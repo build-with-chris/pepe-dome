@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface NavigationProps {
-  currentPage?: 'home' | 'veranstaltungen' | 'freeman' | 'training' | 'business' | 'ueber' | 'kontakt';
+  currentPage?: 'home' | 'veranstaltungen' | 'freeman' | 'training' | 'business' | 'ueber' | 'kontakt' | 'impressum' | 'datenschutz';
 }
 
 export default function Navigation({ currentPage = 'home' }: NavigationProps) {
