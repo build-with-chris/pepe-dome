@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import { getNextEvent } from "@/data/events";
 
@@ -34,9 +35,9 @@ export default function Home() {
           </p>
 
           <div className="hero-actions">
-            <button className="btn-primary btn-lg">
+            <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
               Event anfragen
-            </button>
+            </Link>
             <a
               href="https://maps.google.com/maps?q=Theatron+Ostpark+München"
               target="_blank"
@@ -107,11 +108,16 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                  <Link href="/kontakt#kontaktformular" className="btn-primary px-8 py-4 text-lg font-semibold">
                     Tickets kaufen
-                  </button>
-                  <div className="flex items-center justify-center text-white/70">
-                    📅 {nextEvent.time} • {nextEvent.price}
+                  </Link>
+                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
+                    <div className="flex items-center gap-1 mb-1">
+                      📅 {nextEvent.time}
+                    </div>
+                    <div className="text-center leading-tight">
+                      {nextEvent.price}
+                    </div>
                   </div>
                 </div>
 
@@ -125,17 +131,22 @@ export default function Home() {
               </div>
 
               <div className="order-1 md:order-2 relative">
-                <div className={`aspect-square bg-gradient-to-br from-${nextEvent.color.primary}/20 to-${nextEvent.color.secondary}/20 rounded-xl border border-${nextEvent.color.accent}/30 overflow-hidden backdrop-blur-sm`}>
-                  <div className="w-full h-full flex items-center justify-center text-8xl">
-                    {nextEvent.emoji}
-                  </div>
+                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${nextEvent.color.primary}/20 to-${nextEvent.color.secondary}/20 rounded-xl border border-${nextEvent.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
+                  {nextEvent.image ? (
+                    <Image
+                      src={nextEvent.image}
+                      alt={nextEvent.title}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-8xl">
+                      {nextEvent.emoji}
+                    </div>
+                  )}
                 </div>
-                <div className={`absolute -bottom-4 -right-4 bg-${nextEvent.color.accent} text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg`}>
-                  {nextEvent.category === 'cinema' ? 'Artistik & Kino' :
-                   nextEvent.category === 'workshop' ? 'Workshop & Show' :
-                   nextEvent.category === 'festival' ? 'Festival der Artistik' : nextEvent.category}
-                </div>
-                <div className="absolute -top-4 -left-4 bg-yellow-400 text-black px-3 py-1 rounded-lg font-bold text-xs">
+                <div className="absolute -top-3 -left-3 bg-yellow-400 text-black px-2 py-1 rounded-lg font-bold text-xs shadow-lg">
                   NÄCHSTES EVENT
                 </div>
               </div>
@@ -225,9 +236,9 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="btn-primary btn-lg">
+            <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
               Event anfragen
-            </button>
+            </Link>
             <a
               href="#contact"
               className="btn-ghost"

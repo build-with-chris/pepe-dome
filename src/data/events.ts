@@ -18,6 +18,7 @@ export interface Event {
     accent: string;
   };
   emoji: string;
+  image?: string;
   status: 'upcoming' | 'ongoing' | 'past';
 }
 
@@ -26,15 +27,16 @@ export const events: Event[] = [
     id: 'circus-meets-cinema',
     title: 'Circus meets Cinema',
     subtitle: 'Artistik & Film in perfekter Symbiose',
-    description: 'Ein einzigartiges Erlebnis: Sängerin, Artisten und Kinofilm verschmelzen zu einem unvergesslichen Abend. Professionelle Kinoausstattung mit Sound, Projektor und bequemen Sitzen.',
+    description: 'Ein außergewöhnliches Erlebnis erwartet Sie: Sängerin und Moderatorin Caro eröffnet den Abend mit einem einführenden Lied, gefolgt von einer meisterhaften Artistik-Performance. Anschließend werden Sie in die Welt des Kinos entführt mit dem ersten Filmakt. Nach einer stilvollen 10-minütigen Pause, in der Sie sich mit kulinarischen Köstlichkeiten verwöhnen lassen können, bezaubern die Künstler erneut mit einer eleganten Darbietung aus Gesang und Artistik. Der zweite Filmakt folgt nahtlos, bevor das große Finale während des Abspanns alle Akteure zu einem unvergesslichen, gemeinsamen Abschluss vereint – 2 Stunden und 10 Minuten pures Entertainment.',
     date: '2025-10-10',
     dateRange: '10.–11. OKTOBER 2025',
-    time: 'Jeweils 18:00 Uhr',
-    price: 'Ab 12€',
+    time: 'Jeweils 18:30 Uhr',
+    price: 'Kinder bis 6 kostenlos • Ermäßigt 8€ • Regulär 15€',
     features: [
-      { icon: '🎭', text: 'Live-Artistik während der Filmvorführung' },
-      { icon: '🎵', text: 'Sängerin begleitet die Handlung live' },
-      { icon: '🍿', text: 'Popcorn und Getränke vor Ort' }
+      { icon: '🎭', text: 'Artistik-Performance zum Auftakt und als Finale' },
+      { icon: '🎵', text: 'Live-Musik zwischen den Darbietungen' },
+      { icon: '🎬', text: 'Professionelle Kinoausstattung mit Premium-Sound' },
+      { icon: '🍿', text: 'Popcorn, Nachos, Eiskonfekt und Getränke' }
     ],
     category: 'cinema',
     color: {
@@ -43,6 +45,7 @@ export const events: Event[] = [
       accent: 'red-400'
     },
     emoji: '🎬',
+    image: '/Circus&Cinema.webp',
     status: 'upcoming'
   },
   {

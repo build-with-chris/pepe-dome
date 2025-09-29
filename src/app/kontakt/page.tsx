@@ -118,7 +118,7 @@ export default function KontaktPage() {
       </section>
 
       {/* Contact Form */}
-      <section className="py-20 px-6 bg-black/10">
+      <section id="kontaktformular" className="py-20 px-6 bg-black/10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="display text-3xl md:text-4xl font-bold mb-4">
@@ -255,8 +255,8 @@ export default function KontaktPage() {
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">E-Mail</h3>
                     <p className="text-white/70">
-                      <a href="mailto:info@pepe-dome.de" className="hover:text-white transition-colors">
-                        info@pepe-dome.de
+                      <a href="mailto:info@pepearts.de" className="hover:text-white transition-colors">
+                        info@pepearts.de
                       </a>
                     </p>
                     <p className="text-sm text-white/60 mt-1">Antwort innerhalb von 24h</p>
@@ -466,7 +466,7 @@ export default function KontaktPage() {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-20 px-6 text-center">
+      <section id="newsletter" className="py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">
           <h2 className="display text-4xl md:text-5xl font-bold mb-6">
             Newsletter abonnieren

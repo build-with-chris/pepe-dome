@@ -1,8 +1,12 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import { events } from "@/data/events";
 
 export default function VeranstaltungenPage() {
+  const freemanEvent = events.find(event => event.id === 'freeman-festival');
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -21,192 +25,130 @@ export default function VeranstaltungenPage() {
       </section>
 
       {/* Freeman Festival Highlight */}
-      <section className="py-12 px-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block mb-4">
-                <span className="px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-sm">
-                  🎭 HIGHLIGHT EVENT
-                </span>
-              </div>
-              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                Freeman
-              </h2>
-              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                Festival der Artistik
-              </h3>
-              <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau.
-                5 Shows &bull; 3 Tage &bull; Höchstleistung trifft Poesie
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Link
-                  href="/freeman"
-                  className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
-                >
-                  Zum Festival
-                </Link>
-                <div className="text-white/70 flex items-center justify-center">
-                  📅 14.–16. November 2025
+      {freemanEvent && (
+        <section className={`py-12 px-6 bg-gradient-to-br from-${freemanEvent.color.primary}/10 to-${freemanEvent.color.secondary}/10`}>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="inline-block mb-4">
+                  <span className={`px-4 py-2 bg-${freemanEvent.color.primary}/20 border border-${freemanEvent.color.accent}/30 rounded-full text-${freemanEvent.color.accent} font-semibold text-sm`}>
+                    🎭 HIGHLIGHT EVENT
+                  </span>
+                </div>
+                <h2 className="display text-4xl md:text-5xl font-bold mb-6">
+                  {freemanEvent.title}
+                </h2>
+                <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
+                  {freemanEvent.subtitle}
+                </h3>
+                <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                  {freemanEvent.description}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <Link
+                    href="/kontakt#kontaktformular"
+                    className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
+                  >
+                    Tickets kaufen
+                  </Link>
+                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
+                    <div className="flex items-center gap-1 mb-1">
+                      📅 {freemanEvent.dateRange}
+                    </div>
+                    <div className="text-center leading-tight">
+                      {freemanEvent.price}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden">
-                {/* Placeholder for Freeman Festival image */}
-                <div className="w-full h-full flex items-center justify-center text-6xl">
-                  🎪
+              <div className="relative">
+                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${freemanEvent.color.primary}/20 to-${freemanEvent.color.secondary}/20 rounded-xl border border-${freemanEvent.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
+                  {freemanEvent.image ? (
+                    <Image
+                      src={freemanEvent.image}
+                      alt={freemanEvent.title}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-6xl">
+                      {freemanEvent.emoji}
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold text-sm">
-                Festival der Artistik
+                <div className="absolute -bottom-3 -right-3 bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg">
+                  HIGHLIGHT EVENT
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Event 1: Circus meets Cinema */}
-      <section className="py-12 px-6 bg-gradient-to-br from-red-500/10 to-pink-500/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block mb-4">
-                <span className="px-4 py-2 bg-red-500/20 border border-red-400/30 rounded-full text-red-300 font-semibold text-sm">
-                  🎬 10.–11. OKTOBER 2024
-                </span>
-              </div>
-              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                Circus meets Cinema
-              </h2>
-              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                Artistik & Film in perfekter Symbiose
-              </h3>
-              <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Ein einzigartiges Erlebnis: Sängerin, Artisten und Kinofilm verschmelzen zu einem unvergesslichen Abend.
-                Professionelle Kinoausstattung mit Sound, Projektor und bequemen Sitzen. Popcorn und Getränke vor Ort erhältlich.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <button className="btn-primary px-8 py-4 text-lg font-semibold">
-                  Tickets kaufen
-                </button>
-                <div className="text-white/70 flex items-center justify-center">
-                  📅 Jeweils 18:00 Uhr &bull; Ermäßigt 12€ &bull; Normal 18€
+      {/* Dynamic Events */}
+      {events.map((event, index) => (
+        <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10`}>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className={index % 2 === 0 ? 'order-1' : 'order-2 md:order-1'}>
+                <div className="inline-block mb-4">
+                  <span className={`px-4 py-2 bg-${event.color.primary}/20 border border-${event.color.accent}/30 rounded-full text-${event.color.accent} font-semibold text-sm`}>
+                    {event.emoji} {event.dateRange}
+                  </span>
+                </div>
+                <h2 className="display text-4xl md:text-5xl font-bold mb-6">
+                  {event.title}
+                </h2>
+                <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
+                  {event.subtitle}
+                </h3>
+                <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                  {event.description}
+                </p>
+                <div className="space-y-3 mb-6">
+                  {event.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="flex items-center gap-3 text-white/70">
+                      <span className={`text-${event.color.accent}`}>{feature.icon}</span>
+                      <span>{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <Link href="/kontakt#kontaktformular" className="btn-primary px-8 py-4 text-lg font-semibold">
+                    {event.id === 'freeman-festival' ? 'Tickets kaufen' : 'Tickets kaufen'}
+                  </Link>
+                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
+                    <div className="flex items-center gap-1 mb-1">
+                      📅 {event.time}
+                    </div>
+                    <div className="text-center leading-tight">
+                      {event.price}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p className="text-white/60 italic">
-                Ein wahnsinniges Programm, um alle Menschen abzuholen!
-              </p>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-xl border border-red-400/30 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center text-6xl">
-                  🎬
+              <div className={`relative ${index % 2 === 0 ? 'order-2' : 'order-1 md:order-2'}`}>
+                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${event.color.primary}/20 to-${event.color.secondary}/20 rounded-xl border border-${event.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
+                  {event.image ? (
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-6xl">
+                      {event.emoji}
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-red-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
-                Artistik & Kino
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Event 2: Luftakrobatik mit Marlon */}
-      <section className="py-12 px-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 relative">
-              <div className="aspect-square bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-400/30 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center text-6xl">
-                  🤸‍♂️
-                </div>
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-blue-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
-                Luftakrobatik
-              </div>
-            </div>
-            <div className="order-1 md:order-2">
-              <div className="inline-block mb-4">
-                <span className="px-4 py-2 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 font-semibold text-sm">
-                  🤸‍♂️ 7.–9. NOVEMBER 2024
-                </span>
-              </div>
-              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                Luftakrobatik mit Marlon
-              </h2>
-              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                Workshop &bull; Open Stage &bull; Show
-              </h3>
-              <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Drei Tage voller Luftakrobatik! Marlon öffnet seine Bühne für seine Schüler, bietet intensive Workshops
-                und präsentiert eine spektakuläre Show. Ein Event für alle, die die Kunst des Fliegens erleben möchten.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <button className="btn-primary px-8 py-4 text-lg font-semibold">
-                  Anmelden
-                </button>
-                <div className="text-white/70 flex items-center justify-center">
-                  📅 Workshop & Show &bull; Verschiedene Zeiten
-                </div>
-              </div>
-              <p className="text-white/60 italic">
-                Schwebe zwischen Himmel und Erde - erlebe die Magie der Luftakrobatik!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Event 3: Freeman Festival */}
-      <section className="py-12 px-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block mb-4">
-                <span className="px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-sm">
-                  🎭 14.–16. NOVEMBER 2025
-                </span>
-              </div>
-              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                Freeman
-              </h2>
-              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                Festival der Artistik
-              </h3>
-              <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau.
-                5 Shows &bull; 3 Tage &bull; Höchstleistung trifft Poesie in der einzigartigen Atmosphäre des Pepe Dome.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Link
-                  href="/freeman"
-                  className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
-                >
-                  Zum Festival
-                </Link>
-                <div className="text-white/70 flex items-center justify-center">
-                  📅 3 Tage &bull; 5 Shows &bull; Weltklasse-Niveau
-                </div>
-              </div>
-              <p className="text-white/60 italic">
-                Erlebe Artistik auf höchstem internationalen Niveau!
-              </p>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center text-6xl">
-                  🎪
-                </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-purple-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
-                Festival der Artistik
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       {/* Event Types */}
       <section className="py-20 px-6 bg-black/10">
@@ -267,9 +209,9 @@ export default function VeranstaltungenPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="btn-primary text-xl px-12 py-6">
+            <Link href="/kontakt#newsletter" className="btn-primary text-xl px-12 py-6">
               Newsletter abonnieren
-            </button>
+            </Link>
             <Link
               href="/kontakt"
               className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"
