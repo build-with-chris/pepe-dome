@@ -219,4 +219,356 @@ body {
   .hero-feature-divider {
     color: var(--pepe-line);
   }
+
+  /* Base mobile menu styles - always available */
+  .nav-mobile {
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--pepe-ink);
+    z-index: 1000;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: all 0.3s ease-out;
+    /* Default closed state */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+  }
+
+  .nav-mobile-closed {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+  }
+
+  .nav-mobile-open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+
+  .nav-mobile-links {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1.5rem 2rem;
+    gap: 1rem;
+    max-width: 100%;
+    margin: 0;
+    min-height: calc(100vh - 4rem);
+  }
+
+  .nav-mobile-link {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 1rem;
+    border: 2px solid var(--pepe-line);
+    background: var(--pepe-surface);
+    color: var(--pepe-t80);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-mobile-link:hover,
+  .nav-mobile-link:active {
+    border-color: var(--pepe-gold);
+    background: rgba(212, 165, 116, 0.15);
+    color: var(--pepe-gold);
+    transform: translateY(-2px);
+  }
+
+  .nav-mobile-link-active {
+    border-color: var(--pepe-gold);
+    background: rgba(212, 165, 116, 0.2);
+    color: var(--pepe-gold);
+  }
+
+  /* Freeman Festival Button in mobile menu */
+  .nav-mobile .btn-primary {
+    background: var(--pepe-gold);
+    color: #0A0A0A;
+    border: 2px solid var(--pepe-gold);
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+
+  .nav-mobile .btn-primary:hover {
+    background: var(--pepe-gold-hover);
+    border-color: var(--pepe-gold-hover);
+    transform: translateY(-2px);
+  }
+
+  /* Hide on desktop */
+  @media (min-width: 768px) {
+    .nav-mobile {
+      display: none !important;
+    }
+  }
+
+  /* Show on mobile */
+  @media (max-width: 767px) {
+    .nav-mobile {
+      display: block;
+    }
+  }
+
+  /* Mobile Navigation Improvements */
+  .mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Hamburger Animation */
+  .hamburger {
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hamburger span {
+    width: 100%;
+    height: 2px;
+    background: var(--pepe-t80);
+    border-radius: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+
+  .hamburger-open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger-open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .hamburger-open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Mobile Navigation - Fix overlapping issue */
+  @media (max-width: 767px) {
+    .nav {
+      z-index: 1000;
+      position: relative;
+    }
+
+    .nav-container {
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .nav-logo {
+      font-size: 1.125rem;
+      z-index: 1001;
+      position: relative;
+    }
+
+    .mobile-menu-button {
+      z-index: 1001;
+      position: relative;
+    }
+
+    .nav-links {
+      display: none !important;
+    }
+
+    /* Mobile-specific adjustments only */
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mobile Hero Optimizations */
+  @media (max-width: 767px) {
+    .hero {
+      padding: 1.5rem 1rem;
+      min-height: 90vh;
+    }
+
+    .hero-content {
+      max-width: 100%;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 10vw, 3rem);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 6vw, 1.75rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+
+    .hero-actions {
+      width: 100%;
+      padding: 0 0.5rem;
+    }
+
+    .hero-actions .btn-primary,
+    .hero-actions .btn-ghost {
+      width: 100%;
+      max-width: 280px;
+      padding: 0.875rem 1.5rem;
+    }
+
+    .hero-features {
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .hero-feature-divider {
+      display: none;
+    }
+  }
+
+  /* Mobile Events Page Optimizations */
+  @media (max-width: 767px) {
+    /* Event sections on mobile */
+    section {
+      padding: 1.5rem 1rem !important;
+    }
+
+    /* Event grid layouts become single column */
+    .grid {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+    }
+
+    /* Event content adjustments */
+    .display {
+      font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+      line-height: 1.2 !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Event descriptions */
+    .text-lg {
+      font-size: 1rem !important;
+      line-height: 1.6 !important;
+    }
+
+    /* Event buttons */
+    .flex-col.sm\\:flex-row {
+      flex-direction: column !important;
+      gap: 1rem !important;
+      align-items: stretch !important;
+    }
+
+    .flex-col.sm\\:flex-row .btn-primary,
+    .flex-col.sm\\:flex-row .btn-ghost {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+
+    /* Event badges and info */
+    .px-4.py-2 {
+      padding: 0.75rem 1rem !important;
+      font-size: 0.875rem !important;
+    }
+
+    /* Aspect ratio boxes for images */
+    .aspect-square {
+      aspect-ratio: 16 / 9 !important;
+      max-height: 200px;
+    }
+
+    /* Event meta info */
+    .text-white\\/70 {
+      font-size: 0.875rem !important;
+      text-align: center !important;
+    }
+
+    /* Order adjustments for mobile */
+    .order-2.md\\:order-1 {
+      order: 1 !important;
+    }
+
+    .order-1.md\\:order-2 {
+      order: 2 !important;
+    }
+  }
+
+  /* Mobile General Layout Improvements */
+  @media (max-width: 767px) {
+    /* Container spacing */
+    .max-w-6xl,
+    .max-w-4xl {
+      padding: 0 1rem !important;
+    }
+
+    /* Text center adjustments */
+    .text-center {
+      padding: 0 0.5rem;
+    }
+
+    /* Button improvements */
+    .btn-primary,
+    .btn-ghost {
+      min-height: 48px;
+      touch-action: manipulation;
+    }
+
+    /* Footer adjustments */
+    footer {
+      padding: 2rem 1rem !important;
+    }
+
+    /* Spacing improvements */
+    .py-20 {
+      padding-top: 3rem !important;
+      padding-bottom: 3rem !important;
+    }
+
+    .py-12 {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+
+    .mb-12 {
+      margin-bottom: 2rem !important;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem !important;
+    }
+  }
 }
