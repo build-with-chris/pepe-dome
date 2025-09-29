@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { events } from "@/data/events";
 
 export default function VeranstaltungenPage() {
@@ -222,17 +223,7 @@ export default function VeranstaltungenPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="display text-xl font-bold mb-4">
-            Pepe Dome 2025
-          </div>
-          <p className="muted text-sm">
-            Ostpark München &bull; Ein Projekt von PepeShows
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

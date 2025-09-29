@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 export default function KontaktPage() {
   return (
@@ -218,9 +219,9 @@ export default function KontaktPage() {
               />
               <label htmlFor="privacy" className="text-sm text-white/70">
                 Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
-                <a href="#" className="text-white hover:underline">
+                <Link href="/datenschutz" className="text-white hover:underline">
                   Datenschutzerklärung
-                </a>{" "}
+                </Link>{" "}
                 zu. *
               </label>
             </div>
@@ -493,17 +494,7 @@ export default function KontaktPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="display text-xl font-bold mb-4">
-            Pepe Dome München
-          </div>
-          <p className="muted text-sm">
-            Ostpark München • Ein Projekt von PepeShows
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
