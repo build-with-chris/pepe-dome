@@ -68,9 +68,8 @@ body {
   .nav {
     position: sticky;
     top: 0;
-    z-index: 50;
-    background: rgba(22, 22, 22, 0.95);
-    backdrop-filter: blur(12px);
+    z-index: 100000;
+    background: var(--pepe-ink);
     border-bottom: 1px solid var(--pepe-line);
   }
 
@@ -220,104 +219,126 @@ body {
     color: var(--pepe-line);
   }
 
-  /* Base mobile menu styles - always available */
+  /* Mobile menu overlay */
   .nav-mobile {
-    position: fixed;
-    top: 4rem;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--pepe-ink);
-    z-index: 1000;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    transition: all 0.3s ease-out;
-    /* Default closed state */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-  }
-
-  .nav-mobile-closed {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-  }
-
-  .nav-mobile-open {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
+    position: fixed !important;
+    top: 4rem !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(135deg, var(--pepe-ink) 0%, #0F0F0F 50%, #0A0A0A 100%) !important;
+    z-index: 99999 !important;
+    display: block !important;
+    animation: slideDown 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    backdrop-filter: blur(20px) !important;
+    border-top: 1px solid var(--pepe-line) !important;
   }
 
   .nav-mobile-links {
-    display: flex;
-    flex-direction: column;
-    padding: 3rem 1.5rem 2rem;
-    gap: 1rem;
-    max-width: 100%;
-    margin: 0;
-    min-height: calc(100vh - 4rem);
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 3rem 1.5rem 2rem !important;
+    gap: 0.75rem !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    min-height: calc(100vh - 4rem) !important;
+    justify-content: flex-start !important;
+    animation: fadeInUp 0.5s ease-out 0.1s both !important;
   }
 
   .nav-mobile-link {
-    display: block;
-    padding: 1.25rem 1.5rem;
-    font-size: 1.25rem;
-    font-weight: 500;
-    text-align: center;
-    border-radius: 1rem;
-    border: 2px solid var(--pepe-line);
-    background: var(--pepe-surface);
-    color: var(--pepe-t80);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    padding: 1rem 1.5rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    border-radius: 1rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: linear-gradient(145deg, rgba(26, 26, 26, 0.6), rgba(20, 20, 20, 0.8)) !important;
+    color: var(--pepe-t80) !important;
+    text-decoration: none !important;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    min-height: 52px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(12px) !important;
+    font-family: var(--font-body) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .nav-mobile-link::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.1), transparent) !important;
+    transition: left 0.6s ease !important;
   }
 
   .nav-mobile-link:hover,
   .nav-mobile-link:active {
-    border-color: var(--pepe-gold);
-    background: rgba(212, 165, 116, 0.15);
-    color: var(--pepe-gold);
-    transform: translateY(-2px);
+    border-color: rgba(212, 165, 116, 0.6) !important;
+    background: linear-gradient(145deg, rgba(212, 165, 116, 0.08), rgba(212, 165, 116, 0.12)) !important;
+    color: var(--pepe-white) !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .nav-mobile-link:hover::before {
+    left: 100% !important;
   }
 
   .nav-mobile-link-active {
-    border-color: var(--pepe-gold);
-    background: rgba(212, 165, 116, 0.2);
-    color: var(--pepe-gold);
+    border-color: var(--pepe-gold) !important;
+    background: linear-gradient(145deg, rgba(212, 165, 116, 0.15), rgba(212, 165, 116, 0.25)) !important;
+    color: var(--pepe-gold) !important;
+    box-shadow: 0 4px 24px rgba(212, 165, 116, 0.3), inset 0 1px 0 rgba(212, 165, 116, 0.2) !important;
+    transform: scale(1.02) !important;
   }
 
   /* Freeman Festival Button in mobile menu */
   .nav-mobile .btn-primary {
-    background: var(--pepe-gold);
-    color: #0A0A0A;
-    border: 2px solid var(--pepe-gold);
-    font-weight: 600;
-    margin-top: 1rem;
+    background: linear-gradient(135deg, var(--pepe-gold) 0%, var(--pepe-gold-hover) 100%) !important;
+    color: #0A0A0A !important;
+    border: 1px solid var(--pepe-gold) !important;
+    font-weight: 700 !important;
+    margin-top: 2rem !important;
+    box-shadow: 0 4px 20px rgba(212, 165, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    font-family: var(--font-body) !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .nav-mobile .btn-primary::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+    transition: left 0.6s ease !important;
   }
 
   .nav-mobile .btn-primary:hover {
-    background: var(--pepe-gold-hover);
-    border-color: var(--pepe-gold-hover);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--pepe-gold-hover) 0%, #F5C995 100%) !important;
+    border-color: var(--pepe-gold-hover) !important;
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3) !important;
   }
 
-  /* Hide on desktop */
+  .nav-mobile .btn-primary:hover::before {
+    left: 100% !important;
+  }
+
+  /* Hide on desktop only */
   @media (min-width: 768px) {
     .nav-mobile {
       display: none !important;
-    }
-  }
-
-  /* Show on mobile */
-  @media (max-width: 767px) {
-    .nav-mobile {
-      display: block;
     }
   }
 
@@ -368,38 +389,34 @@ body {
 
   /* Mobile Navigation - Fix overlapping issue */
   @media (max-width: 767px) {
-    .nav {
-      z-index: 1000;
-      position: relative;
-    }
-
     .nav-container {
       padding: 0 1rem;
-      position: relative;
     }
 
     .nav-logo {
       font-size: 1.125rem;
-      z-index: 1001;
-      position: relative;
-    }
-
-    .mobile-menu-button {
-      z-index: 1001;
-      position: relative;
     }
 
     .nav-links {
       display: none !important;
     }
-
-    /* Mobile-specific adjustments only */
   }
 
   @keyframes slideDown {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
     }
     to {
       opacity: 1;
