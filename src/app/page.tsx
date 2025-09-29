@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
+import { getNextEvent } from "@/data/events";
 
 export default function Home() {
+  const nextEvent = getNextEvent();
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -60,6 +63,86 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Nächstes Highlight Section */}
+      {nextEvent && (
+        <section className={`py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-${nextEvent.color.primary}/5 to-${nextEvent.color.secondary}/5`}>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+                Nächstes Highlight
+              </h2>
+              <p className="text-lg text-white/80">
+                Das kommende Event im Pepe Dome
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="inline-block mb-4">
+                  <span className={`px-4 py-2 bg-${nextEvent.color.primary}/20 border border-${nextEvent.color.accent}/30 rounded-full text-${nextEvent.color.accent} font-semibold text-sm`}>
+                    {nextEvent.emoji} {nextEvent.dateRange}
+                  </span>
+                </div>
+
+                <h3 className="display text-3xl md:text-4xl font-bold mb-4">
+                  {nextEvent.title}
+                </h3>
+
+                <h4 className="text-xl md:text-2xl mb-6 text-white/90 font-semibold">
+                  {nextEvent.subtitle}
+                </h4>
+
+                <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                  {nextEvent.description}
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  {nextEvent.features.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-3 text-white/70">
+                      <span className={`text-${nextEvent.color.accent}`}>{feature.icon}</span>
+                      <span>{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                    Tickets kaufen
+                  </button>
+                  <div className="flex items-center justify-center text-white/70">
+                    📅 {nextEvent.time} • {nextEvent.price}
+                  </div>
+                </div>
+
+                <Link
+                  href="/veranstaltungen"
+                  className={`inline-flex items-center gap-2 text-${nextEvent.color.accent} hover:text-${nextEvent.color.accent}/80 transition-colors`}
+                >
+                  <span>Alle Events ansehen</span>
+                  <span>→</span>
+                </Link>
+              </div>
+
+              <div className="order-1 md:order-2 relative">
+                <div className={`aspect-square bg-gradient-to-br from-${nextEvent.color.primary}/20 to-${nextEvent.color.secondary}/20 rounded-xl border border-${nextEvent.color.accent}/30 overflow-hidden backdrop-blur-sm`}>
+                  <div className="w-full h-full flex items-center justify-center text-8xl">
+                    {nextEvent.emoji}
+                  </div>
+                </div>
+                <div className={`absolute -bottom-4 -right-4 bg-${nextEvent.color.accent} text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg`}>
+                  {nextEvent.category === 'cinema' ? 'Artistik & Kino' :
+                   nextEvent.category === 'workshop' ? 'Workshop & Show' :
+                   nextEvent.category === 'festival' ? 'Festival der Artistik' : nextEvent.category}
+                </div>
+                <div className="absolute -top-4 -left-4 bg-yellow-400 text-black px-3 py-1 rounded-lg font-bold text-xs">
+                  NÄCHSTES EVENT
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Main CTAs Section */}
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
