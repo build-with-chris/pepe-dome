@@ -31,14 +31,14 @@ export default function VeranstaltungenPage() {
                 </span>
               </div>
               <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                Freeman Festival
+                Freeman
               </h2>
               <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
                 Festival der Artistik
               </h3>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
                 Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau.
-                5 Shows • 3 Tage • Höchstleistung trifft Poesie
+                5 Shows &bull; 3 Tage &bull; Höchstleistung trifft Poesie
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <Link
@@ -67,71 +67,142 @@ export default function VeranstaltungenPage() {
         </div>
       </section>
 
-      {/* Upcoming Events */}
-      <section className="py-20 px-6">
+      {/* Event 1: Circus meets Cinema */}
+      <section className="py-12 px-6 bg-gradient-to-br from-red-500/10 to-pink-500/10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="display text-3xl md:text-4xl font-bold mb-12 text-center">
-            Kommende Termine
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Freeman Festival */}
-            <Link
-              href="/freeman"
-              className="group p-6 rounded-xl bg-black/20 border border-white/10 hover:border-purple-400/30 hover:bg-black/30 transition-all block"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🎭</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-purple-300 text-sm">14.–16. Nov 2025</div>
-                  <div className="text-xs text-white/60">3 Tage Festival</div>
-                </div>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-block mb-4">
+                <span className="px-4 py-2 bg-red-500/20 border border-red-400/30 rounded-full text-red-300 font-semibold text-sm">
+                  🎬 10.–11. OKTOBER 2024
+                </span>
               </div>
-              <h3 className="display text-xl font-bold mb-2 group-hover:text-white transition-colors">
-                Freeman Festival
+              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
+                Circus meets Cinema
+              </h2>
+              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
+                Artistik & Film in perfekter Symbiose
               </h3>
-              <p className="text-sm text-white/70 group-hover:text-white/90 transition-colors">
-                Festival der Artistik mit internationalen Top-Acts
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Ein einzigartiges Erlebnis: Sängerin, Artisten und Kinofilm verschmelzen zu einem unvergesslichen Abend.
+                Professionelle Kinoausstattung mit Sound, Projektor und bequemen Sitzen. Popcorn und Getränke vor Ort erhältlich.
               </p>
-            </Link>
-
-            {/* Placeholder Events */}
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🎪</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-green-300 text-sm">Coming Soon</div>
-                  <div className="text-xs text-white/60">Gastspiel</div>
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                  Tickets kaufen
+                </button>
+                <div className="text-white/70 flex items-center justify-center">
+                  📅 Jeweils 18:00 Uhr &bull; Ermäßigt 12€ &bull; Normal 18€
                 </div>
               </div>
-              <h3 className="display text-xl font-bold mb-2">
-                Weitere Events folgen
-              </h3>
-              <p className="text-sm text-white/70">
-                Mehr spektakuläre Shows und Gastspiele in Planung
+              <p className="text-white/60 italic">
+                Ein wahnsinniges Programm, um alle Menschen abzuholen!
               </p>
             </div>
-
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🎵</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-orange-300 text-sm">In Planung</div>
-                  <div className="text-xs text-white/60">Konzert</div>
+            <div className="relative">
+              <div className="aspect-square bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-xl border border-red-400/30 overflow-hidden">
+                <div className="w-full h-full flex items-center justify-center text-6xl">
+                  🎬
                 </div>
               </div>
-              <h3 className="display text-xl font-bold mb-2">
-                Musik im Dome
+              <div className="absolute -bottom-4 -right-4 bg-red-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
+                Artistik & Kino
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Event 2: Luftakrobatik mit Marlon */}
+      <section className="py-12 px-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1 relative">
+              <div className="aspect-square bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-400/30 overflow-hidden">
+                <div className="w-full h-full flex items-center justify-center text-6xl">
+                  🤸‍♂️
+                </div>
+              </div>
+              <div className="absolute -bottom-4 -left-4 bg-blue-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
+                Luftakrobatik
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <div className="inline-block mb-4">
+                <span className="px-4 py-2 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 font-semibold text-sm">
+                  🤸‍♂️ 7.–9. NOVEMBER 2024
+                </span>
+              </div>
+              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
+                Luftakrobatik mit Marlon
+              </h2>
+              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
+                Workshop &bull; Open Stage &bull; Show
               </h3>
-              <p className="text-sm text-white/70">
-                Konzerte und musikalische Darbietungen unter der Kuppel
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Drei Tage voller Luftakrobatik! Marlon öffnet seine Bühne für seine Schüler, bietet intensive Workshops
+                und präsentiert eine spektakuläre Show. Ein Event für alle, die die Kunst des Fliegens erleben möchten.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                  Anmelden
+                </button>
+                <div className="text-white/70 flex items-center justify-center">
+                  📅 Workshop & Show &bull; Verschiedene Zeiten
+                </div>
+              </div>
+              <p className="text-white/60 italic">
+                Schwebe zwischen Himmel und Erde - erlebe die Magie der Luftakrobatik!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Event 3: Freeman Festival */}
+      <section className="py-12 px-6 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-block mb-4">
+                <span className="px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-sm">
+                  🎭 14.–16. NOVEMBER 2025
+                </span>
+              </div>
+              <h2 className="display text-4xl md:text-5xl font-bold mb-6">
+                Freeman
+              </h2>
+              <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
+                Festival der Artistik
+              </h3>
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau.
+                5 Shows &bull; 3 Tage &bull; Höchstleistung trifft Poesie in der einzigartigen Atmosphäre des Pepe Dome.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <Link
+                  href="/freeman"
+                  className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
+                >
+                  Zum Festival
+                </Link>
+                <div className="text-white/70 flex items-center justify-center">
+                  📅 3 Tage &bull; 5 Shows &bull; Weltklasse-Niveau
+                </div>
+              </div>
+              <p className="text-white/60 italic">
+                Erlebe Artistik auf höchstem internationalen Niveau!
+              </p>
+            </div>
+            <div className="relative">
+              <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden">
+                <div className="w-full h-full flex items-center justify-center text-6xl">
+                  🎪
+                </div>
+              </div>
+              <div className="absolute -bottom-4 -right-4 bg-purple-400 text-white px-4 py-2 rounded-lg font-bold text-sm">
+                Festival der Artistik
+              </div>
             </div>
           </div>
         </div>
@@ -216,7 +287,7 @@ export default function VeranstaltungenPage() {
             Pepe Dome 2025
           </div>
           <p className="muted text-sm">
-            Ostpark München • Ein Projekt von PepeShows
+            Ostpark München &bull; Ein Projekt von PepeShows
           </p>
         </div>
       </footer>

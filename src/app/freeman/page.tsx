@@ -120,7 +120,7 @@ export default function FreemanPage() {
                 in einem kraftvollen, poetischen Circus-Erlebnis.
               </p>
               <div className="text-sm text-white/60">
-                Show: "Häppy Hour" - Geeignet für alle Altersgruppen
+                Show: &ldquo;Häppy Hour&rdquo; - Geeignet für alle Altersgruppen
               </div>
             </div>
 
@@ -132,7 +132,7 @@ export default function FreemanPage() {
                 aus Tanz, Zirkus und zeitgenössischer Bewegung.
               </p>
               <div className="text-sm text-white/60">
-                Show: "How a Spiral Works" - Preisgekrönte Performance
+                Show: &ldquo;How a Spiral Works&rdquo; - Preisgekrönte Performance
               </div>
             </div>
           </div>
