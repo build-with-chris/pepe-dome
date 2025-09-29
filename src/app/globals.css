@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom styles for elegant dark theme */
+.btn-primary {
+  @apply bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-semibold px-6 py-3 rounded-full hover:from-yellow-300 hover:to-orange-300 transition-all duration-300 shadow-lg;
+}
+
+.muted {
+  @apply text-white/70;
+}
+
+.display {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Gradient background */
+body {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  min-height: 100vh;
+}
