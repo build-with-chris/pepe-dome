@@ -10,20 +10,30 @@ export default function VeranstaltungenPage() {
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
 
-  const freemanEvent = events.find(event => event.id === 'freeman-festival');
-
   // Get unique months and types
-  const months = Array.from(new Set(events.map(event => {
+  const monthsWithDates = events.map(event => {
     const date = new Date(event.date);
-    return date.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
-  }))).sort();
+    return {
+      display: date.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' }),
+      sortKey: new Date(date.getFullYear(), date.getMonth()).getTime()
+    };
+  });
+
+  const uniqueMonths = new Map();
+  monthsWithDates.forEach(month => {
+    if (!uniqueMonths.has(month.display)) {
+      uniqueMonths.set(month.display, month.sortKey);
+    }
+  });
+
+  const months = Array.from(uniqueMonths.entries())
+    .sort((a, b) => a[1] - b[1])
+    .map(entry => entry[0]);
 
   const types = Array.from(new Set(events.map(event => event.category)));
 
   // Filter events based on selected filters
   const filteredEvents = events.filter(event => {
-    if (event.id === 'freeman-festival') return false; // Freeman is shown separately
-
     const eventDate = new Date(event.date);
     const eventMonth = eventDate.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
 
@@ -31,7 +41,7 @@ export default function VeranstaltungenPage() {
     const typeMatch = selectedType === 'all' || event.category === selectedType;
 
     return monthMatch && typeMatch;
-  });
+  }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
     <div className="min-h-screen">
@@ -136,79 +146,26 @@ export default function VeranstaltungenPage() {
         </div>
       </section>
 
-      {/* Freeman Festival Highlight */}
-      {freemanEvent && (
-        <section className={`py-12 px-6 bg-gradient-to-br from-${freemanEvent.color.primary}/10 to-${freemanEvent.color.secondary}/10`}>
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex flex-wrap gap-3 mb-4">
-                  <span className={`px-4 py-2 bg-${freemanEvent.color.primary}/20 border border-${freemanEvent.color.accent}/30 rounded-full text-${freemanEvent.color.accent} font-semibold text-sm`}>
-                    🎭 HIGHLIGHT EVENT
-                  </span>
-                  <span className={`px-4 py-2 bg-${freemanEvent.color.primary}/20 border border-${freemanEvent.color.accent}/30 rounded-full text-${freemanEvent.color.accent} font-semibold text-sm`}>
-                    📅 {freemanEvent.dateRange}
-                  </span>
-                </div>
-                <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                  {freemanEvent.title}
-                </h2>
-                <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                  {freemanEvent.subtitle}
-                </h3>
-                <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                  {freemanEvent.description}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <a
-                    href={freemanEvent.externalTicketUrl || "/kontakt#kontaktformular"}
-                    target={freemanEvent.externalTicketUrl ? "_blank" : undefined}
-                    rel={freemanEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
-                    className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
-                  >
-                    Tickets kaufen
-                  </a>
-                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
-                    <div className="flex items-center gap-1 mb-1">
-                      📅 {freemanEvent.dateRange}
-                    </div>
-                    <div className="text-center leading-tight">
-                      {freemanEvent.price}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                {/* Freeman Featured Poster */}
-                <div className="aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden backdrop-blur-sm shadow-xl">
-                  <Image
-                    src="/PosterFreeMan/Happy hour 2.webp"
-                    alt="Freeman Festival - Happy Hour Poster"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 400px"
-                  />
-                </div>
-                <div className="absolute -bottom-3 -right-3 bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg">
-                  HIGHLIGHT EVENT
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Dynamic Events */}
+      {/* All Events */}
       {filteredEvents.length > 0 ? (
         filteredEvents.map((event, index) => (
-        <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10`}>
-          <div className="max-w-6xl mx-auto">
+        <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10 ${event.id === 'freeman-festival' ? 'relative' : ''}`}>
+          {/* Freeman Festival Glow Effect */}
+          {event.id === 'freeman-festival' && (
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 blur-3xl opacity-60 animate-pulse"></div>
+          )}
+          <div className={`max-w-6xl mx-auto ${event.id === 'freeman-festival' ? 'relative z-10' : ''}`}>
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className={index % 2 === 0 ? 'order-1' : 'order-2 md:order-1'}>
-                <div className="inline-block mb-4">
+                <div className="flex flex-wrap gap-3 mb-4">
                   <span className={`px-4 py-2 bg-${event.color.primary}/20 border border-${event.color.accent}/30 rounded-full text-${event.color.accent} font-semibold text-sm`}>
                     {event.emoji} {event.dateRange}
                   </span>
+                  {event.id === 'freeman-festival' && (
+                    <span className="px-4 py-2 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-sm shadow-lg">
+                      ✨ FESTIVAL HIGHLIGHT
+                    </span>
+                  )}
                 </div>
                 <h2 className="display text-4xl md:text-5xl font-bold mb-6">
                   {event.title}
@@ -277,19 +234,42 @@ export default function VeranstaltungenPage() {
                 </div>
               </div>
               <div className={`relative ${index % 2 === 0 ? 'order-2' : 'order-1 md:order-2'}`}>
-                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${event.color.primary}/20 to-${event.color.secondary}/20 rounded-xl border border-${event.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
+                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${event.color.primary}/20 to-${event.color.secondary}/20 rounded-xl border border-${event.color.accent}/30 overflow-hidden backdrop-blur-sm ${event.id === 'freeman-festival' ? 'shadow-purple-500/25 shadow-2xl ring-2 ring-purple-400/30' : 'shadow-2xl'}`}>
                   {event.image ? (
                     <Image
                       src={event.image}
                       alt={event.title}
                       fill
-                      className={event.id === 'wanderzirkus-pepe' ? "object-contain object-bottom" : "object-contain"}
-                      style={event.id === 'wanderzirkus-pepe' ? {backgroundColor: '#000'} : undefined}
+                      className={
+                        event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival'
+                          ? "object-contain object-bottom"
+                          : "object-contain"
+                      }
+                      style={
+                        event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival'
+                          ? {backgroundColor: '#000'}
+                          : undefined
+                      }
                       sizes="(max-width: 768px) 100vw, 400px"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-6xl">
                       {event.emoji}
+                    </div>
+                  )}
+
+                  {/* Freeman Festival Animated Glow Text */}
+                  {event.id === 'freeman-festival' && (
+                    <div className="absolute inset-0 pointer-events-none flex items-start justify-center pt-8">
+                      <div
+                        className="text-white font-bold text-lg whitespace-nowrap px-4"
+                        style={{
+                          textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00f3ff, 0 0 40px #00f3ff',
+                          animation: 'gentleFloat 3s ease-in-out infinite'
+                        }}
+                      >
+                        Festival der Artistik
+                      </div>
                     </div>
                   )}
                 </div>

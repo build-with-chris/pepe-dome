@@ -115,8 +115,12 @@ export default function Home() {
 
       {/* Nächstes Highlight Section */}
       {nextEvent && (
-        <section className={`py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-${nextEvent.color.primary}/5 to-${nextEvent.color.secondary}/5`}>
-          <div className="max-w-6xl mx-auto">
+        <section className={`py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-${nextEvent.color.primary}/5 to-${nextEvent.color.secondary}/5 ${nextEvent.id === 'freeman-festival' ? 'relative' : ''}`}>
+          {/* Freeman Festival Glow Effect */}
+          {nextEvent.id === 'freeman-festival' && (
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 to-blue-500/15 blur-3xl opacity-50 animate-pulse"></div>
+          )}
+          <div className={`max-w-6xl mx-auto ${nextEvent.id === 'freeman-festival' ? 'relative z-10' : ''}`}>
             <div className="text-center mb-12">
               <h2 className="display text-3xl md:text-4xl font-bold mb-4">
                 Nächstes Highlight
@@ -128,10 +132,15 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div className="order-2 md:order-1">
-                <div className="inline-block mb-4">
+                <div className="flex flex-wrap gap-3 mb-4">
                   <span className={`px-4 py-2 bg-${nextEvent.color.primary}/20 border border-${nextEvent.color.accent}/30 rounded-full text-${nextEvent.color.accent} font-semibold text-sm`}>
                     {nextEvent.emoji} {nextEvent.dateRange}
                   </span>
+                  {nextEvent.id === 'freeman-festival' && (
+                    <span className="px-4 py-2 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-sm shadow-lg">
+                      ✨ FESTIVAL HIGHLIGHT
+                    </span>
+                  )}
                 </div>
 
                 <h3 className="display text-3xl md:text-4xl font-bold mb-4">
@@ -214,14 +223,22 @@ export default function Home() {
               </div>
 
               <div className="order-1 md:order-2 relative">
-                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${nextEvent.color.primary}/20 to-${nextEvent.color.secondary}/20 rounded-xl border border-${nextEvent.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
+                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${nextEvent.color.primary}/20 to-${nextEvent.color.secondary}/20 rounded-xl border border-${nextEvent.color.accent}/30 overflow-hidden backdrop-blur-sm ${nextEvent.id === 'freeman-festival' ? 'shadow-purple-500/25 shadow-2xl ring-2 ring-purple-400/30' : 'shadow-2xl'}`}>
                   {nextEvent.image ? (
                     <Image
                       src={nextEvent.image}
                       alt={nextEvent.title}
                       fill
-                      className={nextEvent.id === 'wanderzirkus-pepe' ? "object-contain object-bottom" : "object-contain"}
-                      style={nextEvent.id === 'wanderzirkus-pepe' ? {backgroundColor: '#000'} : undefined}
+                      className={
+                        nextEvent.id === 'wanderzirkus-pepe' || nextEvent.id === 'freeman-festival'
+                          ? "object-contain object-bottom"
+                          : "object-contain"
+                      }
+                      style={
+                        nextEvent.id === 'wanderzirkus-pepe' || nextEvent.id === 'freeman-festival'
+                          ? {backgroundColor: '#000'}
+                          : undefined
+                      }
                       sizes="(max-width: 768px) 100vw, 400px"
                     />
                   ) : (
@@ -229,9 +246,24 @@ export default function Home() {
                       {nextEvent.emoji}
                     </div>
                   )}
+
+                  {/* Freeman Festival Animated Glow Text */}
+                  {nextEvent.id === 'freeman-festival' && (
+                    <div className="absolute inset-0 pointer-events-none flex items-start justify-center pt-8">
+                      <div
+                        className="text-white font-bold text-lg whitespace-nowrap px-4"
+                        style={{
+                          textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00f3ff, 0 0 40px #00f3ff',
+                          animation: 'gentleFloat 3s ease-in-out infinite'
+                        }}
+                      >
+                        Festival der Artistik
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="absolute -top-3 -left-3 bg-yellow-400 text-black px-2 py-1 rounded-lg font-bold text-xs shadow-lg">
-                  NÄCHSTES EVENT
+                <div className={`absolute -top-3 -left-3 px-2 py-1 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-yellow-400 text-black'}`}>
+                  {nextEvent.id === 'freeman-festival' ? '✨ FESTIVAL' : 'NÄCHSTES EVENT'}
                 </div>
               </div>
             </div>

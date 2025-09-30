@@ -140,6 +140,7 @@ export const events: Event[] = [
       accent: 'purple-400'
     },
     emoji: '🎪',
+    image: '/Freeman-Poster.webp',
     status: 'upcoming',
     externalTicketUrl: 'https://freemanfestival.de'
   }

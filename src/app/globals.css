@@ -762,4 +762,14 @@ body {
   .eversports-widget {
     background: #161616;
   }
+
+  /* Freeman Festival Glow Text Animation */
+  @keyframes gentleFloat {
+    0%, 100% {
+      transform: translateX(-10px);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+  }
 }
