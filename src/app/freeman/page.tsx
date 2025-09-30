@@ -80,11 +80,16 @@ export default function FreemanPage() {
           </p>
 
           <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8 px-4">
-            <button className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs">
-              Tickets ab 12€ sichern
-            </button>
             <a
-              href="https://freeman-festival.de"
+              href="https://freemanfestival.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
+            >
+              Tickets ab 12€ sichern
+            </a>
+            <a
+              href="https://freemanfestival.de"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white/70 hover:text-white transition-colors underline text-sm sm:text-base"
@@ -275,7 +280,7 @@ export default function FreemanPage() {
             ))}
           </div>
           <a
-            href="https://freeman-festival.de/programm"
+            href="https://freemanfestival.de/programm"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 border border-white/30 rounded-full hover:border-white/50 transition-colors"
@@ -323,11 +328,16 @@ export default function FreemanPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="btn-primary text-xl px-12 py-6">
-              Jetzt Tickets sichern
-            </button>
             <a
-              href="https://freeman-festival.de"
+              href="https://freemanfestival.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-xl px-12 py-6 inline-block text-center"
+            >
+              Jetzt Tickets sichern
+            </a>
+            <a
+              href="https://freemanfestival.de"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"

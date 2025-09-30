@@ -20,6 +20,13 @@ export interface Event {
   emoji: string;
   image?: string;
   status: 'upcoming' | 'ongoing' | 'past';
+  ticketDates?: Array<{
+    date: string;
+    dateDisplay: string;
+    film?: string;
+    ticketUrl: string;
+  }>;
+  externalTicketUrl?: string;
 }
 
 export const events: Event[] = [
@@ -27,7 +34,7 @@ export const events: Event[] = [
     id: 'circus-meets-cinema',
     title: 'Circus meets Cinema',
     subtitle: 'Artistik & Film in perfekter Symbiose',
-    description: 'Ein außergewöhnliches Erlebnis erwartet Sie: Sängerin und Moderatorin Caro eröffnet den Abend mit einem einführenden Lied, gefolgt von einer meisterhaften Artistik-Performance. Anschließend werden Sie in die Welt des Kinos entführt mit dem ersten Filmakt. Nach einer stilvollen 10-minütigen Pause, in der Sie sich mit kulinarischen Köstlichkeiten verwöhnen lassen können, bezaubern die Künstler erneut mit einer eleganten Darbietung aus Gesang und Artistik. Der zweite Filmakt folgt nahtlos, bevor das große Finale während des Abspanns alle Akteure zu einem unvergesslichen, gemeinsamen Abschluss vereint – 2 Stunden und 10 Minuten pures Entertainment.',
+    description: 'Ein außergewöhnliches Erlebnis: Artistik-Performance und Kinofilm in perfekter Symbiose. Sängerin Caro und unsere Künstler gestalten den Abend mit Live-Musik und spektakulären Darbietungen, während Sie sich zurücklehnen und einen großartigen Film genießen können.',
     date: '2025-10-10',
     dateRange: '10.–11. OKTOBER 2025',
     time: 'Jeweils 18:30 Uhr',
@@ -46,7 +53,47 @@ export const events: Event[] = [
     },
     emoji: '🎬',
     image: '/Circus&Cinema.webp',
-    status: 'upcoming'
+    status: 'upcoming',
+    ticketDates: [
+      {
+        date: '2025-10-10',
+        dateDisplay: '10. Oktober',
+        film: 'Wicki und die starken Männer',
+        ticketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/circus-cinema-7378769807640899523.html'
+      },
+      {
+        date: '2025-10-11',
+        dateDisplay: '11. Oktober',
+        film: 'Ostwind',
+        ticketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/circus-cinema-7378772246792262000.html'
+      }
+    ]
+  },
+  {
+    id: 'wanderzirkus-pepe',
+    title: 'Ein Mann, ein Koffer, ein Wandazirkus',
+    subtitle: 'Clownerie • Pantomime • Artistik',
+    description: 'Der Clown Pepe zaubert eine magische Welt aus seinem Koffer. Pantomime, Artistik und Clownerie für groß und klein. Erzählt werden skurrile Sketche aus dem Alltag eines Clowns der seinen Weg sucht. Sein herzerwärmendes Stolpern zieht alle in seinen Bann. Immer einmal Sonntags im Monat im Pepe Dome.',
+    date: '2025-10-12',
+    dateRange: '12. OKTOBER 2025',
+    time: 'Sonntag',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🤡', text: 'Herzerwärmende Clownerie für alle Altersgruppen' },
+      { icon: '🎭', text: 'Pantomime und Artistik aus dem Koffer' },
+      { icon: '📅', text: 'Monatliche Aufführungen jeden Sonntag' },
+      { icon: '👨‍👩‍👧‍👦', text: 'Perfekt für Familien und Kinder' }
+    ],
+    category: 'clown',
+    color: {
+      primary: 'yellow-500',
+      secondary: 'orange-500',
+      accent: 'yellow-400'
+    },
+    emoji: '🤡',
+    image: '/Entertainment.webp',
+    status: 'upcoming',
+    externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html'
   },
   {
     id: 'luftakrobatik-marlon',
@@ -93,7 +140,8 @@ export const events: Event[] = [
       accent: 'purple-400'
     },
     emoji: '🎪',
-    status: 'upcoming'
+    status: 'upcoming',
+    externalTicketUrl: 'https://freemanfestival.de'
   }
 ];
 

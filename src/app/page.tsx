@@ -155,18 +155,53 @@ export default function Home() {
                   ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <Link href="/kontakt#kontaktformular" className="btn-primary px-8 py-4 text-lg font-semibold">
-                    Tickets kaufen
-                  </Link>
-                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
-                    <div className="flex items-center gap-1 mb-1">
-                      📅 {nextEvent.time}
+                <div className="space-y-4 mb-6">
+                  {nextEvent.ticketDates ? (
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-semibold text-white/90 mb-3">Tickets für beide Termine:</h4>
+                      {nextEvent.ticketDates.map((ticketDate) => (
+                        <div key={ticketDate.date} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-4 bg-black/20 rounded-lg border border-white/10">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-lg font-semibold text-white">📅 {ticketDate.dateDisplay}</span>
+                              <span className="text-sm text-white/70">{nextEvent.time}</span>
+                            </div>
+                            {ticketDate.film && (
+                              <div className="text-white/80 text-sm">🎬 {ticketDate.film}</div>
+                            )}
+                            <div className="text-white/70 text-sm mt-1">{nextEvent.price}</div>
+                          </div>
+                          <a
+                            href={ticketDate.ticketUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-primary px-6 py-3 text-sm font-semibold whitespace-nowrap"
+                          >
+                            Tickets kaufen
+                          </a>
+                        </div>
+                      ))}
                     </div>
-                    <div className="text-center leading-tight">
-                      {nextEvent.price}
+                  ) : (
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <a
+                        href={nextEvent.externalTicketUrl || "/kontakt#kontaktformular"}
+                        target={nextEvent.externalTicketUrl ? "_blank" : undefined}
+                        rel={nextEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
+                        className="btn-primary px-8 py-4 text-lg font-semibold"
+                      >
+                        Tickets kaufen
+                      </a>
+                      <div className="flex flex-col items-center justify-center text-white/70 text-sm">
+                        <div className="flex items-center gap-1 mb-1">
+                          📅 {nextEvent.time}
+                        </div>
+                        <div className="text-center leading-tight">
+                          {nextEvent.price}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <Link
@@ -185,7 +220,8 @@ export default function Home() {
                       src={nextEvent.image}
                       alt={nextEvent.title}
                       fill
-                      className="object-contain"
+                      className={nextEvent.id === 'wanderzirkus-pepe' ? "object-contain object-bottom" : "object-contain"}
+                      style={nextEvent.id === 'wanderzirkus-pepe' ? {backgroundColor: '#000'} : undefined}
                       sizes="(max-width: 768px) 100vw, 400px"
                     />
                   ) : (

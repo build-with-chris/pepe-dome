@@ -1,18 +1,37 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { events } from "@/data/events";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Events & Veranstaltungen - Pepe Dome München | Freeman Festival & Artistik-Shows",
-  description: "Entdecken Sie spektakuläre Events im Pepe Dome: Freeman Festival, Luftakrobatik mit Marlon, Circus meets Cinema. Tickets für einzigartige Artistik-Erlebnisse sichern!",
-  keywords: ["Pepe Dome Events", "Freeman Festival", "Artistik München", "Luftakrobatik", "Circus Cinema", "Veranstaltungen Ostpark", "Tickets"],
-};
+import { useState } from "react";
 
 export default function VeranstaltungenPage() {
+  const [selectedMonth, setSelectedMonth] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string>('all');
+
   const freemanEvent = events.find(event => event.id === 'freeman-festival');
+
+  // Get unique months and types
+  const months = Array.from(new Set(events.map(event => {
+    const date = new Date(event.date);
+    return date.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
+  }))).sort();
+
+  const types = Array.from(new Set(events.map(event => event.category)));
+
+  // Filter events based on selected filters
+  const filteredEvents = events.filter(event => {
+    if (event.id === 'freeman-festival') return false; // Freeman is shown separately
+
+    const eventDate = new Date(event.date);
+    const eventMonth = eventDate.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
+
+    const monthMatch = selectedMonth === 'all' || eventMonth === selectedMonth;
+    const typeMatch = selectedType === 'all' || event.category === selectedType;
+
+    return monthMatch && typeMatch;
+  });
 
   return (
     <div className="min-h-screen">
@@ -28,6 +47,92 @@ export default function VeranstaltungenPage() {
           <p className="text-xl text-white/80 mb-12 leading-relaxed">
             Von spektakulären Festivals bis zu intimen Artistik-Shows - erlebe Kultur in einzigartiger Atmosphäre
           </p>
+        </div>
+      </section>
+
+      {/* Filter Section */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="display text-2xl md:text-3xl font-bold mb-4">
+              Events filtern
+            </h2>
+            <p className="text-white/70">
+              Finde schnell die Veranstaltungen, die dich interessieren
+            </p>
+          </div>
+
+          <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+
+              {/* Month Filter */}
+              <div className="space-y-3">
+                <label htmlFor="month-filter" className="block text-white font-semibold">
+                  📅 Nach Monat filtern
+                </label>
+                <select
+                  id="month-filter"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="w-full bg-var(--pepe-surface) border border-var(--pepe-line) rounded-xl px-4 py-3 text-white focus:border-var(--pepe-gold) focus:outline-none transition-colors"
+                  style={{
+                    backgroundColor: 'var(--pepe-surface)',
+                    borderColor: 'var(--pepe-line)'
+                  }}
+                >
+                  <option value="all">🗓️ Alle Monate anzeigen</option>
+                  {months.map(month => (
+                    <option key={month} value={month}>{month}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Type Filter */}
+              <div className="space-y-3">
+                <label htmlFor="type-filter" className="block text-white font-semibold">
+                  🎭 Nach Typ filtern
+                </label>
+                <select
+                  id="type-filter"
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="w-full bg-var(--pepe-surface) border border-var(--pepe-line) rounded-xl px-4 py-3 text-white focus:border-var(--pepe-gold) focus:outline-none transition-colors"
+                  style={{
+                    backgroundColor: 'var(--pepe-surface)',
+                    borderColor: 'var(--pepe-line)'
+                  }}
+                >
+                  <option value="all">🎪 Alle Veranstaltungstypen</option>
+                  <option value="cinema">🎬 Cinema</option>
+                  <option value="clown">🤡 Clownerie</option>
+                  <option value="workshop">🤸 Workshop</option>
+                  <option value="festival">🎭 Festival</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Filter Status & Reset */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+              <div className="text-sm text-white/70">
+                {filteredEvents.length === 0
+                  ? "Keine Events gefunden"
+                  : `${filteredEvents.length} Event${filteredEvents.length !== 1 ? 's' : ''} gefunden`
+                }
+              </div>
+
+              {(selectedMonth !== 'all' || selectedType !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSelectedMonth('all');
+                    setSelectedType('all');
+                  }}
+                  className="btn-ghost px-6 py-2 text-sm"
+                >
+                  🔄 Filter zurücksetzen
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -55,12 +160,14 @@ export default function VeranstaltungenPage() {
                   {freemanEvent.description}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <Link
-                    href="/kontakt#kontaktformular"
+                  <a
+                    href={freemanEvent.externalTicketUrl || "/kontakt#kontaktformular"}
+                    target={freemanEvent.externalTicketUrl ? "_blank" : undefined}
+                    rel={freemanEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
                     className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center justify-center"
                   >
                     Tickets kaufen
-                  </Link>
+                  </a>
                   <div className="flex flex-col items-center justify-center text-white/70 text-sm">
                     <div className="flex items-center gap-1 mb-1">
                       📅 {freemanEvent.dateRange}
@@ -92,7 +199,8 @@ export default function VeranstaltungenPage() {
       )}
 
       {/* Dynamic Events */}
-      {events.filter(event => event.id !== 'freeman-festival').map((event, index) => (
+      {filteredEvents.length > 0 ? (
+        filteredEvents.map((event, index) => (
         <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10`}>
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -119,18 +227,53 @@ export default function VeranstaltungenPage() {
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <Link href="/kontakt#kontaktformular" className="btn-primary px-8 py-4 text-lg font-semibold">
-                    {event.id === 'freeman-festival' ? 'Tickets kaufen' : 'Tickets kaufen'}
-                  </Link>
-                  <div className="flex flex-col items-center justify-center text-white/70 text-sm">
-                    <div className="flex items-center gap-1 mb-1">
-                      📅 {event.time}
+                <div className="space-y-4 mb-6">
+                  {event.ticketDates ? (
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-semibold text-white/90 mb-3">Tickets für beide Termine:</h4>
+                      {event.ticketDates.map((ticketDate) => (
+                        <div key={ticketDate.date} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-4 bg-black/20 rounded-lg border border-white/10">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-lg font-semibold text-white">📅 {ticketDate.dateDisplay}</span>
+                              <span className="text-sm text-white/70">{event.time}</span>
+                            </div>
+                            {ticketDate.film && (
+                              <div className="text-white/80 text-sm">🎬 {ticketDate.film}</div>
+                            )}
+                            <div className="text-white/70 text-sm mt-1">{event.price}</div>
+                          </div>
+                          <a
+                            href={ticketDate.ticketUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-primary px-6 py-3 text-sm font-semibold whitespace-nowrap"
+                          >
+                            Tickets kaufen
+                          </a>
+                        </div>
+                      ))}
                     </div>
-                    <div className="text-center leading-tight">
-                      {event.price}
+                  ) : (
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <a
+                        href={event.externalTicketUrl || "/kontakt#kontaktformular"}
+                        target={event.externalTicketUrl ? "_blank" : undefined}
+                        rel={event.externalTicketUrl ? "noopener noreferrer" : undefined}
+                        className="btn-primary px-8 py-4 text-lg font-semibold"
+                      >
+                        Tickets kaufen
+                      </a>
+                      <div className="flex flex-col items-center justify-center text-white/70 text-sm">
+                        <div className="flex items-center gap-1 mb-1">
+                          📅 {event.time}
+                        </div>
+                        <div className="text-center leading-tight">
+                          {event.price}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               <div className={`relative ${index % 2 === 0 ? 'order-2' : 'order-1 md:order-2'}`}>
@@ -140,7 +283,8 @@ export default function VeranstaltungenPage() {
                       src={event.image}
                       alt={event.title}
                       fill
-                      className="object-contain"
+                      className={event.id === 'wanderzirkus-pepe' ? "object-contain object-bottom" : "object-contain"}
+                      style={event.id === 'wanderzirkus-pepe' ? {backgroundColor: '#000'} : undefined}
                       sizes="(max-width: 768px) 100vw, 400px"
                     />
                   ) : (
@@ -153,7 +297,30 @@ export default function VeranstaltungenPage() {
             </div>
           </div>
         </section>
-      ))}
+        ))
+      ) : (
+        /* No Events Found */
+        <section className="py-20 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="text-6xl mb-6">🔍</div>
+            <h3 className="display text-2xl md:text-3xl font-bold mb-4">
+              Keine Events gefunden
+            </h3>
+            <p className="text-lg text-white/80 mb-6">
+              Für die ausgewählten Filter wurden keine Veranstaltungen gefunden.
+            </p>
+            <button
+              onClick={() => {
+                setSelectedMonth('all');
+                setSelectedType('all');
+              }}
+              className="btn-primary px-8 py-4 text-lg font-semibold"
+            >
+              Alle Events anzeigen
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* Event Types */}
       <section className="py-20 px-6 bg-black/10">
