@@ -1,8 +1,14 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Artistik Training & Kurse - Pepe Dome München | Luftakrobatik lernen im Ostpark",
+  description: "Lernen Sie Luftakrobatik im Pepe Dome! Profi-Training, Open Training & Workshops für alle Level. 8,50m Kuppelhöhe, professionelle Ausstattung. Jetzt anmelden!",
+  keywords: ["Artistik Training München", "Luftakrobatik Kurse", "Pepe Dome Training", "Ostpark", "Workshops", "Profi Training", "Open Training", "8,50m Höhe"],
+};
 
 export default function TrainingPage() {
   return (
@@ -39,6 +45,123 @@ export default function TrainingPage() {
                   erfahrene Trainer:innen für alle Levels und Disziplinen.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Open Training Times - Prominent Section */}
+      <section className="py-16 px-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-y border-yellow-400/20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-8">
+            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <span className="text-4xl">⏰</span>
+            </div>
+            <h2 className="display text-4xl md:text-5xl font-bold mb-4 text-yellow-400">
+              Open Training
+            </h2>
+            <p className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Jeden Tag bis 18h
+            </p>
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              Komm vorbei und trainiere in deinem eigenen Tempo. Alle Geräte verfügbar, alle Level willkommen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Guided Training Notice */}
+      <section className="py-12 px-6 bg-black/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20">
+            <h3 className="display text-2xl font-bold mb-4 text-blue-400">
+              Angeleitete Trainings
+            </h3>
+            <p className="text-lg text-white/90 mb-4">
+              Angeleitete Trainings findet ihr im Eversports Plan.
+            </p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-400/30 rounded-full">
+              <span className="text-orange-400 font-semibold">⚠️ Achtung:</span>
+              <span className="text-white/90">Schaut ob es an der richtigen Location stattfindet!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Eversports Booking Widget */}
+      <section className="py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Kursplan & Buchung
+            </h2>
+            <p className="text-xl text-white/80 mb-6">
+              Alle aktuellen Kurse und direkte Buchung über Eversports
+            </p>
+          </div>
+
+          <div className="rounded-xl overflow-hidden border border-white/10 bg-gray-900">
+            <div className="eversports-widget">
+              <iframe
+                width="100%"
+                height="900"
+                src="https://www.eversports.de/widget/w/E5UPEH"
+                frameBorder="0"
+                title="Eversports Buchungswidget"
+                className="w-full"
+                style={{
+                  filter: 'invert(1) hue-rotate(180deg)',
+                  background: '#161616'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Train at Pepe Dome */}
+      <section className="py-20 px-6 bg-black/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Warum im Pepe Dome trainieren?
+            </h2>
+            <p className="text-xl text-white/80">
+              Einzigartige Trainingsbedingungen in München
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">📏</span>
+              </div>
+              <h3 className="display text-lg font-semibold mb-2">8,50 Meter Höhe</h3>
+              <p className="text-sm text-white/70">Viel Raum für Luftakrobatik und spektakuläre hohe Elemente</p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">🏛️</span>
+              </div>
+              <h3 className="display text-lg font-semibold mb-2">Geodätische Kuppel</h3>
+              <p className="text-sm text-white/70">Einzigartige Architektur und optimale Akustik</p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">🌿</span>
+              </div>
+              <h3 className="display text-lg font-semibold mb-2">Ostpark Lage</h3>
+              <p className="text-sm text-white/70">Training im Grünen - inspirierendes Umfeld</p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">👥</span>
+              </div>
+              <h3 className="display text-lg font-semibold mb-2">Community</h3>
+              <p className="text-sm text-white/70">Lebendige Artist:innen-Community in München</p>
             </div>
           </div>
         </div>
@@ -158,47 +281,7 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* Eversports Booking Widget */}
-      <section className="py-12 px-6 bg-black/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Kursplan & Buchung
-            </h2>
-            <p className="text-xl text-white/80 mb-6">
-              Alle aktuellen Kurse und direkte Buchung über Eversports
-            </p>
-          </div>
-
-          <div className="rounded-xl overflow-hidden border border-white/10 bg-gray-900">
-            <style jsx>{`
-              .eversports-dark-theme iframe {
-                filter: invert(1) hue-rotate(180deg);
-                background: #161616 !important;
-              }
-              .eversports-dark-theme {
-                background: #161616;
-              }
-            `}</style>
-            <div className="eversports-dark-theme">
-              <iframe
-                width="100%"
-                height="900"
-                src="https://www.eversports.de/widget/w/E5UPEH"
-                frameBorder="0"
-                title="Eversports Buchungswidget"
-                className="w-full"
-                style={{
-                  filter: 'invert(1) hue-rotate(180deg)',
-                  background: '#161616'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Train at Pepe Dome */}
+      {/* Disciplines */}
       <section className="py-20 px-6 bg-black/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -215,8 +298,8 @@ export default function TrainingPage() {
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">📏</span>
               </div>
-              <h3 className="display text-lg font-semibold mb-2">5 Meter Höhe</h3>
-              <p className="text-sm text-white/70">Genug Raum für Luftakrobatik und hohe Elemente</p>
+              <h3 className="display text-lg font-semibold mb-2">8,50 Meter Höhe</h3>
+              <p className="text-sm text-white/70">Viel Raum für Luftakrobatik und spektakuläre hohe Elemente</p>
             </div>
 
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
@@ -390,6 +473,34 @@ export default function TrainingPage() {
             >
               Kontakt aufnehmen
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Workshop Request CTA */}
+      <section className="py-16 px-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-y border-purple-400/20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="p-8 rounded-xl bg-black/30 border border-purple-400/30">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <span className="text-3xl">💌</span>
+            </div>
+            <h2 className="display text-3xl md:text-4xl font-bold mb-6 text-purple-400">
+              Ihr wünscht euch einen Workshop oder Kurs?
+            </h2>
+            <p className="text-lg text-white/90 mb-6 leading-relaxed">
+              Zögert nicht zu schreiben! Wir nehmen eure Nachrichten ernst und richten Kurse oder Workshops bei genug Nachfrage ein.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href="/kontakt"
+                className="btn-primary text-lg px-8 py-4"
+              >
+                Workshop anfragen
+              </Link>
+              <button className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white">
+                Idee mitteilen
+              </button>
+            </div>
           </div>
         </div>
       </section>

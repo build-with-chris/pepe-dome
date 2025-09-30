@@ -1,8 +1,14 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Business Events & Firmenevents - Pepe Dome München | Einzigartige Location im Ostpark",
+  description: "Unvergessliche Firmenevents im Pepe Dome: Teambuilding, Tagungen, Weihnachtsfeiern in einzigartiger geodätischer Kuppel. 200 Plätze, barrierefrei. Event anfragen!",
+  keywords: ["Firmenevents München", "Teambuilding Pepe Dome", "Business Events", "Tagungen Ostpark", "Weihnachtsfeier", "geodätische Kuppel", "200 Plätze", "barrierefrei"],
+};
 
 export default function BusinessPage() {
   return (

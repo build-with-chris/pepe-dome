@@ -1,8 +1,59 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import { useState, useEffect } from "react";
 
 export default function FreemanPage() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const posters = [
+    {
+      src: "/PosterFreeMan/Happy hour 2.webp",
+      alt: "Freeman Festival - Happy Hour 2",
+      title: "Happy Hour 2"
+    },
+    {
+      src: "/PosterFreeMan/Happy Hour.webp",
+      alt: "Freeman Festival - Happy Hour",
+      title: "Happy Hour"
+    },
+    {
+      src: "/PosterFreeMan/How a spiral works 2.webp",
+      alt: "Freeman Festival - How a Spiral Works 2",
+      title: "How a Spiral Works 2"
+    },
+    {
+      src: "/PosterFreeMan/How a Spiral Works.webp",
+      alt: "Freeman Festival - How a Spiral Works",
+      title: "How a Spiral Works"
+    },
+    {
+      src: "/PosterFreeMan/Object manipulation.webp",
+      alt: "Freeman Festival - Object Manipulation",
+      title: "Object Manipulation"
+    },
+    {
+      src: "/PosterFreeMan/stillness in motion.webp",
+      alt: "Freeman Festival - Stillness in Motion",
+      title: "Stillness in Motion"
+    }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % posters.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + posters.length) % posters.length);
+  };
+
+  // Auto-advance slides every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -93,10 +144,70 @@ export default function FreemanPage() {
                 </li>
               </ul>
             </div>
-            <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden">
-              {/* Placeholder for artist image */}
-              <div className="w-full h-full flex items-center justify-center text-6xl">
-                🤸
+            {/* Poster Slider Gallery */}
+            <div className="relative w-full flex justify-center">
+              <div className="relative w-full max-w-md">
+                {/* Container for aspect ratio */}
+                <div className="aspect-[3/4] relative">
+                  {/* Main Image Display */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden shadow-2xl">
+                    <Image
+                      src={posters[currentSlide].src}
+                      alt={posters[currentSlide].alt}
+                      fill
+                      className="object-cover transition-all duration-500 ease-in-out"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      priority
+                    />
+
+                    {/* Overlay with poster title */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <h3 className="text-white font-semibold text-sm">
+                        {posters[currentSlide].title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:border-white/40 z-10"
+                    aria-label="Previous poster"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:border-white/40 z-10"
+                    aria-label="Next poster"
+                  >
+                    →
+                  </button>
+                </div>
+
+                {/* Slide Indicators */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {posters.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentSlide
+                          ? 'bg-purple-400 w-6'
+                          : 'bg-white/30 hover:bg-white/50'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden mt-2">
+                  <div
+                    className="h-full bg-purple-400 transition-all duration-100 ease-linear"
+                    style={{ width: `${((currentSlide + 1) / posters.length) * 100}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -69,6 +69,7 @@ export const events: Event[] = [
       accent: 'blue-400'
     },
     emoji: '🤸‍♂️',
+    image: '/Marlon1.webp',
     status: 'upcoming'
   },
   {

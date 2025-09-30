@@ -1,7 +1,13 @@
-"use client";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kontakt - Pepe Dome München | Event anfragen & Informationen | Ostpark",
+  description: "Kontaktieren Sie uns für Events, Training oder Fragen zum Pepe Dome. Standort: Ostpark München, barrierefrei, 200 Plätze. Jetzt Event anfragen oder Newsletter abonnieren!",
+  keywords: ["Kontakt Pepe Dome", "Event anfragen", "Ostpark München", "Adresse", "Telefon", "Email", "Newsletter", "Anfrage", "Information"],
+};
 
 export default function KontaktPage() {
   return (

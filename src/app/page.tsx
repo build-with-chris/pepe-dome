@@ -1,9 +1,15 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { getNextEvent } from "@/data/events";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pepe Dome München - Geodätische Kuppel für Artistik & Events im Ostpark",
+  description: "Erleben Sie einzigartige Artistik-Events in der geodätischen Kuppel im Ostpark München. 8,50m Höhe, 200 Plätze, barrierefrei. Jetzt Events & Training entdecken!",
+  keywords: ["Pepe Dome", "München", "Ostpark", "Artistik", "Events", "geodätische Kuppel", "Luftakrobatik", "Kultur", "Veranstaltungsort"],
+};
 
 export default function Home() {
   const nextEvent = getNextEvent();
@@ -19,9 +25,9 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 right-0 transform -translate-y-1/2 w-[60vw] h-[60vw] max-w-4xl max-h-4xl opacity-25">
             <div
-              className="relative w-full h-full animate-[fadeInBlur_4s_ease-out_1s_both]"
+              className="relative w-full h-full animate-[fadeInBlur_1.5s_ease-out_0.3s_both]"
               style={{
-                animation: 'fadeInBlur 4s ease-out 1s both'
+                animation: 'fadeInBlur 1.5s ease-out 0.3s both'
               }}
             >
               <Image
@@ -77,8 +83,8 @@ export default function Home() {
           </p>
 
           <div className="hero-actions">
-            <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
-              Event anfragen
+            <Link href="/veranstaltungen" className="btn-primary btn-lg">
+              Was steht an?
             </Link>
             <a
               href="https://maps.google.com/maps?q=Theatron+Ostpark+München"
@@ -97,7 +103,7 @@ export default function Home() {
             </div>
             <span className="hero-feature-divider">•</span>
             <div className="hero-feature">
-              <span>🎪</span> 5m Kuppelhöhe
+              <span>🎪</span> 8,50m Kuppelhöhe
             </div>
             <span className="hero-feature-divider">•</span>
             <div className="hero-feature">

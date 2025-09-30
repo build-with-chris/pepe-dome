@@ -1,8 +1,14 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Über uns - Pepe Dome München | PepeCollective & geodätische Kuppel Geschichte",
+  description: "Erfahren Sie mehr über den Pepe Dome: Geschichte der geodätischen Kuppel, das PepeCollective (PepeArts, Munich Circus Arts, BUZZ, Circusakademie, PepeShows) & Nachhaltigkeit.",
+  keywords: ["Über Pepe Dome", "PepeCollective", "geodätische Kuppel", "PepeArts", "Munich Circus Arts", "Geschichte", "Nachhaltigkeit", "Ostpark München", "8,50m Höhe"],
+};
 
 export default function UeberPage() {
   return (
@@ -54,7 +60,7 @@ export default function UeberPage() {
                 </li>
               </ul>
             </div>
-            <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
+            <div className="hidden md:block relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
               <div
                 className="relative w-full h-full animate-[fadeInBlur_3s_ease-out_0.5s_both]"
                 style={{
@@ -92,6 +98,38 @@ export default function UeberPage() {
         </div>
       </section>
 
+      {/* Mobile Dome Image - Zoomed for prominence */}
+      <section className="md:hidden py-8 px-6">
+        <div className="max-w-md mx-auto">
+          <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
+            <div className="relative w-full h-full">
+              <Image
+                src="/TheDome.png"
+                alt="Pepe Dome - Luftaufnahme der geodätischen Kuppel"
+                fill
+                className="object-cover transition-all duration-1000"
+                style={{
+                  objectPosition: 'center center',
+                  transform: 'scale(1.8)',
+                }}
+                sizes="100vw"
+                priority
+              />
+              {/* Gradient overlay for seamless integration */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `
+                    radial-gradient(ellipse at center, transparent 50%, rgba(22, 22, 22, 0.2) 70%, var(--pepe-ink) 90%),
+                    linear-gradient(135deg, transparent 60%, rgba(22, 22, 22, 0.3) 80%, rgba(22, 22, 22, 0.7) 95%)
+                  `
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* The Dome */}
       <section className="py-20 px-6 bg-black/10">
         <div className="max-w-6xl mx-auto">
@@ -104,13 +142,49 @@ export default function UeberPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Desktop Layout: Only Features */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">📏</span>
+                </div>
+                <h3 className="display text-lg font-semibold mb-2">8,50 Meter Höhe</h3>
+                <p className="text-sm text-white/70">Beeindruckende Höhe für spektakuläre Luftakrobatik und Events</p>
+              </div>
+
+              <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">🎵</span>
+                </div>
+                <h3 className="display text-lg font-semibold mb-2">Perfekte Akustik</h3>
+                <p className="text-sm text-white/70">Geodätische Form sorgt für optimale Schallverteilung</p>
+              </div>
+
+              <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">♿</span>
+                </div>
+                <h3 className="display text-lg font-semibold mb-2">Barrierefrei</h3>
+                <p className="text-sm text-white/70">Zugänglich für alle - Inklusion von Beginn an</p>
+              </div>
+
+              <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">🌿</span>
+                </div>
+                <h3 className="display text-lg font-semibold mb-2">Grüne Lage</h3>
+                <p className="text-sm text-white/70">Mitten im Ostpark - Natur und Kultur vereint</p>
+              </div>
+            </div>
+
+          {/* Mobile Layout: Features only */}
+          <div className="md:hidden grid grid-cols-1 gap-6">
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">📏</span>
               </div>
-              <h3 className="display text-lg font-semibold mb-2">5 Meter Höhe</h3>
-              <p className="text-sm text-white/70">Ideale Höhe für spektakuläre Luftakrobatik und Events</p>
+              <h3 className="display text-lg font-semibold mb-2">8,50 Meter Höhe</h3>
+              <p className="text-sm text-white/70">Beeindruckende Höhe für spektakuläre Luftakrobatik und Events</p>
             </div>
 
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
@@ -145,35 +219,27 @@ export default function UeberPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
-              <div
-                className="relative w-full h-full animate-[fadeInBlur_3s_ease-out_0.5s_both]"
-                style={{
-                  animation: 'fadeInBlur 3s ease-out 0.5s both'
-                }}
-              >
+              <div className="relative w-full h-full">
                 <Image
-                  src="/TheDome.png"
-                  alt="Pepe Dome - Luftaufnahme der geodätischen Kuppel"
+                  src="/CircusSchool.webp"
+                  alt="PepeCollective - Artistik Training und Performance"
                   fill
-                  className="object-contain transition-all duration-1000"
+                  className="object-cover transition-all duration-1000"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
-                {/* Seamless background blend overlay */}
+                {/* Gradient overlay for better text readability */}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     background: `
-                      radial-gradient(ellipse at center, transparent 35%, rgba(22, 22, 22, 0.3) 55%, var(--pepe-ink) 85%),
-                      linear-gradient(135deg, transparent 40%, rgba(22, 22, 22, 0.1) 60%, rgba(22, 22, 22, 0.8) 90%)
+                      linear-gradient(135deg,
+                        transparent 0%,
+                        rgba(22, 22, 22, 0.1) 30%,
+                        rgba(22, 22, 22, 0.6) 70%,
+                        var(--pepe-ink) 100%
+                      )
                     `
-                  }}
-                />
-                {/* Subtle vignette for depth */}
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'radial-gradient(circle at center, transparent 50%, rgba(22, 22, 22, 0.15) 100%)'
                   }}
                 />
               </div>
@@ -188,31 +254,74 @@ export default function UeberPage() {
               </p>
               <div className="mb-6">
                 <h3 className="display text-xl font-semibold mb-4 text-white">Das Kollektiv:</h3>
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center gap-3 text-white/80">
-                    <span className="text-purple-400">🎪</span>
-                    <span className="font-semibold">PepeArts</span>
-                    <span className="text-white/60">• Artistik & Performance</span>
+
+                {/* Desktop Layout - Horizontal Liste */}
+                <div className="hidden md:block">
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center gap-3 text-white/80">
+                      <span className="text-purple-400">🎪</span>
+                      <span className="font-semibold">PepeArts</span>
+                      <span className="text-white/60">• Artistik & Performance</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/80">
+                      <span className="text-purple-400">🤸</span>
+                      <span className="font-semibold">Munich Circus Arts</span>
+                      <span className="text-white/60">• Training & Kurse</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/80">
+                      <span className="text-purple-400">⚡</span>
+                      <span className="font-semibold">BUZZ</span>
+                      <span className="text-white/60">• Events & Entertainment</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/80">
+                      <span className="text-purple-400">🎓</span>
+                      <span className="font-semibold">Circusakademie München</span>
+                      <span className="text-white/60">• Ausbildung & Workshops</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/80">
+                      <span className="text-purple-400">🎭</span>
+                      <span className="font-semibold">PepeShows</span>
+                      <span className="text-white/60">• Shows & Produktion</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <span className="text-purple-400">🤸</span>
-                    <span className="font-semibold">Munich Circus Arts</span>
-                    <span className="text-white/60">• Training & Kurse</span>
+                </div>
+
+                {/* Mobile Layout - Vertical Cards */}
+                <div className="md:hidden space-y-4">
+                  <div className="text-white/80">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-purple-400">🎪</span>
+                      <span className="font-semibold">PepeArts</span>
+                    </div>
+                    <div className="text-white/60 text-sm ml-6">Artistik & Performance</div>
                   </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <span className="text-purple-400">⚡</span>
-                    <span className="font-semibold">BUZZ</span>
-                    <span className="text-white/60">• Events & Entertainment</span>
+                  <div className="text-white/80">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-purple-400">🤸</span>
+                      <span className="font-semibold">Munich Circus Arts</span>
+                    </div>
+                    <div className="text-white/60 text-sm ml-6">Training & Kurse</div>
                   </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <span className="text-purple-400">🎓</span>
-                    <span className="font-semibold">Circusakademie München</span>
-                    <span className="text-white/60">• Ausbildung & Workshops</span>
+                  <div className="text-white/80">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-purple-400">⚡</span>
+                      <span className="font-semibold">BUZZ</span>
+                    </div>
+                    <div className="text-white/60 text-sm ml-6">Events & Entertainment</div>
                   </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <span className="text-purple-400">🎭</span>
-                    <span className="font-semibold">PepeShows</span>
-                    <span className="text-white/60">• Shows & Produktion</span>
+                  <div className="text-white/80">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-purple-400">🎓</span>
+                      <span className="font-semibold">Circusakademie München</span>
+                    </div>
+                    <div className="text-white/60 text-sm ml-6">Ausbildung & Workshops</div>
+                  </div>
+                  <div className="text-white/80">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-purple-400">🎭</span>
+                      <span className="font-semibold">PepeShows</span>
+                    </div>
+                    <div className="text-white/60 text-sm ml-6">Shows & Produktion</div>
                   </div>
                 </div>
               </div>
@@ -277,8 +386,8 @@ export default function UeberPage() {
                 Nachhaltigkeit
               </h3>
               <p className="text-white/70 mb-4">
-                Verantwortung für Umwelt und Gesellschaft - von unserer Energieversorgung
-                bis zu unseren Partnerschaften.
+                Nicht neu kaufen, sondern kreativ wiederverwenden - das ist unser Ansatz
+                für nachhaltiges Wirtschaften und verantwortungsvolles Handeln.
               </p>
             </div>
 
@@ -290,6 +399,62 @@ export default function UeberPage() {
               <p className="text-white/70 mb-4">
                 Wir experimentieren mit neuen Formaten und Technologien, um einzigartige
                 Erlebnisse zu schaffen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sustainability Section */}
+      <section className="py-20 px-6 bg-black/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Nachhaltigkeit neu gedacht
+            </h2>
+            <p className="text-xl text-white/80">
+              Nicht neu kaufen, sondern kreativ wiederverwenden
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Nachhaltigkeit heißt für uns: nicht neu kaufen, sondern kreativ wiederverwenden.
+                Bei den NEBourhoods in Neuperlach setzen wir genau das in die Tat um:
+              </p>
+
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3 text-white/80">
+                  <span className="text-green-400 mt-1">🏗️</span>
+                  <span>ein Geodome, der seit vielen Jahren immer wieder genutzt wird</span>
+                </li>
+                <li className="flex items-start gap-3 text-white/80">
+                  <span className="text-green-400 mt-1">🌿</span>
+                  <span>ökologische kompotoi-Toiletten</span>
+                </li>
+                <li className="flex items-start gap-3 text-white/80">
+                  <span className="text-green-400 mt-1">♻️</span>
+                  <span>Materialien, die seit über zwei Jahrzehnten im Umlauf sind – und noch lange nicht ausgedient haben</span>
+                </li>
+                <li className="flex items-start gap-3 text-white/80">
+                  <span className="text-green-400 mt-1">🎨</span>
+                  <span>bunte Wimpelketten von Anna Diermeier, die hier ihr zweites Leben feiern</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-black/20 border border-white/10 rounded-xl p-8">
+              <h3 className="display text-xl font-bold mb-6 text-white">
+                Unterstützung durch Partner
+              </h3>
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Möglich wurde das durch die Unterstützung vieler Menschen und Partner:
+              </p>
+              <p className="text-white/80 leading-relaxed">
+                Ein herzliches Dankeschön an die <strong>Grüne Rosa Liste Fraktion</strong> (besonders an David Süß & Christian Smolka),
+                das <strong>Stadtteilmanagement Neuperlach</strong>, <strong>Kreativ München</strong>,
+                das <strong>Kulturreferat</strong> – und natürlich an alle helfenden Hände aus unserer Nachbarschaft.
               </p>
             </div>
           </div>

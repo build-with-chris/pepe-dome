@@ -1,9 +1,15 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { events } from "@/data/events";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Events & Veranstaltungen - Pepe Dome München | Freeman Festival & Artistik-Shows",
+  description: "Entdecken Sie spektakuläre Events im Pepe Dome: Freeman Festival, Luftakrobatik mit Marlon, Circus meets Cinema. Tickets für einzigartige Artistik-Erlebnisse sichern!",
+  keywords: ["Pepe Dome Events", "Freeman Festival", "Artistik München", "Luftakrobatik", "Circus Cinema", "Veranstaltungen Ostpark", "Tickets"],
+};
 
 export default function VeranstaltungenPage() {
   const freemanEvent = events.find(event => event.id === 'freeman-festival');
@@ -31,9 +37,12 @@ export default function VeranstaltungenPage() {
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="inline-block mb-4">
+                <div className="flex flex-wrap gap-3 mb-4">
                   <span className={`px-4 py-2 bg-${freemanEvent.color.primary}/20 border border-${freemanEvent.color.accent}/30 rounded-full text-${freemanEvent.color.accent} font-semibold text-sm`}>
                     🎭 HIGHLIGHT EVENT
+                  </span>
+                  <span className={`px-4 py-2 bg-${freemanEvent.color.primary}/20 border border-${freemanEvent.color.accent}/30 rounded-full text-${freemanEvent.color.accent} font-semibold text-sm`}>
+                    📅 {freemanEvent.dateRange}
                   </span>
                 </div>
                 <h2 className="display text-4xl md:text-5xl font-bold mb-6">
@@ -63,20 +72,15 @@ export default function VeranstaltungenPage() {
                 </div>
               </div>
               <div className="relative">
-                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${freemanEvent.color.primary}/20 to-${freemanEvent.color.secondary}/20 rounded-xl border border-${freemanEvent.color.accent}/30 overflow-hidden backdrop-blur-sm shadow-2xl`}>
-                  {freemanEvent.image ? (
-                    <Image
-                      src={freemanEvent.image}
-                      alt={freemanEvent.title}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 100vw, 400px"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-6xl">
-                      {freemanEvent.emoji}
-                    </div>
-                  )}
+                {/* Freeman Featured Poster */}
+                <div className="aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden backdrop-blur-sm shadow-xl">
+                  <Image
+                    src="/PosterFreeMan/Happy hour 2.webp"
+                    alt="Freeman Festival - Happy Hour Poster"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 400px"
+                  />
                 </div>
                 <div className="absolute -bottom-3 -right-3 bg-yellow-400 text-black px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg">
                   HIGHLIGHT EVENT
@@ -88,7 +92,7 @@ export default function VeranstaltungenPage() {
       )}
 
       {/* Dynamic Events */}
-      {events.map((event, index) => (
+      {events.filter(event => event.id !== 'freeman-festival').map((event, index) => (
         <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10`}>
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
