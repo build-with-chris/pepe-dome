@@ -419,16 +419,10 @@ ${ideaText}`;
             <p className="text-lg text-white/90 mb-6 leading-relaxed">
               Zögert nicht zu schreiben! Wir nehmen eure Nachrichten ernst und richten Kurse oder Workshops bei genug Nachfrage ein.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/kontakt"
-                className="btn-primary text-lg px-8 py-4"
-              >
-                Workshop anfragen
-              </Link>
+            <div className="flex justify-center">
               <button
                 onClick={() => setShowIdeaForm(!showIdeaForm)}
-                className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"
+                className="btn-primary text-lg px-8 py-4"
               >
                 Idee mitteilen
               </button>
@@ -494,7 +488,6 @@ ${ideaText}`;
                 </div>
               </form>
             )}
-            </div>
           </div>
         </div>
       </section>
