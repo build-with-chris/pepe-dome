@@ -277,11 +277,11 @@ export default function KontaktPage() {
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">Telefon</h3>
                     <p className="text-white/70">
-                      <a href="tel:+498912345678" className="hover:text-white transition-colors">
-                        +49 89 123 456 78
+                      <a href="tel:+491796990707" className="hover:text-white transition-colors">
+                        +49 179 699 0707
                       </a>
                     </p>
-                    <p className="text-sm text-white/60 mt-1">Mo-Fr 9:00-18:00 Uhr</p>
+                    <p className="text-sm text-white/60 mt-1">12-21 Uhr unter der Woche</p>
                   </div>
                 </div>
 
@@ -293,13 +293,8 @@ export default function KontaktPage() {
                     <h3 className="display text-lg font-semibold mb-2">Social Media</h3>
                     <div className="space-y-1">
                       <p className="text-white/70">
-                        <a href="#" className="hover:text-white transition-colors">
-                          @pepedome (Instagram)
-                        </a>
-                      </p>
-                      <p className="text-white/70">
-                        <a href="#" className="hover:text-white transition-colors">
-                          Pepe Dome München (Facebook)
+                        <a href="https://instagram.com/pepe_arts" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                          @pepe_arts (Instagram)
                         </a>
                       </p>
                     </div>
@@ -317,8 +312,8 @@ export default function KontaktPage() {
                   Bei Notfällen während Veranstaltungen:
                 </p>
                 <p className="text-white font-mono">
-                  <a href="tel:+4917612345678" className="hover:text-white transition-colors">
-                    +49 176 123 456 78
+                  <a href="tel:+4915904891419" className="hover:text-white transition-colors">
+                    +49 159 048 914 19
                   </a>
                 </p>
                 <p className="text-sm text-white/60 mt-1">24/7 erreichbar während Events</p>
@@ -363,11 +358,10 @@ export default function KontaktPage() {
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">ÖPNV</h3>
                     <div className="text-white/70 space-y-1">
-                      <p>• U5 bis Ostbahnhof, dann Bus 145</p>
-                      <p>• S-Bahn bis Ostbahnhof (S1-S8)</p>
-                      <p>• Straßenbahn 19 bis Ostpark</p>
+                      <p>• U-Bahn bis Quiddestraße</p>
+                      <p>• Eingang über Albert-Schweitzer-Straße</p>
                     </div>
-                    <p className="text-sm text-white/60 mt-2">Ca. 5 Min. Fußweg vom Ostpark</p>
+                    <p className="text-sm text-white/60 mt-2">Kurzer Fußweg zum Pepe Dome</p>
                   </div>
                 </div>
 
@@ -378,9 +372,8 @@ export default function KontaktPage() {
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">Parken</h3>
                     <div className="text-white/70 space-y-1">
-                      <p>• Kostenlose Parkplätze im Ostpark</p>
-                      <p>• Parkhaus Ostbahnhof (5 Min. entfernt)</p>
-                      <p>• Straßenparken begrenzt verfügbar</p>
+                      <p>• Michaeligarten + 15 Minuten Fußweg</p>
+                      <p>• Parkplätze meist verfügbar</p>
                     </div>
                     <p className="text-sm text-white/60 mt-2">Bei Events: Früh anreisen empfohlen</p>
                   </div>
@@ -395,20 +388,18 @@ export default function KontaktPage() {
                 </h3>
                 <div className="space-y-2 text-white/70">
                   <div className="flex justify-between">
-                    <span>Training:</span>
-                    <span>Mo-Fr 17:00-21:00</span>
+                    <span>Unter der Woche:</span>
+                    <span>12:00-21:00 Uhr</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Open Training:</span>
-                    <span>Sa-So 14:00-18:00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Events:</span>
-                    <span>Nach Vereinbarung</span>
+                  <div className="flex justify-between items-center">
+                    <span>Wochenende:</span>
+                    <Link href="/veranstaltungen" className="text-yellow-400 hover:text-yellow-300 transition-colors underline">
+                      siehe Events
+                    </Link>
                   </div>
                 </div>
                 <p className="text-sm text-white/60 mt-3">
-                  Aktuelle Trainingszeiten können variieren. Bitte kontaktieren Sie uns für Details.
+                  Am Wochenende richten sich die Öffnungszeiten nach den Events.
                 </p>
               </div>
             </div>
