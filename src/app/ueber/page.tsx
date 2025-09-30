@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 export default function UeberPage() {
   return (
@@ -52,9 +54,38 @@ export default function UeberPage() {
                 </li>
               </ul>
             </div>
-            <div className="aspect-square bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl border border-yellow-400/30 overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center text-6xl">
-                🏛️
+            <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
+              <div
+                className="relative w-full h-full animate-[fadeInBlur_3s_ease-out_0.5s_both]"
+                style={{
+                  animation: 'fadeInBlur 3s ease-out 0.5s both'
+                }}
+              >
+                <Image
+                  src="/TheDome.png"
+                  alt="Pepe Dome - Luftaufnahme der geodätischen Kuppel"
+                  fill
+                  className="object-contain transition-all duration-1000"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+                {/* Seamless background blend overlay */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at center, transparent 35%, rgba(22, 22, 22, 0.3) 55%, var(--pepe-ink) 85%),
+                      linear-gradient(135deg, transparent 40%, rgba(22, 22, 22, 0.1) 60%, rgba(22, 22, 22, 0.8) 90%)
+                    `
+                  }}
+                />
+                {/* Subtle vignette for depth */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at center, transparent 50%, rgba(22, 22, 22, 0.15) 100%)'
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -109,100 +140,101 @@ export default function UeberPage() {
         </div>
       </section>
 
-      {/* PepeShows Connection */}
+      {/* PepeCollective Connection */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-400/30 overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center text-6xl">
-                🎪
+            <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--pepe-ink)' }}>
+              <div
+                className="relative w-full h-full animate-[fadeInBlur_3s_ease-out_0.5s_both]"
+                style={{
+                  animation: 'fadeInBlur 3s ease-out 0.5s both'
+                }}
+              >
+                <Image
+                  src="/TheDome.png"
+                  alt="Pepe Dome - Luftaufnahme der geodätischen Kuppel"
+                  fill
+                  className="object-contain transition-all duration-1000"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+                {/* Seamless background blend overlay */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at center, transparent 35%, rgba(22, 22, 22, 0.3) 55%, var(--pepe-ink) 85%),
+                      linear-gradient(135deg, transparent 40%, rgba(22, 22, 22, 0.1) 60%, rgba(22, 22, 22, 0.8) 90%)
+                    `
+                  }}
+                />
+                {/* Subtle vignette for depth */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at center, transparent 50%, rgba(22, 22, 22, 0.15) 100%)'
+                  }}
+                />
               </div>
             </div>
             <div>
               <h2 className="display text-3xl md:text-4xl font-bold mb-6">
-                Ein Projekt von PepeShows
+                Ein Projekt des PepeCollective
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Der Pepe Dome ist das neueste Projekt von PepeShows, einem etablierten
-                Entertainment-Unternehmen mit über 10 Jahren Erfahrung in der Artistik-
-                und Veranstaltungsbranche.
+                Der Pepe Dome ist das gemeinsame Projekt des PepeCollective - einem
+                Zusammenschluss von fünf etablierten Partnern der Münchner Artistik-Szene.
               </p>
-              <ul className="space-y-3 text-white/70 mb-6">
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">🎭</span>
-                  <span>Über 1000 erfolgreiche Shows und Events</span>
-                </li>
-                <li className="flex items-center gap-3">
+              <div className="mb-6">
+                <h3 className="display text-xl font-semibold mb-4 text-white">Das Kollektiv:</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="flex items-center gap-3 text-white/80">
+                    <span className="text-purple-400">🎪</span>
+                    <span className="font-semibold">PepeArts</span>
+                    <span className="text-white/60">• Artistik & Performance</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-white/80">
+                    <span className="text-purple-400">🤸</span>
+                    <span className="font-semibold">Munich Circus Arts</span>
+                    <span className="text-white/60">• Training & Kurse</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-white/80">
+                    <span className="text-purple-400">⚡</span>
+                    <span className="font-semibold">BUZZ</span>
+                    <span className="text-white/60">• Events & Entertainment</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-white/80">
+                    <span className="text-purple-400">🎓</span>
+                    <span className="font-semibold">Circusakademie München</span>
+                    <span className="text-white/60">• Ausbildung & Workshops</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-white/80">
+                    <span className="text-purple-400">🎭</span>
+                    <span className="font-semibold">PepeShows</span>
+                    <span className="text-white/60">• Shows & Produktion</span>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-3 text-white/70 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-purple-400">🌟</span>
+                  <span>Gebündelte Expertise aus über 15 Jahren</span>
+                </div>
+                <div className="flex items-center gap-3">
                   <span className="text-purple-400">🌍</span>
                   <span>Internationales Netzwerk von Artist:innen</span>
-                </li>
-                <li className="flex items-center gap-3">
+                </div>
+                <div className="flex items-center gap-3">
                   <span className="text-purple-400">🏆</span>
-                  <span>Ausgezeichnete Qualität und Professionalität</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">❤️</span>
-                  <span>Leidenschaft für Artistik und Performance</span>
-                </li>
-              </ul>
-              <div>
-                <a
-                  href="https://pepeshows.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary px-8 py-4 inline-block"
-                >
-                  PepeShows entdecken
-                </a>
+                  <span>Qualität durch Kooperation</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-20 px-6 bg-black/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Das Team
-            </h2>
-            <p className="text-xl text-white/80">
-              Leidenschaftliche Menschen hinter dem Pepe Dome
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Team Member Placeholders */}
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">👨‍💼</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Management Team</h3>
-              <p className="text-sm text-white/70 mb-3">Erfahrene Führung mit Vision für Artistik und Kultur</p>
-              <div className="text-xs text-white/60">Event-Management • Strategische Planung</div>
-            </div>
-
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🤸</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Artist:innen & Trainer</h3>
-              <p className="text-sm text-white/70 mb-3">Professionelle Performer mit internationaler Erfahrung</p>
-              <div className="text-xs text-white/60">Training • Workshops • Shows</div>
-            </div>
-
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🛠️</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Operations Team</h3>
-              <p className="text-sm text-white/70 mb-3">Technische Expertise und operative Exzellenz</p>
-              <div className="text-xs text-white/60">Technik • Sicherheit • Logistik</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Values */}
       <section className="py-20 px-6">
@@ -332,6 +364,70 @@ export default function UeberPage() {
         </div>
       </section>
 
+      {/* Support Section */}
+      <section className="py-20 px-6 bg-black/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Unterstützung & Förderung
+            </h2>
+            <p className="text-xl text-white/80">
+              Der Pepe Dome wird gefördert von wichtigen kulturellen Institutionen
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            <div className="bg-black/20 border border-white/10 rounded-xl p-8">
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="display text-2xl font-bold mb-4">Kulturreferat München & Kreativ München</h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Wir werden sehr stark gefördert vom Kulturreferat der Landeshauptstadt München
+                    und Kreativ München, die unsere Vision einer lebendigen Artistik-Szene in München unterstützen.
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/KKUK_de_mit_LHM_Logo_kurz_nebeneinander_Unterstuetzung.png"
+                    alt="Unterstützung von Landeshauptstadt München und Kreativ München"
+                    width={500}
+                    height={100}
+                    className="h-16 sm:h-20 w-auto object-contain invert"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-black/20 border border-white/10 rounded-xl p-8">
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="display text-2xl font-bold mb-4">Städtebauförderung</h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Dieses Projekt wird durch Städtebauförderung in einem Bund-Länder-Programm im Mitteln des
+                    Bundes und des Freistaats Bayern gefördert sowie von der Landeshauptstadt München kofinanziert.
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/Förderung Logo.jpg"
+                    alt="Städtebauförderung Logo"
+                    width={400}
+                    height={80}
+                    className="h-12 sm:h-16 w-auto object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-white/60">
+              Diese Unterstützung ermöglicht es uns, hochwertige kulturelle Angebote für München zu schaffen.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">
@@ -359,17 +455,7 @@ export default function UeberPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="display text-xl font-bold mb-4">
-            Pepe Dome • Über uns
-          </div>
-          <p className="muted text-sm">
-            Ostpark München • Ein Projekt von PepeShows
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

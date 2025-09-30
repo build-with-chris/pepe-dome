@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 export default function TrainingPage() {
   return (
@@ -14,116 +16,183 @@ export default function TrainingPage() {
           <h1 className="display text-5xl md:text-6xl font-bold mb-6">
             Training & Kurse
           </h1>
-          <p className="text-xl text-white/80 mb-12 leading-relaxed">
+          <p className="text-xl text-white/80 mb-8 leading-relaxed">
             Pepe Dome als Trainingsraum für Profis & Einsteiger - von Open Training bis zu spezialisierten Workshops
           </p>
+
+          {/* Munich Circus Arts Partnership */}
+          <div className="max-w-2xl mx-auto mb-12 p-6 rounded-xl bg-gradient-to-r from-red-900/20 to-orange-900/20 border border-red-400/30">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="flex-shrink-0">
+                <Image
+                  src="/logo MCA.png"
+                  alt="Munich Circus Arts Logo"
+                  width={120}
+                  height={120}
+                  className="h-20 w-20 object-contain"
+                />
+              </div>
+              <div className="text-center sm:text-left">
+                <h2 className="display text-xl font-bold mb-2 text-white">In Kooperation mit Munich Circus Arts</h2>
+                <p className="text-white/80 text-sm leading-relaxed">
+                  Die regulären Kurse werden geplant und durchgeführt von Munich Circus Arts -
+                  erfahrene Trainer:innen für alle Levels und Disziplinen.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Training Categories */}
+      {/* Pricing Section */}
       <section className="py-12 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Profi-Training */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-400/20 hover:border-red-400/40 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🔥</span>
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Preise & Pakete
+            </h2>
+            <p className="text-xl text-white/80">
+              Flexible Optionen für alle Trainingsbedürfnisse
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Non-Aerial Prices */}
+            <div className="p-8 rounded-xl bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">🤸</span>
+                </div>
+                <h3 className="display text-2xl font-bold">Non-Aerial Kurse</h3>
+                <p className="text-white/70 text-sm mt-2">Bodenakrobatik, Handstand, Movement</p>
               </div>
-              <h2 className="display text-2xl font-bold mb-4 text-center">Profi-Training</h2>
-              <p className="text-white/80 mb-6 text-center">
-                Trainingsraum für professionelle Artist:innen und angehende Performer
-              </p>
-              <ul className="space-y-3 text-white/70 mb-6">
-                <li className="flex items-center gap-3">
-                  <span className="text-red-400">🎪</span>
-                  <span>Luftakrobatik (Tuch, Trapez, Lyra)</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-red-400">🤸</span>
-                  <span>Bodenakrobatik & Hand-Balancing</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-red-400">⚡</span>
-                  <span>Cyr Wheel & Chinese Pole</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-red-400">🎭</span>
-                  <span>Show-Vorbereitung & Coaching</span>
-                </li>
-              </ul>
-              <div className="text-center">
-                <button className="bg-red-500/20 hover:bg-red-500/30 border border-red-400/30 px-6 py-3 rounded-full transition-all">
-                  Training anfragen
-                </button>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">Probestunde</div>
+                    <div className="text-xs text-white/60">Einmalige Kursteilnahme zum ersten Mal</div>
+                  </div>
+                  <div className="text-xl font-bold text-green-400">€12</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">Einzelticket</div>
+                    <div className="text-xs text-white/60">Einmalige Kursteilnahme</div>
+                  </div>
+                  <div className="text-xl font-bold text-green-400">€20</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">5er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 5 non-Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-green-400">€90</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">10er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 10 non-Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-green-400">€165</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">20er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 20 non-Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-green-400">€300</div>
+                </div>
               </div>
             </div>
 
-            {/* Open Training */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-green-500/10 to-teal-500/10 border border-green-400/20 hover:border-green-400/40 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🌱</span>
+            {/* Aerial Prices */}
+            <div className="p-8 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-400/20">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">🎪</span>
+                </div>
+                <h3 className="display text-2xl font-bold">Aerial Kurse</h3>
+                <p className="text-white/70 text-sm mt-2">Vertikaltuch, Luftringe, Trapez</p>
               </div>
-              <h2 className="display text-2xl font-bold mb-4 text-center">Open Training</h2>
-              <p className="text-white/80 mb-6 text-center">
-                Offenes Training für alle Interessierten - egal welches Level
-              </p>
-              <ul className="space-y-3 text-white/70 mb-6">
-                <li className="flex items-center gap-3">
-                  <span className="text-green-400">🤸</span>
-                  <span>Einsteiger-freundlich</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-400">👥</span>
-                  <span>Gemeinsames Training</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-400">🏛️</span>
-                  <span>5m Kuppelhöhe nutzen</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-400">⏰</span>
-                  <span>Regelmäßige Sessions</span>
-                </li>
-              </ul>
-              <div className="text-center">
-                <button className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-6 py-3 rounded-full transition-all">
-                  Sessions anzeigen
-                </button>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">Einzelticket</div>
+                    <div className="text-xs text-white/60">Einmalige Kursteilnahme</div>
+                  </div>
+                  <div className="text-xl font-bold text-red-400">€25</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">5er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 5 Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-red-400">€120</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">10er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 10 Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-red-400">€220</div>
+                </div>
+
+                <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
+                  <div>
+                    <div className="font-semibold">20er Karte</div>
+                    <div className="text-xs text-white/60">Nimm an 20 Aerial Kursen teil</div>
+                  </div>
+                  <div className="text-xl font-bold text-red-400">€400</div>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Workshops & Kurse */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-400/20 hover:border-purple-400/40 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🎓</span>
-              </div>
-              <h2 className="display text-2xl font-bold mb-4 text-center">Workshops & Kurse</h2>
-              <p className="text-white/80 mb-6 text-center">
-                Strukturierte Kurse und Workshops für systematisches Lernen
-              </p>
-              <ul className="space-y-3 text-white/70 mb-6">
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">🎪</span>
-                  <span>Wochenend-Workshops</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">📚</span>
-                  <span>Mehrtägige Intensivkurse</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">👨‍🏫</span>
-                  <span>Gasttrainer & Masterclasses</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-purple-400">🎯</span>
-                  <span>Spezielle Techniken</span>
-                </li>
-              </ul>
-              <div className="text-center">
-                <button className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-6 py-3 rounded-full transition-all">
-                  Kursplan anzeigen
-                </button>
-              </div>
+      {/* Eversports Booking Widget */}
+      <section className="py-12 px-6 bg-black/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Kursplan & Buchung
+            </h2>
+            <p className="text-xl text-white/80 mb-6">
+              Alle aktuellen Kurse und direkte Buchung über Eversports
+            </p>
+          </div>
+
+          <div className="rounded-xl overflow-hidden border border-white/10 bg-gray-900">
+            <style jsx>{`
+              .eversports-dark-theme iframe {
+                filter: invert(1) hue-rotate(180deg);
+                background: #161616 !important;
+              }
+              .eversports-dark-theme {
+                background: #161616;
+              }
+            `}</style>
+            <div className="eversports-dark-theme">
+              <iframe
+                width="100%"
+                height="900"
+                src="https://www.eversports.de/widget/w/E5UPEH"
+                frameBorder="0"
+                title="Eversports Buchungswidget"
+                className="w-full"
+                style={{
+                  filter: 'invert(1) hue-rotate(180deg)',
+                  background: '#161616'
+                }}
+              />
             </div>
           </div>
         </div>
@@ -325,17 +394,7 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="display text-xl font-bold mb-4">
-            Pepe Dome Training
-          </div>
-          <p className="muted text-sm">
-            Ostpark München • Trainingsraum für Artistik & Bewegung
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

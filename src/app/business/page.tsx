@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 export default function BusinessPage() {
   return (
@@ -288,19 +290,23 @@ export default function BusinessPage() {
                   PepeShows anfragen
                 </button>
                 <a
-                  href="https://pepeshows.com"
+                  href="https://pepeshows.de"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/70 hover:text-white transition-colors underline"
                 >
-                  pepeshows.com besuchen
+                  pepeshows.de besuchen
                 </a>
               </div>
             </div>
-            <div className="aspect-square bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl border border-orange-400/30 overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center text-6xl">
-                🎪
-              </div>
+            <div className="aspect-[5/4] bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl border border-orange-400/30 overflow-hidden">
+              <Image
+                src="/Header Pepe 5:4.jpg"
+                alt="PepeShows Performance im Dome"
+                width={500}
+                height={400}
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
@@ -330,17 +336,7 @@ export default function BusinessPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="display text-xl font-bold mb-4">
-            Pepe Dome Business
-          </div>
-          <p className="muted text-sm">
-            Ostpark München • Corporate Events & PepeShows
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

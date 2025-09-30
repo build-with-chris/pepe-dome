@@ -125,27 +125,22 @@ body {
 
   .hero {
     min-height: 100vh;
-    background:
-      linear-gradient(135deg, rgba(22, 22, 22, 0.3) 0%, rgba(10, 10, 10, 0.4) 100%),
-      url('/GeodomeEvening.webp');
-    background-size: cover;
-    background-position: center bottom;
-    background-attachment: fixed;
+    background: linear-gradient(135deg,
+      var(--pepe-ink) 0%,
+      rgba(22, 22, 22, 0.98) 20%,
+      rgba(212, 165, 116, 0.03) 50%,
+      rgba(22, 22, 22, 0.99) 80%,
+      var(--pepe-ink) 100%
+    );
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 2rem 1.5rem;
     position: relative;
+    overflow: hidden;
   }
 
-  /* Mobile optimization: disable fixed attachment for better performance */
-  @media (max-width: 768px) {
-    .hero {
-      background-attachment: scroll;
-      background-position: center center;
-    }
-  }
 
   .hero::before {
     content: '';
@@ -452,6 +447,24 @@ body {
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInBlur {
+    0% {
+      opacity: 0;
+      filter: blur(20px);
+      transform: scale(1.1);
+    }
+    50% {
+      opacity: 0.7;
+      filter: blur(8px);
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0px);
+      transform: scale(1);
     }
   }
 

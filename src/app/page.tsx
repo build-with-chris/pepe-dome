@@ -15,6 +15,47 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero">
+        {/* Large Dome Image with Cinematic Effect */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 right-0 transform -translate-y-1/2 w-[60vw] h-[60vw] max-w-4xl max-h-4xl opacity-25">
+            <div
+              className="relative w-full h-full animate-[fadeInBlur_4s_ease-out_1s_both]"
+              style={{
+                animation: 'fadeInBlur 4s ease-out 1s both'
+              }}
+            >
+              <Image
+                src="/TheDome.png"
+                alt="Pepe Dome - Luftaufnahme der geodätischen Kuppel"
+                fill
+                className="object-contain transition-all duration-1000"
+                sizes="(max-width: 1024px) 60vw, 1024px"
+                priority
+              />
+              {/* Brand gradient overlay for seamless integration */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `
+                    radial-gradient(ellipse 80% 60% at 40% 50%,
+                      transparent 20%,
+                      rgba(22, 22, 22, 0.1) 35%,
+                      rgba(212, 165, 116, 0.05) 50%,
+                      rgba(22, 22, 22, 0.4) 70%,
+                      var(--pepe-ink) 85%
+                    ),
+                    linear-gradient(120deg,
+                      transparent 30%,
+                      rgba(212, 165, 116, 0.03) 50%,
+                      rgba(22, 22, 22, 0.6) 80%,
+                      var(--pepe-ink) 95%
+                    )
+                  `
+                }}
+              />
+            </div>
+          </div>
+        </div>
         <div className="hero-content">
           {/* Badge */}
           <div className="hero-badge">
@@ -246,6 +287,35 @@ export default function Home() {
             >
               Mehr erfahren
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Support Section */}
+      <section className="py-12 px-6 border-t border-white/10">
+        <div className="w-full">
+          <div className="text-center mb-8">
+            <p className="text-sm text-white/60 mb-6">Mit Unterstützung von</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 opacity-70 hover:opacity-90 transition-opacity">
+              <div className="flex items-center">
+                <Image
+                  src="/KKUK_de_mit_LHM_Logo_kurz_nebeneinander_Unterstuetzung.png"
+                  alt="Unterstützung von Landeshauptstadt München und Kreativ München"
+                  width={500}
+                  height={100}
+                  className="h-16 w-auto object-contain invert"
+                />
+              </div>
+              <div className="flex items-center">
+                <Image
+                  src="/Förderung Logo.jpg"
+                  alt="Städtebauförderung"
+                  width={400}
+                  height={80}
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>

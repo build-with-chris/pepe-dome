@@ -31,17 +31,16 @@ export default function ImpressumPage() {
                 <div>
                   <h3 className="display text-lg font-semibold mb-2 text-white">Betreiber der Website</h3>
                   <p>
-                    PepeShows<br />
-                    [Vollständiger Name des Inhabers]<br />
-                    [Straße und Hausnummer]<br />
-                    [PLZ und Ort]
+                    Michael Heiduk<br />
+                    Ranharzweg 18<br />
+                    85521 Ottobrunn
                   </p>
                 </div>
 
                 <div>
                   <h3 className="display text-lg font-semibold mb-2 text-white">Kontakt</h3>
                   <p>
-                    Telefon: [Telefonnummer]<br />
+                    Telefon: +491796990707<br />
                     E-Mail: info@pepearts.de
                   </p>
                 </div>
@@ -49,8 +48,7 @@ export default function ImpressumPage() {
                 <div>
                   <h3 className="display text-lg font-semibold mb-2 text-white">Umsatzsteuer-ID</h3>
                   <p>
-                    Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br />
-                    [USt-IdNr.]
+                    Zum aktuellen Zeitpunkt ist keine Umsatzsteuer-Identifikationsnummer vorhanden.
                   </p>
                 </div>
               </div>
@@ -58,12 +56,12 @@ export default function ImpressumPage() {
 
             {/* Verantwortlich für den Inhalt */}
             <div className="p-8 rounded-xl bg-black/20 border border-white/10">
-              <h2 className="display text-2xl font-bold mb-6">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+              <h2 className="display text-2xl font-bold mb-6">Verantwortlich für die Website und Inhalte</h2>
               <div className="text-white/80">
                 <p>
-                  [Vollständiger Name]<br />
-                  [Straße und Hausnummer]<br />
-                  [PLZ und Ort]
+                  Christoph Hermann<br />
+                  Kiebitzweg 12a<br />
+                  85464 Finsing
                 </p>
               </div>
             </div>
