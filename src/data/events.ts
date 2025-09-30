@@ -96,6 +96,31 @@ export const events: Event[] = [
     externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html'
   },
   {
+    id: 'morphe',
+    title: 'Morphe',
+    subtitle: 'Ein interdisziplinäres performatives Stück',
+    description: 'Morphe erforscht den Prozess der persönlichen und kollektiven Resilienz. Inspiriert von Wetterphänomenen, die Landschaften im Laufe der Zeit prägen verbindet dieses Stück Tanz, Akrobatik und Live-Musik zu einer wandelbaren Bühnenlandschaft, in der innere wie äußere Stürme sichtbar werden. Im Zentrum steht die Frage: Was bricht, was biegt sich- und was wächst gestärkt zurück? Die Performer*innen Melanie Old, Jonas Dürrbeck und Leonhard Sedlmeier laden das Publikum ein, Teil dieses Prozesses zu werden. Natur, Klang und Körper verweben sich zu einem immersiven Erlebnis, das die Grenzen zwischen Bühne und Zuschauerraum auflöst und Resilienz als individuellen wie gemeinsamen Akt erfahrbar macht.',
+    date: '2025-11-01',
+    dateRange: '1. NOVEMBER 2025',
+    time: 'Abends',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🌪️', text: 'Interdisziplinäres Stück aus Tanz, Akrobatik und Live-Musik' },
+      { icon: '🎭', text: 'Performer*innen: Melanie Old, Jonas Dürrbeck, Leonhard Sedlmeier' },
+      { icon: '✨', text: 'Immersives Erlebnis zwischen Bühne und Zuschauerraum' },
+      { icon: '🌱', text: 'Exploration von Resilienz und persönlicher Transformation' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'teal-500',
+      secondary: 'emerald-500',
+      accent: 'teal-400'
+    },
+    emoji: '🌪️',
+    status: 'upcoming',
+    externalTicketUrl: 'https://eventfrog.de/de/p/theater-buehne/experimentelles-theater/morphe-7378820788130941548.html'
+  },
+  {
     id: 'luftakrobatik-marlon',
     title: 'Luftakrobatik mit Marlon',
     subtitle: 'Workshop • Open Stage • Show',

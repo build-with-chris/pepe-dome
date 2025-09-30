@@ -9,6 +9,7 @@ import { useState } from "react";
 export default function VeranstaltungenPage() {
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
 
   // Get unique months and types
   const monthsWithDates = events.map(event => {
@@ -43,6 +44,22 @@ export default function VeranstaltungenPage() {
     return monthMatch && typeMatch;
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  const toggleEventExpansion = (eventId: string) => {
+    const newExpanded = new Set(expandedEvents);
+    if (newExpanded.has(eventId)) {
+      newExpanded.delete(eventId);
+    } else {
+      newExpanded.add(eventId);
+    }
+    setExpandedEvents(newExpanded);
+  };
+
+  const getShortDescription = (description: string) => {
+    const words = description.split(' ');
+    if (words.length <= 20) return description;
+    return words.slice(0, 20).join(' ') + '...';
+  };
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
@@ -54,15 +71,24 @@ export default function VeranstaltungenPage() {
           <h1 className="display text-5xl md:text-6xl font-bold mb-6">
             Events im Pepe Dome
           </h1>
-          <p className="text-xl text-white/80 mb-12 leading-relaxed">
-            Von spektakulären Festivals bis zu intimen Artistik-Shows - erlebe Kultur in einzigartiger Atmosphäre
+          <p className="text-xl text-white/80 mb-4 leading-relaxed">
+            Von spektakulären Festivals bis zu intimen Artistik-Shows - erlebe Kultur in einzigartiger Atmosphäre<br />
+            Jedes Wochenende ein neues Event.
           </p>
         </div>
       </section>
 
+      {/* Tagline Section */}
+      <section className="py-3 px-6 text-center">
+        <p className="text-lg text-white/90 font-medium italic">
+          Mach den Kalender frei: Kultur hat ein Date mit dir.
+          <span className="ml-2 inline-block animate-pulse">💌</span>
+        </p>
+      </section>
+
       {/* Filter Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-10 px-6">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="display text-2xl md:text-3xl font-bold mb-4">
               Events filtern
@@ -72,8 +98,8 @@ export default function VeranstaltungenPage() {
             </p>
           </div>
 
-          <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
 
               {/* Month Filter */}
               <div className="space-y-3">
@@ -115,6 +141,7 @@ export default function VeranstaltungenPage() {
                   <option value="all">🎪 Alle Veranstaltungstypen</option>
                   <option value="cinema">🎬 Cinema</option>
                   <option value="clown">🤡 Clownerie</option>
+                  <option value="performance">🌪️ Performance</option>
                   <option value="workshop">🤸 Workshop</option>
                   <option value="festival">🎭 Festival</option>
                 </select>
@@ -156,7 +183,7 @@ export default function VeranstaltungenPage() {
           )}
           <div className={`max-w-6xl mx-auto ${event.id === 'freeman-festival' ? 'relative z-10' : ''}`}>
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className={index % 2 === 0 ? 'order-1' : 'order-2 md:order-1'}>
+              <div className={`${index % 2 === 0 ? 'order-1' : 'order-2 md:order-1'}`}>
                 <div className="flex flex-wrap gap-3 mb-4">
                   <span className={`px-4 py-2 bg-${event.color.primary}/20 border border-${event.color.accent}/30 rounded-full text-${event.color.accent} font-semibold text-sm`}>
                     {event.emoji} {event.dateRange}
@@ -174,15 +201,37 @@ export default function VeranstaltungenPage() {
                   {event.subtitle}
                 </h3>
                 <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                  {event.description}
+                  {expandedEvents.has(event.id) ? event.description : getShortDescription(event.description)}
                 </p>
+                {/* "Mehr lesen" button for all screen sizes */}
+                <div className="mb-4">
+                  {event.description.split(' ').length > 20 && (
+                    <button
+                      onClick={() => toggleEventExpansion(event.id)}
+                      className="text-sm text-white/70 hover:text-white underline transition-colors"
+                    >
+                      {expandedEvents.has(event.id) ? 'Weniger anzeigen' : 'Mehr lesen'}
+                    </button>
+                  )}
+                </div>
                 <div className="space-y-3 mb-6">
-                  {event.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center gap-3 text-white/70">
-                      <span className={`text-${event.color.accent}`}>{feature.icon}</span>
-                      <span>{feature.text}</span>
-                    </div>
-                  ))}
+                  {/* Show only first 2 features on mobile, all on desktop */}
+                  <div className="md:hidden">
+                    {event.features.slice(0, 2).map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center gap-3 text-white/70">
+                        <span className={`text-${event.color.accent}`}>{feature.icon}</span>
+                        <span>{feature.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="hidden md:block">
+                    {event.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center gap-3 text-white/70">
+                        <span className={`text-${event.color.accent}`}>{feature.icon}</span>
+                        <span>{feature.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className="space-y-4 mb-6">
                   {event.ticketDates ? (
@@ -233,7 +282,7 @@ export default function VeranstaltungenPage() {
                   )}
                 </div>
               </div>
-              <div className={`relative ${index % 2 === 0 ? 'order-2' : 'order-1 md:order-2'}`}>
+              <div className={`relative ${index % 2 === 0 ? 'order-2 md:order-2' : 'order-1 md:order-2'}`}>
                 <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${event.color.primary}/20 to-${event.color.secondary}/20 rounded-xl border border-${event.color.accent}/30 overflow-hidden backdrop-blur-sm ${event.id === 'freeman-festival' ? 'shadow-purple-500/25 shadow-2xl ring-2 ring-purple-400/30' : 'shadow-2xl'}`}>
                   {event.image ? (
                     <Image
