@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(convert:*)"
+      "Bash(convert:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

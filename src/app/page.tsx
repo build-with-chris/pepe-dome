@@ -355,12 +355,12 @@ export default function Home() {
             <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
               Event anfragen
             </Link>
-            <a
-              href="#contact"
+            <Link
+              href="/ueber"
               className="btn-ghost"
             >
               Mehr erfahren
-            </a>
+            </Link>
           </div>
         </div>
       </section>

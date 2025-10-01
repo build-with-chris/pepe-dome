@@ -547,7 +547,7 @@ export default function UeberPage() {
                 <div className="flex-1 text-center lg:text-left">
                   <h3 className="display text-2xl font-bold mb-4">Kulturreferat München & Kreativ München</h3>
                   <p className="text-white/80 leading-relaxed">
-                    Wir werden sehr stark gefördert vom Kulturreferat der Landeshauptstadt München
+                    Wir werden großzügig gefördert vom Kulturreferat der Landeshauptstadt München
                     und Kreativ München, die unsere Vision einer lebendigen Artistik-Szene in München unterstützen.
                   </p>
                 </div>
@@ -568,7 +568,7 @@ export default function UeberPage() {
                 <div className="flex-1 text-center lg:text-left">
                   <h3 className="display text-2xl font-bold mb-4">Städtebauförderung</h3>
                   <p className="text-white/80 leading-relaxed">
-                    Dieses Projekt wird durch Städtebauförderung in einem Bund-Länder-Programm im Mitteln des
+                    Dieses Projekt wird durch die Städtebauförderung in einem Bund-Länder-Programm mit Mitteln des
                     Bundes und des Freistaats Bayern gefördert sowie von der Landeshauptstadt München kofinanziert.
                   </p>
                 </div>

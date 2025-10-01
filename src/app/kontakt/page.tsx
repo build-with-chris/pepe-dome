@@ -54,10 +54,18 @@ export default function KontaktPage() {
                   <span>PepeShows anfragen</span>
                 </li>
               </ul>
-              <div className="text-center">
-                <button className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-6 py-3 rounded-full transition-all w-full">
-                  Event anfragen
-                </button>
+              <div className="space-y-3">
+                <a href="https://pepeshows.de/anfragen" target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-purple-500/30 to-blue-500/30 hover:from-purple-500/40 hover:to-blue-500/40 border border-purple-400/50 px-6 py-3 rounded-full transition-all w-full block text-center font-semibold">
+                  🤖 Booking Assistent (empfohlen)
+                </a>
+                <div className="flex gap-2">
+                  <a href="#kontaktformular-events" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
+                    📝 Formular
+                  </a>
+                  <a href="tel:015904891419" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
+                    📞 Anrufen
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -85,9 +93,9 @@ export default function KontaktPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-6 py-3 rounded-full transition-all w-full">
+                <Link href="/training#kontaktformular" className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-6 py-3 rounded-full transition-all w-full block">
                   Training anfragen
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -115,9 +123,9 @@ export default function KontaktPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 px-6 py-3 rounded-full transition-all w-full">
+                <a href="#kontaktformular" className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 px-6 py-3 rounded-full transition-all w-full block">
                   Nachricht senden
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -136,15 +144,15 @@ export default function KontaktPage() {
             </p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" enctype="text/plain">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="name-general" className="block text-sm font-medium text-white/90 mb-2">
                   Name *
                 </label>
                 <input
                   type="text"
-                  id="name"
+                  id="name-general"
                   name="name"
                   required
                   className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
@@ -152,12 +160,12 @@ export default function KontaktPage() {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="email-general" className="block text-sm font-medium text-white/90 mb-2">
                   E-Mail *
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="email-general"
                   name="email"
                   required
                   className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
@@ -168,32 +176,28 @@ export default function KontaktPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="phone-general" className="block text-sm font-medium text-white/90 mb-2">
                   Telefon
                 </label>
                 <input
                   type="tel"
-                  id="phone"
+                  id="phone-general"
                   name="phone"
                   className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
                   placeholder="+49 123 456789"
                 />
               </div>
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-white/90 mb-2">
+                <label htmlFor="subject-general" className="block text-sm font-medium text-white/90 mb-2">
                   Betreff *
                 </label>
                 <select
-                  id="subject"
+                  id="subject-general"
                   name="subject"
                   required
                   className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white"
                 >
                   <option value="">Bitte auswählen</option>
-                  <option value="event">Corporate Event</option>
-                  <option value="private">Private Veranstaltung</option>
-                  <option value="training">Training & Kurse</option>
-                  <option value="pepeshows">PepeShows anfragen</option>
                   <option value="partnership">Partnerschaft</option>
                   <option value="press">Presse & Medien</option>
                   <option value="general">Allgemeine Frage</option>
@@ -202,28 +206,28 @@ export default function KontaktPage() {
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-white/90 mb-2">
+              <label htmlFor="message-general" className="block text-sm font-medium text-white/90 mb-2">
                 Nachricht *
               </label>
               <textarea
-                id="message"
+                id="message-general"
                 name="message"
                 rows={6}
                 required
                 className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50 resize-none"
-                placeholder="Beschreiben Sie Ihr Anliegen... Bei Events: Datum, Personenzahl, Art der Veranstaltung, besondere Wünsche"
+                placeholder="Beschreiben Sie Ihr Anliegen..."
               ></textarea>
             </div>
 
             <div className="flex items-start gap-3">
               <input
                 type="checkbox"
-                id="privacy"
+                id="privacy-general"
                 name="privacy"
                 required
                 className="mt-1 w-4 h-4 text-yellow-400 bg-black/20 border-white/20 rounded focus:ring-yellow-400 focus:ring-2"
               />
-              <label htmlFor="privacy" className="text-sm text-white/70">
+              <label htmlFor="privacy-general" className="text-sm text-white/70">
                 Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
                 <Link href="/datenschutz" className="text-white hover:underline">
                   Datenschutzerklärung
@@ -238,6 +242,139 @@ export default function KontaktPage() {
                 className="btn-primary text-lg px-12 py-4"
               >
                 Nachricht senden
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* Events Specific Contact Form */}
+      <section id="kontaktformular-events" className="py-20 px-6 bg-gradient-to-br from-purple-500/5 to-blue-500/5">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Event & Show anfragen
+            </h2>
+            <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30 rounded-xl p-6 mb-8">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <span className="text-2xl">🤖</span>
+                <h3 className="text-xl font-bold">Unser Booking Assistent ist da!</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Für Events und Shows empfehlen wir unseren intelligenten Booking Assistenten -
+                er hilft Ihnen schnell und unkompliziert bei der Planung.
+              </p>
+              <a href="https://pepeshows.de/anfragen" target="_blank" rel="noopener noreferrer" className="btn-primary px-8 py-3 inline-block">
+                🚀 Zum Booking Assistenten
+              </a>
+            </div>
+            <p className="text-lg text-white/70">
+              Alternativ können Sie auch das klassische Formular nutzen oder uns direkt anrufen:
+              <a href="tel:015904891419" className="text-purple-400 hover:text-purple-300 font-semibold ml-1">
+                015904891419
+              </a>
+            </p>
+          </div>
+
+          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" enctype="text/plain">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="name-events" className="block text-sm font-medium text-white/90 mb-2">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  id="name-events"
+                  name="name"
+                  required
+                  className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
+                  placeholder="Ihr vollständiger Name"
+                />
+              </div>
+              <div>
+                <label htmlFor="email-events" className="block text-sm font-medium text-white/90 mb-2">
+                  E-Mail *
+                </label>
+                <input
+                  type="email"
+                  id="email-events"
+                  name="email"
+                  required
+                  className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
+                  placeholder="ihre.email@beispiel.de"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="phone-events" className="block text-sm font-medium text-white/90 mb-2">
+                  Telefon
+                </label>
+                <input
+                  type="tel"
+                  id="phone-events"
+                  name="phone"
+                  className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
+                  placeholder="+49 123 456789"
+                />
+              </div>
+              <div>
+                <label htmlFor="subject-events" className="block text-sm font-medium text-white/90 mb-2">
+                  Art der Veranstaltung *
+                </label>
+                <select
+                  id="subject-events"
+                  name="subject"
+                  required
+                  className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white"
+                >
+                  <option value="">Bitte auswählen</option>
+                  <option value="corporate">Corporate Event</option>
+                  <option value="private">Private Veranstaltung</option>
+                  <option value="pepeshows">PepeShows anfragen</option>
+                  <option value="other">Sonstiges</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="message-events" className="block text-sm font-medium text-white/90 mb-2">
+                Nachricht *
+              </label>
+              <textarea
+                id="message-events"
+                name="message"
+                rows={6}
+                required
+                className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50 resize-none"
+                placeholder="Beschreiben Sie Ihr Event: Datum, Personenzahl, Art der Veranstaltung, besondere Wünsche..."
+              ></textarea>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="privacy-events"
+                name="privacy"
+                required
+                className="mt-1 w-4 h-4 text-yellow-400 bg-black/20 border-white/20 rounded focus:ring-yellow-400 focus:ring-2"
+              />
+              <label htmlFor="privacy-events" className="text-sm text-white/70">
+                Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
+                <Link href="/datenschutz" className="text-white hover:underline">
+                  Datenschutzerklärung
+                </Link>{" "}
+                zu. *
+              </label>
+            </div>
+
+            <div className="text-center">
+              <button
+                type="submit"
+                className="btn-primary text-lg px-12 py-4"
+              >
+                Event anfragen
               </button>
             </div>
           </form>
@@ -480,9 +617,9 @@ export default function KontaktPage() {
                 placeholder="Ihre E-Mail Adresse"
                 className="flex-1 px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white placeholder-white/50"
               />
-              <button className="btn-primary px-6 py-3 whitespace-nowrap">
+              <a href="mailto:info@pepearts.de?subject=Newsletter Anmeldung&body=Hallo, ich möchte den Pepe Dome Newsletter abonnieren." className="btn-primary px-6 py-3 whitespace-nowrap block text-center">
                 Anmelden
-              </button>
+              </a>
             </div>
             <p className="text-sm text-white/60 mt-3">
               Abmeldung jederzeit möglich. Kein Spam, versprochen!
