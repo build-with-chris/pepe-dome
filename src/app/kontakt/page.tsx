@@ -144,7 +144,7 @@ export default function KontaktPage() {
             </p>
           </div>
 
-          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" enctype="text/plain">
+          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" encType="text/plain">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name-general" className="block text-sm font-medium text-white/90 mb-2">
@@ -276,7 +276,7 @@ export default function KontaktPage() {
             </p>
           </div>
 
-          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" enctype="text/plain">
+          <form className="space-y-6" action="mailto:info@pepearts.de" method="post" encType="text/plain">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name-events" className="block text-sm font-medium text-white/90 mb-2">

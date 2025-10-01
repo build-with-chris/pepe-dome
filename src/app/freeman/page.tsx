@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function FreemanPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -40,9 +40,9 @@ export default function FreemanPage() {
     }
   ];
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % posters.length);
-  };
+  }, [posters.length]);
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + posters.length) % posters.length);
@@ -52,7 +52,7 @@ export default function FreemanPage() {
   useEffect(() => {
     const timer = setInterval(nextSlide, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [nextSlide]);
 
   return (
     <div className="min-h-screen">
