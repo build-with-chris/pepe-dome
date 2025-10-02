@@ -6,9 +6,9 @@ import { getNextEvent } from "@/data/events";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pepe Dome München - Geodätische Kuppel für Artistik & Events im Ostpark",
-  description: "Erleben Sie einzigartige Artistik-Events in der geodätischen Kuppel im Ostpark München. 8,50m Höhe, 200 Plätze, barrierefrei. Jetzt Events & Training entdecken!",
-  keywords: ["Pepe Dome", "München", "Ostpark", "Artistik", "Events", "geodätische Kuppel", "Luftakrobatik", "Kultur", "Veranstaltungsort"],
+  title: "Pepe Dome München - Zuhause für zeitgenössischen Zirkus & Artistik im Ostpark",
+  description: "Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München. Geodätische Kuppel im Ostpark - für Training, Events und Business. Jetzt entdecken!",
+  keywords: ["Pepe Dome", "München", "Ostpark", "zeitgenössischer Zirkus", "Artistik", "Events", "geodätische Kuppel", "Luftakrobatik", "Kultur", "Veranstaltungsort"],
 };
 
 export default function Home() {
@@ -75,16 +75,16 @@ export default function Home() {
           </h1>
 
           <h2 className="hero-subtitle">
-            Das Zuhause für Artistik & Kultur in München
+            Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München
           </h2>
 
           <p className="hero-description">
-            Einzigartiger Ort für Events, Training und Business - mitten im Ostpark München. Erlebe Artistik hautnah oder nutze den Dome für deine Veranstaltung.
+            Mitten im Ostpark entsteht ein einzigartiger Ort: für Training, für Events, für Business. Hier erlebst du die Welt des zeitgenössischen Zirkus hautnah – oder nutzt den Dome für deine eigene Veranstaltung.
           </p>
 
           <div className="hero-actions">
             <Link href="/veranstaltungen" className="btn-primary btn-lg">
-              Was steht an?
+              Events & Tickets
             </Link>
             <a
               href="https://maps.google.com/maps?q=Theatron+Ostpark+München"
@@ -232,6 +232,8 @@ export default function Home() {
                       className={
                         nextEvent.id === 'wanderzirkus-pepe' || nextEvent.id === 'freeman-festival'
                           ? "object-contain object-bottom"
+                          : nextEvent.id === 'morphe'
+                          ? "object-cover"
                           : "object-contain"
                       }
                       style={
@@ -262,7 +264,7 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div className={`absolute -top-3 -left-3 px-2 py-1 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-yellow-400 text-black'}`}>
+                <div className={`absolute -top-3 -left-3 px-2 py-1 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-gradient-to-r from-white/20 to-white/30 text-white border border-white/20'}`}>
                   {nextEvent.id === 'freeman-festival' ? '✨ FESTIVAL' : 'NÄCHSTES EVENT'}
                 </div>
               </div>
@@ -312,7 +314,7 @@ export default function Home() {
               </div>
               <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Training & Kurse</h3>
               <p className="muted text-sm group-hover:text-white/90 transition-colors mb-4">
-                Profi-Training, Open Training und Workshops für alle Level - von Einsteiger bis Artist
+                Profi-Training, Open Training und Workshops für alle Level - von Einsteiger:innen bis Artist:innen
               </p>
               <div className="inline-flex items-center gap-2 text-green-400 group-hover:text-green-300 transition-colors">
                 <span className="text-sm font-semibold">Zu den Kursen</span>
@@ -323,9 +325,9 @@ export default function Home() {
             {/* Für Unternehmen */}
             <Link
               href="/business"
-              className="group text-center p-8 rounded-xl bg-gradient-to-br from-orange-500/10 to-red-500/10 border border-orange-400/20 hover:border-orange-400/40 hover:bg-gradient-to-br hover:from-orange-500/20 hover:to-red-500/20 transition-all duration-300 block"
+              className="group text-center p-8 rounded-xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-white/20 hover:bg-gradient-to-br hover:from-white/10 hover:to-white/15 transition-all duration-300 block"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-gradient-to-br from-white/10 to-white/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🏢</span>
               </div>
               <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Für Unternehmen</h3>
@@ -333,7 +335,7 @@ export default function Home() {
                 Firmenevents, Teambuilding und exklusive Shows - den Dome als einzigartige Location nutzen
               </p>
               <div className="inline-flex items-center gap-2 text-orange-400 group-hover:text-orange-300 transition-colors">
-                <span className="text-sm font-semibold">Event anfragen</span>
+                <span className="text-sm font-semibold">Dome anfragen</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
@@ -353,7 +355,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
-              Event anfragen
+              Dome anfragen
             </Link>
             <Link
               href="/ueber"

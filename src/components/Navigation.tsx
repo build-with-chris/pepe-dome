@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 interface NavigationProps {
@@ -41,7 +42,13 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
           className="nav-logo"
           onClick={closeMenu}
         >
-          🏛️ Pepe Dome
+          <Image
+            src="/PepeDome Logo ausgeschnitten.png"
+            alt="Pepe Dome Logo"
+            width={240}
+            height={80}
+            className="h-16 w-auto nav-logo-white"
+          />
         </Link>
 
         <div className="nav-links">

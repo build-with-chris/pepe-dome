@@ -106,7 +106,7 @@ export default function KontaktPage() {
               </div>
               <h2 className="display text-2xl font-bold mb-4 text-center">Allgemeine Fragen</h2>
               <p className="text-white/80 mb-6 text-center">
-                Informationen über den Pepe Dome, Partnerschaft oder Presse
+                Informationen über den Pepe Dome, Partner:innenschaften oder Presse
               </p>
               <ul className="space-y-3 text-white/70 mb-6">
                 <li className="flex items-center gap-3">
@@ -115,7 +115,7 @@ export default function KontaktPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-orange-400">🤝</span>
-                  <span>Partnerschaften</span>
+                  <span>Partner:innenschaften</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-orange-400">📰</span>
@@ -123,8 +123,8 @@ export default function KontaktPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <a href="#kontaktformular" className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 px-6 py-3 rounded-full transition-all w-full block">
-                  Nachricht senden
+                <a href="#kontaktformular" className="btn-secondary px-6 py-3 w-full block text-center">
+                  Dome anfragen
                 </a>
               </div>
             </div>
@@ -198,7 +198,7 @@ export default function KontaktPage() {
                   className="w-full px-4 py-3 bg-black/20 border border-white/20 rounded-lg focus:border-white/50 focus:outline-none transition-colors text-white"
                 >
                   <option value="">Bitte auswählen</option>
-                  <option value="partnership">Partnerschaft</option>
+                  <option value="partnership">Partner:innenschaft</option>
                   <option value="press">Presse & Medien</option>
                   <option value="general">Allgemeine Frage</option>
                 </select>
@@ -241,7 +241,7 @@ export default function KontaktPage() {
                 type="submit"
                 className="btn-primary text-lg px-12 py-4"
               >
-                Nachricht senden
+                Dome anfragen
               </button>
             </div>
           </form>
@@ -592,7 +592,7 @@ export default function KontaktPage() {
                 Welche Catering-Optionen gibt es?
               </h3>
               <p className="text-white/70">
-                Wir arbeiten mit ausgewählten lokalen Catering-Partnern zusammen und können
+                Wir arbeiten mit ausgewählten lokalen Catering-Partner:innen zusammen und können
                 verschiedene Optionen von Fingerfood bis Menü anbieten.
               </p>
             </div>

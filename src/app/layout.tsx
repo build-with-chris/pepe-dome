@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   description: 'Der Pepe Dome im Ostpark München - geodätische Kuppel für Artistik, Events und kulturelle Erlebnisse',
   keywords: ['Pepe Dome', 'München', 'Ostpark', 'Veranstaltungsort', 'Artistik', 'Events', 'Kultur'],
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/PepeDome Logo ausgeschnitten.png',
+    shortcut: '/PepeDome Logo ausgeschnitten.png',
+    apple: '/PepeDome Logo ausgeschnitten.png',
   },
 }
 

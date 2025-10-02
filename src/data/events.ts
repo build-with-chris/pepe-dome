@@ -47,9 +47,9 @@ export const events: Event[] = [
     ],
     category: 'cinema',
     color: {
-      primary: 'red-500',
-      secondary: 'pink-500',
-      accent: 'red-400'
+      primary: 'blue-500',
+      secondary: 'blue-400',
+      accent: 'blue-300'
     },
     emoji: '🎬',
     image: '/Circus&Cinema.webp',
@@ -86,9 +86,9 @@ export const events: Event[] = [
     ],
     category: 'clown',
     color: {
-      primary: 'yellow-500',
-      secondary: 'orange-500',
-      accent: 'yellow-400'
+      primary: 'blue-500',
+      secondary: 'blue-400',
+      accent: 'blue-300'
     },
     emoji: '🤡',
     image: '/Entertainment.webp',
@@ -101,7 +101,7 @@ export const events: Event[] = [
     subtitle: 'Ein interdisziplinäres performatives Stück',
     description: 'Morphe erforscht den Prozess der persönlichen und kollektiven Resilienz. Inspiriert von Wetterphänomenen, die Landschaften im Laufe der Zeit prägen verbindet dieses Stück Tanz, Akrobatik und Live-Musik zu einer wandelbaren Bühnenlandschaft, in der innere wie äußere Stürme sichtbar werden. Im Zentrum steht die Frage: Was bricht, was biegt sich- und was wächst gestärkt zurück? Die Performer*innen Melanie Old, Jonas Dürrbeck und Leonhard Sedlmeier laden das Publikum ein, Teil dieses Prozesses zu werden. Natur, Klang und Körper verweben sich zu einem immersiven Erlebnis, das die Grenzen zwischen Bühne und Zuschauerraum auflöst und Resilienz als individuellen wie gemeinsamen Akt erfahrbar macht.',
     date: '2025-11-01',
-    dateRange: '1. NOVEMBER 2025',
+    dateRange: '1.–2. NOVEMBER 2025',
     time: 'Abends',
     price: 'Tickets verfügbar',
     features: [
@@ -117,8 +117,20 @@ export const events: Event[] = [
       accent: 'teal-400'
     },
     emoji: '🌪️',
+    image: '/Morphe.webp',
     status: 'upcoming',
-    externalTicketUrl: 'https://eventfrog.de/de/p/theater-buehne/experimentelles-theater/morphe-7378820788130941548.html'
+    ticketDates: [
+      {
+        date: '2025-11-01',
+        dateDisplay: '1. November',
+        ticketUrl: 'https://eventfrog.de/de/p/theater-buehne/experimentelles-theater/morphe-7378820788130941548.html'
+      },
+      {
+        date: '2025-11-02',
+        dateDisplay: '2. November',
+        ticketUrl: 'https://rausgegangen.de/events/morphe-1/'
+      }
+    ]
   },
   {
     id: 'luftakrobatik-marlon',

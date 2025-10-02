@@ -292,6 +292,8 @@ export default function VeranstaltungenPage() {
                       className={
                         event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival'
                           ? "object-contain object-bottom"
+                          : event.id === 'morphe'
+                          ? "object-cover"
                           : "object-contain"
                       }
                       style={

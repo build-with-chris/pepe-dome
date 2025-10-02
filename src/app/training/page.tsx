@@ -47,55 +47,157 @@ ${ideaText}`;
           <h1 className="display text-5xl md:text-6xl font-bold mb-6">
             Training & Kurse
           </h1>
-          <p className="text-xl text-white/80 mb-8 leading-relaxed">
-            Pepe Dome als Trainingsraum für Profis & Einsteiger - von Open Training bis zu spezialisierten Workshops
+          <p className="text-xl text-white/80 mb-12 leading-relaxed">
+            Zeitgenössischer Zirkus und Artistik im Pepe Dome
           </p>
 
-          {/* Munich Circus Arts Partnership */}
-          <div className="max-w-2xl mx-auto mb-12 p-6 rounded-xl bg-gradient-to-r from-red-900/20 to-orange-900/20 border border-red-400/30">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="flex-shrink-0">
-                <Image
-                  src="/logo MCA.png"
-                  alt="Munich Circus Arts Logo"
-                  width={120}
-                  height={120}
-                  className="h-20 w-20 object-contain"
-                />
+          {/* Two Main Options */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <a href="#profitraining" className="group text-center p-8 rounded-xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-white/20 transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-blue-300/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span className="text-2xl">🎯</span>
               </div>
-              <div className="text-center sm:text-left">
-                <h2 className="display text-xl font-bold mb-2 text-white">In Kooperation mit Munich Circus Arts</h2>
-                <p className="text-white/80 text-sm leading-relaxed">
-                  Die regulären Kurse werden geplant und durchgeführt von Munich Circus Arts -
-                  erfahrene Trainer:innen für alle Levels und Disziplinen.
+              <h2 className="display text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">Profitraining</h2>
+              <p className="text-white/80 mb-4">Täglich 10:00 – 14:00 Uhr</p>
+              <p className="text-sm text-white/70">Für professionelle Künstler:innen und fortgeschrittene Trainer:innen</p>
+            </a>
+
+            <a href="#kurse" className="group text-center p-8 rounded-xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-white/20 transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-green-300/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span className="text-2xl">📚</span>
+              </div>
+              <h2 className="display text-2xl font-bold mb-3 text-white group-hover:text-green-300 transition-colors">Kurse & Workshops</h2>
+              <p className="text-white/80 mb-4">Verschiedene Termine</p>
+              <p className="text-sm text-white/70">Für alle Level - von Einsteiger:innen bis Profis</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Profitraining Details */}
+      <section id="profitraining" className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="p-6 rounded-xl bg-black/20 border border-white/10">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-white/10 to-white/20 rounded-full flex items-center justify-center">
+                <span className="text-xl">⏰</span>
+              </div>
+              <div>
+                <h2 className="display text-2xl font-bold text-white">
+                  Profitraining
+                </h2>
+                <p className="text-lg font-semibold text-white/90">
+                  Täglich 10:00 – 14:00 Uhr
                 </p>
+              </div>
+            </div>
+            <p className="text-white/80 mb-6">
+              Im Pepe Dome findet täglich von 10 bis 14 Uhr das Profitraining im zeitgenössischen Zirkus statt. Hier treffen sich Künstler:innen zum gemeinsamen Training und kreativen Austausch.
+            </p>
+
+            <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+              <h3 className="display text-lg font-bold text-white mb-4">Hinweise vor Ort</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-white/80">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🎤</span>
+                  <span>Sound System ausschalten</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">💡</span>
+                  <span>Lichtsystem ausschalten & abdecken</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">⛺</span>
+                  <span>Zelt schließen (5 Reißverschlüsse)</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🔒</span>
+                  <span>Container abschließen</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">⬅️</span>
+                  <span>Matten zurücklegen</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">↘️</span>
+                  <span>Aerial-Props abbauen (Karabiner nicht hochziehen ohne Gewicht)</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🧹</span>
+                  <span>Grob fegen</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">♾️</span>
+                  <span>Müll trennen: Plastik, Rest, Papier, PET – Glas bitte mitnehmen</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">👟</span>
+                  <span>Keine Straßenschuhe auf dem Tanzboden</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🧽</span>
+                  <span>Küche nach Benutzung direkt reinigen</span>
+                </div>
+                <div className="flex items-center gap-3 md:col-span-2">
+                  <span className="text-lg">📝</span>
+                  <span>Besucher:innen freundlich informieren, dass Infos/Flyer auf dem Tisch liegen</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Open Training Times - Subtle */}
-      <section className="py-12 px-6 bg-black/5">
+      {/* Kurse & Workshops Section */}
+      <section id="kurse" className="py-20 px-6 bg-black/5">
         <div className="max-w-4xl mx-auto">
-          <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full flex items-center justify-center">
-                <span className="text-xl">⏰</span>
-              </div>
-              <div>
-                <h2 className="display text-2xl font-bold text-yellow-400">
-                  Open Training
-                </h2>
-                <p className="text-lg font-semibold text-white/90">
-                  Jeden Tag bis 18h
-                </p>
-              </div>
-            </div>
-            <p className="text-white/80">
-              Komm vorbei und trainiere in deinem eigenen Tempo. Alle Geräte verfügbar, alle Level willkommen.
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Kurse & Workshops
+            </h2>
+            <p className="text-xl text-white/80">
+              Strukturiertes Lernen für alle Level
             </p>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Regular Courses */}
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-green-300/20 rounded-full mx-auto mb-6 flex items-center justify-center">
+                <span className="text-2xl">📅</span>
+              </div>
+              <h3 className="display text-xl font-bold mb-4 text-center text-white">
+                Angeleitete Trainings
+              </h3>
+              <p className="text-white/80 mb-6 text-center">
+                Angeleitete Trainings findet ihr im Eversports Plan.
+              </p>
+              <div className="mt-6 text-center">
+                <a href="#angeleitete-trainings" className="btn-secondary px-6 py-3 inline-block">
+                  Mehr Infos →
+                </a>
+              </div>
+            </div>
+
+            {/* Workshops */}
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-400/20 to-orange-300/20 rounded-full mx-auto mb-6 flex items-center justify-center">
+                <span className="text-2xl">✨</span>
+              </div>
+              <h3 className="display text-xl font-bold mb-4 text-center text-white">
+                Workshops & Intensives
+              </h3>
+              <p className="text-white/80 mb-6 text-center">
+                Workshops und Intensives werden unter Events angekündigt.
+              </p>
+              <div className="mt-6 text-center">
+                <Link href="/veranstaltungen" className="btn-secondary px-6 py-3 inline-block">
+                  Events ansehen →
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -209,7 +311,7 @@ ${ideaText}`;
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-blue-300/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">📏</span>
               </div>
               <h3 className="display text-lg font-semibold mb-2">8,50 Meter Höhe</h3>
@@ -233,7 +335,7 @@ ${ideaText}`;
             </div>
 
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-blue-300/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">👥</span>
               </div>
               <h3 className="display text-lg font-semibold mb-2">Community</h3>
@@ -310,9 +412,9 @@ ${ideaText}`;
             </div>
 
             {/* Aerial Prices */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-400/20">
+            <div className="p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-400/10 border border-blue-400/20">
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-blue-300/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <span className="text-2xl">🎪</span>
                 </div>
                 <h3 className="display text-2xl font-bold">Aerial Kurse</h3>
@@ -325,7 +427,7 @@ ${ideaText}`;
                     <div className="font-semibold">Einzelticket</div>
                     <div className="text-xs text-white/60">Einmalige Kursteilnahme</div>
                   </div>
-                  <div className="text-xl font-bold text-red-400">€25</div>
+                  <div className="text-xl font-bold text-blue-400">€25</div>
                 </div>
 
                 <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
@@ -333,7 +435,7 @@ ${ideaText}`;
                     <div className="font-semibold">5er Karte</div>
                     <div className="text-xs text-white/60">Nimm an 5 Aerial Kursen teil</div>
                   </div>
-                  <div className="text-xl font-bold text-red-400">€120</div>
+                  <div className="text-xl font-bold text-blue-400">€120</div>
                 </div>
 
                 <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
@@ -341,7 +443,7 @@ ${ideaText}`;
                     <div className="font-semibold">10er Karte</div>
                     <div className="text-xs text-white/60">Nimm an 10 Aerial Kursen teil</div>
                   </div>
-                  <div className="text-xl font-bold text-red-400">€220</div>
+                  <div className="text-xl font-bold text-blue-400">€220</div>
                 </div>
 
                 <div className="flex justify-between items-center p-3 rounded-lg bg-black/20 border border-white/10">
@@ -349,7 +451,7 @@ ${ideaText}`;
                     <div className="font-semibold">20er Karte</div>
                     <div className="text-xs text-white/60">Nimm an 20 Aerial Kursen teil</div>
                   </div>
-                  <div className="text-xl font-bold text-red-400">€400</div>
+                  <div className="text-xl font-bold text-blue-400">€400</div>
                 </div>
               </div>
             </div>
@@ -358,7 +460,7 @@ ${ideaText}`;
       </section>
 
       {/* Guided Training Notice */}
-      <section className="py-12 px-6 bg-black/10">
+      <section id="angeleitete-trainings" className="py-12 px-6 bg-black/10">
         <div className="max-w-4xl mx-auto text-center">
           <div className="p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20">
             <h3 className="display text-2xl font-bold mb-4 text-blue-400">
@@ -479,7 +581,7 @@ ${ideaText}`;
                   {submitMessage && (
                     <div className={`text-sm p-3 rounded-lg ${
                       submitMessage.includes("Fehler")
-                        ? "bg-red-500/20 border border-red-400/30 text-red-400"
+                        ? "bg-blue-500/20 border border-blue-400/30 text-blue-400"
                         : "bg-green-500/20 border border-green-400/30 text-green-400"
                     }`}>
                       {submitMessage}

@@ -33,8 +33,8 @@ export default function BusinessPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             {/* Firmenevents */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/20 hover:border-blue-400/40 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-6 flex items-center justify-center">
+            <div className="p-8 rounded-xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-white/20 transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-white/10 to-white/20 rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl">🎭</span>
               </div>
               <h2 className="display text-2xl font-bold mb-4 text-center">Corporate Events</h2>
@@ -43,24 +43,24 @@ export default function BusinessPage() {
               </p>
               <ul className="space-y-3 text-white/70 mb-6">
                 <li className="flex items-center gap-3">
-                  <span className="text-blue-400">🎪</span>
+                  <span className="text-white/80">🎪</span>
                   <span>Firmen-Weihnachtsfeiern</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-blue-400">🏆</span>
+                  <span className="text-white/80">🏆</span>
                   <span>Jubiläums-Veranstaltungen</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-blue-400">🚀</span>
+                  <span className="text-white/80">🚀</span>
                   <span>Produktlaunches</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-blue-400">🎯</span>
+                  <span className="text-white/80">🎯</span>
                   <span>Kundenevents</span>
                 </li>
               </ul>
               <div className="text-center">
-                <button className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/30 px-6 py-3 rounded-full transition-all">
+                <button className="btn-secondary px-6 py-3">
                   Event anfragen
                 </button>
               </div>
@@ -94,8 +94,8 @@ export default function BusinessPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-6 py-3 rounded-full transition-all">
-                  Workshop buchen
+                <button className="btn-secondary px-6 py-3">
+                  Dome anfragen
                 </button>
               </div>
             </div>
@@ -151,11 +151,11 @@ export default function BusinessPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-white/10 to-white/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">🏛️</span>
               </div>
               <h3 className="display text-lg font-semibold mb-2">Einzigartige Location</h3>
-              <p className="text-sm text-white/70">Geodätische Kuppel - ein Ort, den Ihre Gäste nie vergessen</p>
+              <p className="text-sm text-white/70">Geodätische Kuppel - ein Ort, den Ihre Besucher:innen nie vergessen</p>
             </div>
 
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
@@ -171,7 +171,7 @@ export default function BusinessPage() {
                 <span className="text-2xl">♿</span>
               </div>
               <h3 className="display text-lg font-semibold mb-2">Barrierefrei</h3>
-              <p className="text-sm text-white/70">Zugänglich für alle Ihre Mitarbeiter und Gäste</p>
+              <p className="text-sm text-white/70">Zugänglich für alle Ihre Mitarbeiter:innen und Besucher:innen</p>
             </div>
 
             <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10">
@@ -206,7 +206,7 @@ export default function BusinessPage() {
               </h3>
               <div className="space-y-3 text-white/70">
                 <div>• Komplette Eventplanung und -durchführung</div>
-                <div>• Catering-Koordination mit lokalen Partnern</div>
+                <div>• Catering-Koordination mit lokalen Partner:innen</div>
                 <div>• Technische Ausstattung (Licht, Ton, Projektion)</div>
                 <div>• Sicherheits- und Logistikmanagement</div>
                 <div>• Fotografische/filmische Dokumentation</div>
@@ -222,7 +222,7 @@ export default function BusinessPage() {
               <div className="space-y-3 text-white/70">
                 <div>• Teambuilding-Workshops nach Ihren Zielen</div>
                 <div>• Shows passend zu Ihrem Unternehmensthema</div>
-                <div>• Interaktive Artistik-Erlebnisse für Gäste</div>
+                <div>• Interaktive Artistik-Erlebnisse für Besucher:innen</div>
                 <div>• Workshops für Führungskräfte-Entwicklung</div>
                 <div>• Kreativitäts- und Innovationsworkshops</div>
               </div>
@@ -293,7 +293,7 @@ export default function BusinessPage() {
               </ul>
               <div>
                 <button className="btn-primary px-8 py-4 mr-4">
-                  PepeShows anfragen
+                  Dome anfragen
                 </button>
                 <a
                   href="https://pepeshows.de"

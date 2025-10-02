@@ -11,6 +11,10 @@
   --pepe-gold:#D4A574;
   --pepe-gold-hover:#E6B887;
   --pepe-gold-active:#C19A64;
+  --brand:#64B5F6;
+  --brand-dark:#0D47A1;
+  --brand-hover:#E6B887;
+  --brand-active:#42A5F5;
   --font-display:'Outfit',system-ui,sans-serif;
   --font-body:'Inter',system-ui,sans-serif;
 }
@@ -22,17 +26,21 @@ body {
 }
 
 @layer components {
+  .nav-logo-white {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 font-semibold transition-colors;
-    background:var(--pepe-gold);
+    background:var(--brand);
     color:#0A0A0A;
-    box-shadow: 0 2px 8px rgba(212, 165, 116, 0.15);
+    box-shadow: 0 2px 8px rgba(100, 181, 246, 0.15);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-primary:hover {
-    background:var(--pepe-gold-hover);
-    box-shadow: 0 4px 16px rgba(212, 165, 116, 0.25);
+    background:var(--brand-hover);
+    box-shadow: 0 4px 16px rgba(230, 184, 135, 0.25);
     transform: translateY(-1px);
   }
 
@@ -45,7 +53,20 @@ body {
 
   .btn-ghost:hover {
     background: var(--pepe-surface);
-    border-color: var(--pepe-gold);
+    border-color: var(--brand);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 font-semibold transition-colors;
+    background: transparent;
+    color: var(--brand);
+    border: 1px solid var(--brand);
+  }
+
+  .btn-secondary:hover {
+    background: var(--brand);
+    color: #0A0A0A;
+    border-color: var(--brand);
   }
 
   .btn-lg {
@@ -87,7 +108,7 @@ body {
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--pepe-gold);
+    color: var(--brand);
     text-decoration: none;
     letter-spacing: -0.02em;
   }
@@ -120,7 +141,7 @@ body {
   }
 
   .nav-link-active {
-    color: var(--pepe-gold);
+    color: var(--brand);
   }
 
   .hero {
@@ -128,11 +149,11 @@ body {
     background: linear-gradient(135deg,
       var(--pepe-ink) 0%,
       rgba(22, 22, 22, 0.95) 15%,
-      rgba(212, 165, 116, 0.06) 25%,
-      rgba(212, 165, 116, 0.18) 40%,
-      rgba(212, 165, 116, 0.22) 50%,
-      rgba(212, 165, 116, 0.15) 60%,
-      rgba(212, 165, 116, 0.08) 70%,
+      rgba(100, 181, 246, 0.06) 25%,
+      rgba(100, 181, 246, 0.18) 40%,
+      rgba(100, 181, 246, 0.22) 50%,
+      rgba(100, 181, 246, 0.15) 60%,
+      rgba(100, 181, 246, 0.08) 70%,
       rgba(22, 22, 22, 0.97) 85%,
       var(--pepe-ink) 100%
     );
@@ -174,9 +195,9 @@ body {
   .badge {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: rgba(212, 165, 116, 0.15);
-    color: var(--pepe-gold);
-    border: 1px solid rgba(212, 165, 116, 0.3);
+    background: rgba(100, 181, 246, 0.15);
+    color: var(--brand);
+    border: 1px solid rgba(100, 181, 246, 0.3);
     border-radius: 9999px;
     font-size: 0.875rem;
     font-weight: 600;
@@ -196,7 +217,7 @@ body {
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 600;
-    color: var(--pepe-gold);
+    color: var(--brand);
     margin-bottom: 1.5rem;
     letter-spacing: -0.01em;
     line-height: 1.1;
@@ -305,17 +326,17 @@ body {
     left: -100% !important;
     width: 100% !important;
     height: 100% !important;
-    background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.1), transparent) !important;
+    background: linear-gradient(90deg, transparent, rgba(100, 181, 246, 0.1), transparent) !important;
     transition: left 0.6s ease !important;
   }
 
   .nav-mobile-link:hover,
   .nav-mobile-link:active {
-    border-color: rgba(212, 165, 116, 0.6) !important;
-    background: linear-gradient(145deg, rgba(212, 165, 116, 0.08), rgba(212, 165, 116, 0.12)) !important;
+    border-color: rgba(100, 181, 246, 0.6) !important;
+    background: linear-gradient(145deg, rgba(100, 181, 246, 0.08), rgba(100, 181, 246, 0.12)) !important;
     color: var(--pepe-white) !important;
     transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(100, 181, 246, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
   }
 
   .nav-mobile-link:hover::before {
@@ -323,21 +344,21 @@ body {
   }
 
   .nav-mobile-link-active {
-    border-color: var(--pepe-gold) !important;
-    background: linear-gradient(145deg, rgba(212, 165, 116, 0.15), rgba(212, 165, 116, 0.25)) !important;
-    color: var(--pepe-gold) !important;
-    box-shadow: 0 4px 24px rgba(212, 165, 116, 0.3), inset 0 1px 0 rgba(212, 165, 116, 0.2) !important;
+    border-color: var(--brand) !important;
+    background: linear-gradient(145deg, rgba(100, 181, 246, 0.15), rgba(100, 181, 246, 0.25)) !important;
+    color: var(--brand) !important;
+    box-shadow: 0 4px 24px rgba(100, 181, 246, 0.3), inset 0 1px 0 rgba(100, 181, 246, 0.2) !important;
     transform: scale(1.02) !important;
   }
 
   /* Freeman Festival Button in mobile menu */
   .nav-mobile .btn-primary {
-    background: linear-gradient(135deg, var(--pepe-gold) 0%, var(--pepe-gold-hover) 100%) !important;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%) !important;
     color: #0A0A0A !important;
-    border: 1px solid var(--pepe-gold) !important;
+    border: 1px solid var(--brand) !important;
     font-weight: 700 !important;
     margin-top: 2rem !important;
-    box-shadow: 0 4px 20px rgba(212, 165, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 20px rgba(100, 181, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     font-family: var(--font-body) !important;
     position: relative !important;
     overflow: hidden !important;
@@ -355,10 +376,10 @@ body {
   }
 
   .nav-mobile .btn-primary:hover {
-    background: linear-gradient(135deg, var(--pepe-gold-hover) 0%, #F5C995 100%) !important;
-    border-color: var(--pepe-gold-hover) !important;
+    background: linear-gradient(135deg, var(--brand-hover) 0%, #90CAF9 100%) !important;
+    border-color: var(--brand-hover) !important;
     transform: translateY(-4px) scale(1.05) !important;
-    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(100, 181, 246, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3) !important;
   }
 
   .nav-mobile .btn-primary:hover::before {

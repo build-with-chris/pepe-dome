@@ -250,7 +250,7 @@ export default function UeberPage() {
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
                 Der Pepe Dome ist das gemeinsame Projekt des PepeCollective - einem
-                Zusammenschluss von fünf etablierten Partnern der Münchner Artistik-Szene.
+                Zusammenschluss von fünf etablierten Partner:innen der Münchner Artistik-Szene.
               </p>
               <div className="mb-6">
                 <h3 className="display text-xl font-semibold mb-4 text-white">Das Kollektiv:</h3>
@@ -446,10 +446,10 @@ export default function UeberPage() {
 
             <div className="bg-black/20 border border-white/10 rounded-xl p-8">
               <h3 className="display text-xl font-bold mb-6 text-white">
-                Unterstützung durch Partner
+                Unterstützung durch Partner:innen
               </h3>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Möglich wurde das durch die Unterstützung vieler Menschen und Partner:
+                Möglich wurde das durch die Unterstützung vieler Menschen und Partner:innen:
               </p>
               <p className="text-white/80 leading-relaxed">
                 Ein herzliches Dankeschön an die <strong>Grüne Rosa Liste Fraktion</strong> (besonders an David Süß & Christian Smolka),
@@ -495,7 +495,7 @@ export default function UeberPage() {
                 <h3 className="display text-lg font-semibold mb-2">2025 • Aufbau</h3>
                 <p className="text-white/70">
                   Planung und Aufbau der geodätischen Kuppel im Ostpark.
-                  Partnerschaften werden geschlossen, das Team formiert sich.
+                  Partner:innenschaften werden geschlossen, das Team formiert sich.
                 </p>
               </div>
             </div>

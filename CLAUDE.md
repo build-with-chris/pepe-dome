@@ -147,3 +147,4 @@ npm run lint   # Run ESLint
 - Image optimization and gallery
 - SEO metadata optimization
 - Analytics integration
+- Auf der Seite Business gibt es den CTA Dome anfragen. Dieser soll auf das Kontaktformular leiten
