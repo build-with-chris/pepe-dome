@@ -60,9 +60,12 @@ export default function BusinessPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="btn-secondary px-6 py-3">
+                <Link
+                  href="/kontakt"
+                  className="btn-secondary px-6 py-3 inline-block"
+                >
                   Event anfragen
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -94,9 +97,12 @@ export default function BusinessPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="btn-secondary px-6 py-3">
+                <Link
+                  href="/kontakt"
+                  className="btn-secondary px-6 py-3 inline-block"
+                >
                   Dome anfragen
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -128,9 +134,12 @@ export default function BusinessPage() {
                 </li>
               </ul>
               <div className="text-center">
-                <button className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 px-6 py-3 rounded-full transition-all">
+                <Link
+                  href="/kontakt"
+                  className="bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 px-6 py-3 rounded-full transition-all inline-block"
+                >
                   Show anfragen
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -292,9 +301,12 @@ export default function BusinessPage() {
                 </li>
               </ul>
               <div>
-                <button className="btn-primary px-8 py-4 mr-4">
+                <Link
+                  href="/kontakt"
+                  className="btn-primary px-8 py-4 mr-4 inline-block"
+                >
                   Dome anfragen
-                </button>
+                </Link>
                 <a
                   href="https://pepeshows.de"
                   target="_blank"
@@ -329,9 +341,12 @@ export default function BusinessPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="btn-primary text-xl px-12 py-6">
+            <Link
+              href="/kontakt"
+              className="btn-primary text-xl px-12 py-6 inline-block"
+            >
               Unverbindlich anfragen
-            </button>
+            </Link>
             <Link
               href="/kontakt"
               className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"
