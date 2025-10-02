@@ -264,7 +264,7 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div className={`absolute -top-3 -left-3 px-2 py-1 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-gradient-to-r from-white/20 to-white/30 text-white border border-white/20'}`}>
+                <div className={`absolute -top-6 -left-3 px-3 py-2 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-gradient-to-r from-white to-gray-100 text-black border border-gray-300'}`}>
                   {nextEvent.id === 'freeman-festival' ? '✨ FESTIVAL' : 'NÄCHSTES EVENT'}
                 </div>
               </div>
