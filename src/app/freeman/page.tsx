@@ -3,9 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import { useState, useEffect, useCallback } from "react";
+import { isEarlyBirdActive } from "@/data/events";
 
 export default function FreemanPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const earlyBirdActive = isEarlyBirdActive();
 
   const posters = [
     {
@@ -359,14 +361,16 @@ export default function FreemanPage() {
             ⚠️ Nur 200 Plätze pro Show – freie Platzwahl
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-2">12 €</div>
-                <div className="font-semibold mb-2">🚀 Early Bird</div>
-                <div className="text-sm text-white/70">bis 15.10. • SPARE 10€</div>
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 mb-12`}>
+            {earlyBirdActive && (
+              <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-2">12 €</div>
+                  <div className="font-semibold mb-2">🚀 Early Bird</div>
+                  <div className="text-sm text-white/70">bis 15.10. • SPARE 10€</div>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="p-6 rounded-xl bg-black/20 border border-white/10">
               <div className="text-center">

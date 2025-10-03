@@ -364,3 +364,16 @@ export function getNextEvent(): Event | null {
 export function getEventById(id: string): Event | null {
   return events.find(event => event.id === id) || null;
 }
+
+export function isEarlyBirdActive(): boolean {
+  const now = new Date();
+  const earlyBirdEndDate = new Date('2025-10-16');
+  return now < earlyBirdEndDate;
+}
+
+export function getEventPrice(price: string): string {
+  if (!isEarlyBirdActive() && price.includes('Early Bird')) {
+    return price.replace(/Ab \d+€ \(Early Bird\)/, 'Ab 18€');
+  }
+  return price;
+}

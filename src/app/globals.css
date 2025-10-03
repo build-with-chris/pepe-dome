@@ -907,6 +907,31 @@ body {
     padding: 2rem 1rem;
   }
 
+  .month-section {
+    margin-bottom: 3rem;
+  }
+
+  .timeline-month-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 2rem;
+    z-index: 3;
+  }
+
+  .timeline-month-title {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--pepe-gold)/20, var(--pepe-gold)/10);
+    border: 1px solid var(--pepe-gold)/30;
+    border-radius: 2rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--pepe-gold);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(212, 165, 116, 0.1);
+  }
+
   .timeline-line {
     position: absolute;
     left: 50%;
@@ -1846,5 +1871,44 @@ body {
   .freeman-show-regular {
     border-left: 4px solid #8b5cf6;
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+  }
+
+  /* Current Month Highlighting */
+  .current-month-option {
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(251, 191, 36, 0.2));
+    color: #fbbf24;
+    font-weight: 600;
+  }
+
+  .current-month-highlight {
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(251, 191, 36, 0.2));
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    border-radius: 1rem;
+    padding: 0.5rem 0.75rem;
+    color: #fbbf24;
+    font-weight: 600;
+    animation: currentMonthPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes currentMonthPulse {
+    0%, 100% {
+      box-shadow: 0 0 0 rgba(234, 179, 8, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
+    }
+  }
+
+  /* Mobile Month Header Styles */
+  @media (max-width: 767px) {
+    .timeline-month-header {
+      margin-bottom: 1.5rem;
+      margin-left: 4rem;
+      text-align: left;
+    }
+    .timeline-month-title {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
   }
 }

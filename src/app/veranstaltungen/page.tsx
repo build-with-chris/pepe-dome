@@ -3,14 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { events } from "@/data/events";
-import { useState } from "react";
+import { events, getEventPrice } from "@/data/events";
+import { useState, useEffect, useRef } from "react";
 
 export default function VeranstaltungenPage() {
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
-  const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
+  const [visibleMonth, setVisibleMonth] = useState<string>('');
+  const monthRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Get unique months and types
   const monthsWithDates = events.map(event => {
@@ -32,17 +33,15 @@ export default function VeranstaltungenPage() {
     .sort((a, b) => a[1] - b[1])
     .map(entry => entry[0]);
 
-  const types = Array.from(new Set(events.map(event => event.category)));
+  // Get current month for highlighting
+  const currentMonth = new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
 
-  // Filter events based on selected filters
+  // Filter events based on selected month
   const filteredEvents = events.filter(event => {
     const eventDate = new Date(event.date);
     const eventMonth = eventDate.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
 
-    const monthMatch = selectedMonth === 'all' || eventMonth === selectedMonth;
-    const typeMatch = selectedType === 'all' || event.category === selectedType;
-
-    return monthMatch && typeMatch;
+    return selectedMonth === 'all' || eventMonth === selectedMonth;
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   const openEventModal = (eventId: string) => {
@@ -66,16 +65,50 @@ export default function VeranstaltungenPage() {
     return truncated.substring(0, lastSpace) + '...';
   };
 
-  const getCategoryDisplayName = (category: string) => {
-    const categoryMap: { [key: string]: string } = {
-      'cinema': '🎬 Cinema',
-      'clown': '🤡 Clownerie',
-      'performance': '🎭 Performance',
-      'workshop': '🤸 Workshop',
-      'festival': '🎪 Festival'
-    };
-    return categoryMap[category] || category;
-  };
+  // Group events by month for the timeline
+  const eventsGroupedByMonth = filteredEvents.reduce((groups, event) => {
+    const eventDate = new Date(event.date);
+    const monthKey = eventDate.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
+
+    if (!groups[monthKey]) {
+      groups[monthKey] = [];
+    }
+    groups[monthKey].push(event);
+    return groups;
+  }, {} as { [key: string]: typeof events });
+
+  // Intersection Observer for tracking visible month
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let mostVisibleMonth = '';
+        let maxVisibilityRatio = 0;
+
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > maxVisibilityRatio) {
+            maxVisibilityRatio = entry.intersectionRatio;
+            mostVisibleMonth = entry.target.getAttribute('data-month') || '';
+          }
+        });
+
+        if (mostVisibleMonth) {
+          setVisibleMonth(mostVisibleMonth);
+        }
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+        rootMargin: '-20% 0px -20% 0px'
+      }
+    );
+
+    // Observe all month sections
+    Object.values(monthRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [filteredEvents]);
+
 
   return (
     <div className="min-h-screen">
@@ -109,17 +142,17 @@ export default function VeranstaltungenPage() {
             <h2 className="display text-2xl md:text-3xl font-bold mb-4">
               Events filtern
             </h2>
-            <p className="text-white/70">
+            <p className="text-white/70 mb-4">
               Finde schnell die Veranstaltungen, die dich interessieren
             </p>
+
           </div>
 
           <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-
+            <div className="max-w-md mx-auto">
               {/* Month Filter */}
               <div className="space-y-3">
-                <label htmlFor="month-filter" className="block text-white font-semibold">
+                <label htmlFor="month-filter" className="block text-white font-semibold text-center">
                   📅 Nach Monat filtern
                 </label>
                 <select
@@ -134,60 +167,53 @@ export default function VeranstaltungenPage() {
                 >
                   <option value="all">🗓️ Alle Monate anzeigen</option>
                   {months.map(month => (
-                    <option key={month} value={month}>{month}</option>
+                    <option
+                      key={month}
+                      value={month}
+                      className={month === currentMonth ? 'current-month-option' : ''}
+                    >
+                      {month === currentMonth ? `📍 ${month} (Aktueller Monat)` : month}
+                    </option>
                   ))}
                 </select>
               </div>
 
-              {/* Type Filter */}
-              <div className="space-y-3">
-                <label htmlFor="type-filter" className="block text-white font-semibold">
-                  🎭 Nach Typ filtern
-                </label>
-                <select
-                  id="type-filter"
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full bg-var(--pepe-surface) border border-var(--pepe-line) rounded-xl px-4 py-3 text-white focus:border-var(--pepe-gold) focus:outline-none transition-colors"
-                  style={{
-                    backgroundColor: 'var(--pepe-surface)',
-                    borderColor: 'var(--pepe-line)'
-                  }}
-                >
-                  <option value="all">🎪 Alle Veranstaltungstypen</option>
-                  <option value="cinema">🎬 Cinema</option>
-                  <option value="clown">🤡 Clownerie</option>
-                  <option value="performance">🌪️ Performance</option>
-                  <option value="workshop">🤸 Workshop</option>
-                  <option value="festival">🎭 Festival</option>
-                </select>
-              </div>
-            </div>
+              {/* Filter Status & Reset */}
+              <div className="text-center mt-4">
+                <div className="text-sm text-white/70 mb-3">
+                  {filteredEvents.length === 0
+                    ? "Keine Events gefunden"
+                    : `${filteredEvents.length} Event${filteredEvents.length !== 1 ? 's' : ''} gefunden`
+                  }
+                </div>
 
-            {/* Filter Status & Reset */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
-              <div className="text-sm text-white/70">
-                {filteredEvents.length === 0
-                  ? "Keine Events gefunden"
-                  : `${filteredEvents.length} Event${filteredEvents.length !== 1 ? 's' : ''} gefunden`
-                }
+                {selectedMonth !== 'all' && (
+                  <button
+                    onClick={() => setSelectedMonth('all')}
+                    className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors underline"
+                  >
+                    🔄 Alle Monate anzeigen
+                  </button>
+                )}
               </div>
-
-              {(selectedMonth !== 'all' || selectedType !== 'all') && (
-                <button
-                  onClick={() => {
-                    setSelectedMonth('all');
-                    setSelectedType('all');
-                  }}
-                  className="btn-ghost px-6 py-2 text-sm"
-                >
-                  🔄 Filter zurücksetzen
-                </button>
-              )}
             </div>
           </div>
         </div>
       </section>
+
+      {/* Sticky Month Indicator */}
+      {visibleMonth && filteredEvents.length > 0 && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 md:top-24">
+          <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 backdrop-blur-md border border-yellow-400/30 rounded-full px-4 py-2 shadow-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">📍</span>
+              <span className="text-yellow-200 font-medium text-sm md:text-base">
+                {visibleMonth === currentMonth ? `${visibleMonth} (Aktueller Monat)` : visibleMonth}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Timeline Section */}
       <section className="py-12 px-6">
@@ -195,7 +221,21 @@ export default function VeranstaltungenPage() {
           <div className="timeline-container">
             <div className="timeline-line"></div>
 
-            {filteredEvents.map((event, index) => (
+            {Object.entries(eventsGroupedByMonth).map(([monthKey, monthEvents]) => (
+              <div
+                key={monthKey}
+                ref={(el) => { monthRefs.current[monthKey] = el; }}
+                data-month={monthKey}
+                className="month-section"
+              >
+                {/* Month Header */}
+                <div className="timeline-month-header">
+                  <h3 className="timeline-month-title">
+                    {monthKey}
+                  </h3>
+                </div>
+
+                {monthEvents.map((event, index) => (
               <div
                 key={event.id}
                 className={`timeline-item ${event.id === 'freeman-festival' ? 'timeline-featured' : ''}`}
@@ -240,22 +280,16 @@ export default function VeranstaltungenPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="timeline-category">
-                      {getCategoryDisplayName(event.category)}
-                    </span>
-
-                    {event.id === 'freeman-festival' && (
-                      <div className="flex gap-2">
-                        <span className="px-2 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs">
-                          ✨ HIGHLIGHT
-                        </span>
-                        <span className="px-2 py-1 bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 rounded-full text-amber-300 font-bold text-xs animate-pulse">
-                          🎪 PREMIUM
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  {event.id === 'freeman-festival' && (
+                    <div className="flex gap-2 mb-3">
+                      <span className="px-2 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs">
+                        ✨ HIGHLIGHT
+                      </span>
+                      <span className="px-2 py-1 bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 rounded-full text-amber-300 font-bold text-xs animate-pulse">
+                        🎪 PREMIUM
+                      </span>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <a
@@ -273,6 +307,8 @@ export default function VeranstaltungenPage() {
                   </div>
                 </div>
               </div>
+                ))}
+              </div>
             ))}
           </div>
         ) : (
@@ -288,7 +324,6 @@ export default function VeranstaltungenPage() {
             <button
               onClick={() => {
                 setSelectedMonth('all');
-                setSelectedType('all');
               }}
               className="btn-primary px-8 py-4 text-lg font-semibold"
             >
@@ -422,22 +457,16 @@ export default function VeranstaltungenPage() {
                   {selectedEventData.subtitle}
                 </p>
 
-                <div className="event-modal-badges">
-                  <span className="event-modal-badge timeline-category">
-                    {getCategoryDisplayName(selectedEventData.category)}
-                  </span>
-
-                  {selectedEventData.id === 'freeman-festival' && (
-                    <>
-                      <span className="event-modal-badge bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 text-purple-300">
-                        ✨ FESTIVAL HIGHLIGHT
-                      </span>
-                      <span className="event-modal-badge bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 text-amber-300">
-                        🎪 PREMIUMEVENT
-                      </span>
-                    </>
-                  )}
-                </div>
+                {selectedEventData.id === 'freeman-festival' && (
+                  <div className="event-modal-badges">
+                    <span className="event-modal-badge bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 text-purple-300">
+                      ✨ FESTIVAL HIGHLIGHT
+                    </span>
+                    <span className="event-modal-badge bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 text-amber-300">
+                      🎪 PREMIUMEVENT
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -570,7 +599,7 @@ export default function VeranstaltungenPage() {
                             <div key={showIndex} className={`freeman-show ${getShowTypeClass(show.type)}`}>
                               <div className="freeman-show-header">
                                 <div className="freeman-show-time">🕐 {show.time} Uhr</div>
-                                <div className="freeman-show-price">{show.price}</div>
+                                <div className="freeman-show-price">{getEventPrice(show.price)}</div>
                               </div>
                               <div className="freeman-show-title">{getShowIcon(show.type)} {show.title}</div>
                               <div className="freeman-show-description">{show.description}</div>
@@ -605,7 +634,7 @@ export default function VeranstaltungenPage() {
                         {ticketDate.film && (
                           <div className="event-modal-ticket-details">🎬 {ticketDate.film}</div>
                         )}
-                        <div className="event-modal-ticket-details">{selectedEventData.price}</div>
+                        <div className="event-modal-ticket-details">{getEventPrice(selectedEventData.price || '')}</div>
                       </div>
                       <a
                         href={ticketDate.ticketUrl}
@@ -634,7 +663,7 @@ export default function VeranstaltungenPage() {
                       📅 {selectedEventData.time}
                     </div>
                     <div className="text-sm">
-                      {selectedEventData.price}
+                      {getEventPrice(selectedEventData.price || '')}
                     </div>
                   </div>
                 </div>
