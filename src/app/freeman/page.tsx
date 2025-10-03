@@ -73,7 +73,7 @@ export default function FreemanPage() {
             Freeman – Festival der Artistik
           </h1>
           <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6 text-white/90 font-semibold px-2">
-            5 Shows • 3 Tage • Höchstleistung trifft Poesie
+            4 Shows • 2 Workshops • 3 Tage • Höchstleistung trifft Poesie
           </h2>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/80 leading-relaxed max-w-4xl mx-auto px-2">
             Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau – live, nahbar und mitten in München.
@@ -227,28 +227,40 @@ export default function FreemanPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="p-8 rounded-xl bg-black/20 border border-white/10">
               <h3 className="display text-xl font-bold mb-2">The Nordic Council</h3>
               <p className="text-purple-300 mb-4">Finnland, Island & Schweden</p>
               <p className="text-white/70 mb-4">
-                Zeitgenössische Zirkuskunst: Jonglage, Akrobatik und Live-Musik verschmelzen
-                in einem kraftvollen, poetischen Circus-Erlebnis.
+                Zeitgenössische Zirkuskunst mit Comedy: Humor über Alltag & Ambivalenz verschmilzt
+                mit spektakulärer Artistik.
               </p>
               <div className="text-sm text-white/60">
-                Show: &ldquo;Häppy Hour&rdquo; - Geeignet für alle Altersgruppen
+                Show: &ldquo;Häppy Hour&rdquo; - Fr. 19:00 & Sa. 18:00
               </div>
             </div>
 
             <div className="p-8 rounded-xl bg-black/20 border border-white/10">
               <h3 className="display text-xl font-bold mb-2">Art for Rainy Days</h3>
-              <p className="text-purple-300 mb-4">Lettland • Gewinner Latvian Dance Awards 2023/2024</p>
+              <p className="text-purple-300 mb-4">Lettland • Preisgekrönte Performance</p>
               <p className="text-white/70 mb-4">
-                Contemporary Circus & Dance Collective: Ihre Performance verbindet Elemente
-                aus Tanz, Zirkus und zeitgenössischer Bewegung.
+                Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope.
+                Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik.
               </p>
               <div className="text-sm text-white/60">
-                Show: &ldquo;How a Spiral Works&rdquo; - Preisgekrönte Performance
+                Show: &ldquo;How a Spiral Works&rdquo; - Sa. 20:30 & So. 18:00
+              </div>
+            </div>
+
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10 md:col-span-2 lg:col-span-1">
+              <h3 className="display text-xl font-bold mb-2">Workshop Leaders</h3>
+              <p className="text-purple-300 mb-4">Internationale Experten</p>
+              <p className="text-white/70 mb-4">
+                <strong>Merri Heikkilä:</strong> Object Manipulation (Fr. 15:00)<br/>
+                <strong>Alise Madara Bokaldere:</strong> Stillness in Motion (So. 13:00)
+              </p>
+              <div className="text-sm text-white/60">
+                Workshops in englischer Sprache • Anmeldung erforderlich
               </div>
             </div>
           </div>
@@ -257,37 +269,83 @@ export default function FreemanPage() {
 
       {/* Program Overview */}
       <section className="py-20 px-6 bg-black/10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="display text-3xl md:text-4xl font-bold mb-8">
-            5 Shows an 3 Tagen
+        <div className="max-w-6xl mx-auto">
+          <h2 className="display text-3xl md:text-4xl font-bold mb-8 text-center">
+            Programm im Detail
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-            {[
-              { day: "Fr", time: "20:00", title: "Insomnia", artist: "Jakob Jakobsson" },
-              { day: "Sa", time: "17:00", title: "Häppy Hour", artist: "Nordic Council" },
-              { day: "Sa", time: "19:00", title: "How a Spiral Works", artist: "Art for Rainy Days" },
-              { day: "So", time: "15:00", title: "Häppy Hour (Matinee)", artist: "Nordic Council" },
-              { day: "So", time: "17:00", title: "How a Spiral Works (Finale)", artist: "Art for Rainy Days" }
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="p-4 rounded-lg bg-black/30 border border-white/10 text-center hover:border-purple-400/30 hover:bg-black/40 transition-all"
-              >
-                <div className="font-bold text-white">{item.day}</div>
-                <div className="text-sm muted">{item.time}</div>
-                <div className="text-xs mt-1 text-white/60">{item.title}</div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {/* Friday */}
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Freitag, 14.11.</h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
+                  <div className="font-semibold text-orange-300">15:00 Workshop</div>
+                  <div className="text-sm text-white">Object Manipulation</div>
+                  <div className="text-xs text-white/60">Merri Heikkilä</div>
+                </div>
+                <div className="p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                  <div className="font-semibold text-blue-300">19:00 Show</div>
+                  <div className="text-sm text-white">Häppy Hour</div>
+                  <div className="text-xs text-white/60">The Nordic Council</div>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Saturday */}
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Samstag, 15.11.</h3>
+              <div className="space-y-3">
+                <div className="p-3 bg-green-500/10 border border-green-400/30 rounded-lg">
+                  <div className="font-semibold text-green-300">11:00 Talk</div>
+                  <div className="text-sm text-white">Presentation</div>
+                  <div className="text-xs text-white/60">Anke Politz</div>
+                </div>
+                <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                  <div className="font-semibold text-blue-300">18:00 Show</div>
+                  <div className="text-sm text-white">Häppy Hour</div>
+                  <div className="text-xs text-white/60">The Nordic Council</div>
+                </div>
+                <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                  <div className="font-semibold text-purple-300">20:30 Show</div>
+                  <div className="text-sm text-white">How a Spiral Works</div>
+                  <div className="text-xs text-white/60">Art for Rainy Days</div>
+                </div>
+                <div className="p-3 bg-pink-500/10 border border-pink-400/30 rounded-lg">
+                  <div className="font-semibold text-pink-300">21:45 Party</div>
+                  <div className="text-sm text-white">Festival After-Party</div>
+                  <div className="text-xs text-white/60">Mit Musik & Austausch</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sunday */}
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Sonntag, 16.11.</h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
+                  <div className="font-semibold text-orange-300">13:00 Workshop</div>
+                  <div className="text-sm text-white">Stillness in Motion</div>
+                  <div className="text-xs text-white/60">Alise Madara Bokaldere</div>
+                </div>
+                <div className="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                  <div className="font-semibold text-purple-300">18:00 Show</div>
+                  <div className="text-sm text-white">How a Spiral Works</div>
+                  <div className="text-xs text-white/60">Art for Rainy Days</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <a
-            href="https://freemanfestival.de/programm"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-white/30 rounded-full hover:border-white/50 transition-colors"
-          >
-            <span>Vollständiges Programm</span>
-            <span>→</span>
-          </a>
+
+          <div className="text-center">
+            <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
+              <span className="text-2xl">🎫</span>
+              <div className="text-left">
+                <div className="font-semibold text-white">Shows ab 12€ • Workshops Anmeldung</div>
+                <div className="text-sm text-white/70">Kombitickets verfügbar • Nur 200 Plätze pro Show</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

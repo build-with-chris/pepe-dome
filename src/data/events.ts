@@ -27,6 +27,27 @@ export interface Event {
     ticketUrl: string;
   }>;
   externalTicketUrl?: string;
+  isOneDay?: boolean;
+  freemanShows?: Array<{
+    day: string;
+    date: string;
+    dateDisplay: string;
+    shows: Array<{
+      time: string;
+      title: string;
+      description: string;
+      ticketUrl: string;
+      price: string;
+      type?: 'workshop' | 'talk' | 'party';
+    }>;
+  }>;
+  combiTickets?: Array<{
+    name: string;
+    description: string;
+    price: string;
+    ticketUrl: string;
+    savings: string;
+  }>;
 }
 
 export const events: Event[] = [
@@ -86,14 +107,15 @@ export const events: Event[] = [
     ],
     category: 'clown',
     color: {
-      primary: 'blue-500',
-      secondary: 'blue-400',
-      accent: 'blue-300'
+      primary: 'orange-500',
+      secondary: 'red-500',
+      accent: 'orange-300'
     },
     emoji: '🤡',
     image: '/Entertainment.webp',
     status: 'upcoming',
-    externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html'
+    externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html',
+    isOneDay: true
   },
   {
     id: 'morphe',
@@ -133,28 +155,66 @@ export const events: Event[] = [
     ]
   },
   {
-    id: 'luftakrobatik-marlon',
-    title: 'Luftakrobatik mit Marlon',
-    subtitle: 'Workshop • Open Stage • Show',
-    description: 'Drei Tage voller Luftakrobatik! Marlon öffnet seine Bühne für seine Schüler, bietet intensive Workshops und präsentiert eine spektakuläre Show. Ein Event für alle, die die Kunst des Fliegens erleben möchten.',
-    date: '2025-11-07',
-    dateRange: '7.–9. NOVEMBER 2025',
-    time: 'Workshop & Show',
-    price: 'Verschiedene Preise',
+    id: 'drag-akrobatik-show',
+    title: 'Drag. Akrobatik. Show.',
+    subtitle: 'Theater ohne Hausnummer',
+    description: '„Theater ohne Hausnummer" kombiniert spektakuläre Artistik mit Drag-Performance und Live-Musik. Eine bunte Mischung aus Witz, Glamour und atemberaubender Akrobatik. Ein Abend, der garantiert anders ist – und Spaß macht.',
+    date: '2025-11-08',
+    dateRange: '8. NOVEMBER 2025',
+    time: '19:00 Uhr',
+    price: 'Tickets verfügbar',
     features: [
-      { icon: '🤸‍♂️', text: 'Intensive Luftakrobatik-Workshops' },
-      { icon: '🎪', text: 'Open Stage für Schüler' },
-      { icon: '✨', text: 'Spektakuläre Abschluss-Show' }
+      { icon: '💃', text: 'Spektakuläre Drag-Performance' },
+      { icon: '🤸‍♀️', text: 'Atemberaubende Artistik und Akrobatik' },
+      { icon: '🎵', text: 'Live-Musik und Entertainment' },
+      { icon: '✨', text: 'Witz, Glamour und Überraschungen' }
     ],
-    category: 'workshop',
+    category: 'performance',
     color: {
-      primary: 'blue-500',
-      secondary: 'cyan-500',
-      accent: 'blue-400'
+      primary: 'pink-500',
+      secondary: 'purple-500',
+      accent: 'pink-400'
     },
-    emoji: '🤸‍♂️',
-    image: '/Marlon1.webp',
-    status: 'upcoming'
+    emoji: '💃',
+    status: 'upcoming',
+    isOneDay: true
+  },
+  {
+    id: 'tshemodan',
+    title: 'Musik. Zirkus. Heimat.',
+    subtitle: 'Tshemodan – ein musikalischer Zirkus zwischen Heimat & Flucht',
+    description: 'Das Ensemble packt den Zirkus buchstäblich aus dem Koffer: Bewegende Akrobatik, Live-Klezmer, Pantomime und persönliche Geschichten verweben sich zu einer Show über Migration, Identität und Zugehörigkeit. Am Ende wird alles wieder eingepackt – mit der Botschaft: Die Reise geht weiter.',
+    date: '2025-11-09',
+    dateRange: '9.–10. NOVEMBER 2025',
+    time: 'Abends',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎪', text: 'Bewegende Akrobatik aus dem Koffer' },
+      { icon: '🎵', text: 'Live-Klezmer-Musik' },
+      { icon: '🎭', text: 'Pantomime und persönliche Geschichten' },
+      { icon: '🌍', text: 'Themen: Migration, Identität und Zugehörigkeit' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'emerald-500',
+      secondary: 'teal-500',
+      accent: 'emerald-400'
+    },
+    emoji: '🎪',
+    image: '/Tsirk.webp',
+    status: 'upcoming',
+    ticketDates: [
+      {
+        date: '2025-11-09',
+        dateDisplay: '9. November',
+        ticketUrl: '/kontakt#kontaktformular'
+      },
+      {
+        date: '2025-11-10',
+        dateDisplay: '10. November',
+        ticketUrl: '/kontakt#kontaktformular'
+      }
+    ]
   },
   {
     id: 'freeman-festival',
@@ -163,12 +223,13 @@ export const events: Event[] = [
     description: 'Internationale Spitzen-Artist:innen zeigen Akrobatik und Entertainment auf Weltklasse-Niveau. 5 Shows • 3 Tage • Höchstleistung trifft Poesie in der einzigartigen Atmosphäre des Pepe Dome.',
     date: '2025-11-14',
     dateRange: '14.–16. NOVEMBER 2025',
-    time: '3 Tage',
-    price: 'Ab 12€',
+    time: '3 Tage Festival',
+    price: 'Ab 12€ • Kombitickets verfügbar',
     features: [
       { icon: '🎭', text: 'Internationale Spitzen-Artist:innen' },
       { icon: '🌍', text: 'Acts aus Skandinavien und dem Baltikum' },
-      { icon: '🏛️', text: 'Weltklasse-Niveau im Pepe Dome' }
+      { icon: '🏛️', text: '5 Shows an 3 Tagen' },
+      { icon: '🎫', text: 'Einzeltickets & Kombitickets' }
     ],
     category: 'festival',
     color: {
@@ -179,7 +240,112 @@ export const events: Event[] = [
     emoji: '🎪',
     image: '/Freeman-Poster.webp',
     status: 'upcoming',
-    externalTicketUrl: 'https://freemanfestival.de'
+    freemanShows: [
+      {
+        day: 'Freitag',
+        date: '2025-11-14',
+        dateDisplay: '14. November',
+        shows: [
+          {
+            time: '15:00',
+            title: 'Workshop „Object Manipulation"',
+            description: 'Mit Merri Heikkilä • Alltagsgegenstände als Requisiten, Form, Bewegung, Rhythmus • Ca. 2 Stunden, englisch',
+            ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdV55BqdgNW9xKmdD3vps10RfW9luBzKtM6JCNSChOuojFNbg/viewform',
+            price: 'Workshop-Anmeldung',
+            type: 'workshop'
+          },
+          {
+            time: '19:00',
+            title: 'Show „Häppy Hour"',
+            description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy, Humor über Alltag & Ambivalenz',
+            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-0/?mtm_campaign=teilen_event&mtm_kwd=app',
+            price: 'Ab 12€ (Early Bird)'
+          }
+        ]
+      },
+      {
+        day: 'Samstag',
+        date: '2025-11-15',
+        dateDisplay: '15. November',
+        shows: [
+          {
+            time: '11:00',
+            title: 'Presentation + Talk',
+            description: 'Mit Anke Politz • Details folgen',
+            ticketUrl: '/kontakt#kontaktformular',
+            price: 'Kostenlos',
+            type: 'talk'
+          },
+          {
+            time: '18:00',
+            title: 'Show „Häppy Hour"',
+            description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy • Zweite Aufführung',
+            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-1/?mtm_campaign=teilen_event&mtm_kwd=app',
+            price: 'Ab 12€ (Early Bird)'
+          },
+          {
+            time: '20:30',
+            title: 'Show „How a Spiral Works"',
+            description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope • Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik',
+            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-0/?mtm_campaign=teilen_event&mtm_kwd=app',
+            price: 'Ab 12€ (Early Bird)'
+          },
+          {
+            time: '21:45',
+            title: 'Party',
+            description: 'Veranstaltung nach den Shows mit Musik, Austausch und guter Stimmung',
+            ticketUrl: '',
+            price: 'Kostenlos',
+            type: 'party'
+          }
+        ]
+      },
+      {
+        day: 'Sonntag',
+        date: '2025-11-16',
+        dateDisplay: '16. November',
+        shows: [
+          {
+            time: '13:00',
+            title: 'Workshop „Stillness in Motion"',
+            description: 'Mit Alise Madara Bokaldere • Stille & Bewegung, Bühnenpräsenz, Ausdruck jenseits der Disziplinen • Ca. 2 Stunden, englisch, max. 20 Teilnehmer:innen',
+            ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeg-YUt_aatNtb-iiIZKerZ1kviJRl3U61WLPsA4ROncrrV5g/viewform',
+            price: 'Workshop-Anmeldung',
+            type: 'workshop'
+          },
+          {
+            time: '18:00',
+            title: 'Show „How a Spiral Works"',
+            description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus • Wiederholung der Show vom Samstag',
+            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-1/?mtm_campaign=teilen_event&mtm_kwd=app',
+            price: 'Ab 12€ (Early Bird)'
+          }
+        ]
+      }
+    ],
+    combiTickets: [
+      {
+        name: 'Festival Pass',
+        description: 'Alle 4 Shows + beide Workshops',
+        price: 'Nur 48€ (statt 60€)',
+        ticketUrl: 'https://eventfrog.de/freeman-festival-pass',
+        savings: 'Spare 12€!'
+      },
+      {
+        name: 'Show Pass',
+        description: 'Alle 4 Shows (ohne Workshops)',
+        price: 'Nur 40€ (statt 48€)',
+        ticketUrl: 'https://eventfrog.de/freeman-show-pass',
+        savings: 'Spare 8€!'
+      },
+      {
+        name: 'Workshop Pass',
+        description: 'Beide Workshops + 1 Show deiner Wahl',
+        price: 'Nur 25€',
+        ticketUrl: 'https://eventfrog.de/freeman-workshop-pass',
+        savings: 'Perfekt für Künstler!'
+      }
+    ]
   }
 ];
 

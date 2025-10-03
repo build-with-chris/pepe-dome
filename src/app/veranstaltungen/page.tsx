@@ -9,7 +9,8 @@ import { useState } from "react";
 export default function VeranstaltungenPage() {
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
-  const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
 
   // Get unique months and types
   const monthsWithDates = events.map(event => {
@@ -44,20 +45,36 @@ export default function VeranstaltungenPage() {
     return monthMatch && typeMatch;
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const toggleEventExpansion = (eventId: string) => {
-    const newExpanded = new Set(expandedEvents);
-    if (newExpanded.has(eventId)) {
-      newExpanded.delete(eventId);
-    } else {
-      newExpanded.add(eventId);
-    }
-    setExpandedEvents(newExpanded);
+  const openEventModal = (eventId: string) => {
+    setSelectedEvent(eventId);
+    document.body.style.overflow = 'hidden';
   };
 
-  const getShortDescription = (description: string) => {
-    const words = description.split(' ');
-    if (words.length <= 20) return description;
-    return words.slice(0, 20).join(' ') + '...';
+  const closeEventModal = () => {
+    setSelectedEvent(null);
+    setIsDescriptionExpanded(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const selectedEventData = selectedEvent ? events.find(e => e.id === selectedEvent) : null;
+
+  // Helper function to truncate text for mobile
+  const getTruncatedDescription = (text: string, maxLength: number = 150) => {
+    if (text.length <= maxLength) return text;
+    const truncated = text.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    return truncated.substring(0, lastSpace) + '...';
+  };
+
+  const getCategoryDisplayName = (category: string) => {
+    const categoryMap: { [key: string]: string } = {
+      'cinema': '🎬 Cinema',
+      'clown': '🤡 Clownerie',
+      'performance': '🎭 Performance',
+      'workshop': '🤸 Workshop',
+      'festival': '🎪 Festival'
+    };
+    return categoryMap[category] || category;
   };
 
   return (
@@ -69,7 +86,7 @@ export default function VeranstaltungenPage() {
       <section className="py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="display text-5xl md:text-6xl font-bold mb-6">
-            Events im Pepe Dome
+            Veranstaltungen
           </h1>
           <p className="text-xl text-white/80 mb-4 leading-relaxed">
             Von spektakulären Festivals bis zu intimen Artistik-Shows - erlebe Kultur in einzigartiger Atmosphäre<br />
@@ -81,14 +98,13 @@ export default function VeranstaltungenPage() {
       {/* Tagline Section */}
       <section className="py-3 px-6 text-center">
         <p className="text-lg text-white/90 font-medium italic">
-          Mach den Kalender frei: Kultur hat ein Date mit dir.
-          <span className="ml-2 inline-block animate-pulse">💌</span>
+          Mach den Kalender frei: Kultur hat ein Date mit dir.💌
         </p>
       </section>
 
       {/* Filter Section */}
       <section className="py-10 px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="display text-2xl md:text-3xl font-bold mb-4">
               Events filtern
@@ -173,166 +189,95 @@ export default function VeranstaltungenPage() {
         </div>
       </section>
 
-      {/* All Events */}
-      {filteredEvents.length > 0 ? (
-        filteredEvents.map((event, index) => (
-        <section key={event.id} className={`py-12 px-6 bg-gradient-to-br from-${event.color.primary}/10 to-${event.color.secondary}/10 ${event.id === 'freeman-festival' ? 'relative' : ''}`}>
-          {/* Freeman Festival Glow Effect */}
-          {event.id === 'freeman-festival' && (
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 blur-3xl opacity-60 animate-pulse"></div>
-          )}
-          <div className={`max-w-6xl mx-auto ${event.id === 'freeman-festival' ? 'relative z-10' : ''}`}>
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className={`${index % 2 === 0 ? 'order-1' : 'order-2 md:order-1'}`}>
-                <div className="flex flex-wrap gap-3 mb-4">
-                  <span className={`px-4 py-2 bg-${event.color.primary}/20 border border-${event.color.accent}/30 rounded-full text-${event.color.accent} font-semibold text-sm`}>
-                    {event.emoji} {event.dateRange}
-                  </span>
-                  {event.id === 'freeman-festival' && (
-                    <span className="px-4 py-2 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-sm shadow-lg">
-                      ✨ FESTIVAL HIGHLIGHT
-                    </span>
-                  )}
-                </div>
-                <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-                  {event.title}
-                </h2>
-                <h3 className="text-2xl md:text-3xl mb-4 text-white/90 font-semibold">
-                  {event.subtitle}
-                </h3>
-                <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                  {expandedEvents.has(event.id) ? event.description : getShortDescription(event.description)}
-                </p>
-                {/* "Mehr lesen" button for all screen sizes */}
-                <div className="mb-4">
-                  {event.description.split(' ').length > 20 && (
-                    <button
-                      onClick={() => toggleEventExpansion(event.id)}
-                      className="text-sm text-white/70 hover:text-white underline transition-colors"
-                    >
-                      {expandedEvents.has(event.id) ? 'Weniger anzeigen' : 'Mehr lesen'}
-                    </button>
-                  )}
-                </div>
-                <div className="space-y-3 mb-6">
-                  {/* Show only first 2 features on mobile, all on desktop */}
-                  <div className="md:hidden">
-                    {event.features.slice(0, 2).map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3 text-white/70">
-                        <span className={`text-${event.color.accent}`}>{feature.icon}</span>
-                        <span>{feature.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="hidden md:block">
-                    {event.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3 text-white/70">
-                        <span className={`text-${event.color.accent}`}>{feature.icon}</span>
-                        <span>{feature.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-4 mb-6">
-                  {event.ticketDates ? (
-                    <div className="space-y-3">
-                      <h4 className="text-lg font-semibold text-white/90 mb-3">Tickets für beide Termine:</h4>
-                      {event.ticketDates.map((ticketDate) => (
-                        <div key={ticketDate.date} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-4 bg-black/20 rounded-lg border border-white/10">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-lg font-semibold text-white">📅 {ticketDate.dateDisplay}</span>
-                              <span className="text-sm text-white/70">{event.time}</span>
-                            </div>
-                            {ticketDate.film && (
-                              <div className="text-white/80 text-sm">🎬 {ticketDate.film}</div>
-                            )}
-                            <div className="text-white/70 text-sm mt-1">{event.price}</div>
-                          </div>
-                          <a
-                            href={ticketDate.ticketUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-primary px-6 py-3 text-sm font-semibold whitespace-nowrap"
-                          >
-                            Tickets kaufen
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <a
-                        href={event.externalTicketUrl || "/kontakt#kontaktformular"}
-                        target={event.externalTicketUrl ? "_blank" : undefined}
-                        rel={event.externalTicketUrl ? "noopener noreferrer" : undefined}
-                        className="btn-primary px-8 py-4 text-lg font-semibold"
-                      >
-                        Tickets kaufen
-                      </a>
-                      <div className="flex flex-col items-center justify-center text-white/70 text-sm">
-                        <div className="flex items-center gap-1 mb-1">
-                          📅 {event.time}
-                        </div>
-                        <div className="text-center leading-tight">
-                          {event.price}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className={`relative ${index % 2 === 0 ? 'order-2 md:order-2' : 'order-1 md:order-2'}`}>
-                <div className={`aspect-[3/4] max-w-sm mx-auto bg-gradient-to-br from-${event.color.primary}/20 to-${event.color.secondary}/20 rounded-xl border border-${event.color.accent}/30 overflow-hidden backdrop-blur-sm ${event.id === 'freeman-festival' ? 'shadow-purple-500/25 shadow-2xl ring-2 ring-purple-400/30' : 'shadow-2xl'}`}>
-                  {event.image ? (
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      className={
-                        event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival'
-                          ? "object-contain object-bottom"
-                          : event.id === 'morphe'
-                          ? "object-cover"
-                          : "object-contain"
-                      }
-                      style={
-                        event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival'
-                          ? {backgroundColor: '#000'}
-                          : undefined
-                      }
-                      sizes="(max-width: 768px) 100vw, 400px"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-6xl">
-                      {event.emoji}
-                    </div>
-                  )}
+      {/* Timeline Section */}
+      <section className="py-12 px-6">
+        {filteredEvents.length > 0 ? (
+          <div className="timeline-container">
+            <div className="timeline-line"></div>
 
-                  {/* Freeman Festival Animated Glow Text */}
-                  {event.id === 'freeman-festival' && (
-                    <div className="absolute inset-0 pointer-events-none flex items-start justify-center pt-8">
-                      <div
-                        className="text-white font-bold text-lg whitespace-nowrap px-4"
+            {filteredEvents.map((event, index) => (
+              <div
+                key={event.id}
+                className={`timeline-item ${event.id === 'freeman-festival' ? 'timeline-featured' : ''}`}
+              >
+                <div className="timeline-dot"></div>
+                <div
+                  className="timeline-content cursor-pointer"
+                  onClick={() => openEventModal(event.id)}
+                >
+                  <div className="timeline-header">
+                    {event.image && (
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        width={80}
+                        height={80}
+                        className="timeline-image"
                         style={{
-                          textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00f3ff, 0 0 40px #00f3ff',
-                          animation: 'gentleFloat 3s ease-in-out infinite'
+                          objectFit: event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival' ? 'contain' : 'cover',
+                          backgroundColor: event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival' ? '#000' : 'transparent'
                         }}
-                      >
-                        Festival der Artistik
+                      />
+                    )}
+                    {!event.image && (
+                      <div className="timeline-image bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-2xl">
+                        {event.emoji}
                       </div>
+                    )}
+
+                    <div className="timeline-info">
+                      <div className="timeline-date">
+                        {event.emoji} {event.dateRange}
+                      </div>
+
+                      <h3 className="timeline-title">
+                        {event.title}
+                      </h3>
+
+                      <p className="timeline-subtitle">
+                        {event.subtitle}
+                      </p>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="timeline-category">
+                      {getCategoryDisplayName(event.category)}
+                    </span>
+
+                    {event.id === 'freeman-festival' && (
+                      <div className="flex gap-2">
+                        <span className="px-2 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs">
+                          ✨ HIGHLIGHT
+                        </span>
+                        <span className="px-2 py-1 bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 rounded-full text-amber-300 font-bold text-xs animate-pulse">
+                          🎪 PREMIUM
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <a
+                      href={event.externalTicketUrl || (event.ticketDates ? event.ticketDates[0].ticketUrl : "/kontakt#kontaktformular")}
+                      target={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "_blank" : undefined}
+                      rel={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "noopener noreferrer" : undefined}
+                      className="text-xs text-white/60 hover:text-white underline transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      🎫 Tickets
+                    </a>
+                    <div className="text-xs text-white/50">
+                      Klicke für Details ➤
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-        </section>
-        ))
-      ) : (
-        /* No Events Found */
-        <section className="py-20 px-6">
-          <div className="max-w-4xl mx-auto text-center">
+        ) : (
+          /* No Events Found */
+          <div className="max-w-4xl mx-auto text-center py-20">
             <div className="text-6xl mb-6">🔍</div>
             <h3 className="display text-2xl md:text-3xl font-bold mb-4">
               Keine Events gefunden
@@ -350,8 +295,8 @@ export default function VeranstaltungenPage() {
               Alle Events anzeigen
             </button>
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       {/* Event Types */}
       <section className="py-20 px-6 bg-black/10">
@@ -426,6 +371,288 @@ export default function VeranstaltungenPage() {
       </section>
 
       <Footer />
+
+      {/* Event Modal */}
+      {selectedEvent && selectedEventData && (
+        <div className="event-modal-overlay" onClick={closeEventModal}>
+          <div
+            className={`event-modal ${selectedEventData.id === 'freeman-festival' ? 'featured' : ''}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="event-modal-close"
+              onClick={closeEventModal}
+              aria-label="Modal schließen"
+            >
+              ×
+            </button>
+
+            <div className="event-modal-header">
+              {selectedEventData.image ? (
+                <Image
+                  src={selectedEventData.image}
+                  alt={selectedEventData.title}
+                  width={200}
+                  height={250}
+                  className={`event-modal-image ${
+                    selectedEventData.id === 'wanderzirkus-pepe' || selectedEventData.id === 'freeman-festival'
+                      ? 'contain' : ''
+                  }`}
+                  style={{
+                    objectFit: selectedEventData.id === 'wanderzirkus-pepe' || selectedEventData.id === 'freeman-festival' ? 'contain' : 'cover',
+                    backgroundColor: selectedEventData.id === 'wanderzirkus-pepe' || selectedEventData.id === 'freeman-festival' ? '#000' : 'transparent'
+                  }}
+                />
+              ) : (
+                <div className="event-modal-image bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-4xl">
+                  {selectedEventData.emoji}
+                </div>
+              )}
+
+              <div className="event-modal-info">
+                <div className="event-modal-date">
+                  {selectedEventData.emoji} {selectedEventData.dateRange}
+                </div>
+
+                <h2 className="event-modal-title">
+                  {selectedEventData.title}
+                </h2>
+
+                <p className="event-modal-subtitle">
+                  {selectedEventData.subtitle}
+                </p>
+
+                <div className="event-modal-badges">
+                  <span className="event-modal-badge timeline-category">
+                    {getCategoryDisplayName(selectedEventData.category)}
+                  </span>
+
+                  {selectedEventData.id === 'freeman-festival' && (
+                    <>
+                      <span className="event-modal-badge bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 text-purple-300">
+                        ✨ FESTIVAL HIGHLIGHT
+                      </span>
+                      <span className="event-modal-badge bg-gradient-to-r from-amber-500/30 to-orange-500/30 border border-amber-400/50 text-amber-300">
+                        🎪 PREMIUMEVENT
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="event-modal-content">
+              {/* Desktop: Full description, Mobile: Truncated */}
+              <p className="event-modal-description">
+                <span className="hidden md:block">{selectedEventData.description}</span>
+                <span className="md:hidden">
+                  {isDescriptionExpanded
+                    ? selectedEventData.description
+                    : getTruncatedDescription(selectedEventData.description)
+                  }
+                  {selectedEventData.description.length > 150 && (
+                    <button
+                      onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                      className="event-description-toggle"
+                    >
+                      {isDescriptionExpanded ? '👆 Weniger anzeigen' : '👇 Weiterlesen'}
+                    </button>
+                  )}
+                </span>
+              </p>
+
+              <div className="event-modal-features">
+                {/* Desktop: All features, Mobile: Max 2 features */}
+                <div className="hidden md:grid md:grid-cols-2 md:gap-4">
+                  {selectedEventData.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="event-modal-feature">
+                      <span className="event-modal-feature-icon">{feature.icon}</span>
+                      <span>{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="md:hidden grid grid-cols-1 gap-3">
+                  {selectedEventData.features.slice(0, 2).map((feature, featureIndex) => (
+                    <div key={featureIndex} className="event-modal-feature">
+                      <span className="event-modal-feature-icon">{feature.icon}</span>
+                      <span>{feature.text}</span>
+                    </div>
+                  ))}
+                  {selectedEventData.features.length > 2 && (
+                    <div className="text-xs text-white/50 italic text-center mt-2">
+                      📱 +{selectedEventData.features.length - 2} weitere Highlights auf Desktop
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="event-modal-actions">
+              {selectedEventData.id === 'freeman-festival' && selectedEventData.freemanShows ? (
+                /* Freeman Festival Special Ticket Layout */
+                <div className="freeman-tickets">
+                  <div className="freeman-tickets-header">
+                    <div className="freeman-tickets-title">🎪 Festival Tickets 🎪</div>
+                    <div className="freeman-tickets-subtitle">
+                      Wähle deine Shows oder spare mit Kombitickets!
+                    </div>
+                  </div>
+
+                  {/* Kombitickets Section */}
+                  {selectedEventData.combiTickets && (
+                    <div className="freeman-combi-section">
+                      <div className="freeman-combi-title">
+                        💫 Kombitickets - Spare Geld & erlebe mehr!
+                      </div>
+                      <div className="freeman-combi-grid">
+                        {selectedEventData.combiTickets.map((combi, index) => (
+                          <div key={index} className="freeman-combi-card">
+                            <div className="freeman-combi-name">🎫 {combi.name}</div>
+                            <div className="freeman-combi-description">{combi.description}</div>
+                            <div className="freeman-combi-price">{combi.price}</div>
+                            <div className="freeman-combi-savings">💰 {combi.savings}</div>
+                            <a
+                              href={combi.ticketUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-primary px-6 py-3 font-semibold w-full"
+                            >
+                              Jetzt sichern! 🎉
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Individual Shows Section */}
+                  <div className="freeman-shows-section">
+                    <div className="freeman-shows-title">
+                      🎭 Einzelne Shows - Wähle deinen Favoriten
+                    </div>
+
+                    {selectedEventData.freemanShows.map((day, dayIndex) => (
+                      <div key={dayIndex} className="freeman-day">
+                        <div className="freeman-day-header">
+                          <div className="freeman-day-name">{day.day}</div>
+                          <div className="freeman-day-date">{day.dateDisplay}</div>
+                        </div>
+
+                        {day.shows.map((show, showIndex) => {
+                          const getShowIcon = (type: string | undefined) => {
+                            switch (type) {
+                              case 'workshop': return '🎨';
+                              case 'talk': return '💬';
+                              case 'party': return '🎉';
+                              default: return '✨';
+                            }
+                          };
+
+                          const getShowTypeClass = (type: string | undefined) => {
+                            switch (type) {
+                              case 'workshop': return 'freeman-show-workshop';
+                              case 'talk': return 'freeman-show-talk';
+                              case 'party': return 'freeman-show-party';
+                              default: return 'freeman-show-regular';
+                            }
+                          };
+
+                          const getButtonText = (type: string | undefined) => {
+                            switch (type) {
+                              case 'workshop': return 'Jetzt anmelden 📝';
+                              case 'talk': return 'Mehr Info 💭';
+                              case 'party': return 'Kostenlos 🎉';
+                              default: return 'Tickets kaufen 🎫';
+                            }
+                          };
+
+                          return (
+                            <div key={showIndex} className={`freeman-show ${getShowTypeClass(show.type)}`}>
+                              <div className="freeman-show-header">
+                                <div className="freeman-show-time">🕐 {show.time} Uhr</div>
+                                <div className="freeman-show-price">{show.price}</div>
+                              </div>
+                              <div className="freeman-show-title">{getShowIcon(show.type)} {show.title}</div>
+                              <div className="freeman-show-description">{show.description}</div>
+                              {show.ticketUrl && (
+                                <a
+                                  href={show.ticketUrl}
+                                  target={show.ticketUrl.startsWith('http') ? "_blank" : undefined}
+                                  rel={show.ticketUrl.startsWith('http') ? "noopener noreferrer" : undefined}
+                                  className={`btn-primary px-6 py-2 font-semibold self-start ${show.type === 'party' ? 'opacity-50 cursor-default' : ''}`}
+                                  onClick={show.type === 'party' ? (e) => e.preventDefault() : undefined}
+                                >
+                                  {getButtonText(show.type)}
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : selectedEventData.ticketDates ? (
+                /* Regular Multi-Date Event Layout */
+                <div className="event-modal-tickets">
+                  <h3 className="text-lg font-semibold text-white/90 mb-3">Tickets für beide Termine:</h3>
+                  {selectedEventData.ticketDates.map((ticketDate) => (
+                    <div key={ticketDate.date} className="event-modal-ticket-item">
+                      <div className="event-modal-ticket-info">
+                        <div className="event-modal-ticket-date">
+                          📅 {ticketDate.dateDisplay} • {selectedEventData.time}
+                        </div>
+                        {ticketDate.film && (
+                          <div className="event-modal-ticket-details">🎬 {ticketDate.film}</div>
+                        )}
+                        <div className="event-modal-ticket-details">{selectedEventData.price}</div>
+                      </div>
+                      <a
+                        href={ticketDate.ticketUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary px-6 py-3 font-semibold event-modal-ticket-btn"
+                      >
+                        Tickets kaufen
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                /* Single Event Layout */
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <a
+                    href={selectedEventData.externalTicketUrl || "/kontakt#kontaktformular"}
+                    target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
+                    rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
+                    className="btn-primary px-8 py-4 text-lg font-semibold"
+                  >
+                    Tickets kaufen
+                  </a>
+                  <div className="text-white/70">
+                    <div className="flex items-center gap-2 mb-1 text-sm">
+                      📅 {selectedEventData.time}
+                    </div>
+                    <div className="text-sm">
+                      {selectedEventData.price}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Close Button at Bottom */}
+              <div className="text-center pt-4 border-t border-white/10 mt-4">
+                <button
+                  onClick={closeEventModal}
+                  className="event-modal-close-bottom"
+                >
+                  Close ✕
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
