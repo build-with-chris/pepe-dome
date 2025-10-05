@@ -87,26 +87,6 @@ export default function Footer() {
               </Link>
             </nav>
 
-            {/* Social Media */}
-            <div>
-              <h4 className="display text-sm font-semibold mb-2 text-white/90">Folgen Sie uns</h4>
-              <div className="flex gap-3">
-                <a
-                  href="#"
-                  className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
-                  aria-label="Instagram"
-                >
-                  <span className="text-sm">📷</span>
-                </a>
-                <a
-                  href="#"
-                  className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
-                  aria-label="Facebook"
-                >
-                  <span className="text-sm">📘</span>
-                </a>
-              </div>
-            </div>
           </div>
         </div>
 
