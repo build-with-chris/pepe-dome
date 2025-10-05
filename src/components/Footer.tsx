@@ -115,7 +115,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-left">
               <p className="text-white/60 text-xs">
-                © 2025 Pepe Dome München • Ein Projekt von PepeShows
+                © 2025 Pepe Dome München
               </p>
             </div>
 

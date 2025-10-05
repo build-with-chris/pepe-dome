@@ -473,55 +473,86 @@ export default function UeberPage() {
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12">
             <div className="flex gap-6 items-start">
               <div className="w-12 h-12 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg">🎯</span>
+                <span className="text-lg">1️⃣</span>
               </div>
               <div>
-                <h3 className="display text-lg font-semibold mb-2">2024 • Vision</h3>
-                <p className="text-white/70">
-                  Die Idee entsteht: Ein permanenter Ort für Artistik in München,
-                  der Training, Shows und Community vereint.
+                <h3 className="display text-xl font-semibold mb-3">Ursprung – Die Suche nach einem Zuhause für zeitgenössische Artistik</h3>
+                <p className="text-white/70 leading-relaxed">
+                  Seit 2006 treibt uns der Wunsch an, einen echten Anlaufpunkt für zeitgenössischen Zirkus, Kunst und Artistik in München zu schaffen. Einen Ort, an dem Bewegung, Körperkunst und Kultur frei atmen dürfen.
                 </p>
               </div>
+            </div>
+
+            <div className="ml-9 border-l border-white/20 pl-9 space-y-1 text-center text-white/40">
+              <span>⸻</span>
             </div>
 
             <div className="flex gap-6 items-start">
               <div className="w-12 h-12 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg">🏗️</span>
+                <span className="text-lg">2️⃣</span>
               </div>
               <div>
-                <h3 className="display text-lg font-semibold mb-2">2025 • Aufbau</h3>
-                <p className="text-white/70">
-                  Planung und Aufbau der geodätischen Kuppel im Ostpark.
-                  Partner:innenschaften werden geschlossen, das Team formiert sich.
+                <h3 className="display text-xl font-semibold mb-3">Der Weg – Viele Zwischenstopps, eine klare Richtung</h3>
+                <p className="text-white/70 leading-relaxed">
+                  Vom MUCCA über den CircusHub bis zum Sugar Mountain – wir haben viele kreative Zwischenlösungen gefunden. Doch alle waren nur auf Zeit.
+                  Jeder Ort war ein Kapitel, aber die Vision blieb dieselbe: ein Raum, der bleibt.
                 </p>
               </div>
+            </div>
+
+            <div className="ml-9 border-l border-white/20 pl-9 space-y-1 text-center text-white/40">
+              <span>⸻</span>
             </div>
 
             <div className="flex gap-6 items-start">
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg">🎪</span>
+                <span className="text-lg">3️⃣</span>
               </div>
               <div>
-                <h3 className="display text-lg font-semibold mb-2">August 2025 • Eröffnung</h3>
-                <p className="text-white/70">
-                  Der Pepe Dome öffnet seine Türen mit dem Freeman Festival
-                  als Eröffnungsveranstaltung.
+                <h3 className="display text-xl font-semibold mb-3">Der Dome – Ein neues Zuhause (vielleicht auf Zeit, aber mit Herzblut)</h3>
+                <p className="text-white/70 leading-relaxed">
+                  Der PepeDome ist unsere aktuelle Bühne. Befristet, ja – aber mit Vollgas und Vision.
+                  Wir wollen zeigen, dass dieser Ort eine Bereicherung für die Menschen und das Viertel ist – so sehr, dass er gar nicht mehr wegzudenken ist.
                 </p>
               </div>
             </div>
 
+            <div className="ml-9 border-l border-white/20 pl-9 space-y-1 text-center text-white/40">
+              <span>⸻</span>
+            </div>
+
             <div className="flex gap-6 items-start">
-              <div className="w-12 h-12 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg">🌟</span>
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-lg">4️⃣</span>
               </div>
               <div>
-                <h3 className="display text-lg font-semibold mb-2">Zukunft • Vision</h3>
+                <h3 className="display text-xl font-semibold mb-3">Jetzt – Ein lebendiger Treffpunkt für Bewegung und Begegnung</h3>
+                <p className="text-white/70 leading-relaxed mb-4">
+                  Seit der Eröffnung am 1. August 2025 füllt sich der Dome jedes Wochenende mit Leben:
+                </p>
                 <p className="text-white/70">
-                  Der Pepe Dome wird zu einem europaweit bekannten Zentrum
-                  für zeitgenössische Artistik und Kultur.
+                  🎪 Shows, Events, Profitraining, Luftakrobatik – ein bunter Mix aus Energie, Kreativität und Gemeinschaft.
+                </p>
+              </div>
+            </div>
+
+            <div className="ml-9 border-l border-white/20 pl-9 space-y-1 text-center text-white/40">
+              <span>⸻</span>
+            </div>
+
+            <div className="flex gap-6 items-start">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-lg">5️⃣</span>
+              </div>
+              <div>
+                <h3 className="display text-xl font-semibold mb-3">Zukunft – Mehr als ein Ort: ein Impuls für München</h3>
+                <p className="text-white/70 leading-relaxed">
+                  Wir möchten immer mehr Menschen erreichen, inspirieren und verbinden – über Artistik hinaus.
+                  Der PepeDome soll Impact haben: auf den Einzelnen, auf das Viertel, auf die ganze Stadt München.
+                  Ein Symbol dafür, was passiert, wenn Kunst und Bewegung Raum bekommen.
                 </p>
               </div>
             </div>
