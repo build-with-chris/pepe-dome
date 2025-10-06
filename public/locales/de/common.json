@@ -1,0 +1,77 @@
+{
+  "navigation": {
+    "events": "Events",
+    "training": "Training",
+    "business": "Business",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "freeman": "Freeman Festival",
+    "home": "Start",
+    "menuToggle": "Menü öffnen/schließen"
+  },
+  "homepage": {
+    "meta": {
+      "title": "Pepe Dome München - Zuhause für zeitgenössischen Zirkus & Artistik im Ostpark",
+      "description": "Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München. Geodätische Kuppel im Ostpark - für Training, Events und Business. Jetzt entdecken!"
+    },
+    "hero": {
+      "badge": "Seit August 2025 im Ostpark",
+      "title": "Pepe Dome",
+      "subtitle": "Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München",
+      "description": "Mitten im Ostpark entsteht ein einzigartiger Ort: für Training, für Events, für Business. Hier erlebst du die Welt des zeitgenössischen Zirkus hautnah – oder nutzt den Dome für deine eigene Veranstaltung.",
+      "eventsButton": "Events & Tickets",
+      "locationButton": "📍 Ostpark München",
+      "features": {
+        "seats": "🏛️ 200 Plätze",
+        "height": "🎪 8,50m Kuppelhöhe",
+        "accessible": "♿ Barrierefrei"
+      }
+    },
+    "nextEvent": {
+      "title": "Nächstes Highlight",
+      "subtitle": "Das kommende Event im Pepe Dome",
+      "festivalHighlight": "✨ FESTIVAL HIGHLIGHT",
+      "nextEventBadge": "NÄCHSTES EVENT",
+      "festivalBadge": "✨ FESTIVAL",
+      "ticketButton": "Tickets kaufen",
+      "allEventsLink": "Alle Events ansehen",
+      "festivalSubtext": "Festival der Artistik",
+      "ticketsForBothDates": "Tickets für beide Termine:"
+    },
+    "sections": {
+      "discover": {
+        "title": "Entdecke die Vielfalt des Pepe Dome",
+        "subtitle": "Von spektakulären Events über professionelles Training bis hin zu einzigartigen Firmenerlebnissen"
+      },
+      "events": {
+        "title": "Events entdecken",
+        "description": "Freeman Festival, Gastspiele und spektakuläre Shows im einzigartigen Dome-Ambiente",
+        "link": "Zum Programm"
+      },
+      "training": {
+        "title": "Training & Kurse",
+        "description": "Profi-Training, Open Training und Workshops für alle Level - von Einsteiger:innen bis Artist:innen",
+        "link": "Zu den Kursen"
+      },
+      "business": {
+        "title": "Für Unternehmen",
+        "description": "Firmenevents, Teambuilding und exklusive Shows - den Dome als einzigartige Location nutzen",
+        "link": "Dome anfragen"
+      },
+      "cta": {
+        "title": "Bereit für Ihr Event?",
+        "subtitle": "Entdecken Sie die Möglichkeiten des Pepe Dome für Ihre Veranstaltung",
+        "requestButton": "Dome anfragen",
+        "learnMoreButton": "Mehr erfahren"
+      },
+      "support": {
+        "subtitle": "Mit Unterstützung von"
+      }
+    }
+  },
+  "common": {
+    "language": "Sprache",
+    "german": "Deutsch",
+    "english": "English"
+  }
+}

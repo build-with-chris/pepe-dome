@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import I18nProvider from '@/components/I18nProvider'
 
 export const metadata: Metadata = {
   title: 'Pepe Dome - Ein einzigartiger Veranstaltungsort in München',
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className="antialiased">
-        {children}
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   )

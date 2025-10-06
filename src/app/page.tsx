@@ -1,17 +1,13 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { getNextEvent } from "@/data/events";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Pepe Dome München - Zuhause für zeitgenössischen Zirkus & Artistik im Ostpark",
-  description: "Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München. Geodätische Kuppel im Ostpark - für Training, Events und Business. Jetzt entdecken!",
-  keywords: ["Pepe Dome", "München", "Ostpark", "zeitgenössischer Zirkus", "Artistik", "Events", "geodätische Kuppel", "Luftakrobatik", "Kultur", "Veranstaltungsort"],
-};
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
+  const { t } = useTranslation('common');
   const nextEvent = getNextEvent();
 
   return (
@@ -66,25 +62,25 @@ export default function Home() {
           {/* Badge */}
           <div className="hero-badge">
             <span className="badge">
-              Seit August 2025 im Ostpark
+              {t('homepage.hero.badge')}
             </span>
           </div>
 
           <h1 className="hero-title">
-            Pepe Dome
+            {t('homepage.hero.title')}
           </h1>
 
           <h2 className="hero-subtitle">
-            Das Zuhause für zeitgenössischen Zirkus, Artistik und Kultur in München
+            {t('homepage.hero.subtitle')}
           </h2>
 
           <p className="hero-description">
-            Mitten im Ostpark entsteht ein einzigartiger Ort: für Training, für Events, für Business. Hier erlebst du die Welt des zeitgenössischen Zirkus hautnah – oder nutzt den Dome für deine eigene Veranstaltung.
+            {t('homepage.hero.description')}
           </p>
 
           <div className="hero-actions">
             <Link href="/veranstaltungen" className="btn-primary btn-lg">
-              Events & Tickets
+              {t('homepage.hero.eventsButton')}
             </Link>
             <a
               href="https://maps.google.com/maps?q=Theatron+Ostpark+München"
@@ -92,22 +88,22 @@ export default function Home() {
               rel="noopener noreferrer"
               className="btn-ghost"
             >
-              📍 Ostpark München
+              {t('homepage.hero.locationButton')}
             </a>
           </div>
 
           {/* Features */}
           <div className="hero-features">
             <div className="hero-feature">
-              <span>🏛️</span> 200 Plätze
+              {t('homepage.hero.features.seats')}
             </div>
             <span className="hero-feature-divider">•</span>
             <div className="hero-feature">
-              <span>🎪</span> 8,50m Kuppelhöhe
+              {t('homepage.hero.features.height')}
             </div>
             <span className="hero-feature-divider">•</span>
             <div className="hero-feature">
-              <span>♿</span> Barrierefrei
+              {t('homepage.hero.features.accessible')}
             </div>
           </div>
         </div>
@@ -123,10 +119,10 @@ export default function Home() {
           <div className={`max-w-6xl mx-auto ${nextEvent.id === 'freeman-festival' ? 'relative z-10' : ''}`}>
             <div className="text-center mb-12">
               <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-                Nächstes Highlight
+                {t('homepage.nextEvent.title')}
               </h2>
               <p className="text-lg text-white/80">
-                Das kommende Event im Pepe Dome
+                {t('homepage.nextEvent.subtitle')}
               </p>
             </div>
 
@@ -138,7 +134,7 @@ export default function Home() {
                   </span>
                   {nextEvent.id === 'freeman-festival' && (
                     <span className="px-4 py-2 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-sm shadow-lg">
-                      ✨ FESTIVAL HIGHLIGHT
+                      {t('homepage.nextEvent.festivalHighlight')}
                     </span>
                   )}
                 </div>
@@ -186,7 +182,7 @@ export default function Home() {
                             rel="noopener noreferrer"
                             className="btn-primary px-6 py-3 text-sm font-semibold whitespace-nowrap"
                           >
-                            Tickets kaufen
+                            {t('homepage.nextEvent.ticketButton')}
                           </a>
                         </div>
                       ))}
@@ -199,7 +195,7 @@ export default function Home() {
                         rel={nextEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
                         className="btn-primary px-8 py-4 text-lg font-semibold"
                       >
-                        Tickets kaufen
+                        {t('homepage.nextEvent.ticketButton')}
                       </a>
                       <div className="flex flex-col items-center justify-center text-white/70 text-sm">
                         <div className="flex items-center gap-1 mb-1">
@@ -217,7 +213,7 @@ export default function Home() {
                   href="/veranstaltungen"
                   className={`inline-flex items-center gap-2 text-${nextEvent.color.accent} hover:text-${nextEvent.color.accent}/80 transition-colors`}
                 >
-                  <span>Alle Events ansehen</span>
+                  <span>{t('homepage.nextEvent.allEventsLink')}</span>
                   <span>→</span>
                 </Link>
               </div>
@@ -265,7 +261,7 @@ export default function Home() {
                   )}
                 </div>
                 <div className={`absolute -top-6 -left-3 px-3 py-2 rounded-lg font-bold text-xs shadow-lg ${nextEvent.id === 'freeman-festival' ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white' : 'bg-gradient-to-r from-white to-gray-100 text-black border border-gray-300'}`}>
-                  {nextEvent.id === 'freeman-festival' ? '✨ FESTIVAL' : 'NÄCHSTES EVENT'}
+                  {nextEvent.id === 'freeman-festival' ? t('homepage.nextEvent.festivalBadge') : t('homepage.nextEvent.nextEventBadge')}
                 </div>
               </div>
             </div>
@@ -278,10 +274,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Entdecke die Vielfalt des Pepe Dome
+              {t('homepage.sections.discover.title')}
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Von spektakulären Events über professionelles Training bis hin zu einzigartigen Firmenerlebnissen
+              {t('homepage.sections.discover.subtitle')}
             </p>
           </div>
 
@@ -294,12 +290,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🎭</span>
               </div>
-              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Events entdecken</h3>
+              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">{t('homepage.sections.events.title')}</h3>
               <p className="muted text-sm group-hover:text-white/90 transition-colors mb-4">
-                Freeman Festival, Gastspiele und spektakuläre Shows im einzigartigen Dome-Ambiente
+                {t('homepage.sections.events.description')}
               </p>
               <div className="inline-flex items-center gap-2 text-purple-400 group-hover:text-purple-300 transition-colors">
-                <span className="text-sm font-semibold">Zum Programm</span>
+                <span className="text-sm font-semibold">{t('homepage.sections.events.link')}</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
@@ -312,12 +308,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🤸</span>
               </div>
-              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Training & Kurse</h3>
+              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">{t('homepage.sections.training.title')}</h3>
               <p className="muted text-sm group-hover:text-white/90 transition-colors mb-4">
-                Profi-Training, Open Training und Workshops für alle Level - von Einsteiger:innen bis Artist:innen
+                {t('homepage.sections.training.description')}
               </p>
               <div className="inline-flex items-center gap-2 text-green-400 group-hover:text-green-300 transition-colors">
-                <span className="text-sm font-semibold">Zu den Kursen</span>
+                <span className="text-sm font-semibold">{t('homepage.sections.training.link')}</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
@@ -330,12 +326,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-gradient-to-br from-white/10 to-white/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🏢</span>
               </div>
-              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Für Unternehmen</h3>
+              <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">{t('homepage.sections.business.title')}</h3>
               <p className="muted text-sm group-hover:text-white/90 transition-colors mb-4">
-                Firmenevents, Teambuilding und exklusive Shows - den Dome als einzigartige Location nutzen
+                {t('homepage.sections.business.description')}
               </p>
               <div className="inline-flex items-center gap-2 text-orange-400 group-hover:text-orange-300 transition-colors">
-                <span className="text-sm font-semibold">Dome anfragen</span>
+                <span className="text-sm font-semibold">{t('homepage.sections.business.link')}</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
@@ -347,21 +343,21 @@ export default function Home() {
       <section className="py-20 px-6 text-center bg-gradient-to-b from-black/0 to-black/20">
         <div className="max-w-4xl mx-auto">
           <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-            Bereit für Ihr Event?
+            {t('homepage.sections.cta.title')}
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Entdecken Sie die Möglichkeiten des Pepe Dome für Ihre Veranstaltung
+            {t('homepage.sections.cta.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
-              Dome anfragen
+              {t('homepage.sections.cta.requestButton')}
             </Link>
             <Link
               href="/ueber"
               className="btn-ghost"
             >
-              Mehr erfahren
+              {t('homepage.sections.cta.learnMoreButton')}
             </Link>
           </div>
         </div>
@@ -371,7 +367,7 @@ export default function Home() {
       <section className="py-12 px-6 border-t border-white/10">
         <div className="w-full">
           <div className="text-center mb-8">
-            <p className="text-sm text-white/60 mb-6">Mit Unterstützung von</p>
+            <p className="text-sm text-white/60 mb-6">{t('homepage.sections.support.subtitle')}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 opacity-70 hover:opacity-90 transition-opacity">
               <div className="flex items-center">
                 <Image

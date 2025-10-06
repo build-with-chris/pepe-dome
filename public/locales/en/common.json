@@ -1,0 +1,77 @@
+{
+  "navigation": {
+    "events": "Events",
+    "training": "Training",
+    "business": "Business",
+    "about": "About Us",
+    "contact": "Contact",
+    "freeman": "Freeman Festival",
+    "home": "Home",
+    "menuToggle": "Open/close menu"
+  },
+  "homepage": {
+    "meta": {
+      "title": "Pepe Dome Munich - Home of Contemporary Circus & Artistry in Ostpark",
+      "description": "The home of contemporary circus, artistry and culture in Munich. Geodesic dome in Ostpark - for training, events and business. Discover now!"
+    },
+    "hero": {
+      "badge": "Since August 2025 in Ostpark",
+      "title": "Pepe Dome",
+      "subtitle": "The home of contemporary circus, artistry and culture in Munich",
+      "description": "In the heart of Ostpark, a unique place is emerging: for training, for events, for business. Here you can experience the world of contemporary circus up close – or use the dome for your own event.",
+      "eventsButton": "Events & Tickets",
+      "locationButton": "📍 Ostpark Munich",
+      "features": {
+        "seats": "🏛️ 200 Seats",
+        "height": "🎪 8.50m Dome Height",
+        "accessible": "♿ Accessible"
+      }
+    },
+    "nextEvent": {
+      "title": "Next Highlight",
+      "subtitle": "The upcoming event at Pepe Dome",
+      "festivalHighlight": "✨ FESTIVAL HIGHLIGHT",
+      "nextEventBadge": "NEXT EVENT",
+      "festivalBadge": "✨ FESTIVAL",
+      "ticketButton": "Buy Tickets",
+      "allEventsLink": "View All Events",
+      "festivalSubtext": "Festival of Artistry",
+      "ticketsForBothDates": "Tickets for both dates:"
+    },
+    "sections": {
+      "discover": {
+        "title": "Discover the Diversity of Pepe Dome",
+        "subtitle": "From spectacular events to professional training and unique corporate experiences"
+      },
+      "events": {
+        "title": "Discover Events",
+        "description": "Freeman Festival, guest performances and spectacular shows in the unique dome atmosphere",
+        "link": "To the Program"
+      },
+      "training": {
+        "title": "Training & Courses",
+        "description": "Professional training, open training and workshops for all levels - from beginners to artists",
+        "link": "To the Courses"
+      },
+      "business": {
+        "title": "For Companies",
+        "description": "Corporate events, team building and exclusive shows - use the dome as a unique location",
+        "link": "Request Dome"
+      },
+      "cta": {
+        "title": "Ready for Your Event?",
+        "subtitle": "Discover the possibilities of Pepe Dome for your event",
+        "requestButton": "Request Dome",
+        "learnMoreButton": "Learn More"
+      },
+      "support": {
+        "subtitle": "With support from"
+      }
+    }
+  },
+  "common": {
+    "language": "Language",
+    "german": "Deutsch",
+    "english": "English"
+  }
+}
