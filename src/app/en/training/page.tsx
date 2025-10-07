@@ -18,7 +18,7 @@ export default function TrainingPageEN() {
     setIsSubmitting(true);
     try {
       // In a real implementation, this would send to a backend API
-      // For now, we'll simulate the email functionality
+      // For now, we&apos;ll simulate the email functionality
       const emailBody = `Workshop/Course Idea from Pepe Dome Training:
 
 ${ideaText}`;
@@ -92,7 +92,7 @@ ${ideaText}`;
               </div>
             </div>
             <p className="text-white/80 mb-6">
-              Professional training in contemporary circus takes place daily from 10 to 14 o'clock at Pepe Dome. Here artists meet for joint training and creative exchange.
+              Professional training in contemporary circus takes place daily from 10 to 14 o&apos;clock at Pepe Dome. Here artists meet for joint training and creative exchange.
             </p>
 
             <div className="bg-white/5 border border-white/10 rounded-lg p-6">
@@ -120,7 +120,7 @@ ${ideaText}`;
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-lg">↘️</span>
-                  <span>Take down aerial props (don't pull up carabiners without weight)</span>
+                  <span>Take down aerial props (don&apos;t pull up carabiners without weight)</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-lg">🧹</span>
@@ -519,7 +519,7 @@ ${ideaText}`;
               Do you want a workshop or course?
             </h2>
             <p className="text-lg text-white/90 mb-6 leading-relaxed">
-              Don't hesitate to write! We take your messages seriously and organize courses or workshops when there's enough demand.
+              Don&apos;t hesitate to write! We take your messages seriously and organize courses or workshops when there&apos;s enough demand.
             </p>
             <div className="flex justify-center">
               <button

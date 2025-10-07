@@ -140,7 +140,7 @@ export default function ContactPageEN() {
               Send Message
             </h2>
             <p className="text-xl text-white/80">
-              Fill out the form and we'll get back to you as soon as possible
+              Fill out the form and we&apos;ll get back to you as soon as possible
             </p>
           </div>
 
@@ -562,7 +562,7 @@ export default function ContactPageEN() {
                 Can I visit Pepe Dome?
               </h3>
               <p className="text-white/70">
-                Yes! We're happy to show you our location. Simply arrange an appointment
+                Yes! We&apos;re happy to show you our location. Simply arrange an appointment
                 with us via the contact form or by phone.
               </p>
             </div>

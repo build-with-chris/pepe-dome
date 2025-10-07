@@ -37,7 +37,7 @@ export default function AboutPageEN() {
                 Our Vision
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Pepe Dome is more than just a location - it's a place of encounter
+                Pepe Dome is more than just a location - it&apos;s a place of encounter
                 where artistry and culture come together. Here people of all ages
                 and backgrounds can experience the magic of movement and performance.
               </p>
@@ -250,7 +250,7 @@ export default function AboutPageEN() {
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
                 Pepe Dome is the joint project of the PepeCollective - a collaboration
-                of five established partners from Munich's artistry scene.
+                of five established partners from Munich&apos;s artistry scene.
               </p>
               <div className="mb-6">
                 <h3 className="display text-xl font-semibold mb-4 text-white">The Collective:</h3>
@@ -386,7 +386,7 @@ export default function AboutPageEN() {
                 Sustainability
               </h3>
               <p className="text-white/70 mb-4">
-                Don't buy new, but creatively reuse - that's our approach
+                Don&apos;t buy new, but creatively reuse - that&apos;s our approach
                 for sustainable economy and responsible action.
               </p>
             </div>
@@ -413,14 +413,14 @@ export default function AboutPageEN() {
               Sustainability Reimagined
             </h2>
             <p className="text-xl text-white/80">
-              Don't buy new, but creatively reuse
+              Don&apos;t buy new, but creatively reuse
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto">
             <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                For us, sustainability means: don't buy new, but creatively reuse.
+                For us, sustainability means: don&apos;t buy new, but creatively reuse.
                 At the NEBourhoods in Neuperlach, we put exactly this into practice:
               </p>
 

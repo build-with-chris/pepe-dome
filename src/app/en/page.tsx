@@ -62,7 +62,7 @@ export default function HomeEN() {
           {/* Badge */}
           <div className="hero-badge">
             <span className="badge">
-              Munich's Premium Circus Venue
+              Munich&apos;s Premium Circus Venue
             </span>
           </div>
 
@@ -76,7 +76,7 @@ export default function HomeEN() {
 
           <p className="hero-description">
             Experience contemporary circus and artistry in a unique geodesic dome -
-            where Munich's cultural scene comes together under one spectacular roof.
+            where Munich&apos;s cultural scene comes together under one spectacular roof.
           </p>
 
           <div className="hero-actions">
@@ -123,7 +123,7 @@ export default function HomeEN() {
                 Next Highlight
               </h2>
               <p className="text-lg text-white/80">
-                Don't miss our upcoming cultural highlight
+                Don&apos;t miss our upcoming cultural highlight
               </p>
             </div>
 
@@ -313,7 +313,7 @@ export default function HomeEN() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Discover Munich's Most Unique Cultural Space
+              Discover Munich&apos;s Most Unique Cultural Space
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
               Contemporary circus, artistry training, and unforgettable events in an extraordinary setting
@@ -349,7 +349,7 @@ export default function HomeEN() {
               </div>
               <h3 className="display text-xl font-bold mb-3 group-hover:text-white transition-colors">Training & Courses</h3>
               <p className="muted text-sm group-hover:text-white/90 transition-colors mb-4">
-                Learn contemporary circus and artistry from professionals in Munich's premier training facility
+                Learn contemporary circus and artistry from professionals in Munich&apos;s premier training facility
               </p>
               <div className="inline-flex items-center gap-2 text-green-400 group-hover:text-green-300 transition-colors">
                 <span className="text-sm font-semibold">Start Training</span>
@@ -385,7 +385,7 @@ export default function HomeEN() {
             Ready for Your Next Cultural Adventure?
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Join Munich's most vibrant arts community in our spectacular geodesic dome
+            Join Munich&apos;s most vibrant arts community in our spectacular geodesic dome
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

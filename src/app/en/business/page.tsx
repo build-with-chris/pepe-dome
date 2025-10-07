@@ -337,7 +337,7 @@ export default function BusinessPageEN() {
             Your Event at Pepe Dome
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Let's create an unforgettable experience for your team together
+            Let&apos;s create an unforgettable experience for your team together
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

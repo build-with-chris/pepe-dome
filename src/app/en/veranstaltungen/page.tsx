@@ -388,7 +388,7 @@ export default function EventsPageEN() {
             Newsletter & Updates
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Don't miss any events - get all news directly
+            Don&apos;t miss any events - get all news directly
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
