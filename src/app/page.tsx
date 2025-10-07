@@ -209,6 +209,46 @@ export default function Home() {
                   )}
                 </div>
 
+                {/* Sponsorship Information for Tshemodan */}
+                {nextEvent.sponsorship && (
+                  <div className="mt-6 pt-4 border-t border-white/20">
+                    {/* Commemoration Notice */}
+                    {nextEvent.sponsorship.commemoration && (
+                      <div className="mb-4 p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/20">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-lg">🕯️</span>
+                          <h5 className="text-sm font-semibold text-white">
+                            {nextEvent.sponsorship.commemoration.text}
+                          </h5>
+                        </div>
+                        {nextEvent.sponsorship.commemoration.description && (
+                          <p className="text-white/80 text-xs">
+                            {nextEvent.sponsorship.commemoration.description}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Sponsor Information */}
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-black/20 border border-white/10">
+                      <div className="flex-shrink-0">
+                        <Image
+                          src={nextEvent.sponsorship.sponsor.logo}
+                          alt={nextEvent.sponsorship.sponsor.name}
+                          width={80}
+                          height={40}
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-white/90 text-sm font-medium">
+                          {nextEvent.sponsorship.sponsor.text}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <Link
                   href="/veranstaltungen"
                   className={`inline-flex items-center gap-2 text-${nextEvent.color.accent} hover:text-${nextEvent.color.accent}/80 transition-colors`}

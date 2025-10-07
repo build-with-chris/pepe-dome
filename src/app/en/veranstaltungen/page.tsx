@@ -669,6 +669,44 @@ export default function EventsPageEN() {
                 </div>
               )}
 
+              {/* Sponsorship Information */}
+              {selectedEventData.sponsorship && (
+                <div className="pt-6 border-t border-white/10 mt-6">
+                  {/* Commemoration Notice */}
+                  {selectedEventData.sponsorship.commemoration && (
+                    <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/20">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-2xl">🕯️</span>
+                        <h4 className="text-lg font-semibold text-white">
+                          In Memory of Kristallnacht
+                        </h4>
+                      </div>
+                      <p className="text-white/80 text-sm">
+                        This performance takes place in remembrance of Kristallnacht on November 9, 1938.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Sponsor Information */}
+                  <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-lg bg-black/20 border border-white/10">
+                    <div className="flex-shrink-0">
+                      <Image
+                        src={selectedEventData.sponsorship.sponsor.logo}
+                        alt={selectedEventData.sponsorship.sponsor.name}
+                        width={120}
+                        height={60}
+                        className="h-12 w-auto object-contain"
+                      />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <p className="text-white/90 font-medium">
+                        Supported by the Kuszner Foundation
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Close Button at Bottom */}
               <div className="text-center pt-4 border-t border-white/10 mt-4">
                 <button

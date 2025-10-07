@@ -48,6 +48,17 @@ export interface Event {
     ticketUrl: string;
     savings: string;
   }>;
+  sponsorship?: {
+    sponsor: {
+      name: string;
+      logo: string;
+      text: string;
+    };
+    commemoration?: {
+      text: string;
+      description?: string;
+    };
+  };
 }
 
 export const events: Event[] = [
@@ -214,7 +225,18 @@ export const events: Event[] = [
         dateDisplay: '10. November',
         ticketUrl: '/kontakt#kontaktformular'
       }
-    ]
+    ],
+    sponsorship: {
+      sponsor: {
+        name: 'Kuszner-Stiftung',
+        logo: '/Stiftung.jpg',
+        text: 'Gefördert durch die Kuszner-Stiftung'
+      },
+      commemoration: {
+        text: 'Zum Gedenken an die Reichsprogromnacht',
+        description: 'Diese Aufführung findet in Erinnerung an die Reichspogromnacht vom 9. November 1938 statt.'
+      }
+    }
   },
   {
     id: 'freeman-festival',
