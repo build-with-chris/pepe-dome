@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface NavigationProps {
   currentPage?: 'home' | 'veranstaltungen' | 'freeman' | 'training' | 'business' | 'ueber' | 'kontakt' | 'impressum' | 'datenschutz';
@@ -11,6 +12,8 @@ interface NavigationProps {
 export default function Navigation({ currentPage = 'home' }: NavigationProps) {
   const { t, i18n } = useTranslation('common');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     const newState = !isMenuOpen;
@@ -29,9 +32,47 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
     document.body.style.overflow = 'unset';
   };
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+  // Helper function to get the correct path for current language
+  const getLocalizedPath = (path: string) => {
+    const isEnglishRoute = pathname.startsWith('/en');
+    if (isEnglishRoute && path !== '/') {
+      return `/en${path}`;
+    } else if (isEnglishRoute && path === '/') {
+      return '/en';
+    }
+    return path;
   };
+
+  const changeLanguage = (lng: string) => {
+    // Update i18next language
+    i18n.changeLanguage(lng);
+
+    // Navigate to corresponding route
+    if (lng === 'en') {
+      // If we're on a German page, navigate to the English equivalent
+      if (pathname === '/') {
+        router.push('/en');
+      } else if (!pathname.startsWith('/en')) {
+        router.push(`/en${pathname}`);
+      }
+    } else {
+      // If we're on an English page, navigate to the German equivalent
+      if (pathname.startsWith('/en')) {
+        const germanPath = pathname.replace('/en', '') || '/';
+        router.push(germanPath);
+      }
+    }
+  };
+
+  // Set language based on current route
+  useEffect(() => {
+    const isEnglishRoute = pathname.startsWith('/en');
+    const expectedLanguage = isEnglishRoute ? 'en' : 'de';
+
+    if (i18n.language !== expectedLanguage) {
+      i18n.changeLanguage(expectedLanguage);
+    }
+  }, [pathname, i18n]);
 
   // Clean up on unmount
   useEffect(() => {
@@ -44,7 +85,7 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
     <nav className="nav">
       <div className="nav-container">
         <Link
-          href="/"
+          href={getLocalizedPath("/")}
           className="nav-logo"
           onClick={closeMenu}
         >
@@ -59,37 +100,37 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
 
         <div className="nav-links">
           <Link
-            href="/veranstaltungen"
+            href={getLocalizedPath("/veranstaltungen")}
             className={`nav-link ${currentPage === 'veranstaltungen' ? 'nav-link-active' : ''}`}
           >
             {t('navigation.events')}
           </Link>
           <Link
-            href="/training"
+            href={getLocalizedPath("/training")}
             className={`nav-link ${currentPage === 'training' ? 'nav-link-active' : ''}`}
           >
             {t('navigation.training')}
           </Link>
           <Link
-            href="/business"
+            href={getLocalizedPath("/business")}
             className={`nav-link ${currentPage === 'business' ? 'nav-link-active' : ''}`}
           >
             {t('navigation.business')}
           </Link>
           <Link
-            href="/ueber"
+            href={getLocalizedPath("/ueber")}
             className={`nav-link ${currentPage === 'ueber' ? 'nav-link-active' : ''}`}
           >
             {t('navigation.about')}
           </Link>
           <Link
-            href="/kontakt"
+            href={getLocalizedPath("/kontakt")}
             className={`nav-link ${currentPage === 'kontakt' ? 'nav-link-active' : ''}`}
           >
             {t('navigation.contact')}
           </Link>
           <Link
-            href="/freeman"
+            href={getLocalizedPath("/freeman")}
             className="btn-primary btn-sm"
           >
             {t('navigation.freeman')}
@@ -136,49 +177,49 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
         <div className="nav-mobile" onClick={closeMenu}>
           <div className="nav-mobile-links" onClick={(e) => e.stopPropagation()}>
             <Link
-              href="/"
+              href={getLocalizedPath("/")}
               className={`nav-mobile-link ${currentPage === 'home' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.home')}
             </Link>
             <Link
-              href="/veranstaltungen"
+              href={getLocalizedPath("/veranstaltungen")}
               className={`nav-mobile-link ${currentPage === 'veranstaltungen' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.events')}
             </Link>
             <Link
-              href="/training"
+              href={getLocalizedPath("/training")}
               className={`nav-mobile-link ${currentPage === 'training' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.training')}
             </Link>
             <Link
-              href="/business"
+              href={getLocalizedPath("/business")}
               className={`nav-mobile-link ${currentPage === 'business' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.business')}
             </Link>
             <Link
-              href="/ueber"
+              href={getLocalizedPath("/ueber")}
               className={`nav-mobile-link ${currentPage === 'ueber' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.about')}
             </Link>
             <Link
-              href="/kontakt"
+              href={getLocalizedPath("/kontakt")}
               className={`nav-mobile-link ${currentPage === 'kontakt' ? 'nav-mobile-link-active' : ''}`}
               onClick={closeMenu}
             >
               {t('navigation.contact')}
             </Link>
             <Link
-              href="/freeman"
+              href={getLocalizedPath("/freeman")}
               className="btn-primary"
               onClick={closeMenu}
             >
