@@ -167,8 +167,8 @@ export const events: Event[] = [
   },
   {
     id: 'drag-akrobatik-show',
-    title: 'Drag. Akrobatik. Show.',
-    subtitle: 'Theater ohne Hausnummer',
+    title: 'Theater ohne Hausnummer',
+    subtitle: 'Drag. Akrobatik. Show.',
     description: '„Theater ohne Hausnummer" kombiniert spektakuläre Artistik mit Drag-Performance und Live-Musik. Eine bunte Mischung aus Witz, Glamour und atemberaubender Akrobatik. Ein Abend, der garantiert anders ist – und Spaß macht.',
     date: '2025-11-08',
     dateRange: '8. NOVEMBER 2025',
@@ -193,12 +193,12 @@ export const events: Event[] = [
   },
   {
     id: 'tshemodan',
-    title: 'Musik. Zirkus. Heimat.',
+    title: 'Tschemodan',
     subtitle: 'Tshemodan – ein musikalischer Zirkus zwischen Heimat & Flucht',
     description: 'Das Ensemble packt den Zirkus buchstäblich aus dem Koffer: Bewegende Akrobatik, Live-Klezmer, Pantomime und persönliche Geschichten verweben sich zu einer Show über Migration, Identität und Zugehörigkeit. Am Ende wird alles wieder eingepackt – mit der Botschaft: Die Reise geht weiter.',
     date: '2025-11-09',
     dateRange: '9.–10. NOVEMBER 2025',
-    time: 'Abends',
+    time: '18:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '🎪', text: 'Bewegende Akrobatik aus dem Koffer' },
@@ -219,12 +219,12 @@ export const events: Event[] = [
       {
         date: '2025-11-09',
         dateDisplay: '9. November',
-        ticketUrl: '/kontakt#kontaktformular'
+        ticketUrl: 'https://rausgegangen.de/events/tschemodan-tsirk-dobranotch-0/'
       },
       {
         date: '2025-11-10',
         dateDisplay: '10. November',
-        ticketUrl: '/kontakt#kontaktformular'
+        ticketUrl: 'https://rausgegangen.de/events/tschemodan-tsirk-dobranotch-1/'
       }
     ],
     sponsorship: {
