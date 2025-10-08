@@ -288,8 +288,8 @@ body {
   .nav-mobile-links {
     display: flex !important;
     flex-direction: column !important;
-    padding: 3rem 1.5rem 2rem !important;
-    gap: 0.75rem !important;
+    padding: 2rem 1.5rem 1.5rem !important;
+    gap: 0.5rem !important;
     max-width: 380px !important;
     margin: 0 auto !important;
     min-height: calc(100vh - 4rem) !important;
@@ -299,7 +299,7 @@ body {
 
   .nav-mobile-link {
     display: flex !important;
-    padding: 1rem 1.5rem !important;
+    padding: 0.75rem 1.5rem !important;
     font-size: 1rem !important;
     font-weight: 500 !important;
     text-align: center !important;
@@ -357,7 +357,7 @@ body {
     color: #0A0A0A !important;
     border: 1px solid var(--brand) !important;
     font-weight: 700 !important;
-    margin-top: 2rem !important;
+    margin-top: 1rem !important;
     box-shadow: 0 4px 20px rgba(100, 181, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     font-family: var(--font-body) !important;
     position: relative !important;

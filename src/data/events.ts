@@ -187,6 +187,7 @@ export const events: Event[] = [
       accent: 'pink-400'
     },
     emoji: '💃',
+    image: '/DragArtistik.webp',
     status: 'upcoming',
     isOneDay: true
   },

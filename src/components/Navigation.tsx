@@ -176,6 +176,38 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
       {isMenuOpen && (
         <div className="nav-mobile" onClick={closeMenu}>
           <div className="nav-mobile-links" onClick={(e) => e.stopPropagation()}>
+            {/* Mobile Language Switcher - Moved to top and made more compact */}
+            <div className="mb-4 pb-3 border-b border-white/20">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    changeLanguage('de');
+                    closeMenu();
+                  }}
+                  className={`flex-1 px-3 py-2 rounded-lg border transition-all text-sm font-medium ${
+                    i18n.language === 'de'
+                      ? 'bg-white/20 border-white/40 text-white'
+                      : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
+                  }`}
+                >
+                  🇩🇪 DE
+                </button>
+                <button
+                  onClick={() => {
+                    changeLanguage('en');
+                    closeMenu();
+                  }}
+                  className={`flex-1 px-3 py-2 rounded-lg border transition-all text-sm font-medium ${
+                    i18n.language === 'en'
+                      ? 'bg-white/20 border-white/40 text-white'
+                      : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
+                  }`}
+                >
+                  🇬🇧 EN
+                </button>
+              </div>
+            </div>
+
             <Link
               href={getLocalizedPath("/")}
               className={`nav-mobile-link ${currentPage === 'home' ? 'nav-mobile-link-active' : ''}`}
@@ -220,44 +252,11 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
             </Link>
             <Link
               href={getLocalizedPath("/freeman")}
-              className="btn-primary"
+              className="btn-primary mt-3"
               onClick={closeMenu}
             >
               {t('navigation.freeman')}
             </Link>
-
-            {/* Mobile Language Switcher */}
-            <div className="border-t border-white/20 pt-4 mt-4">
-              <div className="text-white/70 text-sm mb-3 px-2">{t('common.language')}</div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    changeLanguage('de');
-                    closeMenu();
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-lg border transition-all text-sm font-medium ${
-                    i18n.language === 'de'
-                      ? 'bg-white/20 border-white/40 text-white'
-                      : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
-                  }`}
-                >
-                  {t('common.german')}
-                </button>
-                <button
-                  onClick={() => {
-                    changeLanguage('en');
-                    closeMenu();
-                  }}
-                  className={`flex-1 px-4 py-3 rounded-lg border transition-all text-sm font-medium ${
-                    i18n.language === 'en'
-                      ? 'bg-white/20 border-white/40 text-white'
-                      : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
-                  }`}
-                >
-                  {t('common.english')}
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
