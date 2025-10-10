@@ -383,29 +383,6 @@ export const events: Event[] = [
           }
         ]
       }
-    ],
-    combiTickets: [
-      {
-        name: 'Festival Pass',
-        description: 'Alle 4 Shows + beide Workshops',
-        price: 'Nur 48€ (statt 60€)',
-        ticketUrl: 'https://eventfrog.de/freeman-festival-pass',
-        savings: 'Spare 12€!'
-      },
-      {
-        name: 'Show Pass',
-        description: 'Alle 4 Shows (ohne Workshops)',
-        price: 'Nur 40€ (statt 48€)',
-        ticketUrl: 'https://eventfrog.de/freeman-show-pass',
-        savings: 'Spare 8€!'
-      },
-      {
-        name: 'Workshop Pass',
-        description: 'Beide Workshops + 1 Show deiner Wahl',
-        price: 'Nur 25€',
-        ticketUrl: 'https://eventfrog.de/freeman-workshop-pass',
-        savings: 'Perfekt für Künstler!'
-      }
     ]
   }
 ];
