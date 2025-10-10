@@ -129,6 +129,42 @@ export const events: Event[] = [
     isOneDay: true
   },
   {
+    id: 'circus-poetry',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2025-10-24',
+    dateRange: '24.–25. OKTOBER 2025',
+    time: 'Jeweils 19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    status: 'upcoming',
+    ticketDates: [
+      {
+        date: '2025-10-24',
+        dateDisplay: '24. Oktober',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-0/?mtm_campaign=teilen_event&mtm_kwd=app'
+      },
+      {
+        date: '2025-10-25',
+        dateDisplay: '25. Oktober',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-1/'
+      }
+    ]
+  },
+  {
     id: 'morphe',
     title: 'Morphe',
     subtitle: 'Ein interdisziplinäres performatives Stück',
@@ -189,6 +225,7 @@ export const events: Event[] = [
     emoji: '💃',
     image: '/DragArtistik.webp',
     status: 'upcoming',
+    externalTicketUrl: 'https://rausgegangen.de/events/theater-ohne-hausnummer-0/',
     isOneDay: true
   },
   {
@@ -376,6 +413,24 @@ export function getNextEvent(): Event | null {
   const now = new Date();
   const upcomingEvents = events
     .filter(event => {
+      // For multi-day events (with ticketDates), check the last date
+      if (event.ticketDates && event.ticketDates.length > 0) {
+        const lastTicketDate = event.ticketDates[event.ticketDates.length - 1];
+        // Parse the date and add the event time (e.g., 18:30)
+        const lastEventDateTime = new Date(lastTicketDate.date);
+
+        // For Circus meets Cinema, events end at 18:30
+        if (event.id === 'circus-meets-cinema') {
+          lastEventDateTime.setHours(18, 30, 0, 0);
+        } else {
+          // For other events, use end of day
+          lastEventDateTime.setHours(23, 59, 59, 999);
+        }
+
+        return lastEventDateTime >= now && event.status === 'upcoming';
+      }
+
+      // For single-day events, use the original logic
       const eventDate = new Date(event.date);
       return eventDate >= now && event.status === 'upcoming';
     })
