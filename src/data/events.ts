@@ -150,6 +150,7 @@ export const events: Event[] = [
       accent: 'violet-400'
     },
     emoji: '📖',
+    image: '/CircusSchool.webp',
     status: 'upcoming',
     ticketDates: [
       {
