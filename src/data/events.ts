@@ -1,3 +1,43 @@
+// Utility function to determine if an event is in the past
+function getEventEndDate(event: Event): Date {
+  // For events with multiple ticket dates, use the latest date
+  if (event.ticketDates && event.ticketDates.length > 0) {
+    const lastTicketDate = event.ticketDates[event.ticketDates.length - 1];
+    const endDate = new Date(lastTicketDate.date);
+    // Set to end of day for most events
+    endDate.setHours(23, 59, 59, 999);
+    return endDate;
+  }
+
+  // For Freeman Festival type events with multiple shows, use the latest show date
+  if (event.freemanShows && event.freemanShows.length > 0) {
+    const lastShow = event.freemanShows[event.freemanShows.length - 1];
+    const endDate = new Date(lastShow.date);
+    endDate.setHours(23, 59, 59, 999);
+    return endDate;
+  }
+
+  // For single-day events, use the main event date
+  const endDate = new Date(event.date);
+  endDate.setHours(23, 59, 59, 999);
+  return endDate;
+}
+
+// Function to automatically calculate event status based on current date
+export function calculateEventStatus(event: Omit<Event, 'status'>): 'upcoming' | 'ongoing' | 'past' {
+  const now = new Date();
+  const eventEndDate = getEventEndDate(event as Event);
+
+  // Check if event has ended
+  if (now > eventEndDate) {
+    return 'past';
+  }
+
+  // For simplicity, we'll consider all non-past events as upcoming
+  // You could add 'ongoing' logic here if needed (e.g., multi-day events currently happening)
+  return 'upcoming';
+}
+
 export interface Event {
   id: string;
   title: string;
@@ -61,7 +101,8 @@ export interface Event {
   };
 }
 
-export const events: Event[] = [
+// Raw events data without status (will be calculated automatically)
+const rawEvents: Omit<Event, 'status'>[] = [
   {
     id: 'circus-meets-cinema',
     title: 'Circus meets Cinema',
@@ -85,7 +126,6 @@ export const events: Event[] = [
     },
     emoji: '🎬',
     image: '/Circus&Cinema.webp',
-    status: 'upcoming',
     ticketDates: [
       {
         date: '2025-10-10',
@@ -124,7 +164,6 @@ export const events: Event[] = [
     },
     emoji: '🤡',
     image: '/Entertainment.webp',
-    status: 'upcoming',
     externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html',
     isOneDay: true
   },
@@ -151,7 +190,6 @@ export const events: Event[] = [
     },
     emoji: '📖',
     image: '/CircusSchool.webp',
-    status: 'upcoming',
     ticketDates: [
       {
         date: '2025-10-24',
@@ -188,7 +226,6 @@ export const events: Event[] = [
     },
     emoji: '🌪️',
     image: '/Morphe.webp',
-    status: 'upcoming',
     ticketDates: [
       {
         date: '2025-11-01',
@@ -225,7 +262,6 @@ export const events: Event[] = [
     },
     emoji: '💃',
     image: '/DragArtistik.webp',
-    status: 'upcoming',
     externalTicketUrl: 'https://rausgegangen.de/events/theater-ohne-hausnummer-0/',
     isOneDay: true
   },
@@ -252,7 +288,6 @@ export const events: Event[] = [
     },
     emoji: '🎪',
     image: '/Tsirk.webp',
-    status: 'upcoming',
     ticketDates: [
       {
         date: '2025-11-09',
@@ -300,7 +335,6 @@ export const events: Event[] = [
     },
     emoji: '🎪',
     image: '/Freeman-Poster.webp',
-    status: 'upcoming',
     freemanShows: [
       {
         day: 'Freitag',
@@ -407,10 +441,15 @@ export const events: Event[] = [
       accent: 'yellow-400'
     },
     emoji: '☀️',
-    image: '/Freeman-Poster.webp',
-    status: 'past'
+    image: '/Freeman-Poster.webp'
   }
 ];
+
+// Export events with automatically calculated status
+export const events: Event[] = rawEvents.map(event => ({
+  ...event,
+  status: calculateEventStatus(event)
+}));
 
 export function getNextEvent(): Event | null {
   const now = new Date();
