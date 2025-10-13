@@ -129,6 +129,43 @@ export const events: Event[] = [
     isOneDay: true
   },
   {
+    id: 'circus-poetry',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2025-10-24',
+    dateRange: '24.–25. OKTOBER 2025',
+    time: 'Jeweils 19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/CircusSchool.webp',
+    status: 'upcoming',
+    ticketDates: [
+      {
+        date: '2025-10-24',
+        dateDisplay: '24. Oktober',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-0/?mtm_campaign=teilen_event&mtm_kwd=app'
+      },
+      {
+        date: '2025-10-25',
+        dateDisplay: '25. Oktober',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-1/'
+      }
+    ]
+  },
+  {
     id: 'morphe',
     title: 'Morphe',
     subtitle: 'Ein interdisziplinäres performatives Stück',
@@ -167,8 +204,8 @@ export const events: Event[] = [
   },
   {
     id: 'drag-akrobatik-show',
-    title: 'Drag. Akrobatik. Show.',
-    subtitle: 'Theater ohne Hausnummer',
+    title: 'Theater ohne Hausnummer',
+    subtitle: 'Drag. Akrobatik. Show.',
     description: '„Theater ohne Hausnummer" kombiniert spektakuläre Artistik mit Drag-Performance und Live-Musik. Eine bunte Mischung aus Witz, Glamour und atemberaubender Akrobatik. Ein Abend, der garantiert anders ist – und Spaß macht.',
     date: '2025-11-08',
     dateRange: '8. NOVEMBER 2025',
@@ -189,16 +226,17 @@ export const events: Event[] = [
     emoji: '💃',
     image: '/DragArtistik.webp',
     status: 'upcoming',
+    externalTicketUrl: 'https://rausgegangen.de/events/theater-ohne-hausnummer-0/',
     isOneDay: true
   },
   {
     id: 'tshemodan',
-    title: 'Musik. Zirkus. Heimat.',
+    title: 'Tschemodan',
     subtitle: 'Tshemodan – ein musikalischer Zirkus zwischen Heimat & Flucht',
     description: 'Das Ensemble packt den Zirkus buchstäblich aus dem Koffer: Bewegende Akrobatik, Live-Klezmer, Pantomime und persönliche Geschichten verweben sich zu einer Show über Migration, Identität und Zugehörigkeit. Am Ende wird alles wieder eingepackt – mit der Botschaft: Die Reise geht weiter.',
     date: '2025-11-09',
     dateRange: '9.–10. NOVEMBER 2025',
-    time: 'Abends',
+    time: '18:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '🎪', text: 'Bewegende Akrobatik aus dem Koffer' },
@@ -345,29 +383,6 @@ export const events: Event[] = [
           }
         ]
       }
-    ],
-    combiTickets: [
-      {
-        name: 'Festival Pass',
-        description: 'Alle 4 Shows + beide Workshops',
-        price: 'Nur 48€ (statt 60€)',
-        ticketUrl: 'https://eventfrog.de/freeman-festival-pass',
-        savings: 'Spare 12€!'
-      },
-      {
-        name: 'Show Pass',
-        description: 'Alle 4 Shows (ohne Workshops)',
-        price: 'Nur 40€ (statt 48€)',
-        ticketUrl: 'https://eventfrog.de/freeman-show-pass',
-        savings: 'Spare 8€!'
-      },
-      {
-        name: 'Workshop Pass',
-        description: 'Beide Workshops + 1 Show deiner Wahl',
-        price: 'Nur 25€',
-        ticketUrl: 'https://eventfrog.de/freeman-workshop-pass',
-        savings: 'Perfekt für Künstler!'
-      }
     ]
   },
   {
@@ -401,6 +416,24 @@ export function getNextEvent(): Event | null {
   const now = new Date();
   const upcomingEvents = events
     .filter(event => {
+      // For multi-day events (with ticketDates), check the last date
+      if (event.ticketDates && event.ticketDates.length > 0) {
+        const lastTicketDate = event.ticketDates[event.ticketDates.length - 1];
+        // Parse the date and add the event time (e.g., 18:30)
+        const lastEventDateTime = new Date(lastTicketDate.date);
+
+        // For Circus meets Cinema, events end at 18:30
+        if (event.id === 'circus-meets-cinema') {
+          lastEventDateTime.setHours(18, 30, 0, 0);
+        } else {
+          // For other events, use end of day
+          lastEventDateTime.setHours(23, 59, 59, 999);
+        }
+
+        return lastEventDateTime >= now && event.status === 'upcoming';
+      }
+
+      // For single-day events, use the original logic
       const eventDate = new Date(event.date);
       return eventDate >= now && event.status === 'upcoming';
     })
