@@ -36,13 +36,17 @@ export default function VeranstaltungenPage() {
   // Get current month for highlighting
   const currentMonth = new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
 
-  // Filter events based on selected month
+  // Filter events based on selected month (only upcoming events for timeline)
   const filteredEvents = events.filter(event => {
     const eventDate = new Date(event.date);
     const eventMonth = eventDate.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' });
 
-    return selectedMonth === 'all' || eventMonth === selectedMonth;
+    return event.status === 'upcoming' && (selectedMonth === 'all' || eventMonth === selectedMonth);
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  // Get past events for highlights section
+  const pastEvents = events.filter(event => event.status === 'past')
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Most recent first
 
   const openEventModal = (eventId: string) => {
     setSelectedEvent(eventId);
@@ -404,6 +408,77 @@ export default function VeranstaltungenPage() {
           </div>
         </div>
       </section>
+
+      {/* Past Events Highlights Section */}
+      {pastEvents.length > 0 && (
+        <section className="py-20 px-6 bg-black/10">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+                Vergangene Highlights
+              </h2>
+              <p className="text-xl text-white/80">
+                Blicke zurück auf unsere unvergesslichen Veranstaltungen
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pastEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className="bg-black/20 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 cursor-pointer group"
+                  onClick={() => openEventModal(event.id)}
+                >
+                  {event.image && (
+                    <div className="mb-4 overflow-hidden rounded-xl">
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        width={300}
+                        height={200}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        style={{
+                          objectFit: event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival' ? 'contain' : 'cover',
+                          backgroundColor: event.id === 'wanderzirkus-pepe' || event.id === 'freeman-festival' ? '#000' : 'transparent'
+                        }}
+                      />
+                    </div>
+                  )}
+                  {!event.image && (
+                    <div className="mb-4 h-48 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl flex items-center justify-center">
+                      <span className="text-4xl">{event.emoji}</span>
+                    </div>
+                  )}
+
+                  <div className="text-sm text-white/60 mb-2">
+                    {event.emoji} {event.dateRange}
+                  </div>
+
+                  <h3 className="display text-xl font-bold mb-2 group-hover:text-[#D4A574] transition-colors">
+                    {event.title}
+                  </h3>
+
+                  <p className="text-white/80 text-sm mb-4">
+                    {event.subtitle}
+                  </p>
+
+                  {event.id === 'freeman-festival' && (
+                    <div className="flex gap-2 mb-3">
+                      <span className="px-2 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs">
+                        ✨ HIGHLIGHT
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="text-xs text-white/50">
+                    Klicke für Details ➤
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
 
