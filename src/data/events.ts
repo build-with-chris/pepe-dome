@@ -189,7 +189,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       accent: 'violet-400'
     },
     emoji: '📖',
-    image: '/CircusSchool.webp',
+    image: '/Weiß Beige Kalligraphie Elegant Foto Weihnachtsmarkt Flyer-5.jpg',
     ticketDates: [
       {
         date: '2025-10-24',
