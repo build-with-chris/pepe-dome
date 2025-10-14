@@ -296,15 +296,29 @@ export default function VeranstaltungenPage() {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <a
-                      href={event.externalTicketUrl || (event.ticketDates ? event.ticketDates[0].ticketUrl : "/kontakt#kontaktformular")}
-                      target={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "_blank" : undefined}
-                      rel={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "noopener noreferrer" : undefined}
-                      className="text-xs text-white/60 hover:text-white underline transition-colors"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      🎫 Tickets
-                    </a>
+                    {event.ticketDates && event.ticketDates.length > 1 ? (
+                      /* Multi-day event - lead to modal for all dates */
+                      <button
+                        className="text-xs text-white/60 hover:text-white underline transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEventModal(event.id);
+                        }}
+                      >
+                        🎫 Alle {event.ticketDates.length} Termine
+                      </button>
+                    ) : (
+                      /* Single date or external URL */
+                      <a
+                        href={event.externalTicketUrl || (event.ticketDates ? event.ticketDates[0].ticketUrl : "/kontakt#kontaktformular")}
+                        target={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "_blank" : undefined}
+                        rel={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "noopener noreferrer" : undefined}
+                        className="text-xs text-white/60 hover:text-white underline transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        🎫 Tickets
+                      </a>
+                    )}
                     <div className="text-xs text-white/50">
                       Klicke für Details ➤
                     </div>

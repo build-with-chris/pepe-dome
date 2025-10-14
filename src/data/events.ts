@@ -335,6 +335,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎪',
     image: '/Freeman-Poster.webp',
+    externalTicketUrl: 'https://www.freemanfestival.de/tickets',
     freemanShows: [
       {
         day: 'Freitag',
