@@ -64,6 +64,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* All headings use Outfit display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
 /* ============================================
    CUSTOM UTILITIES & COMPONENTS
    ============================================ */
@@ -521,18 +528,18 @@ body {
   box-shadow: 0 4px 20px rgb(212 165 116 / 0.1);
 }
 
-/* Freeman Festival Special */
+/* Freeman Festival Special - Gold Theme */
 .timeline-featured .timeline-content {
-  background: linear-gradient(135deg, rgb(147 51 234 / 0.1) 0%, rgb(59 130 246 / 0.1) 50%, rgb(147 51 234 / 0.05) 100%);
-  border: 2px solid rgb(147 51 234 / 0.4);
-  box-shadow: 0 8px 32px rgb(147 51 234 / 0.2);
+  background: linear-gradient(135deg, rgb(212 165 116 / 0.15) 0%, rgb(212 165 116 / 0.08) 50%, rgb(212 165 116 / 0.05) 100%);
+  border: 2px solid rgb(212 165 116 / 0.4);
+  box-shadow: 0 8px 32px rgb(212 165 116 / 0.3);
 }
 
 .timeline-featured .timeline-dot {
   width: 1.5rem;
   height: 1.5rem;
-  background: linear-gradient(135deg, #9333ea, #3b82f6);
-  box-shadow: 0 0 30px rgb(147 51 234 / 0.6);
+  background: var(--color-pepe-gold);
+  box-shadow: 0 0 30px rgb(212 165 116 / 0.6);
   animation: festivalPulse 2s ease-in-out infinite;
 }
 
@@ -547,10 +554,10 @@ body {
   }
 }
 
-/* Freeman Tickets */
+/* Freeman Tickets - Gold Theme */
 .freeman-tickets {
-  background: linear-gradient(135deg, rgb(147 51 234 / 0.1) 0%, rgb(59 130 246 / 0.1) 100%);
-  border: 2px solid rgb(147 51 234 / 0.3);
+  background: linear-gradient(135deg, rgb(212 165 116 / 0.1) 0%, rgb(212 165 116 / 0.05) 100%);
+  border: 2px solid rgb(212 165 116 / 0.3);
   border-radius: 1.5rem;
   padding: 2rem;
   margin-top: 1rem;
@@ -570,28 +577,29 @@ body {
 
 .freeman-show:hover {
   background: rgb(255 255 255 / 0.05);
-  border-color: rgb(147 51 234 / 0.3);
+  border-color: var(--color-pepe-gold);
   transform: translateY(-1px);
 }
 
+/* All show types use gold accents */
 .freeman-show-workshop {
-  border-left: 4px solid #f97316;
-  background: linear-gradient(135deg, rgb(249 115 22 / 0.1), rgb(234 88 12 / 0.05));
+  border-left: 4px solid var(--color-pepe-gold);
+  background: linear-gradient(135deg, rgb(212 165 116 / 0.08), rgb(212 165 116 / 0.03));
 }
 
 .freeman-show-talk {
-  border-left: 4px solid #10b981;
-  background: linear-gradient(135deg, rgb(16 185 129 / 0.1), rgb(5 150 105 / 0.05));
+  border-left: 4px solid var(--color-pepe-bronze);
+  background: linear-gradient(135deg, rgb(184 134 11 / 0.08), rgb(184 134 11 / 0.03));
 }
 
 .freeman-show-party {
-  border-left: 4px solid #ec4899;
-  background: linear-gradient(135deg, rgb(236 72 153 / 0.1), rgb(219 39 119 / 0.05));
+  border-left: 4px solid var(--color-pepe-gold-hover);
+  background: linear-gradient(135deg, rgb(230 184 135 / 0.08), rgb(230 184 135 / 0.03));
 }
 
 .freeman-show-regular {
-  border-left: 4px solid #8b5cf6;
-  background: linear-gradient(135deg, rgb(139 92 246 / 0.1), rgb(124 58 237 / 0.05));
+  border-left: 4px solid var(--color-pepe-gold);
+  background: linear-gradient(135deg, rgb(212 165 116 / 0.08), rgb(212 165 116 / 0.03));
 }
 
 /* Animations */

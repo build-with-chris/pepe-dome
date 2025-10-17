@@ -113,10 +113,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: 'Jeweils 18:30 Uhr',
     price: 'Kinder bis 6 kostenlos • Ermäßigt 8€ • Regulär 15€',
     features: [
-      { icon: "theater-masks", text: 'Artistik-Performance zum Auftakt und als Finale' },
-      { icon: "music", text: 'Live-Musik zwischen den Darbietungen' },
-      { icon: "film", text: 'Professionelle Kinoausstattung mit Premium-Sound' },
-      { icon: "popcorn", text: 'Popcorn, Nachos, Eiskonfekt und Getränke' }
+      { icon: '🎭', text: 'Artistik-Performance zum Auftakt und als Finale' },
+      { icon: '🎵', text: 'Live-Musik zwischen den Darbietungen' },
+      { icon: '🎬', text: 'Professionelle Kinoausstattung mit Premium-Sound' },
+      { icon: '🍿', text: 'Popcorn, Nachos, Eiskonfekt und Getränke' }
     ],
     category: 'cinema',
     color: {
@@ -124,7 +124,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'blue-400',
       accent: 'blue-300'
     },
-    icon: "cinema",
+    emoji: '🎬',
     image: '/Circus&Cinema.webp',
     ticketDates: [
       {
@@ -151,10 +151,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: 'Sonntag',
     price: 'Tickets verfügbar',
     features: [
-      { icon: "clown", text: 'Herzerwärmende Clownerie für alle Altersgruppen' },
-      { icon: "theater-masks", text: 'Pantomime und Artistik aus dem Koffer' },
-      { icon: "calendar", text: 'Monatliche Aufführungen jeden Sonntag' },
-      { icon: "family", text: 'Perfekt für Familien und Kinder' }
+      { icon: '🤡', text: 'Herzerwärmende Clownerie für alle Altersgruppen' },
+      { icon: '🎭', text: 'Pantomime und Artistik aus dem Koffer' },
+      { icon: '📅', text: 'Monatliche Aufführungen jeden Sonntag' },
+      { icon: '👨‍👩‍👧‍👦', text: 'Perfekt für Familien und Kinder' }
     ],
     category: 'clown',
     color: {
@@ -162,7 +162,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'red-500',
       accent: 'orange-300'
     },
-    icon: "clown",
+    emoji: '🤡',
     image: '/Entertainment.webp',
     externalTicketUrl: 'https://eventfrog.de/de/p/musicals-shows/zirkus/einmanneinkoffereinwanderzirkus-7378775815528387554.html',
     isOneDay: true
@@ -177,10 +177,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: 'Jeweils 19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
-      { icon: "book", text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
-      { icon: "theater-masks", text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
-      { icon: "acrobatics", text: 'Artistik von Elefteria und Chris' },
-      { icon: "sparkles", text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
     ],
     category: 'performance',
     color: {
@@ -188,7 +188,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'purple-500',
       accent: 'violet-400'
     },
-    icon: "performance",
+    emoji: '📖',
     image: '/Weiß Beige Kalligraphie Elegant Foto Weihnachtsmarkt Flyer-5.jpg',
     ticketDates: [
       {
@@ -213,10 +213,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: 'Abends',
     price: 'Tickets verfügbar',
     features: [
-      { icon: "spiral", text: 'Interdisziplinäres Stück aus Tanz, Akrobatik und Live-Musik' },
-      { icon: "theater-masks", text: 'Performer*innen: Melanie Old, Jonas Dürrbeck, Leonhard Sedlmeier' },
-      { icon: "sparkles", text: 'Immersives Erlebnis zwischen Bühne und Zuschauerraum' },
-      { icon: "seedling", text: 'Exploration von Resilienz und persönlicher Transformation' }
+      { icon: '🌪️', text: 'Interdisziplinäres Stück aus Tanz, Akrobatik und Live-Musik' },
+      { icon: '🎭', text: 'Performer*innen: Melanie Old, Jonas Dürrbeck, Leonhard Sedlmeier' },
+      { icon: '✨', text: 'Immersives Erlebnis zwischen Bühne und Zuschauerraum' },
+      { icon: '🌱', text: 'Exploration von Resilienz und persönlicher Transformation' }
     ],
     category: 'performance',
     color: {
@@ -224,7 +224,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'emerald-500',
       accent: 'teal-400'
     },
-    icon: "performance",
+    emoji: '🌪️',
     image: '/Morphe.webp',
     ticketDates: [
       {
@@ -249,10 +249,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: '19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
-      { icon: "dance", text: 'Spektakuläre Drag-Performance' },
-      { icon: "acrobatics"♀️', text: 'Atemberaubende Artistik und Akrobatik' },
-      { icon: "music", text: 'Live-Musik und Entertainment' },
-      { icon: "sparkles", text: 'Witz, Glamour und Überraschungen' }
+      { icon: '💃', text: 'Spektakuläre Drag-Performance' },
+      { icon: '🤸‍♀️', text: 'Atemberaubende Artistik und Akrobatik' },
+      { icon: '🎵', text: 'Live-Musik und Entertainment' },
+      { icon: '✨', text: 'Witz, Glamour und Überraschungen' }
     ],
     category: 'performance',
     color: {
@@ -260,7 +260,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'purple-500',
       accent: 'pink-400'
     },
-    icon: "drag",
+    emoji: '💃',
     image: '/DragArtistik.webp',
     externalTicketUrl: 'https://rausgegangen.de/events/theater-ohne-hausnummer-0/',
     isOneDay: true
@@ -275,10 +275,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: '18:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
-      { icon: "circus", text: 'Bewegende Akrobatik aus dem Koffer' },
-      { icon: "music", text: 'Live-Klezmer-Musik' },
-      { icon: "theater-masks", text: 'Pantomime und persönliche Geschichten' },
-      { icon: "globe", text: 'Themen: Migration, Identität und Zugehörigkeit' }
+      { icon: '🎪', text: 'Bewegende Akrobatik aus dem Koffer' },
+      { icon: '🎵', text: 'Live-Klezmer-Musik' },
+      { icon: '🎭', text: 'Pantomime und persönliche Geschichten' },
+      { icon: '🌍', text: 'Themen: Migration, Identität und Zugehörigkeit' }
     ],
     category: 'performance',
     color: {
@@ -286,7 +286,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'teal-500',
       accent: 'emerald-400'
     },
-    icon: "circus",
+    emoji: '🎪',
     image: '/Tsirk.webp',
     ticketDates: [
       {
@@ -322,10 +322,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: '3 Tage Festival',
     price: 'Ab 12€ • Kombitickets verfügbar',
     features: [
-      { icon: "theater-masks", text: 'Internationale Spitzen-Artist:innen' },
-      { icon: "globe", text: 'Acts aus Skandinavien und dem Baltikum' },
-      { icon: "stage", text: '5 Shows an 3 Tagen' },
-      { icon: "ticket", text: 'Einzeltickets & Kombitickets' }
+      { icon: '🎭', text: 'Internationale Spitzen-Artist:innen' },
+      { icon: '🌍', text: 'Acts aus Skandinavien und dem Baltikum' },
+      { icon: '🏛️', text: '5 Shows an 3 Tagen' },
+      { icon: '🎫', text: 'Einzeltickets & Kombitickets' }
     ],
     category: 'festival',
     color: {
@@ -333,7 +333,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'blue-500',
       accent: 'purple-400'
     },
-    icon: "circus",
+    emoji: '🎪',
     image: '/Freeman-Poster.webp',
     externalTicketUrl: 'https://www.freemanfestival.de/tickets',
     freemanShows: [
@@ -430,10 +430,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     time: '3 Tage Festival',
     price: 'Tickets waren ab 25€ verfügbar',
     features: [
-      { icon: "sun", text: 'Drei Tage Open-Air Festival' },
-      { icon: "circus", text: 'Internationale Artistik-Acts' },
-      { icon: "music", text: 'Live-Musik auf mehreren Bühnen' },
-      { icon: "star", text: 'Über 2000 begeisterte Besucher' }
+      { icon: '☀️', text: 'Drei Tage Open-Air Festival' },
+      { icon: '🎪', text: 'Internationale Artistik-Acts' },
+      { icon: '🎵', text: 'Live-Musik auf mehreren Bühnen' },
+      { icon: '🌟', text: 'Über 2000 begeisterte Besucher' }
     ],
     category: 'festival',
     color: {
@@ -441,7 +441,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       secondary: 'orange-500',
       accent: 'yellow-400'
     },
-    icon: "festival",
+    emoji: '☀️',
     image: '/Freeman-Poster.webp'
   }
 ];
