@@ -250,7 +250,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     price: 'Tickets verfügbar',
     features: [
       { icon: "dance", text: 'Spektakuläre Drag-Performance' },
-      { icon: "acrobatics"♀️', text: 'Atemberaubende Artistik und Akrobatik' },
+      { icon: "acrobatics", text: 'Atemberaubende Artistik und Akrobatik' },
       { icon: "music", text: 'Live-Musik und Entertainment' },
       { icon: "sparkles", text: 'Witz, Glamour und Überraschungen' }
     ],
