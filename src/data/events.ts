@@ -445,30 +445,6 @@ const rawEvents: Omit<Event, 'status'>[] = [
         ]
       }
     ]
-  },
-  {
-    id: 'sommer-festival-2024',
-    title: 'Sommer Festival 2024',
-    subtitle: 'Drei Tage voller Artistik und Musik',
-    description: 'Ein unvergessliches Wochenende mit internationalen Artists, Live-Musik und spektakulären Darbietungen unter freiem Himmel. Das Festival bot eine einzigartige Mischung aus zeitgenössischem Zirkus, Akrobatik und musikalischen Highlights.',
-    date: '2024-07-15',
-    dateRange: '15.–17. JULI 2024',
-    time: '3 Tage Festival',
-    price: 'Tickets waren ab 25€ verfügbar',
-    features: [
-      { icon: '☀️', text: 'Drei Tage Open-Air Festival' },
-      { icon: '🎪', text: 'Internationale Artistik-Acts' },
-      { icon: '🎵', text: 'Live-Musik auf mehreren Bühnen' },
-      { icon: '🌟', text: 'Über 2000 begeisterte Besucher' }
-    ],
-    category: 'festival',
-    color: {
-      primary: 'yellow-500',
-      secondary: 'orange-500',
-      accent: 'yellow-400'
-    },
-    emoji: '☀️',
-    image: '/Freeman-Poster.webp'
   }
 ];
 
