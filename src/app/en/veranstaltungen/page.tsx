@@ -4,6 +4,7 @@ import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { events, getEventPrice } from "@/data/events";
+import { getLocalizedEvents } from "@/data/eventsTranslations";
 import { useState, useEffect, useRef } from "react";
 
 export default function EventsPageEN() {
@@ -13,8 +14,11 @@ export default function EventsPageEN() {
   const [visibleMonth, setVisibleMonth] = useState<string>('');
   const monthRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+  // Get localized events
+  const localizedEvents = getLocalizedEvents(events, 'en');
+
   // Get unique months and types
-  const monthsWithDates = events.map(event => {
+  const monthsWithDates = localizedEvents.map(event => {
     const date = new Date(event.date);
     return {
       display: date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
@@ -37,7 +41,7 @@ export default function EventsPageEN() {
   const currentMonth = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
   // Filter events based on selected month (only upcoming events for timeline)
-  const filteredEvents = events.filter(event => {
+  const filteredEvents = localizedEvents.filter(event => {
     const eventDate = new Date(event.date);
     const eventMonth = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
@@ -45,7 +49,7 @@ export default function EventsPageEN() {
   }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   // Get past events for highlights section
-  const pastEvents = events.filter(event => event.status === 'past')
+  const pastEvents = localizedEvents.filter(event => event.status === 'past')
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Most recent first
 
   const openEventModal = (eventId: string) => {
@@ -59,7 +63,7 @@ export default function EventsPageEN() {
     document.body.style.overflow = 'unset';
   };
 
-  const selectedEventData = selectedEvent ? events.find(e => e.id === selectedEvent) : null;
+  const selectedEventData = selectedEvent ? localizedEvents.find(e => e.id === selectedEvent) : null;
 
   // Helper function to truncate text for mobile
   const getTruncatedDescription = (text: string, maxLength: number = 150) => {
