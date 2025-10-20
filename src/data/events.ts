@@ -313,6 +313,32 @@ const rawEvents: Omit<Event, 'status'>[] = [
     }
   },
   {
+    id: 'samhain-circus-madness',
+    title: 'Samhain Circus Madness',
+    subtitle: 'Halloween Zirkusnacht',
+    description: 'Tritt ein in eine magische Nacht voller schaurig-schöner Zirkusmomente! Erlebe leuchtende Luftartistik, geheimnisvolle Shows und überraschende Begegnungen aus einer anderen Welt. Unsere Künstler*innen nehmen dich mit auf eine Reise zwischen Leben und Tod – wo Hexen fliegen, Schatten tanzen und der Schleier zur Anderswelt dünn wird. Kostüme sind willkommen, aber kein Muss – bring einfach gute Laune und Halloween-Spirit mit und feiere eine Nacht, die du nicht vergisst!',
+    date: '2025-10-31',
+    dateRange: '31. OKTOBER 2025',
+    time: 'Einlass: 18:30 Uhr | Showbeginn: 19:00 Uhr',
+    price: 'Erwachsene 10€ • Kinder (6-12 Jahre) 7€ • Kinder unter 6 kostenlos',
+    features: [
+      { icon: '🎃', text: 'Magische Halloween-Zirkusnacht' },
+      { icon: '✨', text: 'Leuchtende Luftartistik und geheimnisvolle Shows' },
+      { icon: '🦇', text: 'Eine Reise zwischen Leben und Tod' },
+      { icon: '🕸️', text: 'Kostüme willkommen – Halloween-Spirit garantiert!' }
+    ],
+    category: 'event',
+    color: {
+      primary: 'orange-500',
+      secondary: 'purple-500',
+      accent: 'orange-400'
+    },
+    emoji: '🎃',
+    image: '/Helloween Event.jpeg',
+    externalTicketUrl: '/kontakt#kontaktformular',
+    isOneDay: true
+  },
+  {
     id: 'freeman-festival',
     title: 'Freeman',
     subtitle: 'Festival der Artistik',
