@@ -335,7 +335,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎃',
     image: '/Helloween Event.jpeg',
-    externalTicketUrl: '/kontakt#kontaktformular',
+    externalTicketUrl: 'https://rausgegangen.de/events/samhain-circus-madness-0/',
     isOneDay: true
   },
   {
