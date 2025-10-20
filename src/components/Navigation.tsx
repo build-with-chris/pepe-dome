@@ -136,27 +136,15 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
             {t('navigation.freeman')}
           </Link>
 
-          {/* Language Switcher */}
-          <div className="relative group">
-            <button className="nav-link flex items-center gap-1">
-              <span>{i18n.language === 'de' ? '🇬🇧' : '🇩🇪'}</span>
-              <span className="text-xs">{i18n.language === 'de' ? 'EN' : 'DE'}</span>
-            </button>
-            <div className="absolute right-0 top-full mt-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-              <button
-                onClick={() => changeLanguage('de')}
-                className={`block w-full text-left px-3 py-2 rounded text-sm hover:bg-white/10 transition-colors ${i18n.language === 'de' ? 'text-white font-semibold' : 'text-white/70'}`}
-              >
-                🇩🇪 Deutsch
-              </button>
-              <button
-                onClick={() => changeLanguage('en')}
-                className={`block w-full text-left px-3 py-2 rounded text-sm hover:bg-white/10 transition-colors ${i18n.language === 'en' ? 'text-white font-semibold' : 'text-white/70'}`}
-              >
-                🇬🇧 English
-              </button>
-            </div>
-          </div>
+          {/* Language Switcher - Direct toggle */}
+          <button
+            onClick={() => changeLanguage(i18n.language === 'de' ? 'en' : 'de')}
+            className="nav-link flex items-center gap-1 hover:text-white transition-colors"
+            aria-label={i18n.language === 'de' ? 'Switch to English' : 'Zu Deutsch wechseln'}
+          >
+            <span>{i18n.language === 'de' ? '🇬🇧' : '🇩🇪'}</span>
+            <span className="text-xs">{i18n.language === 'de' ? 'EN' : 'DE'}</span>
+          </button>
         </div>
 
         <button
