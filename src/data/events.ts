@@ -334,7 +334,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       accent: 'orange-400'
     },
     emoji: '🎃',
-    image: '/Helloween Event.jpeg',
+    image: '/Samhain-Circus-Madness.jpeg',
     externalTicketUrl: 'https://rausgegangen.de/events/samhain-circus-madness-0/',
     isOneDay: true
   },
