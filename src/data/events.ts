@@ -541,6 +541,104 @@ export interface Workshop {
 // Workshop data
 const rawWorkshops: Omit<Workshop, 'status'>[] = [
   {
+    id: 'object-manipulation-workshop',
+    title: 'Object Manipulation',
+    subtitle: 'Workshop mit Merri Heikkilä',
+    description: 'Dieser Workshop konzentriert sich auf die Verwendung alltäglicher Gegenstände als Jonglier-Requisiten und bietet eine andere Perspektive auf Objektmanipulation. Durch angeleitete Erkundung experimentieren die Teilnehmer mit Form, Bewegung und Rhythmus unter Verwendung von Gegenständen aus dem täglichen Leben. Die Session fördert einen durchdachten und kreativen Ansatz zum Jonglieren, mit Schwerpunkt auf Beobachtung, Anpassungsfähigkeit und dem Finden neuer Möglichkeiten in vertrauten Dingen.',
+    date: '2025-11-14',
+    dateDisplay: '14. November 2025',
+    duration: '2 Stunden',
+    time: '15:00 Uhr',
+    whatToBring: [
+      'Bringen Sie Ihren liebsten Alltagsgegenstand mit'
+    ],
+    schedule: [
+      {
+        title: 'Einführung in die Objektmanipulation',
+        description: 'Workshop über die Verwendung alltäglicher Gegenstände als Jonglier-Requisiten.'
+      },
+      {
+        title: 'Angeleitete Erkundung',
+        description: 'Experimentieren mit Form, Bewegung und Rhythmus unter Verwendung von Gegenständen aus dem täglichen Leben.'
+      },
+      {
+        title: 'Kreatives Jonglieren',
+        description: 'Durchdachter und kreativer Ansatz zum Jonglieren mit Schwerpunkt auf Beobachtung, Anpassungsfähigkeit und dem Finden neuer Möglichkeiten in vertrauten Dingen.'
+      }
+    ],
+    instructor: {
+      name: 'Merri Heikkilä',
+      email: 'info@pepeshows.de',
+      website: ''
+    },
+    features: [
+      { icon: '🎭', text: 'Zeitgenössischer Zirkus und Objektmanipulation' },
+      { icon: '🌍', text: 'Merri Heikkilä - Bachelor in Zirkuskünsten (Codarts Rotterdam)' },
+      { icon: '🎪', text: 'Ideal für Jongleure und Bewegungspraktiker' },
+      { icon: '🗣️', text: 'Workshop auf Englisch' }
+    ],
+    category: 'workshop',
+    color: {
+      primary: 'orange-500',
+      secondary: 'amber-500',
+      accent: 'orange-400'
+    },
+    emoji: '🤹',
+    registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdV55BqdgNW9xKmdD3vps10RfW9luBzKtM6JCNSChOuojFNbg/viewform?pli=1'
+  },
+  {
+    id: 'stillness-in-motion-workshop',
+    title: 'Stillness in Motion',
+    subtitle: 'Workshop mit Alise Madara Bokaldere',
+    description: '"Stillness in Motion" erkundet die kraftvolle Verwendung von Stille – nicht nur als Fundament für Bewegung, sondern auch als Technik zur Verbesserung der Bühnenpräsenz. Wir werden uns innerhalb und außerhalb unserer jeweiligen Disziplinen bewegen und es euch ermöglichen, grundlegende Prinzipien zu entdecken und später in eure eigene künstlerische Praxis zu integrieren. In vielen Kunstformen spielt Stille eine entscheidende Rolle – Musik wird durch Pausen verstärkt, Worte brauchen Zwischenräume, um verständlich zu sein, und Bewegung funktioniert ähnlich. Das Vergessen zu stoppen nimmt uns die Fähigkeit, uns auf die Bewegung zu konzentrieren.',
+    date: '2025-11-16',
+    dateDisplay: '16. November 2025',
+    duration: '2 Stunden',
+    time: '13:00 Uhr',
+    whatToBring: [
+      'Kleidung, die uneingeschränkte Bewegung ermöglicht',
+      'Wasser zur Hydratation',
+      'Notizbücher und Stifte für wichtige Erkenntnisse und Inspirationen'
+    ],
+    schedule: [
+      {
+        title: 'Fundament der Stille',
+        description: 'Erkunden Sie die kraftvolle Verwendung von Stille als Fundament für Bewegung.'
+      },
+      {
+        title: 'Bühnenpräsenz verstärken',
+        description: 'Techniken zur Verbesserung der Bühnenpräsenz durch bewussten Einsatz von Stille.'
+      },
+      {
+        title: 'Disziplinübergreifende Exploration',
+        description: 'Bewegung innerhalb und außerhalb der jeweiligen Disziplinen mit Fokus auf nuancierte Details.'
+      },
+      {
+        title: 'Integration in die Praxis',
+        description: 'Grundlegende Prinzipien entdecken und in die eigene künstlerische Praxis integrieren.'
+      }
+    ],
+    instructor: {
+      name: 'Alise Madara Bokaldere',
+      email: 'info@pepeshows.de',
+      website: ''
+    },
+    features: [
+      { icon: '💃', text: 'Beste zeitgenössische Tänzerin 2024 (Lettische Tanzpreise)' },
+      { icon: '🎭', text: 'Ideal für Tänzer, Zirkusartisten, Akrobaten und Jongleure' },
+      { icon: '👥', text: 'Max. 20 Teilnehmer' },
+      { icon: '🗣️', text: 'Workshop auf Englisch' }
+    ],
+    category: 'workshop',
+    color: {
+      primary: 'purple-500',
+      secondary: 'pink-500',
+      accent: 'purple-400'
+    },
+    emoji: '💫',
+    registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeg-YUt_aatNtb-iiIZKerZ1kviJRl3U61WLPsA4ROncrrV5g/viewform'
+  },
+  {
     id: 'cyr-wheel-workshop-nov',
     title: 'Cyr Wheel – The Art of Spinning',
     subtitle: 'Workshop mit Chris',
