@@ -265,10 +265,22 @@ ${ideaText}`;
                       <span className="text-lg">🔗</span>
                     </button>
 
-                    {/* Workshop Icon */}
-                    <div className={`w-16 h-16 bg-gradient-to-br from-${workshop.color.primary}/20 to-${workshop.color.secondary}/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                      <span className="text-3xl">{workshop.emoji}</span>
-                    </div>
+                    {/* Workshop Icon/Image */}
+                    {workshop.image ? (
+                      <div className="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <Image
+                          src={workshop.image}
+                          alt={workshop.title}
+                          width={400}
+                          height={300}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className={`w-16 h-16 bg-gradient-to-br from-${workshop.color.primary}/20 to-${workshop.color.secondary}/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <span className="text-3xl">{workshop.emoji}</span>
+                      </div>
+                    )}
 
                     {/* Workshop Title */}
                     <h4 className="display text-xl font-bold mb-2 text-center group-hover:text-[#D4A574] transition-colors">
@@ -743,9 +755,22 @@ ${ideaText}`;
             </button>
 
             <div className="event-modal-header">
-              <div className={`event-modal-image bg-gradient-to-br from-${selectedWorkshop.color.primary}/20 to-${selectedWorkshop.color.secondary}/20 flex items-center justify-center text-5xl`}>
-                {selectedWorkshop.emoji}
-              </div>
+              {selectedWorkshop.image ? (
+                <Image
+                  src={selectedWorkshop.image}
+                  alt={selectedWorkshop.title}
+                  width={200}
+                  height={250}
+                  className="event-modal-image"
+                  style={{
+                    objectFit: 'cover'
+                  }}
+                />
+              ) : (
+                <div className={`event-modal-image bg-gradient-to-br from-${selectedWorkshop.color.primary}/20 to-${selectedWorkshop.color.secondary}/20 flex items-center justify-center text-5xl`}>
+                  {selectedWorkshop.emoji}
+                </div>
+              )}
 
               <div className="event-modal-info">
                 <div className="event-modal-date">
