@@ -647,7 +647,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
     dateDisplay: '29. November 2025',
     duration: '5 Stunden inkl. Pause',
     time: '10:00 - 15:00 Uhr',
-    price: '65€',
+    price: '35€',
     whatToBring: [
       'Bequeme Sportkleidung',
       'Sportschuhe',
@@ -676,7 +676,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
       },
       {
         title: '5. Cyr-Spiel & Tricks',
-        description: 'Wir steigen wieder ein mit einem spielerischen Warm-up. Dann geht\'s an neue Tricks und Kombinationen. Von Superman bis Coin, von Flag bis Twist & Turn – ihr bringt Ideen, ich helfe beim Umsetzen.'
+        description: 'Wir steige wieder ein mit einem spielerischen Warm-up. Dann geht\'s an neue Tricks und Kombinationen. Von Superman bis Coin, von Flag bis Twist & Turn – ihr bringt Ideen, ich helfe beim Umsetzen.'
       }
     ],
     instructor: {
@@ -697,7 +697,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
       accent: 'cyan-400'
     },
     emoji: '🎡',
-    registrationUrl: 'mailto:chris@pepearts.de?subject=Anmeldung%20Cyr%20Wheel%20Workshop%2029.11.2025'
+    registrationUrl: 'https://share.google/uGSZf5GOtZxzCGZyR'
   }
 ];
 
