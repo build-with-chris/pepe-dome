@@ -1,0 +1,295 @@
+[
+  {
+    "id": "freeman-festival-2025",
+    "title": "Freeman Festival 2025",
+    "subtitle": "Das Festival der Artistik",
+    "description": "Drei Tage voller spektakulärer Shows, Workshops und internationaler Artist:innen. Das größte Artistik-Event in München kehrt zurück!",
+    "date": "2025-11-14",
+    "endDate": "2025-11-16",
+    "time": "Verschiedene Zeiten",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Festival",
+    "ticketUrl": "https://example.com/tickets/freeman-2025",
+    "price": "Tagesticket ab 35€, Festivalpass 89€",
+    "imageUrl": "/images/events/freeman-festival.jpg",
+    "featured": true,
+    "highlights": [
+      "Über 30 internationale Artist:innen",
+      "15+ Workshops für alle Levels",
+      "3 Abendshows",
+      "After-Show-Partys"
+    ]
+  },
+  {
+    "id": "circus-meets-cinema-okt-10",
+    "title": "Circus meets Cinema",
+    "subtitle": "Stummfilm mit Live-Artistik",
+    "description": "Erleben Sie klassische Stummfilme neu interpretiert durch spektakuläre Live-Artistik und Musik.",
+    "date": "2025-10-10",
+    "time": "20:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Show",
+    "ticketUrl": "https://example.com/tickets/circus-cinema-1",
+    "price": "25€ / ermäßigt 18€",
+    "imageUrl": "/images/events/circus-cinema.jpg",
+    "featured": false,
+    "highlights": [
+      "Charlie Chaplin's 'The Circus'",
+      "Live-Akrobatik",
+      "Ensemble 'Ciné Sonore'",
+      "Einzigartige Kunstform"
+    ]
+  },
+  {
+    "id": "circus-meets-cinema-okt-11",
+    "title": "Circus meets Cinema",
+    "subtitle": "Stummfilm mit Live-Artistik",
+    "description": "Zweiter Abend mit einem anderen klassischen Stummfilm und neuen artistischen Interpretationen.",
+    "date": "2025-10-11",
+    "time": "20:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Show",
+    "ticketUrl": "https://example.com/tickets/circus-cinema-2",
+    "price": "25€ / ermäßigt 18€",
+    "imageUrl": "/images/events/circus-cinema.jpg",
+    "featured": false,
+    "highlights": [
+      "Buster Keaton's 'Sherlock Jr.'",
+      "Live-Artistik",
+      "Ensemble 'Ciné Sonore'",
+      "Cinematische Magie"
+    ]
+  },
+  {
+    "id": "morphe-premiere",
+    "title": "MORPHE - Premiere",
+    "subtitle": "Eine Reise durch Transformation",
+    "description": "Die neue Show des Ensembles erforscht Transformation durch zeitgenössische Artistik und modernen Tanz.",
+    "date": "2025-12-05",
+    "time": "20:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Premiere",
+    "ticketUrl": "https://example.com/tickets/morphe",
+    "price": "28€ / ermäßigt 20€",
+    "imageUrl": "/images/events/morphe.jpg",
+    "featured": true,
+    "highlights": [
+      "Weltpremiere",
+      "7 internationale Artist:innen",
+      "Choreographie: Elena Rodriguez",
+      "Zeitgenössischer Zirkus"
+    ]
+  },
+  {
+    "id": "morphe-dec-06",
+    "title": "MORPHE",
+    "subtitle": "Eine Reise durch Transformation",
+    "description": "Die neue Show des Ensembles erforscht Transformation durch zeitgenössische Artistik und modernen Tanz.",
+    "date": "2025-12-06",
+    "time": "20:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Show",
+    "ticketUrl": "https://example.com/tickets/morphe",
+    "price": "28€ / ermäßigt 20€",
+    "imageUrl": "/images/events/morphe.jpg",
+    "featured": false,
+    "highlights": []
+  },
+  {
+    "id": "wanderzirkus-westpark",
+    "title": "Wanderzirkus Pepe - Westpark",
+    "subtitle": "Open Air Artistik Show",
+    "description": "Kostenlose Open-Air-Show im Westpark. Professionelle Artistik für die ganze Familie.",
+    "date": "2025-07-15",
+    "time": "18:00 Uhr",
+    "location": "Westpark München",
+    "category": "Open Air",
+    "ticketUrl": null,
+    "price": "Eintritt frei",
+    "imageUrl": "/images/events/wanderzirkus.jpg",
+    "featured": false,
+    "highlights": [
+      "Kostenlos",
+      "Familienfreundlich",
+      "Bei Regen im Dome"
+    ]
+  },
+  {
+    "id": "wanderzirkus-englischer-garten",
+    "title": "Wanderzirkus Pepe - Englischer Garten",
+    "subtitle": "Open Air Artistik Show",
+    "description": "Kostenlose Open-Air-Show im Englischen Garten. Professionelle Artistik für die ganze Familie.",
+    "date": "2025-07-22",
+    "time": "18:00 Uhr",
+    "location": "Englischer Garten, Monopteros",
+    "category": "Open Air",
+    "ticketUrl": null,
+    "price": "Eintritt frei",
+    "imageUrl": "/images/events/wanderzirkus.jpg",
+    "featured": false,
+    "highlights": [
+      "Kostenlos",
+      "Familienfreundlich",
+      "Bei Regen im Dome"
+    ]
+  },
+  {
+    "id": "cyr-wheel-anfaenger-sep",
+    "title": "Cyr Wheel Anfängerkurs",
+    "subtitle": "Deutsches Rad für Einsteiger",
+    "description": "Lerne die Grundlagen des Cyr Wheels in unserem 8-wöchigen Anfängerkurs. Keine Vorkenntnisse nötig!",
+    "date": "2025-09-08",
+    "endDate": "2025-10-27",
+    "time": "Montags, 18:00 - 19:30 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Workshop",
+    "ticketUrl": "https://example.com/tickets/cyr-wheel-beginner",
+    "price": "240€ für 8 Termine",
+    "imageUrl": "/images/events/cyr-wheel-course.jpg",
+    "featured": false,
+    "highlights": [
+      "Max. 6 Teilnehmer:innen",
+      "Professionelle Trainer:innen",
+      "Equipment inklusive",
+      "8 Wochen"
+    ]
+  },
+  {
+    "id": "herbstferienprogramm",
+    "title": "Herbstferienprogramm für Kinder",
+    "subtitle": "Eine Woche Artistik-Abenteuer",
+    "description": "Schnupperkurse in Trapez, Akrobatik, Jonglage und mehr. Für Kinder von 6-14 Jahren.",
+    "date": "2025-10-28",
+    "endDate": "2025-11-01",
+    "time": "10:00 - 15:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Kindertraining",
+    "ticketUrl": "https://example.com/tickets/herbstferien",
+    "price": "180€ (Geschwisterrabatt 20%)",
+    "imageUrl": "/images/events/kinder-ferien.jpg",
+    "featured": false,
+    "highlights": [
+      "5 Tage Programm",
+      "Mini-Show am Freitag",
+      "Mittagessen inklusive",
+      "Keine Vorkenntnisse"
+    ]
+  },
+  {
+    "id": "business-teambuilding-nov",
+    "title": "Business Teambuilding Workshop",
+    "subtitle": "Artistik als Team-Erfahrung",
+    "description": "Stärken Sie Ihr Team durch gemeinsame Artistik-Erfahrungen. Individuell buchbar für Firmen.",
+    "date": "2025-11-12",
+    "time": "14:00 - 18:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Business",
+    "ticketUrl": "mailto:business@pepedome.de",
+    "price": "Auf Anfrage (ab 10 Personen)",
+    "imageUrl": "/images/events/business-teambuilding.jpg",
+    "featured": false,
+    "highlights": [
+      "Teambuilding Exercises",
+      "Professionelle Anleitung",
+      "Catering optional",
+      "Firmenrabatte"
+    ]
+  },
+  {
+    "id": "trapez-workshop-fortgeschrittene",
+    "title": "Trapez Workshop - Fortgeschrittene",
+    "subtitle": "Vertiefe deine Trapez-Skills",
+    "description": "Intensiv-Workshop für erfahrene Trapez-Artist:innen. Neue Tricks und Kombinationen.",
+    "date": "2025-09-20",
+    "time": "10:00 - 16:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Workshop",
+    "ticketUrl": "https://example.com/tickets/trapez-advanced",
+    "price": "85€",
+    "imageUrl": "/images/events/trapez-workshop.jpg",
+    "featured": false,
+    "highlights": [
+      "Mindestens 1 Jahr Erfahrung",
+      "Max. 8 Teilnehmer:innen",
+      "Gasttrainer:in aus Frankreich"
+    ]
+  },
+  {
+    "id": "jonglage-basics",
+    "title": "Jonglage Basics",
+    "subtitle": "Einführung in die Kunst des Jonglierens",
+    "description": "Lerne die Grundlagen der Jonglage mit Bällen, Keulen und Ringen. Für absolute Anfänger:innen.",
+    "date": "2025-09-15",
+    "time": "17:00 - 19:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Workshop",
+    "ticketUrl": "https://example.com/tickets/jonglage-basics",
+    "price": "25€",
+    "imageUrl": "/images/events/jonglage.jpg",
+    "featured": false,
+    "highlights": [
+      "Equipment wird gestellt",
+      "Keine Vorkenntnisse",
+      "Take-home Materials"
+    ]
+  },
+  {
+    "id": "akrobatik-jam-session",
+    "title": "Akrobatik Jam Session",
+    "subtitle": "Offenes Training für alle Levels",
+    "description": "Jeden Donnerstag offenes Training. Matten, Musik und Community. Bring deine eigenen Ideen!",
+    "date": "2025-09-18",
+    "time": "19:00 - 21:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Open Training",
+    "ticketUrl": null,
+    "price": "8€ Tageskarte",
+    "imageUrl": "/images/events/akrobatik-jam.jpg",
+    "featured": false,
+    "highlights": [
+      "Jeden Donnerstag",
+      "Alle Levels willkommen",
+      "Trainer:in vor Ort"
+    ]
+  },
+  {
+    "id": "weihnachtsshow-2025",
+    "title": "Weihnachtszauber im Dome",
+    "subtitle": "Familienshow zur Adventszeit",
+    "description": "Eine magische Show für die ganze Familie. Artistik, Musik und festliche Stimmung im illuminierten Dome.",
+    "date": "2025-12-20",
+    "time": "16:00 Uhr",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Show",
+    "ticketUrl": "https://example.com/tickets/weihnachtsshow",
+    "price": "22€ / Kinder 12€",
+    "imageUrl": "/images/events/weihnachtsshow.jpg",
+    "featured": true,
+    "highlights": [
+      "Familienfreundlich",
+      "Live-Musik",
+      "Punsch & Plätzchen",
+      "Festliche Atmosphäre"
+    ]
+  },
+  {
+    "id": "silvester-gala-2025",
+    "title": "Silvester-Gala 2025",
+    "subtitle": "Ins neue Jahr mit Artistik",
+    "description": "Feiern Sie den Jahreswechsel mit spektakulärer Artistik, DJ, Sektempfang und Mitternachts-Countdown.",
+    "date": "2025-12-31",
+    "time": "21:00 Uhr - Open End",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Event",
+    "ticketUrl": "https://example.com/tickets/silvester",
+    "price": "95€ inkl. Show, Buffet & Getränke",
+    "imageUrl": "/images/events/silvester-gala.jpg",
+    "featured": true,
+    "highlights": [
+      "Exklusive Show",
+      "Buffet & Bar",
+      "DJ bis 4 Uhr",
+      "Limitierte Tickets"
+    ]
+  }
+]

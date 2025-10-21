@@ -85,13 +85,3 @@ Woche	Feature
 	•	Wird eine Archivfunktion für alte Newsletter benötigt?
 
 ⸻
-
-Hinweis für Gamma-Präsi:
-Dieser PRD bildet die inhaltliche Grundlage für deine Folien 1, 3, 5, 6, 7, 8, 9.
-Visualisiere:
-	•	Newsletter-Versand-Flow (Startseite → Mail → Event-Seite)
-	•	Admin UI Mockup (z. B. Events auswählen → Vorschau → Send)
-	•	Monatsvorschau als Landingpage mit Eventkarten (wie eine Mini-Website)
-	•	Mail-Einsammeln auf allen Seiten, klarer CTA.
-
-Auf Wunsch kann ich dir gerne auch das Admin-UI in React als Code-Vorlage liefern.
