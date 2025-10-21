@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import I18nProvider from '@/components/I18nProvider'
+import ParticleBackground from '@/components/ParticleBackground'
 import Script from 'next/script'
 
 export const metadata: Metadata = {
@@ -50,6 +51,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="antialiased">
+        <ParticleBackground />
         <I18nProvider>
           {children}
         </I18nProvider>

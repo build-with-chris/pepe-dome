@@ -1,123 +1,136 @@
-"use client";
-import Link from "next/link";
+'use client'
+
+import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="py-12 px-6 border-t border-white/10">
-      <div className="max-w-6xl mx-auto">
-        {/* Main Footer Content */}
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          {/* Pepe Dome Info */}
-          <div>
-            <div className="display text-xl font-bold mb-4">
-              Pepe Dome München
-            </div>
-            <p className="text-white/70 text-sm mb-4">
-              Das Zuhause für Artistik & Kultur in München. Erlebe spektakuläre Events oder nutze den Dome für deine Veranstaltung.
+    <footer className="footer">
+      <div className="stage-container">
+        <div className="footer-content">
+          {/* Brand Section */}
+          <div className="footer-brand">
+            <h3 className="h3 mb-6">Pepe Dome München</h3>
+            <p className="body-sm text-pepe-t64 mb-8">
+              Das Zuhause für Artistik & Kultur in München. Erlebe spektakuläre Events oder
+              nutze den Dome für deine Veranstaltung.
             </p>
-            <div className="space-y-2 text-sm text-white/60">
+
+            <div className="space-y-2 text-sm text-pepe-t64 mb-8">
               <div className="flex items-center gap-2">
                 <span>📍</span>
                 <span>Ostpark München</span>
               </div>
               <div className="flex items-center gap-2">
                 <span>📧</span>
-                <a href="mailto:info@pepearts.de" className="hover:text-white transition-colors">
+                <a
+                  href="mailto:info@pepearts.de"
+                  className="hover:text-pepe-white transition-colors"
+                >
                   info@pepearts.de
                 </a>
               </div>
             </div>
+
+            {/* Newsletter */}
+            <div className="footer-newsletter">
+              <h4 className="footer-newsletter-title">Newsletter</h4>
+              <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
+                <div className="newsletter-input-group">
+                  <input
+                    type="email"
+                    placeholder="Deine E-Mail"
+                    className="newsletter-input"
+                    required
+                  />
+                  <button type="submit" className="newsletter-btn">
+                    Anmelden
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
-          {/* Navigation */}
-          <div>
-            <h3 className="display text-lg font-semibold mb-4">Navigation</h3>
-            <nav className="space-y-2">
-              <Link href="/" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Startseite
-              </Link>
-              <Link href="/veranstaltungen" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Events
-              </Link>
-              <Link href="/freeman" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Freeman Festival
-              </Link>
-              <Link href="/training" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Training
-              </Link>
-              <Link href="/business" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Business
-              </Link>
-              <Link href="/kontakt" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Kontakt
-              </Link>
-            </nav>
-          </div>
-
-          {/* Events */}
-          <div>
-            <h3 className="display text-lg font-semibold mb-4">Events</h3>
-            <nav className="space-y-2">
-              <div className="text-white/70 text-sm">
-                <span className="font-semibold">Nächste Events:</span>
+          {/* Main Links */}
+          <div className="footer-links">
+            <div className="footer-group">
+              <h4 className="footer-title">Navigation</h4>
+              <div className="footer-link-group">
+                <Link href="/" className="footer-link">
+                  Startseite
+                </Link>
+                <Link href="/veranstaltungen" className="footer-link">
+                  Events
+                </Link>
+                <Link href="/training" className="footer-link">
+                  Training
+                </Link>
+                <Link href="/business" className="footer-link">
+                  Business
+                </Link>
+                <Link href="/freeman" className="footer-link">
+                  Freeman Festival
+                </Link>
+                <Link href="/kontakt" className="footer-link">
+                  Kontakt
+                </Link>
               </div>
-              <div className="text-white/60 text-xs">
-                🎬 Circus meets Cinema<br />
-                10.–11. Oktober 2025
-              </div>
-              <div className="text-white/60 text-xs">
-                🎪 Freeman Festival<br />
-                14.–16. November 2025
-              </div>
-              <Link href="/veranstaltungen" className="inline-block text-yellow-400 hover:text-yellow-300 transition-colors text-sm mt-2">
-                Alle Events ansehen →
-              </Link>
-            </nav>
-          </div>
-
-          {/* Legal & Social */}
-          <div>
-            <h3 className="display text-lg font-semibold mb-4">Rechtliches</h3>
-            <nav className="space-y-2 mb-4">
-              <Link href="/impressum" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Impressum
-              </Link>
-              <Link href="/datenschutz" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Datenschutz
-              </Link>
-            </nav>
-
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-center md:text-left">
-              <p className="text-white/60 text-xs">
-                © 2025 Pepe Dome München
-              </p>
             </div>
 
-            <div className="flex flex-wrap gap-6 text-xs">
-              <Link href="/impressum" className="text-white/60 hover:text-white transition-colors">
+            <div className="footer-group">
+              <h4 className="footer-title">Nächste Events</h4>
+              <div className="footer-link-group">
+                <div className="text-pepe-t64 text-xs">
+                  🎬 Circus meets Cinema
+                  <br />
+                  10.–11. Oktober 2025
+                </div>
+                <div className="text-pepe-t64 text-xs">
+                  🎪 Freeman Festival
+                  <br />
+                  14.–16. November 2025
+                </div>
+                <Link href="/veranstaltungen" className="footer-link text-pepe-gold">
+                  Alle Events ansehen →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Legal */}
+          <div className="footer-group">
+            <h4 className="footer-title">Rechtliches</h4>
+            <div className="footer-link-group">
+              <Link href="/impressum" className="footer-link">
                 Impressum
               </Link>
-              <Link href="/datenschutz" className="text-white/60 hover:text-white transition-colors">
+              <Link href="/datenschutz" className="footer-link">
                 Datenschutz
               </Link>
               <a
                 href="https://maps.google.com/maps?q=Theatron+Ostpark+München"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
+                className="footer-link"
               >
                 🗺️ Anfahrt
               </a>
             </div>
           </div>
         </div>
+
+        {/* Footer Bottom */}
+        <div className="footer-bottom">
+          <p className="footer-copyright">© 2025 Pepe Dome München</p>
+          <div className="footer-legal">
+            <Link href="/impressum" className="footer-legal-link">
+              Impressum
+            </Link>
+            <Link href="/datenschutz" className="footer-legal-link">
+              Datenschutz
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
-  );
+  )
 }

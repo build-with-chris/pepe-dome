@@ -1,19 +1,19 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import { getNextEvent } from "@/data/events";
-import { useTranslation } from 'react-i18next';
+'use client'
+
+import Link from 'next/link'
+import Image from 'next/image'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import { getNextEvent } from '@/data/events'
+import { useTranslation } from 'react-i18next'
 
 export default function Home() {
   const { t } = useTranslation('common');
   const nextEvent = getNextEvent();
 
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <Navigation currentPage="home" />
+    <>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="hero">
@@ -433,6 +433,6 @@ export default function Home() {
       </section>
 
       <Footer />
-    </div>
-  );
+    </>
+  )
 }
