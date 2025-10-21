@@ -148,3 +148,19 @@ npm run lint   # Run ESLint
 - SEO metadata optimization
 - Analytics integration
 - Auf der Seite Business gibt es den CTA Dome anfragen. Dieser soll auf das Kontaktformular leiten
+- Bitte füge mir ein neues Event auf der Veranstaltungsseite ein. Dieses soll wie die anderen auch mit dem Datum eingepflegt werden, sodass die Logik funktioniert.
+Beschreibung:
+🎪 Samhain Circus Madness – Halloween Zirkusnacht 🎃
+
+Datum: 31. Oktober 2025
+Einlass: 18:30 Uhr | Showbeginn: 19:00 Uhr
+Eintritt: 10 € (Erwachsene), 7 € (Kinder 6–12 Jahre), kostenlos für Kinder unter 6
+Ort: Pepe Dome im Ostpark
+
+Tritt ein in eine magische Nacht voller schaurig-schöner Zirkusmomente! ✨
+Erlebe leuchtende Luftartistik, geheimnisvolle Shows und überraschende Begegnungen aus einer anderen Welt. Unsere Künstler*innen nehmen dich mit auf eine Reise zwischen Leben und Tod – wo Hexen fliegen, Schatten tanzen und der Schleier zur Anderswelt dünn wird.
+
+Kostüme sind willkommen, aber kein Muss – bring einfach gute Laune und Halloween-Spirit mit und feiere eine Nacht, die du nicht vergisst! 🕸️🦇
+Tickets gibt’s an der Abendkasse oder online (begrenzte Plätze).
+
+Lass das Madness beginnen… 🎃

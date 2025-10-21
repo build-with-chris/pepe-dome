@@ -500,3 +500,120 @@ export function getEventPrice(price: string): string {
   }
   return price;
 }
+
+// Workshop Interface
+export interface Workshop {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  dateDisplay: string;
+  duration: string;
+  time?: string;
+  price?: string;
+  whatToBring: string[];
+  schedule: Array<{
+    title: string;
+    description: string;
+  }>;
+  instructor: {
+    name: string;
+    email: string;
+    website?: string;
+  };
+  features: Array<{
+    icon: string;
+    text: string;
+  }>;
+  category: string;
+  color: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+  emoji: string;
+  image?: string;
+  status: 'upcoming' | 'past';
+  registrationUrl?: string;
+}
+
+// Workshop data
+const rawWorkshops: Omit<Workshop, 'status'>[] = [
+  {
+    id: 'cyr-wheel-workshop-nov',
+    title: 'Cyr Wheel – The Art of Spinning',
+    subtitle: 'Workshop mit Chris',
+    description: 'Ich gestalte den Workshop frei und individuell. Bringt eure Ideen, Fragen und Bewegungen mit – wir entwickeln sie gemeinsam weiter.',
+    date: '2025-11-29',
+    dateDisplay: '29. November 2025',
+    duration: '5 Stunden inkl. Pause',
+    time: '10:00 - 15:00 Uhr',
+    price: '65€',
+    whatToBring: [
+      'Bequeme Sportkleidung',
+      'Sportschuhe',
+      'Offenheit, Neugier und Lust auf Bewegung'
+    ],
+    schedule: [
+      {
+        title: '1. Warm-up am Cyr Wheel',
+        description: 'Wir starten ruhig: heben, rollen, spüren. Das Rad wird zum Partner – wir lernen, es zu bewegen, zu manipulieren und dabei locker zu bleiben.'
+      },
+      {
+        title: '2. Bewegung im Raum',
+        description: 'Wie reist man mit dem Cyr Wheel von A nach B? Wir erforschen Wege, Schwünge und Raumgefühl – Schritt für Schritt, Drehung für Drehung.'
+      },
+      {
+        title: '3. Basics intensiv',
+        description: 'Wir tauchen tiefer in die Grundlagen ein: Flying Steps, Rocken und Walz bilden die Basis. Jede Bewegung fließt in die nächste.'
+      },
+      {
+        title: '4. Mini-Showcase vor der Pause',
+        description: 'Jetzt seid ihr dran: Jede*r zeigt eine kleine Sequenz aus den Basics. Ganz nach dem Motto „Each One Teach One" – wer mag, gibt Tipps und teilt Erfahrungen.'
+      },
+      {
+        title: 'Pause',
+        description: 'Zeit zum Durchatmen, Kräfte sammeln, Arme ausschütteln.'
+      },
+      {
+        title: '5. Cyr-Spiel & Tricks',
+        description: 'Wir steigen wieder ein mit einem spielerischen Warm-up. Dann geht\'s an neue Tricks und Kombinationen. Von Superman bis Coin, von Flag bis Twist & Turn – ihr bringt Ideen, ich helfe beim Umsetzen.'
+      }
+    ],
+    instructor: {
+      name: 'Chris',
+      email: 'chris@pepearts.de',
+      website: 'https://www.pepearts.de'
+    },
+    features: [
+      { icon: '🎡', text: '5 Stunden intensive Cyr Wheel Praxis' },
+      { icon: '👨‍🏫', text: 'Professionelle Anleitung von Chris' },
+      { icon: '🔄', text: 'Von Basics bis zu fortgeschrittenen Tricks' },
+      { icon: '🤝', text: 'Each One Teach One - Gemeinschaftliches Lernen' }
+    ],
+    category: 'workshop',
+    color: {
+      primary: 'cyan-500',
+      secondary: 'blue-500',
+      accent: 'cyan-400'
+    },
+    emoji: '🎡',
+    registrationUrl: 'mailto:chris@pepearts.de?subject=Anmeldung%20Cyr%20Wheel%20Workshop%2029.11.2025'
+  }
+];
+
+// Export workshops with automatically calculated status
+export const workshops: Workshop[] = rawWorkshops.map(workshop => ({
+  ...workshop,
+  status: new Date(workshop.date) < new Date() ? 'past' : 'upcoming'
+}));
+
+export function getUpcomingWorkshops(): Workshop[] {
+  return workshops.filter(w => w.status === 'upcoming')
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
+export function getWorkshopById(id: string): Workshop | null {
+  return workshops.find(workshop => workshop.id === id) || null;
+}
