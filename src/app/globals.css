@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ========================================
+   PEPE DOME DESIGN SYSTEM
+   Editorial News Hub with Gold Theme
+   ======================================== */
+
+/* Import Design System */
+@import '../styling/tokens.css';
+@import '../styling/typography.css';
+@import '../styling/components.css';
+@import '../styling/animations.css';
+@import '../styling/particles.css';
+
+/* ===== Base Reset ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--pepe-t80);
+  background: var(--pepe-black);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== Layout System ===== */
+
+main {
+  padding-top: 80px; /* Navbar height */
+  min-height: calc(100vh - 80px);
+}
+
+.stage-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(var(--space-4), 5vw, var(--space-12));
+  width: 100%;
+}
+
+.section {
+  padding: var(--space-16) 0;
+}
+
+.section-hero {
+  padding: var(--space-24) 0;
+  min-height: 70vh;
+}
+
+.section-compact {
+  padding: var(--space-12) 0;
+}
+
+/* ===== Bento Grid System ===== */
+
+.bento-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.bento-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+.bento-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.bento-item {
+  min-height: 300px;
+}
+
+.bento-item-tall {
+  grid-row: span 2;
+}
+
+.bento-item-wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .bento-item-wide {
+    grid-column: span 1;
+  }
+
+  .bento-item-tall {
+    grid-row: span 1;
+  }
+}
+
+/* ===== Accessibility ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+*:focus-visible {
+  outline: 2px solid var(--pepe-gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Tailwind v4 Theme ===== */
+
+@theme {
+  /* Core Black Tones */
+  --color-pepe-black: #000000;
+  --color-pepe-dark: #111111;
+  --color-pepe-ink: #161616;
+  --color-pepe-surface: #1A1A1A;
+
+  /* Text */
+  --color-pepe-white: #FFFFFF;
+  --color-pepe-t80: rgb(255 255 255 / 0.80);
+  --color-pepe-t64: rgb(255 255 255 / 0.64);
+
+  /* UI */
+  --color-pepe-line: #333333;
+
+  /* Gold Accent */
+  --color-pepe-gold: #D4A574;
+  --color-pepe-gold-hover: #E6B887;
+  --color-pepe-bronze: #B8860B;
+
+  /* Fonts */
+  --font-family-display: 'Outfit', system-ui, sans-serif;
+  --font-family-body: 'Inter', system-ui, sans-serif;
+}

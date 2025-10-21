@@ -1,0 +1,89 @@
+[
+  {
+    "id": "2025-10",
+    "month": 10,
+    "year": 2025,
+    "title": "Oktober 2025 - Herbst im Pepe Dome",
+    "subject": "Circus meets Cinema, Herbstferien & mehr",
+    "publishedAt": "2025-10-01T10:00:00Z",
+    "sentAt": "2025-10-01T12:00:00Z",
+    "sentCount": 1847,
+    "intro": "Der Herbst bringt kreative Highlights in den Pepe Dome! Von Stummfilm mit Live-Artistik bis zum bunten Herbstferienprogramm - entdecke, was im Oktober auf dich wartet.",
+    "featured": {
+      "title": "Circus meets Cinema",
+      "description": "Am 10. und 11. Oktober erleben Sie eine einzigartige Verbindung von Stummfilm und Live-Artistik.",
+      "eventId": "circus-meets-cinema-okt-10",
+      "imageUrl": "/images/newsletter/circus-cinema.jpg"
+    },
+    "events": [
+      "circus-meets-cinema-okt-10",
+      "circus-meets-cinema-okt-11",
+      "herbstferienprogramm"
+    ],
+    "newsHighlights": [
+      "circus-meets-cinema-oktober",
+      "kindertraining-herbst"
+    ],
+    "outro": "Wir freuen uns darauf, Sie im Pepe Dome begrüßen zu dürfen. Bei Fragen stehen wir Ihnen jederzeit zur Verfügung.",
+    "openRate": 42.3,
+    "clickRate": 18.7
+  },
+  {
+    "id": "2025-09",
+    "month": 9,
+    "year": 2025,
+    "title": "September 2025 - Neues Kursprogramm",
+    "subject": "Cyr Wheel, Trapez & Jonglage - Jetzt anmelden!",
+    "publishedAt": "2025-09-01T10:00:00Z",
+    "sentAt": "2025-09-01T11:30:00Z",
+    "sentCount": 1792,
+    "intro": "Der Herbst startet mit einem vielfältigen Kursprogramm! Ob Cyr Wheel für Anfänger:innen, Trapez für Fortgeschrittene oder Jonglage Basics - für jeden ist etwas dabei.",
+    "featured": {
+      "title": "Neue Cyr Wheel Kurse",
+      "description": "Ab September starten unsere neuen Cyr Wheel Kurse für Anfänger:innen und Fortgeschrittene.",
+      "eventId": "cyr-wheel-anfaenger-sep",
+      "imageUrl": "/images/newsletter/cyr-wheel.jpg"
+    },
+    "events": [
+      "cyr-wheel-anfaenger-sep",
+      "trapez-workshop-fortgeschrittene",
+      "jonglage-basics",
+      "akrobatik-jam-session"
+    ],
+    "newsHighlights": [
+      "neue-cyr-wheel-kurse",
+      "dome-renovierung-abgeschlossen"
+    ],
+    "outro": "Melde dich jetzt an und sichere dir deinen Platz in unseren Kursen!",
+    "openRate": 45.1,
+    "clickRate": 21.4
+  },
+  {
+    "id": "2025-06",
+    "month": 6,
+    "year": 2025,
+    "title": "Juni 2025 - Sommer Special",
+    "subject": "Freeman Festival 2025 & Wanderzirkus Tour",
+    "publishedAt": "2025-06-01T10:00:00Z",
+    "sentAt": "2025-06-01T12:00:00Z",
+    "sentCount": 1654,
+    "intro": "Der Sommer verspricht spektakulär zu werden! Das Freeman Festival kehrt zurück und der Wanderzirkus Pepe geht auf Tour durch München.",
+    "featured": {
+      "title": "Freeman Festival 2025",
+      "description": "Vom 14. bis 16. November - das größte Artistik-Event des Jahres. Early Bird Tickets jetzt sichern!",
+      "eventId": "freeman-festival-2025",
+      "imageUrl": "/images/newsletter/freeman-festival.jpg"
+    },
+    "events": [
+      "wanderzirkus-westpark",
+      "wanderzirkus-englischer-garten"
+    ],
+    "newsHighlights": [
+      "freeman-festival-2025-ankuendigung",
+      "wanderzirkus-pepe-sommer-tour"
+    ],
+    "outro": "Wir sehen uns im Sommer - ob im Park oder im Dome!",
+    "openRate": 48.6,
+    "clickRate": 24.2
+  }
+]

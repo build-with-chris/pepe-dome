@@ -1,0 +1,201 @@
+{
+  "site": {
+    "name": "Pepe Dome",
+    "tagline": "Zuhause für Artistik & Kultur in München",
+    "description": "Der Pepe Dome im Ostpark München ist eine einzigartige geodätische Kuppel für spektakuläre Shows, professionelles Training und unvergessliche Events.",
+    "email": "info@pepedome.de",
+    "phone": "+49 89 12345678",
+    "address": {
+      "street": "Ostpark",
+      "city": "München",
+      "zip": "81549",
+      "country": "Deutschland"
+    },
+    "social": {
+      "instagram": "https://www.instagram.com/pepe_arts/",
+      "facebook": "https://www.facebook.com/pepedome",
+      "youtube": "https://www.youtube.com/@pepedome"
+    }
+  },
+  "navigation": {
+    "main": [
+      {"label": "Home", "href": "/"},
+      {"label": "News", "href": "/news"},
+      {"label": "Events", "href": "/events"},
+      {"label": "Newsletter", "href": "/newsletter"},
+      {"label": "Über uns", "href": "/about"},
+      {"label": "Kontakt", "href": "/contact"}
+    ],
+    "footer": [
+      {"label": "Impressum", "href": "/impressum"},
+      {"label": "Datenschutz", "href": "/datenschutz"},
+      {"label": "AGB", "href": "/agb"}
+    ]
+  },
+  "homepage": {
+    "hero": {
+      "title": "Pepe Dome",
+      "subtitle": "Zuhause für Artistik & Kultur",
+      "description": "Erlebe spektakuläre Shows, professionelles Training und unvergessliche Events in Münchens einzigartiger geodätischer Kuppel.",
+      "cta": {
+        "primary": "Aktuelle Events",
+        "secondary": "Newsletter abonnieren"
+      }
+    },
+    "features": [
+      {
+        "title": "Spektakuläre Shows",
+        "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen - erlebe Artistik auf höchstem Niveau.",
+        "icon": "show"
+      },
+      {
+        "title": "Professionelles Training",
+        "description": "Kurse und Workshops für alle Levels - von Einsteiger:innen bis Profis.",
+        "icon": "training"
+      },
+      {
+        "title": "Einzigartige Location",
+        "description": "Die geodätische Kuppel bietet 200 Sitzplätze und 12m Deckenhöhe für spektakuläre Luftartistik.",
+        "icon": "dome"
+      },
+      {
+        "title": "Community & Kultur",
+        "description": "Ein Ort der Begegnung für Artist:innen, Kulturbegeisterte und Neugierige.",
+        "icon": "community"
+      }
+    ]
+  },
+  "about": {
+    "title": "Über den Pepe Dome",
+    "intro": "Der Pepe Dome ist mehr als eine Veranstaltungslocation - er ist ein lebendiger Ort für Artistik, Kultur und Gemeinschaft im Herzen des Münchner Ostparks.",
+    "story": "Seit 2018 bringen wir zeitgenössische Artistik nach München. Was als temporäres Projekt begann, hat sich zu einem festen Bestandteil der Münchner Kulturlandschaft entwickelt. Die geodätische Kuppel mit ihrer beeindruckenden Architektur bietet die perfekte Bühne für spektakuläre Shows und intensives Training.",
+    "values": [
+      {
+        "title": "Künstlerische Exzellenz",
+        "description": "Wir fördern Artistik als zeitgenössische Kunstform und bieten eine Plattform für innovative Produktionen."
+      },
+      {
+        "title": "Inklusion & Zugänglichkeit",
+        "description": "Kultur für alle - wir setzen uns für barrierefreien Zugang und sozial verträgliche Preise ein."
+      },
+      {
+        "title": "Nachhaltigkeit",
+        "description": "Von Solarenergie bis Mehrwegsystem - wir arbeiten kontinuierlich an unserem ökologischen Fußabdruck."
+      },
+      {
+        "title": "Community Building",
+        "description": "Wir schaffen Räume für Begegnung, Austausch und gemeinsames Wachstum."
+      }
+    ],
+    "team": {
+      "title": "Das Team",
+      "description": "Hinter dem Pepe Dome steht ein engagiertes Team aus Artist:innen, Kulturschaffenden und Organisator:innen, die ihre Leidenschaft für Artistik teilen."
+    },
+    "partners": {
+      "title": "Partner & Förderer",
+      "description": "Wir danken unseren Partner:innen und Förderern für die Unterstützung:"
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Wir freuen uns auf Ihre Nachricht",
+    "info": {
+      "address": {
+        "title": "Adresse",
+        "content": "Pepe Dome\nOstpark\n81549 München"
+      },
+      "email": {
+        "title": "E-Mail",
+        "content": "info@pepedome.de"
+      },
+      "phone": {
+        "title": "Telefon",
+        "content": "+49 89 12345678"
+      },
+      "hours": {
+        "title": "Öffnungszeiten",
+        "content": "Mo-Fr: 14:00 - 22:00 Uhr\nSa-So: Nach Veranstaltungsplan"
+      }
+    },
+    "form": {
+      "title": "Nachricht senden",
+      "fields": {
+        "name": "Name",
+        "email": "E-Mail",
+        "subject": "Betreff",
+        "message": "Nachricht",
+        "privacy": "Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Daten zu."
+      },
+      "submit": "Absenden"
+    }
+  },
+  "newsletter": {
+    "signup": {
+      "title": "Newsletter abonnieren",
+      "description": "Erhalte monatlich Neuigkeiten zu Events, Shows und Workshops direkt in dein Postfach.",
+      "placeholder": "Deine E-Mail-Adresse",
+      "button": "Anmelden",
+      "privacy": "Deine Daten werden vertraulich behandelt. Du kannst dich jederzeit abmelden.",
+      "success": "Danke für deine Anmeldung! Bitte bestätige deine E-Mail-Adresse.",
+      "error": "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
+    },
+    "archive": {
+      "title": "Newsletter-Archiv",
+      "description": "Stöbere in unseren vergangenen Newsletter-Ausgaben."
+    }
+  },
+  "categories": {
+    "news": [
+      {"id": "news", "label": "News", "color": "gold"},
+      {"id": "festival", "label": "Festival", "color": "purple"},
+      {"id": "show", "label": "Show", "color": "blue"},
+      {"id": "training", "label": "Training", "color": "green"},
+      {"id": "business", "label": "Business", "color": "bronze"}
+    ],
+    "events": [
+      {"id": "show", "label": "Show", "color": "gold"},
+      {"id": "festival", "label": "Festival", "color": "purple"},
+      {"id": "workshop", "label": "Workshop", "color": "green"},
+      {"id": "premiere", "label": "Premiere", "color": "amber"},
+      {"id": "open-air", "label": "Open Air", "color": "blue"},
+      {"id": "kindertraining", "label": "Kindertraining", "color": "cyan"},
+      {"id": "business", "label": "Business", "color": "bronze"},
+      {"id": "open-training", "label": "Open Training", "color": "teal"},
+      {"id": "event", "label": "Event", "color": "copper"}
+    ]
+  },
+  "footer": {
+    "about": "Der Pepe Dome im Ostpark München ist Zuhause für Artistik und Kultur. Erlebe spektakuläre Shows oder nutze den Dome für deine Veranstaltung.",
+    "quickLinks": {
+      "title": "Schnellzugriff",
+      "links": [
+        {"label": "Aktuelle Events", "href": "/events"},
+        {"label": "News", "href": "/news"},
+        {"label": "Newsletter", "href": "/newsletter"},
+        {"label": "Über uns", "href": "/about"}
+      ]
+    },
+    "legal": {
+      "title": "Rechtliches",
+      "links": [
+        {"label": "Impressum", "href": "/impressum"},
+        {"label": "Datenschutz", "href": "/datenschutz"},
+        {"label": "AGB", "href": "/agb"}
+      ]
+    },
+    "support": {
+      "title": "Unterstützt von",
+      "logos": [
+        {
+          "name": "Landeshauptstadt München",
+          "image": "/KKUK_de_mit_LHM_Logo_kurz_nebeneinander_Unterstuetzung.png"
+        },
+        {
+          "name": "Städtebauförderung",
+          "image": "/Förderung Logo.jpg"
+        }
+      ]
+    },
+    "copyright": "© 2025 Pepe Dome München. Alle Rechte vorbehalten."
+  }
+}
