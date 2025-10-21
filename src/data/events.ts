@@ -697,7 +697,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
       accent: 'cyan-400'
     },
     emoji: '🎡',
-    registrationUrl: 'https://share.google/uGSZf5GOtZxzCGZyR'
+    registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfQSdyREnmEtKik6bGjLfrIajbTnfY0Y2kXAS6mE26DUwbqHg/viewform?usp=dialog'
   }
 ];
 
