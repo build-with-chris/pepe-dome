@@ -1,150 +1,97 @@
-# Pepe Dome - Project Documentation
+PRD: Pepe Dome Beta Plattform (News + Events + Newsletter)
 
-## Overview
-Pepe Dome ist eine moderne Next.js 15 Website für ein Artistik- und Kulturzentrum in München. Die Website präsentiert Events, Training und Business-Angebote mit einem eleganten, dunklen Design.
+1. Hintergrund / Motivation
 
-## Tech Stack
-- **Framework**: Next.js 15 with App Router
-- **Styling**: CSS with Custom Properties (CSS Variables)
-- **TypeScript**: Full TypeScript support
-- **Deployment**: Optimized for production deployment
+Im Pepe Dome passieren wöchentlich Shows, Workshops und Events. Die neue Website soll als digitaler Hub diese Vielfalt sichtbar machen — mit News, Kalender und einem leistungsstarken Newsletter-System. Die Seite wird in React umgesetzt und nutzt Resend für den Versand.
 
-## Design System
+2. Zielsetzung
+	•	Dynamische Website für Events & Ankündigungen
+	•	Newsbereich als Magazin / Blog mit aktuellen Beiträgen
+	•	Newsletter-Tool, das monatlich Event-Zusammenfassungen als Mail und Landingpage bereitstellt
+	•	Admin-UI zur Verwaltung von Inhalten, Mailing-Listen und Versand
+	•	Mail-Adressen sammeln und DSGVO-konform verwalten
 
-### Color Palette
-- `--pepe-ink`: #161616 (Primary dark background)
-- `--pepe-surface`: #1A1A1A (Secondary background)
-- `--pepe-white`: #fff (Primary text)
-- `--pepe-t80`: rgba(255,255,255,.8) (Secondary text)
-- `--pepe-t64`: rgba(255,255,255,.64) (Muted text)
-- `--pepe-line`: #333 (Borders)
-- `--pepe-line2`: #292929 (Secondary borders)
-- `--pepe-gold`: #D4A574 (Accent color)
-- `--pepe-gold-hover`: #E6B887 (Accent hover)
-- `--pepe-gold-active`: #C19A64 (Accent active)
+3. Zielgruppen
+	•	Besucher:innen des Pepe Dome (Shows, Workshops, Trainings)
+	•	Firmenkunden / Mieter
+	•	Partner & Kulturinteressierte
+	•	Interne Redaktion & Redaktionsteam
 
-### Typography
-- `--font-display`: 'Outfit' (Headlines)
-- `--font-body`: 'Inter' (Body text)
+4. Kern-Features (Beta)
 
-### Component Classes
-- `.btn-primary`: Gold primary button with hover effects
-- `.btn-ghost`: Transparent button with border
-- `.btn-lg`, `.btn-sm`: Size variants
-- `.display`: Display typography class
-- `.muted`: Muted text color
-- `.nav`: Sticky navigation with backdrop blur
-- `.hero`: Full-screen hero section with gradient
+4.1 News / Magazin
+	•	News-Artikel mit Teaser, Kategorie, Autor, Bild
+	•	Filterbar nach Kategorie & Schlagwort
+	•	Verknüpfung zu Events, Profilen etc.
 
-## Mobile Navigation
+4.2 Event-Modul
+	•	Anzeige kommender & vergangener Events
+	•	Event-Detailseite mit Bild, Beschreibung, Zeit, Ort, Kategorie
+	•	Optional: Ticket-Link
+	•	Events nach Monat filterbar (Kalender-Ansicht)
 
-### Features
-- **Responsive Design**: Hamburger menu on mobile, full nav on desktop
-- **Modern UI**: Glassmorphism effects with backdrop blur
-- **Smooth Animations**: Custom CSS animations with cubic-bezier easing
-- **Touch Optimized**: 52px+ touch targets for accessibility
+4.3 Newsletter-Tool (Neu)
+	•	Aus Events eines Monats wird automatisch ein Newsletter generiert
+	•	Ausgabe als HTML-Seite (z. B. unter /newsletter/2025-10)
+	•	Versand über Resend (API)
+	•	Admin kann Inhalte vor Versand anpassen, testen, senden
+	•	Vorschaufunktion für Mail & Web
 
-### Implementation
-- **State Management**: React useState for menu toggle
-- **CSS Classes**: `.nav-mobile`, `.nav-mobile-links`, `.nav-mobile-link`
-- **Animations**: `slideDown` and `fadeInUp` keyframe animations
-- **Z-Index Strategy**: Navigation bar (100000), Mobile menu (99999)
+4.4 Admin UI (Neu)
+	•	Login / Auth
+	•	Content-Management für:
+	•	Newsartikel
+	•	Events
+	•	Newsletter-Ausgaben
+	•	Newsletter-Versand: Empfängerlisten, Vorschau, Versandlog
+	•	Formular für E-Mail-Opt-in über Website verwaltbar (DSGVO-konform)
 
-### Mobile Menu Styling
-- **Background**: Dark gradient with backdrop blur
-- **Links**: Glassmorphism cards with hover shimmer effects
-- **Freeman Button**: Premium gold gradient with enhanced hover
-- **Responsive**: Hidden on desktop (768px+), visible on mobile
+4.5 Lead-Generierung
+	•	Mail-Einsammeln auf Startseite, Events & News
+	•	DSGVO-konformes Double Opt-In über Resend
+	•	Speicherung in DB mit Zeitstempel, Kategorie (z. B. “Training”, “Show”)
 
-## Project Structure
+5. Technische Umsetzung
+	•	Frontend: React + Tailwind CSS
+	•	Backend: tbd (Node/Express oder Next.js App Router)
+	•	Newsletter-Versand: Resend API
+	•	Datenbank: PostgreSQL
+	•	Admin UI: Eigenes Panel, optional mit React Admin / Headless CMS
 
-```
-src/
-├── app/
-│   ├── globals.css          # Global styles and design system
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx            # Homepage
-│   ├── veranstaltungen/    # Events page
-│   ├── freeman/            # Freeman Festival page
-│   ├── training/           # Training page (placeholder)
-│   ├── business/           # Business page (placeholder)
-│   ├── ueber/              # About page (placeholder)
-│   └── kontakt/            # Contact page (placeholder)
-└── components/
-    └── Navigation.tsx      # Main navigation component
-```
+6. User-Flows
+	•	Nutzer:in besucht Seite → Trägt sich für Newsletter ein → Erhält monatliche Vorschau
+	•	Redaktion: erstellt Events & News → wählt für Newsletter aus → versendet Mail
 
-## Key Components
+7. Erfolgskriterien (KPIs)
+	•	Anzahl Newsletter-Abonnent:innen
+	•	Öffnungsrate, Klickrate
+	•	Event-Aufrufe über Mailings
+	•	Verweildauer / Bounce Rate
+	•	Redaktionelle Aktivität
 
-### Navigation.tsx
-- Responsive navigation with mobile menu
-- Current page highlighting
-- Hamburger animation
-- Body scroll prevention when mobile menu is open
+8. Roadmap (Beta)
 
-### Events Pages
-- **Freeman Festival**: Dedicated festival page with program, artists, tickets
-- **Veranstaltungen**: Main events overview with featured events
-- Event cards with gradient backgrounds and CTAs
+Woche	Feature
+1	Setup Projektstruktur, DB-Modelle, Seiten-Routing
+2	News-Modul, Event-Modul, Startseite Hub
+3	Newsletter-Seite + Resend-Integration
+4	Admin UI mit Login, Bearbeitung, Mail-Test & Versand
+5	Lead-Formulare, DSGVO, Tests & Launch Beta
 
-## Development
+9. Offene Fragen
+	•	Sollen Empfänger segmentiert werden (z. B. Training vs Business)?
+	•	Wer hat Admin-Rechte?
+	•	Benötigen wir ein Rollen- / Rechtesystem für Autor:innen?
+	•	Wird eine Archivfunktion für alte Newsletter benötigt?
 
-### Commands
-```bash
-npm run dev    # Start development server
-npm run build  # Build for production
-npm run start  # Start production server
-npm run lint   # Run ESLint
-```
+⸻
 
-### Development Server
-- Runs on `http://localhost:3000` (or next available port)
-- Hot reload enabled
-- TypeScript checking in real-time
+Hinweis für Gamma-Präsi:
+Dieser PRD bildet die inhaltliche Grundlage für deine Folien 1, 3, 5, 6, 7, 8, 9.
+Visualisiere:
+	•	Newsletter-Versand-Flow (Startseite → Mail → Event-Seite)
+	•	Admin UI Mockup (z. B. Events auswählen → Vorschau → Send)
+	•	Monatsvorschau als Landingpage mit Eventkarten (wie eine Mini-Website)
+	•	Mail-Einsammeln auf allen Seiten, klarer CTA.
 
-## Features Implemented
-
-### ✅ Navigation
-- Sticky navigation with blur effect
-- Mobile hamburger menu with modern UI
-- Active page highlighting
-- Smooth animations and transitions
-
-### ✅ Pages
-- Homepage with hero section and feature cards
-- Events overview page with chronological layout
-- Freeman Festival dedicated page
-- Responsive design for all screen sizes
-
-### ✅ Mobile Optimization
-- Touch-optimized interface
-- Glassmorphism mobile menu
-- Responsive typography and spacing
-- Mobile-first CSS approach
-
-### ✅ Performance
-- Next.js 15 App Router for optimal performance
-- CSS-only animations (no JavaScript libraries)
-- Optimized asset loading
-- SEO-friendly structure
-
-## Design Philosophy
-- **Premium Feel**: High-end cultural venue representation
-- **Dark Theme**: Sophisticated, modern aesthetic
-- **Gold Accents**: Elegant highlighting for key elements
-- **Smooth Interactions**: Fluid animations and micro-interactions
-- **Accessibility**: Proper contrast ratios and touch targets
-
-## Deployment Notes
-- Ensure all environment variables are configured
-- Build process optimizes CSS and JavaScript
-- Static assets are properly cached
-- Mobile responsiveness tested across devices
-
-## Future Enhancements
-- Contact form implementation
-- Event booking system integration
-- Image optimization and gallery
-- SEO metadata optimization
-- Analytics integration
-- Auf der Seite Business gibt es den CTA Dome anfragen. Dieser soll auf das Kontaktformular leiten
+Auf Wunsch kann ich dir gerne auch das Admin-UI in React als Code-Vorlage liefern.
