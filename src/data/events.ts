@@ -696,8 +696,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
       secondary: 'blue-500',
       accent: 'cyan-400'
     },
-    emoji: '🎡',
-    image: '/Cyr Artist.jpg',
+    emoji: '🌪️',
     registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfQSdyREnmEtKik6bGjLfrIajbTnfY0Y2kXAS6mE26DUwbqHg/viewform?usp=dialog'
   }
 ];
