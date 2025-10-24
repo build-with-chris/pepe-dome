@@ -4,8 +4,10 @@ import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import { useState, useEffect, useCallback } from "react";
 import { isEarlyBirdActive } from "@/data/events";
+import { useTranslation } from 'react-i18next';
 
 export default function FreemanPage() {
+  const { t } = useTranslation('common');
   const [currentSlide, setCurrentSlide] = useState(0);
   const earlyBirdActive = isEarlyBirdActive();
 
@@ -72,7 +74,8 @@ export default function FreemanPage() {
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all text-center"
             >
-              Teil von ZEIT FÜR ZIRKUS 2025<span className="hidden sm:inline"> 🎪</span> • 14.–16. November in München
+              <span className="sm:hidden">Teil von ZEIT FÜR ZIRKUS 2025 • 14.–16. November in München</span>
+              <span className="hidden sm:inline">Teil von ZEIT FÜR ZIRKUS 2025 🎪 • 14.–16. November in München</span>
             </a>
           </div>
 
