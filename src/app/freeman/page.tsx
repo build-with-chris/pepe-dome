@@ -65,12 +65,12 @@ export default function FreemanPage() {
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center max-w-6xl mx-auto">
           {/* Badge */}
-          <div className="flex flex-col items-center gap-3 mb-4 sm:mb-6">
+          <div className="flex flex-col items-center gap-3 mb-4 sm:mb-6 w-full px-4">
             <a
               href="https://zeitfuerzirkus.de"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all text-center"
+              className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all text-center"
             >
               Teil von ZEIT FÜR ZIRKUS 2025<span className="hidden sm:inline"> 🎪</span> • 14.–16. November in München
             </a>
