@@ -12,7 +12,8 @@
       "Bash(npm install:*)",
       "Bash(mkdir:*)",
       "Bash(find:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []

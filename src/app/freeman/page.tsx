@@ -65,7 +65,15 @@ export default function FreemanPage() {
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center max-w-6xl mx-auto">
           {/* Badge */}
-          <div className="inline-block mb-4 sm:mb-6">
+          <div className="flex flex-col items-center gap-3 mb-4 sm:mb-6">
+            <a
+              href="https://zeitfuerzirkus.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all"
+            >
+              Teil von ZEIT FÜR ZIRKUS 2025 🎪
+            </a>
             <span className="px-3 sm:px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-xs sm:text-sm">
               14.–16. November in München
             </span>
@@ -129,8 +137,10 @@ export default function FreemanPage() {
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
                 Freeman ist mehr als ein Festival – es ist eine Feier der artistischen Freiheit.
-                Internationale Spitzen-Artist:innen aus Skandinavien und dem Baltikum zeigen,
-                was möglich ist, wenn Höchstleistung auf Poesie trifft.
+                Als Teil von <a href="https://zeitfuerzirkus.de" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline font-semibold">ZEIT FÜR ZIRKUS</a>,
+                der deutschen Ausgabe des internationalen Festivals LA NUIT DU CIRQUE, zeigen
+                Spitzen-Artist:innen aus Skandinavien und dem Baltikum, was möglich ist,
+                wenn Höchstleistung auf Poesie trifft.
               </p>
               <ul className="space-y-3 text-white/70">
                 <li className="flex items-center gap-3">
@@ -219,6 +229,42 @@ export default function FreemanPage() {
             </div>
           </div>
 
+          {/* Zeit für Zirkus Context */}
+          <div className="mb-16 p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/30">
+            <div className="flex items-start gap-4 mb-4">
+              <span className="text-4xl">🎪</span>
+              <div>
+                <h3 className="display text-2xl font-bold mb-3 text-blue-200">
+                  Teil von ZEIT FÜR ZIRKUS 2025
+                </h3>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  ZEIT FÜR ZIRKUS ist die deutsche Ausgabe des international stattfindenden Zirkusfestivals
+                  <strong className="text-white"> LA NUIT DU CIRQUE</strong>. Die 5. Edition findet erneut in Kooperation
+                  mit dem französischen Netzwerk <em>Territoires du Cirque</em> statt.
+                </p>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  Der <strong className="text-white">Bundesverband Zeitgenössischer Zirkus</strong> erweitert die
+                  Jubiläumsausgabe um das Diskursprogramm <strong className="text-green-300">ZEIT ZUM REDEN</strong> und
+                  gestaltet Gespräche, Begegnungen und Austausch gemeinsam mit sieben überregionalen Veranstaltungsorten.
+                </p>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <a
+                    href="https://zeitfuerzirkus.de"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-400/40 rounded-full text-blue-200 hover:bg-blue-500/30 transition-all text-sm font-semibold"
+                  >
+                    <span>🌐</span>
+                    <span>zeitfuerzirkus.de</span>
+                  </a>
+                  <span className="text-white/60 text-sm">
+                    Auf Augenhöhe mit Publikum und Zirkusszene
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Artists Preview */}
           <div className="text-center mb-12">
             <h2 className="display text-3xl md:text-4xl font-bold mb-4">
@@ -298,10 +344,14 @@ export default function FreemanPage() {
             <div className="bg-black/30 border border-white/10 rounded-xl p-6">
               <h3 className="display text-xl font-bold mb-4 text-purple-300">Samstag, 15.11.</h3>
               <div className="space-y-3">
-                <div className="p-3 bg-green-500/10 border border-green-400/30 rounded-lg">
-                  <div className="font-semibold text-green-300">11:00 Talk</div>
-                  <div className="text-sm text-white">Presentation</div>
-                  <div className="text-xs text-white/60">Anke Politz</div>
+                <div className="p-4 bg-green-500/10 border border-green-400/30 rounded-lg">
+                  <div className="font-semibold text-green-300 mb-1">11:00 ZEIT ZUM REDEN</div>
+                  <div className="text-sm text-white font-medium mb-1">BUZZ – Diskursprogramm</div>
+                  <div className="text-xs text-white/70 mb-2">
+                    Gespräche, Begegnungen und Austausch auf Augenhöhe mit Publikum und Zirkusszene.
+                    Drängende Themen der Kunstform und ihrer Akteur:innen im Kontext unserer Zeit.
+                  </div>
+                  <div className="text-xs text-green-200">mit Anke Politz</div>
                 </div>
                 <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
                   <div className="font-semibold text-blue-300">18:00 Show</div>
