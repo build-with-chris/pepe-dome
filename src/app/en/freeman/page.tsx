@@ -65,10 +65,16 @@ export default function FreemanPageEN() {
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center max-w-6xl mx-auto">
           {/* Badge */}
-          <div className="inline-block mb-4 sm:mb-6">
-            <span className="px-3 sm:px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-xs sm:text-sm">
-              November 14–16 in Munich
-            </span>
+          <div className="flex flex-col items-center gap-3 mb-4 sm:mb-6 w-full px-4">
+            <a
+              href="https://zeitfuerzirkus.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all text-center"
+            >
+              <span className="sm:hidden">Part of TIME FOR CIRCUS 2025 • Nov 14–16 in Munich</span>
+              <span className="hidden sm:inline">Part of TIME FOR CIRCUS 2025 🎪 • Nov 14–16 in Munich</span>
+            </a>
           </div>
 
           <h1 className="display text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 tracking-tight px-2">
@@ -88,254 +94,386 @@ export default function FreemanPageEN() {
               rel="noopener noreferrer"
               className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
             >
-              Get Tickets from 12€
-            </a>
-            <a
-              href="https://freemanfestival.de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors underline text-sm sm:text-base"
-            >
-              🌐 Complete Festival Website
+              Get Tickets from €12
             </a>
           </div>
 
-          {/* Premium Badge */}
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs sm:text-sm shadow-lg">
-            <span className="animate-pulse">✨</span>
-            <span>PREMIUM FESTIVAL EXPERIENCE</span>
-            <span className="animate-pulse">✨</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-purple-500/5 to-blue-500/5">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              What Makes Freeman Special
-            </h2>
-            <p className="text-xl text-white/80">
-              More than a festival – an experience that touches all senses
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10 hover:border-purple-400/30 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🌟</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">World-Class Artists</h3>
-              <p className="text-sm text-white/70">International top performers you normally only see in major theaters</p>
-            </div>
-
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10 hover:border-purple-400/30 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🎪</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Intimate Atmosphere</h3>
-              <p className="text-sm text-white/70">Close to the artists in the unique ambiance of the Pepe Dome</p>
-            </div>
-
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10 hover:border-purple-400/30 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🎨</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Art & Poetry</h3>
-              <p className="text-sm text-white/70">Where technical mastery meets emotional depth</p>
-            </div>
-
-            <div className="text-center p-6 rounded-xl bg-black/20 border border-white/10 hover:border-purple-400/30 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">🌍</span>
-              </div>
-              <h3 className="display text-lg font-semibold mb-2">Exclusive Munich</h3>
-              <p className="text-sm text-white/70">This unique festival lineup only in Munich</p>
+          {/* Features */}
+          <div className="inline-block mb-6 sm:mb-8 px-4 sm:px-6 py-3 bg-blue-500/20 border border-blue-400/30 rounded-full max-w-full">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
+              <span className="flex items-center gap-1">
+                <span>♿</span> Accessible
+              </span>
+              <span className="hidden sm:inline">•</span>
+              <span className="flex items-center gap-1">
+                <span>👨‍👩‍👧‍👦</span> Suitable for children
+              </span>
+              <span className="hidden sm:inline">•</span>
+              <span className="flex items-center gap-1">
+                <span>⏱️</span> approx. 75 minutes
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Poster Gallery */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-black/10">
+      {/* Festival Info */}
+      <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Experience the Magic
-            </h2>
-            <p className="text-xl text-white/80">
-              Impressions from previous Freeman Festival performances
-            </p>
-          </div>
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <h2 className="display text-3xl md:text-4xl font-bold mb-6">
+                What is Freeman?
+              </h2>
+              <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                Freeman is more than a festival – it's a celebration of artistic freedom.
+                As part of <a href="https://zeitfuerzirkus.de" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline font-semibold">TIME FOR CIRCUS</a>,
+                the German edition of the international festival LA NUIT DU CIRQUE, top artists
+                from Scandinavia and the Baltic region showcase what's possible when
+                excellence meets poetry.
+              </p>
+              <ul className="space-y-3 text-white/70">
+                <li className="flex items-center gap-3">
+                  <span className="text-purple-400">🎭</span>
+                  <span>Contemporary circus at world-class level</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-purple-400">🌍</span>
+                  <span>International acts from Europe</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-purple-400">🏛️</span>
+                  <span>Unique atmosphere at Pepe Dome</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-purple-400">🎪</span>
+                  <span>Only 200 seats - intimate and personal shows</span>
+                </li>
+              </ul>
+            </div>
+            {/* Poster Slider Gallery */}
+            <div className="relative w-full flex justify-center">
+              <div className="relative w-full max-w-md">
+                {/* Container for aspect ratio */}
+                <div className="aspect-[3/4] relative">
+                  {/* Main Image Display */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl border border-purple-400/30 overflow-hidden shadow-2xl">
+                    <Image
+                      src={posters[currentSlide].src}
+                      alt={posters[currentSlide].alt}
+                      fill
+                      className="object-cover transition-all duration-500 ease-in-out"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      priority
+                    />
 
-          {/* Gallery */}
-          <div className="relative max-w-4xl mx-auto">
-            <div className="aspect-[4/5] max-w-lg mx-auto relative overflow-hidden rounded-xl border border-purple-400/30 shadow-2xl shadow-purple-500/25">
-              <Image
-                src={posters[currentSlide].src}
-                alt={posters[currentSlide].alt}
-                fill
-                className="object-contain transition-all duration-500"
-                sizes="(max-width: 768px) 100vw, 512px"
-                priority
-              />
+                    {/* Overlay with poster title */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <h3 className="text-white font-semibold text-sm">
+                        {posters[currentSlide].title}
+                      </h3>
+                    </div>
+                  </div>
 
-              {/* Navigation Arrows */}
-              <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
-                aria-label="Previous image"
-              >
-                ←
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
-                aria-label="Next image"
-              >
-                →
-              </button>
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:border-white/40 z-10"
+                    aria-label="Previous poster"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm border border-white/20 hover:border-white/40 z-10"
+                    aria-label="Next poster"
+                  >
+                    →
+                  </button>
+                </div>
 
-              {/* Title Overlay */}
-              <div className="absolute bottom-4 left-4 right-4 text-center">
-                <div className="bg-black/60 backdrop-blur-sm rounded-lg px-4 py-2">
-                  <h3 className="text-white font-semibold">{posters[currentSlide].title}</h3>
+                {/* Slide Indicators */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {posters.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentSlide
+                          ? 'bg-purple-400 w-6'
+                          : 'bg-white/30 hover:bg-white/50'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden mt-2">
+                  <div
+                    className="h-full bg-purple-400 transition-all duration-100 ease-linear"
+                    style={{ width: `${((currentSlide + 1) / posters.length) * 100}%` }}
+                  />
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Slide Indicators */}
-            <div className="flex justify-center gap-2 mt-6">
-              {posters.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentSlide
-                      ? 'bg-purple-400'
-                      : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+          {/* Time for Circus Context */}
+          <div className="mb-16 p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/30">
+            <div className="flex items-start gap-4 mb-4">
+              <span className="text-4xl">🎪</span>
+              <div>
+                <h3 className="display text-2xl font-bold mb-3 text-blue-200">
+                  Part of TIME FOR CIRCUS 2025
+                </h3>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  TIME FOR CIRCUS is the German edition of the internationally held circus festival
+                  <strong className="text-white"> LA NUIT DU CIRQUE</strong>. The 5th edition takes place once again in cooperation
+                  with the French network <em>Territoires du Cirque</em>.
+                </p>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  The <strong className="text-white">Federal Association of Contemporary Circus</strong> extends the
+                  anniversary edition with the discourse program <strong className="text-green-300">TIME TO TALK</strong> and
+                  shapes conversations, encounters and exchange together with seven national venues.
+                </p>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <a
+                    href="https://zeitfuerzirkus.de"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-400/40 rounded-full text-blue-200 hover:bg-blue-500/30 transition-all text-sm font-semibold"
+                  >
+                    <span>🌐</span>
+                    <span>zeitfuerzirkus.de</span>
+                  </a>
+                  <span className="text-white/60 text-sm">
+                    On eye level with audience and circus scene
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Artists Preview */}
+          <div className="text-center mb-12">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              The Artists
+            </h2>
+            <p className="text-xl text-white/80">
+              Meet the international top performers
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+              <h3 className="display text-xl font-bold mb-2">The Nordic Council</h3>
+              <p className="text-purple-300 mb-4">Finland, Iceland & Sweden</p>
+              <p className="text-white/70 mb-4">
+                Contemporary circus art with comedy: Humor about everyday life & ambivalence merges
+                with spectacular acrobatics.
+              </p>
+              <div className="text-sm text-white/60">
+                Show: "Häppy Hour" - Fri. 7pm & Sat. 6pm
+              </div>
+            </div>
+
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+              <h3 className="display text-xl font-bold mb-2">Art for Rainy Days</h3>
+              <p className="text-purple-300 mb-4">Latvia • Award-winning performance</p>
+              <p className="text-white/70 mb-4">
+                Meditative, hypnotic circus with dance, hair hanging & aerial rope.
+                Minimalist aesthetics with reinterpreted Baltic folk music.
+              </p>
+              <div className="text-sm text-white/60">
+                Show: "How a Spiral Works" - Sat. 8:30pm & Sun. 6pm
+              </div>
+            </div>
+
+            <div className="p-8 rounded-xl bg-black/20 border border-white/10 md:col-span-2 lg:col-span-1">
+              <h3 className="display text-xl font-bold mb-2">Workshop Leaders</h3>
+              <p className="text-purple-300 mb-4">International experts</p>
+              <p className="text-white/70 mb-4">
+                <strong>Merri Heikkilä:</strong> Object Manipulation (Fri. 3pm)<br/>
+                <strong>Alise Madara Bokaldere:</strong> Stillness in Motion (Sun. 1pm)
+              </p>
+              <div className="text-sm text-white/60">
+                Workshops in English • Registration required
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Program Overview */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6">
+      <section className="py-20 px-6 bg-black/10">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
-              Festival Program
-            </h2>
-            <p className="text-xl text-white/80">
-              Three days full of breathtaking artistry
-            </p>
-          </div>
+          <h2 className="display text-3xl md:text-4xl font-bold mb-8 text-center">
+            Program Details
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Thursday */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-400/20">
-              <div className="text-center mb-6">
-                <h3 className="display text-2xl font-bold mb-2">Thursday</h3>
-                <p className="text-purple-400 font-semibold">November 14</p>
-              </div>
-              <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-lg font-semibold mb-1">Festival Opening</div>
-                  <div className="text-white/70 text-sm">Meet the artists & welcome drinks</div>
-                </div>
-              </div>
-            </div>
-
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {/* Friday */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-blue-500/10 to-teal-500/10 border border-blue-400/20">
-              <div className="text-center mb-6">
-                <h3 className="display text-2xl font-bold mb-2">Friday</h3>
-                <p className="text-blue-400 font-semibold">November 15</p>
-              </div>
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Friday, Nov 14</h3>
               <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-lg font-semibold mb-1">Main Shows</div>
-                  <div className="text-white/70 text-sm">Spectacular evening performances</div>
+                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
+                  <div className="font-semibold text-orange-300">3:00pm Workshop</div>
+                  <div className="text-sm text-white">Object Manipulation</div>
+                  <div className="text-xs text-white/60">Merri Heikkilä</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-lg font-semibold mb-1">Workshops</div>
-                  <div className="text-white/70 text-sm">Learn from the masters</div>
+                <div className="p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                  <div className="font-semibold text-blue-300">7:00pm Show</div>
+                  <div className="text-sm text-white">Häppy Hour</div>
+                  <div className="text-xs text-white/60">The Nordic Council</div>
                 </div>
               </div>
             </div>
 
             {/* Saturday */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-teal-500/10 to-green-500/10 border border-teal-400/20">
-              <div className="text-center mb-6">
-                <h3 className="display text-2xl font-bold mb-2">Saturday</h3>
-                <p className="text-teal-400 font-semibold">November 16</p>
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Saturday, Nov 15</h3>
+              <div className="space-y-3">
+                <div className="p-4 bg-green-500/10 border border-green-400/30 rounded-lg">
+                  <div className="font-semibold text-green-300 mb-1">11:00am TIME TO TALK</div>
+                  <div className="text-sm text-white font-medium mb-1">BUZZ – Discourse Program</div>
+                  <div className="text-xs text-white/70 mb-2">
+                    Conversations, encounters and exchange on eye level with audience and circus scene.
+                    Pressing topics of the art form and its actors in the context of our time.
+                  </div>
+                  <div className="text-xs text-green-200">with Anke Politz</div>
+                </div>
+                <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                  <div className="font-semibold text-blue-300">6:00pm Show</div>
+                  <div className="text-sm text-white">Häppy Hour</div>
+                  <div className="text-xs text-white/60">The Nordic Council</div>
+                </div>
+                <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                  <div className="font-semibold text-purple-300">8:30pm Show</div>
+                  <div className="text-sm text-white">How a Spiral Works</div>
+                  <div className="text-xs text-white/60">Art for Rainy Days</div>
+                </div>
+                <div className="p-3 bg-pink-500/10 border border-pink-400/30 rounded-lg">
+                  <div className="font-semibold text-pink-300">9:45pm Party</div>
+                  <div className="text-sm text-white">Festival After-Party</div>
+                  <div className="text-xs text-white/60">With music & exchange</div>
+                </div>
               </div>
+            </div>
+
+            {/* Sunday */}
+            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
+              <h3 className="display text-xl font-bold mb-4 text-purple-300">Sunday, Nov 16</h3>
               <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-lg font-semibold mb-1">Grand Finale</div>
-                  <div className="text-white/70 text-sm">Closing gala with all artists</div>
+                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
+                  <div className="font-semibold text-orange-300">1:00pm Workshop</div>
+                  <div className="text-sm text-white">Stillness in Motion</div>
+                  <div className="text-xs text-white/60">Alise Madara Bokaldere</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-lg font-semibold mb-1">After Party</div>
-                  <div className="text-white/70 text-sm">Celebrate with the community</div>
+                <div className="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
+                  <div className="font-semibold text-purple-300">6:00pm Show</div>
+                  <div className="text-sm text-white">How a Spiral Works</div>
+                  <div className="text-xs text-white/60">Art for Rainy Days</div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
+              <span className="text-2xl">🎫</span>
+              <div className="text-left">
+                <div className="font-semibold text-white">Shows from €12 • Workshops registration</div>
+                <div className="text-sm text-white/70">Combo tickets available • Only 200 seats per show</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 text-center bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-        <div className="max-w-4xl mx-auto">
-          {/* Early Bird Notice */}
-          {earlyBirdActive && (
-            <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <span className="text-2xl animate-pulse">⚡</span>
-                <h3 className="text-xl font-bold text-amber-300">Early Bird Active!</h3>
-                <span className="text-2xl animate-pulse">⚡</span>
-              </div>
-              <p className="text-white/90">
-                Secure your tickets now and save on this unique festival experience!
-              </p>
-            </div>
-          )}
-
+      {/* Tickets */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
           <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-            Experience Freeman Festival
+            Secure Your Tickets
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Secure your tickets now for this unique festival in Munich
+            ⚠️ Only 200 seats per show – free seating
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 mb-12`}>
+            {earlyBirdActive && (
+              <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-2">€12</div>
+                  <div className="font-semibold mb-2">🚀 Early Bird</div>
+                  <div className="text-sm text-white/70">until Oct 15 • SAVE €10</div>
+                </div>
+              </div>
+            )}
+
+            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white mb-2">€18</div>
+                <div className="font-semibold mb-2">Standard</div>
+                <div className="text-sm text-white/70">available online</div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white mb-2">€22</div>
+                <div className="font-semibold mb-2">Box Office</div>
+                <div className="text-sm text-white/70">if available</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
               href="https://freemanfestival.de"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary text-xl px-12 py-6 shadow-lg hover:shadow-xl transition-all"
+              className="btn-primary text-xl px-12 py-6 inline-block text-center"
             >
-              Get Festival Tickets
+              Get Tickets Now
             </a>
-            <Link
-              href="/en/veranstaltungen"
-              className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors text-white/70 hover:text-white"
+            <a
+              href="https://freemanfestival.de"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"
             >
-              More Events
-            </Link>
+              To Festival Website
+            </a>
           </div>
-
-          <p className="text-white/60 text-sm">
-            Tickets start from 12€ • Limited capacity • Be part of something extraordinary
-          </p>
         </div>
       </section>
+
+      {/* Back to Events */}
+      <section className="py-12 px-6 bg-black/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <Link
+            href="/en/veranstaltungen"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-white/30 rounded-full hover:border-white/50 transition-colors"
+          >
+            <span>←</span>
+            <span>Back to All Events</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-white/10">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="display text-xl font-bold mb-4">
+            Freeman 2025 • Pepe Dome
+          </div>
+          <p className="muted text-sm">
+            A Festival of Artistry • Nov 14–16 • Ostpark Munich
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
