@@ -4,10 +4,8 @@ import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import { useState, useEffect, useCallback } from "react";
 import { isEarlyBirdActive } from "@/data/events";
-import { useTranslation } from 'react-i18next';
 
 export default function FreemanPage() {
-  const { t } = useTranslation('common');
   const [currentSlide, setCurrentSlide] = useState(0);
   const earlyBirdActive = isEarlyBirdActive();
 
