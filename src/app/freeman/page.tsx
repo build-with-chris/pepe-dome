@@ -70,13 +70,10 @@ export default function FreemanPage() {
               href="https://zeitfuerzirkus.de"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all"
+              className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-400/40 rounded-full text-blue-200 font-bold text-xs sm:text-sm hover:from-blue-500/40 hover:to-purple-500/40 transition-all text-center"
             >
-              Teil von ZEIT FÜR ZIRKUS 2025 🎪
+              Teil von ZEIT FÜR ZIRKUS 2025<span className="hidden sm:inline"> 🎪</span> • 14.–16. November in München
             </a>
-            <span className="px-3 sm:px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-300 font-semibold text-xs sm:text-sm">
-              14.–16. November in München
-            </span>
           </div>
 
           <h1 className="display text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 tracking-tight px-2">
@@ -97,14 +94,6 @@ export default function FreemanPage() {
               className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
             >
               Tickets ab 12€ sichern
-            </a>
-            <a
-              href="https://freemanfestival.de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors underline text-sm sm:text-base"
-            >
-              🌐 Vollständige Festival-Website
             </a>
           </div>
 

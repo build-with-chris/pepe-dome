@@ -99,10 +99,6 @@ export default function Home() {
             </div>
             <span className="hero-feature-divider">•</span>
             <div className="hero-feature">
-              {t('homepage.hero.features.height')}
-            </div>
-            <span className="hero-feature-divider">•</span>
-            <div className="hero-feature">
               {t('homepage.hero.features.accessible')}
             </div>
           </div>
@@ -374,30 +370,6 @@ export default function Home() {
                 <span className="text-sm font-semibold">{t('homepage.sections.business.link')}</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-6 text-center bg-gradient-to-b from-black/0 to-black/20">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-            {t('homepage.sections.cta.title')}
-          </h2>
-          <p className="text-xl mb-8 text-white/90">
-            {t('homepage.sections.cta.subtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/kontakt#kontaktformular" className="btn-primary btn-lg">
-              {t('homepage.sections.cta.requestButton')}
-            </Link>
-            <Link
-              href="/ueber"
-              className="btn-ghost"
-            >
-              {t('homepage.sections.cta.learnMoreButton')}
             </Link>
           </div>
         </div>
