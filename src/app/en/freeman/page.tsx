@@ -97,23 +97,6 @@ export default function FreemanPageEN() {
               Get Tickets from €12
             </a>
           </div>
-
-          {/* Features */}
-          <div className="inline-block mb-6 sm:mb-8 px-4 sm:px-6 py-3 bg-blue-500/20 border border-blue-400/30 rounded-full max-w-full">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
-              <span className="flex items-center gap-1">
-                <span>♿</span> Accessible
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1">
-                <span>👨‍👩‍👧‍👦</span> Suitable for children
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1">
-                <span>⏱️</span> approx. 75 minutes
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
