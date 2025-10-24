@@ -109,10 +109,10 @@ export default function FreemanPageEN() {
                 What is Freeman?
               </h2>
               <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                Freeman is more than a festival – it's a celebration of artistic freedom.
+                Freeman is more than a festival – it&apos;s a celebration of artistic freedom.
                 As part of <a href="https://zeitfuerzirkus.de" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline font-semibold">TIME FOR CIRCUS</a>,
                 the German edition of the international festival LA NUIT DU CIRQUE, top artists
-                from Scandinavia and the Baltic region showcase what's possible when
+                from Scandinavia and the Baltic region showcase what&apos;s possible when
                 excellence meets poetry.
               </p>
               <ul className="space-y-3 text-white/70">
@@ -257,7 +257,7 @@ export default function FreemanPageEN() {
                 with spectacular acrobatics.
               </p>
               <div className="text-sm text-white/60">
-                Show: "Häppy Hour" - Fri. 7pm & Sat. 6pm
+                Show: &ldquo;Häppy Hour&rdquo; - Fri. 7pm & Sat. 6pm
               </div>
             </div>
 
@@ -269,7 +269,7 @@ export default function FreemanPageEN() {
                 Minimalist aesthetics with reinterpreted Baltic folk music.
               </p>
               <div className="text-sm text-white/60">
-                Show: "How a Spiral Works" - Sat. 8:30pm & Sun. 6pm
+                Show: &ldquo;How a Spiral Works&rdquo; - Sat. 8:30pm & Sun. 6pm
               </div>
             </div>
 
