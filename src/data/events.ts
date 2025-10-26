@@ -698,6 +698,58 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
     },
     emoji: '🌪️',
     registrationUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfQSdyREnmEtKik6bGjLfrIajbTnfY0Y2kXAS6mE26DUwbqHg/viewform?usp=dialog'
+  },
+  {
+    id: 'aerial-straps-workshop-dec',
+    title: 'Aerial Straps with Daniel Fernández',
+    subtitle: 'Technical development for beginners and intermediate',
+    description: 'This workshop is aimed at technical development for beginners and intermediate, it\'s prepared for helping those who already had contact with aerial straps, as well as for those who have a background in aerial circus, that gives them a base for straps. The aim for beginners is to explore the technique of straps and gain a base and tools so that they can continue growing new skills also after the workshop. The aim for intermediates is to focus in advanced techniques (or their current work in progress) and so, doing more in-detail work. Daniel Fernández is a circus artist based in Brussels, Belgium, who started aerial straps as self-taught, eventually joining the Ésac circus school in Belgium. He has since graduated and co-founded a circus company, Alud Company, which intertwines aerial straps and partner acrobatics with other art forms.',
+    date: '2025-12-06',
+    dateDisplay: '6.–7. Dezember 2025',
+    duration: '3 Stunden pro Session',
+    time: '13:00 - 16:00 Uhr',
+    price: '85€ pro Session • 150€ für 2-Tage-Pass',
+    whatToBring: [
+      'Bequeme Sportkleidung für Luftakrobatik',
+      'Ggf. eigene Handgelenkbandagen (falls bevorzugt)',
+      'Wasser zur Hydratation',
+      'Bei Fragen zur Ausrüstung kontaktieren Sie bitte die Organisatoren'
+    ],
+    schedule: [
+      {
+        title: 'Session 1 - Samstag, 6. Dezember',
+        description: '13:00-16:00 Uhr: Technische Entwicklung für Beginner und Fortgeschrittene. Fokus auf Grundtechniken für Anfänger, fortgeschrittene Techniken für Intermediates.'
+      },
+      {
+        title: 'Session 2 - Sonntag, 7. Dezember',
+        description: '13:00-16:00 Uhr: Fortsetzung der technischen Entwicklung. Vertiefung der Techniken und detaillierte Arbeit an individuellen Fähigkeiten.'
+      },
+      {
+        title: 'Technischer Aufbau',
+        description: 'Anfänger erkunden die Straps-Technik und erhalten Werkzeuge für eigenständiges Weiterwachsen. Fortgeschrittene konzentrieren sich auf ihre aktuellen fortgeschrittenen Techniken und Work-in-Progress.'
+      }
+    ],
+    instructor: {
+      name: 'Daniel Fernández',
+      email: 'info@pepeshows.de',
+      website: ''
+    },
+    features: [
+      { icon: '🎪', text: 'Workshop für Anfänger und Fortgeschrittene' },
+      { icon: '🌍', text: 'Internationaler Lehrer mit Erfahrung in Valencia, Leipzig, Istanbul, Taipei' },
+      { icon: '🎓', text: 'Absolvent der Ésac Circus School, Belgien' },
+      { icon: '🎭', text: 'Mitbegründer von Alud Company' },
+      { icon: '📅', text: 'Zwei Sessions am Wochenende oder 2-Tage-Pass' },
+      { icon: '🗣️', text: 'Workshop auf Englisch' }
+    ],
+    category: 'workshop',
+    color: {
+      primary: 'red-500',
+      secondary: 'rose-500',
+      accent: 'red-400'
+    },
+    emoji: '🎪',
+    registrationUrl: 'https://www.eversports.de/e/workshop/2z8n_uw'
   }
 ];
 
