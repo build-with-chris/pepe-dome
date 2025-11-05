@@ -257,6 +257,20 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
         ]
       }
     ]
+  },
+  'sharing-is-caring': {
+    title: 'Sharing is Caring',
+    subtitle: 'A Day Full of Creativity, Movement and Stories',
+    description: 'Fold, marvel and listen together: From artistic origami to a captivating Niklo performance to fire-tea-stories in the evening – everything revolves around sharing. Whether ideas, art or moments – we share what brings joy. A day in the warm light of Pepe Dome full of community and creativity.',
+    time: 'From 4:30 PM',
+    price: 'Tickets available',
+    features: [
+      { icon: '🎨', text: 'Origami workshop at 4:30 PM' },
+      { icon: '🎭', text: 'Niklo performance at 5:30 PM' },
+      { icon: '🔥', text: 'Fire-tea-stories at 7:00 PM' },
+      { icon: '💬', text: 'Themes: Community, sharing, creativity' }
+    ],
+    dateRange: 'DECEMBER 6, 2025'
   }
 };
 

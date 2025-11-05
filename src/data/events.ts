@@ -445,6 +445,32 @@ const rawEvents: Omit<Event, 'status'>[] = [
         ]
       }
     ]
+  },
+  {
+    id: 'sharing-is-caring',
+    title: 'Sharing is Caring',
+    subtitle: 'Ein Tag voller Kreativität, Bewegung und Geschichten',
+    description: 'Gemeinsam falten, staunen und lauschen: Vom kunstvollen Origami über eine mitreißende Niklo-Performance bis hin zu Feuer-Tee-Geschichten am Abend – hier dreht sich alles ums Teilen. Ob Ideen, Kunst oder Momente – geteilt wird, was Freude macht. Ein Tag im warmen Licht des Pepe Domes voller Gemeinschaft und Kreativität.',
+    date: '2025-12-06',
+    dateRange: '6. DEZEMBER 2025',
+    time: 'Ab 16:30 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎨', text: 'Origami-Workshop um 16:30 Uhr' },
+      { icon: '🎭', text: 'Niklo-Performance um 17:30 Uhr' },
+      { icon: '🔥', text: 'Feuer-Tee-Geschichten um 19:00 Uhr' },
+      { icon: '💬', text: 'Themen: Gemeinschaft, Teilen, Kreativität' }
+    ],
+    category: 'event',
+    color: {
+      primary: 'amber-500',
+      secondary: 'yellow-500',
+      accent: 'amber-400'
+    },
+    emoji: '🎪',
+    image: '/sharing-is-caring.webp',
+    externalTicketUrl: '',
+    isOneDay: true
   }
 ];
 
