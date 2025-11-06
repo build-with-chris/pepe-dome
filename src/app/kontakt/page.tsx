@@ -62,8 +62,8 @@ export default function KontaktPage() {
                   <a href="#kontaktformular-events" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
                     📝 Formular
                   </a>
-                  <a href="tel:015904891419" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
-                    📞 Anrufen
+                  <a href="https://wa.me/4915904891419?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Veranstaltung%20im%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
+                    💬 WhatsApp
                   </a>
                 </div>
               </div>
@@ -269,9 +269,9 @@ export default function KontaktPage() {
               </a>
             </div>
             <p className="text-lg text-white/70">
-              Alternativ können Sie auch das klassische Formular nutzen oder uns direkt anrufen:
-              <a href="tel:015904891419" className="text-purple-400 hover:text-purple-300 font-semibold ml-1">
-                015904891419
+              Alternativ können Sie auch das klassische Formular nutzen oder uns direkt per WhatsApp kontaktieren:
+              <a href="https://wa.me/4915904891419?text=Hallo%2C%20ich%20habe%20eine%20Frage%20zum%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-semibold ml-1">
+                WhatsApp öffnen
               </a>
             </p>
           </div>
@@ -409,12 +409,12 @@ export default function KontaktPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📱</span>
+                    <span className="text-xl">💬</span>
                   </div>
                   <div>
-                    <h3 className="display text-lg font-semibold mb-2">Telefon</h3>
+                    <h3 className="display text-lg font-semibold mb-2">WhatsApp</h3>
                     <p className="text-white/70">
-                      <a href="tel:+491796990707" className="hover:text-white transition-colors">
+                      <a href="https://wa.me/491796990707?text=Hallo%2C%20ich%20habe%20eine%20Frage%20zum%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                         +49 179 699 0707
                       </a>
                     </p>
@@ -424,7 +424,7 @@ export default function KontaktPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">💬</span>
+                    <span className="text-xl">📱</span>
                   </div>
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">Social Media</h3>
@@ -440,20 +440,20 @@ export default function KontaktPage() {
               </div>
 
               {/* Emergency Contact */}
-              <div className="mt-8 p-6 rounded-xl bg-red-500/10 border border-red-400/20">
+              <div className="mt-8 p-6 rounded-xl bg-orange-500/10 border border-orange-400/20">
                 <h3 className="display text-lg font-semibold mb-2 flex items-center gap-2">
-                  <span className="text-xl">🚨</span>
-                  Notfall während Events
+                  <span className="text-xl">⚡</span>
+                  Dringende Anfragen während Events
                 </h3>
                 <p className="text-white/70 mb-2">
-                  Bei Notfällen während Veranstaltungen:
+                  Bei dringenden Anfragen während Veranstaltungen:
                 </p>
                 <p className="text-white font-mono">
-                  <a href="tel:+4915904891419" className="hover:text-white transition-colors">
-                    +49 159 048 914 19
+                  <a href="https://wa.me/4915904891419?text=Dringende%20Anfrage%20bezüglich%20Event%3A%20" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                    WhatsApp: +49 159 048 914 19
                   </a>
                 </p>
-                <p className="text-sm text-white/60 mt-1">24/7 erreichbar während Events</p>
+                <p className="text-sm text-white/60 mt-1">Schnelle Antwort während Events</p>
               </div>
             </div>
 

@@ -62,8 +62,8 @@ export default function ContactPageEN() {
                   <a href="#kontaktformular-events" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
                     📝 Form
                   </a>
-                  <a href="tel:015904891419" className="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
-                    📞 Call
+                  <a href="https://wa.me/4915904891419?text=Hello%2C%20I'm%20interested%20in%20an%20event%20at%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 px-4 py-2 rounded-full transition-all flex-1 block text-center text-sm">
+                    💬 WhatsApp
                   </a>
                 </div>
               </div>
@@ -269,9 +269,9 @@ export default function ContactPageEN() {
               </a>
             </div>
             <p className="text-lg text-white/70">
-              Alternatively you can also use the classic form or call us directly:
-              <a href="tel:015904891419" className="text-purple-400 hover:text-purple-300 font-semibold ml-1">
-                015904891419
+              Alternatively you can also use the classic form or contact us directly via WhatsApp:
+              <a href="https://wa.me/4915904891419?text=Hello%2C%20I%20have%20a%20question%20about%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-semibold ml-1">
+                Open WhatsApp
               </a>
             </p>
           </div>
@@ -409,12 +409,12 @@ export default function ContactPageEN() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-400/20 to-teal-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📱</span>
+                    <span className="text-xl">💬</span>
                   </div>
                   <div>
-                    <h3 className="display text-lg font-semibold mb-2">Phone</h3>
+                    <h3 className="display text-lg font-semibold mb-2">WhatsApp</h3>
                     <p className="text-white/70">
-                      <a href="tel:+491796990707" className="hover:text-white transition-colors">
+                      <a href="https://wa.me/491796990707?text=Hello%2C%20I%20have%20a%20question%20about%20Pepe%20Dome." target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                         +49 179 699 0707
                       </a>
                     </p>
@@ -424,7 +424,7 @@ export default function ContactPageEN() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">💬</span>
+                    <span className="text-xl">📱</span>
                   </div>
                   <div>
                     <h3 className="display text-lg font-semibold mb-2">Social Media</h3>
@@ -440,20 +440,20 @@ export default function ContactPageEN() {
               </div>
 
               {/* Emergency Contact */}
-              <div className="mt-8 p-6 rounded-xl bg-red-500/10 border border-red-400/20">
+              <div className="mt-8 p-6 rounded-xl bg-orange-500/10 border border-orange-400/20">
                 <h3 className="display text-lg font-semibold mb-2 flex items-center gap-2">
-                  <span className="text-xl">🚨</span>
-                  Emergency During Events
+                  <span className="text-xl">⚡</span>
+                  Urgent Inquiries During Events
                 </h3>
                 <p className="text-white/70 mb-2">
-                  In case of emergencies during events:
+                  For urgent inquiries during events:
                 </p>
                 <p className="text-white font-mono">
-                  <a href="tel:+4915904891419" className="hover:text-white transition-colors">
-                    +49 159 048 914 19
+                  <a href="https://wa.me/4915904891419?text=Urgent%20inquiry%20regarding%20event%3A%20" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                    WhatsApp: +49 159 048 914 19
                   </a>
                 </p>
-                <p className="text-sm text-white/60 mt-1">24/7 available during events</p>
+                <p className="text-sm text-white/60 mt-1">Quick response during events</p>
               </div>
             </div>
 
