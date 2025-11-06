@@ -240,15 +240,13 @@ export default function VeranstaltungenPage() {
                 </div>
 
                 {monthEvents.map((event, index) => (
-              <div
+              <Link
                 key={event.id}
+                href={`/veranstaltungen/${event.id}`}
                 className={`timeline-item ${event.id === 'freeman-festival' ? 'timeline-featured' : ''}`}
               >
                 <div className="timeline-dot"></div>
-                <div
-                  className="timeline-content cursor-pointer"
-                  onClick={() => openEventModal(event.id)}
-                >
+                <div className="timeline-content">
                   <div className="timeline-header">
                     {event.image && (
                       <Image
@@ -296,35 +294,19 @@ export default function VeranstaltungenPage() {
                   )}
 
                   <div className="flex items-center justify-between">
-                    {event.ticketDates && event.ticketDates.length > 1 ? (
-                      /* Multi-day event - lead to modal for all dates */
-                      <button
-                        className="text-xs text-white/60 hover:text-white underline transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEventModal(event.id);
-                        }}
-                      >
-                        🎫 Alle {event.ticketDates.length} Termine
-                      </button>
-                    ) : (
-                      /* Single date or external URL */
-                      <a
-                        href={event.externalTicketUrl || (event.ticketDates ? event.ticketDates[0].ticketUrl : "/kontakt#kontaktformular")}
-                        target={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "_blank" : undefined}
-                        rel={event.externalTicketUrl || (event.ticketDates && event.ticketDates[0].ticketUrl !== "/kontakt#kontaktformular") ? "noopener noreferrer" : undefined}
-                        className="text-xs text-white/60 hover:text-white underline transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        🎫 Tickets
-                      </a>
-                    )}
+                    <div className="text-xs text-white/60">
+                      {event.ticketDates && event.ticketDates.length > 1 ? (
+                        <span>🎫 {event.ticketDates.length} Termine verfügbar</span>
+                      ) : (
+                        <span>🎫 Tickets verfügbar</span>
+                      )}
+                    </div>
                     <div className="text-xs text-white/50">
-                      Klicke für Details ➤
+                      Mehr erfahren ➤
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
                 ))}
               </div>
             ))}
@@ -438,10 +420,10 @@ export default function VeranstaltungenPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map((event) => (
-                <div
+                <Link
                   key={event.id}
-                  className="bg-black/20 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 cursor-pointer group"
-                  onClick={() => openEventModal(event.id)}
+                  href={`/veranstaltungen/${event.id}`}
+                  className="bg-black/20 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 group"
                 >
                   {event.image && (
                     <div className="mb-4 overflow-hidden rounded-xl">
@@ -485,9 +467,9 @@ export default function VeranstaltungenPage() {
                   )}
 
                   <div className="text-xs text-white/50">
-                    Klicke für Details ➤
+                    Mehr erfahren ➤
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
