@@ -94,7 +94,7 @@ export default function FreemanPage() {
               rel="noopener noreferrer"
               className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
             >
-              Tickets ab 12€ sichern
+              Tickets sichern
             </a>
           </div>
         </div>
@@ -324,7 +324,6 @@ export default function FreemanPage() {
                     Gespräche, Begegnungen und Austausch auf Augenhöhe mit Publikum und Zirkusszene.
                     Drängende Themen der Kunstform und ihrer Akteur:innen im Kontext unserer Zeit.
                   </div>
-                  <div className="text-xs text-green-200">mit Anke Politz</div>
                 </div>
                 <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
                   <div className="font-semibold text-blue-300">18:00 Show</div>
@@ -366,7 +365,7 @@ export default function FreemanPage() {
             <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
               <span className="text-2xl">🎫</span>
               <div className="text-left">
-                <div className="font-semibold text-white">Shows ab 12€ • Workshops Anmeldung</div>
+                <div className="font-semibold text-white">Shows: Ermäßigt 8€, Regulär 18€ • Workshops Anmeldung</div>
                 <div className="text-sm text-white/70">Kombitickets verfügbar • Nur 200 Plätze pro Show</div>
               </div>
             </div>
@@ -384,7 +383,7 @@ export default function FreemanPage() {
             ⚠️ Nur 200 Plätze pro Show – freie Platzwahl
           </p>
 
-          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 mb-12`}>
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6 mb-12`}>
             {earlyBirdActive && (
               <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
                 <div className="text-center">
@@ -397,8 +396,16 @@ export default function FreemanPage() {
 
             <div className="p-6 rounded-xl bg-black/20 border border-white/10">
               <div className="text-center">
+                <div className="text-2xl font-bold text-white mb-2">8 €</div>
+                <div className="font-semibold mb-2">Ermäßigt</div>
+                <div className="text-sm text-white/70">online verfügbar</div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="text-center">
                 <div className="text-2xl font-bold text-white mb-2">18 €</div>
-                <div className="font-semibold mb-2">Standard</div>
+                <div className="font-semibold mb-2">Regulär</div>
                 <div className="text-sm text-white/70">online verfügbar</div>
               </div>
             </div>
