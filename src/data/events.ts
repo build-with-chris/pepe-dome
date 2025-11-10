@@ -72,14 +72,24 @@ export interface Event {
     day: string;
     date: string;
     dateDisplay: string;
-    shows: Array<{
-      time: string;
-      title: string;
-      description: string;
-      ticketUrl: string;
-      price: string;
-      type?: 'workshop' | 'talk' | 'party';
-    }>;
+      shows: Array<{
+        time: string;
+        title: string;
+        description: string;
+        ticketUrl: string;
+        price: string;
+        type?: 'workshop' | 'talk' | 'party';
+        talkDetails?: {
+          shortDescription: string;
+          fullDescription: string;
+          topics: string[];
+          goal: string;
+          participants: Array<{ name: string; role: string }>;
+          schedule: Array<{ time: string; activity: string }>;
+          themeTables?: Array<{ title: string; moderator: string }>;
+          series?: { name: string; description: string; link?: string };
+        };
+      }>;
   }>;
   combiTickets?: Array<{
     name: string;
@@ -346,7 +356,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     date: '2025-11-14',
     dateRange: '14.–16. NOVEMBER 2025',
     time: '3 Tage Festival',
-    price: 'Ermäßigt 8€, Regulär 18€ • Kombitickets verfügbar',
+    price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär) • Kombitickets verfügbar',
     features: [
       { icon: '🎭', text: 'Internationale Spitzen-Artist:innen' },
       { icon: '🌍', text: 'Acts aus Skandinavien und dem Baltikum' },
@@ -381,7 +391,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy, Humor über Alltag & Ambivalenz',
             ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Ermäßigt 8€, Regulär 18€'
+            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
           }
         ]
       },
@@ -391,26 +401,57 @@ const rawEvents: Omit<Event, 'status'>[] = [
         dateDisplay: '15. November',
         shows: [
           {
-            time: '11:00',
-            title: 'Presentation + Talk',
-            description: 'Details folgen',
+            time: '14:00',
+            title: 'ZEIT ZUM REDEN – Talk zur Zukunft des zeitgenössischen Zirkus',
+            description: 'Offenes Gespräch über die Zukunft des zeitgenössischen Zirkus mit Künstler:innen, Veranstalter:innen und kulturpolitischen Vertreter:innen.',
             ticketUrl: '/kontakt#kontaktformular',
             price: 'Kostenlos',
-            type: 'talk'
+            type: 'talk',
+            talkDetails: {
+              shortDescription: 'Offenes Gespräch über die Zukunft des zeitgenössischen Zirkus mit Künstler:innen, Veranstalter:innen und kulturpolitischen Vertreter:innen.',
+              fullDescription: 'Im Rahmen des Festivals „Zeit für Zirkus" lädt der Bundesverband Zeitgenössischer Zirkus (BUZZ) zu einem offenen Gespräch über die Zukunft des zeitgenössischen Zirkus ein.\n\nIn München wächst die Szene stetig, doch es fehlt noch immer an fairen Zugängen zu Förderungen, Spielstätten und Produktionsmöglichkeiten. Der Talk bietet Raum, um genau darüber zu sprechen – gemeinsam mit Künstlerinnen, Veranstalterinnen und kulturpolitischen Vertreter*innen.',
+              topics: [
+                'Welche Rolle spielt der freie Zirkus in der bayerischen Kulturlandschaft?',
+                'Wie kann seine Sichtbarkeit und finanzielle Stabilität gestärkt werden?',
+                'Welche Strukturen und Netzwerke braucht es, um nachhaltig zu wachsen?'
+              ],
+              goal: 'Ein ehrlicher Austausch über Herausforderungen und Chancen – um Verbindungen zu schaffen, Allianzen zu fördern und neue Perspektiven für die Kunstform zu eröffnen.',
+              participants: [
+                { name: 'Sanne Kurz', role: 'MdL, Bündnis 90/Die Grünen' },
+                { name: 'Walter Heun', role: 'NPN, BLZT, SK3' },
+                { name: 'Anke Politz', role: 'BUZZ, Chamäleon Theater Berlin' },
+                { name: 'Michael Heiduk', role: 'Vertreter Münchner Szene' }
+              ],
+              schedule: [
+                { time: '14:00', activity: 'Kurzer Einblick in die Münchner Zirkusszene' },
+                { time: '14:15', activity: '30-minütiges moderiertes Gespräch zu Lage, Bedarfen und Zukunftsperspektiven' },
+                { time: '14:45', activity: 'Offener Austausch an Thementischen' }
+              ],
+              themeTables: [
+                { title: 'Interessenvertretung', moderator: 'Anke Politz' },
+                { title: 'Bedarfe der Münchner Szene', moderator: 'Michael Heiduk' },
+                { title: 'Netzwerke und Strukturen für den Zeitgenössischen Zirkus', moderator: 'Walter Heun' }
+              ],
+              series: {
+                name: 'ZEIT ZUM REDEN',
+                description: 'Teil des bundesweiten Formats „Zeit für Zirkus", gefördert durch den Fonds Darstellende Künste, in Kooperation mit führenden Häusern für zeitgenössischen Zirkus in Deutschland.',
+                link: 'https://zeitfuerzirkus.de'
+              }
+            }
           },
           {
             time: '18:00',
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy • Zweite Aufführung',
             ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Ermäßigt 8€, Regulär 18€'
+            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
           },
           {
             time: '20:30',
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope • Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik',
             ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Ermäßigt 8€, Regulär 18€'
+            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
           },
           {
             time: '21:45',
@@ -440,7 +481,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus • Wiederholung der Show vom Samstag',
             ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Ermäßigt 8€, Regulär 18€'
+            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
           }
         ]
       }

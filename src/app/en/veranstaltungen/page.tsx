@@ -743,14 +743,21 @@ export default function EventsPageEN() {
               ) : (
                 /* Single Event Layout */
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <a
-                    href={selectedEventData.externalTicketUrl || "/en/kontakt#kontaktformular"}
-                    target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
-                    rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
-                    className="btn-primary px-8 py-4 text-lg font-semibold"
-                  >
-                    Buy Tickets
-                  </a>
+                  {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') ? (
+                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border border-green-400/50 rounded-full text-green-300 font-semibold">
+                      <span>🎁</span>
+                      <span>Free</span>
+                    </div>
+                  ) : (
+                    <a
+                      href={selectedEventData.externalTicketUrl || "/en/kontakt#kontaktformular"}
+                      target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
+                      rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
+                      className="btn-primary px-8 py-4 text-lg font-semibold"
+                    >
+                      Buy Tickets
+                    </a>
+                  )}
                   <div className="text-white/70">
                     <div className="flex items-center gap-2 mb-1 text-sm">
                       📅 {selectedEventData.time}

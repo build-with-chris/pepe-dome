@@ -11,6 +11,7 @@ export default function VeranstaltungenPage() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
   const [visibleMonth, setVisibleMonth] = useState<string>('');
+  const [expandedTalks, setExpandedTalks] = useState<Set<string>>(new Set());
   const monthRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Get unique months and types
@@ -666,6 +667,10 @@ export default function VeranstaltungenPage() {
                             }
                           };
 
+                          const talkId = `${dayIndex}-${showIndex}`;
+                          const isExpanded = expandedTalks.has(talkId);
+                          const hasTalkDetails = show.type === 'talk' && show.talkDetails;
+
                           return (
                             <div key={showIndex} className={`freeman-show ${getShowTypeClass(show.type)}`}>
                               <div className="freeman-show-header">
@@ -673,7 +678,122 @@ export default function VeranstaltungenPage() {
                                 <div className="freeman-show-price">{getEventPrice(show.price)}</div>
                               </div>
                               <div className="freeman-show-title">{getShowIcon(show.type)} {show.title}</div>
-                              <div className="freeman-show-description">{show.description}</div>
+                              <div className="freeman-show-description">
+                                {hasTalkDetails ? show.talkDetails!.shortDescription : show.description}
+                              </div>
+                              
+                              {hasTalkDetails && (
+                                <div className="mt-4">
+                                  <button
+                                    onClick={() => {
+                                      const newExpanded = new Set(expandedTalks);
+                                      if (isExpanded) {
+                                        newExpanded.delete(talkId);
+                                      } else {
+                                        newExpanded.add(talkId);
+                                      }
+                                      setExpandedTalks(newExpanded);
+                                    }}
+                                    className="text-green-400 hover:text-green-300 text-sm font-semibold flex items-center gap-2 transition-colors mb-4"
+                                  >
+                                    <span>{isExpanded ? '▼' : '▶'}</span>
+                                    <span>{isExpanded ? 'Weniger anzeigen' : 'Mehr Details anzeigen'}</span>
+                                  </button>
+                                  
+                                  {isExpanded && (
+                                    <div className="mt-4 p-6 bg-black/30 border border-green-400/20 rounded-xl space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                                      <div>
+                                        <h4 className="text-lg font-bold text-green-300 mb-2">Über den Talk</h4>
+                                        <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                          {show.talkDetails!.fullDescription}
+                                        </p>
+                                      </div>
+                                      
+                                      {show.talkDetails!.topics && show.talkDetails!.topics.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Themen des Panels</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.topics.map((topic, idx) => (
+                                              <li key={idx} className="flex items-start gap-2 text-white/80">
+                                                <span className="text-green-400 mt-1">•</span>
+                                                <span>{topic}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.goal && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-2">Ziel</h4>
+                                          <p className="text-white/80">{show.talkDetails!.goal}</p>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.participants && show.talkDetails!.participants.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Teilnehmende Gesprächspartner*innen</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.participants.map((participant, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold">{participant.name}</span>
+                                                <span className="text-white/60"> • {participant.role}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.schedule && show.talkDetails!.schedule.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Ablauf</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.schedule.map((item, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold text-green-300">{item.time} Uhr</span>
+                                                <span className="ml-2">{item.activity}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.themeTables && show.talkDetails!.themeTables.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Thementische</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.themeTables.map((table, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold">{table.title}</span>
+                                                <span className="text-white/60"> (mit {table.moderator})</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.series && (
+                                        <div className="pt-4 border-t border-green-400/20">
+                                          <h4 className="text-lg font-bold text-green-300 mb-2">Veranstaltungsreihe</h4>
+                                          <p className="text-white/80 mb-2">{show.talkDetails!.series.name}</p>
+                                          <p className="text-white/70 text-sm mb-3">{show.talkDetails!.series.description}</p>
+                                          {show.talkDetails!.series.link && (
+                                            <a
+                                              href={show.talkDetails!.series.link}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-green-400 hover:text-green-300 text-sm font-semibold underline"
+                                            >
+                                              Mehr Infos: zeitfuerzirkus.de
+                                            </a>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
                               {show.ticketUrl && (
                                 <a
                                   href={show.ticketUrl}
@@ -721,14 +841,21 @@ export default function VeranstaltungenPage() {
               ) : (
                 /* Single Event Layout */
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <a
-                    href={selectedEventData.externalTicketUrl || "/kontakt#kontaktformular"}
-                    target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
-                    rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
-                    className="btn-primary px-8 py-4 text-lg font-semibold"
-                  >
-                    Tickets kaufen
-                  </a>
+                  {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') ? (
+                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border border-green-400/50 rounded-full text-green-300 font-semibold">
+                      <span>🎁</span>
+                      <span>Kostenlos</span>
+                    </div>
+                  ) : (
+                    <a
+                      href={selectedEventData.externalTicketUrl || "/kontakt#kontaktformular"}
+                      target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
+                      rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
+                      className="btn-primary px-8 py-4 text-lg font-semibold"
+                    >
+                      Tickets kaufen
+                    </a>
+                  )}
                   <div className="text-white/70">
                     <div className="flex items-center gap-2 mb-1 text-sm">
                       📅 {selectedEventData.time}

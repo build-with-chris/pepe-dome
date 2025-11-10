@@ -166,7 +166,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     subtitle: 'Festival of Artistry',
     description: 'International top artists show acrobatics and entertainment at world-class level. 5 Shows • 3 Days • Peak performance meets poetry in the unique atmosphere of Pepe Dome.',
     time: '3-Day Festival',
-    price: 'Reduced €8, Regular €18 • Combo tickets available',
+    price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular) • Combo tickets available',
     features: [
       { icon: '🎭', text: 'International top artists' },
       { icon: '🌍', text: 'Acts from Scandinavia and the Baltics' },
@@ -193,7 +193,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy, humor about everyday life & ambivalence',
             ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Reduced €8, Regular €18'
+            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
           }
         ]
       },
@@ -203,26 +203,57 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
         dateDisplay: 'November 15',
         shows: [
           {
-            time: '11:00',
-            title: 'Presentation + Talk',
-            description: 'Details to follow',
+            time: '14:00',
+            title: 'TIME TO TALK – Talk on the Future of Contemporary Circus',
+            description: 'Open conversation about the future of contemporary circus with artists, organizers and cultural policy representatives.',
             ticketUrl: '/en/kontakt#kontaktformular',
             price: 'Free',
-            type: 'talk' as const
+            type: 'talk' as const,
+            talkDetails: {
+              shortDescription: 'Open conversation about the future of contemporary circus with artists, organizers and cultural policy representatives.',
+              fullDescription: 'As part of the "Time for Circus" festival, the Federal Association of Contemporary Circus (BUZZ) invites you to an open conversation about the future of contemporary circus.\n\nIn Munich, the scene is growing steadily, but there is still a lack of fair access to funding, venues and production opportunities. The talk provides space to talk about exactly this – together with artists, organizers and cultural policy representatives.',
+              topics: [
+                'What role does free circus play in the Bavarian cultural landscape?',
+                'How can its visibility and financial stability be strengthened?',
+                'What structures and networks are needed to grow sustainably?'
+              ],
+              goal: 'An honest exchange about challenges and opportunities – to create connections, foster alliances and open up new perspectives for the art form.',
+              participants: [
+                { name: 'Sanne Kurz', role: 'MdL, Alliance 90/The Greens' },
+                { name: 'Walter Heun', role: 'NPN, BLZT, SK3' },
+                { name: 'Anke Politz', role: 'BUZZ, Chamäleon Theater Berlin' },
+                { name: 'Michael Heiduk', role: 'Representative Munich Scene' }
+              ],
+              schedule: [
+                { time: '14:00', activity: 'Brief insight into the Munich circus scene' },
+                { time: '14:15', activity: '30-minute moderated conversation on situation, needs and future perspectives' },
+                { time: '14:45', activity: 'Open exchange at theme tables' }
+              ],
+              themeTables: [
+                { title: 'Interest Representation', moderator: 'Anke Politz' },
+                { title: 'Needs of the Munich Scene', moderator: 'Michael Heiduk' },
+                { title: 'Networks and Structures for Contemporary Circus', moderator: 'Walter Heun' }
+              ],
+              series: {
+                name: 'TIME TO TALK',
+                description: 'Part of the nationwide format "Time for Circus", funded by the Fonds Darstellende Künste, in cooperation with leading houses for contemporary circus in Germany.',
+                link: 'https://zeitfuerzirkus.de'
+              }
+            }
           },
           {
             time: '18:00',
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy • Second performance',
             ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Reduced €8, Regular €18'
+            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
           },
           {
             time: '20:30',
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus with dance, hair hanging & aerial rope • Minimalist aesthetics with reinterpreted Baltic folk music',
             ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Reduced €8, Regular €18'
+            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
           },
           {
             time: '21:45',
@@ -252,7 +283,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus • Repeat of Saturday\'s show',
             ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: 'Reduced €8, Regular €18'
+            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
           }
         ]
       }

@@ -318,12 +318,12 @@ export default function FreemanPageEN() {
               <h3 className="display text-xl font-bold mb-4 text-purple-300">Saturday, Nov 15</h3>
               <div className="space-y-3">
                 <div className="p-4 bg-green-500/10 border border-green-400/30 rounded-lg">
-                  <div className="font-semibold text-green-300 mb-1">11:00am TIME TO TALK</div>
+                  <div className="font-semibold text-green-300 mb-1">2:00pm TIME TO TALK</div>
                   <div className="text-sm text-white font-medium mb-1">BUZZ – Discourse Program</div>
                   <div className="text-xs text-white/70 mb-2">
-                    Conversations, encounters and exchange on eye level with audience and circus scene.
-                    Pressing topics of the art form and its actors in the context of our time.
+                    Open conversation about the future of contemporary circus with artists, organizers and cultural policy representatives.
                   </div>
+                  <div className="text-xs text-green-200">Free • with Anke Politz, Sanne Kurz, Walter Heun & Michael Heiduk</div>
                 </div>
                 <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
                   <div className="font-semibold text-blue-300">6:00pm Show</div>
@@ -365,7 +365,7 @@ export default function FreemanPageEN() {
             <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
               <span className="text-2xl">🎫</span>
               <div className="text-left">
-                <div className="font-semibold text-white">Shows: Reduced €8, Regular €18 • Workshops registration</div>
+                <div className="font-semibold text-white">Shows: €8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular) • Workshops registration</div>
                 <div className="text-sm text-white/70">Combo tickets available • Only 200 seats per show</div>
               </div>
             </div>
@@ -383,7 +383,7 @@ export default function FreemanPageEN() {
             ⚠️ Only 200 seats per show – free seating
           </p>
 
-          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6 mb-12`}>
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-6 mb-12`}>
             {earlyBirdActive && (
               <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
                 <div className="text-center">
@@ -397,7 +397,15 @@ export default function FreemanPageEN() {
             <div className="p-6 rounded-xl bg-black/20 border border-white/10">
               <div className="text-center">
                 <div className="text-2xl font-bold text-white mb-2">€8</div>
-                <div className="font-semibold mb-2">Reduced</div>
+                <div className="font-semibold mb-2">Severely disabled</div>
+                <div className="text-sm text-white/70">available online</div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white mb-2">€12</div>
+                <div className="font-semibold mb-2">Students/Apprentices/Seniors</div>
                 <div className="text-sm text-white/70">available online</div>
               </div>
             </div>
