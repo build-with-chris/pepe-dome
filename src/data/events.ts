@@ -356,7 +356,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     date: '2025-11-14',
     dateRange: '14.–16. NOVEMBER 2025',
     time: '3 Tage Festival',
-    price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär) • Kombitickets verfügbar',
+    price: 'Ermäßigt 12€, Regulär 18€ • Kombitickets verfügbar',
     features: [
       { icon: '🎭', text: 'Internationale Spitzen-Artist:innen' },
       { icon: '🌍', text: 'Acts aus Skandinavien und dem Baltikum' },
@@ -390,8 +390,8 @@ const rawEvents: Omit<Event, 'status'>[] = [
             time: '19:00',
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy, Humor über Alltag & Ambivalenz',
-            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Ermäßigt 12€, Regulär 18€'
           }
         ]
       },
@@ -443,15 +443,15 @@ const rawEvents: Omit<Event, 'status'>[] = [
             time: '18:00',
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy • Zweite Aufführung',
-            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Ermäßigt 12€, Regulär 18€'
           },
           {
             time: '20:30',
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope • Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik',
-            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Ermäßigt 12€, Regulär 18€'
           },
           {
             time: '21:45',
@@ -480,8 +480,8 @@ const rawEvents: Omit<Event, 'status'>[] = [
             time: '18:00',
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus • Wiederholung der Show vom Samstag',
-            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Ermäßigt 12€, Regulär 18€'
           }
         ]
       }

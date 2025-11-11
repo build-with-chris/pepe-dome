@@ -166,7 +166,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     subtitle: 'Festival of Artistry',
     description: 'International top artists show acrobatics and entertainment at world-class level. 5 Shows • 3 Days • Peak performance meets poetry in the unique atmosphere of Pepe Dome.',
     time: '3-Day Festival',
-    price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular) • Combo tickets available',
+    price: 'Reduced €12, Regular €18 • Combo tickets available',
     features: [
       { icon: '🎭', text: 'International top artists' },
       { icon: '🌍', text: 'Acts from Scandinavia and the Baltics' },
@@ -192,8 +192,8 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             time: '19:00',
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy, humor about everyday life & ambivalence',
-            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Reduced €12, Regular €18'
           }
         ]
       },
@@ -245,15 +245,15 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             time: '18:00',
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy • Second performance',
-            ticketUrl: 'https://rausgegangen.de/events/nordic-council-happy-hour-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Reduced €12, Regular €18'
           },
           {
             time: '20:30',
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus with dance, hair hanging & aerial rope • Minimalist aesthetics with reinterpreted Baltic folk music',
-            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-0/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Reduced €12, Regular €18'
           },
           {
             time: '21:45',
@@ -282,8 +282,8 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             time: '18:00',
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus • Repeat of Saturday\'s show',
-            ticketUrl: 'https://rausgegangen.de/events/art-for-rainy-days-how-a-spiral-works-1/?mtm_campaign=teilen_event&mtm_kwd=app',
-            price: '€8 (Severely disabled), €12 (Students/Apprentices/Seniors), €18 (Regular)'
+            ticketUrl: 'https://www.freemanfestival.de/tickets',
+            price: 'Reduced €12, Regular €18'
           }
         ]
       }

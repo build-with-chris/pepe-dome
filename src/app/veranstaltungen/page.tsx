@@ -658,12 +658,17 @@ export default function VeranstaltungenPage() {
                             }
                           };
 
-                          const getButtonText = (type: string | undefined) => {
+                          const getButtonText = (type: string | undefined, ticketUrl?: string) => {
                             switch (type) {
                               case 'workshop': return 'Jetzt anmelden 📝';
                               case 'talk': return 'Mehr Info 💭';
                               case 'party': return 'Kostenlos 🎉';
-                              default: return 'Tickets kaufen 🎫';
+                              default: 
+                                // Für Freeman-Shows: "Show auswählen" wenn Link zu freemanfestival.de/tickets
+                                if (ticketUrl && ticketUrl.includes('freemanfestival.de')) {
+                                  return 'Show auswählen 🎫';
+                                }
+                                return 'Tickets kaufen 🎫';
                             }
                           };
 
@@ -802,7 +807,7 @@ export default function VeranstaltungenPage() {
                                   className={`btn-primary px-6 py-2 font-semibold self-start ${show.type === 'party' ? 'opacity-50 cursor-default' : ''}`}
                                   onClick={show.type === 'party' ? (e) => e.preventDefault() : undefined}
                                 >
-                                  {getButtonText(show.type)}
+                                  {getButtonText(show.type, show.ticketUrl)}
                                 </a>
                               )}
                             </div>

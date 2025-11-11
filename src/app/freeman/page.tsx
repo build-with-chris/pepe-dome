@@ -89,12 +89,12 @@ export default function FreemanPage() {
 
           <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8 px-4">
             <a
-              href="https://freemanfestival.de"
+              href="https://www.freemanfestival.de/tickets"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
             >
-              Tickets sichern
+              Show auswählen
             </a>
           </div>
         </div>
@@ -365,7 +365,7 @@ export default function FreemanPage() {
             <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
               <span className="text-2xl">🎫</span>
               <div className="text-left">
-                <div className="font-semibold text-white">Shows: 8€ (Schwerbehinderte), 12€ (Studenten/Azubis/Senioren), 18€ (Regulär) • Workshops Anmeldung</div>
+                <div className="font-semibold text-white">Shows: Ermäßigt 12€, Regulär 18€ • Workshops Anmeldung</div>
                 <div className="text-sm text-white/70">Kombitickets verfügbar • Nur 200 Plätze pro Show</div>
               </div>
             </div>
@@ -383,7 +383,7 @@ export default function FreemanPage() {
             ⚠️ Nur 200 Plätze pro Show – freie Platzwahl
           </p>
 
-          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-6 mb-12`}>
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6 mb-12`}>
             {earlyBirdActive && (
               <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
                 <div className="text-center">
@@ -396,16 +396,8 @@ export default function FreemanPage() {
 
             <div className="p-6 rounded-xl bg-black/20 border border-white/10">
               <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-2">8 €</div>
-                <div className="font-semibold mb-2">Schwerbehinderte</div>
-                <div className="text-sm text-white/70">online verfügbar</div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="text-center">
                 <div className="text-2xl font-bold text-white mb-2">12 €</div>
-                <div className="font-semibold mb-2">Studenten/Azubis/Senioren</div>
+                <div className="font-semibold mb-2">Ermäßigt</div>
                 <div className="text-sm text-white/70">online verfügbar</div>
               </div>
             </div>
@@ -429,12 +421,12 @@ export default function FreemanPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
-              href="https://freemanfestival.de"
+              href="https://www.freemanfestival.de/tickets"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary text-xl px-12 py-6 inline-block text-center"
             >
-              Jetzt Tickets sichern
+              Show auswählen
             </a>
             <a
               href="https://freemanfestival.de"
