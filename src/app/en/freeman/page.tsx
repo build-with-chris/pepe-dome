@@ -3,11 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import { useState, useEffect, useCallback } from "react";
-import { isEarlyBirdActive } from "@/data/events";
+import { isEarlyBirdActive, getEventById, getEventPrice } from "@/data/events";
+import { getLocalizedEvent } from "@/data/eventsTranslations";
 
 export default function FreemanPageEN() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const earlyBirdActive = isEarlyBirdActive();
+  const [expandedTalks, setExpandedTalks] = useState<Set<string>>(new Set());
+  const [expandedShows, setExpandedShows] = useState<Set<string>>(new Set());
+  const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
+  
+  const event = getEventById('freeman-festival');
+  const localizedEvent = event ? getLocalizedEvent(event, 'en') : null;
 
   const posters = [
     {
@@ -296,69 +303,253 @@ export default function FreemanPageEN() {
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {/* Friday */}
-            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
-              <h3 className="display text-xl font-bold mb-4 text-purple-300">Friday, Nov 14</h3>
-              <div className="space-y-4">
-                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
-                  <div className="font-semibold text-orange-300">3:00pm Workshop</div>
-                  <div className="text-sm text-white">Object Manipulation</div>
-                  <div className="text-xs text-white/60">Merri Heikkilä</div>
-                </div>
-                <div className="p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
-                  <div className="font-semibold text-blue-300">7:00pm Show</div>
-                  <div className="text-sm text-white">Häppy Hour</div>
-                  <div className="text-xs text-white/60">The Nordic Council</div>
-                </div>
-              </div>
-            </div>
+            {localizedEvent?.freemanShows?.map((day, dayIndex) => {
+              const getShowColorClasses = (type?: string) => {
+                switch (type) {
+                  case 'workshop': 
+                    return {
+                      bg: 'bg-orange-500/10',
+                      border: 'border-orange-400/30',
+                      text: 'text-orange-300',
+                      expandText: 'text-orange-400',
+                      expandHover: 'hover:text-orange-300',
+                      detailBorder: 'border-orange-400/20',
+                      detailTitle: 'text-orange-300',
+                      bullet: 'text-orange-400'
+                    };
+                  case 'talk': 
+                    return {
+                      bg: 'bg-green-500/10',
+                      border: 'border-green-400/30',
+                      text: 'text-green-300',
+                      expandText: 'text-green-400',
+                      expandHover: 'hover:text-green-300',
+                      detailBorder: 'border-green-400/20',
+                      detailTitle: 'text-green-300',
+                      bullet: 'text-green-400'
+                    };
+                  case 'party': 
+                    return {
+                      bg: 'bg-pink-500/10',
+                      border: 'border-pink-400/30',
+                      text: 'text-pink-300',
+                      expandText: 'text-pink-400',
+                      expandHover: 'hover:text-pink-300',
+                      detailBorder: 'border-pink-400/20',
+                      detailTitle: 'text-pink-300',
+                      bullet: 'text-pink-400'
+                    };
+                  default: 
+                    return {
+                      bg: 'bg-blue-500/10',
+                      border: 'border-blue-400/30',
+                      text: 'text-blue-300',
+                      expandText: 'text-purple-400',
+                      expandHover: 'hover:text-purple-300',
+                      detailBorder: 'border-purple-400/20',
+                      detailTitle: 'text-purple-300',
+                      bullet: 'text-purple-400'
+                    };
+                }
+              };
 
-            {/* Saturday */}
-            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
-              <h3 className="display text-xl font-bold mb-4 text-purple-300">Saturday, Nov 15</h3>
-              <div className="space-y-3">
-                <div className="p-4 bg-green-500/10 border border-green-400/30 rounded-lg">
-                  <div className="font-semibold text-green-300 mb-1">2:00pm TIME TO TALK</div>
-                  <div className="text-sm text-white font-medium mb-1">BUZZ – Discourse Program</div>
-                  <div className="text-xs text-white/70 mb-2">
-                    Open conversation about the future of contemporary circus with artists, organizers and cultural policy representatives.
+              return (
+                <div key={dayIndex} className="bg-black/30 border border-white/10 rounded-xl p-6">
+                  <h3 className="display text-xl font-bold mb-4 text-purple-300">{day.day}, {day.dateDisplay}</h3>
+                  <div className="space-y-3">
+                    {day.shows.map((show, showIndex) => {
+                      const itemId = `${dayIndex}-${showIndex}`;
+                      const isTalkExpanded = expandedTalks.has(itemId);
+                      const isShowExpanded = expandedShows.has(itemId);
+                      const isWorkshopExpanded = expandedWorkshops.has(itemId);
+                      const hasTalkDetails = show.type === 'talk' && show.talkDetails;
+                      const hasShowDetails = !show.type && show.showDetails;
+                      const hasWorkshopDetails = show.type === 'workshop' && show.workshopDetails;
+                      const colors = getShowColorClasses(show.type);
+
+                      let displayDescription = show.description;
+                      if (hasTalkDetails) displayDescription = show.talkDetails!.shortDescription;
+                      else if (hasShowDetails) displayDescription = show.showDetails!.shortDescription;
+                      else if (hasWorkshopDetails) displayDescription = show.workshopDetails!.shortDescription;
+
+                      return (
+                        <div key={showIndex} className={`p-3 ${colors.bg} ${colors.border} rounded-lg ${show.type === 'workshop' ? 'opacity-90' : ''}`}>
+                          <div className={`font-semibold ${colors.text} mb-1`}>{show.time} {show.type === 'talk' ? 'TIME TO TALK' : show.type === 'workshop' ? 'Workshop' : show.type === 'party' ? 'Party' : 'Show'}</div>
+                          <div className="text-sm text-white font-medium mb-1">{show.title}</div>
+                          <div className="text-xs text-white/70 mb-2">{displayDescription}</div>
+                          
+                          {/* Show Details Pagination */}
+                          {hasShowDetails && (
+                            <div className="mt-3">
+                              <button
+                                onClick={() => {
+                                  const newExpanded = new Set(expandedShows);
+                                  if (isShowExpanded) {
+                                    newExpanded.delete(itemId);
+                                  } else {
+                                    newExpanded.add(itemId);
+                                  }
+                                  setExpandedShows(newExpanded);
+                                }}
+                                className={`${colors.expandText} ${colors.expandHover} text-xs font-semibold flex items-center gap-1 transition-colors mb-2`}
+                              >
+                                <span>{isShowExpanded ? '▼' : '▶'}</span>
+                                <span>{isShowExpanded ? 'Less' : 'More Details'}</span>
+                              </button>
+                              
+                              {isShowExpanded && (
+                                <div className={`mt-2 p-4 bg-black/30 border ${colors.detailBorder} rounded-lg space-y-4 text-xs animate-in fade-in slide-in-from-top-2 duration-300`}>
+                                  {show.showDetails!.by && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>By {show.showDetails!.by}</h5>
+                                    </div>
+                                  )}
+                                  <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                    {show.showDetails!.fullDescription}
+                                  </p>
+                                  {show.showDetails!.elements && show.showDetails!.elements.length > 0 && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-2`}>Elements</h5>
+                                      <ul className="space-y-1">
+                                        {show.showDetails!.elements.map((element, idx) => (
+                                          <li key={idx} className="flex items-start gap-2 text-white/80">
+                                            <span className={`${colors.bullet} mt-0.5`}>•</span>
+                                            <span>{element}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Workshop Details Pagination */}
+                          {hasWorkshopDetails && (
+                            <div className="mt-3">
+                              <button
+                                onClick={() => {
+                                  const newExpanded = new Set(expandedWorkshops);
+                                  if (isWorkshopExpanded) {
+                                    newExpanded.delete(itemId);
+                                  } else {
+                                    newExpanded.add(itemId);
+                                  }
+                                  setExpandedWorkshops(newExpanded);
+                                }}
+                                className={`${colors.expandText} ${colors.expandHover} text-xs font-semibold flex items-center gap-1 transition-colors mb-2`}
+                              >
+                                <span>{isWorkshopExpanded ? '▼' : '▶'}</span>
+                                <span>{isWorkshopExpanded ? 'Less' : 'More Details'}</span>
+                              </button>
+                              
+                              {isWorkshopExpanded && (
+                                <div className={`mt-2 p-4 bg-black/30 border ${colors.detailBorder} rounded-lg space-y-3 text-xs animate-in fade-in slide-in-from-top-2 duration-300`}>
+                                  {show.workshopDetails!.by && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>By {show.workshopDetails!.by}</h5>
+                                    </div>
+                                  )}
+                                  <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                    {show.workshopDetails!.fullDescription}
+                                  </p>
+                                  {show.workshopDetails!.aboutTeacher && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>About the Teacher</h5>
+                                      <p className="text-white/80">{show.workshopDetails!.aboutTeacher}</p>
+                                    </div>
+                                  )}
+                                  {show.workshopDetails!.idealFor && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>Ideal For</h5>
+                                      <p className="text-white/80">{show.workshopDetails!.idealFor}</p>
+                                    </div>
+                                  )}
+                                  {show.workshopDetails!.whatToBring && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>What to Bring</h5>
+                                      <p className="text-white/80">{show.workshopDetails!.whatToBring}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Talk Details Pagination */}
+                          {hasTalkDetails && (
+                            <div className="mt-3">
+                              <button
+                                onClick={() => {
+                                  const newExpanded = new Set(expandedTalks);
+                                  if (isTalkExpanded) {
+                                    newExpanded.delete(itemId);
+                                  } else {
+                                    newExpanded.add(itemId);
+                                  }
+                                  setExpandedTalks(newExpanded);
+                                }}
+                                className={`${colors.expandText} ${colors.expandHover} text-xs font-semibold flex items-center gap-1 transition-colors mb-2`}
+                              >
+                                <span>{isTalkExpanded ? '▼' : '▶'}</span>
+                                <span>{isTalkExpanded ? 'Less' : 'More Details'}</span>
+                              </button>
+                              
+                              {isTalkExpanded && (
+                                <div className={`mt-2 p-4 bg-black/30 border ${colors.detailBorder} rounded-lg space-y-3 text-xs animate-in fade-in slide-in-from-top-2 duration-300`}>
+                                  <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                    {show.talkDetails!.fullDescription}
+                                  </p>
+                                  {show.talkDetails!.topics && show.talkDetails!.topics.length > 0 && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-2`}>Topics</h5>
+                                      <ul className="space-y-1">
+                                        {show.talkDetails!.topics.map((topic, idx) => (
+                                          <li key={idx} className="flex items-start gap-2 text-white/80">
+                                            <span className={`${colors.bullet} mt-0.5`}>•</span>
+                                            <span>{topic}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {show.talkDetails!.participants && show.talkDetails!.participants.length > 0 && (
+                                    <div>
+                                      <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>Participants</h5>
+                                      <ul className="space-y-1">
+                                        {show.talkDetails!.participants.map((participant, idx) => (
+                                          <li key={idx} className="text-white/80 text-xs">
+                                            <span className="font-semibold">{participant.name}</span>
+                                            <span className="text-white/60"> • {participant.role}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                  {show.talkDetails!.series && show.talkDetails!.series.link && (
+                                    <div className={`pt-2 border-t ${colors.detailBorder}`}>
+                                      <a
+                                        href={show.talkDetails!.series.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`${colors.expandText} ${colors.expandHover} text-xs font-semibold underline`}
+                                      >
+                                        More Info: zeitfuerzirkus.de
+                                      </a>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="text-xs text-green-200">Free • with Anke Politz, Sanne Kurz, Walter Heun & Michael Heiduk</div>
                 </div>
-                <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
-                  <div className="font-semibold text-blue-300">6:00pm Show</div>
-                  <div className="text-sm text-white">Häppy Hour</div>
-                  <div className="text-xs text-white/60">The Nordic Council</div>
-                </div>
-                <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg">
-                  <div className="font-semibold text-purple-300">8:30pm Show</div>
-                  <div className="text-sm text-white">How a Spiral Works</div>
-                  <div className="text-xs text-white/60">Art for Rainy Days</div>
-                </div>
-                <div className="p-3 bg-pink-500/10 border border-pink-400/30 rounded-lg">
-                  <div className="font-semibold text-pink-300">9:45pm Party</div>
-                  <div className="text-sm text-white">Festival After-Party</div>
-                  <div className="text-xs text-white/60">With music & exchange</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sunday */}
-            <div className="bg-black/30 border border-white/10 rounded-xl p-6">
-              <h3 className="display text-xl font-bold mb-4 text-purple-300">Sunday, Nov 16</h3>
-              <div className="space-y-4">
-                <div className="p-4 bg-orange-500/10 border border-orange-400/30 rounded-lg">
-                  <div className="font-semibold text-orange-300">1:00pm Workshop</div>
-                  <div className="text-sm text-white">Stillness in Motion</div>
-                  <div className="text-xs text-white/60">Alise Madara Bokaldere</div>
-                </div>
-                <div className="p-4 bg-purple-500/10 border border-purple-400/30 rounded-lg">
-                  <div className="font-semibold text-purple-300">6:00pm Show</div>
-                  <div className="text-sm text-white">How a Spiral Works</div>
-                  <div className="text-xs text-white/60">Art for Rainy Days</div>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
           <div className="text-center">

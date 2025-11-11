@@ -89,6 +89,20 @@ export interface Event {
           themeTables?: Array<{ title: string; moderator: string }>;
           series?: { name: string; description: string; link?: string };
         };
+        showDetails?: {
+          shortDescription: string;
+          fullDescription: string;
+          by?: string;
+          elements?: string[];
+        };
+        workshopDetails?: {
+          shortDescription: string;
+          fullDescription: string;
+          by?: string;
+          aboutTeacher?: string;
+          idealFor?: string;
+          whatToBring?: string;
+        };
       }>;
   }>;
   combiTickets?: Array<{
@@ -384,14 +398,28 @@ const rawEvents: Omit<Event, 'status'>[] = [
             description: 'Mit Merri Heikkilä • Alltagsgegenstände als Requisiten, Form, Bewegung, Rhythmus • Ca. 2 Stunden, englisch',
             ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdV55BqdgNW9xKmdD3vps10RfW9luBzKtM6JCNSChOuojFNbg/viewform',
             price: 'Workshop-Anmeldung',
-            type: 'workshop'
+            type: 'workshop',
+            workshopDetails: {
+              shortDescription: 'Mit Merri Heikkilä • Alltagsgegenstände als Requisiten, Form, Bewegung, Rhythmus • Ca. 2 Stunden, englisch',
+              fullDescription: 'Dieser Workshop konzentriert sich auf die Verwendung von Alltagsgegenständen als Jonglier-Requisiten und bietet eine andere Perspektive auf Objektmanipulation. Durch geführte Erkundung experimentieren die Teilnehmer:innen mit Form, Bewegung und Rhythmus, indem sie Gegenstände aus dem täglichen Leben verwenden. Die Session fördert einen durchdachten und kreativen Ansatz zum Jonglieren, mit Schwerpunkt auf Beobachtung, Anpassungsfähigkeit und dem Finden neuer Möglichkeiten in vertrauten Dingen.',
+              by: 'Merri Heikkilä',
+              aboutTeacher: 'Merri Heikkilä ist ein Jongleur und Zirkuskünstler, der hauptsächlich mit zeitgenössischem Zirkus arbeitet. Merri schloss 2017 sein Studium an der Codarts in Rotterdam mit einem Bachelor-Abschluss in Zirkuskunst ab und war an der Gründung zweier neuer Zirkusgruppen beteiligt: Sirkum Polaris und The Nordic Council. Zusätzlich arbeitet er in verschiedenen Werken und Veranstaltungen der Zirkuskompanie Nuua. In seiner Arbeit verwendet Merri neben Objektmanipulation und Akrobatik oft auch die Werkzeuge des physischen Theaters, um einzigartige Erfahrungen für das Publikum zu schaffen.',
+              idealFor: 'Zeitgenössische Zirkuskünstler:innen, Jongleur:innen und Bewegungspraktiker:innen, die sich für Objektmanipulation, kreative Erkundung und interdisziplinäre Experimente interessieren.',
+              whatToBring: 'Dein Lieblings-Alltagsgegenstand.'
+            }
           },
           {
             time: '19:00',
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy, Humor über Alltag & Ambivalenz',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Ermäßigt 12€, Regulär 18€'
+            price: 'Ermäßigt 12€, Regulär 18€',
+            showDetails: {
+              shortDescription: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy, Humor über Alltag & Ambivalenz',
+              fullDescription: 'Häppy Hour ist eine Ode an den tiefen, dunklen Norden und seine soziale Kultur. Die Show beschäftigt sich mit der widersprüchlichen Beziehung zum Alkohol und erkundet die seltsamen und peinlichen Erfahrungen, die das nordische Nachtleben zu bieten hat.\n\nDurch die Linse des zeitgenössischen Zirkus und der Comedy interpretiert, nähert sich Häppy Hour realen Lebenssituationen durch unbeholfenen Humor und zeigt, dass die Dinge nicht immer so ernst sind und dass es in Ordnung ist, über uns selbst zu lachen, selbst in unseren schlimmsten Momenten.\n\nDurch die Kombination von Jonglage und Aerial Rope mit physischem Theater und Live-Musik schafft The Nordic Council Szenen zu diesen Themen, die beim Publikum ein Gefühl der Selbstwiedererkennung hervorrufen. "Wir waren alle schon mal da" ist ein Gefühl, das die Aufführung durchdringt, während das Trio sich durch die Höhen und Tiefen des nordischen Nachtlebens stolpert.',
+              by: 'The Nordic Council',
+              elements: ['Jonglage', 'Aerial Rope', 'Physisches Theater', 'Live-Musik']
+            }
           }
         ]
       },
@@ -444,14 +472,26 @@ const rawEvents: Omit<Event, 'status'>[] = [
             title: 'Show „Häppy Hour"',
             description: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy • Zweite Aufführung',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Ermäßigt 12€, Regulär 18€'
+            price: 'Ermäßigt 12€, Regulär 18€',
+            showDetails: {
+              shortDescription: 'The Nordic Council • Zeitgenössischer Zirkus × Comedy • Zweite Aufführung',
+              fullDescription: 'Häppy Hour ist eine Ode an den tiefen, dunklen Norden und seine soziale Kultur. Die Show beschäftigt sich mit der widersprüchlichen Beziehung zum Alkohol und erkundet die seltsamen und peinlichen Erfahrungen, die das nordische Nachtleben zu bieten hat.\n\nDurch die Linse des zeitgenössischen Zirkus und der Comedy interpretiert, nähert sich Häppy Hour realen Lebenssituationen durch unbeholfenen Humor und zeigt, dass die Dinge nicht immer so ernst sind und dass es in Ordnung ist, über uns selbst zu lachen, selbst in unseren schlimmsten Momenten.\n\nDurch die Kombination von Jonglage und Aerial Rope mit physischem Theater und Live-Musik schafft The Nordic Council Szenen zu diesen Themen, die beim Publikum ein Gefühl der Selbstwiedererkennung hervorrufen. "Wir waren alle schon mal da" ist ein Gefühl, das die Aufführung durchdringt, während das Trio sich durch die Höhen und Tiefen des nordischen Nachtlebens stolpert.',
+              by: 'The Nordic Council',
+              elements: ['Jonglage', 'Aerial Rope', 'Physisches Theater', 'Live-Musik']
+            }
           },
           {
             time: '20:30',
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope • Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Ermäßigt 12€, Regulär 18€'
+            price: 'Ermäßigt 12€, Regulär 18€',
+            showDetails: {
+              shortDescription: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope • Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik',
+              fullDescription: 'Es ist eine kraftvolle und hypnotische Erkundung der Fürsorge unter Druck. Wie kümmern wir uns um uns selbst – und einander – wenn alles um uns herum außer Kontrolle gerät? Wie sieht Mitgefühl aus in großen Höhen, mitten im Sturm oder wenn Schmerz in den Körper kriecht?\n\nIn diesem intimen Duett sind eine Tänzerin, eine Aerialistin und ein Seil in einer sich ständig entwickelnden Beziehung miteinander verbunden. Ihre Bewegungen umkreisen sich in einer zarten Choreografie aus Vertrauen, Widerstand und Loslassen. Sie hängen, drehen sich, stützen und reagieren – aneinander gebunden in einer physischen und emotionalen Spirale.\n\nDurch die Verbindung von Hair Hanging, Aerial Rope, zeitgenössischem Tanz und eindringlich neu interpretierter baltischer Volksmusik ist "How A Spiral Works" ein poetischer Akt der Fürsorge und des Widerstands.\n\nGeschaffen vom renommierten britischen Regisseur Jason Dupree, der lettischen Choreografin Alise Madara Bokaldere und der außergewöhnlichen litauischen Aerialistin Izabele Kuzelyte. Mit ihrer Debüt-Performance haben sie einen resonanten Akkord in der zeitgenössischen Szene getroffen und wir sind stolz, Teil ihrer umfangreichen Europatournee zu sein.',
+              by: 'Art for Rainy Days',
+              elements: ['Hair Hanging', 'Aerial Rope', 'Zeitgenössischer Tanz', 'Baltische Volksmusik']
+            }
           },
           {
             time: '21:45',
@@ -474,14 +514,28 @@ const rawEvents: Omit<Event, 'status'>[] = [
             description: 'Mit Alise Madara Bokaldere • Stille & Bewegung, Bühnenpräsenz, Ausdruck jenseits der Disziplinen • Ca. 2 Stunden, englisch, max. 20 Teilnehmer:innen',
             ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeg-YUt_aatNtb-iiIZKerZ1kviJRl3U61WLPsA4ROncrrV5g/viewform',
             price: 'Workshop-Anmeldung',
-            type: 'workshop'
+            type: 'workshop',
+            workshopDetails: {
+              shortDescription: 'Mit Alise Madara Bokaldere • Stille & Bewegung, Bühnenpräsenz, Ausdruck jenseits der Disziplinen • Ca. 2 Stunden, englisch, max. 20 Teilnehmer:innen',
+              fullDescription: '"Stillness in Motion" erkundet den wirkungsvollen Einsatz von Stille – nicht nur als Grundlage für Bewegung, sondern auch als Technik zur Verbesserung der Bühnenpräsenz. Wir werden uns mit Bewegung sowohl innerhalb als auch außerhalb unserer jeweiligen Disziplinen beschäftigen, sodass du grundlegende Prinzipien entdecken und später in deine eigene künstlerische Praxis einbeziehen kannst. In vielen Kunstformen spielt Stille eine entscheidende Rolle – Musik wird durch Pausen verstärkt, Worte benötigen Räume, um verständlich zu sein, und Bewegung funktioniert ähnlich. Das Vergessen anzuhalten nimmt uns die Fähigkeit, uns auf die Bewegung zu konzentrieren.',
+              by: 'Alise Madara Bokaldere',
+              aboutTeacher: 'Alise Madara Bokaldere ist eine lettische Tänzerin und Choreografin. Sie arbeitet sehr eng mit Details und nuancierten Bewegungen in ihren Kreationen und konzentriert sich auf Performance-Präsenz, Bewegungsqualität und Konzept. Sie schloss 2018 ihr Studium an der Lettischen Kultur-Akademie mit einem BA in zeitgenössischem Tanz ab. Sie wurde 2024 mit dem Titel Beste Zeitgenössische Tänzerin bei den Lettischen Tanzpreisen ausgezeichnet.',
+              idealFor: 'Dieser Workshop richtet sich an Tänzer:innen und Zirkus-Performer:innen, einschließlich Akrobat:innen, Aerialist:innen und Jongleur:innen, die neue Dimensionen des Ausdrucks durch den disziplinierten Einsatz von Stille und Präsenz erkunden möchten. Geeignet auch für Choreograf:innen und Regisseur:innen, die ihr Werkzeug erweitern und Konzepte der Stille erkunden möchten.',
+              whatToBring: 'Teilnehmer:innen sollten Kleidung tragen, die uneingeschränkte Bewegung ermöglicht, Wasser zum Trinken mitbringen und Notizbücher und Stifte zum Festhalten wichtiger Erkenntnisse und Inspirationen während der Diskussionen mitbringen.'
+            }
           },
           {
             time: '18:00',
             title: 'Show „How a Spiral Works"',
             description: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus • Wiederholung der Show vom Samstag',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Ermäßigt 12€, Regulär 18€'
+            price: 'Ermäßigt 12€, Regulär 18€',
+            showDetails: {
+              shortDescription: 'Art for Rainy Days • Meditativer, hypnotischer Zirkus • Wiederholung der Show vom Samstag',
+              fullDescription: 'Es ist eine kraftvolle und hypnotische Erkundung der Fürsorge unter Druck. Wie kümmern wir uns um uns selbst – und einander – wenn alles um uns herum außer Kontrolle gerät? Wie sieht Mitgefühl aus in großen Höhen, mitten im Sturm oder wenn Schmerz in den Körper kriecht?\n\nIn diesem intimen Duett sind eine Tänzerin, eine Aerialistin und ein Seil in einer sich ständig entwickelnden Beziehung miteinander verbunden. Ihre Bewegungen umkreisen sich in einer zarten Choreografie aus Vertrauen, Widerstand und Loslassen. Sie hängen, drehen sich, stützen und reagieren – aneinander gebunden in einer physischen und emotionalen Spirale.\n\nDurch die Verbindung von Hair Hanging, Aerial Rope, zeitgenössischem Tanz und eindringlich neu interpretierter baltischer Volksmusik ist "How A Spiral Works" ein poetischer Akt der Fürsorge und des Widerstands.\n\nGeschaffen vom renommierten britischen Regisseur Jason Dupree, der lettischen Choreografin Alise Madara Bokaldere und der außergewöhnlichen litauischen Aerialistin Izabele Kuzelyte. Mit ihrer Debüt-Performance haben sie einen resonanten Akkord in der zeitgenössischen Szene getroffen und wir sind stolz, Teil ihrer umfangreichen Europatournee zu sein.',
+              by: 'Art for Rainy Days',
+              elements: ['Hair Hanging', 'Aerial Rope', 'Zeitgenössischer Tanz', 'Baltische Volksmusik']
+            }
           }
         ]
       }

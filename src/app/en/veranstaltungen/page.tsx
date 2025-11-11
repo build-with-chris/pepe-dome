@@ -12,6 +12,9 @@ export default function EventsPageEN() {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
   const [visibleMonth, setVisibleMonth] = useState<string>('');
+  const [expandedTalks, setExpandedTalks] = useState<Set<string>>(new Set());
+  const [expandedShows, setExpandedShows] = useState<Set<string>>(new Set());
+  const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
   const monthRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Get localized events
@@ -679,23 +682,264 @@ export default function EventsPageEN() {
                             }
                           };
 
-                          const getButtonText = (type: string | undefined) => {
+                          const getButtonText = (type: string | undefined, ticketUrl?: string) => {
                             switch (type) {
                               case 'workshop': return 'Register Now 📝';
                               case 'talk': return 'More Info 💭';
                               case 'party': return 'Free Entry 🎉';
-                              default: return 'Buy Tickets 🎫';
+                              default: 
+                                if (ticketUrl && ticketUrl.includes('freemanfestival.de')) {
+                                  return 'Select Show 🎫';
+                                }
+                                return 'Buy Tickets 🎫';
                             }
                           };
 
+                          const itemId = `${dayIndex}-${showIndex}`;
+                          const isTalkExpanded = expandedTalks.has(itemId);
+                          const isShowExpanded = expandedShows.has(itemId);
+                          const isWorkshopExpanded = expandedWorkshops.has(itemId);
+                          const hasTalkDetails = show.type === 'talk' && show.talkDetails;
+                          const hasShowDetails = !show.type && show.showDetails;
+                          const hasWorkshopDetails = show.type === 'workshop' && show.workshopDetails;
+
+                          // Determine which description to show
+                          let displayDescription = show.description;
+                          if (hasTalkDetails) displayDescription = show.talkDetails!.shortDescription;
+                          else if (hasShowDetails) displayDescription = show.showDetails!.shortDescription;
+                          else if (hasWorkshopDetails) displayDescription = show.workshopDetails!.shortDescription;
+
                           return (
-                            <div key={showIndex} className={`freeman-show ${getShowTypeClass(show.type)}`}>
+                            <div key={showIndex} className={`freeman-show ${getShowTypeClass(show.type)} ${show.type === 'workshop' ? 'opacity-90' : ''}`}>
                               <div className="freeman-show-header">
                                 <div className="freeman-show-time">🕐 {show.time}</div>
                                 <div className="freeman-show-price">{getEventPrice(show.price)}</div>
                               </div>
-                              <div className="freeman-show-title">{getShowIcon(show.type)} {show.title}</div>
-                              <div className="freeman-show-description">{show.description}</div>
+                              <div className={`freeman-show-title ${show.type === 'workshop' ? 'text-base' : ''}`}>{getShowIcon(show.type)} {show.title}</div>
+                              <div className={`freeman-show-description ${show.type === 'workshop' ? 'text-sm' : ''}`}>
+                                {displayDescription}
+                              </div>
+                              
+                              {/* Show Details Pagination */}
+                              {hasShowDetails && (
+                                <div className="mt-4">
+                                  <button
+                                    onClick={() => {
+                                      const newExpanded = new Set(expandedShows);
+                                      if (isShowExpanded) {
+                                        newExpanded.delete(itemId);
+                                      } else {
+                                        newExpanded.add(itemId);
+                                      }
+                                      setExpandedShows(newExpanded);
+                                    }}
+                                    className="text-purple-400 hover:text-purple-300 text-sm font-semibold flex items-center gap-2 transition-colors mb-4"
+                                  >
+                                    <span>{isShowExpanded ? '▼' : '▶'}</span>
+                                    <span>{isShowExpanded ? 'Show less' : 'Show more details'}</span>
+                                  </button>
+                                  
+                                  {isShowExpanded && (
+                                    <div className="mt-4 p-6 bg-black/30 border border-purple-400/20 rounded-xl space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                                      {show.showDetails!.by && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-purple-300 mb-2">By {show.showDetails!.by}</h4>
+                                        </div>
+                                      )}
+                                      <div>
+                                        <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                          {show.showDetails!.fullDescription}
+                                        </p>
+                                      </div>
+                                      
+                                      {show.showDetails!.elements && show.showDetails!.elements.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-purple-300 mb-3">Elements</h4>
+                                          <ul className="space-y-2">
+                                            {show.showDetails!.elements.map((element, idx) => (
+                                              <li key={idx} className="flex items-start gap-2 text-white/80">
+                                                <span className="text-purple-400 mt-1">•</span>
+                                                <span>{element}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Workshop Details Pagination */}
+                              {hasWorkshopDetails && (
+                                <div className="mt-4">
+                                  <button
+                                    onClick={() => {
+                                      const newExpanded = new Set(expandedWorkshops);
+                                      if (isWorkshopExpanded) {
+                                        newExpanded.delete(itemId);
+                                      } else {
+                                        newExpanded.add(itemId);
+                                      }
+                                      setExpandedWorkshops(newExpanded);
+                                    }}
+                                    className="text-orange-400 hover:text-orange-300 text-sm font-semibold flex items-center gap-2 transition-colors mb-4"
+                                  >
+                                    <span>{isWorkshopExpanded ? '▼' : '▶'}</span>
+                                    <span>{isWorkshopExpanded ? 'Show less' : 'Show more details'}</span>
+                                  </button>
+                                  
+                                  {isWorkshopExpanded && (
+                                    <div className="mt-4 p-5 bg-black/30 border border-orange-400/20 rounded-xl space-y-5 animate-in fade-in slide-in-from-top-2 duration-300 text-sm">
+                                      {show.workshopDetails!.by && (
+                                        <div>
+                                          <h4 className="text-base font-bold text-orange-300 mb-2">By {show.workshopDetails!.by}</h4>
+                                        </div>
+                                      )}
+                                      <div>
+                                        <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                          {show.workshopDetails!.fullDescription}
+                                        </p>
+                                      </div>
+                                      
+                                      {show.workshopDetails!.aboutTeacher && (
+                                        <div>
+                                          <h4 className="text-base font-bold text-orange-300 mb-2">About the Teacher</h4>
+                                          <p className="text-white/80">{show.workshopDetails!.aboutTeacher}</p>
+                                        </div>
+                                      )}
+                                      
+                                      {show.workshopDetails!.idealFor && (
+                                        <div>
+                                          <h4 className="text-base font-bold text-orange-300 mb-2">Ideal For</h4>
+                                          <p className="text-white/80">{show.workshopDetails!.idealFor}</p>
+                                        </div>
+                                      )}
+                                      
+                                      {show.workshopDetails!.whatToBring && (
+                                        <div>
+                                          <h4 className="text-base font-bold text-orange-300 mb-2">What to Bring</h4>
+                                          <p className="text-white/80">{show.workshopDetails!.whatToBring}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Talk Details Pagination */}
+                              {hasTalkDetails && (
+                                <div className="mt-4">
+                                  <button
+                                    onClick={() => {
+                                      const newExpanded = new Set(expandedTalks);
+                                      if (isTalkExpanded) {
+                                        newExpanded.delete(itemId);
+                                      } else {
+                                        newExpanded.add(itemId);
+                                      }
+                                      setExpandedTalks(newExpanded);
+                                    }}
+                                    className="text-green-400 hover:text-green-300 text-sm font-semibold flex items-center gap-2 transition-colors mb-4"
+                                  >
+                                    <span>{isTalkExpanded ? '▼' : '▶'}</span>
+                                    <span>{isTalkExpanded ? 'Show less' : 'Show more details'}</span>
+                                  </button>
+                                  
+                                  {isTalkExpanded && (
+                                    <div className="mt-4 p-6 bg-black/30 border border-green-400/20 rounded-xl space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                                      <div>
+                                        <h4 className="text-lg font-bold text-green-300 mb-2">About the Talk</h4>
+                                        <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                          {show.talkDetails!.fullDescription}
+                                        </p>
+                                      </div>
+                                      
+                                      {show.talkDetails!.topics && show.talkDetails!.topics.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Panel Topics</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.topics.map((topic, idx) => (
+                                              <li key={idx} className="flex items-start gap-2 text-white/80">
+                                                <span className="text-green-400 mt-1">•</span>
+                                                <span>{topic}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.goal && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-2">Goal</h4>
+                                          <p className="text-white/80">{show.talkDetails!.goal}</p>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.participants && show.talkDetails!.participants.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Participating Speakers</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.participants.map((participant, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold">{participant.name}</span>
+                                                <span className="text-white/60"> • {participant.role}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.schedule && show.talkDetails!.schedule.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Schedule</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.schedule.map((item, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold text-green-300">{item.time}</span>
+                                                <span className="ml-2">{item.activity}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.themeTables && show.talkDetails!.themeTables.length > 0 && (
+                                        <div>
+                                          <h4 className="text-lg font-bold text-green-300 mb-3">Theme Tables</h4>
+                                          <ul className="space-y-2">
+                                            {show.talkDetails!.themeTables.map((table, idx) => (
+                                              <li key={idx} className="text-white/80">
+                                                <span className="font-semibold">{table.title}</span>
+                                                <span className="text-white/60"> (with {table.moderator})</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      
+                                      {show.talkDetails!.series && (
+                                        <div className="pt-4 border-t border-green-400/20">
+                                          <h4 className="text-lg font-bold text-green-300 mb-2">Event Series</h4>
+                                          <p className="text-white/80 mb-2">{show.talkDetails!.series.name}</p>
+                                          <p className="text-white/70 text-sm mb-3">{show.talkDetails!.series.description}</p>
+                                          {show.talkDetails!.series.link && (
+                                            <a
+                                              href={show.talkDetails!.series.link}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-green-400 hover:text-green-300 text-sm font-semibold underline"
+                                            >
+                                              More info: zeitfuerzirkus.de
+                                            </a>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
                               {show.ticketUrl && (
                                 <a
                                   href={show.ticketUrl}
@@ -704,7 +948,7 @@ export default function EventsPageEN() {
                                   className={`btn-primary px-6 py-2 font-semibold self-start ${show.type === 'party' ? 'opacity-50 cursor-default' : ''}`}
                                   onClick={show.type === 'party' ? (e) => e.preventDefault() : undefined}
                                 >
-                                  {getButtonText(show.type)}
+                                  {getButtonText(show.type, show.ticketUrl)}
                                 </a>
                               )}
                             </div>
@@ -749,14 +993,14 @@ export default function EventsPageEN() {
                       <span>Free</span>
                     </div>
                   ) : (
-                    <a
-                      href={selectedEventData.externalTicketUrl || "/en/kontakt#kontaktformular"}
-                      target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
-                      rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
-                      className="btn-primary px-8 py-4 text-lg font-semibold"
-                    >
-                      Buy Tickets
-                    </a>
+                  <a
+                    href={selectedEventData.externalTicketUrl || "/en/kontakt#kontaktformular"}
+                    target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
+                    rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
+                    className="btn-primary px-8 py-4 text-lg font-semibold"
+                  >
+                    Buy Tickets
+                  </a>
                   )}
                   <div className="text-white/70">
                     <div className="flex items-center gap-2 mb-1 text-sm">

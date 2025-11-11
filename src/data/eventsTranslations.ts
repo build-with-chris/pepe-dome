@@ -186,14 +186,28 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             description: 'With Merri Heikkilä • Everyday objects as props, form, movement, rhythm • Approx. 2 hours, in English',
             ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdV55BqdgNW9xKmdD3vps10RfW9luBzKtM6JCNSChOuojFNbg/viewform',
             price: 'Workshop Registration',
-            type: 'workshop' as const
+            type: 'workshop' as const,
+            workshopDetails: {
+              shortDescription: 'With Merri Heikkilä • Everyday objects as props, form, movement, rhythm • Approx. 2 hours, in English',
+              fullDescription: 'This workshop focuses on using everyday objects as juggling props, offering a different perspective on object manipulation. Through guided exploration, participants will experiment with form, movement, and rhythm, using items found in daily life. The session encourages a thoughtful and creative approach to juggling, with an emphasis on observation, adaptability, and finding new possibilities in familiar things.',
+              by: 'Merri Heikkilä',
+              aboutTeacher: 'Merri Heikkilä is a juggler and circus artist who mainly works with contemporary circus. Merri graduated in 2017 from the circus line of Codarts in Rotterdam with a bachelor\'s degree in circus arts and has been involved in founding two new circus groups, Sirkum Polaris and the Nordic Council. In addition, he works in various works and events of the circus company Nuua. In his work, in addition to object manipulation and acrobatics, Merri often also uses the tools of physical theater to create unique experiences for the audience.',
+              idealFor: 'Contemporary circus artists, jugglers, and movement practitioners interested in object manipulation, creative exploration and interdisciplinary experimentation.',
+              whatToBring: 'Your favorite everyday object.'
+            }
           },
           {
             time: '19:00',
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy, humor about everyday life & ambivalence',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Reduced €12, Regular €18'
+            price: 'Reduced €12, Regular €18',
+            showDetails: {
+              shortDescription: 'The Nordic Council • Contemporary circus × comedy, humor about everyday life & ambivalence',
+              fullDescription: 'A new Nordic circus creation by The Nordic Council.\n\nHäppy Hour is an ode to the deep dark north and its social culture. It grapples with the contradictory relationship to alcohol, and explores the weird and awkward experiences that the northern nightlife has to offer.\n\nInterpreting it through the lens of contemporary circus and comedy, Häppy Hour approaches real life situations through awkward humour, showing how things aren\'t always that serious, and that it\'s ok to laugh at ourselves, even at our worst.\n\nBy combining juggling, and aerial rope with physical theatre and live music The Nordic Council creates scenes around these topics which evokes a feeling of self-recognition in the audience. "We\'ve all been there" is a feeling that permeates the performance, as the trio stumble their way through the scenes of the highs and lows of Nordic nightlife.',
+              by: 'The Nordic Council',
+              elements: ['Juggling', 'Aerial Rope', 'Physical Theatre', 'Live Music']
+            }
           }
         ]
       },
@@ -246,14 +260,26 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             title: 'Show "Häppy Hour"',
             description: 'The Nordic Council • Contemporary circus × comedy • Second performance',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Reduced €12, Regular €18'
+            price: 'Reduced €12, Regular €18',
+            showDetails: {
+              shortDescription: 'The Nordic Council • Contemporary circus × comedy • Second performance',
+              fullDescription: 'A new Nordic circus creation by The Nordic Council.\n\nHäppy Hour is an ode to the deep dark north and its social culture. It grapples with the contradictory relationship to alcohol, and explores the weird and awkward experiences that the northern nightlife has to offer.\n\nInterpreting it through the lens of contemporary circus and comedy, Häppy Hour approaches real life situations through awkward humour, showing how things aren\'t always that serious, and that it\'s ok to laugh at ourselves, even at our worst.\n\nBy combining juggling, and aerial rope with physical theatre and live music The Nordic Council creates scenes around these topics which evokes a feeling of self-recognition in the audience. "We\'ve all been there" is a feeling that permeates the performance, as the trio stumble their way through the scenes of the highs and lows of Nordic nightlife.',
+              by: 'The Nordic Council',
+              elements: ['Juggling', 'Aerial Rope', 'Physical Theatre', 'Live Music']
+            }
           },
           {
             time: '20:30',
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus with dance, hair hanging & aerial rope • Minimalist aesthetics with reinterpreted Baltic folk music',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Reduced €12, Regular €18'
+            price: 'Reduced €12, Regular €18',
+            showDetails: {
+              shortDescription: 'Art for Rainy Days • Meditative, hypnotic circus with dance, hair hanging & aerial rope • Minimalist aesthetics with reinterpreted Baltic folk music',
+              fullDescription: 'It is a powerful and hypnotic exploration of care under pressure. How do we take care of ourselves—and each other—when everything around us spins out of control? What does compassion look like at great heights, in the middle of a storm, or when pain creeps into the body?\n\nIn this intimate duet, one dancer, one aerialist, and one rope are bound together in an ever-evolving relationship. Their movements circle each other in a delicate choreography of trust, resistance, and release. They hang, spin, support, and respond—tethered to one another in a physical and emotional spiral.\n\nBlending hair hanging, aerial rope, contemporary dance, and hauntingly reimagined Baltic folk music, "How A Spiral Works" is a poetic act of care and resistance.\n\nCreated by renowned British director Jason Dupree, Latvian choreographer Alise Madara Bokaldere, and the extraordinary Lithuanian aerialist Izabele Kuzelyte. With their debut performance, they have struck a resonant chord within the contemporary scene and we are proud to be part of their extensive European tour.',
+              by: 'Art for Rainy Days',
+              elements: ['Hair Hanging', 'Aerial Rope', 'Contemporary Dance', 'Baltic Folk Music']
+            }
           },
           {
             time: '21:45',
@@ -276,14 +302,28 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
             description: 'With Alise Madara Bokaldere • Stillness & movement, stage presence, expression beyond disciplines • Approx. 2 hours, in English, max. 20 participants',
             ticketUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeg-YUt_aatNtb-iiIZKerZ1kviJRl3U61WLPsA4ROncrrV5g/viewform',
             price: 'Workshop Registration',
-            type: 'workshop' as const
+            type: 'workshop' as const,
+            workshopDetails: {
+              shortDescription: 'With Alise Madara Bokaldere • Stillness & movement, stage presence, expression beyond disciplines • Approx. 2 hours, in English, max. 20 participants',
+              fullDescription: '"Stillness in Motion" explores the potent use of stillness—not only as the foundation for movement but also as a technique to enhance stage presence. We\'ll engage in movement both within and outside of our respective disciplines, allowing you to uncover and later incorporate fundamental principles into your own artistic practice. In many art forms, stillness plays a crucial role—music is enhanced by pauses, words require spaces to be comprehensible, and movement works similarly. Forgetting to stop takes away from our ability to focus on the motion.',
+              by: 'Alise Madara Bokaldere',
+              aboutTeacher: 'Alise Madara Bokaldere is a Latvian dancer / choreographer. She works very closely with the details and nuanced movement in her creations, focusing on performance presence, movement quality, and concept. She graduated from The Latvian Academy of Culture in 2018, with a BA in The Art of Contemporary Dance. She was awarded the title of Best Contemporary Dancer 2024 in Latvian Dance awards.',
+              idealFor: 'This workshop is designed for dancers and circus performers, including acrobats, aerialists, and jugglers who wish to explore new dimensions of expressiveness through the disciplined use of stillness and presence. Suitable also for choreographers and directors seeking to deepen their toolbox and explore concepts of stillness.',
+              whatToBring: 'Participants should wear clothing that allows for unrestricted movement, bring water to stay hydrated, and have notebooks and pens for capturing crucial insights and inspirations during discussions.'
+            }
           },
           {
             time: '18:00',
             title: 'Show "How a Spiral Works"',
             description: 'Art for Rainy Days • Meditative, hypnotic circus • Repeat of Saturday\'s show',
             ticketUrl: 'https://www.freemanfestival.de/tickets',
-            price: 'Reduced €12, Regular €18'
+            price: 'Reduced €12, Regular €18',
+            showDetails: {
+              shortDescription: 'Art for Rainy Days • Meditative, hypnotic circus • Repeat of Saturday\'s show',
+              fullDescription: 'It is a powerful and hypnotic exploration of care under pressure. How do we take care of ourselves—and each other—when everything around us spins out of control? What does compassion look like at great heights, in the middle of a storm, or when pain creeps into the body?\n\nIn this intimate duet, one dancer, one aerialist, and one rope are bound together in an ever-evolving relationship. Their movements circle each other in a delicate choreography of trust, resistance, and release. They hang, spin, support, and respond—tethered to one another in a physical and emotional spiral.\n\nBlending hair hanging, aerial rope, contemporary dance, and hauntingly reimagined Baltic folk music, "How A Spiral Works" is a poetic act of care and resistance.\n\nCreated by renowned British director Jason Dupree, Latvian choreographer Alise Madara Bokaldere, and the extraordinary Lithuanian aerialist Izabele Kuzelyte. With their debut performance, they have struck a resonant chord within the contemporary scene and we are proud to be part of their extensive European tour.',
+              by: 'Art for Rainy Days',
+              elements: ['Hair Hanging', 'Aerial Rope', 'Contemporary Dance', 'Baltic Folk Music']
+            }
           }
         ]
       }
