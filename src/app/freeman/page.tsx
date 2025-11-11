@@ -12,6 +12,8 @@ export default function FreemanPage() {
   const [expandedTalks, setExpandedTalks] = useState<Set<string>>(new Set());
   const [expandedShows, setExpandedShows] = useState<Set<string>>(new Set());
   const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
+  const [expandedArtistShows, setExpandedArtistShows] = useState<Set<string>>(new Set());
+  const [expandedArtistWorkshops, setExpandedArtistWorkshops] = useState<Set<string>>(new Set());
   
   const event = getEventById('freeman-festival');
   const localizedEvent = event ? getLocalizedEvent(event, 'de') : null;
@@ -256,41 +258,219 @@ export default function FreemanPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+            {/* The Nordic Council - Häppy Hour */}
+            {(() => {
+              const happyHourShow = localizedEvent?.freemanShows?.flatMap(day => day.shows)
+                .find(show => show.showDetails && show.showDetails.by === 'The Nordic Council');
+              
+              if (!happyHourShow?.showDetails) return null;
+              
+              const showTimes = localizedEvent?.freemanShows
+                ?.flatMap((day, dayIdx) => day.shows
+                  .filter(s => s.showDetails?.by === 'The Nordic Council')
+                  .map(s => ({ day: day.day, time: s.time }))
+                )
+                .map(({ day, time }) => `${day.slice(0, 2)}. ${time}`)
+                .join(' & ') || 'Fr. 19:00 & Sa. 18:00';
+              
+              const isExpanded = expandedArtistShows.has('nordic-council');
+              
+              return (
+                <div key="nordic-council" className="p-8 rounded-xl bg-black/20 border border-white/10">
               <h3 className="display text-xl font-bold mb-2">The Nordic Council</h3>
               <p className="text-purple-300 mb-4">Finnland, Island & Schweden</p>
               <p className="text-white/70 mb-4">
-                Zeitgenössische Zirkuskunst mit Comedy: Humor über Alltag & Ambivalenz verschmilzt
-                mit spektakulärer Artistik.
+                    {happyHourShow.showDetails.shortDescription}
               </p>
-              <div className="text-sm text-white/60">
-                Show: &ldquo;Häppy Hour&rdquo; - Fr. 19:00 & Sa. 18:00
-              </div>
+                  <div className="text-sm text-white/60 mb-4">
+                    Show: &ldquo;Häppy Hour&rdquo; - {showTimes}
             </div>
 
-            <div className="p-8 rounded-xl bg-black/20 border border-white/10">
+                  <button
+                    onClick={() => {
+                      const newExpanded = new Set(expandedArtistShows);
+                      if (isExpanded) {
+                        newExpanded.delete('nordic-council');
+                      } else {
+                        newExpanded.add('nordic-council');
+                      }
+                      setExpandedArtistShows(newExpanded);
+                    }}
+                    className="text-purple-400 hover:text-purple-300 text-xs font-semibold flex items-center gap-1 transition-colors mb-2"
+                  >
+                    <span>{isExpanded ? '▼' : '▶'}</span>
+                    <span>{isExpanded ? 'Weniger Details' : 'Mehr Details'}</span>
+                  </button>
+                  
+                  {isExpanded && (
+                    <div className="mt-4 p-4 bg-black/30 border border-purple-400/20 rounded-lg space-y-3 text-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                      <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                        {happyHourShow.showDetails.fullDescription}
+                      </p>
+                      {happyHourShow.showDetails.elements && happyHourShow.showDetails.elements.length > 0 && (
+                        <div>
+                          <h5 className="text-sm font-bold text-purple-300 mb-2">Elemente</h5>
+                          <ul className="space-y-1">
+                            {happyHourShow.showDetails.elements.map((element, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-white/80">
+                                <span className="text-purple-400 mt-0.5">•</span>
+                                <span>{element}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* Art for Rainy Days - How a Spiral Works */}
+            {(() => {
+              const spiralShow = localizedEvent?.freemanShows?.flatMap(day => day.shows)
+                .find(show => show.showDetails && show.showDetails.by === 'Art for Rainy Days');
+              
+              if (!spiralShow?.showDetails) return null;
+              
+              const showTimes = localizedEvent?.freemanShows
+                ?.flatMap((day) => day.shows
+                  .filter(s => s.showDetails?.by === 'Art for Rainy Days')
+                  .map(s => ({ day: day.day, time: s.time }))
+                )
+                .map(({ day, time }) => `${day.slice(0, 2)}. ${time}`)
+                .join(' & ') || 'Sa. 20:30 & So. 18:00';
+              
+              const isExpanded = expandedArtistShows.has('art-for-rainy-days');
+              
+              return (
+                <div key="art-for-rainy-days" className="p-8 rounded-xl bg-black/20 border border-white/10">
               <h3 className="display text-xl font-bold mb-2">Art for Rainy Days</h3>
               <p className="text-purple-300 mb-4">Lettland • Preisgekrönte Performance</p>
               <p className="text-white/70 mb-4">
-                Meditativer, hypnotischer Zirkus mit Tanz, Hair Hanging & Aerial Rope.
-                Minimalistische Ästhetik mit neu interpretierter baltischer Volksmusik.
+                    {spiralShow.showDetails.shortDescription}
               </p>
-              <div className="text-sm text-white/60">
-                Show: &ldquo;How a Spiral Works&rdquo; - Sa. 20:30 & So. 18:00
-              </div>
+                  <div className="text-sm text-white/60 mb-4">
+                    Show: &ldquo;How a Spiral Works&rdquo; - {showTimes}
             </div>
 
-            <div className="p-8 rounded-xl bg-black/20 border border-white/10 md:col-span-2 lg:col-span-1">
+                  <button
+                    onClick={() => {
+                      const newExpanded = new Set(expandedArtistShows);
+                      if (isExpanded) {
+                        newExpanded.delete('art-for-rainy-days');
+                      } else {
+                        newExpanded.add('art-for-rainy-days');
+                      }
+                      setExpandedArtistShows(newExpanded);
+                    }}
+                    className="text-purple-400 hover:text-purple-300 text-xs font-semibold flex items-center gap-1 transition-colors mb-2"
+                  >
+                    <span>{isExpanded ? '▼' : '▶'}</span>
+                    <span>{isExpanded ? 'Weniger Details' : 'Mehr Details'}</span>
+                  </button>
+                  
+                  {isExpanded && (
+                    <div className="mt-4 p-4 bg-black/30 border border-purple-400/20 rounded-lg space-y-3 text-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                      <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                        {spiralShow.showDetails.fullDescription}
+                      </p>
+                      {spiralShow.showDetails.elements && spiralShow.showDetails.elements.length > 0 && (
+                        <div>
+                          <h5 className="text-sm font-bold text-purple-300 mb-2">Elemente</h5>
+                          <ul className="space-y-1">
+                            {spiralShow.showDetails.elements.map((element, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-white/80">
+                                <span className="text-purple-400 mt-0.5">•</span>
+                                <span>{element}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* Workshop Leaders */}
+            {(() => {
+              const workshops = localizedEvent?.freemanShows?.flatMap(day => day.shows)
+                .filter(show => show.workshopDetails);
+              
+              if (!workshops || workshops.length === 0) return null;
+              
+              return (
+                <div key="workshop-leaders" className="p-8 rounded-xl bg-black/20 border border-white/10 md:col-span-2 lg:col-span-1">
               <h3 className="display text-xl font-bold mb-2">Workshop Leaders</h3>
               <p className="text-purple-300 mb-4">Internationale Experten</p>
-              <p className="text-white/70 mb-4">
-                <strong>Merri Heikkilä:</strong> Object Manipulation (Fr. 15:00)<br/>
-                <strong>Alise Madara Bokaldere:</strong> Stillness in Motion (So. 13:00)
-              </p>
-              <div className="text-sm text-white/60">
+                  
+                  <div className="space-y-4">
+                    {workshops.map((workshop, idx) => {
+                      if (!workshop.workshopDetails) return null;
+                      const workshopId = `artist-workshop-${idx}`;
+                      const isExpanded = expandedArtistWorkshops.has(workshopId);
+                      const day = localizedEvent?.freemanShows?.find(d => d.shows.includes(workshop));
+                      
+                      return (
+                        <div key={workshopId} className="border-t border-white/10 pt-4 first:border-t-0 first:pt-0">
+                          <p className="text-white/70 mb-2">
+                            <strong>{workshop.workshopDetails.by}:</strong> {workshop.title.replace('Workshop „', '').replace('"', '')} ({day?.day.slice(0, 2)}. {workshop.time})
+                          </p>
+                          
+                          <button
+                            onClick={() => {
+                              const newExpanded = new Set(expandedArtistWorkshops);
+                              if (isExpanded) {
+                                newExpanded.delete(workshopId);
+                              } else {
+                                newExpanded.add(workshopId);
+                              }
+                              setExpandedArtistWorkshops(newExpanded);
+                            }}
+                            className="text-orange-400 hover:text-orange-300 text-xs font-semibold flex items-center gap-1 transition-colors mb-2"
+                          >
+                            <span>{isExpanded ? '▼' : '▶'}</span>
+                            <span>{isExpanded ? 'Weniger' : 'Mehr Details'}</span>
+                          </button>
+                          
+                          {isExpanded && (
+                            <div className="mt-2 p-4 bg-black/30 border border-orange-400/20 rounded-lg space-y-3 text-xs animate-in fade-in slide-in-from-top-2 duration-300">
+                              <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                                {workshop.workshopDetails.fullDescription}
+                              </p>
+                              {workshop.workshopDetails.aboutTeacher && (
+                                <div>
+                                  <h5 className="text-sm font-bold text-orange-300 mb-1">Über die/den Dozent:in</h5>
+                                  <p className="text-white/80">{workshop.workshopDetails.aboutTeacher}</p>
+                                </div>
+                              )}
+                              {workshop.workshopDetails.idealFor && (
+                                <div>
+                                  <h5 className="text-sm font-bold text-orange-300 mb-1">Ideal für</h5>
+                                  <p className="text-white/80">{workshop.workshopDetails.idealFor}</p>
+                                </div>
+                              )}
+                              {workshop.workshopDetails.whatToBring && (
+                                <div>
+                                  <h5 className="text-sm font-bold text-orange-300 mb-1">Mitbringen</h5>
+                                  <p className="text-white/80">{workshop.workshopDetails.whatToBring}</p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  <div className="text-sm text-white/60 mt-4">
                 Workshops in englischer Sprache • Anmeldung erforderlich
               </div>
             </div>
+              );
+            })()}
           </div>
         </div>
       </section>
