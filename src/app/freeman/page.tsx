@@ -402,7 +402,7 @@ export default function FreemanPage() {
                                   {show.showDetails!.by && (
                                     <div>
                                       <h5 className={`text-sm font-bold ${colors.detailTitle} mb-1`}>Von {show.showDetails!.by}</h5>
-                                    </div>
+                </div>
                                   )}
                                   <p className="text-white/80 whitespace-pre-line leading-relaxed">
                                     {show.showDetails!.fullDescription}
@@ -418,11 +418,11 @@ export default function FreemanPage() {
                                           </li>
                                         ))}
                                       </ul>
-                                    </div>
+                </div>
                                   )}
-                                </div>
+              </div>
                               )}
-                            </div>
+            </div>
                           )}
 
                           {/* Workshop Details Pagination */}
@@ -474,7 +474,7 @@ export default function FreemanPage() {
                                   )}
                                 </div>
                               )}
-                            </div>
+                  </div>
                           )}
 
                           {/* Talk Details Pagination */}
@@ -512,7 +512,7 @@ export default function FreemanPage() {
                                           </li>
                                         ))}
                                       </ul>
-                                    </div>
+                </div>
                                   )}
                                   {show.talkDetails!.participants && show.talkDetails!.participants.length > 0 && (
                                     <div>
@@ -525,7 +525,7 @@ export default function FreemanPage() {
                                           </li>
                                         ))}
                                       </ul>
-                                    </div>
+                </div>
                                   )}
                                   {show.talkDetails!.series && show.talkDetails!.series.link && (
                                     <div className={`pt-2 border-t ${colors.detailBorder}`}>
@@ -537,16 +537,16 @@ export default function FreemanPage() {
                                       >
                                         Mehr Infos: zeitfuerzirkus.de
                                       </a>
-                                    </div>
+                </div>
                                   )}
-                                </div>
+                </div>
                               )}
-                            </div>
+              </div>
                           )}
-                        </div>
+            </div>
                       );
                     })}
-                  </div>
+                </div>
                 </div>
               );
             })}
@@ -574,7 +574,7 @@ export default function FreemanPage() {
             ⚠️ Nur 200 Plätze pro Show – freie Platzwahl
           </p>
 
-          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6 mb-12`}>
+          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 mb-12`}>
             {earlyBirdActive && (
               <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
                 <div className="text-center">
@@ -598,14 +598,6 @@ export default function FreemanPage() {
                 <div className="text-2xl font-bold text-white mb-2">18 €</div>
                 <div className="font-semibold mb-2">Regulär</div>
                 <div className="text-sm text-white/70">online verfügbar</div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-2">22 €</div>
-                <div className="font-semibold mb-2">Abendkasse</div>
-                <div className="text-sm text-white/70">falls verfügbar</div>
               </div>
             </div>
           </div>
