@@ -816,6 +816,32 @@ export default function FreemanPage() {
         </div>
       </section>
 
+      {/* Förderer */}
+      <section className="py-16 px-6 border-t border-white/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <h3 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-2">
+              Gefördert von
+            </h3>
+            <p className="text-xs text-white/50">
+              Mit freundlicher Unterstützung unserer Förderer
+            </p>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-4xl">
+              <Image
+                src="/Logos.png"
+                alt="Förderer und Partner des Freeman Festivals"
+                width={1200}
+                height={400}
+                className="w-full h-auto opacity-80 hover:opacity-100 transition-opacity"
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center">
