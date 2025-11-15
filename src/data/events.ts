@@ -867,9 +867,9 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
     ],
     category: 'workshop',
     color: {
-      primary: 'red-500',
-      secondary: 'rose-500',
-      accent: 'red-400'
+      primary: 'blue-500',
+      secondary: 'indigo-500',
+      accent: 'blue-400'
     },
     emoji: '🎪',
     registrationUrl: 'https://www.eversports.de/e/workshop/2z8n_uw'

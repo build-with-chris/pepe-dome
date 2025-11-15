@@ -11,8 +11,6 @@ export default function TrainingPage() {
   const [ideaText, setIdeaText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
-  const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(null);
-
   const upcomingWorkshops = getUpcomingWorkshops();
 
   const getWorkshopColorClasses = (workshop: typeof upcomingWorkshops[0]) => {
@@ -68,18 +66,18 @@ export default function TrainingPage() {
         priceText: 'text-cyan-400',
         ctaText: 'text-cyan-400',
       },
-      'red-500': {
-        bg: 'bg-gradient-to-br from-red-500/10 via-black/30 to-rose-500/10',
-        border: 'border-2 border-red-500/30',
-        borderHover: 'hover:border-red-500/50',
-        iconBg: 'bg-gradient-to-br from-red-500/30 to-rose-500/30',
-        iconBorder: 'border-2 border-red-400/40',
-        titleHover: 'group-hover:text-red-400',
-        subtitle: 'text-red-400/80',
-        priceBg: 'bg-gradient-to-r from-red-500/20 to-rose-500/20',
-        priceBorder: 'border-2 border-red-400/40',
-        priceText: 'text-red-400',
-        ctaText: 'text-red-400',
+      'blue-500': {
+        bg: 'bg-gradient-to-br from-blue-500/10 via-black/30 to-indigo-500/10',
+        border: 'border-2 border-blue-500/30',
+        borderHover: 'hover:border-blue-500/50',
+        iconBg: 'bg-gradient-to-br from-blue-500/30 to-indigo-500/30',
+        iconBorder: 'border-2 border-blue-400/40',
+        titleHover: 'group-hover:text-blue-400',
+        subtitle: 'text-blue-400/80',
+        priceBg: 'bg-gradient-to-r from-blue-500/20 to-indigo-500/20',
+        priceBorder: 'border-2 border-blue-400/40',
+        priceText: 'text-blue-400',
+        ctaText: 'text-blue-400',
       },
     };
     
@@ -112,21 +110,11 @@ ${ideaText}`;
     }
   };
 
-  const openWorkshopModal = (workshop: Workshop) => {
-    setSelectedWorkshop(workshop);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeWorkshopModal = () => {
-    setSelectedWorkshop(null);
-    document.body.style.overflow = 'unset';
-  };
-
   const shareWorkshop = async (workshop: Workshop) => {
     const shareData = {
       title: `${workshop.title} - Pepe Dome`,
       text: `${workshop.subtitle} am ${workshop.dateDisplay} im Pepe Dome`,
-      url: `https://www.pepe-dome.de/training#workshop-${workshop.id}`
+      url: `${window.location.origin}/training/${workshop.id}`
     };
 
     try {
@@ -134,7 +122,7 @@ ${ideaText}`;
         await navigator.share(shareData);
       } else {
         // Fallback: Copy link to clipboard
-        await navigator.clipboard.writeText(`https://www.pepe-dome.de/training#workshop-${workshop.id}`);
+        await navigator.clipboard.writeText(`${window.location.origin}/training/${workshop.id}`);
         alert('Link wurde in die Zwischenablage kopiert!');
       }
     } catch (err) {
@@ -320,11 +308,11 @@ ${ideaText}`;
                 {upcomingWorkshops.map((workshop, index) => {
                   const colors = getWorkshopColorClasses(workshop);
                   return (
-                  <div
+                  <Link
+                    href={`/training/${workshop.id}`}
                     key={workshop.id}
                     id={`workshop-${workshop.id}`}
-                    className={`${colors.bg} ${colors.border} ${colors.borderHover} rounded-2xl p-8 transition-all duration-300 cursor-pointer group relative shadow-lg ${workshop.soldOut ? 'opacity-75' : ''}`}
-                    onClick={() => openWorkshopModal(workshop)}
+                    className={`${colors.bg} ${colors.border} ${colors.borderHover} rounded-2xl p-8 transition-all duration-300 cursor-pointer group relative shadow-lg ${workshop.soldOut ? 'opacity-75' : ''} block`}
                     style={{
                       borderColor: workshop.soldOut ? 'rgba(239, 68, 68, 0.5)' : undefined
                     }}
@@ -432,7 +420,7 @@ ${ideaText}`;
                         {workshop.soldOut ? 'Ausverkauft' : 'Klicke für Details & Anmeldung ➤'}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                   );
                 })}
               </div>
@@ -836,207 +824,6 @@ ${ideaText}`;
       </section>
 
       <Footer />
-
-      {/* Workshop Modal */}
-      {selectedWorkshop && (
-        <div className="event-modal-overlay" onClick={closeWorkshopModal}>
-          <div
-            className="event-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="event-modal-close"
-              onClick={closeWorkshopModal}
-              aria-label="Modal schließen"
-            >
-              ×
-            </button>
-
-            <div className="event-modal-header">
-              {selectedWorkshop.image ? (
-                <Image
-                  src={selectedWorkshop.image}
-                  alt={selectedWorkshop.title}
-                  width={200}
-                  height={250}
-                  className="event-modal-image"
-                  style={{
-                    objectFit: 'cover'
-                  }}
-                />
-              ) : (
-                <div className={`event-modal-image bg-gradient-to-br from-${selectedWorkshop.color.primary}/20 to-${selectedWorkshop.color.secondary}/20 flex items-center justify-center text-5xl`}>
-                  {selectedWorkshop.emoji}
-                </div>
-              )}
-
-              <div className="event-modal-info">
-                <div className="event-modal-date">
-                  {selectedWorkshop.emoji} {selectedWorkshop.dateDisplay}
-                </div>
-
-                <h2 className="event-modal-title">
-                  {selectedWorkshop.title}
-                </h2>
-
-                <p className="event-modal-subtitle">
-                  {selectedWorkshop.subtitle}
-                </p>
-              </div>
-            </div>
-
-            <div className="event-modal-content">
-              {/* Workshop Info */}
-              <div className="mb-6 p-4 rounded-lg bg-black/20 border border-white/10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">📅</span>
-                    <div>
-                      <div className="text-white/60">Datum</div>
-                      <div className="text-white font-semibold">{selectedWorkshop.dateDisplay}</div>
-                    </div>
-                  </div>
-                  {selectedWorkshop.time && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">🕐</span>
-                      <div>
-                        <div className="text-white/60">Zeit</div>
-                        <div className="text-white font-semibold">{selectedWorkshop.time}</div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">⏱️</span>
-                    <div>
-                      <div className="text-white/60">Dauer</div>
-                      <div className="text-white font-semibold">{selectedWorkshop.duration}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="event-modal-description mb-6">
-                {selectedWorkshop.description}
-              </p>
-
-              {/* What to Bring */}
-              <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-400/20">
-                <h3 className="text-lg font-semibold mb-3 text-cyan-300">Was du mitbringen solltest:</h3>
-                <ul className="space-y-2">
-                  {selectedWorkshop.whatToBring.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-white/80">
-                      <span className="text-cyan-400">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Schedule */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-4 text-white">Ablauf:</h3>
-                <div className="space-y-4">
-                  {selectedWorkshop.schedule.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-lg bg-black/20 border border-white/10">
-                      <h4 className="font-semibold text-white mb-2">{item.title}</h4>
-                      <p className="text-sm text-white/70">{item.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="event-modal-features mb-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  {selectedWorkshop.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="event-modal-feature">
-                      <span className="event-modal-feature-icon">{feature.icon}</span>
-                      <span>{feature.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Instructor */}
-              <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/20">
-                <h3 className="text-lg font-semibold mb-3 text-purple-300">Instructor:</h3>
-                <div className="text-white/80">
-                  <div className="font-semibold text-white mb-2">{selectedWorkshop.instructor.name}</div>
-                  <div className="space-y-1 text-sm">
-                    <div className="flex items-center gap-2">
-                      <span>📧</span>
-                      <a href={`mailto:${selectedWorkshop.instructor.email}`} className="hover:text-purple-300 transition-colors">
-                        {selectedWorkshop.instructor.email}
-                      </a>
-                    </div>
-                    {selectedWorkshop.instructor.website && (
-                      <div className="flex items-center gap-2">
-                        <span>🌐</span>
-                        <a href={selectedWorkshop.instructor.website} target="_blank" rel="noopener noreferrer" className="hover:text-purple-300 transition-colors">
-                          {selectedWorkshop.instructor.website}
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="event-modal-actions">
-                {selectedWorkshop.soldOut && (
-                  <div className="mb-4 p-4 bg-red-500/20 border-2 border-red-400/50 rounded-xl text-center">
-                    <div className="text-red-400 font-bold text-lg mb-2">⚠️ AUSVERKAUFT</div>
-                    <p className="text-white/80 text-sm">
-                      Dieser Workshop ist bereits ausverkauft. Vielen Dank für Ihr Interesse!
-                    </p>
-                  </div>
-                )}
-                <div className="flex flex-col sm:flex-row gap-4 items-center">
-                  {selectedWorkshop.soldOut ? (
-                    <button
-                      disabled
-                      className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center opacity-50 cursor-not-allowed"
-                    >
-                      Ausverkauft
-                    </button>
-                  ) : (
-                    <a
-                      href={selectedWorkshop.registrationUrl || `mailto:${selectedWorkshop.instructor.email}?subject=Anmeldung%20${encodeURIComponent(selectedWorkshop.title)}`}
-                      className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center"
-                    >
-                      Jetzt anmelden
-                    </a>
-                  )}
-                  <button
-                    onClick={() => shareWorkshop(selectedWorkshop)}
-                    className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors text-white/70 hover:text-white flex items-center gap-2"
-                  >
-                    <span>🔗</span>
-                    <span>Workshop teilen</span>
-                  </button>
-                </div>
-
-                {selectedWorkshop.price && (
-                  <div className="text-center mt-4 text-white/70">
-                    <div className="text-sm">Preis: <span className="text-cyan-300 font-semibold">{selectedWorkshop.price}</span></div>
-                  </div>
-                )}
-
-                {/* Close Button at Bottom */}
-                <div className="text-center pt-4 border-t border-white/10 mt-4">
-                  <button
-                    onClick={closeWorkshopModal}
-                    className="event-modal-close-bottom"
-                  >
-                    Close ✕
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
