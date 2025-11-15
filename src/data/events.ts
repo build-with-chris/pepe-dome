@@ -657,6 +657,7 @@ export interface Workshop {
   image?: string;
   status: 'upcoming' | 'past';
   registrationUrl?: string;
+  soldOut?: boolean;
 }
 
 // Workshop data
@@ -769,6 +770,7 @@ const rawWorkshops: Omit<Workshop, 'status'>[] = [
     duration: '5 Stunden inkl. Pause',
     time: '10:00 - 15:00 Uhr',
     price: '35€',
+    soldOut: true,
     whatToBring: [
       'Bequeme Sportkleidung',
       'Sportschuhe',
@@ -881,7 +883,13 @@ export const workshops: Workshop[] = rawWorkshops.map(workshop => ({
 }));
 
 export function getUpcomingWorkshops(): Workshop[] {
-  return workshops.filter(w => w.status === 'upcoming')
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return workshops.filter(w => {
+    const workshopDate = new Date(w.date);
+    workshopDate.setHours(0, 0, 0, 0);
+    return workshopDate >= today;
+  })
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 

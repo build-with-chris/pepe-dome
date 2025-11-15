@@ -15,6 +15,77 @@ export default function TrainingPage() {
 
   const upcomingWorkshops = getUpcomingWorkshops();
 
+  const getWorkshopColorClasses = (workshop: typeof upcomingWorkshops[0]) => {
+    const colorMap: Record<string, {
+      bg: string;
+      border: string;
+      borderHover: string;
+      iconBg: string;
+      iconBorder: string;
+      titleHover: string;
+      subtitle: string;
+      priceBg: string;
+      priceBorder: string;
+      priceText: string;
+      ctaText: string;
+    }> = {
+      'orange-500': {
+        bg: 'bg-gradient-to-br from-orange-500/10 via-black/30 to-amber-500/10',
+        border: 'border-2 border-orange-500/30',
+        borderHover: 'hover:border-orange-500/50',
+        iconBg: 'bg-gradient-to-br from-orange-500/30 to-amber-500/30',
+        iconBorder: 'border-2 border-orange-400/40',
+        titleHover: 'group-hover:text-orange-400',
+        subtitle: 'text-orange-400/80',
+        priceBg: 'bg-gradient-to-r from-orange-500/20 to-amber-500/20',
+        priceBorder: 'border-2 border-orange-400/40',
+        priceText: 'text-orange-400',
+        ctaText: 'text-orange-400',
+      },
+      'purple-500': {
+        bg: 'bg-gradient-to-br from-purple-500/10 via-black/30 to-pink-500/10',
+        border: 'border-2 border-purple-500/30',
+        borderHover: 'hover:border-purple-500/50',
+        iconBg: 'bg-gradient-to-br from-purple-500/30 to-pink-500/30',
+        iconBorder: 'border-2 border-purple-400/40',
+        titleHover: 'group-hover:text-purple-400',
+        subtitle: 'text-purple-400/80',
+        priceBg: 'bg-gradient-to-r from-purple-500/20 to-pink-500/20',
+        priceBorder: 'border-2 border-purple-400/40',
+        priceText: 'text-purple-400',
+        ctaText: 'text-purple-400',
+      },
+      'cyan-500': {
+        bg: 'bg-gradient-to-br from-cyan-500/10 via-black/30 to-blue-500/10',
+        border: 'border-2 border-cyan-500/30',
+        borderHover: 'hover:border-cyan-500/50',
+        iconBg: 'bg-gradient-to-br from-cyan-500/30 to-blue-500/30',
+        iconBorder: 'border-2 border-cyan-400/40',
+        titleHover: 'group-hover:text-cyan-400',
+        subtitle: 'text-cyan-400/80',
+        priceBg: 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20',
+        priceBorder: 'border-2 border-cyan-400/40',
+        priceText: 'text-cyan-400',
+        ctaText: 'text-cyan-400',
+      },
+      'red-500': {
+        bg: 'bg-gradient-to-br from-red-500/10 via-black/30 to-rose-500/10',
+        border: 'border-2 border-red-500/30',
+        borderHover: 'hover:border-red-500/50',
+        iconBg: 'bg-gradient-to-br from-red-500/30 to-rose-500/30',
+        iconBorder: 'border-2 border-red-400/40',
+        titleHover: 'group-hover:text-red-400',
+        subtitle: 'text-red-400/80',
+        priceBg: 'bg-gradient-to-r from-red-500/20 to-rose-500/20',
+        priceBorder: 'border-2 border-red-400/40',
+        priceText: 'text-red-400',
+        ctaText: 'text-red-400',
+      },
+    };
+    
+    return colorMap[workshop.color.primary] || colorMap['cyan-500'];
+  };
+
   const handleIdeaSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ideaText.trim()) return;
@@ -245,98 +316,125 @@ ${ideaText}`;
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {upcomingWorkshops.map((workshop) => (
+              <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                {upcomingWorkshops.map((workshop, index) => {
+                  const colors = getWorkshopColorClasses(workshop);
+                  return (
                   <div
                     key={workshop.id}
                     id={`workshop-${workshop.id}`}
-                    className="bg-black/20 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 cursor-pointer group relative"
+                    className={`${colors.bg} ${colors.border} ${colors.borderHover} rounded-2xl p-8 transition-all duration-300 cursor-pointer group relative shadow-lg ${workshop.soldOut ? 'opacity-75' : ''}`}
                     onClick={() => openWorkshopModal(workshop)}
+                    style={{
+                      borderColor: workshop.soldOut ? 'rgba(239, 68, 68, 0.5)' : undefined
+                    }}
                   >
+                    {/* Sold Out Badge */}
+                    {workshop.soldOut && (
+                      <div className="absolute top-4 left-4 z-20 px-4 py-2 bg-red-500/90 border border-red-400 rounded-full text-white text-sm font-bold shadow-lg">
+                        AUSVERKAUFT
+                      </div>
+                    )}
+
                     {/* Share Button */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         shareWorkshop(workshop);
                       }}
-                      className="absolute top-4 right-4 w-10 h-10 bg-white/5 hover:bg-white/10 border border-white/20 rounded-full flex items-center justify-center transition-all z-10"
+                      className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full flex items-center justify-center transition-all z-10 backdrop-blur-sm"
                       aria-label="Workshop teilen"
                     >
                       <span className="text-lg">🔗</span>
                     </button>
 
-                    {/* Workshop Icon/Image */}
-                    {workshop.image ? (
-                      <div className="w-full h-48 mb-4 overflow-hidden rounded-xl">
-                        <Image
-                          src={workshop.image}
-                          alt={workshop.title}
-                          width={400}
-                          height={300}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    ) : (
-                      <div className={`w-16 h-16 bg-gradient-to-br from-${workshop.color.primary}/20 to-${workshop.color.secondary}/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <span className="text-3xl">{workshop.emoji}</span>
-                      </div>
-                    )}
-
-                    {/* Workshop Title */}
-                    <h4 className="display text-xl font-bold mb-2 text-center group-hover:text-[#D4A574] transition-colors">
-                      {workshop.title}
-                    </h4>
-
-                    {/* Workshop Subtitle */}
-                    <p className="text-white/70 text-sm text-center mb-4">
-                      {workshop.subtitle}
-                    </p>
-
-                    {/* Workshop Date & Duration */}
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center justify-center gap-2 text-sm text-white/80">
-                        <span>📅</span>
-                        <span>{workshop.dateDisplay}</span>
-                      </div>
-                      {workshop.time && (
-                        <div className="flex items-center justify-center gap-2 text-sm text-white/80">
-                          <span>🕐</span>
-                          <span>{workshop.time}</span>
+                    {/* Workshop Header with Icon */}
+                    <div className="flex items-start gap-4 mb-6">
+                      {workshop.image ? (
+                        <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl border-2 border-white/20">
+                          <Image
+                            src={workshop.image}
+                            alt={workshop.title}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      ) : (
+                        <div className={`w-24 h-24 flex-shrink-0 ${colors.iconBg} rounded-xl ${colors.iconBorder} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg`}>
+                          <span className="text-5xl">{workshop.emoji}</span>
                         </div>
                       )}
-                      <div className="flex items-center justify-center gap-2 text-sm text-white/80">
-                        <span>⏱️</span>
-                        <span>{workshop.duration}</span>
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`display text-2xl font-bold mb-2 ${colors.titleHover} transition-colors`}>
+                          {workshop.title}
+                        </h4>
+                        <p className={`${colors.subtitle} text-sm font-medium`}>
+                          {workshop.subtitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Workshop Date & Duration */}
+                    <div className="grid grid-cols-2 gap-3 mb-6 p-4 bg-black/20 rounded-xl border border-white/10">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-lg">📅</span>
+                        <div>
+                          <div className="text-white/60 text-xs">Datum</div>
+                          <div className="text-white font-semibold">{workshop.dateDisplay}</div>
+                        </div>
+                      </div>
+                      {workshop.time && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-lg">🕐</span>
+                          <div>
+                            <div className="text-white/60 text-xs">Zeit</div>
+                            <div className="text-white font-semibold">{workshop.time}</div>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-sm col-span-2">
+                        <span className="text-lg">⏱️</span>
+                        <div>
+                          <div className="text-white/60 text-xs">Dauer</div>
+                          <div className="text-white font-semibold">{workshop.duration}</div>
+                        </div>
                       </div>
                     </div>
 
                     {/* Workshop Price */}
                     {workshop.price && (
-                      <div className="text-center mb-4">
-                        <div className="inline-block px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 rounded-full">
-                          <span className="text-cyan-300 font-bold">{workshop.price}</span>
+                      <div className="text-center mb-6">
+                        <div className={`inline-block px-6 py-3 ${colors.priceBg} ${colors.priceBorder} rounded-full shadow-lg`}>
+                          <span className={`${colors.priceText} font-bold text-lg`}>{workshop.price}</span>
                         </div>
                       </div>
                     )}
 
-                    {/* Workshop Features (first 2) */}
-                    <div className="space-y-2 mb-4">
-                      {workshop.features.slice(0, 2).map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-sm text-white/70">
-                          <span className="text-base flex-shrink-0">{feature.icon}</span>
+                    {/* Workshop Description Preview */}
+                    <p className="text-white/80 text-sm mb-6 line-clamp-3 leading-relaxed">
+                      {workshop.description}
+                    </p>
+
+                    {/* Workshop Features (first 3) */}
+                    <div className="space-y-2 mb-6">
+                      {workshop.features.slice(0, 3).map((feature, idx) => (
+                        <div key={idx} className="flex items-start gap-3 text-sm text-white/80">
+                          <span className="text-lg flex-shrink-0">{feature.icon}</span>
                           <span>{feature.text}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* CTA */}
-                    <div className="text-center pt-4 border-t border-white/10">
-                      <div className="text-xs text-white/50">
-                        Klicke für Details & Anmeldung ➤
+                    <div className="text-center pt-6 border-t-2 border-white/20">
+                      <div className={`text-sm font-semibold ${workshop.soldOut ? 'text-red-400' : colors.ctaText}`}>
+                        {workshop.soldOut ? 'Ausverkauft' : 'Klicke für Details & Anmeldung ➤'}
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -886,13 +984,30 @@ ${ideaText}`;
 
               {/* Actions */}
               <div className="event-modal-actions">
+                {selectedWorkshop.soldOut && (
+                  <div className="mb-4 p-4 bg-red-500/20 border-2 border-red-400/50 rounded-xl text-center">
+                    <div className="text-red-400 font-bold text-lg mb-2">⚠️ AUSVERKAUFT</div>
+                    <p className="text-white/80 text-sm">
+                      Dieser Workshop ist bereits ausverkauft. Vielen Dank für Ihr Interesse!
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-col sm:flex-row gap-4 items-center">
-                  <a
-                    href={selectedWorkshop.registrationUrl || `mailto:${selectedWorkshop.instructor.email}?subject=Anmeldung%20${encodeURIComponent(selectedWorkshop.title)}`}
-                    className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center"
-                  >
-                    Jetzt anmelden
-                  </a>
+                  {selectedWorkshop.soldOut ? (
+                    <button
+                      disabled
+                      className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center opacity-50 cursor-not-allowed"
+                    >
+                      Ausverkauft
+                    </button>
+                  ) : (
+                    <a
+                      href={selectedWorkshop.registrationUrl || `mailto:${selectedWorkshop.instructor.email}?subject=Anmeldung%20${encodeURIComponent(selectedWorkshop.title)}`}
+                      className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center"
+                    >
+                      Jetzt anmelden
+                    </a>
+                  )}
                   <button
                     onClick={() => shareWorkshop(selectedWorkshop)}
                     className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors text-white/70 hover:text-white flex items-center gap-2"
