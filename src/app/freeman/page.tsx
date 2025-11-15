@@ -97,14 +97,24 @@ export default function FreemanPage() {
           </p>
 
           <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8 px-4">
-            <a
-              href="https://www.freemanfestival.de/tickets"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center"
-            >
-              Show auswählen
-            </a>
+            <div className="w-full sm:w-auto">
+              <div className="mb-3 p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg">
+                <p className="text-xs text-yellow-200 text-center">
+                  <strong>Hinweis:</strong> Technisches Problem beim Online-Ticketverkauf. 
+                  Tickets an der <strong>Abendkasse zum selben Preis</strong> verfügbar.
+                </p>
+              </div>
+              <a
+                href="https://www.freemanfestival.de/tickets"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center opacity-60 cursor-not-allowed pointer-events-none"
+                onClick={(e) => e.preventDefault()}
+                title="Aktuell nicht verfügbar - Tickets an der Abendkasse erhältlich"
+              >
+                Show auswählen
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -782,12 +792,22 @@ export default function FreemanPage() {
             </div>
           </div>
 
+          <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-400/30 rounded-xl">
+            <p className="text-sm text-yellow-200 text-center">
+              <strong>Hinweis:</strong> Aktuell gibt es ein technisches Problem beim Online-Ticketverkauf (rausgegangen). 
+              Tickets sind jedoch <strong>an der Abendkasse zum selben Preis</strong> verfügbar. 
+              Wir bitten um Verständnis für die Unannehmlichkeiten.
+            </p>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
               href="https://www.freemanfestival.de/tickets"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary text-xl px-12 py-6 inline-block text-center"
+              className="btn-primary text-xl px-12 py-6 inline-block text-center opacity-60 cursor-not-allowed"
+              onClick={(e) => e.preventDefault()}
+              title="Aktuell nicht verfügbar - Tickets an der Abendkasse erhältlich"
             >
               Show auswählen
             </a>

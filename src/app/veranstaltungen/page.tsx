@@ -920,15 +920,31 @@ export default function VeranstaltungenPage() {
                               )}
                               
                               {show.ticketUrl && (
-                                <a
-                                  href={show.ticketUrl}
-                                  target={show.ticketUrl.startsWith('http') ? "_blank" : undefined}
-                                  rel={show.ticketUrl.startsWith('http') ? "noopener noreferrer" : undefined}
-                                  className={`btn-primary px-6 py-2 font-semibold self-start ${show.type === 'party' ? 'opacity-50 cursor-default' : ''}`}
-                                  onClick={show.type === 'party' ? (e) => e.preventDefault() : undefined}
-                                >
-                                  {getButtonText(show.type, show.ticketUrl)}
-                                </a>
+                                <div className="self-start">
+                                  {show.ticketUrl.includes('freemanfestival.de') && !show.type && (
+                                    <div className="mb-2 p-2 bg-yellow-500/10 border border-yellow-400/30 rounded text-xs text-yellow-200">
+                                      <strong>Hinweis:</strong> Technisches Problem beim Online-Ticketverkauf. 
+                                      Tickets an der <strong>Abendkasse zum selben Preis</strong> verfügbar.
+                                    </div>
+                                  )}
+                                  <a
+                                    href={show.ticketUrl}
+                                    target={show.ticketUrl.startsWith('http') ? "_blank" : undefined}
+                                    rel={show.ticketUrl.startsWith('http') ? "noopener noreferrer" : undefined}
+                                    className={`btn-primary px-6 py-2 font-semibold self-start ${
+                                      show.type === 'party' ? 'opacity-50 cursor-default' : 
+                                      show.ticketUrl.includes('freemanfestival.de') && !show.type ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''
+                                    }`}
+                                    onClick={
+                                      show.type === 'party' || (show.ticketUrl.includes('freemanfestival.de') && !show.type) 
+                                        ? (e) => e.preventDefault() 
+                                        : undefined
+                                    }
+                                    title={show.ticketUrl.includes('freemanfestival.de') && !show.type ? "Aktuell nicht verfügbar - Tickets an der Abendkasse erhältlich" : undefined}
+                                  >
+                                    {getButtonText(show.type, show.ticketUrl)}
+                                  </a>
+                                </div>
                               )}
                             </div>
                           );
