@@ -98,22 +98,12 @@ export default function FreemanPage() {
 
           <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8 px-4">
             <div className="w-full sm:w-auto">
-              <div className="mb-3 p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg">
-                <p className="text-xs text-yellow-200 text-center">
-                  <strong>Hinweis:</strong> Technisches Problem beim Online-Ticketverkauf. 
-                  Tickets an der <strong>Abendkasse zum selben Preis</strong> verfügbar.
+              <div className="mb-3 p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                <p className="text-sm text-blue-200 text-center">
+                  <strong>Das Freeman Festival 2025 ist vorbei.</strong><br />
+                  Nächstes Jahr werden wieder verschiedene und andere Performances im Pepe Dome stattfinden.
                 </p>
               </div>
-              <a
-                href="https://www.freemanfestival.de/tickets"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto max-w-xs inline-block text-center opacity-60 cursor-not-allowed pointer-events-none"
-                onClick={(e) => e.preventDefault()}
-                title="Aktuell nicht verfügbar - Tickets an der Abendkasse erhältlich"
-              >
-                Show auswählen
-              </a>
             </div>
           </div>
         </div>
@@ -257,17 +247,22 @@ export default function FreemanPage() {
             </div>
           </div>
 
-          {/* Artists Preview */}
+          {/* Artists Preview - Simplified */}
           <div className="text-center mb-12">
             <h2 className="display text-3xl md:text-4xl font-bold mb-4">
               Die Artist:innen
             </h2>
-            <p className="text-xl text-white/80">
-              Lernen Sie die internationalen Spitzen-Performer kennen
+            <p className="text-xl text-white/80 mb-6">
+              Internationale Spitzen-Performer aus Skandinavien und dem Baltikum
+            </p>
+            <p className="text-white/70 max-w-2xl mx-auto">
+              Das Freeman Festival 2025 präsentierte Acts wie &ldquo;Häppy Hour&rdquo; von The Nordic Council 
+              und &ldquo;How a Spiral Works&rdquo; von Art for Rainy Days. Nächstes Jahr werden wieder 
+              verschiedene und andere Performances im Pepe Dome stattfinden.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
             {/* The Nordic Council - Häppy Hour */}
             {(() => {
               const happyHourShow = localizedEvent?.freemanShows?.flatMap(day => day.shows)
@@ -485,14 +480,19 @@ export default function FreemanPage() {
         </div>
       </section>
 
-      {/* Program Overview */}
+      {/* Program Overview - Simplified */}
       <section className="py-20 px-6 bg-black/10">
         <div className="max-w-6xl mx-auto">
           <h2 className="display text-3xl md:text-4xl font-bold mb-8 text-center">
-            Programm im Detail
+            Programm 2025
           </h2>
+          <p className="text-center text-white/70 mb-8 max-w-2xl mx-auto">
+            Das Festival fand vom 14.–16. November 2025 statt und umfasste 4 Shows, 2 Workshops 
+            und verschiedene Talks. Nächstes Jahr werden wieder verschiedene und andere Performances 
+            im Pepe Dome stattfinden.
+          </p>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-12 hidden">
             {localizedEvent?.freemanShows?.map((day, dayIndex) => {
               const getShowColorClasses = (type?: string) => {
                 switch (type) {
@@ -742,84 +742,6 @@ export default function FreemanPage() {
             })}
           </div>
 
-          <div className="text-center">
-            <div className="inline-flex items-center gap-4 p-4 bg-purple-500/10 border border-purple-400/30 rounded-xl mb-6">
-              <span className="text-2xl">🎫</span>
-              <div className="text-left">
-                <div className="font-semibold text-white">Shows: Ermäßigt 12€, Regulär 18€ • Workshops Anmeldung</div>
-                <div className="text-sm text-white/70">Kombitickets verfügbar • Nur 200 Plätze pro Show</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tickets */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="display text-4xl md:text-5xl font-bold mb-6">
-            Tickets sichern
-          </h2>
-          <p className="text-xl mb-8 text-white/90">
-            ⚠️ Nur 200 Plätze pro Show – freie Platzwahl
-          </p>
-
-          <div className={`grid ${earlyBirdActive ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 mb-12`}>
-            {earlyBirdActive && (
-              <div className="p-6 rounded-xl bg-white/5 border-white/30 shadow-white/10 shadow-lg border">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-white mb-2">12 €</div>
-                  <div className="font-semibold mb-2">🚀 Early Bird</div>
-                  <div className="text-sm text-white/70">bis 15.10. • SPARE 10€</div>
-                </div>
-              </div>
-            )}
-
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-2">12 €</div>
-                <div className="font-semibold mb-2">Ermäßigt</div>
-                <div className="text-sm text-white/70">online verfügbar</div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-xl bg-black/20 border border-white/10">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-2">18 €</div>
-                <div className="font-semibold mb-2">Regulär</div>
-                <div className="text-sm text-white/70">online verfügbar</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-400/30 rounded-xl">
-            <p className="text-sm text-yellow-200 text-center">
-              <strong>Hinweis:</strong> Aktuell gibt es ein technisches Problem beim Online-Ticketverkauf (rausgegangen). 
-              Tickets sind jedoch <strong>an der Abendkasse zum selben Preis</strong> verfügbar. 
-              Wir bitten um Verständnis für die Unannehmlichkeiten.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a
-              href="https://www.freemanfestival.de/tickets"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary text-xl px-12 py-6 inline-block text-center opacity-60 cursor-not-allowed"
-              onClick={(e) => e.preventDefault()}
-              title="Aktuell nicht verfügbar - Tickets an der Abendkasse erhältlich"
-            >
-              Show auswählen
-            </a>
-            <a
-              href="https://freemanfestival.de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 border border-white/20 rounded-full hover:border-white/50 transition-colors muted hover:text-white"
-            >
-              Zur Festival-Website
-            </a>
-          </div>
         </div>
       </section>
 
