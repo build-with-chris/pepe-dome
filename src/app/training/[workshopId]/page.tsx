@@ -309,6 +309,36 @@ export default function WorkshopDetailPage() {
                       Dieser Workshop ist bereits ausverkauft. Vielen Dank für Ihr Interesse!
                     </p>
                   </div>
+                  
+                  {/* Waitlist for Cyr Wheel Workshop */}
+                  {workshop.id === 'cyr-wheel-workshop-nov' && (
+                    <div className="mb-6 p-6 bg-gradient-to-br from-orange-500/20 via-amber-500/10 to-orange-500/20 border-2 border-orange-400/40 rounded-xl shadow-lg">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-500/30 to-amber-500/30 border-2 border-orange-400/50 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">📋</span>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-orange-300 font-bold text-lg mb-2">Warteliste verfügbar</h3>
+                          <p className="text-white/80 text-sm leading-relaxed mb-4">
+                            Falls ein Teilnehmer absagt, rücken Sie automatisch auf der Warteliste nach. 
+                            Wir kontaktieren Sie umgehend, sobald ein Platz frei wird, und Sie können 
+                            dann entscheiden, ob Sie den Platz wahrnehmen möchten.
+                          </p>
+                          <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLScv20Z26o7ohAUrYVBM1FS8VFfijOhoVfdv5Z0Cnk70XOXftw/viewform?usp=publish-editor"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500/30 to-amber-500/30 border-2 border-orange-400/50 rounded-full text-white font-semibold hover:from-orange-500/40 hover:to-amber-500/40 transition-all shadow-lg hover:shadow-xl"
+                          >
+                            <span>📝</span>
+                            <span>Zur Warteliste anmelden</span>
+                            <span className="text-sm">→</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
                   <button
                     disabled
                     className="btn-primary px-8 py-4 text-lg font-semibold w-full sm:w-auto text-center opacity-50 cursor-not-allowed"
