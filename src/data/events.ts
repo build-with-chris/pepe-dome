@@ -566,6 +566,84 @@ const rawEvents: Omit<Event, 'status'>[] = [
     image: '/sharing-is-caring.webp',
     externalTicketUrl: '',
     isOneDay: true
+  },
+  {
+    id: 'open-stage-dec-09',
+    title: 'Open Stage',
+    subtitle: 'Moderiert von Oles Koval',
+    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    date: '2025-12-09',
+    dateRange: '9. DEZEMBER 2025',
+    time: '19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎤', text: 'Moderiert von Oles Koval' },
+      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
+      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
+      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'fuchsia-500',
+      secondary: 'pink-500',
+      accent: 'fuchsia-400'
+    },
+    emoji: '🎭',
+    image: '/Open Stage Pepe.webp',
+    externalTicketUrl: '',
+    isOneDay: true
+  },
+  {
+    id: 'open-stage-dec-16',
+    title: 'Open Stage',
+    subtitle: 'Moderiert von Oles Koval',
+    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    date: '2025-12-16',
+    dateRange: '16. DEZEMBER 2025',
+    time: '19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎤', text: 'Moderiert von Oles Koval' },
+      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
+      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
+      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'fuchsia-500',
+      secondary: 'pink-500',
+      accent: 'fuchsia-400'
+    },
+    emoji: '🎭',
+    image: '/Open Stage Pepe.webp',
+    externalTicketUrl: '',
+    isOneDay: true
+  },
+  {
+    id: 'open-stage-dec-19',
+    title: 'Open Stage',
+    subtitle: 'Moderiert von Oles Koval',
+    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    date: '2025-12-19',
+    dateRange: '19. DEZEMBER 2025',
+    time: '19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎤', text: 'Moderiert von Oles Koval' },
+      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
+      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
+      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'fuchsia-500',
+      secondary: 'pink-500',
+      accent: 'fuchsia-400'
+    },
+    emoji: '🎭',
+    image: '/Open Stage Pepe.webp',
+    externalTicketUrl: '',
+    isOneDay: true
   }
 ];
 
