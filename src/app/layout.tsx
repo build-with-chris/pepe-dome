@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import I18nProvider from '@/components/I18nProvider'
+import CookieBanner from '@/components/CookieBanner'
 import Script from 'next/script'
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function RootLayout({
       <body className="antialiased">
         <I18nProvider>
           {children}
+          <CookieBanner />
         </I18nProvider>
       </body>
     </html>
