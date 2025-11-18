@@ -344,7 +344,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     dateRange: 'DECEMBER 6, 2025'
   },
   'open-stage-dec-09': {
-    title: 'Open Stage',
+    title: 'Les Nuits de Magic',
     subtitle: 'Hosted by Oles Koval',
     description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
     time: '7:00 PM',
@@ -358,7 +358,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     dateRange: 'DECEMBER 9, 2025'
   },
   'open-stage-dec-16': {
-    title: 'Open Stage',
+    title: 'Les Nuits de Magic',
     subtitle: 'Hosted by Oles Koval',
     description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
     time: '7:00 PM',
@@ -372,7 +372,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     dateRange: 'DECEMBER 16, 2025'
   },
   'open-stage-dec-19': {
-    title: 'Open Stage',
+    title: 'Les Nuits de Magic',
     subtitle: 'Hosted by Oles Koval',
     description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
     time: '7:00 PM',
