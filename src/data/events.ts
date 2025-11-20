@@ -543,7 +543,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
   },
   {
     id: 'sharing-is-caring',
-    title: 'Sharing is Caring',
+    title: 'Niklo Performance',
     subtitle: 'Ein Tag voller Kreativität, Bewegung und Geschichten',
     description: 'Gemeinsam falten, staunen und lauschen: Vom kunstvollen Origami über eine mitreißende Niklo-Performance bis hin zu Feuer-Tee-Geschichten am Abend – hier dreht sich alles ums Teilen. Ob Ideen, Kunst oder Momente – geteilt wird, was Freude macht. Ein Tag im warmen Licht des Pepe Domes voller Gemeinschaft und Kreativität.',
     date: '2025-12-06',
@@ -677,8 +677,8 @@ const rawEvents: Omit<Event, 'status'>[] = [
     subtitle: 'Literatur trifft Artistik',
     description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
     date: '2025-12-27',
-    dateRange: '27. DEZEMBER 2025',
-    time: 'Einlass 18:30 Uhr • Beginn 19:00 Uhr',
+    dateRange: '27.–28. DEZEMBER 2025',
+    time: 'Jeweils Einlass 18:30 Uhr • Beginn 19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
@@ -694,8 +694,18 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '📖',
     image: '/Circus & Poetry 2.webp',
-    externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-2/',
-    isOneDay: true
+    ticketDates: [
+      {
+        date: '2025-12-27',
+        dateDisplay: '27. Dezember',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
+      },
+      {
+        date: '2025-12-28',
+        dateDisplay: '28. Dezember',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
+      }
+    ]
   },
   {
     id: 'circus-poetry-sep',

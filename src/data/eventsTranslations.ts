@@ -330,7 +330,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     ]
   },
   'sharing-is-caring': {
-    title: 'Sharing is Caring',
+    title: 'Niklo Performance',
     subtitle: 'A Day Full of Creativity, Movement and Stories',
     description: 'Fold, marvel and listen together: From artistic origami to a captivating Niklo performance to fire-tea-stories in the evening – everything revolves around sharing. Whether ideas, art or moments – we share what brings joy. A day in the warm light of Pepe Dome full of community and creativity.',
     time: 'From 4:30 PM',
@@ -398,6 +398,32 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
     ],
     dateRange: 'SEPTEMBER 28, 2025'
+  },
+  'circus-poetry-dec': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature Meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: 'Both days: Doors 6:30 PM • Start 7:00 PM',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini, and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'DECEMBER 27-28, 2025',
+    ticketDates: [
+      {
+        date: '2025-12-27',
+        dateDisplay: 'December 27',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
+      },
+      {
+        date: '2025-12-28',
+        dateDisplay: 'December 28',
+        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
+      }
+    ]
   },
   'outta-space-sylvester': {
     title: 'Outta Space Party Service',
