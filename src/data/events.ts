@@ -651,7 +651,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     subtitle: 'eMOTION – Moderner Zirkus trifft Streamingkultur',
     description: 'Begleitet die beiden aufstrebenden Streamer Jonas und Max dabei, wie sie ihren Kanal „eMOTION" zu immer mehr Followern bringen. Der wichtigste Anker dafür sind ihre treuen Follower, die „Motionies". Mit dieser Community veranstalten sie Videowettbewerbe, lassen sich von ihnen waghalsige Challenges stellen und beantworten alle Nachrichten ihrer Fans. Auch fragwürdige Essensaufgaben dürfen im Stream nie fehlen. Im Kampf um die Aufmerksamkeit des Publikums kann dabei auch auf Let´s Plays und sogar NPC-Streams zurückgegriffen werden. Was soll bei diesem Arsenal an guter Laune noch schiefgehen? eMOTION ist ein modernes Zirkustheaterstück, in dem Artistik, Comedy und Live-Musik zu einer beeindruckenden und unterhaltsamen Performance verschmelzen. Dabei wird mit dauerhaftem Bezug auf moderne Influencer und Streamer die digitale Welt auf der Bühne zurück in die analoge Welt gebracht und einer neuen Sichtweise ausgesetzt.',
     date: '2025-12-03',
-    dateRange: '3. DEZEMBER 2025',
+    dateRange: '3.–10. DEZEMBER 2025',
     time: 'Abends',
     price: 'Tickets verfügbar',
     features: [
@@ -668,8 +668,18 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎪',
     image: '/ZirkusArtista.webp',
-    externalTicketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/',
-    isOneDay: true
+    ticketDates: [
+      {
+        date: '2025-12-03',
+        dateDisplay: '3. Dezember',
+        ticketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/'
+      },
+      {
+        date: '2025-12-10',
+        dateDisplay: '10. Dezember',
+        ticketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/'
+      }
+    ]
   },
   {
     id: 'circus-poetry-dec',
