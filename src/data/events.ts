@@ -571,16 +571,16 @@ const rawEvents: Omit<Event, 'status'>[] = [
     id: 'open-stage-dec-09',
     title: 'Rhapsodie du soir',
     subtitle: 'Moderiert von Oles Koval',
-    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    description: 'Eine bunte Mischung voller Vielfalt, Spaß und Unterhaltung: Magic, Drag, Acting, Acrobatics, Music, Poetry und das Unerwartete. Ein Abend, der alle Sinne anspricht und garantiert für Überraschungen sorgt.',
     date: '2025-12-09',
     dateRange: '9. DEZEMBER 2025',
     time: '19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '🎤', text: 'Moderiert von Oles Koval' },
-      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
-      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
-      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+      { icon: '🎩', text: 'Magic & das Unerwartete' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     category: 'performance',
     color: {
@@ -597,16 +597,16 @@ const rawEvents: Omit<Event, 'status'>[] = [
     id: 'open-stage-dec-16',
     title: 'Rhapsodie du soir',
     subtitle: 'Moderiert von Oles Koval',
-    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    description: 'Eine bunte Mischung voller Vielfalt, Spaß und Unterhaltung: Magic, Drag, Acting, Acrobatics, Music, Poetry und das Unerwartete. Ein Abend, der alle Sinne anspricht und garantiert für Überraschungen sorgt.',
     date: '2025-12-16',
     dateRange: '16. DEZEMBER 2025',
     time: '19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '🎤', text: 'Moderiert von Oles Koval' },
-      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
-      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
-      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+      { icon: '🎩', text: 'Magic & das Unerwartete' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     category: 'performance',
     color: {
@@ -623,16 +623,16 @@ const rawEvents: Omit<Event, 'status'>[] = [
     id: 'open-stage-dec-19',
     title: 'Rhapsodie du soir',
     subtitle: 'Moderiert von Oles Koval',
-    description: 'Zauberer aus München zeigen verschiedene Künstler ihre Talente in einer abwechslungsreichen Show. Von schwindelerregender Luftakrobatik über beeindruckende Contortion bis zu glamouröser Drag-Performance – dieser bunte Mix verspricht einen unterhaltsamen Abend voller Überraschungen. Jeder Auftritt ist einzigartig, jede Nummer ein Highlight. Erleben Sie aufstrebende Talente und etablierte Künstler in der intimen Atmosphäre des Pepe Dome. Ein Abend, der Artistik in all ihren Facetten feiert und Sie garantiert begeistern wird.',
+    description: 'Eine bunte Mischung voller Vielfalt, Spaß und Unterhaltung: Magic, Drag, Acting, Acrobatics, Music, Poetry und das Unerwartete. Ein Abend, der alle Sinne anspricht und garantiert für Überraschungen sorgt.',
     date: '2025-12-19',
     dateRange: '19. DEZEMBER 2025',
     time: '19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '🎤', text: 'Moderiert von Oles Koval' },
-      { icon: '🤸', text: 'Atemberaubende Luftakrobatik' },
-      { icon: '✨', text: 'Beeindruckende Contortion-Acts' },
-      { icon: '💃', text: 'Glamouröse Drag-Performance' }
+      { icon: '🎩', text: 'Magic & das Unerwartete' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     category: 'performance',
     color: {
@@ -695,6 +695,58 @@ const rawEvents: Omit<Event, 'status'>[] = [
     emoji: '📖',
     image: '/Circus & Poetry 2.webp',
     externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-2/',
+    isOneDay: true
+  },
+  {
+    id: 'circus-poetry-sep',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2025-09-28',
+    dateRange: '28. SEPTEMBER 2025',
+    time: 'Einlass 18:30 Uhr • Beginn 19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/Circus & Poetry 2.webp',
+    externalTicketUrl: '',
+    isOneDay: true
+  },
+  {
+    id: 'outta-space-sylvester',
+    title: 'Outta Space Party Service',
+    subtitle: 'Sylvester mit Breakdance-Crew',
+    description: 'Ringe ins neue Jahr mit der preisgekrönten Breakdance-Crew Outta Space aus München. Die Crew, die bereits zahlreiche Wettbewerbe gewonnen hat, bringt ihre energiegeladene Performance und ihre mitreißende Beats auf die Bühne. Erlebe atemberaubende Moves, dynamische Choreografien und die pure Leidenschaft für Hip-Hop-Kultur. Ein Sylvester-Abend voller Rhythmus, Style und unvergesslicher Momente.',
+    date: '2025-12-31',
+    dateRange: '31. DEZEMBER 2025',
+    time: 'Abends',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🕺', text: 'Preisgekrönte Breakdance-Crew aus München' },
+      { icon: '🎵', text: 'Energiegeladene Performance mit mitreißenden Beats' },
+      { icon: '💫', text: 'Atemberaubende Moves und dynamische Choreografien' },
+      { icon: '🎊', text: 'Sylvester-Feier mit Hip-Hop-Kultur' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'orange-500',
+      secondary: 'red-500',
+      accent: 'orange-400'
+    },
+    emoji: '🕺',
+    image: '/Outta Space Silvester.webp',
+    externalTicketUrl: '',
     isOneDay: true
   }
 ];

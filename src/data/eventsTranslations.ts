@@ -346,44 +346,72 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
   'open-stage-dec-09': {
     title: 'Rhapsodie du soir',
     subtitle: 'Hosted by Oles Koval',
-    description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
+    description: 'A colorful mix full of diversity, fun, and entertainment: Magic, Drag, Acting, Acrobatics, Music, Poetry, and the unexpected. An evening that appeals to all senses and guarantees surprises.',
     time: '7:00 PM',
     price: 'Tickets available',
     features: [
       { icon: '🎤', text: 'Hosted by Oles Koval' },
-      { icon: '🤸', text: 'Breathtaking aerial acrobatics' },
-      { icon: '✨', text: 'Impressive contortion acts' },
-      { icon: '💃', text: 'Glamorous drag performance' }
+      { icon: '🎩', text: 'Magic & the unexpected' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     dateRange: 'DECEMBER 9, 2025'
   },
   'open-stage-dec-16': {
     title: 'Rhapsodie du soir',
     subtitle: 'Hosted by Oles Koval',
-    description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
+    description: 'A colorful mix full of diversity, fun, and entertainment: Magic, Drag, Acting, Acrobatics, Music, Poetry, and the unexpected. An evening that appeals to all senses and guarantees surprises.',
     time: '7:00 PM',
     price: 'Tickets available',
     features: [
       { icon: '🎤', text: 'Hosted by Oles Koval' },
-      { icon: '🤸', text: 'Breathtaking aerial acrobatics' },
-      { icon: '✨', text: 'Impressive contortion acts' },
-      { icon: '💃', text: 'Glamorous drag performance' }
+      { icon: '🎩', text: 'Magic & the unexpected' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     dateRange: 'DECEMBER 16, 2025'
   },
   'open-stage-dec-19': {
     title: 'Rhapsodie du soir',
     subtitle: 'Hosted by Oles Koval',
-    description: 'Magicians from Munich showcase various artists and their talents in a diverse show. From dizzying aerial acrobatics to impressive contortion to glamorous drag performances – this colorful mix promises an entertaining evening full of surprises. Each performance is unique, each act a highlight. Experience rising talents and established artists in the intimate atmosphere of Pepe Dome. An evening that celebrates artistry in all its facets and will certainly thrill you.',
+    description: 'A colorful mix full of diversity, fun, and entertainment: Magic, Drag, Acting, Acrobatics, Music, Poetry, and the unexpected. An evening that appeals to all senses and guarantees surprises.',
     time: '7:00 PM',
     price: 'Tickets available',
     features: [
       { icon: '🎤', text: 'Hosted by Oles Koval' },
-      { icon: '🤸', text: 'Breathtaking aerial acrobatics' },
-      { icon: '✨', text: 'Impressive contortion acts' },
-      { icon: '💃', text: 'Glamorous drag performance' }
+      { icon: '🎩', text: 'Magic & the unexpected' },
+      { icon: '💃', text: 'Drag, Acting & Performance' },
+      { icon: '🤸', text: 'Acrobatics, Music & Poetry' }
     ],
     dateRange: 'DECEMBER 19, 2025'
+  },
+  'circus-poetry-sep': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature Meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: 'Doors 6:30 PM • Start 7:00 PM',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini, and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'SEPTEMBER 28, 2025'
+  },
+  'outta-space-sylvester': {
+    title: 'Outta Space Party Service',
+    subtitle: 'New Year\'s Eve with Breakdance Crew',
+    description: 'Ring in the new year with the award-winning breakdance crew Outta Space from Munich. The crew, which has already won numerous competitions, brings their energetic performance and infectious beats to the stage. Experience breathtaking moves, dynamic choreographies, and pure passion for hip-hop culture. A New Year\'s Eve evening full of rhythm, style, and unforgettable moments.',
+    time: 'Evening',
+    price: 'Tickets available',
+    features: [
+      { icon: '🕺', text: 'Award-winning breakdance crew from Munich' },
+      { icon: '🎵', text: 'Energetic performance with infectious beats' },
+      { icon: '💫', text: 'Breathtaking moves and dynamic choreographies' },
+      { icon: '🎊', text: 'New Year\'s Eve celebration with hip-hop culture' }
+    ],
+    dateRange: 'DECEMBER 31, 2025'
   }
 };
 
