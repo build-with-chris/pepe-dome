@@ -192,13 +192,13 @@ const rawEvents: Omit<Event, 'status'>[] = [
     isOneDay: true
   },
   {
-    id: 'circus-poetry',
+    id: 'circus-poetry-oct-24',
     title: 'Circus & Poetry',
     subtitle: 'Literatur trifft Artistik',
     description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
     date: '2025-10-24',
-    dateRange: '24.–25. OKTOBER 2025',
-    time: 'Jeweils 19:00 Uhr',
+    dateRange: '24. OKTOBER 2025',
+    time: '19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
@@ -214,18 +214,34 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '📖',
     image: '/Weiß Beige Kalligraphie Elegant Foto Weihnachtsmarkt Flyer-5.jpg',
-    ticketDates: [
-      {
-        date: '2025-10-24',
-        dateDisplay: '24. Oktober',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-0/?mtm_campaign=teilen_event&mtm_kwd=app'
-      },
-      {
-        date: '2025-10-25',
-        dateDisplay: '25. Oktober',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-1/'
-      }
-    ]
+    externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-0/?mtm_campaign=teilen_event&mtm_kwd=app',
+    isOneDay: true
+  },
+  {
+    id: 'circus-poetry-oct-25',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2025-10-25',
+    dateRange: '25. OKTOBER 2025',
+    time: '19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/Weiß Beige Kalligraphie Elegant Foto Weihnachtsmarkt Flyer-5.jpg',
+    externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-1/',
+    isOneDay: true
   },
   {
     id: 'morphe',
@@ -646,12 +662,12 @@ const rawEvents: Omit<Event, 'status'>[] = [
     isOneDay: true
   },
   {
-    id: 'zirkus-artista-emotion',
+    id: 'zirkus-artista-emotion-dec-03',
     title: 'Zirkus Artista',
     subtitle: 'eMOTION – Moderner Zirkus trifft Streamingkultur',
     description: 'Begleitet die beiden aufstrebenden Streamer Jonas und Max dabei, wie sie ihren Kanal „eMOTION" zu immer mehr Followern bringen. Der wichtigste Anker dafür sind ihre treuen Follower, die „Motionies". Mit dieser Community veranstalten sie Videowettbewerbe, lassen sich von ihnen waghalsige Challenges stellen und beantworten alle Nachrichten ihrer Fans. Auch fragwürdige Essensaufgaben dürfen im Stream nie fehlen. Im Kampf um die Aufmerksamkeit des Publikums kann dabei auch auf Let´s Plays und sogar NPC-Streams zurückgegriffen werden. Was soll bei diesem Arsenal an guter Laune noch schiefgehen? eMOTION ist ein modernes Zirkustheaterstück, in dem Artistik, Comedy und Live-Musik zu einer beeindruckenden und unterhaltsamen Performance verschmelzen. Dabei wird mit dauerhaftem Bezug auf moderne Influencer und Streamer die digitale Welt auf der Bühne zurück in die analoge Welt gebracht und einer neuen Sichtweise ausgesetzt.',
     date: '2025-12-03',
-    dateRange: '3.–10. DEZEMBER 2025',
+    dateRange: '3. DEZEMBER 2025',
     time: 'Abends',
     price: 'Tickets verfügbar',
     features: [
@@ -668,27 +684,43 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎪',
     image: '/ZirkusArtista.webp',
-    ticketDates: [
-      {
-        date: '2025-12-03',
-        dateDisplay: '3. Dezember',
-        ticketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/'
-      },
-      {
-        date: '2025-12-10',
-        dateDisplay: '10. Dezember',
-        ticketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/'
-      }
-    ]
+    externalTicketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/',
+    isOneDay: true
   },
   {
-    id: 'circus-poetry-dec',
+    id: 'zirkus-artista-emotion-dec-10',
+    title: 'Zirkus Artista',
+    subtitle: 'eMOTION – Moderner Zirkus trifft Streamingkultur',
+    description: 'Begleitet die beiden aufstrebenden Streamer Jonas und Max dabei, wie sie ihren Kanal „eMOTION" zu immer mehr Followern bringen. Der wichtigste Anker dafür sind ihre treuen Follower, die „Motionies". Mit dieser Community veranstalten sie Videowettbewerbe, lassen sich von ihnen waghalsige Challenges stellen und beantworten alle Nachrichten ihrer Fans. Auch fragwürdige Essensaufgaben dürfen im Stream nie fehlen. Im Kampf um die Aufmerksamkeit des Publikums kann dabei auch auf Let´s Plays und sogar NPC-Streams zurückgegriffen werden. Was soll bei diesem Arsenal an guter Laune noch schiefgehen? eMOTION ist ein modernes Zirkustheaterstück, in dem Artistik, Comedy und Live-Musik zu einer beeindruckenden und unterhaltsamen Performance verschmelzen. Dabei wird mit dauerhaftem Bezug auf moderne Influencer und Streamer die digitale Welt auf der Bühne zurück in die analoge Welt gebracht und einer neuen Sichtweise ausgesetzt.',
+    date: '2025-12-10',
+    dateRange: '10. DEZEMBER 2025',
+    time: 'Abends',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎪', text: 'Artistik, Comedy und Live-Musik' },
+      { icon: '📱', text: 'Moderne Streamingkultur trifft Zirkuskunst' },
+      { icon: '🎭', text: 'Mit Jonas Bolliger, Lea Reichel, Max Kuschmierz, Rebecca Neubauer, Max Heckl und Carina Hechenberger' },
+      { icon: '🎬', text: 'Regie: Max Heckl • Produzent: Jan Schaarschmidt' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'cyan-500',
+      secondary: 'blue-500',
+      accent: 'cyan-400'
+    },
+    emoji: '🎪',
+    image: '/ZirkusArtista.webp',
+    externalTicketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/',
+    isOneDay: true
+  },
+  {
+    id: 'circus-poetry-dec-27',
     title: 'Circus & Poetry',
     subtitle: 'Literatur trifft Artistik',
     description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
     date: '2025-12-27',
-    dateRange: '27.–28. DEZEMBER 2025',
-    time: 'Jeweils Einlass 18:30 Uhr • Beginn 19:00 Uhr',
+    dateRange: '27. DEZEMBER 2025',
+    time: 'Einlass 18:30 Uhr • Beginn 19:00 Uhr',
     price: 'Tickets verfügbar',
     features: [
       { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
@@ -704,18 +736,34 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '📖',
     image: '/Circus & Poetry 2.webp',
-    ticketDates: [
-      {
-        date: '2025-12-27',
-        dateDisplay: '27. Dezember',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
-      },
-      {
-        date: '2025-12-28',
-        dateDisplay: '28. Dezember',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
-      }
-    ]
+    externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-2/',
+    isOneDay: true
+  },
+  {
+    id: 'circus-poetry-dec-28',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2025-12-28',
+    dateRange: '28. DEZEMBER 2025',
+    time: 'Einlass 18:30 Uhr • Beginn 19:00 Uhr',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/Circus & Poetry 2.webp',
+    externalTicketUrl: 'https://rausgegangen.de/events/circus-poetry-2/',
+    isOneDay: true
   },
   {
     id: 'circus-poetry-sep',

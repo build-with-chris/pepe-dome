@@ -44,11 +44,11 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     ],
     dateRange: 'OCTOBER 12, 2025'
   },
-  'circus-poetry': {
+  'circus-poetry-oct-24': {
     title: 'Circus & Poetry',
     subtitle: 'Literature meets Artistry',
     description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus arts and creates an experience full of poetry, movement and emotion. Poems by Rainer Maria Rilke, a touching adaptation of Antoine de Saint-Exupéry and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space is created where language flies and artistry tells stories. Sigrid Grün, Julian Bellini and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
-    time: 'Both days 7:00 PM',
+    time: '7:00 PM',
     price: 'Tickets available',
     features: [
       { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
@@ -56,19 +56,21 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
       { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
     ],
-    dateRange: 'OCTOBER 24-25, 2025',
-    ticketDates: [
-      {
-        date: '2025-10-24',
-        dateDisplay: 'October 24',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-0/?mtm_campaign=teilen_event&mtm_kwd=app'
-      },
-      {
-        date: '2025-10-25',
-        dateDisplay: 'October 25',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-1/'
-      }
-    ]
+    dateRange: 'OCTOBER 24, 2025'
+  },
+  'circus-poetry-oct-25': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus arts and creates an experience full of poetry, movement and emotion. Poems by Rainer Maria Rilke, a touching adaptation of Antoine de Saint-Exupéry and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space is created where language flies and artistry tells stories. Sigrid Grün, Julian Bellini and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: '7:00 PM',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'OCTOBER 25, 2025'
   },
   'samhain-circus-madness': {
     title: 'Samhain Circus Madness',
@@ -399,11 +401,11 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     ],
     dateRange: 'SEPTEMBER 28, 2025'
   },
-  'circus-poetry-dec': {
+  'circus-poetry-dec-27': {
     title: 'Circus & Poetry',
     subtitle: 'Literature Meets Artistry',
     description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
-    time: 'Both days: Doors 6:30 PM • Start 7:00 PM',
+    time: 'Doors 6:30 PM • Start 7:00 PM',
     price: 'Tickets available',
     features: [
       { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
@@ -411,19 +413,21 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
       { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
     ],
-    dateRange: 'DECEMBER 27-28, 2025',
-    ticketDates: [
-      {
-        date: '2025-12-27',
-        dateDisplay: 'December 27',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
-      },
-      {
-        date: '2025-12-28',
-        dateDisplay: 'December 28',
-        ticketUrl: 'https://rausgegangen.de/events/circus-poetry-2/'
-      }
-    ]
+    dateRange: 'DECEMBER 27, 2025'
+  },
+  'circus-poetry-dec-28': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature Meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: 'Doors 6:30 PM • Start 7:00 PM',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini, and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'DECEMBER 28, 2025'
   },
   'outta-space-sylvester': {
     title: 'Outta Space Party Service',
