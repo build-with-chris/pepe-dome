@@ -606,7 +606,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎭',
     image: '/OpenStage Pepe.webp',
-    externalTicketUrl: '',
+    externalTicketUrl: 'https://rausgegangen.de/events/rhapsodie-du-soir-0/',
     isOneDay: true
   },
   {
@@ -632,7 +632,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎭',
     image: '/OpenStage Pepe.webp',
-    externalTicketUrl: '',
+    externalTicketUrl: 'https://rausgegangen.de/events/rhapsodie-du-soir-1/',
     isOneDay: true
   },
   {
@@ -658,7 +658,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎭',
     image: '/OpenStage Pepe.webp',
-    externalTicketUrl: '',
+    externalTicketUrl: 'https://rausgegangen.de/events/rhapsodie-du-soir-2/',
     isOneDay: true
   },
   {
@@ -710,7 +710,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎪',
     image: '/ZirkusArtista.webp',
-    externalTicketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-0/',
+    externalTicketUrl: 'https://rausgegangen.de/events/zirkus-artista-emotion-1/',
     isOneDay: true
   },
   {
