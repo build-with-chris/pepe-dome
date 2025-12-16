@@ -5,15 +5,41 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { getNextEvent } from "@/data/events";
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const { t } = useTranslation('common');
   const nextEvent = getNextEvent();
+  const [showCancellationNotice, setShowCancellationNotice] = useState(false);
+
+  useEffect(() => {
+    // Check if today is December 16, 2025 and before 19:00
+    const now = new Date();
+    const today = new Date(2025, 11, 16); // December 16, 2025 (month is 0-indexed)
+    const cutoffTime = new Date(2025, 11, 16, 19, 0, 0); // 19:00 on December 16, 2025
+    
+    const isToday = now.getFullYear() === today.getFullYear() &&
+                    now.getMonth() === today.getMonth() &&
+                    now.getDate() === today.getDate();
+    
+    if (isToday && now < cutoffTime) {
+      setShowCancellationNotice(true);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen">
       {/* Navigation */}
       <Navigation currentPage="home" />
+
+      {/* Cancellation Notice */}
+      {showCancellationNotice && (
+        <div className="bg-red-600/90 border-b border-red-500 px-4 py-3 text-center">
+          <p className="text-white font-semibold">
+            ⚠️ Die Veranstaltung &quot;Rhapsodie du soir&quot; am 16. Dezember wurde wegen Verletzung und Krankheit abgesagt.
+          </p>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="hero">

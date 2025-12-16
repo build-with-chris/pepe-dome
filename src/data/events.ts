@@ -60,6 +60,9 @@ export interface Event {
   emoji: string;
   image?: string;
   status: 'upcoming' | 'ongoing' | 'past';
+  cancelled?: {
+    reason: string;
+  };
   ticketDates?: Array<{
     date: string;
     dateDisplay: string;
@@ -633,7 +636,10 @@ const rawEvents: Omit<Event, 'status'>[] = [
     emoji: '🎭',
     image: '/OpenStage Pepe.webp',
     externalTicketUrl: 'https://rausgegangen.de/events/rhapsodie-du-soir-1/',
-    isOneDay: true
+    isOneDay: true,
+    cancelled: {
+      reason: 'Wegen Verletzung und Krankheit abgesagt'
+    }
   },
   {
     id: 'open-stage-dec-19',
@@ -829,6 +835,11 @@ export function getNextEvent(): Event | null {
   const now = new Date();
   const upcomingEvents = events
     .filter(event => {
+      // Exclude cancelled events
+      if (event.cancelled) {
+        return false;
+      }
+
       // For multi-day events (with ticketDates), check the last date
       if (event.ticketDates && event.ticketDates.length > 0) {
         const lastTicketDate = event.ticketDates[event.ticketDates.length - 1];

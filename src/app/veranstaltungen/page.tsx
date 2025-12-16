@@ -285,6 +285,16 @@ export default function VeranstaltungenPage() {
                     </div>
                   </div>
 
+                  {event.cancelled && (
+                    <div className="mb-3 p-3 bg-red-600/20 border border-red-500/50 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-lg">⚠️</span>
+                        <span className="text-red-400 font-semibold text-sm">ABGESAGT</span>
+                      </div>
+                      <p className="text-red-300 text-xs">{event.cancelled.reason}</p>
+                    </div>
+                  )}
+
                   {event.id === 'freeman-festival' && (
                     <div className="flex gap-2 mb-3">
                       <span className="px-2 py-1 bg-gradient-to-r from-purple-500/30 to-blue-500/30 border border-purple-400/50 rounded-full text-purple-300 font-bold text-xs">
@@ -298,15 +308,19 @@ export default function VeranstaltungenPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="text-xs text-white/60">
-                      {event.ticketDates && event.ticketDates.length > 1 ? (
+                      {event.cancelled ? (
+                        <span className="text-red-400">❌ Abgesagt</span>
+                      ) : event.ticketDates && event.ticketDates.length > 1 ? (
                         <span>🎫 {event.ticketDates.length} Termine verfügbar</span>
                       ) : (
                         <span>🎫 Tickets verfügbar</span>
                       )}
                     </div>
-                    <div className="text-xs text-white/50">
-                      Mehr erfahren ➤
-                    </div>
+                    {!event.cancelled && (
+                      <div className="text-xs text-white/50">
+                        Mehr erfahren ➤
+                      </div>
+                    )}
                   </div>
                 </div>
               </Link>
@@ -530,6 +544,16 @@ export default function VeranstaltungenPage() {
                 <p className="event-modal-subtitle">
                   {selectedEventData.subtitle}
                 </p>
+
+                {selectedEventData.cancelled && (
+                  <div className="mt-4 p-4 bg-red-600/20 border border-red-500/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">⚠️</span>
+                      <span className="text-red-400 font-bold text-lg">ABGESAGT</span>
+                    </div>
+                    <p className="text-red-300 text-sm">{selectedEventData.cancelled.reason}</p>
+                  </div>
+                )}
 
                 {selectedEventData.id === 'freeman-festival' && (
                   <div className="event-modal-badges">
@@ -940,6 +964,12 @@ export default function VeranstaltungenPage() {
                       </div>
                     ))}
                   </div>
+                </div>
+              ) : selectedEventData.cancelled ? (
+                /* Cancelled Event - No Tickets */
+                <div className="text-center py-8">
+                  <p className="text-red-400 font-semibold text-lg mb-2">❌ Diese Veranstaltung wurde abgesagt</p>
+                  <p className="text-white/70">{selectedEventData.cancelled.reason}</p>
                 </div>
               ) : selectedEventData.ticketDates ? (
                 /* Regular Multi-Date Event Layout */
