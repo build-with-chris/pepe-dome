@@ -1,0 +1,86 @@
+/**
+ * Validation schemas using Zod
+ */
+
+import { z } from 'zod'
+
+// Subscriber validation schemas
+export const subscriberSignupSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  firstName: z.string().optional(),
+  interests: z.array(z.string()).optional(),
+})
+
+export const subscriberConfirmSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
+})
+
+export const subscriberUnsubscribeSchema = z.object({
+  email: z.string().email('Invalid email format').optional(),
+  id: z.string().uuid().optional(),
+}).refine((data) => data.email || data.id, {
+  message: 'Either email or id must be provided',
+})
+
+// Newsletter validation schemas
+export const createNewsletterSchema = z.object({
+  subject: z.string().min(1, 'Subject is required').max(200),
+  preheader: z.string().max(200).optional(),
+  heroTitle: z.string().max(100).optional(),
+  heroSubtitle: z.string().max(200).optional(),
+  heroCTALabel: z.string().max(50).optional(),
+  heroCTAUrl: z.string().url().optional().or(z.literal('')),
+  createdBy: z.string().optional(),
+})
+
+export const updateNewsletterSchema = z.object({
+  subject: z.string().min(1).max(200).optional(),
+  preheader: z.string().max(200).optional(),
+  heroImageUrl: z.string().url().optional().or(z.literal('')),
+  heroTitle: z.string().max(100).optional(),
+  heroSubtitle: z.string().max(200).optional(),
+  heroCTALabel: z.string().max(50).optional(),
+  heroCTAUrl: z.string().url().optional().or(z.literal('')),
+})
+
+export const scheduleNewsletterSchema = z.object({
+  scheduledAt: z.string().datetime().or(z.date()),
+})
+
+export const addContentSchema = z.object({
+  contentType: z.enum(['EVENT', 'ARTICLE', 'SHOW', 'CUSTOM_SECTION']),
+  contentId: z.string().uuid().optional(),
+  sectionHeading: z.string().max(100).optional(),
+  sectionDescription: z.string().max(500).optional(),
+  orderPosition: z.number().int().min(0),
+})
+
+export const reorderContentSchema = z.array(
+  z.object({
+    id: z.string().uuid(),
+    orderPosition: z.number().int().min(0),
+  })
+)
+
+// Query parameter schemas
+export const paginationSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+})
+
+export const subscriberListSchema = paginationSchema.extend({
+  status: z.enum(['PENDING', 'ACTIVE', 'UNSUBSCRIBED', 'BOUNCED']).optional(),
+  interests: z.string().optional(), // Comma-separated list
+})
+
+export const newsletterListSchema = paginationSchema.extend({
+  status: z.enum(['DRAFT', 'SCHEDULED', 'SENDING', 'SENT']).optional(),
+})
+
+export const contentFilterSchema = z.object({
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  category: z.string().optional(),
+  status: z.string().optional(),
+  tags: z.string().optional(), // Comma-separated list
+})

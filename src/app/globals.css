@@ -9,8 +9,47 @@
 @import '../styling/tokens.css';
 @import '../styling/typography.css';
 @import '../styling/components.css';
+@import '../styling/card-components.css';
 @import '../styling/animations.css';
 @import '../styling/particles.css';
+
+/* ===== shadcn/ui Theme Variables ===== */
+/* Maps shadcn semantic colors to pepe design tokens */
+
+:root {
+  /* shadcn theme mapping to pepe tokens */
+  --background: var(--pepe-black);
+  --foreground: var(--pepe-white);
+  --card: var(--pepe-ink);
+  --card-foreground: var(--pepe-white);
+  --popover: var(--pepe-ink);
+  --popover-foreground: var(--pepe-white);
+  --primary: var(--pepe-gold);
+  --primary-foreground: var(--pepe-black);
+  --secondary: var(--pepe-surface);
+  --secondary-foreground: var(--pepe-t80);
+  --muted: var(--pepe-coal);
+  --muted-foreground: var(--pepe-t64);
+  --accent: var(--pepe-bronze);
+  --accent-foreground: var(--pepe-white);
+  --destructive: var(--pepe-error);
+  --destructive-foreground: var(--pepe-white);
+  --border: var(--pepe-line);
+  --input: var(--pepe-line);
+  --ring: var(--pepe-gold);
+  --radius: var(--radius-md);
+
+  /* Admin page color aliases (for backward compatibility) */
+  --color-bg-primary: var(--pepe-black);
+  --color-bg-secondary: var(--pepe-ink);
+  --color-bg-tertiary: var(--pepe-surface);
+  --color-text-primary: var(--pepe-white);
+  --color-text-secondary: var(--pepe-t80);
+  --color-text-muted: var(--pepe-t64);
+  --color-border: var(--pepe-line);
+  --color-gold: var(--pepe-gold);
+  --color-gold-light: var(--pepe-gold-hover);
+}
 
 /* ===== Base Reset ===== */
 * {
@@ -125,22 +164,41 @@ main {
   --color-pepe-black: #000000;
   --color-pepe-dark: #111111;
   --color-pepe-ink: #161616;
+  --color-pepe-coal: #0A0A0A;
   --color-pepe-surface: #1A1A1A;
 
   /* Text */
   --color-pepe-white: #FFFFFF;
   --color-pepe-t80: rgb(255 255 255 / 0.80);
   --color-pepe-t64: rgb(255 255 255 / 0.64);
+  --color-pepe-t48: rgb(255 255 255 / 0.48);
+  --color-pepe-t32: rgb(255 255 255 / 0.32);
 
   /* UI */
   --color-pepe-line: #333333;
+  --color-pepe-line2: #292929;
+  --color-pepe-line-light: #3A3A3A;
 
   /* Gold Accent */
   --color-pepe-gold: #D4A574;
   --color-pepe-gold-hover: #E6B887;
+  --color-pepe-gold-active: #C19A64;
+
+  /* Bronze/Secondary */
   --color-pepe-bronze: #B8860B;
+  --color-pepe-bronze-hover: #C69315;
+  --color-pepe-bronze-active: #9C6F09;
+  --color-pepe-amber: #FFBF00;
+  --color-pepe-copper: #B87333;
+
+  /* Semantic */
+  --color-pepe-success: #00DC82;
+  --color-pepe-warning: #FFB800;
+  --color-pepe-error: #FF3B3B;
+  --color-pepe-info: #0096FF;
 
   /* Fonts */
   --font-family-display: 'Outfit', system-ui, sans-serif;
   --font-family-body: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
 }

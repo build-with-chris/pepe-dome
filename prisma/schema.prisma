@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Subscriber {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  firstName         String?           @map("first_name")
+  status            SubscriberStatus  @default(PENDING)
+  interests         Json              @default("[]")
+  doubleOptInToken  String?           @unique @map("double_opt_in_token")
+  doubleOptInSentAt DateTime?         @map("double_opt_in_sent_at")
+  confirmedAt       DateTime?         @map("confirmed_at")
+  unsubscribedAt    DateTime?         @map("unsubscribed_at")
+  lastOpenAt        DateTime?         @map("last_open_at")
+  lastClickAt       DateTime?         @map("last_click_at")
+  metadata          Json              @default("{}")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  newsletterEvents  NewsletterEvent[]
+
+  @@index([email])
+  @@index([status])
+  @@index([interests])
+  @@map("subscribers")
+}
+
+model Newsletter {
+  id             String              @id @default(uuid())
+  slug           String              @unique
+  subject        String
+  preheader      String?
+  introText      String?             @map("intro_text") @db.Text
+  heroImageUrl   String?             @map("hero_image_url")
+  heroTitle      String?             @map("hero_title")
+  heroSubtitle   String?             @map("hero_subtitle")
+  heroCTALabel   String?             @map("hero_cta_label")
+  heroCTAUrl     String?             @map("hero_cta_url")
+  status         NewsletterStatus    @default(DRAFT)
+  scheduledAt    DateTime?           @map("scheduled_at")
+  sentAt         DateTime?           @map("sent_at")
+  recipientCount Int                 @default(0) @map("recipient_count")
+  createdBy      String?             @map("created_by")
+  metadata       Json                @default("{}")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  content        NewsletterContent[]
+  events         NewsletterEvent[]
+  stats          NewsletterStats?
+
+  @@index([status])
+  @@index([slug])
+  @@index([scheduledAt])
+  @@map("newsletters")
+}
+
+model NewsletterContent {
+  id                 String      @id @default(uuid())
+  newsletterId       String      @map("newsletter_id")
+  contentType        ContentType
+  contentId          String?     @map("content_id")
+  sectionHeading     String?     @map("section_heading")
+  sectionDescription String?     @map("section_description")
+  orderPosition      Int         @default(0) @map("order_position")
+  createdAt          DateTime    @default(now()) @map("created_at")
+  newsletter         Newsletter  @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+
+  @@index([newsletterId])
+  @@index([newsletterId, orderPosition])
+  @@map("newsletter_content")
+}
+
+model NewsletterStats {
+  id               String     @id @default(uuid())
+  newsletterId     String     @unique @map("newsletter_id")
+  sentCount        Int        @default(0) @map("sent_count")
+  deliveredCount   Int        @default(0) @map("delivered_count")
+  openCount        Int        @default(0) @map("open_count")
+  uniqueOpenCount  Int        @default(0) @map("unique_open_count")
+  clickCount       Int        @default(0) @map("click_count")
+  uniqueClickCount Int        @default(0) @map("unique_click_count")
+  bounceCount      Int        @default(0) @map("bounce_count")
+  complaintCount   Int        @default(0) @map("complaint_count")
+  unsubscribeCount Int        @default(0) @map("unsubscribe_count")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  newsletter       Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+
+  @@map("newsletter_stats")
+}
+
+model NewsletterEvent {
+  id            String      @id @default(uuid())
+  newsletterId  String?     @map("newsletter_id")
+  subscriberId  String?     @map("subscriber_id")
+  eventType     EventType   @map("event_type")
+  eventData     Json        @default("{}") @map("event_data")
+  resendEventId String?     @map("resend_event_id")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  newsletter    Newsletter? @relation(fields: [newsletterId], references: [id])
+  subscriber    Subscriber? @relation(fields: [subscriberId], references: [id])
+
+  @@index([newsletterId])
+  @@index([subscriberId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("newsletter_events")
+}
+
+model TestRecipient {
+  id        String   @id @default(uuid())
+  email     String
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("test_recipients")
+}
+
+// ============================================
+// Events & Articles (Admin-managed content)
+// ============================================
+
+model Event {
+  id          String        @id @default(uuid())
+  slug        String        @unique
+  title       String
+  subtitle    String?
+  description String        @db.Text
+  date        DateTime
+  endDate     DateTime?     @map("end_date")
+  time        String?
+  location    String
+  category    EventCategory
+  ticketUrl   String?       @map("ticket_url")
+  price       String?
+  imageUrl    String?       @map("image_url")
+  featured    Boolean       @default(false)
+  highlights  Json          @default("[]")
+  status      ContentStatus @default(DRAFT)
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  // Recurring event support
+  recurrence      RecurrencePattern? @map("recurrence")
+  recurrenceEnd   DateTime?          @map("recurrence_end")
+  parentEventId   String?            @map("parent_event_id")
+  parentEvent     Event?             @relation("EventRecurrence", fields: [parentEventId], references: [id])
+  childEvents     Event[]            @relation("EventRecurrence")
+
+  // Relations
+  articles ArticleEvent[]
+
+  @@index([slug])
+  @@index([date])
+  @@index([category])
+  @@index([status])
+  @@index([featured])
+  @@map("events")
+}
+
+model Article {
+  id          String        @id @default(uuid())
+  slug        String        @unique
+  title       String
+  excerpt     String        @db.Text
+  content     String        @db.Text
+  category    String
+  author      String
+  imageUrl    String?       @map("image_url")
+  tags        Json          @default("[]")
+  featured    Boolean       @default(false)
+  status      ContentStatus @default(DRAFT)
+  publishedAt DateTime?     @map("published_at")
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  events ArticleEvent[]
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([featured])
+  @@map("articles")
+}
+
+model ArticleEvent {
+  id        String   @id @default(uuid())
+  articleId String   @map("article_id")
+  eventId   String   @map("event_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, eventId])
+  @@map("article_events")
+}
+
+enum SubscriberStatus {
+  PENDING
+  ACTIVE
+  UNSUBSCRIBED
+  BOUNCED
+}
+
+enum NewsletterStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+}
+
+enum ContentType {
+  EVENT
+  ARTICLE
+  SHOW
+  CUSTOM_SECTION
+}
+
+enum EventType {
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  BOUNCED
+  COMPLAINED
+  UNSUBSCRIBED
+}
+
+enum EventCategory {
+  SHOW
+  PREMIERE
+  FESTIVAL
+  WORKSHOP
+  OPEN_TRAINING
+  KINDERTRAINING
+  BUSINESS
+  OPEN_AIR
+  EVENT
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum RecurrencePattern {
+  DAILY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+}

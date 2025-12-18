@@ -3,14 +3,26 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { getNavigation } from '@/lib/data'
+import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
+
+// Hard-code navigation to avoid server/client hydration issues
+const navigation = {
+  main: [
+    { label: "Home", href: "/" },
+    { label: "News", href: "/news" },
+    { label: "Events", href: "/events" },
+    { label: "Newsletter", href: "/newsletter" },
+    { label: "Über uns", href: "/about" },
+    { label: "Kontakt", href: "/contact" }
+  ]
+}
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [show, setShow] = useState(true)
   const [lastY, setLastY] = useState(0)
   const pathname = usePathname()
-  const navigation = getNavigation()
+  const { isSignedIn, isLoaded } = useUser()
 
   useEffect(() => {
     const onScroll = () => {
@@ -40,9 +52,11 @@ export default function Navbar() {
       >
         <div className="h-full flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3">
-            <div className="text-2xl font-bold font-display text-pepe-gold">
-              Pepe Dome
-            </div>
+            <img
+              src="/PEPE_logos_dome.svg"
+              alt="Pepe Dome Logo"
+              className="h-16 w-auto transition-opacity hover:opacity-80"
+            />
           </Link>
 
           {/* Desktop Menu */}
@@ -60,6 +74,41 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Auth Section */}
+            {isLoaded && (
+              <>
+                {isSignedIn ? (
+                  <div className="flex items-center gap-4 ml-4 pl-4 border-l border-pepe-line">
+                    <Link
+                      href="/admin"
+                      className={`text-sm font-medium transition-colors ${
+                        pathname.startsWith('/admin')
+                          ? 'text-pepe-gold'
+                          : 'text-pepe-t80 hover:text-pepe-white'
+                      }`}
+                    >
+                      Admin
+                    </Link>
+                    <UserButton
+                      afterSignOutUrl="/"
+                      appearance={{
+                        elements: {
+                          avatarBox: "w-8 h-8",
+                          userButtonTrigger: "focus:shadow-none"
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <SignInButton mode="modal">
+                    <button className="ml-4 pl-4 border-l border-pepe-line text-sm font-medium text-pepe-t64 hover:text-pepe-gold transition-colors">
+                      Login
+                    </button>
+                  </SignInButton>
+                )}
+              </>
+            )}
           </div>
 
           {/* Mobile Hamburger */}
@@ -117,6 +166,44 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Mobile Auth Section */}
+              {isLoaded && (
+                <div className="mt-4 pt-4 border-t border-pepe-line">
+                  {isSignedIn ? (
+                    <>
+                      <Link
+                        href="/admin"
+                        onClick={() => setMenuOpen(false)}
+                        className={`block px-4 py-3 rounded-lg border transition-all ${
+                          pathname.startsWith('/admin')
+                            ? 'border-pepe-gold bg-pepe-gold/10 text-pepe-gold'
+                            : 'border-pepe-line bg-pepe-surface/50 text-pepe-t80 hover:border-pepe-gold hover:text-pepe-white'
+                        }`}
+                      >
+                        Admin Dashboard
+                      </Link>
+                      <div className="flex items-center justify-between px-4 py-3 mt-2">
+                        <span className="text-pepe-t64 text-sm">Eingeloggt</span>
+                        <UserButton
+                          afterSignOutUrl="/"
+                          appearance={{
+                            elements: {
+                              avatarBox: "w-8 h-8"
+                            }
+                          }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <SignInButton mode="modal">
+                      <button className="w-full px-4 py-3 rounded-lg border border-pepe-gold bg-pepe-gold/10 text-pepe-gold hover:bg-pepe-gold/20 transition-all">
+                        Login
+                      </button>
+                    </SignInButton>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

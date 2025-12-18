@@ -8,7 +8,7 @@
     "category": "Festival",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-06-15T10:00:00Z",
-    "imageUrl": "/images/news/freeman-festival-hero.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80&auto=format",
     "tags": ["Festival", "Artistik", "Freeman", "Workshops"],
     "featured": true
   },
@@ -21,7 +21,7 @@
     "category": "Training",
     "author": "Sarah Müller",
     "publishedAt": "2025-08-20T14:00:00Z",
-    "imageUrl": "/images/news/cyr-wheel-course.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80&auto=format",
     "tags": ["Training", "Cyr Wheel", "Kurse"],
     "featured": false
   },
@@ -34,7 +34,7 @@
     "category": "News",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-07-10T09:00:00Z",
-    "imageUrl": "/images/news/dome-renovation.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=1200&q=80&auto=format",
     "tags": ["News", "Renovierung", "Dome"],
     "featured": true
   },
@@ -47,7 +47,7 @@
     "category": "Event",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-09-01T11:00:00Z",
-    "imageUrl": "/images/news/circus-cinema.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&auto=format",
     "tags": ["Event", "Artistik", "Film", "Kultur"],
     "featured": false
   },
@@ -60,7 +60,7 @@
     "category": "Business",
     "author": "Michael Weber",
     "publishedAt": "2025-08-15T10:00:00Z",
-    "imageUrl": "/images/news/business-events.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&q=80&auto=format",
     "tags": ["Business", "Events", "Firmenevent"],
     "featured": false
   },
@@ -73,7 +73,7 @@
     "category": "Event",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-06-25T12:00:00Z",
-    "imageUrl": "/images/news/wanderzirkus.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&q=80&auto=format",
     "tags": ["Event", "Wanderzirkus", "Sommer", "Open Air"],
     "featured": true
   },
@@ -86,7 +86,7 @@
     "category": "Show",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-10-01T15:00:00Z",
-    "imageUrl": "/images/news/morphe-premiere.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=1200&q=80&auto=format",
     "tags": ["Show", "Premiere", "Artistik", "Tanz"],
     "featured": false
   },
@@ -99,7 +99,7 @@
     "category": "Training",
     "author": "Lisa Schmidt",
     "publishedAt": "2025-09-15T10:00:00Z",
-    "imageUrl": "/images/news/kinder-herbst.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&q=80&auto=format",
     "tags": ["Training", "Kinder", "Ferien"],
     "featured": false
   },
@@ -112,7 +112,7 @@
     "category": "News",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-08-30T13:00:00Z",
-    "imageUrl": "/images/news/kooperation-theater.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80&auto=format",
     "tags": ["News", "Kooperation", "Theater"],
     "featured": false
   },
@@ -125,7 +125,7 @@
     "category": "News",
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-07-20T11:00:00Z",
-    "imageUrl": "/images/news/nachhaltigkeit.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1519167758481-83f29da8c19f?w=1200&q=80&auto=format",
     "tags": ["News", "Nachhaltigkeit", "Umwelt"],
     "featured": false
   }

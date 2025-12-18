@@ -1,15 +1,34 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Event, formatDate, formatDateShort, getCategoryColor } from '@/lib/data'
+import { formatDate, formatDateShort, getCategoryClasses } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
+// Flexible event type that works with both JSON and DB data
+type EventData = {
+  id: string
+  slug?: string
+  title: string
+  subtitle?: string | null
+  description: string
+  date: string
+  endDate?: string | null
+  time?: string | null
+  location: string
+  category: string
+  ticketUrl?: string | null
+  price?: string | null
+  imageUrl?: string | null
+  featured?: boolean
+  highlights?: string[]
+}
+
 interface EventCardProps {
-  event: Event
+  event: EventData
   variant?: 'default' | 'compact' | 'featured'
 }
 
 export default function EventCard({ event, variant = 'default' }: EventCardProps) {
-  const categoryColor = getCategoryColor(event.category, 'events')
+  const categoryClasses = getCategoryClasses(event.category, 'events')
   const eventDate = new Date(event.date)
   const day = eventDate.getDate()
   const month = eventDate.toLocaleDateString('de-DE', { month: 'short' })
@@ -21,14 +40,14 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
           <div className="flex gap-4">
             <div className={cn(
               'flex-shrink-0 w-16 h-16 rounded-lg flex flex-col items-center justify-center text-center',
-              `bg-${categoryColor}/10 border border-${categoryColor}/30`
+              categoryClasses.badgeAlt
             )}>
               <div className="text-2xl font-bold text-pepe-white leading-none">{day}</div>
               <div className="text-xs text-pepe-t64 uppercase">{month}</div>
             </div>
 
             <div className="flex-1 min-w-0">
-              <span className={`badge mb-1 bg-${categoryColor}/10 text-${categoryColor} border-${categoryColor}/30`}>
+              <span className={cn('badge mb-1', categoryClasses.badgeAlt)}>
                 {event.category}
               </span>
               <h3 className="h6 mb-1 line-clamp-1 group-hover:text-pepe-gold transition-colors">
@@ -67,7 +86,7 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
             {/* Date Badge */}
             <div className={cn(
               'absolute top-4 left-4 w-16 h-16 rounded-xl flex flex-col items-center justify-center text-center backdrop-blur-md',
-              `bg-${categoryColor}/30 border-2 border-${categoryColor}/60`
+              categoryClasses.date
             )}>
               <div className="text-2xl font-bold text-pepe-white leading-none">{day}</div>
               <div className="text-xs text-pepe-white uppercase font-semibold">{month}</div>
@@ -75,8 +94,8 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
 
             {/* Category Badge */}
             <span className={cn(
-              'badge absolute top-4 right-4',
-              `bg-${categoryColor}/20 text-${categoryColor} border-${categoryColor}/40 backdrop-blur-sm`
+              'badge absolute top-4 right-4 backdrop-blur-sm',
+              categoryClasses.badge
             )}>
               {event.category}
             </span>

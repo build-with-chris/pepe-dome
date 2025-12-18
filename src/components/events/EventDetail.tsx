@@ -1,16 +1,42 @@
+/**
+ * Task 7.1.6: Add end-of-content signup on event pages
+ */
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { Event, formatDate, getCategoryColor, getUpcomingEvents } from '@/lib/data'
+import { formatDate, getCategoryClasses } from '@/lib/data'
+import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 import EventCard from './EventCard'
+import SignupForm from '@/components/newsletter/SignupForm'
+
+// Flexible event type that works with both JSON and DB data
+type EventData = {
+  id: string
+  slug?: string
+  title: string
+  subtitle?: string | null
+  description: string
+  date: string
+  endDate?: string | null
+  time?: string | null
+  location: string
+  category: string
+  ticketUrl?: string | null
+  price?: string | null
+  imageUrl?: string | null
+  featured?: boolean
+  highlights?: string[]
+}
 
 interface EventDetailProps {
-  event: Event
+  event: EventData
 }
 
 export default function EventDetail({ event }: EventDetailProps) {
-  const categoryColor = getCategoryColor(event.category, 'events')
-  const relatedEvents = getUpcomingEvents().filter(e => e.id !== event.id).slice(0, 3)
+  const categoryClasses = getCategoryClasses(event.category, 'events')
+  // Related events will be passed as prop or fetched client-side in future
+  const relatedEvents: EventData[] = []
 
   return (
     <div className="section">
@@ -33,7 +59,7 @@ export default function EventDetail({ event }: EventDetailProps) {
           <div>
             {/* Header */}
             <header className="mb-8">
-              <span className={`badge mb-4 bg-${categoryColor}/20 text-${categoryColor} border-${categoryColor}/40`}>
+              <span className={cn('badge mb-4', categoryClasses.badge)}>
                 {event.category}
               </span>
 
@@ -74,7 +100,7 @@ export default function EventDetail({ event }: EventDetailProps) {
             </div>
 
             {/* Highlights */}
-            {event.highlights.length > 0 && (
+            {event.highlights && event.highlights.length > 0 && (
               <div className="card p-6 mb-8">
                 <h3 className="h4 mb-4">Highlights</h3>
                 <ul className="space-y-2">
@@ -87,6 +113,17 @@ export default function EventDetail({ event }: EventDetailProps) {
                 </ul>
               </div>
             )}
+
+            {/* Newsletter Signup - End of Content */}
+            <div className="mt-12 pt-8 border-t border-pepe-line">
+              <div className="max-w-xl">
+                <h3 className="h3 mb-4">Bleib auf dem Laufenden</h3>
+                <SignupForm
+                  variant="simple"
+                  contextMessage="Stay updated on upcoming events, workshops, and shows at PEPE Dome."
+                />
+              </div>
+            </div>
           </div>
 
           {/* Sidebar */}

@@ -1,9 +1,21 @@
 import type { Metadata } from 'next'
+import { Outfit, Inter } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
-import ParticleBackground from '@/components/layout/ParticleBackground'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
+import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { getSiteContent } from '@/lib/data'
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-outfit',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 const siteContent = getSiteContent()
 
@@ -24,15 +36,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="de">
-      <body className="antialiased">
-        <ParticleBackground />
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
+        <body className="antialiased">
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

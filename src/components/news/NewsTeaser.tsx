@@ -1,17 +1,31 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { NewsArticle } from '@/lib/data'
-import { formatDate, getCategoryColor } from '@/lib/data'
+import { formatDate, getCategoryClasses } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
+// Flexible article type that works with both JSON and DB data
+type ArticleData = {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  content?: string
+  category: string
+  author: string
+  publishedAt: string
+  imageUrl?: string | null
+  tags?: string[]
+  featured?: boolean
+}
+
 interface NewsTeaserProps {
-  article: NewsArticle
+  article: ArticleData
   featured?: boolean
   variant?: 'default' | 'compact'
 }
 
 export default function NewsTeaser({ article, featured = false, variant = 'default' }: NewsTeaserProps) {
-  const categoryColor = getCategoryColor(article.category, 'news')
+  const categoryClasses = getCategoryClasses(article.category, 'news')
 
   if (variant === 'compact') {
     return (
@@ -30,7 +44,7 @@ export default function NewsTeaser({ article, featured = false, variant = 'defau
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <span className={`badge mb-2 bg-${categoryColor}/10 text-${categoryColor} border-${categoryColor}/30`}>
+              <span className={cn('badge mb-2', categoryClasses.badgeAlt)}>
                 {article.category}
               </span>
               <h3 className="h5 mb-1 line-clamp-2 group-hover:text-pepe-gold transition-colors">
@@ -67,8 +81,8 @@ export default function NewsTeaser({ article, featured = false, variant = 'defau
             <div className="absolute inset-0 bg-gradient-to-t from-pepe-black via-transparent to-transparent opacity-60" />
 
             <span className={cn(
-              'badge absolute top-4 left-4',
-              `bg-${categoryColor}/20 text-${categoryColor} border-${categoryColor}/40 backdrop-blur-sm`
+              'badge absolute top-4 left-4 backdrop-blur-sm',
+              categoryClasses.badge
             )}>
               {article.category}
             </span>

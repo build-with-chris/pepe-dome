@@ -211,3 +211,53 @@ export function getCategoryColor(category: string, type: 'news' | 'events'): str
   const cat = categories.find(c => c.id.toLowerCase() === category.toLowerCase())
   return cat?.color || 'gold'
 }
+
+// Pre-defined Tailwind class mappings for category colors
+// This is needed because Tailwind can't process dynamic class names like `bg-${color}/10`
+const categoryClassMap: Record<string, { badge: string; badgeAlt: string; date: string }> = {
+  gold: {
+    badge: 'bg-pepe-gold/20 text-pepe-gold border-pepe-gold/40',
+    badgeAlt: 'bg-pepe-gold/10 text-pepe-gold border-pepe-gold/30',
+    date: 'bg-pepe-gold/30 border-2 border-pepe-gold/60',
+  },
+  red: {
+    badge: 'bg-red-500/20 text-red-400 border-red-500/40',
+    badgeAlt: 'bg-red-500/10 text-red-400 border-red-500/30',
+    date: 'bg-red-500/30 border-2 border-red-500/60',
+  },
+  blue: {
+    badge: 'bg-blue-500/20 text-blue-400 border-blue-500/40',
+    badgeAlt: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+    date: 'bg-blue-500/30 border-2 border-blue-500/60',
+  },
+  green: {
+    badge: 'bg-green-500/20 text-green-400 border-green-500/40',
+    badgeAlt: 'bg-green-500/10 text-green-400 border-green-500/30',
+    date: 'bg-green-500/30 border-2 border-green-500/60',
+  },
+  purple: {
+    badge: 'bg-purple-500/20 text-purple-400 border-purple-500/40',
+    badgeAlt: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+    date: 'bg-purple-500/30 border-2 border-purple-500/60',
+  },
+  orange: {
+    badge: 'bg-orange-500/20 text-orange-400 border-orange-500/40',
+    badgeAlt: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
+    date: 'bg-orange-500/30 border-2 border-orange-500/60',
+  },
+  pink: {
+    badge: 'bg-pink-500/20 text-pink-400 border-pink-500/40',
+    badgeAlt: 'bg-pink-500/10 text-pink-400 border-pink-500/30',
+    date: 'bg-pink-500/30 border-2 border-pink-500/60',
+  },
+  cyan: {
+    badge: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40',
+    badgeAlt: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+    date: 'bg-cyan-500/30 border-2 border-cyan-500/60',
+  },
+}
+
+export function getCategoryClasses(category: string, type: 'news' | 'events') {
+  const color = getCategoryColor(category, type)
+  return categoryClassMap[color] || categoryClassMap.gold
+}

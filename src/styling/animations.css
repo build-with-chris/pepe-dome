@@ -231,16 +231,16 @@
 /* Glow Animations */
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 var(--pepe-red-glow);
+    box-shadow: 0 0 0 0 var(--pepe-gold-glow);
   }
   50% {
-    box-shadow: 0 0 20px 5px var(--pepe-red-glow);
+    box-shadow: 0 0 20px 5px var(--pepe-gold-glow);
   }
 }
 
 @keyframes glowExpand {
   from {
-    box-shadow: 0 0 0 0 var(--pepe-red);
+    box-shadow: 0 0 0 0 var(--pepe-gold);
   }
   to {
     box-shadow: 0 0 0 8px transparent;
@@ -543,7 +543,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--pepe-red);
+  background: var(--pepe-gold);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--duration-slow) var(--ease-out);
@@ -555,7 +555,7 @@
 
 /* Text Gradient Animation */
 .text-gradient-animate {
-  background: linear-gradient(90deg, var(--pepe-red), var(--pepe-white), var(--pepe-red));
+  background: linear-gradient(90deg, var(--pepe-gold), var(--pepe-white), var(--pepe-gold));
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -660,14 +660,14 @@
 
 /* Focus Effects */
 .focus-ring:focus-visible {
-  outline: 2px solid var(--pepe-red);
+  outline: 2px solid var(--pepe-gold);
   outline-offset: 2px;
   border-radius: var(--radius-md);
 }
 
 .focus-shadow:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--pepe-red-glow);
+  box-shadow: 0 0 0 3px var(--pepe-gold-glow);
 }
 
 /* Active/Pressed State */
@@ -758,7 +758,7 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   .parallax,
   .parallax-slow,
   .parallax-medium,

@@ -53,8 +53,8 @@
   /* ===== Typography ===== */
 
   /* Font Families */
-  --font-display: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-outfit), 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body: var(--font-inter), 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'Monaco', monospace;
 
   /* Font Sizes - Fluid Typography */
@@ -227,14 +227,6 @@
   --container-3xl: 1920px;
   --container-full: 100%;
 
-  /* ===== Aspect Ratios ===== */
-
-  --aspect-square: 1 / 1;
-  --aspect-video: 16 / 9;
-  --aspect-portrait: 4 / 5;
-  --aspect-landscape: 5 / 4;
-  --aspect-golden: 1.618 / 1;
-
   /* ===== Backdrop Filters ===== */
 
   --backdrop-blur-none: blur(0);
@@ -257,6 +249,7 @@
   /* ===== Transitions ===== */
 
   --transition-none: none;
+  --transition-base: var(--duration-normal) var(--ease-in-out);
   --transition-all: all var(--duration-normal) var(--ease-in-out);
   --transition-colors: background-color var(--duration-normal) var(--ease-in-out),
                        border-color var(--duration-normal) var(--ease-in-out),

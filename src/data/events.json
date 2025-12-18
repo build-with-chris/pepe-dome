@@ -11,7 +11,7 @@
     "category": "Festival",
     "ticketUrl": "https://example.com/tickets/freeman-2025",
     "price": "Tagesticket ab 35€, Festivalpass 89€",
-    "imageUrl": "/images/events/freeman-festival.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80&auto=format",
     "featured": true,
     "highlights": [
       "Über 30 internationale Artist:innen",
@@ -31,7 +31,7 @@
     "category": "Show",
     "ticketUrl": "https://example.com/tickets/circus-cinema-1",
     "price": "25€ / ermäßigt 18€",
-    "imageUrl": "/images/events/circus-cinema.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Charlie Chaplin's 'The Circus'",
@@ -51,7 +51,7 @@
     "category": "Show",
     "ticketUrl": "https://example.com/tickets/circus-cinema-2",
     "price": "25€ / ermäßigt 18€",
-    "imageUrl": "/images/events/circus-cinema.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Buster Keaton's 'Sherlock Jr.'",
@@ -71,7 +71,7 @@
     "category": "Premiere",
     "ticketUrl": "https://example.com/tickets/morphe",
     "price": "28€ / ermäßigt 20€",
-    "imageUrl": "/images/events/morphe.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=1200&q=80&auto=format",
     "featured": true,
     "highlights": [
       "Weltpremiere",
@@ -91,7 +91,7 @@
     "category": "Show",
     "ticketUrl": "https://example.com/tickets/morphe",
     "price": "28€ / ermäßigt 20€",
-    "imageUrl": "/images/events/morphe.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": []
   },
@@ -106,7 +106,7 @@
     "category": "Open Air",
     "ticketUrl": null,
     "price": "Eintritt frei",
-    "imageUrl": "/images/events/wanderzirkus.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Kostenlos",
@@ -125,7 +125,7 @@
     "category": "Open Air",
     "ticketUrl": null,
     "price": "Eintritt frei",
-    "imageUrl": "/images/events/wanderzirkus.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Kostenlos",
@@ -145,7 +145,7 @@
     "category": "Workshop",
     "ticketUrl": "https://example.com/tickets/cyr-wheel-beginner",
     "price": "240€ für 8 Termine",
-    "imageUrl": "/images/events/cyr-wheel-course.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Max. 6 Teilnehmer:innen",
@@ -166,7 +166,7 @@
     "category": "Kindertraining",
     "ticketUrl": "https://example.com/tickets/herbstferien",
     "price": "180€ (Geschwisterrabatt 20%)",
-    "imageUrl": "/images/events/kinder-ferien.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "5 Tage Programm",
@@ -186,7 +186,7 @@
     "category": "Business",
     "ticketUrl": "mailto:business@pepedome.de",
     "price": "Auf Anfrage (ab 10 Personen)",
-    "imageUrl": "/images/events/business-teambuilding.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Teambuilding Exercises",
@@ -206,7 +206,7 @@
     "category": "Workshop",
     "ticketUrl": "https://example.com/tickets/trapez-advanced",
     "price": "85€",
-    "imageUrl": "/images/events/trapez-workshop.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Mindestens 1 Jahr Erfahrung",
@@ -225,7 +225,7 @@
     "category": "Workshop",
     "ticketUrl": "https://example.com/tickets/jonglage-basics",
     "price": "25€",
-    "imageUrl": "/images/events/jonglage.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Equipment wird gestellt",
@@ -244,7 +244,7 @@
     "category": "Open Training",
     "ticketUrl": null,
     "price": "8€ Tageskarte",
-    "imageUrl": "/images/events/akrobatik-jam.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80&auto=format",
     "featured": false,
     "highlights": [
       "Jeden Donnerstag",
@@ -263,7 +263,7 @@
     "category": "Show",
     "ticketUrl": "https://example.com/tickets/weihnachtsshow",
     "price": "22€ / Kinder 12€",
-    "imageUrl": "/images/events/weihnachtsshow.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1200&q=80&auto=format",
     "featured": true,
     "highlights": [
       "Familienfreundlich",
@@ -283,7 +283,7 @@
     "category": "Event",
     "ticketUrl": "https://example.com/tickets/silvester",
     "price": "95€ inkl. Show, Buffet & Getränke",
-    "imageUrl": "/images/events/silvester-gala.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200&q=80&auto=format",
     "featured": true,
     "highlights": [
       "Exklusive Show",

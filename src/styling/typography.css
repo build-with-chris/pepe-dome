@@ -188,7 +188,7 @@ p:last-child {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: var(--pepe-red);
+  color: var(--pepe-gold);
 }
 
 .quote {
@@ -199,7 +199,7 @@ p:last-child {
   line-height: var(--leading-relaxed);
   color: var(--pepe-t80);
   padding-left: var(--space-6);
-  border-left: 3px solid var(--pepe-red);
+  border-left: 3px solid var(--pepe-gold);
   margin: var(--space-8) 0;
 }
 
@@ -207,7 +207,7 @@ p:last-child {
   font-family: var(--font-mono);
   font-size: 0.875em;
   font-weight: var(--font-medium);
-  color: var(--pepe-red);
+  color: var(--pepe-gold);
   background: var(--pepe-ink);
   padding: var(--space-0-5) var(--space-1);
   border-radius: var(--radius-sm);
@@ -216,24 +216,24 @@ p:last-child {
 /* ===== Links ===== */
 
 a {
-  color: var(--pepe-red);
+  color: var(--pepe-gold);
   text-decoration: none;
-  transition: all var(--transition-base);
+  transition: var(--transition-all);
   cursor: pointer;
 }
 
 a:hover {
-  color: var(--pepe-gold);
+  color: var(--pepe-gold-hover);
   text-decoration: none;
   transform: translateY(-1px);
 }
 
 a:active {
-  color: var(--pepe-red-active);
+  color: var(--pepe-gold-active);
 }
 
 a:focus-visible {
-  outline: 2px solid var(--pepe-red);
+  outline: 2px solid var(--pepe-gold);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -250,7 +250,7 @@ a:focus-visible {
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--pepe-red);
+  background: var(--pepe-gold);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--duration-slow) var(--ease-out);
@@ -297,10 +297,10 @@ li:last-child {
 }
 
 .list-custom li::before {
-  content: '▸';
+  content: '\25B8';
   position: absolute;
   left: 0;
-  color: var(--pepe-red);
+  color: var(--pepe-gold);
   font-weight: var(--font-bold);
 }
 
@@ -358,7 +358,7 @@ li:last-child {
 .text-primary { color: var(--pepe-t80); }
 .text-secondary { color: var(--pepe-t64); }
 .text-tertiary { color: var(--pepe-t48); }
-.text-red { color: var(--pepe-red); }
+.text-gold { color: var(--pepe-gold); }
 .text-success { color: var(--pepe-success); }
 .text-warning { color: var(--pepe-warning); }
 .text-error { color: var(--pepe-error); }
@@ -411,13 +411,13 @@ li:last-child {
 /* ===== Selection Styles ===== */
 
 ::selection {
-  background: var(--pepe-red);
-  color: var(--pepe-white);
+  background: var(--pepe-gold);
+  color: var(--pepe-black);
 }
 
 ::-moz-selection {
-  background: var(--pepe-red);
-  color: var(--pepe-white);
+  background: var(--pepe-gold);
+  color: var(--pepe-black);
 }
 
 /* ===== Responsive Typography ===== */
@@ -429,7 +429,7 @@ li:last-child {
   .h4, h4 { font-size: var(--text-xl); }
   .h5, h5 { font-size: var(--text-lg); }
   .h6, h6 { font-size: var(--text-base); }
-  
+
   .display-1 { font-size: var(--text-5xl); }
   .display-2 { font-size: var(--text-4xl); }
 }
@@ -513,11 +513,11 @@ li:last-child {
     color: black !important;
     background: white !important;
   }
-  
+
   a {
     text-decoration: none;
   }
-  
+
   a[href^="http"]:after {
     content: " (" attr(href) ")";
   }

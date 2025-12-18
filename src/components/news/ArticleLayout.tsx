@@ -1,17 +1,39 @@
+/**
+ * Task 7.1.7: Add end-of-content signup on article pages
+ */
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { NewsArticle, formatDate, getCategoryColor, getRecentNews } from '@/lib/data'
+import { formatDate, getCategoryClasses } from '@/lib/data'
+import { cn } from '@/lib/utils'
 import { getReadingTime } from '@/lib/utils'
 import NewsTeaser from './NewsTeaser'
+import SignupForm from '@/components/newsletter/SignupForm'
+
+// Flexible article type that works with both JSON and DB data
+type ArticleData = {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  content: string
+  category: string
+  author: string
+  publishedAt: string
+  imageUrl?: string | null
+  tags?: string[]
+  featured?: boolean
+}
 
 interface ArticleLayoutProps {
-  article: NewsArticle
+  article: ArticleData
 }
 
 export default function ArticleLayout({ article }: ArticleLayoutProps) {
-  const categoryColor = getCategoryColor(article.category, 'news')
+  const categoryClasses = getCategoryClasses(article.category, 'news')
   const readingTime = getReadingTime(article.content)
-  const relatedArticles = getRecentNews(4).filter(a => a.id !== article.id).slice(0, 3)
+  // Related articles will be passed as prop or fetched client-side in future
+  const relatedArticles: ArticleData[] = []
 
   return (
     <div className="section">
@@ -35,7 +57,7 @@ export default function ArticleLayout({ article }: ArticleLayoutProps) {
             {/* Header */}
             <header className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <span className={`badge bg-${categoryColor}/20 text-${categoryColor} border-${categoryColor}/40`}>
+                <span className={cn('badge', categoryClasses.badge)}>
                   {article.category}
                 </span>
                 <span className="text-sm text-pepe-t64">
@@ -84,7 +106,7 @@ export default function ArticleLayout({ article }: ArticleLayoutProps) {
             </div>
 
             {/* Tags */}
-            {article.tags.length > 0 && (
+            {article.tags && article.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t border-pepe-line">
                 <div className="flex flex-wrap gap-2">
                   {article.tags.map(tag => (
@@ -95,6 +117,17 @@ export default function ArticleLayout({ article }: ArticleLayoutProps) {
                 </div>
               </div>
             )}
+
+            {/* Newsletter Signup - End of Content */}
+            <div className="mt-12 pt-8 border-t border-pepe-line">
+              <div className="max-w-xl">
+                <h3 className="h3 mb-4">Bleib informiert</h3>
+                <SignupForm
+                  variant="simple"
+                  contextMessage="Get the latest news, backstage stories, and event updates from PEPE Dome."
+                />
+              </div>
+            </div>
           </article>
 
           {/* Sidebar */}
@@ -116,17 +149,6 @@ export default function ArticleLayout({ article }: ArticleLayoutProps) {
                 </Link>
               </div>
             )}
-
-            {/* Newsletter CTA */}
-            <div className="card p-6 bg-gradient-to-br from-pepe-gold/10 to-pepe-bronze/5 border-pepe-gold/20">
-              <h3 className="h4 mb-3">Newsletter</h3>
-              <p className="body-sm text-pepe-t64 mb-4">
-                Verpasse keine News mehr! Abonniere unseren Newsletter.
-              </p>
-              <Link href="/newsletter" className="btn btn-primary btn-sm w-full">
-                Jetzt anmelden
-              </Link>
-            </div>
           </aside>
         </div>
       </div>

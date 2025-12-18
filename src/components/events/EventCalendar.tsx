@@ -1,9 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { Event, getEventsByMonth } from '@/lib/data'
+import { useState, useEffect } from 'react'
 import EventCard from './EventCard'
 import Button from '@/components/ui/Button'
+
+type EventData = {
+  id: string
+  slug: string
+  title: string
+  subtitle: string | null
+  description: string
+  date: string
+  endDate: string | null
+  time: string | null
+  location: string
+  category: string
+  ticketUrl: string | null
+  price: string | null
+  imageUrl: string | null
+  featured: boolean
+  highlights: string[]
+}
 
 interface EventCalendarProps {
   initialYear?: number
@@ -14,8 +31,27 @@ export default function EventCalendar({ initialYear, initialMonth }: EventCalend
   const now = new Date()
   const [year, setYear] = useState(initialYear || now.getFullYear())
   const [month, setMonth] = useState(initialMonth || now.getMonth() + 1)
+  const [events, setEvents] = useState<EventData[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const events = getEventsByMonth(year, month)
+  useEffect(() => {
+    async function fetchEvents() {
+      setLoading(true)
+      try {
+        const res = await fetch(`/api/events?year=${year}&month=${month}`)
+        if (res.ok) {
+          const data = await res.json()
+          setEvents(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch events:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchEvents()
+  }, [year, month])
+
   const monthName = new Date(year, month - 1).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })
 
   const goToPreviousMonth = () => {
@@ -48,7 +84,7 @@ export default function EventCalendar({ initialYear, initialMonth }: EventCalend
         <div>
           <h2 className="h2 capitalize">{monthName}</h2>
           <p className="text-pepe-t64">
-            {events.length} {events.length === 1 ? 'Event' : 'Events'} in diesem Monat
+            {loading ? 'Laden...' : `${events.length} ${events.length === 1 ? 'Event' : 'Events'} in diesem Monat`}
           </p>
         </div>
 
@@ -66,7 +102,17 @@ export default function EventCalendar({ initialYear, initialMonth }: EventCalend
       </div>
 
       {/* Events Grid */}
-      {events.length > 0 ? (
+      {loading ? (
+        <div className="bento-grid">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="card p-6 animate-pulse">
+              <div className="h-40 bg-pepe-ink/50 rounded mb-4" />
+              <div className="h-4 bg-pepe-ink/50 rounded w-3/4 mb-2" />
+              <div className="h-4 bg-pepe-ink/50 rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : events.length > 0 ? (
         <div className="bento-grid">
           {events.map(event => (
             <EventCard key={event.id} event={event} />
