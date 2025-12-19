@@ -1011,6 +1011,11 @@ export default function EventsPageEN() {
                       <span>🎁</span>
                       <span>Free</span>
                     </div>
+                  ) : selectedEventData.ticketsDisabled ? (
+                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-500/30 border border-gray-400/50 rounded-full text-gray-300 font-semibold opacity-50 cursor-not-allowed">
+                      <span>🎫</span>
+                      <span>Tickets available soon</span>
+                    </div>
                   ) : (
                   <a
                     href={selectedEventData.externalTicketUrl || "/en/kontakt#kontaktformular"}

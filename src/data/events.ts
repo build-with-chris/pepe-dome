@@ -71,6 +71,7 @@ export interface Event {
     ticketUrl: string;
   }>;
   externalTicketUrl?: string;
+  ticketsDisabled?: boolean;
   isOneDay?: boolean;
   freemanShows?: Array<{
     day: string;
@@ -851,6 +852,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     image: '/TwoGetherPoster.jpg',
     video: '/TWO%20GATHER%20-%20Trailer.mp4',
     externalTicketUrl: '',
+    ticketsDisabled: true,
     isOneDay: true
   }
 ];
