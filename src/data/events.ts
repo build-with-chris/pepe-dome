@@ -845,6 +845,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       accent: 'indigo-400'
     },
     emoji: '🎪',
+    image: '/TwoGetherPoster.jpg',
     externalTicketUrl: '',
     isOneDay: true
   }
