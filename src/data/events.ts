@@ -832,12 +832,14 @@ const rawEvents: Omit<Event, 'status'>[] = [
     date: '2026-01-11',
     dateRange: '11. JANUAR 2026',
     time: 'Dauer: 50 Minuten (ohne Pause)',
-    price: 'Tickets verfügbar',
+    price: 'Eintritt für unter 16 Jahre umsonst • Tickets ab 23.12 verfügbar',
     features: [
       { icon: '🎪', text: 'Zeitgenössisches Zirkusstück für alle Altersgruppen' },
       { icon: '🤸', text: 'Handstand, Hula Hoop, Partnerakrobatik, Jonglage und Bodenakrobatik' },
       { icon: '🎭', text: 'Objekttheater, Live-Musik und Theaterelemente' },
-      { icon: '⭐', text: 'Mit hauseigenen Pepe-Artisten Daniela und Jakob' }
+      { icon: '⭐', text: 'Mit hauseigenen Pepe-Artisten Daniela und Jakob' },
+      { icon: '🎁', text: 'Eintritt für unter 16 Jahre umsonst' },
+      { icon: '📅', text: 'Tickets ab 23. Dezember verfügbar' }
     ],
     category: 'performance',
     color: {
