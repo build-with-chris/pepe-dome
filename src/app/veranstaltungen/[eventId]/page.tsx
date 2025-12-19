@@ -210,6 +210,20 @@ export default function EventDetailPage() {
                 </span>
               </p>
 
+              {/* Video */}
+              {event.video && (
+                <div className="my-6 md:my-8">
+                  <video
+                    src={event.video}
+                    controls
+                    className="w-full rounded-lg shadow-lg"
+                    style={{ maxHeight: '500px' }}
+                  >
+                    Ihr Browser unterstützt das Video-Element nicht.
+                  </video>
+                </div>
+              )}
+
               <div className="event-modal-features">
                 {/* Desktop: All features, Mobile: Max 2 features */}
                 <div className="hidden md:grid md:grid-cols-2 md:gap-4">

@@ -59,6 +59,7 @@ export interface Event {
   };
   emoji: string;
   image?: string;
+  video?: string;
   status: 'upcoming' | 'ongoing' | 'past';
   cancelled?: {
     reason: string;
@@ -846,6 +847,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     },
     emoji: '🎪',
     image: '/TwoGetherPoster.jpg',
+    video: '/TWO%20GATHER%20-%20Trailer.mp4',
     externalTicketUrl: '',
     isOneDay: true
   }
