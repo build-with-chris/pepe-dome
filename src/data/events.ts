@@ -822,6 +822,31 @@ const rawEvents: Omit<Event, 'status'>[] = [
     image: '/Outta Space Silvester.webp',
     externalTicketUrl: '',
     isOneDay: true
+  },
+  {
+    id: 'two-gather',
+    title: 'TWO GATHER',
+    subtitle: 'Ein zeitgenössisches Zirkusstück',
+    description: 'Mit Humor, Gefühl und richtig guter Zirkuskunst erzählt TWO GATHER von Begegnungen, Vertrauen und dem feinen Tanz zwischen Nähe und Distanz. Ein Wechselspiel aus spektakulären Momenten und stillen Augenblicken: mal atemberaubend, mal verspielt, mal nachdenklich – aber immer voller Menschlichkeit. Freu dich auf eine liebevoll moderne Inszenierung, die klassische Zirkusdisziplinen mit Theater, Musik und Objektspiel verbindet. Daniela und Jakob (ausgebildete Zirkusartisten) zeigen u. a. Handstand, Hula Hoop, Partnerakrobatik, Jonglage und Bodenakrobatik – dazu gibt es Objekttheater, Live-Musik und Theaterelemente. Eine Tasche voller Überraschungen, ein eigenwilliges Requisit und diese besondere Magie des zeitgenössischen Zirkus machen TWO GATHER zu einer herzerwärmenden, lebendigen Vorstellung für die ganze Familie. Und jetzt kommt das i-Tüpfelchen (oder eher das Zirkus-Z): Daniela und Jakob sind hauseigene Pepe-Artisten – also ein echtes Highlight im Pepe Dome.',
+    date: '2026-01-11',
+    dateRange: '11. JANUAR 2026',
+    time: 'Dauer: 50 Minuten (ohne Pause)',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '🎪', text: 'Zeitgenössisches Zirkusstück für alle Altersgruppen' },
+      { icon: '🤸', text: 'Handstand, Hula Hoop, Partnerakrobatik, Jonglage und Bodenakrobatik' },
+      { icon: '🎭', text: 'Objekttheater, Live-Musik und Theaterelemente' },
+      { icon: '⭐', text: 'Mit hauseigenen Pepe-Artisten Daniela und Jakob' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'indigo-500',
+      secondary: 'purple-500',
+      accent: 'indigo-400'
+    },
+    emoji: '🎪',
+    externalTicketUrl: '',
+    isOneDay: true
   }
 ];
 
