@@ -832,7 +832,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     description: 'Mit Humor, Gefühl und richtig guter Zirkuskunst erzählt TWO GATHER von Begegnungen, Vertrauen und dem feinen Tanz zwischen Nähe und Distanz. Ein Wechselspiel aus spektakulären Momenten und stillen Augenblicken: mal atemberaubend, mal verspielt, mal nachdenklich – aber immer voller Menschlichkeit. Freu dich auf eine liebevoll moderne Inszenierung, die klassische Zirkusdisziplinen mit Theater, Musik und Objektspiel verbindet. Daniela und Jakob (ausgebildete Zirkusartisten) zeigen u. a. Handstand, Hula Hoop, Partnerakrobatik, Jonglage und Bodenakrobatik – dazu gibt es Objekttheater, Live-Musik und Theaterelemente. Eine Tasche voller Überraschungen, ein eigenwilliges Requisit und diese besondere Magie des zeitgenössischen Zirkus machen TWO GATHER zu einer herzerwärmenden, lebendigen Vorstellung für die ganze Familie. Und jetzt kommt das i-Tüpfelchen (oder eher das Zirkus-Z): Daniela und Jakob sind hauseigene Pepe-Artisten – also ein echtes Highlight im Pepe Dome.',
     date: '2026-01-11',
     dateRange: '11. JANUAR 2026',
-    time: 'Dauer: 50 Minuten (ohne Pause)',
+    time: 'Einlass 15:30 Uhr • Beginn 16:00 Uhr • Dauer: 50 Minuten (ohne Pause)',
     price: 'Eintritt für unter 16 Jahre umsonst • Tickets ab 23.12 verfügbar',
     features: [
       { icon: '🎪', text: 'Zeitgenössisches Zirkusstück für alle Altersgruppen' },
