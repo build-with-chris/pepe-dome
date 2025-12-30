@@ -458,6 +458,37 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       { icon: '📅', text: 'Tickets available from December 23' }
     ],
     dateRange: 'JANUARY 11, 2026'
+  },
+  'facets-of-the-world': {
+    title: 'Facets of the World',
+    subtitle: 'From Nature to Composition',
+    description: 'NOT YOUR TYPICAL ART SHOW! 🎨🤸 From nature to city to inner space, FACETS OF THE WORLD mixes art and Munich Circus Arts performance into one vibrant, multidimensional experience. Step inside. Shift your gaze. Discover the world—facet by facet.',
+    time: 'Various opening hours',
+    price: 'Free admission',
+    features: [
+      { icon: '🎨', text: 'Art exhibition with performance elements' },
+      { icon: '🤸', text: 'Combination of art and Munich Circus Arts' },
+      { icon: '🌍', text: 'From nature to city to inner space' },
+      { icon: '🎁', text: 'Free admission' }
+    ],
+    dateRange: 'JANUARY 9-11, 2026',
+    ticketDates: [
+      {
+        date: '2026-01-09',
+        dateDisplay: 'January 9 • 6:00 PM-11:00 PM (Opening with Performance)',
+        ticketUrl: '',
+      },
+      {
+        date: '2026-01-10',
+        dateDisplay: 'January 10 • 12:00 PM-6:00 PM',
+        ticketUrl: '',
+      },
+      {
+        date: '2026-01-11',
+        dateDisplay: 'January 11 • 12:00 PM-4:00 PM',
+        ticketUrl: '',
+      }
+    ]
   }
 };
 

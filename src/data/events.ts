@@ -854,6 +854,49 @@ const rawEvents: Omit<Event, 'status'>[] = [
     externalTicketUrl: '',
     ticketsDisabled: true,
     isOneDay: true
+  },
+  {
+    id: 'facets-of-the-world',
+    title: 'Facets of the World',
+    subtitle: 'From Nature to Composition',
+    description: 'NOT YOUR TYPICAL ART SHOW! 🎨🤸 From nature to city to inner space, FACETS OF THE WORLD mixes art and Munich Circus Arts performance into one vibrant, multidimensional experience. Step inside. Shift your gaze. Discover the world—facet by facet.',
+    date: '2026-01-09',
+    dateRange: '9.–11. JANUAR 2026',
+    time: 'Verschiedene Öffnungszeiten',
+    price: 'Eintritt frei',
+    features: [
+      { icon: '🎨', text: 'Kunstausstellung mit Performance-Elementen' },
+      { icon: '🤸', text: 'Kombination aus Kunst und Munich Circus Arts' },
+      { icon: '🌍', text: 'Von Natur zu Stadt zu innerem Raum' },
+      { icon: '🎁', text: 'Eintritt frei' }
+    ],
+    category: 'exhibition',
+    color: {
+      primary: 'amber-500',
+      secondary: 'yellow-500',
+      accent: 'amber-400'
+    },
+    emoji: '🎨',
+    image: '/AusstellungJan2026.jpg',
+    ticketDates: [
+      {
+        date: '2026-01-09',
+        dateDisplay: '9. Januar • 18:00-23:00 Uhr (Vernissage mit Performance)',
+        ticketUrl: '',
+      },
+      {
+        date: '2026-01-10',
+        dateDisplay: '10. Januar • 12:00-18:00 Uhr',
+        ticketUrl: '',
+      },
+      {
+        date: '2026-01-11',
+        dateDisplay: '11. Januar • 12:00-16:00 Uhr',
+        ticketUrl: '',
+      }
+    ],
+    externalTicketUrl: '',
+    isOneDay: false
   }
 ];
 
