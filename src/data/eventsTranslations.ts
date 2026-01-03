@@ -448,7 +448,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     subtitle: 'A Contemporary Circus Piece',
     description: 'With humor, emotion, and truly good circus art, TWO GATHER tells of encounters, trust, and the delicate dance between closeness and distance. An interplay of spectacular moments and quiet moments: sometimes breathtaking, sometimes playful, sometimes thoughtful – but always full of humanity. Look forward to a lovingly modern production that combines classical circus disciplines with theater, music, and object play. Daniela and Jakob (trained circus artists) showcase handstand, hula hoop, partner acrobatics, juggling, and floor acrobatics – plus object theater, live music, and theater elements. A bag full of surprises, an idiosyncratic prop, and that special magic of contemporary circus make TWO GATHER a heartwarming, lively performance for the whole family. And now comes the cherry on top (or rather the circus-Z): Daniela and Jakob are in-house Pepe artists – a real highlight at Pepe Dome.',
     time: 'Doors 3:30 PM • Start 4:00 PM • Duration: 50 minutes (no intermission)',
-    price: 'Free admission for under 16 years • Tickets available from December 23',
+    price: '€12.50 to €18.00 • Free admission for under 16 years',
     features: [
       { icon: '🎪', text: 'Contemporary circus piece for all age groups' },
       { icon: '🤸', text: 'Handstand, hula hoop, partner acrobatics, juggling, and floor acrobatics' },

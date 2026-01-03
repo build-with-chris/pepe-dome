@@ -833,7 +833,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
     date: '2026-01-11',
     dateRange: '11. JANUAR 2026',
     time: 'Einlass 15:30 Uhr • Beginn 16:00 Uhr • Dauer: 50 Minuten (ohne Pause)',
-    price: 'Eintritt für unter 16 Jahre umsonst • Tickets ab 23.12 verfügbar',
+    price: '12,50€ bis 18,00€ • Eintritt für unter 16 Jahre umsonst',
     features: [
       { icon: '🎪', text: 'Zeitgenössisches Zirkusstück für alle Altersgruppen' },
       { icon: '🤸', text: 'Handstand, Hula Hoop, Partnerakrobatik, Jonglage und Bodenakrobatik' },
@@ -851,8 +851,8 @@ const rawEvents: Omit<Event, 'status'>[] = [
     emoji: '🎪',
     image: '/TwoGetherPoster.jpg',
     video: '/TWO%20GATHER%20-%20Trailer.mp4',
-    externalTicketUrl: '',
-    ticketsDisabled: true,
+    externalTicketUrl: 'https://rausgegangen.de/events/twogather-0/',
+    ticketsDisabled: false,
     isOneDay: true
   },
   {
