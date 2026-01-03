@@ -461,14 +461,14 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
   },
   'facets-of-the-world': {
     title: 'Facets of the World',
-    subtitle: 'From Nature to Composition',
-    description: 'NOT YOUR TYPICAL ART SHOW! 🎨🤸 From nature to city to inner space, FACETS OF THE WORLD mixes art and Munich Circus Arts performance into one vibrant, multidimensional experience. Step inside. Shift your gaze. Discover the world—facet by facet.',
+    subtitle: 'From Nature to Composition - 26 Works by Artists from Guangzhou',
+    description: 'In an age saturated with images and structures, our understanding of the world is no longer shaped by a single, fixed gaze but by a multidimensional process of observation and reconstruction. Facets of the World: From Nature to Composition brings together 26 artworks by various artists from the Yuciao Art Institutes of Guangzhou, China, approaching the world through three dimensions—nature, the city, and the inner self—to reveal the multiple ways humans perceive their surroundings. The exhibition adopts the "facet" as its central metaphor. Each work functions as a cross-section of reality—sometimes gentle, sometimes austere, sometimes abstract, sometimes representational. The nature-themed pieces capture the flow of light and wind and the emotional interplay between figures and landscape. Drawings of cities and architecture explore spatial order and the logic of design. Abstract or digital works translate or recode the world into a visual language of form and color, reflecting the undercurrents of human consciousness. These facets do not exist in isolation but resonate with one another within the exhibition space. On the opening evening of the exhibition, there will be a performance by the circus artists of Munich Circus Arts.',
     time: 'Various opening hours',
     price: 'Free admission',
     features: [
-      { icon: '🎨', text: 'Art exhibition with performance elements' },
-      { icon: '🤸', text: 'Combination of art and Munich Circus Arts' },
-      { icon: '🌍', text: 'From nature to city to inner space' },
+      { icon: '🎨', text: '26 artworks by artists from Guangzhou, China' },
+      { icon: '🤸', text: 'Performance by Munich Circus Arts on opening evening' },
+      { icon: '🌍', text: 'Three dimensions: nature, city, and inner self' },
       { icon: '🎁', text: 'Free admission' }
     ],
     dateRange: 'JANUARY 9-11, 2026',
@@ -476,17 +476,17 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       {
         date: '2026-01-09',
         dateDisplay: 'January 9 • 6:00 PM-11:00 PM (Opening with Performance)',
-        ticketUrl: '',
+        ticketUrl: 'https://rausgegangen.de/events/facets-of-the-world-from-nature-to-composition-26-werke-von--1/',
       },
       {
         date: '2026-01-10',
         dateDisplay: 'January 10 • 12:00 PM-6:00 PM',
-        ticketUrl: '',
+        ticketUrl: 'https://rausgegangen.de/events/facets-of-the-world-from-nature-to-composition-26-werke-von--2/',
       },
       {
         date: '2026-01-11',
         dateDisplay: 'January 11 • 12:00 PM-4:00 PM',
-        ticketUrl: '',
+        ticketUrl: 'https://rausgegangen.de/events/facets-of-the-world-from-nature-to-composition-26-werke-von--3/',
       }
     ]
   }
