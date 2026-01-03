@@ -1006,7 +1006,7 @@ export default function VeranstaltungenPage() {
                         rel="noopener noreferrer"
                         className="btn-primary px-6 py-3 font-semibold event-modal-ticket-btn"
                       >
-                        Tickets kaufen
+                        {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') || selectedEventData.price?.toLowerCase().includes('eintritt frei') ? 'Anmelden' : 'Tickets kaufen'}
                       </a>
                     </div>
                   ))}
@@ -1031,7 +1031,7 @@ export default function VeranstaltungenPage() {
                     rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
                     className="btn-primary px-8 py-4 text-lg font-semibold"
                   >
-                    Tickets kaufen
+                    {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') || selectedEventData.price?.toLowerCase().includes('eintritt frei') ? 'Anmelden' : 'Tickets kaufen'}
                   </a>
                   )}
                   <div className="text-white/70">
