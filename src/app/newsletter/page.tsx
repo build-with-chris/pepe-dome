@@ -51,7 +51,7 @@ export default async function NewsletterPage() {
         size="sm"
       />
 
-      <div className="stage-container py-16 md:py-20">
+      <div className="stage-container py-20 md:py-28">
         {/* Intro Text */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-[var(--pepe-t80)] text-lg leading-relaxed">

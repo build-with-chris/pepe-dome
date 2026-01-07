@@ -276,8 +276,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="min-h-[calc(100vh-4rem)] px-6 py-10 lg:px-12 lg:py-12">
-          <div className="max-w-6xl mx-auto space-y-8">
+        <main className="min-h-[calc(100vh-4rem)] px-6 py-8 lg:px-16 lg:py-10">
+          <div className="max-w-7xl mx-auto space-y-6">
             {children}
           </div>
         </main>

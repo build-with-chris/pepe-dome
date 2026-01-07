@@ -56,7 +56,7 @@ export default function AboutPage() {
       />
 
       {/* Story Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
@@ -88,7 +88,7 @@ export default function AboutPage() {
       </section>
 
       {/* PEPE Ecosystem Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -143,7 +143,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -181,7 +181,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 md:py-20 bg-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -200,7 +200,7 @@ export default function AboutPage() {
       </section>
 
       {/* Location Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Map Placeholder */}

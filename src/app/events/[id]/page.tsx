@@ -111,7 +111,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       </section>
 
       {/* Main Content */}
-      <div className="stage-container py-16 md:py-20">
+      <div className="stage-container py-20 md:py-28">
         <div className="grid lg:grid-cols-[1fr_380px] gap-12 lg:gap-16">
           {/* Left Column - Content */}
           <div>

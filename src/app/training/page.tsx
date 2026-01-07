@@ -56,7 +56,7 @@ export default function TrainingPage() {
       />
 
       {/* Intro Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
@@ -100,7 +100,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Profitraining */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <span className="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
@@ -119,7 +119,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Disciplines */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -152,7 +152,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="py-16 md:py-20 bg-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -222,7 +222,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Facility Features */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 lg:order-1">
@@ -282,7 +282,7 @@ export default function TrainingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
+      <section className="py-24 md:py-32 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">

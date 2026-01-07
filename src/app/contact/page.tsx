@@ -80,7 +80,7 @@ export default function ContactPage() {
         size="sm"
       />
 
-      <div className="stage-container py-16 md:py-20">
+      <div className="stage-container py-20 md:py-28">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
           {/* Contact Info Cards */}
           <div className="space-y-6">

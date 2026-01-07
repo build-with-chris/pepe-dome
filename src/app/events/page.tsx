@@ -142,7 +142,7 @@ export default function EventsPage() {
         size="sm"
       />
 
-      <div className="stage-container py-16 md:py-20">
+      <div className="stage-container py-20 md:py-28">
         {/* Month Navigation */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
           <div>

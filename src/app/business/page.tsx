@@ -65,7 +65,7 @@ export default function BusinessPage() {
       />
 
       {/* Intro Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
@@ -106,7 +106,7 @@ export default function BusinessPage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -147,7 +147,7 @@ export default function BusinessPage() {
       </section>
 
       {/* Packages */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -213,7 +213,7 @@ export default function BusinessPage() {
       </section>
 
       {/* Venue Features */}
-      <section className="py-16 md:py-20 bg-[var(--pepe-ink)]">
+      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="relative h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
@@ -273,7 +273,7 @@ export default function BusinessPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-20">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">

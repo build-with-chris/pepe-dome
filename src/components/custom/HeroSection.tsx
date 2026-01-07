@@ -46,9 +46,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     ref
   ) => {
     const sizeClasses = {
-      sm: 'py-16 md:py-20',
-      md: 'py-24 md:py-32 min-h-[50vh]',
-      lg: 'py-32 md:py-40 min-h-[70vh]',
+      sm: 'py-20 md:py-28',
+      md: 'py-28 md:py-36 min-h-[50vh]',
+      lg: 'py-36 md:py-48 min-h-[70vh]',
     }
 
     return (

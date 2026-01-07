@@ -37,7 +37,7 @@ export default async function NewsPage() {
         size="sm"
       />
 
-      <div className="stage-container py-16 md:py-20">
+      <div className="stage-container py-20 md:py-28">
         {/* Category Filter */}
         <div className="flex flex-wrap gap-2 justify-center mb-12">
           <button
