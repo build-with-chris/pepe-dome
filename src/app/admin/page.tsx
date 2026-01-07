@@ -219,7 +219,7 @@ export default async function AdminDashboard() {
             <h3 className="text-lg font-semibold text-white">
               Letzte Events
             </h3>
-            <Link href="/admin/events" className="text-sm text-[#D4A574] hover:underline">
+            <Link href="/admin/events" className="text-sm text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
@@ -265,7 +265,7 @@ export default async function AdminDashboard() {
             <h3 className="text-lg font-semibold text-white">
               Letzte Artikel
             </h3>
-            <Link href="/admin/articles" className="text-sm text-[#D4A574] hover:underline">
+            <Link href="/admin/articles" className="text-sm text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
@@ -313,7 +313,7 @@ export default async function AdminDashboard() {
             <h3 className="text-lg font-semibold text-white">
               Letzter Newsletter
             </h3>
-            <Link href="/admin/newsletters" className="text-sm text-[#D4A574] hover:underline">
+            <Link href="/admin/newsletters" className="text-sm text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
@@ -338,7 +338,7 @@ export default async function AdminDashboard() {
             {stats.lastNewsletter.stats && (
               <div className="flex gap-6">
                 <div>
-                  <p className="text-2xl font-bold text-[#D4A574]">
+                  <p className="text-2xl font-bold text-[#016dca]">
                     {stats.lastNewsletter.recipientCount.toLocaleString('de-DE')}
                   </p>
                   <p className="text-xs text-gray-400">Empfanger</p>

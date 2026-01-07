@@ -3,13 +3,19 @@
     "name": "Pepe Dome",
     "tagline": "Zuhause für Artistik & Kultur in München",
     "description": "Der Pepe Dome im Ostpark München ist eine einzigartige geodätische Kuppel für spektakuläre Shows, professionelles Training und unvergessliche Events.",
-    "email": "info@pepedome.de",
-    "phone": "+49 89 12345678",
+    "email": "info@pepearts.de",
+    "phone": "+49 179 699 0707",
+    "emergencyPhone": "+49 159 048 914 19",
+    "whatsapp": "+49 179 699 0707",
     "address": {
       "street": "Ostpark",
       "city": "München",
-      "zip": "81549",
+      "zip": "81925",
       "country": "Deutschland"
+    },
+    "hours": {
+      "weekdays": "12:00 - 21:00",
+      "weekends": "Nach Veranstaltungsplan"
     },
     "social": {
       "instagram": "https://www.instagram.com/pepe_arts/",
@@ -19,10 +25,10 @@
   },
   "navigation": {
     "main": [
-      {"label": "Home", "href": "/"},
-      {"label": "News", "href": "/news"},
       {"label": "Events", "href": "/events"},
-      {"label": "Newsletter", "href": "/newsletter"},
+      {"label": "Training", "href": "/training"},
+      {"label": "Business", "href": "/business"},
+      {"label": "News", "href": "/news"},
       {"label": "Über uns", "href": "/about"},
       {"label": "Kontakt", "href": "/contact"}
     ],
@@ -67,54 +73,78 @@
   },
   "about": {
     "title": "Über den Pepe Dome",
-    "intro": "Der Pepe Dome ist mehr als eine Veranstaltungslocation - er ist ein lebendiger Ort für Artistik, Kultur und Gemeinschaft im Herzen des Münchner Ostparks.",
-    "story": "Seit 2018 bringen wir zeitgenössische Artistik nach München. Was als temporäres Projekt begann, hat sich zu einem festen Bestandteil der Münchner Kulturlandschaft entwickelt. Die geodätische Kuppel mit ihrer beeindruckenden Architektur bietet die perfekte Bühne für spektakuläre Shows und intensives Training.",
+    "intro": "Der Pepe Dome ist ein Treffpunkt, an dem sich Artistik und Kultur kreuzen - ein Ort, der Performance für Menschen jeden Alters und jeder Herkunft zugänglich macht.",
+    "story": "2006 begann die Suche nach einem Raum für zeitgenössischen Zirkus. Über mehrere temporäre Standorte (MUCCA, CircusHub, Sugar Mountain) entwickelte sich das Projekt bis zur offiziellen Eröffnung am 1. August 2025 im Ostpark München. Die geodätische Kuppel mit 8,5 Metern Höhe bietet optimale Akustik und barrierefreien Zugang für spektakuläre Shows und intensives Training.",
     "values": [
       {
         "title": "Künstlerische Exzellenz",
-        "description": "Wir fördern Artistik als zeitgenössische Kunstform und bieten eine Plattform für innovative Produktionen."
+        "description": "Wir streben nach höchster Qualität in Shows und Training und fördern Artistik als zeitgenössische Kunstform."
       },
       {
-        "title": "Inklusion & Zugänglichkeit",
-        "description": "Kultur für alle - wir setzen uns für barrierefreien Zugang und sozial verträgliche Preise ein."
+        "title": "Inklusion & Community",
+        "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung - Kultur für alle."
       },
       {
         "title": "Nachhaltigkeit",
-        "description": "Von Solarenergie bis Mehrwegsystem - wir arbeiten kontinuierlich an unserem ökologischen Fußabdruck."
+        "description": "Kreative Wiederverwendung von Materialien statt Neuanschaffung - ökologische Verantwortung ist uns wichtig."
       },
       {
-        "title": "Community Building",
-        "description": "Wir schaffen Räume für Begegnung, Austausch und gemeinsames Wachstum."
+        "title": "Innovation",
+        "description": "Wir experimentieren mit neuen Formaten und Technologien, um Artistik neu zu denken."
       }
     ],
+    "collective": {
+      "title": "Das PepeCollective",
+      "description": "Fünf Partnerorganisationen betreiben gemeinsam den Venue mit über 15 Jahren Erfahrung und internationalen Künstlernetzwerken:",
+      "partners": [
+        {"name": "PepeArts", "focus": "Artistik und Performance"},
+        {"name": "Munich Circus Arts", "focus": "Training und Kurse"},
+        {"name": "BUZZ", "focus": "Events und Entertainment"},
+        {"name": "Circusakademie München", "focus": "Training und Workshops"},
+        {"name": "PepeShows", "focus": "Shows und Produktion"}
+      ]
+    },
     "team": {
       "title": "Das Team",
-      "description": "Hinter dem Pepe Dome steht ein engagiertes Team aus Artist:innen, Kulturschaffenden und Organisator:innen, die ihre Leidenschaft für Artistik teilen."
+      "description": "Hinter dem Pepe Dome steht das PepeCollective - ein engagiertes Netzwerk aus Artist:innen, Kulturschaffenden und Organisator:innen mit über 15 Jahren Erfahrung."
     },
     "partners": {
       "title": "Partner & Förderer",
-      "description": "Wir danken unseren Partner:innen und Förderern für die Unterstützung:"
+      "description": "Gefördert vom Kulturreferat der Landeshauptstadt München und Kreativ München sowie durch Städtebauförderungsmittel."
+    },
+    "specs": {
+      "height": "8,5 Meter",
+      "capacity": "200 Plätze",
+      "features": ["Optimale Akustik", "Barrierefreier Zugang", "Luftartistik möglich"]
     }
   },
   "contact": {
     "title": "Kontakt",
-    "subtitle": "Wir freuen uns auf Ihre Nachricht",
+    "subtitle": "Wir freuen uns auf deine Nachricht",
     "info": {
       "address": {
         "title": "Adresse",
-        "content": "Pepe Dome\nOstpark\n81549 München"
+        "content": "Pepe Dome\nOstpark\n81925 München"
       },
       "email": {
         "title": "E-Mail",
-        "content": "info@pepedome.de"
+        "content": "info@pepearts.de"
       },
       "phone": {
-        "title": "Telefon",
-        "content": "+49 89 12345678"
+        "title": "WhatsApp",
+        "content": "+49 179 699 0707"
+      },
+      "emergency": {
+        "title": "Event-Notfall",
+        "content": "+49 159 048 914 19"
       },
       "hours": {
         "title": "Öffnungszeiten",
-        "content": "Mo-Fr: 14:00 - 22:00 Uhr\nSa-So: Nach Veranstaltungsplan"
+        "content": "Werktags: 12:00 - 21:00 Uhr\nWochenende: Nach Veranstaltungsplan"
+      },
+      "directions": {
+        "title": "Anfahrt",
+        "content": "U-Bahn: Quiddestraße\nEingang: Albert-Schweitzer-Straße\nParken: Michaeligarten (15 Min. Fußweg)"
       }
     },
     "form": {
@@ -169,18 +199,29 @@
     "quickLinks": {
       "title": "Schnellzugriff",
       "links": [
-        {"label": "Aktuelle Events", "href": "/events"},
+        {"label": "Events", "href": "/events"},
+        {"label": "Training", "href": "/training"},
+        {"label": "Business", "href": "/business"},
         {"label": "News", "href": "/news"},
-        {"label": "Newsletter", "href": "/newsletter"},
-        {"label": "Über uns", "href": "/about"}
+        {"label": "Über uns", "href": "/about"},
+        {"label": "Kontakt", "href": "/contact"}
+      ]
+    },
+    "pepeEcosystem": {
+      "title": "PEPE Ökosystem",
+      "links": [
+        {"label": "PEPE Dome", "href": "/", "external": false},
+        {"label": "PEPE Shows", "href": "https://pepeshows.de", "external": true},
+        {"label": "PEPE Arts", "href": "https://pepearts.de", "external": true},
+        {"label": "Munich Circus Arts", "href": "https://munichcircusarts.de", "external": true},
+        {"label": "Circusakademie München", "href": "https://circusakademie-muenchen.de", "external": true}
       ]
     },
     "legal": {
       "title": "Rechtliches",
       "links": [
         {"label": "Impressum", "href": "/impressum"},
-        {"label": "Datenschutz", "href": "/datenschutz"},
-        {"label": "AGB", "href": "/agb"}
+        {"label": "Datenschutz", "href": "/datenschutz"}
       ]
     },
     "support": {

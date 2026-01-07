@@ -39,7 +39,7 @@ export default function ContactPage() {
     // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
       setStatus('error')
-      setErrorMessage('Bitte fulle alle Pflichtfelder aus.')
+      setErrorMessage('Bitte fülle alle Pflichtfelder aus.')
       return
     }
 
@@ -80,8 +80,8 @@ export default function ContactPage() {
         size="sm"
       />
 
-      <div className="stage-container py-12">
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+      <div className="stage-container py-16 md:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
           {/* Contact Info Cards */}
           <div className="space-y-6">
             {/* Address Card */}
@@ -356,7 +356,7 @@ export default function ContactPage() {
         </div>
 
         {/* Map Section (Optional) */}
-        <section className="mt-16">
+        <section className="mt-20">
           <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
             So findest du uns
           </h2>
@@ -376,7 +376,7 @@ export default function ContactPage() {
                   className="mt-4 inline-block"
                 >
                   <Button variant="secondary" size="sm">
-                    In Google Maps offnen
+                    In Google Maps öffnen
                   </Button>
                 </a>
               </div>

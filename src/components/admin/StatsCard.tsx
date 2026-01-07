@@ -35,12 +35,12 @@ interface StatsCardProps {
 
 const variantStyles = {
   default: {
-    icon: 'bg-[#D4A574]/20 text-[#D4A574]',
+    icon: 'bg-[#016dca]/20 text-[#016dca]',
     value: 'text-white',
   },
   gold: {
-    icon: 'bg-[#D4A574]/20 text-[#D4A574]',
-    value: 'text-[#D4A574]',
+    icon: 'bg-[#016dca]/20 text-[#016dca]',
+    value: 'text-[#016dca]',
   },
   success: {
     icon: 'bg-emerald-500/20 text-emerald-400',

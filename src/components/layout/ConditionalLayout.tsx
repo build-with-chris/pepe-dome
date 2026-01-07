@@ -14,13 +14,9 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
   const pathname = usePathname()
   const isAdminRoute = pathname?.startsWith('/admin')
 
-  // Admin routes: no navbar, no footer, no particles, no main padding
+  // Admin routes: no navbar, no footer, no particles - AdminLayout handles its own layout
   if (isAdminRoute) {
-    return (
-      <main className="min-h-screen">
-        {children}
-      </main>
-    )
+    return <>{children}</>
   }
 
   // Public routes: full layout with navbar, footer, particles

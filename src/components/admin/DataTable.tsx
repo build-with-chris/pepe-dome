@@ -190,11 +190,11 @@ export default function DataTable<T extends object>({
     return (
       <span className="ml-2 inline-flex">
         {direction === 'asc' ? (
-          <svg className="w-4 h-4 text-[#D4A574]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-[#016dca]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
         ) : direction === 'desc' ? (
-          <svg className="w-4 h-4 text-[#D4A574]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-[#016dca]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         ) : (
@@ -378,7 +378,7 @@ export default function DataTable<T extends object>({
                     className={cn(
                       'px-3 py-1 rounded-xl text-sm transition-colors',
                       page === pageNum
-                        ? 'bg-[#D4A574] text-black font-medium'
+                        ? 'bg-[#016dca] text-black font-medium'
                         : 'bg-white/5 text-white/80 hover:bg-white/10'
                     )}
                   >

@@ -1,6 +1,6 @@
 /* ========================================
    Pepe Dome Design Tokens
-   Core design system variables - Gold Theme
+   Core design system variables - DOME Blue Theme
    ======================================== */
 
 :root {
@@ -25,20 +25,20 @@
   --pepe-line2: #292929;
   --pepe-line-light: #3A3A3A;
 
-  /* Accent Colors - Warm Golden Theatre Lighting */
-  --pepe-gold: #D4A574;          /* Primary golden accent - warm theatre spotlight */
-  --pepe-gold-hover: #E6B887;    /* Hover state - brighter gold */
-  --pepe-gold-active: #C19A64;   /* Active/pressed state - deeper gold */
-  --pepe-gold-glow: rgba(212, 165, 116, 0.25);  /* Golden glow effect */
-  --pepe-gold-glow-strong: rgba(212, 165, 116, 0.4);  /* Strong glow */
+  /* Accent Colors - DOME Blue */
+  --pepe-gold: #016dca;          /* Primary DOME blue accent */
+  --pepe-gold-hover: #0180e8;    /* Hover state - brighter blue */
+  --pepe-gold-active: #015ab0;   /* Active/pressed state - deeper blue */
+  --pepe-gold-glow: rgba(1, 109, 202, 0.25);  /* Blue glow effect */
+  --pepe-gold-glow-strong: rgba(1, 109, 202, 0.4);  /* Strong glow */
 
-  /* Secondary Warm Tones */
-  --pepe-bronze: #B8860B;        /* Bronze accent for depth */
-  --pepe-bronze-hover: #C69315;  /* Hover state for bronze */
-  --pepe-bronze-active: #9C6F09; /* Active state for bronze */
-  --pepe-bronze-glow: rgba(184, 134, 11, 0.25); /* Bronze glow */
-  --pepe-amber: #FFBF00;         /* Bright amber for highlights */
-  --pepe-copper: #B87333;        /* Copper tone for variety */
+  /* Primary Button Colors - DOME Blue */
+  --pepe-bronze: #016dca;        /* Primary DOME blue for buttons */
+  --pepe-bronze-hover: #0180e8;  /* Hover state for blue */
+  --pepe-bronze-active: #015ab0; /* Active state for blue */
+  --pepe-bronze-glow: rgba(1, 109, 202, 0.25); /* Blue glow */
+  --pepe-amber: #3399ff;         /* Bright blue for highlights */
+  --pepe-copper: #0055aa;        /* Darker blue for variety */
 
   /* Semantic Colors */
   --pepe-success: #00DC82;

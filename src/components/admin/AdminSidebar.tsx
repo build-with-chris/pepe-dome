@@ -162,10 +162,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       <aside
         className={cn(
           'fixed top-0 left-0 z-50 h-screen w-[260px]',
-          'bg-[#111111] border-r border-white/10',
+          'bg-[#111111] border-r border-white/20',
           'transition-transform duration-300 ease-in-out',
+          // Always visible on lg+, toggle on mobile
           'lg:translate-x-0',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Logo */}
@@ -180,7 +181,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             />
             <Badge
               variant="outline"
-              className="text-xs bg-[var(--pepe-gold)]/10 text-[var(--pepe-gold)] border-[var(--pepe-gold)]/30"
+              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
             >
               Admin
             </Badge>
@@ -198,7 +199,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 'flex items-center gap-3 px-4 py-3 rounded-xl',
                 'text-sm font-medium transition-all duration-200',
                 isActive(item.href)
-                  ? 'bg-[#D4A574]/15 text-[#D4A574]'
+                  ? 'bg-[#016dca]/15 text-[#016dca]'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               )}
               aria-current={isActive(item.href) ? 'page' : undefined}

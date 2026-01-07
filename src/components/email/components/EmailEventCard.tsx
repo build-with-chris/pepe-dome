@@ -92,7 +92,7 @@ export function EmailEventCard({
           style={{
             fontSize: '16px',
             lineHeight: '1.5',
-            color: '#D4A574',
+            color: '#016dca',
             fontWeight: '600',
             margin: '0 0 8px 0',
           }}

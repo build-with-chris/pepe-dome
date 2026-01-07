@@ -393,7 +393,7 @@ export default function NewsletterEditClient({
           <DialogHeader>
             <DialogTitle className="text-[var(--pepe-white)]">Newsletter jetzt senden?</DialogTitle>
             <DialogDescription className="text-[var(--pepe-t64)]">
-              Diese Aktion kann nicht ruckgangig gemacht werden.
+              Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
 

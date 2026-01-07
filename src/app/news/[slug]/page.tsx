@@ -100,8 +100,8 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
       </section>
 
       {/* Main Content */}
-      <div className="stage-container py-12">
-        <div className="grid lg:grid-cols-[1fr_300px] gap-12">
+      <div className="stage-container py-16 md:py-20">
+        <div className="grid lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
           {/* Left Column - Article Content */}
           <article>
             {/* Header */}
@@ -266,7 +266,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedEvents.map(event => (
                 <EventCard
                   key={event.id}

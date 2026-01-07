@@ -201,7 +201,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             />
             <Badge
               variant="outline"
-              className="text-xs bg-[#D4A574]/10 text-[#D4A574] border-[#D4A574]/30"
+              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
             >
               Admin
             </Badge>
@@ -219,7 +219,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 'flex items-center gap-3 px-4 py-3 rounded-xl',
                 'text-sm font-medium transition-all duration-200',
                 isActive(item.href)
-                  ? 'bg-[#D4A574]/15 text-[#D4A574]'
+                  ? 'bg-[#016dca]/15 text-[#016dca]'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               )}
             >

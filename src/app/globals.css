@@ -2,7 +2,7 @@
 
 /* ========================================
    PEPE DOME DESIGN SYSTEM
-   Editorial News Hub with Gold Theme
+   Editorial News Hub with DOME Blue Theme
    ======================================== */
 
 /* Import Design System */
@@ -79,11 +79,56 @@ main {
   min-height: calc(100vh - 80px);
 }
 
+/* ===== Admin Layout ===== */
+
+.admin-main-content {
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .admin-main-content {
+    margin-left: 260px;
+  }
+}
+
+/* Admin pages don't need the main padding-top since they have their own header */
+.admin-main-content main {
+  padding-top: 0;
+  min-height: auto;
+}
+
 .stage-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 clamp(var(--space-4), 5vw, var(--space-12));
+  padding: 0 clamp(var(--space-6), 5vw, var(--space-16));
   width: 100%;
+}
+
+/* Page section spacing */
+.page-section {
+  padding: var(--space-20) 0;
+}
+
+.page-section-compact {
+  padding: var(--space-12) 0;
+}
+
+.page-section-hero {
+  padding: var(--space-24) 0 var(--space-20);
+}
+
+/* Content spacing */
+.content-block {
+  margin-bottom: var(--space-12);
+}
+
+.content-block-sm {
+  margin-bottom: var(--space-8);
+}
+
+.content-block-lg {
+  margin-bottom: var(--space-16);
 }
 
 .section {
@@ -179,17 +224,17 @@ main {
   --color-pepe-line2: #292929;
   --color-pepe-line-light: #3A3A3A;
 
-  /* Gold Accent */
-  --color-pepe-gold: #D4A574;
-  --color-pepe-gold-hover: #E6B887;
-  --color-pepe-gold-active: #C19A64;
+  /* DOME Blue Accent */
+  --color-pepe-gold: #016dca;
+  --color-pepe-gold-hover: #0180e8;
+  --color-pepe-gold-active: #015ab0;
 
-  /* Bronze/Secondary */
-  --color-pepe-bronze: #B8860B;
-  --color-pepe-bronze-hover: #C69315;
-  --color-pepe-bronze-active: #9C6F09;
-  --color-pepe-amber: #FFBF00;
-  --color-pepe-copper: #B87333;
+  /* Primary Button Blue */
+  --color-pepe-bronze: #016dca;
+  --color-pepe-bronze-hover: #0180e8;
+  --color-pepe-bronze-active: #015ab0;
+  --color-pepe-amber: #3399ff;
+  --color-pepe-copper: #0055aa;
 
   /* Semantic */
   --color-pepe-success: #00DC82;

@@ -59,7 +59,7 @@ interface PageProps {
 const statusColors: Record<string, string> = {
   DRAFT: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
   SCHEDULED: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  SENDING: 'bg-[#D4A574]/20 text-[#D4A574] border-[#D4A574]/30',
+  SENDING: 'bg-[#016dca]/20 text-[#016dca] border-[#016dca]/30',
   SENT: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
 }
 
@@ -104,7 +104,7 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl">
           <div className="text-gray-400 text-sm mb-1">Aktive Subscribers</div>
-          <div className="text-3xl font-bold text-[#D4A574]">
+          <div className="text-3xl font-bold text-[#016dca]">
             {stats.totalSubscribers.toLocaleString('de-DE')}
           </div>
         </div>
@@ -176,7 +176,7 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
                 className={cn(
                   'px-4 py-2 rounded-xl text-sm transition-colors',
                   p === page
-                    ? 'bg-[#D4A574] text-black font-semibold'
+                    ? 'bg-[#016dca] text-black font-semibold'
                     : 'bg-white/5 text-white/80 hover:bg-white/10'
                 )}
               >
@@ -205,7 +205,7 @@ function FilterTab({
       className={cn(
         'px-4 py-2 rounded-xl transition-colors text-sm',
         active
-          ? 'bg-[#D4A574] text-black font-semibold'
+          ? 'bg-[#016dca] text-black font-semibold'
           : 'text-white/80 hover:bg-white/5'
       )}
     >
@@ -288,7 +288,7 @@ function NewsletterListItem({
                 <span>{newsletter.recipientCount.toLocaleString('de-DE')} Empfanger</span>
               )}
               {openRate && (
-                <span className="text-[#D4A574]">{openRate}% Offnungsrate</span>
+                <span className="text-[#016dca]">{openRate}% Offnungsrate</span>
               )}
             </div>
           </div>

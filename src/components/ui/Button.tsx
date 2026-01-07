@@ -6,77 +6,38 @@ import { cn } from "@/lib/utils"
 
 /**
  * Button component following PEPE Dome design system
+ * Uses CSS classes from components.css for consistent styling
  *
  * Variants:
- * - primary: Gold/bronze background for main CTAs
+ * - primary: DOME blue background for main CTAs
  * - secondary: Outlined style for secondary actions
  * - ghost: Transparent background for tertiary actions
  * - destructive: Red background for destructive actions
- * - outline: Border with transparent background
  * - link: Text link style
  *
- * Sizes: xs, sm, md (default), lg, xl
+ * Sizes: xs, sm, md (default), lg, xl, icon
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+  "btn transition-all",
   {
     variants: {
       variant: {
-        // Primary: Gold/Bronze for main CTAs
-        primary: [
-          "bg-[var(--pepe-bronze)] text-[var(--pepe-black)]",
-          "hover:bg-[var(--pepe-bronze-hover)] hover:text-[var(--pepe-white)]",
-          "hover:-translate-y-0.5 hover:shadow-[0_0_0_2px_var(--pepe-bronze-glow),0_8px_40px_rgba(192,137,94,0.15)]",
-          "active:bg-[var(--pepe-bronze-active)] active:translate-y-0",
-        ].join(" "),
-
-        // Secondary: Outlined style
-        secondary: [
-          "bg-transparent text-[var(--pepe-white)] border border-[var(--pepe-line)]",
-          "hover:border-[var(--pepe-white)] hover:bg-white/5",
-          "hover:-translate-y-0.5",
-          "active:bg-white/10 active:translate-y-0",
-        ].join(" "),
-
-        // Ghost: Transparent for tertiary actions
-        ghost: [
-          "bg-transparent text-[var(--pepe-t80)] border-none",
-          "hover:text-[var(--pepe-white)] hover:bg-white/5",
-          "active:bg-white/10",
-        ].join(" "),
-
-        // Destructive: Red for dangerous actions
-        destructive: [
-          "bg-[var(--pepe-error)] text-white",
-          "hover:bg-[var(--pepe-error)]/90 hover:-translate-y-0.5",
-          "active:translate-y-0",
-        ].join(" "),
-
-        // Outline: Border with hover fill (shadcn default)
-        outline: [
-          "border border-input bg-background",
-          "hover:bg-accent hover:text-accent-foreground",
-        ].join(" "),
-
-        // Link: Text link style
-        link: "text-primary underline-offset-4 hover:underline",
-
-        // Default: Uses shadcn primary (gold)
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "btn-primary",
+        primary: "btn-primary",
+        secondary: "btn-secondary",
+        outline: "btn-secondary",
+        ghost: "btn-ghost",
+        destructive: "bg-[var(--pepe-error)] text-white hover:bg-[var(--pepe-error)]/90",
+        link: "text-primary underline-offset-4 hover:underline !p-0 h-auto",
       },
       size: {
-        // Extra small
-        xs: "h-8 px-3 text-xs rounded-lg",
-        // Small
-        sm: "h-9 px-4 text-sm rounded-lg gap-1.5",
-        // Medium (default)
-        md: "h-10 px-6 text-sm rounded-xl",
-        // Large
-        lg: "h-12 px-8 text-base rounded-xl",
-        // Extra large
-        xl: "h-14 px-10 text-lg rounded-2xl",
-        // Icon button
-        icon: "h-10 w-10 rounded-lg",
+        default: "btn-md",
+        xs: "btn-xs",
+        sm: "btn-sm",
+        md: "btn-md",
+        lg: "btn-lg",
+        xl: "btn-xl",
+        icon: "btn-icon-only",
       },
     },
     defaultVariants: {

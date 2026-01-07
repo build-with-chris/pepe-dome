@@ -147,7 +147,7 @@ export default function NewsletterTemplate({
                       style={{
                         fontSize: '18px',
                         lineHeight: '1.5',
-                        color: '#D4A574',
+                        color: '#016dca',
                         margin: '0 0 24px 0',
                         textAlign: 'center',
                       }}
@@ -382,7 +382,7 @@ export default function NewsletterTemplate({
               <Link
                 href="https://instagram.com/pepedome"
                 style={{
-                  color: '#D4A574',
+                  color: '#016dca',
                   textDecoration: 'none',
                   margin: '0 12px',
                   fontSize: '14px',
@@ -393,7 +393,7 @@ export default function NewsletterTemplate({
               <Link
                 href="https://facebook.com/pepedome"
                 style={{
-                  color: '#D4A574',
+                  color: '#016dca',
                   textDecoration: 'none',
                   margin: '0 12px',
                   fontSize: '14px',

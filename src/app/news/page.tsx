@@ -33,11 +33,11 @@ export default async function NewsPage() {
       {/* Hero Section */}
       <HeroSection
         title="News & Magazin"
-        subtitle="Aktuelles aus dem Pepe Dome - Shows, Events, Hintergrunde und mehr"
+        subtitle="Aktuelles aus dem Pepe Dome - Shows, Events, Hintergründe und mehr"
         size="sm"
       />
 
-      <div className="stage-container py-12">
+      <div className="stage-container py-16 md:py-20">
         {/* Category Filter */}
         <div className="flex flex-wrap gap-2 justify-center mb-12">
           <button
@@ -86,7 +86,7 @@ export default async function NewsPage() {
 
         {/* Articles Grid */}
         {remainingArticles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {remainingArticles.map(article => (
               <NewsCard
                 key={article.id}

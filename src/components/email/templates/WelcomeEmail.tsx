@@ -136,7 +136,7 @@ export default function WelcomeEmail({
                 margin: '0 0 12px 0',
               }}
             >
-              <strong style={{ color: '#D4A574' }}>Exklusive Ankundigungen</strong>
+              <strong style={{ color: '#016dca' }}>Exklusive Ankundigungen</strong>
               <br />
               Sei der Erste, der von neuen Shows und Events erfahrt.
             </Text>
@@ -149,7 +149,7 @@ export default function WelcomeEmail({
                 margin: '0 0 12px 0',
               }}
             >
-              <strong style={{ color: '#D4A574' }}>Backstage-Einblicke</strong>
+              <strong style={{ color: '#016dca' }}>Backstage-Einblicke</strong>
               <br />
               Erfahre mehr uber die Kunstler und das Team hinter den Kulissen.
             </Text>
@@ -162,7 +162,7 @@ export default function WelcomeEmail({
                 margin: '0 0 24px 0',
               }}
             >
-              <strong style={{ color: '#D4A574' }}>Special Offers</strong>
+              <strong style={{ color: '#016dca' }}>Special Offers</strong>
               <br />
               Erhalte gelegentlich besondere Angebote und Early-Bird-Tickets.
             </Text>
@@ -213,7 +213,7 @@ export default function WelcomeEmail({
               <a
                 href={newsletterArchiveUrl}
                 style={{
-                  color: '#D4A574',
+                  color: '#016dca',
                   textDecoration: 'none',
                 }}
               >

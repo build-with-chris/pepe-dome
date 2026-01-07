@@ -23,7 +23,7 @@ export function EmailButton({
     <Button
       href={href}
       style={{
-        backgroundColor: isPrimary ? '#B8860B' : '#D4A574',
+        backgroundColor: isPrimary ? '#016dca' : '#016dca',
         color: '#FFFFFF',
         fontSize: '16px',
         fontWeight: '600',

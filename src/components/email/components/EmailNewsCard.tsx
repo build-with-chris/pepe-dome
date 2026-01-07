@@ -67,7 +67,7 @@ export function EmailNewsCard({
               fontWeight: '600',
               letterSpacing: '0.5px',
               textTransform: 'uppercase',
-              color: '#D4A574',
+              color: '#016dca',
               margin: '0 0 8px 0',
             }}
           >
@@ -121,7 +121,7 @@ export function EmailNewsCard({
           <Link
             href={articleUrl}
             style={{
-              color: '#D4A574',
+              color: '#016dca',
               textDecoration: 'none',
               fontWeight: '600',
             }}

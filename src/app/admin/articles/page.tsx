@@ -141,7 +141,7 @@ export default function ArticlesAdminPage() {
           {row.featured && (
             <Badge
               variant="outline"
-              className="text-xs bg-[#D4A574]/10 text-[#D4A574] border-[#D4A574]/30"
+              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
             >
               Featured
             </Badge>
@@ -195,7 +195,7 @@ export default function ArticlesAdminPage() {
         className="text-red-400 hover:text-red-400 hover:bg-red-500/10"
         onClick={() => confirmDelete(row)}
       >
-        Loschen
+        Löschen
       </Button>
     </div>
   )
@@ -229,7 +229,7 @@ export default function ArticlesAdminPage() {
           <SelectContent>
             <SelectItem value="all">Alle Status</SelectItem>
             <SelectItem value="DRAFT">Entwurf</SelectItem>
-            <SelectItem value="PUBLISHED">Veroffentlicht</SelectItem>
+            <SelectItem value="PUBLISHED">Veröffentlicht</SelectItem>
             <SelectItem value="ARCHIVED">Archiviert</SelectItem>
           </SelectContent>
         </Select>
@@ -271,10 +271,10 @@ export default function ArticlesAdminPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Artikel loschen</DialogTitle>
+            <DialogTitle>Artikel löschen</DialogTitle>
             <DialogDescription>
-              Sind Sie sicher, dass Sie den Artikel &quot;{articleToDelete?.title}&quot; loschen mochten?
-              Diese Aktion kann nicht ruckgangig gemacht werden.
+              Sind Sie sicher, dass Sie den Artikel &quot;{articleToDelete?.title}&quot; löschen möchten?
+              Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -290,7 +290,7 @@ export default function ArticlesAdminPage() {
               onClick={handleDelete}
               disabled={deleting}
             >
-              {deleting ? 'Loschen...' : 'Artikel loschen'}
+              {deleting ? 'Löschen...' : 'Artikel löschen'}
             </Button>
           </DialogFooter>
         </DialogContent>

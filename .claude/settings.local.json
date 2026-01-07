@@ -28,7 +28,8 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(timeout 30 npm run dev:*)",
       "Bash(npx tsc:*)",
-      "Bash(timeout 10 npm run dev)"
+      "Bash(timeout 10 npm run dev)",
+      "Bash(npx tsx scripts/seed-from-live-site.ts)"
     ],
     "deny": [],
     "ask": []

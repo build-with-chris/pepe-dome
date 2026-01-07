@@ -124,7 +124,7 @@ export default function ConfirmationEmail({
               <a
                 href={confirmationUrl}
                 style={{
-                  color: '#D4A574',
+                  color: '#016dca',
                   wordBreak: 'break-all',
                 }}
               >

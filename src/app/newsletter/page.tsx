@@ -51,11 +51,11 @@ export default async function NewsletterPage() {
         size="sm"
       />
 
-      <div className="stage-container py-12">
+      <div className="stage-container py-16 md:py-20">
         {/* Intro Text */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-[var(--pepe-t80)] text-lg leading-relaxed">
-            Erhalte monatlich Updates zu Events, Shows und Workshops. Wahle deine Interessen
+            Erhalte monatlich Updates zu Events, Shows und Workshops. Wähle deine Interessen
             und verpasse keine Highlights mehr.
           </p>
         </div>
@@ -77,7 +77,7 @@ export default async function NewsletterPage() {
               </div>
               <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">Event-Vorschauen</h3>
               <p className="text-[var(--pepe-t64)] text-sm">
-                Sei der Erste, der von neuen Shows, Workshops und Festivals erfahrt.
+                Sei der Erste, der von neuen Shows, Workshops und Festivals erfährt.
               </p>
             </div>
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 text-center hover:border-[var(--pepe-gold)] transition-colors duration-300">
@@ -86,7 +86,7 @@ export default async function NewsletterPage() {
               </div>
               <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">Backstage Stories</h3>
               <p className="text-[var(--pepe-t64)] text-sm">
-                Exklusive Einblicke hinter die Kulissen und Interviews mit Kunstlern.
+                Exklusive Einblicke hinter die Kulissen und Interviews mit Künstlern.
               </p>
             </div>
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 text-center hover:border-[var(--pepe-gold)] transition-colors duration-300">
@@ -95,7 +95,7 @@ export default async function NewsletterPage() {
               </div>
               <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">Special Offers</h3>
               <p className="text-[var(--pepe-t64)] text-sm">
-                Early-Bird-Tickets und exklusive Angebote fur Abonnenten.
+                Early-Bird-Tickets und exklusive Angebote für Abonnenten.
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default async function NewsletterPage() {
             </div>
 
             {/* Published Newsletters Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {publishedNewsletters.map(newsletter => (
                 <Link key={newsletter.id} href={`/newsletter/${newsletter.slug}`} className="group">
                   <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 h-full hover:border-[var(--pepe-gold)] transition-all duration-300 hover:-translate-y-1">
@@ -193,7 +193,7 @@ export default async function NewsletterPage() {
               <p className="text-[var(--pepe-t64)]">{content.archive.description}</p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {mockNewsletters.map(newsletter => (
                 <Link key={newsletter.id} href={`/newsletter/${newsletter.id}`} className="group">
                   <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 h-full hover:border-[var(--pepe-gold)] transition-all duration-300 hover:-translate-y-1">

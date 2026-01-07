@@ -140,7 +140,7 @@ export default function EventsAdminPage() {
           {row.featured && (
             <Badge
               variant="outline"
-              className="text-xs bg-[#D4A574]/10 text-[#D4A574] border-[#D4A574]/30"
+              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
             >
               Featured
             </Badge>
@@ -188,7 +188,7 @@ export default function EventsAdminPage() {
         className="text-red-400 hover:text-red-400 hover:bg-red-500/10"
         onClick={() => confirmDelete(row)}
       >
-        Loschen
+        Löschen
       </Button>
     </div>
   )
@@ -222,7 +222,7 @@ export default function EventsAdminPage() {
           <SelectContent>
             <SelectItem value="all">Alle Status</SelectItem>
             <SelectItem value="DRAFT">Entwurf</SelectItem>
-            <SelectItem value="PUBLISHED">Veroffentlicht</SelectItem>
+            <SelectItem value="PUBLISHED">Veröffentlicht</SelectItem>
             <SelectItem value="ARCHIVED">Archiviert</SelectItem>
           </SelectContent>
         </Select>
@@ -264,10 +264,10 @@ export default function EventsAdminPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Event loschen</DialogTitle>
+            <DialogTitle>Event löschen</DialogTitle>
             <DialogDescription>
-              Sind Sie sicher, dass Sie das Event &quot;{eventToDelete?.title}&quot; loschen mochten?
-              Diese Aktion kann nicht ruckgangig gemacht werden.
+              Sind Sie sicher, dass Sie das Event &quot;{eventToDelete?.title}&quot; löschen möchten?
+              Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -283,7 +283,7 @@ export default function EventsAdminPage() {
               onClick={handleDelete}
               disabled={deleting}
             >
-              {deleting ? 'Loschen...' : 'Event loschen'}
+              {deleting ? 'Löschen...' : 'Event löschen'}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -111,8 +111,8 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       </section>
 
       {/* Main Content */}
-      <div className="stage-container py-12">
-        <div className="grid lg:grid-cols-[1fr_380px] gap-12">
+      <div className="stage-container py-16 md:py-20">
+        <div className="grid lg:grid-cols-[1fr_380px] gap-12 lg:gap-16">
           {/* Left Column - Content */}
           <div>
             {/* Featured Badge */}
@@ -258,7 +258,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
           <section className="mt-16 pt-12 border-t border-[var(--pepe-line)]">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-[var(--pepe-white)]">
-                Ahnliche Events
+                Ähnliche Events
               </h2>
               <Link href="/events">
                 <Button variant="ghost" size="sm">
@@ -267,7 +267,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {similarEvents.map(e => (
                 <EventCard
                   key={e.id}
@@ -301,7 +301,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {recentArticles.map(article => (
                 <NewsCard
                   key={article.id}

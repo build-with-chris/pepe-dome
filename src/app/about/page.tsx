@@ -30,7 +30,7 @@ export default function AboutPage() {
     },
     {
       name: 'PEPE Shows',
-      description: 'Zeitgenossischer Zirkus auf hochstem Niveau - von intimen Cabarets bis zu grossen Produktionen.',
+      description: 'Zeitgenössischer Zirkus auf höchstem Niveau - von intimen Cabarets bis zu großen Produktionen.',
       icon: '🎭',
       link: '/events?category=SHOW',
       color: 'bronze',
@@ -38,7 +38,7 @@ export default function AboutPage() {
     },
     {
       name: 'PEPE Art',
-      description: 'Kunstlerische Entwicklung und Produktion - Residenzen, Workshops und kreative Zusammenarbeit.',
+      description: 'Künstlerische Entwicklung und Produktion - Residenzen, Workshops und kreative Zusammenarbeit.',
       icon: '🎨',
       link: '/events?category=WORKSHOP',
       color: 'copper',
@@ -92,10 +92,10 @@ export default function AboutPage() {
         <div className="stage-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Das PEPE Okosystem
+              Das PEPE Ökosystem
             </h2>
             <p className="text-[var(--pepe-t64)] max-w-2xl mx-auto">
-              Drei Saulen - ein gemeinsames Ziel: Artistik als zeitgenossische Kunstform zu fordern und erlebbar zu machen.
+              Drei Säulen - ein gemeinsames Ziel: Artistik als zeitgenössische Kunstform zu fördern und erlebbar zu machen.
             </p>
           </div>
 
@@ -209,7 +209,7 @@ export default function AboutPage() {
                 <div className="text-center">
                   <span className="text-5xl mb-4 block">📍</span>
                   <p className="text-[var(--pepe-t64)]">
-                    Ostpark, Munchen
+                    Ostpark, München
                   </p>
                 </div>
               </div>
@@ -221,8 +221,8 @@ export default function AboutPage() {
                 Besuche uns im Dome
               </h2>
               <p className="text-lg text-[var(--pepe-t80)] mb-6">
-                Der PEPE Dome befindet sich im wunderschonen Ostpark in Munchen - leicht erreichbar
-                mit offentlichen Verkehrsmitteln und mit Parkmoglichkeiten in der Nahe.
+                Der PEPE Dome befindet sich im wunderschönen Ostpark in München - leicht erreichbar
+                mit öffentlichen Verkehrsmitteln und mit Parkmöglichkeiten in der Nähe.
               </p>
 
               <div className="space-y-4 mb-8">

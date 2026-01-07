@@ -43,7 +43,7 @@ export function EmailFooter({
           <Link
             href={viewInBrowserUrl}
             style={{
-              color: '#D4A574',
+              color: '#016dca',
               textDecoration: 'none',
             }}
           >
@@ -108,7 +108,7 @@ export function EmailFooter({
         <Link
           href={unsubscribeUrl}
           style={{
-            color: '#D4A574',
+            color: '#016dca',
             textDecoration: 'underline',
           }}
         >
@@ -118,7 +118,7 @@ export function EmailFooter({
         <Link
           href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/privacy`}
           style={{
-            color: '#D4A574',
+            color: '#016dca',
             textDecoration: 'underline',
           }}
         >

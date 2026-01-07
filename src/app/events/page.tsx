@@ -142,9 +142,9 @@ export default function EventsPage() {
         size="sm"
       />
 
-      <div className="stage-container py-12">
+      <div className="stage-container py-16 md:py-20">
         {/* Month Navigation */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] capitalize">
               {monthName}
@@ -168,7 +168,7 @@ export default function EventsPage() {
         </div>
 
         {/* Filters Row */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
           {/* Category Filter (Task 3.2.1) */}
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(cat => (
@@ -208,7 +208,7 @@ export default function EventsPage() {
 
         {/* Events Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div
                 key={i}
@@ -226,7 +226,7 @@ export default function EventsPage() {
           </div>
         ) : displayedEvents.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {displayedEvents.map((event, index) => (
                 <EventCard
                   key={event.id}

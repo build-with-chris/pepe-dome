@@ -1,213 +1,200 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
 
-// Hard-code navigation to avoid server/client hydration issues
-const navigation = {
-  main: [
-    { label: "Home", href: "/" },
-    { label: "News", href: "/news" },
-    { label: "Events", href: "/events" },
-    { label: "Newsletter", href: "/newsletter" },
-    { label: "Über uns", href: "/about" },
-    { label: "Kontakt", href: "/contact" }
-  ]
-}
+const navigation = [
+  { label: "Events", href: "/events" },
+  { label: "Training", href: "/training" },
+  { label: "Business", href: "/business" },
+  { label: "News", href: "/news" },
+  { label: "Über uns", href: "/about" },
+  { label: "Kontakt", href: "/contact" }
+]
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [show, setShow] = useState(true)
-  const [lastY, setLastY] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const { isSignedIn, isLoaded } = useUser()
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY || 0
-      // Always show near top
-      if (y < 8) {
-        setShow(true)
-      } else {
-        // Show on scroll up
-        if (y < lastY - 2) setShow(true)
-        // Hide on scroll down
-        if (y > lastY + 6) setShow(false)
-      }
-      setLastY(y)
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
     }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [lastY])
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
 
   return (
-    <>
-      <nav
-        className={`fixed top-0 left-0 right-0 w-full h-20 z-50 transition-transform duration-300 ${
-          show ? 'translate-y-0' : '-translate-y-full'
-        } bg-black/90 backdrop-blur-lg border-b border-pepe-line`}
-      >
-        <div className="h-full flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3">
-            <img
-              src="/PEPE_logos_dome.svg"
-              alt="Pepe Dome Logo"
-              className="h-16 w-auto transition-opacity hover:opacity-80"
-            />
-          </Link>
+    <nav
+      className={`nav transition-all duration-300 ${
+        isScrolled ? 'backdrop-blur-md bg-black/90' : 'bg-transparent'
+      }`}
+    >
+      <div className="stage-container">
+        <div className="nav-content">
+          {/* Logo */}
+          <div className="nav-brand">
+            <Link href="/" className="nav-brand-link">
+              <img
+                src="/PEPE_logos_dome.svg"
+                alt="Pepe Dome Logo"
+                className="nav-logo-svg"
+                style={{ height: '64px', width: 'auto' }}
+              />
+            </Link>
+          </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navigation.main.map((link) => (
+          {/* Desktop Navigation */}
+          <div className="nav-links">
+            {navigation.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
-                  pathname === link.href
-                    ? 'text-pepe-gold'
-                    : 'text-pepe-t80 hover:text-pepe-white'
-                }`}
+                className={`nav-link ${pathname === link.href ? 'active' : ''}`}
               >
                 {link.label}
               </Link>
             ))}
+          </div>
 
+          {/* Desktop Actions */}
+          <div className="nav-actions">
             {/* Auth Section */}
-            {isLoaded && (
-              <>
-                {isSignedIn ? (
-                  <div className="flex items-center gap-4 ml-4 pl-4 border-l border-pepe-line">
-                    <Link
-                      href="/admin"
-                      className={`text-sm font-medium transition-colors ${
-                        pathname.startsWith('/admin')
-                          ? 'text-pepe-gold'
-                          : 'text-pepe-t80 hover:text-pepe-white'
-                      }`}
+            {isLoaded && isSignedIn ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/admin"
+                  className={`nav-link text-sm ${
+                    pathname?.startsWith('/admin') ? 'active' : ''
+                  }`}
+                >
+                  Admin
+                </Link>
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: "w-8 h-8",
+                      userButtonPopoverCard: "bg-[#1A1A1A] border border-[#333]",
+                      userButtonPopoverActionButton: "text-white hover:bg-white/10",
+                      userButtonPopoverActionButtonText: "text-white",
+                      userButtonPopoverFooter: "hidden",
+                    }
+                  }}
+                />
+              </div>
+            ) : isLoaded ? (
+              <SignInButton mode="modal">
+                <button className="nav-link text-sm">
+                  Login
+                </button>
+              </SignInButton>
+            ) : null}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Menu öffnen"
+          >
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu-overlay">
+          <div className="mobile-menu-backdrop" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="mobile-menu-content">
+            <div className="mobile-menu-header">
+              <Link href="/" className="nav-brand-link" onClick={() => setIsMobileMenuOpen(false)}>
+                <img
+                  src="/PEPE_logos_dome.svg"
+                  alt="Pepe Dome Logo"
+                  style={{ height: '40px', width: 'auto' }}
+                />
+              </Link>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="mobile-menu-close"
+                aria-label="Menu schließen"
+              >
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="mobile-menu-body">
+              <nav className="mobile-menu-nav">
+                {navigation.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`mobile-menu-link ${pathname === link.href ? 'active' : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                {/* Auth links for mobile */}
+                {isLoaded && isSignedIn ? (
+                  <Link
+                    href="/admin"
+                    className={`mobile-menu-link ${pathname?.startsWith('/admin') ? 'active' : ''}`}
+                    style={{ color: '#016dca' }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                ) : isLoaded ? (
+                  <SignInButton mode="modal">
+                    <button
+                      className="mobile-menu-link"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Admin
-                    </Link>
+                      Login
+                    </button>
+                  </SignInButton>
+                ) : null}
+              </nav>
+
+              {isLoaded && isSignedIn && (
+                <div className="mobile-menu-cta">
+                  <div className="flex items-center justify-center gap-4">
                     <UserButton
-                      afterSignOutUrl="/"
                       appearance={{
                         elements: {
-                          avatarBox: "w-8 h-8",
-                          userButtonTrigger: "focus:shadow-none"
+                          avatarBox: "w-10 h-10",
                         }
                       }}
                     />
                   </div>
-                ) : (
-                  <SignInButton mode="modal">
-                    <button className="ml-4 pl-4 border-l border-pepe-line text-sm font-medium text-pepe-t64 hover:text-pepe-gold transition-colors">
-                      Login
-                    </button>
-                  </SignInButton>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Mobile Hamburger */}
-          <button
-            className="lg:hidden inline-flex items-center justify-center p-2 text-pepe-white hover:text-pepe-gold transition-colors"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 pt-20">
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMenuOpen(false)}
-          />
-          <div className="absolute right-0 top-20 h-[calc(100%-5rem)] w-[85%] max-w-sm bg-pepe-ink border-l border-pepe-line shadow-xl">
-            <div className="flex flex-col p-6 gap-2">
-              {navigation.main.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg border transition-all ${
-                    pathname === link.href
-                      ? 'border-pepe-gold bg-pepe-gold/10 text-pepe-gold'
-                      : 'border-pepe-line bg-pepe-surface/50 text-pepe-t80 hover:border-pepe-gold hover:text-pepe-white'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              {/* Mobile Auth Section */}
-              {isLoaded && (
-                <div className="mt-4 pt-4 border-t border-pepe-line">
-                  {isSignedIn ? (
-                    <>
-                      <Link
-                        href="/admin"
-                        onClick={() => setMenuOpen(false)}
-                        className={`block px-4 py-3 rounded-lg border transition-all ${
-                          pathname.startsWith('/admin')
-                            ? 'border-pepe-gold bg-pepe-gold/10 text-pepe-gold'
-                            : 'border-pepe-line bg-pepe-surface/50 text-pepe-t80 hover:border-pepe-gold hover:text-pepe-white'
-                        }`}
-                      >
-                        Admin Dashboard
-                      </Link>
-                      <div className="flex items-center justify-between px-4 py-3 mt-2">
-                        <span className="text-pepe-t64 text-sm">Eingeloggt</span>
-                        <UserButton
-                          afterSignOutUrl="/"
-                          appearance={{
-                            elements: {
-                              avatarBox: "w-8 h-8"
-                            }
-                          }}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <SignInButton mode="modal">
-                      <button className="w-full px-4 py-3 rounded-lg border border-pepe-gold bg-pepe-gold/10 text-pepe-gold hover:bg-pepe-gold/20 transition-all">
-                        Login
-                      </button>
-                    </SignInButton>
-                  )}
                 </div>
               )}
             </div>
           </div>
         </div>
       )}
-    </>
+    </nav>
   )
 }
