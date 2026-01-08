@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import ImageDropzone from '@/components/admin/ui/ImageDropzone'
 
 /**
  * ArticleForm component
@@ -36,7 +37,7 @@ const articleSchema = z.object({
   content: z.string().min(1, 'Inhalt ist erforderlich'),
   category: z.string().min(1, 'Kategorie ist erforderlich'),
   author: z.string().min(1, 'Autor ist erforderlich'),
-  imageUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
+  imageUrl: z.string().optional().or(z.literal('')),
   tags: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
   status: z.string().default('DRAFT'),
@@ -365,20 +366,14 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
           Medien & Tags
         </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="imageUrl">Bild-URL</Label>
-          <Input
-            id="imageUrl"
-            type="url"
-            value={formData.imageUrl}
-            onChange={(e) => updateField('imageUrl', e.target.value)}
-            hasError={!!errors.imageUrl}
-            placeholder="https://..."
-          />
-          {errors.imageUrl && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.imageUrl}</p>
-          )}
-        </div>
+        <ImageDropzone
+          label="Artikel-Bild"
+          value={formData.imageUrl}
+          onChange={(url) => updateField('imageUrl', url)}
+          hasError={!!errors.imageUrl}
+          error={errors.imageUrl}
+          placeholder="Artikel-Bild hier ablegen oder klicken zum Hochladen"
+        />
 
         <div className="space-y-2">
           <Label htmlFor="tags">Tags</Label>

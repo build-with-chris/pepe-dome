@@ -36,11 +36,11 @@ export function EmailEventCard({
   return (
     <Section
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#1a1a1a',
         borderRadius: '12px',
         overflow: 'hidden',
         marginBottom: '24px',
-        border: '1px solid #E5E5E5',
+        border: '1px solid #333333',
       }}
     >
       {/* Event Image */}
@@ -72,14 +72,14 @@ export function EmailEventCard({
             fontSize: '20px',
             fontWeight: '700',
             lineHeight: '1.3',
-            color: '#0F0520',
+            color: '#FFFFFF',
             margin: '0 0 12px 0',
           }}
         >
           <Link
             href={ctaUrl}
             style={{
-              color: '#0F0520',
+              color: '#FFFFFF',
               textDecoration: 'none',
             }}
           >
@@ -107,7 +107,7 @@ export function EmailEventCard({
             style={{
               fontSize: '14px',
               lineHeight: '1.5',
-              color: '#666666',
+              color: '#AAAAAA',
               margin: '0 0 12px 0',
             }}
           >
@@ -121,7 +121,7 @@ export function EmailEventCard({
             style={{
               fontSize: '16px',
               lineHeight: '1.6',
-              color: '#333333',
+              color: '#CCCCCC',
               margin: '0 0 20px 0',
             }}
           >

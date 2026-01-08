@@ -79,6 +79,21 @@ export const subscriberListSchema = paginationSchema.extend({
   interests: z.string().optional(), // Comma-separated list
 })
 
+// Admin subscriber management
+export const adminCreateSubscriberSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  firstName: z.string().optional(),
+  interests: z.array(z.string()).optional(),
+  status: z.enum(['PENDING', 'ACTIVE']).default('ACTIVE'),
+  skipConfirmation: z.boolean().default(true), // Admin can add directly as active
+})
+
+export const adminUpdateSubscriberSchema = z.object({
+  firstName: z.string().optional(),
+  interests: z.array(z.string()).optional(),
+  status: z.enum(['PENDING', 'ACTIVE', 'UNSUBSCRIBED', 'BOUNCED']).optional(),
+})
+
 export const newsletterListSchema = paginationSchema.extend({
   status: z.enum(['DRAFT', 'SCHEDULED', 'SENDING', 'SENT']).optional(),
 })

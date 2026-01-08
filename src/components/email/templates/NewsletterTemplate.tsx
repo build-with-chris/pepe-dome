@@ -67,7 +67,7 @@ export default function NewsletterTemplate({
   subscriberEmail,
   firstName,
 }: NewsletterTemplateProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004';
   const unsubscribeUrl = `${baseUrl}/api/subscribers/unsubscribe?id=${subscriberId}`;
   const viewInBrowserUrl = `${baseUrl}/newsletter/${newsletterSlug}`;
 
@@ -79,7 +79,7 @@ export default function NewsletterTemplate({
       <Preview>{preheader || subject}</Preview>
       <Body
         style={{
-          backgroundColor: '#F5F5F5',
+          backgroundColor: '#FFFFFF',
           fontFamily:
             '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
           margin: 0,
@@ -88,9 +88,10 @@ export default function NewsletterTemplate({
       >
         <Container
           style={{
-            maxWidth: '600px',
+            maxWidth: '90%',
+            width: '90%',
             margin: '0 auto',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#161616',
           }}
         >
           {/* Header */}
@@ -101,7 +102,7 @@ export default function NewsletterTemplate({
             <Section
               style={{
                 position: 'relative',
-                backgroundColor: '#0F0520',
+                backgroundColor: '#000000',
               }}
             >
               {/* Hero Image */}
@@ -183,7 +184,7 @@ export default function NewsletterTemplate({
                 style={{
                   fontSize: '18px',
                   lineHeight: '1.6',
-                  color: '#333333',
+                  color: '#FFFFFF',
                   margin: '0',
                 }}
               >
@@ -208,7 +209,7 @@ export default function NewsletterTemplate({
                       fontSize: '24px',
                       fontWeight: '700',
                       lineHeight: '1.3',
-                      color: '#0F0520',
+                      color: '#FFFFFF',
                       margin: '0 0 12px 0',
                     }}
                   >
@@ -220,7 +221,7 @@ export default function NewsletterTemplate({
                       style={{
                         fontSize: '16px',
                         lineHeight: '1.6',
-                        color: '#666666',
+                        color: '#AAAAAA',
                         margin: '0 0 24px 0',
                       }}
                     >
@@ -270,7 +271,7 @@ export default function NewsletterTemplate({
                     <Section
                       key={itemIndex}
                       style={{
-                        backgroundColor: '#F9F9F9',
+                        backgroundColor: '#1a1a1a',
                         borderRadius: '12px',
                         padding: '24px',
                         marginBottom: '24px',
@@ -296,7 +297,7 @@ export default function NewsletterTemplate({
                             fontSize: '20px',
                             fontWeight: '700',
                             lineHeight: '1.3',
-                            color: '#0F0520',
+                            color: '#FFFFFF',
                             margin: '0 0 12px 0',
                           }}
                         >
@@ -309,7 +310,7 @@ export default function NewsletterTemplate({
                           style={{
                             fontSize: '16px',
                             lineHeight: '1.6',
-                            color: '#333333',
+                            color: '#CCCCCC',
                             margin: '0 0 16px 0',
                           }}
                         >
@@ -333,7 +334,7 @@ export default function NewsletterTemplate({
                 <Hr
                   style={{
                     border: 'none',
-                    borderTop: '2px solid #E5E5E5',
+                    borderTop: '2px solid #333333',
                     margin: '32px 0 0 0',
                   }}
                 />
@@ -345,14 +346,14 @@ export default function NewsletterTemplate({
           <Section
             style={{
               padding: '32px',
-              backgroundColor: '#F9F9F9',
+              backgroundColor: '#FFFFFF',
             }}
           >
             <Text
               style={{
                 fontSize: '16px',
                 lineHeight: '1.6',
-                color: '#333333',
+                color: '#000000',
                 margin: '0 0 16px 0',
                 textAlign: 'center',
               }}
@@ -364,12 +365,12 @@ export default function NewsletterTemplate({
               style={{
                 fontSize: '14px',
                 lineHeight: '1.6',
-                color: '#666666',
+                color: '#333333',
                 margin: '0',
                 textAlign: 'center',
               }}
             >
-              Folge uns fur tagliche Updates und Behind-the-Scenes-Momente
+              Folge uns für tägliche Updates und Behind-the-Scenes-Momente
             </Text>
 
             {/* Social Links Placeholder */}

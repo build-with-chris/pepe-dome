@@ -25,7 +25,7 @@ export function EmailFooter({
   return (
     <Section
       style={{
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#FFFFFF',
         padding: '40px 20px',
       }}
     >
@@ -55,7 +55,7 @@ export function EmailFooter({
       <Hr
         style={{
           border: 'none',
-          borderTop: '1px solid #DDDDDD',
+          borderTop: '1px solid #E5E5E5',
           margin: '20px 0',
         }}
       />
@@ -65,12 +65,12 @@ export function EmailFooter({
         style={{
           fontSize: '14px',
           lineHeight: '1.6',
-          color: '#666666',
+          color: '#333333',
           textAlign: 'center',
           margin: '0 0 12px 0',
         }}
       >
-        <strong>PEPE Dome</strong>
+        <strong style={{ color: '#000000' }}>PEPE Dome</strong>
         <br />
         Ein einzigartiger Veranstaltungsort in München
         <br />
@@ -82,7 +82,7 @@ export function EmailFooter({
         style={{
           fontSize: '12px',
           lineHeight: '1.6',
-          color: '#999999',
+          color: '#666666',
           textAlign: 'center',
           margin: '0 0 12px 0',
         }}
@@ -100,7 +100,7 @@ export function EmailFooter({
         style={{
           fontSize: '12px',
           lineHeight: '1.6',
-          color: '#999999',
+          color: '#666666',
           textAlign: 'center',
           margin: '0',
         }}
@@ -116,7 +116,7 @@ export function EmailFooter({
         </Link>
         {' · '}
         <Link
-          href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/privacy`}
+          href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/privacy`}
           style={{
             color: '#016dca',
             textDecoration: 'underline',
@@ -131,7 +131,7 @@ export function EmailFooter({
         style={{
           fontSize: '11px',
           lineHeight: '1.5',
-          color: '#AAAAAA',
+          color: '#666666',
           textAlign: 'center',
           margin: '20px 0 0 0',
         }}

@@ -28,13 +28,15 @@ export async function POST(
       return errorResponse('NOT_FOUND', 'Newsletter not found', 404)
     }
 
-    // Fetch test recipients from database
-    const testRecipients = await prisma.testRecipient.findMany()
+    // Fetch active test recipients from database
+    const testRecipients = await prisma.testRecipient.findMany({
+      where: { isActive: true },
+    })
 
     if (testRecipients.length === 0) {
       return errorResponse(
         'NO_TEST_RECIPIENTS',
-        'No test recipients configured. Please add test recipients first.',
+        'Keine aktiven Test-Empfänger vorhanden. Bitte zuerst unter Test-Empfänger hinzufügen.',
         400
       )
     }

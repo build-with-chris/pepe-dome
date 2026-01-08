@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
+import ImageDropzone from '@/components/admin/ui/ImageDropzone'
 
 /**
  * EventForm component
@@ -40,7 +41,7 @@ const eventSchema = z.object({
   category: z.string().min(1, 'Kategorie ist erforderlich'),
   ticketUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
   price: z.string().optional(),
-  imageUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
+  imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
   status: z.string().default('DRAFT'),
@@ -444,20 +445,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
           Medien & Optionen
         </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="imageUrl">Bild-URL</Label>
-          <Input
-            id="imageUrl"
-            type="url"
-            value={formData.imageUrl}
-            onChange={(e) => updateField('imageUrl', e.target.value)}
-            hasError={!!errors.imageUrl}
-            placeholder="https://..."
-          />
-          {errors.imageUrl && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.imageUrl}</p>
-          )}
-        </div>
+        <ImageDropzone
+          label="Event-Bild"
+          value={formData.imageUrl}
+          onChange={(url) => updateField('imageUrl', url)}
+          hasError={!!errors.imageUrl}
+          error={errors.imageUrl}
+          placeholder="Event-Bild hier ablegen oder klicken zum Hochladen"
+        />
 
         <div className="flex items-center gap-3">
           <Switch

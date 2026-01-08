@@ -18,13 +18,29 @@ export default function NewsletterSignup({ compact = false }: NewsletterSignupPr
     e.preventDefault()
     setStatus('loading')
 
-    // TODO: Implement actual newsletter signup with Resend API
-    // For now, just simulate success
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error?.message || 'Ein Fehler ist aufgetreten.')
+      }
+
       setStatus('success')
       setEmail('')
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('newsletter_subscribed', 'true')
+      }
+      setTimeout(() => setStatus('idle'), 5000)
+    } catch {
+      setStatus('error')
       setTimeout(() => setStatus('idle'), 3000)
-    }, 1000)
+    }
   }
 
   if (compact) {

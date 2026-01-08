@@ -16,14 +16,14 @@ interface EmailHeaderProps {
 }
 
 export function EmailHeader({
-  // Use PNG logo for better email client compatibility (SVG not widely supported)
-  logoUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/PepeDome%20Logo%20ausgeschnitten.png`,
-  homeUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  // Use PNG logo with clean filename (no spaces)
+  logoUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/images/pepe-dome-logo.png`,
+  homeUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004',
 }: EmailHeaderProps) {
   return (
     <Section
       style={{
-        backgroundColor: '#0F0520',
+        backgroundColor: '#000000',
         padding: '32px 20px',
         textAlign: 'center',
       }}
@@ -32,7 +32,7 @@ export function EmailHeader({
         <Img
           src={logoUrl}
           alt="PEPE Dome"
-          width="180"
+          width="200"
           height="auto"
           style={{
             margin: '0 auto',

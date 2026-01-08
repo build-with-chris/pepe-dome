@@ -30,11 +30,11 @@ export default function WelcomeEmail({
   subscriberId,
   subscriberEmail,
   firstName,
-  upcomingEventsUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/events`,
-  newsletterArchiveUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`,
+  upcomingEventsUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/events`,
+  newsletterArchiveUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/newsletter`,
 }: WelcomeEmailProps) {
   const previewText = 'Willkommen beim PEPE Dome Newsletter!';
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004';
   const unsubscribeUrl = `${baseUrl}/api/subscribers/unsubscribe?id=${subscriberId}`;
 
   return (

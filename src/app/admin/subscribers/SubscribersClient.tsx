@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/Button'
 import {
@@ -10,6 +11,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
+
+const INTEREST_OPTIONS = [
+  { id: 'shows-events', label: 'Shows & Events' },
+  { id: 'workshops', label: 'Workshops & Community' },
+  { id: 'corporate', label: 'Corporate & Business Events' },
+]
 
 /**
  * Subscribers Client Component
@@ -75,9 +82,16 @@ export default function SubscribersClient({
   statusColors,
   statusLabels,
 }: SubscribersClientProps) {
+  const router = useRouter()
   const [selectedSubscriber, setSelectedSubscriber] = useState<SubscriberDetail | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Add subscriber dialog state
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [addForm, setAddForm] = useState({ email: '', firstName: '', interests: [] as string[] })
+  const [addError, setAddError] = useState('')
+  const [isAdding, setIsAdding] = useState(false)
 
   const handleRowClick = async (subscriberId: string) => {
     setIsLoading(true)
@@ -102,8 +116,61 @@ export default function SubscribersClient({
     setSelectedSubscriber(null)
   }
 
+  const handleInterestToggle = (interestId: string) => {
+    setAddForm((prev) => ({
+      ...prev,
+      interests: prev.interests.includes(interestId)
+        ? prev.interests.filter((id) => id !== interestId)
+        : [...prev.interests, interestId],
+    }))
+  }
+
+  const handleAddSubscriber = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setAddError('')
+    setIsAdding(true)
+
+    try {
+      const res = await fetch('/api/admin/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: addForm.email,
+          firstName: addForm.firstName || undefined,
+          interests: addForm.interests.length > 0 ? addForm.interests : undefined,
+          status: 'ACTIVE',
+          skipConfirmation: true,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error?.message || 'Ein Fehler ist aufgetreten.')
+      }
+
+      setIsAddDialogOpen(false)
+      setAddForm({ email: '', firstName: '', interests: [] })
+      router.refresh()
+    } catch (error: unknown) {
+      setAddError(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten.')
+    } finally {
+      setIsAdding(false)
+    }
+  }
+
   return (
     <>
+      {/* Add Subscriber Button */}
+      <div className="flex justify-end mb-4">
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Subscriber hinzufugen
+        </Button>
+      </div>
+
       {/* Subscribers Table */}
       <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg overflow-hidden">
         {subscribers.length === 0 ? (
@@ -159,6 +226,74 @@ export default function SubscribersClient({
           </table>
         )}
       </div>
+
+      {/* Add Subscriber Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="bg-[var(--pepe-ink)] border-[var(--pepe-line)] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[var(--pepe-white)]">Subscriber hinzufugen</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddSubscriber} className="space-y-4">
+            <div>
+              <label htmlFor="add-email" className="block text-sm font-medium text-[var(--pepe-t80)] mb-1">
+                E-Mail-Adresse *
+              </label>
+              <input
+                id="add-email"
+                type="email"
+                value={addForm.email}
+                onChange={(e) => setAddForm((prev) => ({ ...prev, email: e.target.value }))}
+                placeholder="email@example.com"
+                required
+                disabled={isAdding}
+                className="w-full px-3 py-2 bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-lg text-[var(--pepe-white)] placeholder:text-[var(--pepe-t48)] focus:outline-none focus:border-[var(--pepe-gold)]"
+              />
+            </div>
+            <div>
+              <label htmlFor="add-firstName" className="block text-sm font-medium text-[var(--pepe-t80)] mb-1">
+                Vorname (optional)
+              </label>
+              <input
+                id="add-firstName"
+                type="text"
+                value={addForm.firstName}
+                onChange={(e) => setAddForm((prev) => ({ ...prev, firstName: e.target.value }))}
+                placeholder="Max"
+                disabled={isAdding}
+                className="w-full px-3 py-2 bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-lg text-[var(--pepe-white)] placeholder:text-[var(--pepe-t48)] focus:outline-none focus:border-[var(--pepe-gold)]"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--pepe-t80)] mb-2">Interessen (optional)</label>
+              <div className="space-y-2">
+                {INTEREST_OPTIONS.map((option) => (
+                  <label key={option.id} className="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={addForm.interests.includes(option.id)}
+                      onChange={() => handleInterestToggle(option.id)}
+                      disabled={isAdding}
+                      className="w-4 h-4 rounded border-[var(--pepe-line)] bg-transparent checked:bg-[var(--pepe-gold)] checked:border-[var(--pepe-gold)] cursor-pointer"
+                    />
+                    <span className="text-sm text-[var(--pepe-t80)] group-hover:text-[var(--pepe-white)] transition-colors">
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {addError && <p className="text-sm text-[var(--pepe-error)]">{addError}</p>}
+            <div className="flex justify-end gap-3 pt-2">
+              <Button type="button" variant="secondary" onClick={() => setIsAddDialogOpen(false)} disabled={isAdding}>
+                Abbrechen
+              </Button>
+              <Button type="submit" disabled={isAdding}>
+                {isAdding ? 'Wird hinzugefugt...' : 'Hinzufugen'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Subscriber Detail Modal */}
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>

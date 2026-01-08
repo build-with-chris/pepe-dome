@@ -51,22 +51,41 @@ export async function GET(
       }
 
       // Batch fetch all events and articles
+      // Note: contentId can be either UUID or slug, so we search by both
       const [events, articles] = await Promise.all([
         eventIds.length > 0
           ? prisma.event.findMany({
-              where: { id: { in: eventIds } },
+              where: {
+                OR: [
+                  { id: { in: eventIds } },
+                  { slug: { in: eventIds } },
+                ],
+              },
             })
           : Promise.resolve([]),
         articleIds.length > 0
           ? prisma.article.findMany({
-              where: { id: { in: articleIds } },
+              where: {
+                OR: [
+                  { id: { in: articleIds } },
+                  { slug: { in: articleIds } },
+                ],
+              },
             })
           : Promise.resolve([]),
       ])
 
-      // Create lookup maps
-      const eventMap = new Map(events.map((e) => [e.id, e]))
-      const articleMap = new Map(articles.map((a) => [a.id, a]))
+      // Create lookup maps (by both id and slug for flexibility)
+      const eventMap = new Map<string, typeof events[0]>()
+      events.forEach((e) => {
+        eventMap.set(e.id, e)
+        eventMap.set(e.slug, e)
+      })
+      const articleMap = new Map<string, typeof articles[0]>()
+      articles.forEach((a) => {
+        articleMap.set(a.id, a)
+        articleMap.set(a.slug, a)
+      })
 
       for (const item of newsletter.content) {
         const key = item.sectionHeading || 'default'
