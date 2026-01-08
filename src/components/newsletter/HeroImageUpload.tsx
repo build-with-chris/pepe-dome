@@ -35,7 +35,7 @@ export default function HeroImageUpload({
       const recommendedHeight = Math.round(width / TARGET_ASPECT_RATIO)
       return {
         valid: false,
-        warning: `Image aspect ratio is ${aspectRatio.toFixed(2)}:1. Recommended: 2:1 (e.g., ${width}×${recommendedHeight}px)`,
+        warning: `Bildverhältnis ist ${aspectRatio.toFixed(2)}:1. Empfohlen: 2:1 (z.B. ${width}×${recommendedHeight}px)`,
       }
     }
 
@@ -48,13 +48,13 @@ export default function HeroImageUpload({
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file')
+      setError('Bitte wählen Sie eine Bilddatei aus')
       return
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError('Image must be smaller than 5MB')
+      setError('Das Bild muss kleiner als 5MB sein')
       return
     }
 
@@ -103,7 +103,7 @@ export default function HeroImageUpload({
       // const result = await response.json()
       // onUpload(result.url)
     } catch (err: any) {
-      setError(err.message || 'Failed to upload image')
+      setError(err.message || 'Bild konnte nicht hochgeladen werden')
       setIsUploading(false)
     }
   }
@@ -137,9 +137,9 @@ export default function HeroImageUpload({
   return (
     <div className="space-y-4">
       <div>
-        <label className="form-label">Hero Image</label>
+        <label className="form-label">Hero-Bild</label>
         <p className="text-sm text-pepe-t64 mb-3">
-          Recommended: 1200×600px (2:1 aspect ratio). Max file size: 5MB
+          Empfohlen: 1200×600px (2:1 Seitenverhältnis). Max. Dateigröße: 5MB
         </p>
       </div>
 
@@ -157,9 +157,10 @@ export default function HeroImageUpload({
       >
         {preview ? (
           <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={preview}
-              alt="Hero preview"
+              alt="Hero-Vorschau"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -169,7 +170,7 @@ export default function HeroImageUpload({
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
               >
-                Change Image
+                Bild ändern
               </Button>
             </div>
           </>
@@ -189,10 +190,10 @@ export default function HeroImageUpload({
               />
             </svg>
             <p className="text-pepe-t80 mb-2">
-              Drag and drop an image here, or click to browse
+              Bild hierher ziehen oder klicken zum Durchsuchen
             </p>
             <p className="text-sm text-pepe-t64 mb-4">
-              2:1 aspect ratio recommended (1200×600px)
+              2:1 Seitenverhältnis empfohlen (1200×600px)
             </p>
             <Button
               variant="secondary"
@@ -200,7 +201,7 @@ export default function HeroImageUpload({
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
             >
-              {isUploading ? 'Uploading...' : 'Select Image'}
+              {isUploading ? 'Wird hochgeladen...' : 'Bild auswählen'}
             </Button>
           </div>
         )}

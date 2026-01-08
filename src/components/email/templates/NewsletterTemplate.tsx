@@ -92,10 +92,10 @@ export default function NewsletterTemplate({
       >
         <Container
           style={{
-            maxWidth: '90%',
-            width: '90%',
+            maxWidth: '100%',
+            width: '100%',
             margin: '0 auto',
-            backgroundColor: '#161616',
+            backgroundColor: '#1a1a1a',
           }}
         >
           {/* Header */}
@@ -104,7 +104,7 @@ export default function NewsletterTemplate({
           {/* Hero Section - Always show with subject as fallback title */}
           <Section
             style={{
-              backgroundColor: '#0F0520',
+              backgroundColor: '#2a2a2a',
             }}
           >
             {/* Hero Image - using actual Img tag for email client compatibility */}
@@ -126,7 +126,7 @@ export default function NewsletterTemplate({
             <Section
               style={{
                 padding: '32px',
-                backgroundColor: '#0F0520',
+                backgroundColor: '#2a2a2a',
               }}
             >
               <Text
@@ -147,7 +147,7 @@ export default function NewsletterTemplate({
                   style={{
                     fontSize: '16px',
                     lineHeight: '1.5',
-                    color: '#FFD700',
+                    color: '#7dd3fc',
                     margin: '0 0 20px 0',
                     textAlign: 'center',
                   }}
@@ -196,7 +196,7 @@ export default function NewsletterTemplate({
             <Section
               key={sectionIndex}
               style={{
-                padding: '32px',
+                padding: '24px 16px',
               }}
             >
               {/* Section Heading */}

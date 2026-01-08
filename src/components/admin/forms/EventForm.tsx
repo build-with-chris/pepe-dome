@@ -212,313 +212,360 @@ export default function EventForm({ event, mode }: EventFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
+    <form onSubmit={handleSubmit}>
       {/* Form-level error */}
       {errors.form && (
-        <div className="p-4 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/20 rounded-lg text-[var(--pepe-error)]">
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
           {errors.form}
         </div>
       )}
 
-      {/* Basic Information */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Basis-Informationen
-        </h2>
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-6">
+        {/* LEFT COLUMN - Main content */}
+        <div className="space-y-6">
+          {/* Basic Information */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Basis-Informationen
+            </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="title" hasError={!!errors.title} required>
-            Titel
-          </Label>
-          <Input
-            id="title"
-            value={formData.title}
-            onChange={(e) => updateField('title', e.target.value)}
-            hasError={!!errors.title}
-            placeholder="Event-Titel"
-          />
-          {errors.title && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.title}</p>
-          )}
-        </div>
+            <div className="space-y-5">
+              <div className="space-y-2.5">
+                <Label htmlFor="title" hasError={!!errors.title} required>
+                  Titel
+                </Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => updateField('title', e.target.value)}
+                  hasError={!!errors.title}
+                  placeholder="Event-Titel"
+                  inputSize="lg"
+                />
+                {errors.title && (
+                  <p className="text-sm text-red-400">{errors.title}</p>
+                )}
+              </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="subtitle">Untertitel</Label>
-          <Input
-            id="subtitle"
-            value={formData.subtitle}
-            onChange={(e) => updateField('subtitle', e.target.value)}
-            placeholder="Optionaler Untertitel"
-          />
-        </div>
+              <div className="space-y-2.5">
+                <Label htmlFor="subtitle">Untertitel</Label>
+                <Input
+                  id="subtitle"
+                  value={formData.subtitle}
+                  onChange={(e) => updateField('subtitle', e.target.value)}
+                  placeholder="Optionaler Untertitel"
+                  inputSize="lg"
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="description" hasError={!!errors.description} required>
-            Beschreibung
-          </Label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => updateField('description', e.target.value)}
-            hasError={!!errors.description}
-            rows={4}
-            placeholder="Beschreibung des Events..."
-          />
-          {errors.description && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.description}</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="category" hasError={!!errors.category} required>
-              Kategorie
-            </Label>
-            <Select
-              value={formData.category}
-              onValueChange={(value) => updateField('category', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Kategorie wahlen" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <div className="space-y-2.5">
+                <Label htmlFor="description" hasError={!!errors.description} required>
+                  Beschreibung
+                </Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => updateField('description', e.target.value)}
+                  hasError={!!errors.description}
+                  rows={5}
+                  placeholder="Beschreibung des Events..."
+                  className="min-h-[140px]"
+                />
+                {errors.description && (
+                  <p className="text-sm text-red-400">{errors.description}</p>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
-            <Select
-              value={formData.status}
-              onValueChange={(value) => updateField('status', value)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {statusOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Date & Time */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Datum & Zeit
+            </h2>
+
+            <div className="space-y-5">
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2.5">
+                  <Label htmlFor="date" hasError={!!errors.date} required>
+                    Startdatum
+                  </Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => updateField('date', e.target.value)}
+                    hasError={!!errors.date}
+                    inputSize="lg"
+                  />
+                  {errors.date && (
+                    <p className="text-sm text-red-400">{errors.date}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="endDate">Enddatum</Label>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) => updateField('endDate', e.target.value)}
+                    inputSize="lg"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2.5">
+                <Label htmlFor="time">Uhrzeit</Label>
+                <Input
+                  id="time"
+                  value={formData.time}
+                  onChange={(e) => updateField('time', e.target.value)}
+                  placeholder="z.B. 20:00 Uhr"
+                  inputSize="lg"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2.5">
+                  <Label htmlFor="recurrence">Wiederholung</Label>
+                  <Select
+                    value={formData.recurrence || 'none'}
+                    onValueChange={(value) => updateField('recurrence', value === 'none' ? '' : value)}
+                  >
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Keine Wiederholung" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {recurrenceOptions.map((opt) => (
+                        <SelectItem key={opt.value || 'none'} value={opt.value || 'none'}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="recurrenceEnd">Wiederholung bis</Label>
+                  <Input
+                    id="recurrenceEnd"
+                    type="date"
+                    value={formData.recurrenceEnd}
+                    onChange={(e) => updateField('recurrenceEnd', e.target.value)}
+                    disabled={!formData.recurrence}
+                    inputSize="lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Location & Tickets */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Location & Tickets
+            </h2>
+
+            <div className="space-y-5">
+              <div className="space-y-2.5">
+                <Label htmlFor="location" hasError={!!errors.location} required>
+                  Location
+                </Label>
+                <Input
+                  id="location"
+                  value={formData.location}
+                  onChange={(e) => updateField('location', e.target.value)}
+                  hasError={!!errors.location}
+                  placeholder="Veranstaltungsort"
+                  inputSize="lg"
+                />
+                {errors.location && (
+                  <p className="text-sm text-red-400">{errors.location}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2.5">
+                  <Label htmlFor="ticketUrl">Ticket-URL</Label>
+                  <Input
+                    id="ticketUrl"
+                    type="url"
+                    value={formData.ticketUrl}
+                    onChange={(e) => updateField('ticketUrl', e.target.value)}
+                    hasError={!!errors.ticketUrl}
+                    placeholder="https://..."
+                    inputSize="lg"
+                  />
+                  {errors.ticketUrl && (
+                    <p className="text-sm text-red-400">{errors.ticketUrl}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="price">Preis</Label>
+                  <Input
+                    id="price"
+                    value={formData.price}
+                    onChange={(e) => updateField('price', e.target.value)}
+                    placeholder="z.B. 25EUR"
+                    inputSize="lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Highlights */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Highlights
+            </h2>
+
+            <div className="space-y-3">
+              {highlights.map((highlight, index) => (
+                <div key={index} className="flex gap-3">
+                  <Input
+                    value={highlight}
+                    onChange={(e) => updateHighlight(index, e.target.value)}
+                    placeholder="z.B. Live-Musik"
+                    className="flex-1"
+                    inputSize="lg"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeHighlight(index)}
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </Button>
+                </div>
+              ))}
+
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={addHighlight}
+                className="text-[#016dca] hover:text-[#016dca] hover:bg-[#016dca]/10 mt-2"
+              >
+                + Highlight hinzufugen
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Date & Time */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Datum & Zeit
-        </h2>
+        {/* RIGHT COLUMN - Sidebar */}
+        <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+          {/* Image */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Event-Bild
+            </h2>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="date" hasError={!!errors.date} required>
-              Startdatum
-            </Label>
-            <Input
-              id="date"
-              type="date"
-              value={formData.date}
-              onChange={(e) => updateField('date', e.target.value)}
-              hasError={!!errors.date}
+            <ImageDropzone
+              value={formData.imageUrl}
+              onChange={(url) => updateField('imageUrl', url)}
+              hasError={!!errors.imageUrl}
+              error={errors.imageUrl}
+              placeholder="Bild hier ablegen"
             />
-            {errors.date && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.date}</p>
-            )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="endDate">Enddatum</Label>
-            <Input
-              id="endDate"
-              type="date"
-              value={formData.endDate}
-              onChange={(e) => updateField('endDate', e.target.value)}
-            />
-          </div>
-        </div>
+          {/* Settings */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Einstellungen
+            </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="time">Uhrzeit</Label>
-          <Input
-            id="time"
-            value={formData.time}
-            onChange={(e) => updateField('time', e.target.value)}
-            placeholder="z.B. 20:00 Uhr"
-          />
-        </div>
+            <div className="space-y-5">
+              <div className="space-y-2.5">
+                <Label htmlFor="category" hasError={!!errors.category} required>
+                  Kategorie
+                </Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => updateField('category', value)}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Kategorie wahlen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="recurrence">Wiederholung</Label>
-            <Select
-              value={formData.recurrence || ''}
-              onValueChange={(value) => updateField('recurrence', value || undefined)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Keine Wiederholung" />
-              </SelectTrigger>
-              <SelectContent>
-                {recurrenceOptions.map((opt) => (
-                  <SelectItem key={opt.value || 'none'} value={opt.value || 'none'}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+              <div className="space-y-2.5">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value) => updateField('status', value)}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statusOptions.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="recurrenceEnd">Wiederholung bis</Label>
-            <Input
-              id="recurrenceEnd"
-              type="date"
-              value={formData.recurrenceEnd}
-              onChange={(e) => updateField('recurrenceEnd', e.target.value)}
-              disabled={!formData.recurrence}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Location & Tickets */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Location & Tickets
-        </h2>
-
-        <div className="space-y-2">
-          <Label htmlFor="location" hasError={!!errors.location} required>
-            Location
-          </Label>
-          <Input
-            id="location"
-            value={formData.location}
-            onChange={(e) => updateField('location', e.target.value)}
-            hasError={!!errors.location}
-            placeholder="Veranstaltungsort"
-          />
-          {errors.location && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.location}</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="ticketUrl">Ticket-URL</Label>
-            <Input
-              id="ticketUrl"
-              type="url"
-              value={formData.ticketUrl}
-              onChange={(e) => updateField('ticketUrl', e.target.value)}
-              hasError={!!errors.ticketUrl}
-              placeholder="https://..."
-            />
-            {errors.ticketUrl && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.ticketUrl}</p>
-            )}
+              <div className="pt-3 border-t border-white/[0.08]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="featured" className="cursor-pointer text-white">
+                      Featured Event
+                    </Label>
+                    <p className="text-[11px] text-white/40 mt-0.5">
+                      Prominent auf der Startseite
+                    </p>
+                  </div>
+                  <Switch
+                    id="featured"
+                    checked={formData.featured}
+                    onCheckedChange={(checked) => updateField('featured', checked)}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="price">Preis</Label>
-            <Input
-              id="price"
-              value={formData.price}
-              onChange={(e) => updateField('price', e.target.value)}
-              placeholder="z.B. 25EUR / ermassigt 18EUR"
-            />
+          {/* Actions */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <div className="space-y-3">
+              <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
+                {loading
+                  ? 'Speichern...'
+                  : mode === 'create'
+                  ? 'Event erstellen'
+                  : 'Speichern'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={() => router.push('/admin/events')}
+                className="w-full"
+              >
+                Abbrechen
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Media */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Medien & Optionen
-        </h2>
-
-        <ImageDropzone
-          label="Event-Bild"
-          value={formData.imageUrl}
-          onChange={(url) => updateField('imageUrl', url)}
-          hasError={!!errors.imageUrl}
-          error={errors.imageUrl}
-          placeholder="Event-Bild hier ablegen oder klicken zum Hochladen"
-        />
-
-        <div className="flex items-center gap-3">
-          <Switch
-            id="featured"
-            checked={formData.featured}
-            onCheckedChange={(checked) => updateField('featured', checked)}
-          />
-          <Label htmlFor="featured" className="cursor-pointer">
-            Featured Event (prominent auf der Startseite anzeigen)
-          </Label>
-        </div>
-      </div>
-
-      {/* Highlights */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Highlights
-        </h2>
-
-        {highlights.map((highlight, index) => (
-          <div key={index} className="flex gap-2">
-            <Input
-              value={highlight}
-              onChange={(e) => updateHighlight(index, e.target.value)}
-              placeholder="z.B. Live-Musik"
-              className="flex-1"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => removeHighlight(index)}
-              className="text-[var(--pepe-error)] hover:text-[var(--pepe-error)]"
-            >
-              Entfernen
-            </Button>
-          </div>
-        ))}
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={addHighlight}
-          className="text-[var(--pepe-gold)]"
-        >
-          + Highlight hinzufugen
-        </Button>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Button type="submit" variant="primary" disabled={loading}>
-          {loading
-            ? 'Speichern...'
-            : mode === 'create'
-            ? 'Event erstellen'
-            : 'Anderungen speichern'}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => router.push('/admin/events')}
-        >
-          Abbrechen
-        </Button>
       </div>
     </form>
   )

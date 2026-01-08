@@ -31,7 +31,7 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       [
-        "flex h-10 w-full items-center justify-between rounded-lg border px-3 py-2 text-sm",
+        "flex h-10 w-full items-center justify-between rounded-lg border px-4 py-2.5 text-sm",
         "bg-[var(--pepe-coal)] text-[var(--pepe-white)]",
         "border-[var(--pepe-line)]",
         "data-[placeholder]:text-[var(--pepe-t48)]",
@@ -101,10 +101,10 @@ const SelectContent = React.forwardRef<
       className={cn(
         [
           "relative z-50 max-h-[--radix-select-content-available-height] min-w-[8rem]",
-          "overflow-y-auto overflow-x-hidden rounded-lg",
+          "overflow-y-auto overflow-x-hidden rounded-xl",
           "bg-[var(--pepe-ink)] text-[var(--pepe-white)]",
           "border border-[var(--pepe-line)]",
-          "shadow-lg",
+          "shadow-xl shadow-black/30",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -122,7 +122,7 @@ const SelectContent = React.forwardRef<
       <SelectScrollUpButton />
       <SelectPrimitive.Viewport
         className={cn(
-          "p-1",
+          "p-1.5",
           position === "popper" &&
             "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
         )}
@@ -158,18 +158,19 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       [
-        "relative flex w-full cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2 text-sm",
+        "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 pl-9 pr-3 text-sm",
         "text-[var(--pepe-t80)]",
         "outline-none",
         "focus:bg-[var(--pepe-surface)] focus:text-[var(--pepe-white)]",
         "data-[highlighted]:bg-[var(--pepe-surface)] data-[highlighted]:text-[var(--pepe-white)]",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "transition-colors duration-100",
       ].join(" "),
       className
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2.5 flex h-4 w-4 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
         <Check className="h-4 w-4 text-[var(--pepe-gold)]" />
       </SelectPrimitive.ItemIndicator>

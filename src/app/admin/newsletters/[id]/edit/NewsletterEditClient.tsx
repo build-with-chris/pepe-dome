@@ -20,8 +20,9 @@ import { Input } from '@/components/ui/Input'
 import { cn } from '@/lib/utils'
 
 /**
- * Newsletter Edit Client Component
- * Client-side form with edit/preview tabs, content management, and send/schedule functionality
+ * Newsletter Editor - Split View
+ * Left: Edit form (dynamic height)
+ * Right: Sticky phone preview + send actions
  */
 
 interface ContentBlock {
@@ -67,6 +68,8 @@ interface NewsletterEditClientProps {
   canTestSend: boolean
 }
 
+type EditSection = 'basics' | 'hero' | 'content'
+
 export default function NewsletterEditClient({
   newsletter,
   canEdit,
@@ -74,13 +77,12 @@ export default function NewsletterEditClient({
   canTestSend,
 }: NewsletterEditClientProps) {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'edit' | 'preview' | 'content'>('edit')
-  const [selectedContent, setSelectedContent] = useState<ContentBlock[]>(
-    newsletter.content || []
-  )
+  const [activeSection, setActiveSection] = useState<EditSection>('basics')
+  const [selectedContent, setSelectedContent] = useState<ContentBlock[]>(newsletter.content || [])
   const [showContentSelector, setShowContentSelector] = useState(false)
+  const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
 
-  // Send/Schedule modal states
+  // Modal states
   const [showSendModal, setShowSendModal] = useState(false)
   const [showScheduleModal, setShowScheduleModal] = useState(false)
   const [isSending, setIsSending] = useState(false)
@@ -88,12 +90,9 @@ export default function NewsletterEditClient({
   const [sendError, setSendError] = useState<string | null>(null)
   const [scheduleError, setScheduleError] = useState<string | null>(null)
   const [subscriberCount, setSubscriberCount] = useState<number>(0)
-
-  // Schedule state
   const [scheduleDate, setScheduleDate] = useState<Date | undefined>(undefined)
   const [scheduleTime, setScheduleTime] = useState('10:00')
 
-  // Fetch subscriber count when send modal opens
   const openSendModal = async () => {
     setSendError(null)
     try {
@@ -106,22 +105,13 @@ export default function NewsletterEditClient({
     setShowSendModal(true)
   }
 
-  // Handle send now
   const handleSendNow = async () => {
     setIsSending(true)
     setSendError(null)
-
     try {
-      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/send`, {
-        method: 'POST',
-      })
-
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/send`, { method: 'POST' })
       const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error?.message || 'Fehler beim Versenden')
-      }
-
+      if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Versenden')
       setShowSendModal(false)
       router.push('/admin/newsletters')
       router.refresh()
@@ -132,38 +122,25 @@ export default function NewsletterEditClient({
     }
   }
 
-  // Handle schedule
   const handleSchedule = async () => {
     if (!scheduleDate) {
-      setScheduleError('Bitte wahlen Sie ein Datum aus')
+      setScheduleError('Bitte wählen Sie ein Datum aus')
       return
     }
-
     setIsScheduling(true)
     setScheduleError(null)
-
     try {
-      // Combine date and time
       const [hours, minutes] = scheduleTime.split(':').map(Number)
       const scheduledAt = new Date(scheduleDate)
       scheduledAt.setHours(hours, minutes, 0, 0)
-
-      if (scheduledAt <= new Date()) {
-        throw new Error('Das geplante Datum muss in der Zukunft liegen')
-      }
-
+      if (scheduledAt <= new Date()) throw new Error('Das Datum muss in der Zukunft liegen')
       const res = await fetch(`/api/admin/newsletters/${newsletter.id}/schedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scheduledAt: scheduledAt.toISOString() }),
       })
-
       const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error?.message || 'Fehler beim Planen')
-      }
-
+      if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Planen')
       setShowScheduleModal(false)
       router.refresh()
     } catch (err) {
@@ -173,11 +150,8 @@ export default function NewsletterEditClient({
     }
   }
 
-  // Save content order changes
   const handleContentReorder = async (newContent: ContentBlock[]) => {
     setSelectedContent(newContent)
-
-    // Save to backend
     try {
       await fetch(`/api/admin/newsletters/${newsletter.id}/content`, {
         method: 'PUT',
@@ -198,390 +172,351 @@ export default function NewsletterEditClient({
     }
   }
 
+  const handleAddTextSnippet = () => {
+    const newSnippet: ContentBlock = {
+      contentType: 'CUSTOM_SECTION',
+      contentId: null,
+      sectionHeading: '',
+      sectionDescription: '',
+      orderPosition: selectedContent.length,
+    }
+    handleContentReorder([...selectedContent, newSnippet])
+  }
+
+  const sections: { id: EditSection; label: string }[] = [
+    { id: 'basics', label: 'Grundlagen' },
+    { id: 'hero', label: 'Hero' },
+    { id: 'content', label: `Inhalte (${selectedContent.length})` },
+  ]
+
   return (
-    <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="flex items-center gap-1 border-b border-[var(--pepe-line)]">
-        <button
-          onClick={() => setActiveTab('edit')}
-          className={cn(
-            'px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px',
-            activeTab === 'edit'
-              ? 'border-[var(--pepe-gold)] text-[var(--pepe-gold)]'
-              : 'border-transparent text-[var(--pepe-t64)] hover:text-[var(--pepe-t80)]'
-          )}
-        >
-          Bearbeiten
-        </button>
-        <button
-          onClick={() => setActiveTab('content')}
-          className={cn(
-            'px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px',
-            activeTab === 'content'
-              ? 'border-[var(--pepe-gold)] text-[var(--pepe-gold)]'
-              : 'border-transparent text-[var(--pepe-t64)] hover:text-[var(--pepe-t80)]'
-          )}
-        >
-          Inhalte ({selectedContent.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('preview')}
-          className={cn(
-            'px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px',
-            activeTab === 'preview'
-              ? 'border-[var(--pepe-gold)] text-[var(--pepe-gold)]'
-              : 'border-transparent text-[var(--pepe-t64)] hover:text-[var(--pepe-t80)]'
-          )}
-        >
-          Vorschau
-        </button>
-      </div>
+    <div className={cn(
+      'grid gap-6 transition-all duration-300',
+      previewMode === 'desktop'
+        ? 'grid-cols-1'
+        : 'grid-cols-1 xl:grid-cols-[1fr,400px]'
+    )}>
+      {/* LEFT: Editor */}
+      <div className={cn(
+        'space-y-6',
+        previewMode === 'desktop' && 'order-2'
+      )}>
+        {/* Section Tabs */}
+        <div className="flex gap-2.5">
+          {sections.map((section) => (
+            <button
+              key={section.id}
+              onClick={() => setActiveSection(section.id)}
+              className={cn(
+                'px-5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200',
+                activeSection === section.id
+                  ? 'bg-[#016dca] text-white shadow-lg shadow-[#016dca]/20'
+                  : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
+              )}
+            >
+              {section.label}
+            </button>
+          ))}
+        </div>
 
-      {/* Tab Content */}
-      {activeTab === 'edit' && canEdit && (
-        <NewsletterForm
-          mode="edit"
-          newsletter={newsletter}
-          initialContent={selectedContent}
-        />
-      )}
-
-      {activeTab === 'edit' && !canEdit && (
-        <ReadOnlyNewsletterView newsletter={newsletter} />
-      )}
-
-      {activeTab === 'content' && (
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6">
-          {selectedContent.length === 0 && !showContentSelector ? (
-            <div className="space-y-4">
-              <p className="text-[var(--pepe-t64)]">
-                Keine Inhalte ausgewahlt. Wahlen Sie Events und Artikel fur diesen Newsletter aus.
-              </p>
-
-              <Button
-                variant="secondary"
-                onClick={() => setShowContentSelector(true)}
-                disabled={!canEdit}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Inhalte auswahlen
-              </Button>
+        {/* Editor Card */}
+        <div className="bg-[#111113] border border-white/[0.08] rounded-2xl overflow-hidden">
+          {/* Basics */}
+          {activeSection === 'basics' && (
+            <div className="p-7">
+              {canEdit ? (
+                <NewsletterForm
+                  mode="edit"
+                  newsletter={newsletter}
+                  initialContent={selectedContent}
+                  section="basics"
+                />
+              ) : (
+                <ReadOnlyField label="Betreff" value={newsletter.subject} />
+              )}
             </div>
-          ) : showContentSelector ? (
-            <div className="space-y-4">
-              <ContentSelector
-                onContentSelected={(newContent) => {
-                  handleContentReorder(newContent)
-                  setShowContentSelector(false)
-                }}
-                selectedContent={selectedContent}
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowContentSelector(false)}
-              >
-                Abbrechen
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <DragDropReorder
-                items={selectedContent}
-                onReorder={handleContentReorder}
-              />
+          )}
 
-              {canEdit && (
-                <div className="flex gap-2">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setShowContentSelector(true)}
-                  >
-                    Mehr Inhalte hinzufugen
+          {/* Hero */}
+          {activeSection === 'hero' && (
+            <div className="p-7">
+              {canEdit ? (
+                <NewsletterForm
+                  mode="edit"
+                  newsletter={newsletter}
+                  initialContent={selectedContent}
+                  section="hero"
+                />
+              ) : (
+                <ReadOnlyField label="Hero" value={newsletter.heroTitle || '—'} />
+              )}
+            </div>
+          )}
+
+          {/* Content */}
+          {activeSection === 'content' && (
+            <div className="p-7">
+              <div className="flex items-center justify-between mb-7">
+                <h3 className="text-[13px] font-semibold text-white tracking-[-0.01em]">Inhalte verwalten</h3>
+                {canEdit && (
+                  <div className="flex gap-2.5">
+                    <Button variant="ghost" size="sm" onClick={handleAddTextSnippet}>
+                      + Text
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={() => setShowContentSelector(true)}>
+                      + Event/Artikel
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {selectedContent.length === 0 && !showContentSelector ? (
+                <div className="py-20 text-center">
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                    <svg className="w-7 h-7 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <p className="text-white/40 text-sm mb-5">Noch keine Inhalte</p>
+                  <Button variant="primary" size="sm" onClick={() => setShowContentSelector(true)} disabled={!canEdit}>
+                    Inhalte hinzufügen
                   </Button>
                 </div>
+              ) : showContentSelector ? (
+                <div>
+                  <ContentSelector
+                    onContentSelected={(newContent) => {
+                      handleContentReorder(newContent)
+                      setShowContentSelector(false)
+                    }}
+                    selectedContent={selectedContent}
+                  />
+                  <div className="mt-5 pt-5 border-t border-white/[0.08]">
+                    <Button variant="ghost" size="sm" onClick={() => setShowContentSelector(false)}>
+                      Abbrechen
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <DragDropReorder
+                  items={selectedContent}
+                  onReorder={handleContentReorder}
+                  onAddTextSnippet={canEdit ? handleAddTextSnippet : undefined}
+                />
               )}
             </div>
           )}
         </div>
-      )}
+      </div>
 
-      {activeTab === 'preview' && (
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6">
-          <AdminEmailPreview
-            newsletterId={newsletter.id}
-            slug={newsletter.slug}
-            canTestSend={canTestSend}
-          />
+      {/* RIGHT: Preview Panel (sticky) */}
+      <div className={cn(
+        'xl:sticky xl:top-6 xl:self-start space-y-5',
+        previewMode === 'desktop' && 'order-1'
+      )}>
+        {/* Preview Controls */}
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Vorschau</span>
+          <div className="flex gap-1 p-1.5 bg-white/5 rounded-xl">
+            <button
+              onClick={() => setPreviewMode('mobile')}
+              className={cn(
+                'p-2 rounded-lg transition-all duration-200',
+                previewMode === 'mobile' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
+              )}
+              title="Mobile"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setPreviewMode('desktop')}
+              className={cn(
+                'p-2 rounded-lg transition-all duration-200',
+                previewMode === 'desktop' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
+              )}
+              title="Desktop"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </button>
+          </div>
         </div>
-      )}
 
-      {/* Send Actions */}
-      {canEdit && (newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED') && (
-        <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-            Newsletter versenden
-          </h3>
+        {/* Phone Mockup */}
+        <div className={cn(
+          'relative mx-auto transition-all duration-300',
+          previewMode === 'mobile' ? 'w-[320px]' : 'w-full max-w-[600px]'
+        )}>
+          {/* Phone frame (only for mobile) */}
+          {previewMode === 'mobile' && (
+            <div className="absolute inset-0 border-[12px] border-[#1a1a1c] rounded-[40px] pointer-events-none z-10">
+              {/* Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-[#1a1a1c] rounded-b-2xl" />
+              {/* Home indicator */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/20 rounded-full" />
+            </div>
+          )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Schedule */}
-            {newsletter.status === 'DRAFT' && (
-              <div>
-                <h4 className="font-medium text-[var(--pepe-white)] mb-2">Planen</h4>
-                <p className="text-sm text-[var(--pepe-t64)] mb-3">
-                  Wahlen Sie Datum und Uhrzeit fur den automatischen Versand
-                </p>
+          {/* Preview content */}
+          <div className={cn(
+            'bg-white overflow-hidden',
+            previewMode === 'mobile'
+              ? 'rounded-[28px] mx-3 my-3'
+              : 'rounded-xl border border-white/10'
+          )}>
+            <div className={cn(
+              'overflow-y-auto',
+              previewMode === 'mobile' ? 'max-h-[580px]' : 'max-h-[500px]'
+            )}>
+              <AdminEmailPreview
+                newsletterId={newsletter.id}
+                slug={newsletter.slug}
+                canTestSend={canTestSend}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Send Actions */}
+        {canEdit && (newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED') && (
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-5">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Versenden</span>
+              {newsletter.status === 'SCHEDULED' && newsletter.scheduledAt && (
+                <span className="text-xs text-blue-400">
+                  Geplant: {new Date(newsletter.scheduledAt).toLocaleDateString('de-DE')}
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {newsletter.status === 'DRAFT' && (
                 <Button
                   variant="secondary"
                   onClick={() => setShowScheduleModal(true)}
                   disabled={!canSend}
                   className="w-full"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Fur spater planen
+                  Planen
                 </Button>
-                {!canSend && (
-                  <p className="text-xs text-[var(--pepe-t48)] mt-2">
-                    Nur Super Admins konnen Newsletter versenden
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Send Now */}
-            <div>
-              <h4 className="font-medium text-[var(--pepe-white)] mb-2">Jetzt senden</h4>
-              <p className="text-sm text-[var(--pepe-t64)] mb-3">
-                Newsletter sofort an alle aktiven Abonnenten versenden
-              </p>
+              )}
               <Button
                 variant="primary"
                 onClick={openSendModal}
                 disabled={!canSend}
-                className="w-full"
+                className={newsletter.status === 'DRAFT' ? 'w-full' : 'w-full col-span-2'}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
                 Jetzt senden
               </Button>
-              {!canSend && (
-                <p className="text-xs text-[var(--pepe-t48)] mt-2">
-                  Nur Super Admins konnen Newsletter versenden
+            </div>
+
+            {!canSend && (
+              <p className="text-[10px] text-white/30 text-center pt-1">
+                Nur Super Admins können Newsletter versenden
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Stats */}
+        {newsletter.status === 'SENT' && newsletter.stats && (
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5">
+            <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Statistiken</span>
+            <div className="grid grid-cols-3 gap-4 mt-5">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-[#016dca]">{newsletter.stats.uniqueOpenCount}</p>
+                <p className="text-[11px] text-white/40 mt-1">Öffnungen</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-[#016dca]">{newsletter.stats.uniqueClickCount}</p>
+                <p className="text-[11px] text-white/40 mt-1">Klicks</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-emerald-400">
+                  {newsletter.recipientCount > 0
+                    ? ((newsletter.stats.uniqueOpenCount / newsletter.recipientCount) * 100).toFixed(0)
+                    : '0'}%
                 </p>
-              )}
+                <p className="text-[11px] text-white/40 mt-1">Rate</p>
+              </div>
             </div>
           </div>
+        )}
+      </div>
 
-          {/* Scheduled info */}
-          {newsletter.status === 'SCHEDULED' && newsletter.scheduledAt && (
-            <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-              <p className="text-blue-400">
-                <span className="font-medium">Geplant fur: </span>
-                {new Date(newsletter.scheduledAt).toLocaleString('de-DE', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Send Confirmation Dialog */}
+      {/* Dialogs */}
       <Dialog open={showSendModal} onOpenChange={setShowSendModal}>
-        <DialogContent className="bg-[var(--pepe-ink)] border-[var(--pepe-line)]">
-          <DialogHeader>
-            <DialogTitle className="text-[var(--pepe-white)]">Newsletter jetzt senden?</DialogTitle>
-            <DialogDescription className="text-[var(--pepe-t64)]">
+        <DialogContent className="bg-[#111113] border-white/[0.08] max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-white text-lg">Newsletter senden</DialogTitle>
+            <DialogDescription className="text-white/50 text-sm">
               Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
-
           {sendError && (
-            <div className="p-3 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/30 rounded-lg">
-              <p className="text-sm text-[var(--pepe-error)]">{sendError}</p>
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+              {sendError}
             </div>
           )}
-
-          <div className="space-y-4">
-            {/* Recipient count */}
-            <div className="p-4 bg-[var(--pepe-gold)]/10 border border-[var(--pepe-gold)]/30 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-[var(--pepe-t80)]">Empfanger:</span>
-                <span className="text-2xl font-bold text-[var(--pepe-gold)]">
-                  {subscriberCount}
-                </span>
-              </div>
-              <p className="text-sm text-[var(--pepe-t64)] mt-2">
-                Aktive Abonnenten, die diesen Newsletter erhalten werden
-              </p>
-            </div>
-
-            {subscriberCount === 0 && (
-              <div className="p-3 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/30 rounded-lg">
-                <p className="text-sm text-[var(--pepe-error)]">
-                  Keine aktiven Abonnenten gefunden. Newsletter kann nicht versendet werden.
-                </p>
-              </div>
-            )}
-
-            {/* Warning */}
-            {subscriberCount > 0 && (
-              <div className="p-3 bg-[var(--pepe-warning)]/10 border border-[var(--pepe-warning)]/30 rounded-lg">
-                <p className="text-sm text-[var(--pepe-warning)]">
-                  Warnung: Der Newsletter wird sofort an {subscriberCount} Abonnenten versendet.
-                </p>
-              </div>
-            )}
-
-            {/* Checklist */}
-            <div className="bg-[var(--pepe-surface)] rounded-lg p-4">
-              <h4 className="font-medium text-[var(--pepe-white)] mb-3">Checkliste vor dem Versand:</h4>
-              <ul className="space-y-2 text-sm text-[var(--pepe-t80)]">
-                <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-[var(--pepe-gold)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Betreffzeile ist ansprechend und klar
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-[var(--pepe-gold)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Alle Links funktionieren korrekt
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-[var(--pepe-gold)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Inhalte wurden korrekturgelesen
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg className="w-5 h-5 text-[var(--pepe-gold)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Vorschau in verschiedenen E-Mail-Clients gepruft
-                </li>
-              </ul>
+          <div className="p-5 rounded-xl bg-[#016dca]/10 border border-[#016dca]/20 my-2">
+            <div className="flex items-center justify-between">
+              <span className="text-white/60 text-sm">Empfänger</span>
+              <span className="text-2xl font-bold text-[#016dca]">{subscriberCount.toLocaleString('de-DE')}</span>
             </div>
           </div>
-
-          <DialogFooter>
-            <Button
-              variant="ghost"
-              onClick={() => setShowSendModal(false)}
-              disabled={isSending}
-            >
+          <DialogFooter className="gap-3 pt-2">
+            <Button variant="ghost" onClick={() => setShowSendModal(false)} disabled={isSending}>
               Abbrechen
             </Button>
-            <Button
-              variant="primary"
-              onClick={handleSendNow}
-              disabled={isSending || subscriberCount === 0}
-            >
-              {isSending ? 'Wird versendet...' : `An ${subscriberCount} Empfanger senden`}
+            <Button variant="primary" onClick={handleSendNow} disabled={isSending || subscriberCount === 0}>
+              {isSending ? 'Senden...' : 'Senden'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Schedule Dialog */}
       <Dialog open={showScheduleModal} onOpenChange={setShowScheduleModal}>
-        <DialogContent className="bg-[var(--pepe-ink)] border-[var(--pepe-line)]">
-          <DialogHeader>
-            <DialogTitle className="text-[var(--pepe-white)]">Newsletter planen</DialogTitle>
-            <DialogDescription className="text-[var(--pepe-t64)]">
-              Wahlen Sie Datum und Uhrzeit fur den automatischen Versand.
+        <DialogContent className="bg-[#111113] border-white/[0.08] max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-white text-lg">Newsletter planen</DialogTitle>
+            <DialogDescription className="text-white/50 text-sm">
+              Wählen Sie Datum und Uhrzeit.
             </DialogDescription>
           </DialogHeader>
-
           {scheduleError && (
-            <div className="p-3 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/30 rounded-lg">
-              <p className="text-sm text-[var(--pepe-error)]">{scheduleError}</p>
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+              {scheduleError}
             </div>
           )}
-
-          <div className="space-y-4">
-            {/* Calendar */}
+          <div className="space-y-5 my-2">
             <div className="flex justify-center">
               <Calendar
                 mode="single"
                 selected={scheduleDate}
                 onSelect={setScheduleDate}
                 disabled={(date) => date < new Date()}
-                className="rounded-md border border-[var(--pepe-line)]"
+                className="rounded-xl border border-white/[0.08]"
               />
             </div>
-
-            {/* Time Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-[var(--pepe-white)]">
-                Uhrzeit
-              </label>
+            <div className="space-y-2.5">
+              <label className="text-[13px] font-medium text-white/80">Uhrzeit</label>
               <Input
                 type="time"
                 value={scheduleTime}
                 onChange={(e) => setScheduleTime(e.target.value)}
-                className="w-full"
+                inputSize="lg"
               />
             </div>
-
-            {/* Preview */}
-            {scheduleDate && (
-              <div className="p-4 bg-[var(--pepe-gold)]/10 border border-[var(--pepe-gold)]/30 rounded-lg">
-                <p className="text-sm font-medium text-[var(--pepe-white)]">
-                  Newsletter wird gesendet am:
-                </p>
-                <p className="text-lg text-[var(--pepe-gold)] font-semibold">
-                  {(() => {
-                    const [hours, minutes] = scheduleTime.split(':').map(Number)
-                    const displayDate = new Date(scheduleDate)
-                    displayDate.setHours(hours, minutes, 0, 0)
-                    return displayDate.toLocaleString('de-DE', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  })()}
-                </p>
-              </div>
-            )}
-
-            {/* Info */}
-            <div className="p-3 bg-[var(--pepe-info)]/10 border border-[var(--pepe-info)]/30 rounded-lg">
-              <p className="text-sm text-[var(--pepe-info)]">
-                Hinweis: Die geplante Zeit muss mindestens 5 Minuten in der Zukunft liegen.
-              </p>
-            </div>
           </div>
-
-          <DialogFooter>
-            <Button
-              variant="ghost"
-              onClick={() => setShowScheduleModal(false)}
-              disabled={isScheduling}
-            >
+          <DialogFooter className="gap-3 pt-2">
+            <Button variant="ghost" onClick={() => setShowScheduleModal(false)} disabled={isScheduling}>
               Abbrechen
             </Button>
-            <Button
-              variant="primary"
-              onClick={handleSchedule}
-              disabled={isScheduling || !scheduleDate}
-            >
-              {isScheduling ? 'Wird geplant...' : 'Newsletter planen'}
+            <Button variant="primary" onClick={handleSchedule} disabled={isScheduling || !scheduleDate}>
+              {isScheduling ? 'Planen...' : 'Planen'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -590,81 +525,11 @@ export default function NewsletterEditClient({
   )
 }
 
-function ReadOnlyNewsletterView({ newsletter }: { newsletter: Newsletter }) {
+function ReadOnlyField({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-      <div>
-        <label className="text-sm text-[var(--pepe-t64)]">Betreff</label>
-        <p className="text-[var(--pepe-white)] font-medium">{newsletter.subject}</p>
-      </div>
-
-      {newsletter.preheader && (
-        <div>
-          <label className="text-sm text-[var(--pepe-t64)]">Preheader</label>
-          <p className="text-[var(--pepe-t80)]">{newsletter.preheader}</p>
-        </div>
-      )}
-
-      {newsletter.heroTitle && (
-        <div>
-          <label className="text-sm text-[var(--pepe-t64)]">Hero-Titel</label>
-          <p className="text-[var(--pepe-white)]">{newsletter.heroTitle}</p>
-        </div>
-      )}
-
-      {newsletter.heroSubtitle && (
-        <div>
-          <label className="text-sm text-[var(--pepe-t64)]">Hero-Untertitel</label>
-          <p className="text-[var(--pepe-t80)]">{newsletter.heroSubtitle}</p>
-        </div>
-      )}
-
-      {newsletter.sentAt && (
-        <div>
-          <label className="text-sm text-[var(--pepe-t64)]">Gesendet am</label>
-          <p className="text-[var(--pepe-white)]">
-            {new Date(newsletter.sentAt).toLocaleString('de-DE', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </p>
-        </div>
-      )}
-
-      {newsletter.recipientCount > 0 && (
-        <div>
-          <label className="text-sm text-[var(--pepe-t64)]">Empfanger</label>
-          <p className="text-[var(--pepe-white)]">{newsletter.recipientCount}</p>
-        </div>
-      )}
-
-      {newsletter.stats && (
-        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[var(--pepe-line)]">
-          <div>
-            <label className="text-sm text-[var(--pepe-t64)]">Offnungen</label>
-            <p className="text-2xl font-bold text-[var(--pepe-gold)]">
-              {newsletter.stats.uniqueOpenCount}
-            </p>
-          </div>
-          <div>
-            <label className="text-sm text-[var(--pepe-t64)]">Klicks</label>
-            <p className="text-2xl font-bold text-[var(--pepe-gold)]">
-              {newsletter.stats.uniqueClickCount}
-            </p>
-          </div>
-          <div>
-            <label className="text-sm text-[var(--pepe-t64)]">Offnungsrate</label>
-            <p className="text-2xl font-bold text-[var(--pepe-gold)]">
-              {newsletter.recipientCount > 0
-                ? ((newsletter.stats.uniqueOpenCount / newsletter.recipientCount) * 100).toFixed(1)
-                : '0'}%
-            </p>
-          </div>
-        </div>
-      )}
+    <div className="space-y-2.5">
+      <label className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">{label}</label>
+      <p className="text-white text-base">{value}</p>
     </div>
   )
 }

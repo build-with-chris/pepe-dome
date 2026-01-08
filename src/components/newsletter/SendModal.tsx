@@ -45,7 +45,7 @@ export default function SendModal({
 
   const handleSend = async () => {
     if (subscriberCount === 0) {
-      setError('No active subscribers to send to')
+      setError('Keine aktiven Abonnenten zum Senden vorhanden')
       return
     }
 
@@ -63,7 +63,7 @@ export default function SendModal({
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error?.message || 'Failed to send newsletter')
+        throw new Error(result.error?.message || 'Newsletter konnte nicht gesendet werden')
       }
 
       onSent()
@@ -78,7 +78,7 @@ export default function SendModal({
       <div className="card max-w-lg w-full p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Send Newsletter Now</h2>
+          <h2 className="text-2xl font-semibold">Newsletter jetzt senden</h2>
           <button
             onClick={onClose}
             className="text-pepe-t64 hover:text-pepe-white transition-colors"
@@ -110,26 +110,26 @@ export default function SendModal({
         {/* Confirmation Details */}
         <div className="space-y-4">
           <p className="text-pepe-t80">
-            Are you sure you want to send this newsletter immediately?
+            Sind Sie sicher, dass Sie diesen Newsletter jetzt senden möchten?
           </p>
 
           {/* Recipient Count */}
           <div className="bg-pepe-gold-glow rounded-lg p-4">
             <div className="flex items-center justify-between">
-              <span className="text-pepe-t80">Recipients:</span>
+              <span className="text-pepe-t80">Empfänger:</span>
               <span className="text-2xl font-bold text-pepe-gold">
                 {subscriberCount}
               </span>
             </div>
             <p className="text-sm text-pepe-t64 mt-2">
-              Active subscribers who will receive this newsletter
+              Aktive Abonnenten, die diesen Newsletter erhalten werden
             </p>
           </div>
 
           {/* Test Send Results */}
           {testSendResults.length > 0 && (
             <div>
-              <h4 className="font-medium mb-2">Recent Test Sends</h4>
+              <h4 className="font-medium mb-2">Letzte Testversendungen</h4>
               <div className="space-y-2">
                 {testSendResults.slice(0, 5).map((result, index) => (
                   <div
@@ -144,7 +144,7 @@ export default function SendModal({
                           : 'text-pepe-error'
                       }
                     >
-                      {result.status}
+                      {result.status === 'success' ? 'Erfolgreich' : 'Fehlgeschlagen'}
                     </span>
                   </div>
                 ))}
@@ -156,21 +156,21 @@ export default function SendModal({
           {subscriberCount === 0 ? (
             <div className="bg-pepe-error-bg border border-pepe-error rounded-lg p-3">
               <p className="text-sm text-pepe-error">
-                No active subscribers found. Cannot send newsletter.
+                Keine aktiven Abonnenten gefunden. Newsletter kann nicht gesendet werden.
               </p>
             </div>
           ) : (
             <div className="bg-pepe-warning-bg border border-pepe-warning rounded-lg p-3">
               <p className="text-sm text-pepe-warning">
-                Warning: This action cannot be undone. The newsletter will be
-                sent immediately to all {subscriberCount} active subscribers.
+                Achtung: Diese Aktion kann nicht rückgängig gemacht werden. Der Newsletter
+                wird sofort an alle {subscriberCount} aktiven Abonnenten gesendet.
               </p>
             </div>
           )}
 
           {/* Checklist */}
           <div className="bg-pepe-surface rounded-lg p-4">
-            <h4 className="font-medium mb-3">Before you send, make sure:</h4>
+            <h4 className="font-medium mb-3">Vor dem Senden überprüfen:</h4>
             <ul className="space-y-2 text-sm text-pepe-t80">
               <li className="flex items-start gap-2">
                 <svg
@@ -186,7 +186,7 @@ export default function SendModal({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Subject line is compelling and clear
+                Betreffzeile ist ansprechend und verständlich
               </li>
               <li className="flex items-start gap-2">
                 <svg
@@ -202,7 +202,7 @@ export default function SendModal({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                All links are working correctly
+                Alle Links funktionieren korrekt
               </li>
               <li className="flex items-start gap-2">
                 <svg
@@ -218,7 +218,7 @@ export default function SendModal({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Content is proofread and error-free
+                Inhalte sind korrekturgelesen und fehlerfrei
               </li>
               <li className="flex items-start gap-2">
                 <svg
@@ -234,7 +234,7 @@ export default function SendModal({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Preview looks good in different email clients
+                Vorschau sieht in verschiedenen E-Mail-Programmen gut aus
               </li>
             </ul>
           </div>
@@ -247,14 +247,14 @@ export default function SendModal({
             onClick={onClose}
             disabled={isLoading}
           >
-            Cancel
+            Abbrechen
           </Button>
           <Button
             variant="primary"
             onClick={handleSend}
             disabled={isLoading || subscriberCount === 0}
           >
-            {isLoading ? 'Sending...' : `Send to ${subscriberCount} Subscribers`}
+            {isLoading ? 'Wird gesendet...' : `An ${subscriberCount} Abonnenten senden`}
           </Button>
         </div>
       </div>

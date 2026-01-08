@@ -54,41 +54,34 @@ export default async function EditNewsletterPage({ params }: PageProps) {
   const canEditNewsletter = newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/admin/newsletters"
-            className="text-[var(--pepe-t64)] hover:text-[var(--pepe-white)] transition-colors"
+      <div className="flex items-center gap-3">
+        <Link
+          href="/admin/newsletters"
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+          </svg>
+        </Link>
+        <div className="flex-1 min-w-0 flex items-center gap-2">
+          <h1 className="text-base font-semibold text-white truncate">
+            {newsletter.subject}
+          </h1>
+          <Badge
+            variant="outline"
+            className={cn('text-[10px] border flex-shrink-0', statusColors[newsletter.status])}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </Link>
-          <div>
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-[var(--pepe-white)]">
-                Newsletter bearbeiten
-              </h2>
-              <Badge
-                variant="outline"
-                className={cn('text-xs border', statusColors[newsletter.status])}
-              >
-                {statusLabels[newsletter.status] || newsletter.status}
-              </Badge>
-            </div>
-            <p className="text-[var(--pepe-t64)] mt-1">
-              {newsletter.subject}
-            </p>
-          </div>
+            {statusLabels[newsletter.status] || newsletter.status}
+          </Badge>
         </div>
       </div>
 
       {/* Status Warning */}
       {newsletter.status === 'SENT' && (
-        <div className="bg-[var(--pepe-warning)]/10 border border-[var(--pepe-warning)]/30 rounded-lg p-4">
-          <p className="text-[var(--pepe-warning)]">
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+          <p className="text-xs text-amber-400">
             Dieser Newsletter wurde bereits versendet und kann nicht mehr bearbeitet werden.
           </p>
         </div>

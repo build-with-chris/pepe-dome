@@ -43,18 +43,20 @@ interface ContentItem {
 interface DragDropReorderProps {
   items: ContentItem[]
   onReorder: (items: ContentItem[]) => void
+  onAddTextSnippet?: () => void
 }
 
 // Generate a unique sortable key for each item
 function getSortableKey(item: ContentItem, index: number): string {
   if (item.contentId) return item.contentId
   if (item.id) return item.id
-  return `item-${index}`
+  return `item-${index}-${item.contentType}`
 }
 
 export default function DragDropReorder({
   items,
   onReorder,
+  onAddTextSnippet,
 }: DragDropReorderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -113,11 +115,25 @@ export default function DragDropReorder({
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">
-          Content Order ({items.length} items)
+          Inhalte ({items.length})
         </h3>
-        <p className="text-sm text-pepe-t64">
-          Drag to reorder, edit headings inline
-        </p>
+        <div className="flex items-center gap-3">
+          {onAddTextSnippet && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onAddTextSnippet}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Text hinzufügen
+            </Button>
+          )}
+          <p className="text-sm text-pepe-t64">
+            Ziehen zum Sortieren
+          </p>
+        </div>
       </div>
 
       <DndContext
@@ -178,10 +194,11 @@ function SortableItem({
     opacity: isDragging ? 0.5 : 1,
   }
 
+  const isTextSnippet = item.contentType === 'CUSTOM_SECTION'
   const [isEditingHeading, setIsEditingHeading] = useState(false)
   const [isEditingDescription, setIsEditingDescription] = useState(false)
   const [headingValue, setHeadingValue] = useState(
-    item.sectionHeading || `Section ${index + 1}`
+    item.sectionHeading || (isTextSnippet ? '' : `Abschnitt ${index + 1}`)
   )
   const [descriptionValue, setDescriptionValue] = useState(
     item.sectionDescription || ''
@@ -197,11 +214,25 @@ function SortableItem({
     setIsEditingDescription(false)
   }
 
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      EVENT: 'Event',
+      ARTICLE: 'Artikel',
+      SHOW: 'Show',
+      CUSTOM_SECTION: 'Text',
+    }
+    return labels[type] || type
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-pepe-surface rounded-lg p-4 border border-pepe-line hover:border-pepe-gold transition-colors"
+      className={`bg-pepe-surface rounded-lg p-4 border transition-colors ${
+        isTextSnippet
+          ? 'border-sky-500/30 hover:border-sky-500'
+          : 'border-pepe-line hover:border-pepe-gold'
+      }`}
     >
       <div className="flex items-start gap-4">
         {/* Drag Handle */}
@@ -209,7 +240,7 @@ function SortableItem({
           {...attributes}
           {...listeners}
           className="mt-2 cursor-grab active:cursor-grabbing text-pepe-t64 hover:text-pepe-gold"
-          aria-label="Drag to reorder"
+          aria-label="Zum Sortieren ziehen"
         >
           <svg
             width="20"
@@ -224,12 +255,21 @@ function SortableItem({
         </button>
 
         {/* Position Badge */}
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-pepe-gold text-black flex items-center justify-center font-bold text-sm">
+        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+          isTextSnippet ? 'bg-sky-500 text-white' : 'bg-pepe-gold text-black'
+        }`}>
           {index + 1}
         </div>
 
         {/* Content */}
         <div className="flex-1 space-y-3">
+          {/* Type Badge */}
+          <span className={`inline-block text-xs px-2 py-0.5 rounded ${
+            isTextSnippet ? 'bg-sky-500/20 text-sky-400' : 'bg-pepe-gold/20 text-pepe-gold'
+          }`}>
+            {getTypeLabel(item.contentType)}
+          </span>
+
           {/* Section Heading */}
           {isEditingHeading ? (
             <div className="flex items-center gap-2">
@@ -247,19 +287,22 @@ function SortableItem({
                 }}
                 autoFocus
                 maxLength={100}
+                placeholder={isTextSnippet ? 'Überschrift eingeben...' : 'Abschnitt-Überschrift'}
               />
             </div>
           ) : (
             <button
               onClick={() => setIsEditingHeading(true)}
-              className="text-left hover:text-pepe-gold transition-colors"
+              className="text-left hover:text-pepe-gold transition-colors w-full"
             >
-              <h4 className="text-lg font-semibold">{headingValue}</h4>
+              <h4 className="text-lg font-semibold">
+                {headingValue || (isTextSnippet ? '+ Überschrift hinzufügen...' : `Abschnitt ${index + 1}`)}
+              </h4>
             </button>
           )}
 
-          {/* Content Info */}
-          {item._metadata && (
+          {/* Content Info (for events/articles) */}
+          {item._metadata && !isTextSnippet && (
             <div className="flex items-center gap-3">
               {item._metadata.imageUrl && (
                 /* eslint-disable-next-line @next/next/no-img-element */
@@ -271,19 +314,16 @@ function SortableItem({
               )}
               <div>
                 <p className="font-medium text-sm">{item._metadata.title}</p>
-                <div className="flex items-center gap-2 text-xs text-pepe-t64">
-                  <span className="text-pepe-gold">{item.contentType}</span>
-                  {item._metadata.date && (
-                    <span>
-                      {new Date(item._metadata.date).toLocaleDateString('de-DE')}
-                    </span>
-                  )}
-                </div>
+                {item._metadata.date && (
+                  <span className="text-xs text-pepe-t64">
+                    {new Date(item._metadata.date).toLocaleDateString('de-DE')}
+                  </span>
+                )}
               </div>
             </div>
           )}
 
-          {/* Section Description */}
+          {/* Section Description / Text Content */}
           {isEditingDescription ? (
             <div className="flex items-center gap-2">
               <textarea
@@ -291,9 +331,9 @@ function SortableItem({
                 onChange={(e) => setDescriptionValue(e.target.value)}
                 onBlur={saveDescription}
                 className="input w-full"
-                rows={2}
-                maxLength={500}
-                placeholder="Optional section description..."
+                rows={isTextSnippet ? 4 : 2}
+                maxLength={1000}
+                placeholder={isTextSnippet ? 'Text eingeben...' : 'Optionale Beschreibung...'}
               />
             </div>
           ) : (
@@ -301,7 +341,7 @@ function SortableItem({
               onClick={() => setIsEditingDescription(true)}
               className="text-left text-sm text-pepe-t64 hover:text-pepe-t80 transition-colors w-full"
             >
-              {descriptionValue || '+ Add section description...'}
+              {descriptionValue || (isTextSnippet ? '+ Text hinzufügen...' : '+ Beschreibung hinzufügen...')}
             </button>
           )}
         </div>
@@ -311,9 +351,11 @@ function SortableItem({
           variant="ghost"
           size="sm"
           onClick={() => onRemove(sortableKey)}
-          className="text-pepe-error hover:bg-pepe-error-bg"
+          className="text-pepe-error hover:bg-pepe-error/10"
         >
-          Remove
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
         </Button>
       </div>
     </div>

@@ -92,12 +92,15 @@ interface NewsletterFormProps {
   initialContent?: ContentBlock[]
   /** Callback when content changes */
   onContentChange?: (content: ContentBlock[]) => void
+  /** Render only a specific section: 'basics', 'hero', or 'all' (default) */
+  section?: 'basics' | 'hero' | 'all'
 }
 
 export default function NewsletterForm({
   newsletter,
   mode,
   initialContent = [],
+  section = 'all',
 }: NewsletterFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -198,186 +201,257 @@ export default function NewsletterForm({
     }
   }
 
+  // Render basics section fields
+  const renderBasics = () => (
+    <div className="space-y-6">
+      <div className="space-y-2.5">
+        <Label htmlFor="subject" hasError={!!errors.subject} required>
+          Betreff
+        </Label>
+        <Input
+          id="subject"
+          value={formData.subject}
+          onChange={(e) => updateField('subject', e.target.value)}
+          hasError={!!errors.subject}
+          placeholder="Newsletter-Betreffzeile"
+          maxLength={200}
+          inputSize="lg"
+        />
+        <div className="flex justify-between mt-1.5">
+          {errors.subject && (
+            <p className="text-sm text-red-400">{errors.subject}</p>
+          )}
+          <p className="text-xs text-white/40 ml-auto">
+            {formData.subject.length}/200
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-2.5">
+        <Label htmlFor="preheader">Preheader</Label>
+        <Input
+          id="preheader"
+          value={formData.preheader}
+          onChange={(e) => updateField('preheader', e.target.value)}
+          hasError={!!errors.preheader}
+          placeholder="Vorschau-Text für E-Mail-Clients..."
+          maxLength={200}
+          inputSize="lg"
+        />
+        <p className="text-xs text-white/40 mt-1.5">Wird in E-Mail-Vorschauen angezeigt</p>
+      </div>
+
+      <div className="space-y-2.5">
+        <Label htmlFor="introText">Intro-Text</Label>
+        <Textarea
+          id="introText"
+          value={formData.introText}
+          onChange={(e) => updateField('introText', e.target.value)}
+          hasError={!!errors.introText}
+          rows={4}
+          placeholder="Einführungstext für den Newsletter..."
+          className="min-h-[120px]"
+        />
+        {errors.introText && (
+          <p className="text-sm text-red-400 mt-1.5">{errors.introText}</p>
+        )}
+      </div>
+    </div>
+  )
+
+  // Render hero section fields
+  const renderHero = () => (
+    <div className="space-y-6">
+      <ImageDropzone
+        label="Hero-Bild"
+        value={formData.heroImageUrl}
+        onChange={(url) => updateField('heroImageUrl', url)}
+        hasError={!!errors.heroImageUrl}
+        error={errors.heroImageUrl}
+        placeholder="Bild hier ablegen oder klicken"
+      />
+
+      <div className="grid grid-cols-1 gap-5">
+        <div className="space-y-2.5">
+          <Label htmlFor="heroTitle">Hero-Titel</Label>
+          <Input
+            id="heroTitle"
+            value={formData.heroTitle}
+            onChange={(e) => updateField('heroTitle', e.target.value)}
+            hasError={!!errors.heroTitle}
+            placeholder="Willkommen zu..."
+            maxLength={100}
+            inputSize="lg"
+          />
+        </div>
+
+        <div className="space-y-2.5">
+          <Label htmlFor="heroSubtitle">Hero-Untertitel</Label>
+          <Input
+            id="heroSubtitle"
+            value={formData.heroSubtitle}
+            onChange={(e) => updateField('heroSubtitle', e.target.value)}
+            hasError={!!errors.heroSubtitle}
+            placeholder="Ihre monatlichen Updates"
+            maxLength={200}
+            inputSize="lg"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="space-y-2.5">
+          <Label htmlFor="heroCTALabel">CTA-Button Text</Label>
+          <Input
+            id="heroCTALabel"
+            value={formData.heroCTALabel}
+            onChange={(e) => updateField('heroCTALabel', e.target.value)}
+            hasError={!!errors.heroCTALabel}
+            placeholder="Events ansehen"
+            maxLength={50}
+            inputSize="lg"
+          />
+        </div>
+
+        <div className="space-y-2.5">
+          <Label htmlFor="heroCTAUrl">CTA-Button Seite</Label>
+          <Select
+            value={formData.heroCTAUrl || 'none'}
+            onValueChange={(value) => updateField('heroCTAUrl', value === 'none' ? '' : value)}
+          >
+            <SelectTrigger className="h-12">
+              <SelectValue placeholder="Seite auswählen" />
+            </SelectTrigger>
+            <SelectContent>
+              {pageOptions.map((option) => (
+                <SelectItem key={option.value || 'none'} value={option.value || 'none'}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Render form actions
+  const renderActions = (compact = false) => (
+    <div className={compact ? 'flex gap-4 mt-8 pt-5 border-t border-white/[0.08]' : 'flex gap-4'}>
+      <Button type="submit" variant="primary" size="md" disabled={loading}>
+        {loading ? 'Speichern...' : 'Speichern'}
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="md"
+        onClick={() => router.push('/admin/newsletters')}
+      >
+        Abbrechen
+      </Button>
+    </div>
+  )
+
+  // Sectioned rendering for split-view layouts
+  if (section === 'basics') {
+    return (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {errors.form && (
+          <div className="mb-5 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            {errors.form}
+          </div>
+        )}
+        {renderBasics()}
+        {renderActions(true)}
+      </form>
+    )
+  }
+
+  if (section === 'hero') {
+    return (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {errors.form && (
+          <div className="mb-5 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+            {errors.form}
+          </div>
+        )}
+        {renderHero()}
+        {renderActions(true)}
+      </form>
+    )
+  }
+
+  // Full form (for create mode or 'all' section)
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
+    <form onSubmit={handleSubmit}>
       {/* Form-level error */}
       {errors.form && (
-        <div className="p-4 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/20 rounded-lg text-[var(--pepe-error)]">
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
           {errors.form}
         </div>
       )}
 
-      {/* Basic Information */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Basis-Informationen
-        </h2>
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-6">
+        {/* LEFT COLUMN - Main content */}
+        <div className="space-y-6">
+          {/* Basic Information */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Basis-Informationen
+            </h2>
+            {renderBasics()}
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="subject" hasError={!!errors.subject} required>
-            Betreff
-          </Label>
-          <Input
-            id="subject"
-            value={formData.subject}
-            onChange={(e) => updateField('subject', e.target.value)}
-            hasError={!!errors.subject}
-            placeholder="Newsletter-Betreffzeile"
-            maxLength={200}
-          />
-          <div className="flex justify-between">
-            {errors.subject && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.subject}</p>
-            )}
-            <p className="text-xs text-[var(--pepe-t48)] ml-auto">
-              {formData.subject.length}/200 Zeichen
-            </p>
+          {/* Hero Section */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Hero-Bereich
+            </h2>
+            {renderHero()}
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="preheader">
-            Preheader
-          </Label>
-          <Input
-            id="preheader"
-            value={formData.preheader}
-            onChange={(e) => updateField('preheader', e.target.value)}
-            hasError={!!errors.preheader}
-            placeholder="Vorschau-Text fur E-Mail-Clients..."
-            maxLength={200}
-          />
-          <div className="flex justify-between">
-            {errors.preheader && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.preheader}</p>
-            )}
-            <p className="text-xs text-[var(--pepe-t48)] ml-auto">
-              {(formData.preheader || '').length}/200 Zeichen - Wird in E-Mail-Vorschauen angezeigt
-            </p>
+        {/* RIGHT COLUMN - Sidebar */}
+        <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+          {/* Info */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Hinweis
+            </h2>
+            <div className="flex gap-3">
+              <svg className="w-5 h-5 text-[#016dca] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-[13px] text-white/60 leading-relaxed">
+                Der Newsletter wird als Entwurf gespeichert. Sie können ihn später bearbeiten,
+                eine Vorschau ansehen und dann versenden oder zeitlich planen.
+              </p>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <div className="space-y-3">
+              <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
+                {loading
+                  ? 'Speichern...'
+                  : mode === 'create'
+                  ? 'Newsletter erstellen'
+                  : 'Änderungen speichern'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={() => router.push('/admin/newsletters')}
+                className="w-full"
+              >
+                Abbrechen
+              </Button>
+            </div>
           </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="introText">
-            Intro-Text
-          </Label>
-          <Textarea
-            id="introText"
-            value={formData.introText}
-            onChange={(e) => updateField('introText', e.target.value)}
-            hasError={!!errors.introText}
-            rows={4}
-            placeholder="Einfuhrungstext fur den Newsletter..."
-          />
-          {errors.introText && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.introText}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Hero-Bereich
-        </h2>
-
-        <ImageDropzone
-          label="Hero-Bild"
-          value={formData.heroImageUrl}
-          onChange={(url) => updateField('heroImageUrl', url)}
-          hasError={!!errors.heroImageUrl}
-          error={errors.heroImageUrl}
-          placeholder="Hero-Bild hier ablegen oder klicken zum Hochladen"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="heroTitle">Hero-Titel</Label>
-            <Input
-              id="heroTitle"
-              value={formData.heroTitle}
-              onChange={(e) => updateField('heroTitle', e.target.value)}
-              hasError={!!errors.heroTitle}
-              placeholder="Willkommen zu..."
-              maxLength={100}
-            />
-            {errors.heroTitle && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.heroTitle}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="heroSubtitle">Hero-Untertitel</Label>
-            <Input
-              id="heroSubtitle"
-              value={formData.heroSubtitle}
-              onChange={(e) => updateField('heroSubtitle', e.target.value)}
-              hasError={!!errors.heroSubtitle}
-              placeholder="Ihre monatlichen Updates"
-              maxLength={200}
-            />
-            {errors.heroSubtitle && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.heroSubtitle}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="heroCTALabel">CTA-Button Label</Label>
-            <Input
-              id="heroCTALabel"
-              value={formData.heroCTALabel}
-              onChange={(e) => updateField('heroCTALabel', e.target.value)}
-              hasError={!!errors.heroCTALabel}
-              placeholder="Events ansehen"
-              maxLength={50}
-            />
-            {errors.heroCTALabel && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.heroCTALabel}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="heroCTAUrl">CTA-Button Seite</Label>
-            <Select
-              value={formData.heroCTAUrl || 'none'}
-              onValueChange={(value) => updateField('heroCTAUrl', value === 'none' ? '' : value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seite auswählen" />
-              </SelectTrigger>
-              <SelectContent>
-                {pageOptions.map((option) => (
-                  <SelectItem key={option.value || 'none'} value={option.value || 'none'}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.heroCTAUrl && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.heroCTAUrl}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Button type="submit" variant="primary" disabled={loading}>
-          {loading
-            ? 'Speichern...'
-            : mode === 'create'
-            ? 'Newsletter erstellen'
-            : 'Anderungen speichern'}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => router.push('/admin/newsletters')}
-        >
-          Abbrechen
-        </Button>
       </div>
     </form>
   )

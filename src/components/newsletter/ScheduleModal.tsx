@@ -37,7 +37,7 @@ export default function ScheduleModal({
 
     // Validate datetime
     if (!scheduledDate || !scheduledTime) {
-      setError('Please select both date and time')
+      setError('Bitte wählen Sie Datum und Uhrzeit aus')
       return
     }
 
@@ -45,7 +45,7 @@ export default function ScheduleModal({
     const now = new Date()
 
     if (scheduledAt <= now) {
-      setError('Scheduled time must be in the future')
+      setError('Der Zeitpunkt muss in der Zukunft liegen')
       return
     }
 
@@ -66,7 +66,7 @@ export default function ScheduleModal({
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error?.message || 'Failed to schedule newsletter')
+        throw new Error(result.error?.message || 'Newsletter konnte nicht geplant werden')
       }
 
       onScheduled()
@@ -81,7 +81,7 @@ export default function ScheduleModal({
       <div className="card max-w-lg w-full p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Schedule Newsletter</h2>
+          <h2 className="text-2xl font-semibold">Newsletter planen</h2>
           <button
             onClick={onClose}
             className="text-pepe-t64 hover:text-pepe-white transition-colors"
@@ -113,14 +113,14 @@ export default function ScheduleModal({
         {/* Form */}
         <div className="space-y-4">
           <p className="text-pepe-t80">
-            Choose when this newsletter should be automatically sent to all
-            active subscribers.
+            Wählen Sie, wann dieser Newsletter automatisch an alle aktiven
+            Abonnenten gesendet werden soll.
           </p>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="scheduledDate" className="form-label">
-                Date
+                Datum
               </label>
               <Input
                 id="scheduledDate"
@@ -134,7 +134,7 @@ export default function ScheduleModal({
 
             <div>
               <label htmlFor="scheduledTime" className="form-label">
-                Time
+                Uhrzeit
               </label>
               <Input
                 id="scheduledTime"
@@ -149,7 +149,7 @@ export default function ScheduleModal({
           {scheduledDate && scheduledTime && (
             <div className="bg-pepe-gold-glow rounded-lg p-3">
               <p className="text-sm font-medium">
-                Newsletter will be sent on:
+                Newsletter wird gesendet am:
               </p>
               <p className="text-lg text-pepe-gold font-semibold">
                 {new Date(`${scheduledDate}T${scheduledTime}`).toLocaleString(
@@ -169,9 +169,8 @@ export default function ScheduleModal({
 
           <div className="bg-pepe-info-bg border border-pepe-info rounded-lg p-3">
             <p className="text-sm text-pepe-info">
-              Note: The newsletter must be complete with content before
-              scheduling. Scheduled time must be at least 5 minutes in the
-              future.
+              Hinweis: Der Newsletter muss vor der Planung Inhalte haben.
+              Der geplante Zeitpunkt muss mindestens 5 Minuten in der Zukunft liegen.
             </p>
           </div>
         </div>
@@ -183,14 +182,14 @@ export default function ScheduleModal({
             onClick={onClose}
             disabled={isLoading}
           >
-            Cancel
+            Abbrechen
           </Button>
           <Button
             variant="primary"
             onClick={handleSchedule}
             disabled={isLoading || !scheduledDate || !scheduledTime}
           >
-            {isLoading ? 'Scheduling...' : 'Schedule Newsletter'}
+            {isLoading ? 'Wird geplant...' : 'Newsletter planen'}
           </Button>
         </div>
       </div>

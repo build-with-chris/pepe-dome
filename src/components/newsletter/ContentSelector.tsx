@@ -109,23 +109,23 @@ export default function ContentSelector({
 
   const getCategoryLabel = (type: string) => {
     const labels: Record<string, string> = {
-      EVENT: 'Upcoming Events',
-      ARTICLE: 'Latest News',
-      SHOW: 'Featured Shows',
+      EVENT: 'Kommende Events',
+      ARTICLE: 'Aktuelle News',
+      SHOW: 'Ausgewählte Shows',
     }
-    return labels[type] || 'Content'
+    return labels[type] || 'Inhalt'
   }
 
   return (
     <div className="space-y-6">
       {/* Filter Bar */}
       <div className="bg-pepe-surface rounded-lg p-4">
-        <h3 className="text-lg font-semibold mb-4">Filter Content</h3>
+        <h3 className="text-lg font-semibold mb-4">Inhalte filtern</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label htmlFor="startDate" className="form-label">
-              Start Date
+              Von Datum
             </label>
             <Input
               id="startDate"
@@ -138,7 +138,7 @@ export default function ContentSelector({
 
           <div>
             <label htmlFor="endDate" className="form-label">
-              End Date
+              Bis Datum
             </label>
             <Input
               id="endDate"
@@ -151,7 +151,7 @@ export default function ContentSelector({
 
           <div>
             <label htmlFor="category" className="form-label">
-              Category
+              Kategorie
             </label>
             <select
               id="category"
@@ -160,10 +160,10 @@ export default function ContentSelector({
               onChange={handleFilterChange}
               className="input"
             >
-              <option value="">All Categories</option>
+              <option value="">Alle Kategorien</option>
               <option value="shows">Shows</option>
               <option value="workshops">Workshops</option>
-              <option value="corporate">Corporate</option>
+              <option value="corporate">Business</option>
               <option value="news">News</option>
             </select>
           </div>
@@ -171,7 +171,7 @@ export default function ContentSelector({
 
         <div className="mt-4 flex gap-2">
           <Button variant="primary" size="sm" onClick={handleApplyFilters}>
-            Apply Filters
+            Filter anwenden
           </Button>
           <Button
             variant="ghost"
@@ -187,7 +187,7 @@ export default function ContentSelector({
               fetchContent()
             }}
           >
-            Reset
+            Zurücksetzen
           </Button>
         </div>
       </div>
@@ -196,20 +196,20 @@ export default function ContentSelector({
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">
-            Available Content ({availableContent.length})
+            Verfügbare Inhalte ({availableContent.length})
           </h3>
           <span className="text-sm text-pepe-t64">
-            {selectedItems.size} selected
+            {selectedItems.size} ausgewählt
           </span>
         </div>
 
         {isLoading ? (
           <div className="text-center py-12 text-pepe-t64">
-            Loading content...
+            Inhalte werden geladen...
           </div>
         ) : availableContent.length === 0 ? (
           <div className="text-center py-12 text-pepe-t64">
-            No content found matching your filters
+            Keine Inhalte gefunden, die den Filtern entsprechen
           </div>
         ) : (
           <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -226,6 +226,7 @@ export default function ContentSelector({
                 />
 
                 {item.imageUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.imageUrl}
                     alt={item.title}
@@ -260,14 +261,14 @@ export default function ContentSelector({
         <div className="bg-pepe-gold-glow rounded-lg p-4">
           <div className="flex items-center justify-between">
             <span className="font-semibold">
-              {selectedItems.size} item(s) selected
+              {selectedItems.size} {selectedItems.size === 1 ? 'Inhalt' : 'Inhalte'} ausgewählt
             </span>
             <Button
               variant="primary"
               size="md"
               onClick={handleAddToNewsletter}
             >
-              Add to Newsletter
+              Zum Newsletter hinzufügen
             </Button>
           </div>
         </div>

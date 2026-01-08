@@ -266,6 +266,16 @@ export async function sendNewsletter(
   const sectionMap = new Map<string, { description?: string; items: Array<{ type: ContentItemType; data: unknown }> }>()
 
   for (const item of newsletter.content) {
+    // CUSTOM_SECTION items are standalone - each one is its own section (same as preview)
+    if (item.contentType === 'CUSTOM_SECTION') {
+      contentSections.push({
+        sectionHeading: item.sectionHeading || '',
+        sectionDescription: item.sectionDescription || undefined,
+        items: [], // No items - the heading/description IS the content
+      })
+      continue
+    }
+
     const sectionHeading = item.sectionHeading || 'Aktuelles'
 
     if (!sectionMap.has(sectionHeading)) {
@@ -283,11 +293,20 @@ export async function sendNewsletter(
       if (item.contentType === 'EVENT' || item.contentType === 'SHOW') {
         const event = eventsMap.get(item.contentId)
         if (event) {
+          // Format the date in German (same as preview)
+          const eventDate = new Date(event.date)
+          const formattedDate = eventDate.toLocaleDateString('de-DE', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+
           type = 'event'
           data = {
             title: event.title,
             description: event.subtitle || event.description.substring(0, 150) + '...',
-            date: event.date.toISOString(),
+            date: formattedDate,
             time: event.time,
             location: event.location,
             category: event.category,

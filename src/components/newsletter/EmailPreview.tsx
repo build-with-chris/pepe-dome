@@ -39,17 +39,17 @@ export default function EmailPreview({
       if (response.ok) {
         setTestSendStatus('success')
         setTestSendMessage(
-          result.message || 'Test email sent successfully to test recipients'
+          result.message || 'Test-E-Mail wurde erfolgreich an Testempfänger gesendet'
         )
       } else {
         setTestSendStatus('error')
         setTestSendMessage(
-          result.error?.message || 'Failed to send test email'
+          result.error?.message || 'Test-E-Mail konnte nicht gesendet werden'
         )
       }
     } catch (error: any) {
       setTestSendStatus('error')
-      setTestSendMessage(error.message || 'An error occurred')
+      setTestSendMessage(error.message || 'Ein Fehler ist aufgetreten')
     } finally {
       setIsTestSending(false)
     }
@@ -67,14 +67,14 @@ export default function EmailPreview({
     <div className="space-y-4">
       {/* Preview Actions */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Email Preview</h3>
+        <h3 className="text-lg font-semibold">E-Mail Vorschau</h3>
         <div className="flex gap-2">
           <Button
             variant="secondary"
             size="sm"
             onClick={handleViewWebPage}
           >
-            View as Web Page
+            Als Webseite ansehen
           </Button>
           <Button
             variant="primary"
@@ -82,7 +82,7 @@ export default function EmailPreview({
             onClick={handleTestSend}
             disabled={isTestSending}
           >
-            {isTestSending ? 'Sending...' : 'Send Test Email'}
+            {isTestSending ? 'Wird gesendet...' : 'Test-E-Mail senden'}
           </Button>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default function EmailPreview({
       <div className="border-2 border-pepe-line rounded-lg overflow-hidden bg-white">
         <iframe
           src={`/api/admin/newsletters/${newsletterId}/preview`}
-          title="Email Preview"
+          title="E-Mail Vorschau"
           className="w-full"
           style={{ height: '600px' }}
           sandbox="allow-same-origin"
@@ -122,11 +122,10 @@ export default function EmailPreview({
       {/* Preview Info */}
       <div className="text-sm text-pepe-t64 space-y-1">
         <p>
-          This is a preview of how your newsletter will appear in email clients.
+          Dies ist eine Vorschau, wie Ihr Newsletter in E-Mail-Programmen erscheint.
         </p>
         <p>
-          Note: Actual rendering may vary across different email clients and
-          devices.
+          Hinweis: Die tatsächliche Darstellung kann je nach E-Mail-Programm und Gerät variieren.
         </p>
       </div>
     </div>

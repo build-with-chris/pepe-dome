@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { getNewsletters } from '@/lib/newsletters'
 import { prisma } from '@/lib/prisma'
 import { Button } from '@/components/ui/Button'
@@ -221,6 +222,7 @@ function NewsletterListItem({
     id: string
     subject: string
     preheader: string | null
+    heroImageUrl: string | null
     status: string
     sentAt: Date | null
     scheduledAt: Date | null
@@ -265,35 +267,56 @@ function NewsletterListItem({
 
   return (
     <Link href={`/admin/newsletters/${newsletter.id}/edit`}>
-      <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/[0.05] hover:border-white/20 transition-all hover:-translate-y-0.5">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
+      <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-5 shadow-xl hover:bg-white/[0.05] hover:border-white/20 transition-all hover:-translate-y-0.5">
+        <div className="flex items-start gap-5">
+          {/* Thumbnail */}
+          <div className="relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-white/5">
+            {newsletter.heroImageUrl ? (
+              <Image
+                src={newsletter.heroImageUrl}
+                alt={newsletter.subject}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-xl font-semibold text-white">{newsletter.subject}</h3>
+              <h3 className="text-lg font-semibold text-white truncate">{newsletter.subject}</h3>
               <Badge
                 variant="outline"
-                className={cn('text-xs border', statusColors[newsletter.status])}
+                className={cn('text-xs border flex-shrink-0', statusColors[newsletter.status])}
               >
                 {statusLabels[newsletter.status] || newsletter.status}
               </Badge>
             </div>
 
             {newsletter.preheader && (
-              <p className="text-gray-400 mb-3">{newsletter.preheader}</p>
+              <p className="text-gray-400 text-sm mb-2 line-clamp-1">{newsletter.preheader}</p>
             )}
 
-            <div className="flex items-center gap-6 text-sm text-gray-400">
+            <div className="flex items-center gap-5 text-sm text-gray-400">
               <span>{formattedDate}</span>
               {newsletter.recipientCount > 0 && (
-                <span>{newsletter.recipientCount.toLocaleString('de-DE')} Empfanger</span>
+                <span>{newsletter.recipientCount.toLocaleString('de-DE')} Empfänger</span>
               )}
               {openRate && (
-                <span className="text-[#016dca]">{openRate}% Offnungsrate</span>
+                <span className="text-[#016dca]">{openRate}% Öffnungsrate</span>
               )}
             </div>
           </div>
 
-          <Button variant="secondary" size="sm">
+          {/* Actions */}
+          <Button variant="secondary" size="sm" className="flex-shrink-0">
             Bearbeiten
           </Button>
         </div>

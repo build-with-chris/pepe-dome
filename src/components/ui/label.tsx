@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
  */
 const labelVariants = cva(
   [
-    "text-sm font-medium leading-none",
+    "text-[13px] font-medium leading-none tracking-[-0.01em]",
     "text-[var(--pepe-t80)]",
     "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
   ].join(" "),
@@ -22,7 +22,7 @@ const labelVariants = cva(
         false: "",
       },
       required: {
-        true: "after:content-['*'] after:ml-0.5 after:text-[var(--pepe-gold)]",
+        true: "after:content-['*'] after:ml-1 after:text-[var(--pepe-gold)]",
         false: "",
       },
     },

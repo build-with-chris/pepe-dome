@@ -208,239 +208,276 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
+    <form onSubmit={handleSubmit}>
       {/* Form-level error */}
       {errors.form && (
-        <div className="p-4 bg-[var(--pepe-error)]/10 border border-[var(--pepe-error)]/20 rounded-lg text-[var(--pepe-error)]">
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
           {errors.form}
         </div>
       )}
 
-      {/* Basic Information */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Basis-Informationen
-        </h2>
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-6">
+        {/* LEFT COLUMN - Main content */}
+        <div className="space-y-6">
+          {/* Basic Information */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Basis-Informationen
+            </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="title" hasError={!!errors.title} required>
-            Titel
-          </Label>
-          <Input
-            id="title"
-            value={formData.title}
-            onChange={(e) => updateField('title', e.target.value)}
-            hasError={!!errors.title}
-            placeholder="Artikel-Titel"
-          />
-          {errors.title && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.title}</p>
-          )}
-        </div>
+            <div className="space-y-5">
+              <div className="space-y-2.5">
+                <Label htmlFor="title" hasError={!!errors.title} required>
+                  Titel
+                </Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => updateField('title', e.target.value)}
+                  hasError={!!errors.title}
+                  placeholder="Artikel-Titel"
+                  inputSize="lg"
+                />
+                {errors.title && (
+                  <p className="text-sm text-red-400">{errors.title}</p>
+                )}
+              </div>
 
-        {mode === 'create' && (
-          <div className="space-y-2">
-            <Label htmlFor="slug">
-              Slug (URL)
-            </Label>
-            <Input
-              id="slug"
-              value={formData.slug}
-              onChange={(e) => updateField('slug', e.target.value)}
-              placeholder="artikel-url-slug"
-              className="font-mono text-sm"
-            />
-            <p className="text-xs text-[var(--pepe-t48)]">
-              Wird automatisch aus dem Titel generiert. Kann manuell angepasst werden.
-            </p>
-          </div>
-        )}
+              {mode === 'create' && (
+                <div className="space-y-2.5">
+                  <Label htmlFor="slug">Slug (URL)</Label>
+                  <Input
+                    id="slug"
+                    value={formData.slug}
+                    onChange={(e) => updateField('slug', e.target.value)}
+                    placeholder="artikel-url-slug"
+                    className="font-mono text-sm"
+                    inputSize="lg"
+                  />
+                  <p className="text-[11px] text-white/40">
+                    Wird automatisch aus dem Titel generiert
+                  </p>
+                </div>
+              )}
 
-        <div className="space-y-2">
-          <Label htmlFor="excerpt" hasError={!!errors.excerpt} required>
-            Kurzbeschreibung
-          </Label>
-          <Textarea
-            id="excerpt"
-            value={formData.excerpt}
-            onChange={(e) => updateField('excerpt', e.target.value)}
-            hasError={!!errors.excerpt}
-            rows={2}
-            placeholder="Kurze Beschreibung fur Vorschauen..."
-          />
-          {errors.excerpt && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.excerpt}</p>
-          )}
-        </div>
+              <div className="space-y-2.5">
+                <Label htmlFor="excerpt" hasError={!!errors.excerpt} required>
+                  Kurzbeschreibung
+                </Label>
+                <Textarea
+                  id="excerpt"
+                  value={formData.excerpt}
+                  onChange={(e) => updateField('excerpt', e.target.value)}
+                  hasError={!!errors.excerpt}
+                  rows={3}
+                  placeholder="Kurze Beschreibung fur Vorschauen..."
+                  className="min-h-[100px]"
+                />
+                {errors.excerpt && (
+                  <p className="text-sm text-red-400">{errors.excerpt}</p>
+                )}
+              </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="category" hasError={!!errors.category} required>
-              Kategorie
-            </Label>
-            <Select
-              value={formData.category}
-              onValueChange={(value) => updateField('category', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Kategorie wahlen" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="author" hasError={!!errors.author} required>
-              Autor
-            </Label>
-            <Input
-              id="author"
-              value={formData.author}
-              onChange={(e) => updateField('author', e.target.value)}
-              hasError={!!errors.author}
-              placeholder="Autor Name"
-            />
-            {errors.author && (
-              <p className="text-sm text-[var(--pepe-error)]">{errors.author}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
-          <Select
-            value={formData.status}
-            onValueChange={(value) => updateField('status', value)}
-          >
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {statusOptions.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Inhalt
-        </h2>
-
-        <div className="space-y-2">
-          <Label htmlFor="content" hasError={!!errors.content} required>
-            Artikel-Inhalt (Markdown)
-          </Label>
-          <Textarea
-            id="content"
-            value={formData.content}
-            onChange={(e) => updateField('content', e.target.value)}
-            hasError={!!errors.content}
-            rows={15}
-            placeholder="Artikel-Inhalt in Markdown..."
-            className="font-mono text-sm"
-          />
-          {errors.content && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.content}</p>
-          )}
-          <p className="text-xs text-[var(--pepe-t48)]">
-            Sie konnen Markdown verwenden: **fett**, *kursiv*, # Uberschriften, - Listen, etc.
-          </p>
-        </div>
-      </div>
-
-      {/* Media & Tags */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--pepe-white)] mb-4">
-          Medien & Tags
-        </h2>
-
-        <ImageDropzone
-          label="Artikel-Bild"
-          value={formData.imageUrl}
-          onChange={(url) => updateField('imageUrl', url)}
-          hasError={!!errors.imageUrl}
-          error={errors.imageUrl}
-          placeholder="Artikel-Bild hier ablegen oder klicken zum Hochladen"
-        />
-
-        <div className="space-y-2">
-          <Label htmlFor="tags">Tags</Label>
-          <div className="flex gap-2">
-            <Input
-              id="tags"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-              placeholder="Tag hinzufugen..."
-              className="flex-1"
-            />
-            <Button type="button" variant="secondary" size="sm" onClick={addTag}>
-              Hinzufugen
-            </Button>
-          </div>
-          {formData.tags && formData.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {formData.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--pepe-surface)] text-[var(--pepe-t80)] text-sm rounded"
-                >
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => removeTag(tag)}
-                    className="text-[var(--pepe-t48)] hover:text-[var(--pepe-error)]"
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </span>
-              ))}
+              <div className="space-y-2.5">
+                <Label htmlFor="author" hasError={!!errors.author} required>
+                  Autor
+                </Label>
+                <Input
+                  id="author"
+                  value={formData.author}
+                  onChange={(e) => updateField('author', e.target.value)}
+                  hasError={!!errors.author}
+                  placeholder="Autor Name"
+                  inputSize="lg"
+                />
+                {errors.author && (
+                  <p className="text-sm text-red-400">{errors.author}</p>
+                )}
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Content */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Inhalt
+            </h2>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="content" hasError={!!errors.content} required>
+                Artikel-Inhalt (Markdown)
+              </Label>
+              <Textarea
+                id="content"
+                value={formData.content}
+                onChange={(e) => updateField('content', e.target.value)}
+                hasError={!!errors.content}
+                rows={20}
+                placeholder="Artikel-Inhalt in Markdown..."
+                className="font-mono text-sm min-h-[400px]"
+              />
+              {errors.content && (
+                <p className="text-sm text-red-400">{errors.content}</p>
+              )}
+              <p className="text-[11px] text-white/40">
+                Markdown: **fett**, *kursiv*, # Uberschriften, - Listen
+              </p>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Tags
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex gap-3">
+                <Input
+                  id="tags"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder="Tag hinzufugen..."
+                  className="flex-1"
+                  inputSize="lg"
+                />
+                <Button type="button" variant="secondary" size="md" onClick={addTag}>
+                  Hinzufugen
+                </Button>
+              </div>
+              {formData.tags && formData.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 text-white/80 text-sm rounded-lg border border-white/[0.08]"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="text-white/40 hover:text-red-400 transition-colors"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 pt-2">
-          <Switch
-            id="featured"
-            checked={formData.featured}
-            onCheckedChange={(checked) => updateField('featured', checked)}
-          />
-          <Label htmlFor="featured" className="cursor-pointer">
-            Featured Artikel (prominent auf der Startseite anzeigen)
-          </Label>
-        </div>
-      </div>
+        {/* RIGHT COLUMN - Sidebar */}
+        <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+          {/* Image */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Artikel-Bild
+            </h2>
 
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Button type="submit" variant="primary" disabled={loading}>
-          {loading
-            ? 'Speichern...'
-            : mode === 'create'
-            ? 'Artikel erstellen'
-            : 'Anderungen speichern'}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => router.push('/admin/articles')}
-        >
-          Abbrechen
-        </Button>
+            <ImageDropzone
+              value={formData.imageUrl}
+              onChange={(url) => updateField('imageUrl', url)}
+              hasError={!!errors.imageUrl}
+              error={errors.imageUrl}
+              placeholder="Bild hier ablegen"
+            />
+          </div>
+
+          {/* Settings */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Einstellungen
+            </h2>
+
+            <div className="space-y-5">
+              <div className="space-y-2.5">
+                <Label htmlFor="category" hasError={!!errors.category} required>
+                  Kategorie
+                </Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => updateField('category', value)}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Kategorie wahlen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2.5">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value) => updateField('status', value)}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statusOptions.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="pt-3 border-t border-white/[0.08]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="featured" className="cursor-pointer text-white">
+                      Featured Artikel
+                    </Label>
+                    <p className="text-[11px] text-white/40 mt-0.5">
+                      Prominent auf der Startseite
+                    </p>
+                  </div>
+                  <Switch
+                    id="featured"
+                    checked={formData.featured}
+                    onCheckedChange={(checked) => updateField('featured', checked)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <div className="space-y-3">
+              <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
+                {loading
+                  ? 'Speichern...'
+                  : mode === 'create'
+                  ? 'Artikel erstellen'
+                  : 'Speichern'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={() => router.push('/admin/articles')}
+                className="w-full"
+              >
+                Abbrechen
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
   )

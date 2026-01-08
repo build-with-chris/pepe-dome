@@ -23,18 +23,17 @@ export function EmailButton({
     <Button
       href={href}
       style={{
-        backgroundColor: isPrimary ? '#016dca' : '#016dca',
-        color: '#FFFFFF',
-        fontSize: '16px',
+        backgroundColor: isPrimary ? '#016dca' : 'transparent',
+        color: isPrimary ? '#FFFFFF' : '#016dca',
+        fontSize: '14px',
         fontWeight: '600',
-        padding: '14px 32px',
+        padding: '10px 20px',
         borderRadius: '8px',
         textDecoration: 'none',
         display: 'inline-block',
         textAlign: 'center',
-        minHeight: '44px',
-        lineHeight: '1.2',
-        border: 'none',
+        lineHeight: '1',
+        border: isPrimary ? 'none' : '1px solid #016dca',
       }}
     >
       {children}
