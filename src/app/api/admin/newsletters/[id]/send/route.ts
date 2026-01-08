@@ -8,8 +8,8 @@ import {
   successResponse,
   errorResponse,
 } from '@/lib/api-response'
-import { getNewsletterWithContent, markNewsletterSent } from '@/lib/newsletters'
-import { prisma } from '@/lib/prisma'
+import { getNewsletterWithContent } from '@/lib/newsletters'
+import { sendNewsletter } from '@/lib/email-send'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -40,36 +40,21 @@ export async function POST(
       )
     }
 
-    // Get active subscribers
-    const subscribers = await prisma.subscriber.findMany({
-      where: { status: 'ACTIVE' },
-      select: { id: true, email: true },
-    })
-
-    if (subscribers.length === 0) {
-      return errorResponse(
-        'NO_SUBSCRIBERS',
-        'No active subscribers to send to',
-        400
-      )
-    }
-
-    // TODO: In Phase 4, implement actual sending via Resend
-    // For now, just mark as sent
-    // await sendNewsletterToSubscribers(newsletter, subscribers)
-
-    // Update newsletter status
-    await markNewsletterSent(newsletterId, subscribers.length)
+    // Send newsletter to all active subscribers via Resend
+    const result = await sendNewsletter(newsletterId)
 
     return successResponse({
       message: 'Newsletter sent successfully',
-      recipientCount: subscribers.length,
+      recipientCount: result.success,
+      failedCount: result.failed,
+      total: result.total,
     })
   } catch (error: unknown) {
     console.error('Newsletter send error:', error)
+    const message = error instanceof Error ? error.message : 'Unknown error'
     return errorResponse(
       'INTERNAL_ERROR',
-      'An error occurred while sending the newsletter.',
+      `An error occurred while sending the newsletter: ${message}`,
       500
     )
   }

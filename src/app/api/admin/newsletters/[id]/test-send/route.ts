@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server'
 import { successResponse, errorResponse } from '@/lib/api-response'
 import { getNewsletterWithContent } from '@/lib/newsletters'
+import { sendNewsletter } from '@/lib/email-send'
 import { prisma } from '@/lib/prisma'
 
 interface RouteParams {
@@ -27,7 +28,7 @@ export async function POST(
       return errorResponse('NOT_FOUND', 'Newsletter not found', 404)
     }
 
-    // Fetch test recipients
+    // Fetch test recipients from database
     const testRecipients = await prisma.testRecipient.findMany()
 
     if (testRecipients.length === 0) {
@@ -38,29 +39,25 @@ export async function POST(
       )
     }
 
-    // TODO: Render email template and send via Resend (Phase 3 & 4)
-    // For now, just log what would be sent
-    console.log('Test send for newsletter:', newsletter.slug)
-    console.log('Test recipients:', testRecipients.map((r) => r.email))
-    console.log('Newsletter subject:', newsletter.subject)
+    // Send newsletter to test recipients only (not to all subscribers)
+    const testEmails = testRecipients.map((r) => r.email)
 
-    // Simulate sending
-    const results = testRecipients.map((recipient) => ({
-      email: recipient.email,
-      status: 'sent',
-      // In Phase 4, this will contain the actual Resend response
-    }))
+    const result = await sendNewsletter(id, {
+      testRecipients: testEmails,
+    })
 
     return successResponse({
-      sent: results.length,
-      recipients: results,
-      message: `Test email sent to ${results.length} recipient(s)`,
+      sent: result.success,
+      failed: result.failed,
+      recipients: testEmails,
+      message: `Test email sent to ${result.success} recipient(s)`,
     })
   } catch (error) {
     console.error('Test send error:', error)
+    const message = error instanceof Error ? error.message : 'Unknown error'
     return errorResponse(
       'INTERNAL_ERROR',
-      'An error occurred while sending test email.',
+      `An error occurred while sending test email: ${message}`,
       500
     )
   }
