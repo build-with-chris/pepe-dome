@@ -161,6 +161,43 @@ export async function reorderNewsletterContent(
 }
 
 /**
+ * Replace all newsletter content (for bulk updates from the UI)
+ */
+export async function replaceNewsletterContent(
+  newsletterId: string,
+  content: {
+    id?: string
+    contentType: ContentType
+    contentId?: string | null
+    sectionHeading?: string | null
+    sectionDescription?: string | null
+    orderPosition: number
+  }[]
+) {
+  // Delete all existing content and create new ones in a transaction
+  await prisma.$transaction(async (tx) => {
+    // Delete existing content
+    await tx.newsletterContent.deleteMany({
+      where: { newsletterId },
+    })
+
+    // Create new content items
+    if (content.length > 0) {
+      await tx.newsletterContent.createMany({
+        data: content.map((item) => ({
+          newsletterId,
+          contentType: item.contentType,
+          contentId: item.contentId || null,
+          sectionHeading: item.sectionHeading || null,
+          sectionDescription: item.sectionDescription || null,
+          orderPosition: item.orderPosition,
+        })),
+      })
+    }
+  })
+}
+
+/**
  * Schedule newsletter for sending
  */
 export async function scheduleNewsletter(

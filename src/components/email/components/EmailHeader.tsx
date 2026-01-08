@@ -16,7 +16,8 @@ interface EmailHeaderProps {
 }
 
 export function EmailHeader({
-  logoUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/PEPE_logos_dome.svg`,
+  // Use PNG logo for better email client compatibility (SVG not widely supported)
+  logoUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/PepeDome%20Logo%20ausgeschnitten.png`,
   homeUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
 }: EmailHeaderProps) {
   return (

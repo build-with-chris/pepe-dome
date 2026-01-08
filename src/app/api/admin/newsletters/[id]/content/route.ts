@@ -10,7 +10,7 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '@/lib/api-response'
-import { addNewsletterContent, reorderNewsletterContent } from '@/lib/newsletters'
+import { addNewsletterContent, replaceNewsletterContent } from '@/lib/newsletters'
 import { addContentSchema, reorderContentSchema } from '@/lib/validation'
 
 interface RouteParams {
@@ -65,15 +65,15 @@ export async function PUT(
       return validationErrorResponse(validation.error)
     }
 
-    // Reorder content
-    await reorderNewsletterContent(newsletterId, validation.data)
+    // Replace all content (handles both new items and reordering)
+    await replaceNewsletterContent(newsletterId, validation.data.content)
 
-    return successResponse({ message: 'Content reordered successfully' })
+    return successResponse({ message: 'Content updated successfully' })
   } catch (error: unknown) {
-    console.error('Reorder content error:', error)
+    console.error('Update content error:', error)
     return errorResponse(
       'INTERNAL_ERROR',
-      'An error occurred while reordering content.',
+      'An error occurred while updating content.',
       500
     )
   }

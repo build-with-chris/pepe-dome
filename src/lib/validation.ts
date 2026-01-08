@@ -55,12 +55,18 @@ export const addContentSchema = z.object({
   orderPosition: z.number().int().min(0),
 })
 
-export const reorderContentSchema = z.array(
-  z.object({
-    id: z.string().uuid(),
-    orderPosition: z.number().int().min(0),
-  })
-)
+export const reorderContentSchema = z.object({
+  content: z.array(
+    z.object({
+      id: z.string().uuid().optional(),
+      contentType: z.enum(['EVENT', 'ARTICLE', 'SHOW', 'CUSTOM_SECTION']),
+      contentId: z.string().nullable().optional(),
+      sectionHeading: z.string().max(100).nullable().optional(),
+      sectionDescription: z.string().max(500).nullable().optional(),
+      orderPosition: z.number().int().min(0),
+    })
+  ),
+})
 
 // Query parameter schemas
 export const paginationSchema = z.object({
