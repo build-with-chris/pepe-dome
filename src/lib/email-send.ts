@@ -171,7 +171,8 @@ export async function sendNewsletter(
     throw new Error('Newsletter not found')
   }
 
-  if (newsletter.status === 'SENT') {
+  // Only block real sends for already-sent newsletters (allow test sends)
+  if (newsletter.status === 'SENT' && !options?.testRecipients) {
     throw new Error('Newsletter already sent')
   }
 
@@ -211,25 +212,52 @@ export async function sendNewsletter(
     }
   }
 
-  // Fetch events and articles data
+  // Fetch events and articles data (search by both ID and slug for flexibility)
   const [events, articles] = await Promise.all([
     eventIds.length > 0
       ? prisma.event.findMany({
-          where: { id: { in: eventIds } },
+          where: {
+            OR: [
+              { id: { in: eventIds } },
+              { slug: { in: eventIds } },
+            ],
+          },
         })
       : Promise.resolve([]),
     articleIds.length > 0
       ? prisma.article.findMany({
-          where: { id: { in: articleIds } },
+          where: {
+            OR: [
+              { id: { in: articleIds } },
+              { slug: { in: articleIds } },
+            ],
+          },
         })
       : Promise.resolve([]),
   ])
 
-  // Create lookup maps
-  const eventsMap = new Map(events.map(e => [e.id, e]))
-  const articlesMap = new Map(articles.map(a => [a.id, a]))
+  // Create lookup maps (by both id and slug for flexibility)
+  const eventsMap = new Map<string, typeof events[0]>()
+  events.forEach((e) => {
+    eventsMap.set(e.id, e)
+    eventsMap.set(e.slug, e)
+  })
+  const articlesMap = new Map<string, typeof articles[0]>()
+  articles.forEach((a) => {
+    articlesMap.set(a.id, a)
+    articlesMap.set(a.slug, a)
+  })
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'
+
+  // Helper to convert relative URLs to absolute URLs
+  const toAbsoluteUrl = (url: string | null | undefined): string | undefined => {
+    if (!url) return undefined
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url
+    }
+    return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`
+  }
 
   // Build content sections for template
   const contentSections: ContentSection[] = []
@@ -263,9 +291,10 @@ export async function sendNewsletter(
             time: event.time,
             location: event.location,
             category: event.category,
-            imageUrl: event.imageUrl,
+            imageUrl: toAbsoluteUrl(event.imageUrl),
             eventUrl: `${baseUrl}/events/${event.slug}`,
-            ticketUrl: event.ticketUrl,
+            ctaUrl: event.ticketUrl || `${baseUrl}/events/${event.slug}`,
+            ctaLabel: event.ticketUrl ? 'Tickets kaufen' : 'Mehr erfahren',
           }
         }
       } else if (item.contentType === 'ARTICLE') {
@@ -275,10 +304,9 @@ export async function sendNewsletter(
           data = {
             title: article.title,
             excerpt: article.excerpt,
-            imageUrl: article.imageUrl,
+            imageUrl: toAbsoluteUrl(article.imageUrl),
             articleUrl: `${baseUrl}/news/${article.slug}`,
             category: article.category,
-            author: article.author,
           }
         }
       }
@@ -311,11 +339,12 @@ export async function sendNewsletter(
         subject: newsletter.subject,
         preheader: newsletter.preheader || undefined,
         newsletterSlug: newsletter.slug,
-        heroImageUrl: newsletter.heroImageUrl || undefined,
+        heroImageUrl: toAbsoluteUrl(newsletter.heroImageUrl),
         heroTitle: newsletter.heroTitle || undefined,
         heroSubtitle: newsletter.heroSubtitle || undefined,
         heroCTALabel: newsletter.heroCTALabel || undefined,
-        heroCTAUrl: newsletter.heroCTAUrl || undefined,
+        heroCTAUrl: toAbsoluteUrl(newsletter.heroCTAUrl),
+        introText: newsletter.introText || undefined,
         contentSections,
         subscriberId: recipient.id,
         subscriberEmail: recipient.email,

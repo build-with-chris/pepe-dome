@@ -78,6 +78,7 @@ export async function updateNewsletter(
   data: Partial<{
     subject: string
     preheader: string
+    introText: string | null
     heroImageUrl: string
     heroTitle: string
     heroSubtitle: string

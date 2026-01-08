@@ -35,3 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /generated/prisma
+
+# uploaded files
+/public/uploads/*
+!/public/uploads/.gitkeep

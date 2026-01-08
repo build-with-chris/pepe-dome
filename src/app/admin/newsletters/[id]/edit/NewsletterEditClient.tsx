@@ -252,29 +252,39 @@ export default function NewsletterEditClient({
 
       {activeTab === 'content' && (
         <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-6">
-          {selectedContent.length === 0 ? (
+          {selectedContent.length === 0 && !showContentSelector ? (
             <div className="space-y-4">
               <p className="text-[var(--pepe-t64)]">
                 Keine Inhalte ausgewahlt. Wahlen Sie Events und Artikel fur diesen Newsletter aus.
               </p>
 
-              {showContentSelector ? (
-                <ContentSelector
-                  onContentSelected={handleContentReorder}
-                  selectedContent={selectedContent}
-                />
-              ) : (
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowContentSelector(true)}
-                  disabled={!canEdit}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Inhalte auswahlen
-                </Button>
-              )}
+              <Button
+                variant="secondary"
+                onClick={() => setShowContentSelector(true)}
+                disabled={!canEdit}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Inhalte auswahlen
+              </Button>
+            </div>
+          ) : showContentSelector ? (
+            <div className="space-y-4">
+              <ContentSelector
+                onContentSelected={(newContent) => {
+                  handleContentReorder(newContent)
+                  setShowContentSelector(false)
+                }}
+                selectedContent={selectedContent}
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowContentSelector(false)}
+              >
+                Abbrechen
+              </Button>
             </div>
           ) : (
             <div className="space-y-4">

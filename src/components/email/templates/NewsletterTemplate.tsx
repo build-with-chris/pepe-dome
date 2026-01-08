@@ -44,6 +44,9 @@ interface NewsletterTemplateProps {
   heroCTALabel?: string;
   heroCTAUrl?: string;
 
+  // Intro text (shown after hero, before content)
+  introText?: string;
+
   // Content sections
   contentSections: NewsletterContentSection[];
 
@@ -62,6 +65,7 @@ export default function NewsletterTemplate({
   heroSubtitle,
   heroCTALabel,
   heroCTAUrl,
+  introText,
   contentSections,
   subscriberId,
   subscriberEmail,
@@ -97,98 +101,92 @@ export default function NewsletterTemplate({
           {/* Header */}
           <EmailHeader />
 
-          {/* Hero Section */}
-          {(heroImageUrl || heroTitle) && (
+          {/* Hero Section - Always show with subject as fallback title */}
+          <Section
+            style={{
+              backgroundColor: '#0F0520',
+            }}
+          >
+            {/* Hero Image - using actual Img tag for email client compatibility */}
+            {heroImageUrl && (
+              <Img
+                src={heroImageUrl}
+                alt={heroTitle || subject}
+                width="100%"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  maxHeight: '300px',
+                  objectFit: 'cover',
+                }}
+              />
+            )}
+
+            {/* Hero Text Content */}
             <Section
               style={{
-                position: 'relative',
-                backgroundColor: '#000000',
-              }}
-            >
-              {/* Hero Image */}
-              {heroImageUrl && (
-                <Img
-                  src={heroImageUrl}
-                  alt={heroTitle || 'Newsletter Hero'}
-                  width="600"
-                  height="300"
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: 'auto',
-                  }}
-                />
-              )}
-
-              {/* Hero Text Overlay */}
-              {heroTitle && (
-                <Section
-                  style={{
-                    padding: heroImageUrl ? '32px' : '48px 32px',
-                    background: heroImageUrl
-                      ? 'linear-gradient(to bottom, rgba(15, 5, 32, 0.7), rgba(15, 5, 32, 0.9))'
-                      : '#0F0520',
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: '32px',
-                      fontWeight: '700',
-                      lineHeight: '1.2',
-                      color: '#FFFFFF',
-                      margin: '0 0 12px 0',
-                      textAlign: 'center',
-                    }}
-                  >
-                    {heroTitle}
-                  </Text>
-
-                  {heroSubtitle && (
-                    <Text
-                      style={{
-                        fontSize: '18px',
-                        lineHeight: '1.5',
-                        color: '#016dca',
-                        margin: '0 0 24px 0',
-                        textAlign: 'center',
-                      }}
-                    >
-                      {heroSubtitle}
-                    </Text>
-                  )}
-
-                  {heroCTALabel && heroCTAUrl && (
-                    <Section
-                      style={{
-                        textAlign: 'center',
-                      }}
-                    >
-                      <EmailButton href={heroCTAUrl}>
-                        {heroCTALabel}
-                      </EmailButton>
-                    </Section>
-                  )}
-                </Section>
-              )}
-            </Section>
-          )}
-
-          {/* Personalized Greeting */}
-          {firstName && (
-            <Section
-              style={{
-                padding: '32px 32px 0 32px',
+                padding: '32px',
+                backgroundColor: '#0F0520',
               }}
             >
               <Text
                 style={{
-                  fontSize: '18px',
-                  lineHeight: '1.6',
+                  fontSize: '28px',
+                  fontWeight: '700',
+                  lineHeight: '1.2',
                   color: '#FFFFFF',
-                  margin: '0',
+                  margin: '0 0 12px 0',
+                  textAlign: 'center',
                 }}
               >
-                Hallo {firstName},
+                {heroTitle || subject}
+              </Text>
+
+              {heroSubtitle && (
+                <Text
+                  style={{
+                    fontSize: '16px',
+                    lineHeight: '1.5',
+                    color: '#FFD700',
+                    margin: '0 0 20px 0',
+                    textAlign: 'center',
+                  }}
+                >
+                  {heroSubtitle}
+                </Text>
+              )}
+
+              {heroCTALabel && heroCTAUrl && (
+                <Section
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  <EmailButton href={heroCTAUrl}>
+                    {heroCTALabel}
+                  </EmailButton>
+                </Section>
+              )}
+            </Section>
+          </Section>
+
+          {/* Intro Text */}
+          {introText && (
+            <Section
+              style={{
+                padding: '16px 32px 0 32px',
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: '16px',
+                  lineHeight: '1.7',
+                  color: '#CCCCCC',
+                  margin: '0',
+                  whiteSpace: 'pre-wrap',
+                }}
+              >
+                {introText}
               </Text>
             </Section>
           )}

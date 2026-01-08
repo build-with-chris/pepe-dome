@@ -22,25 +22,34 @@ export const subscriberUnsubscribeSchema = z.object({
   message: 'Either email or id must be provided',
 })
 
+// Helper for URL or path validation (allows /path or https://...)
+const urlOrPathSchema = z.string().refine(
+  (val) => val === '' || val.startsWith('/') || val.startsWith('http://') || val.startsWith('https://'),
+  { message: 'Must be a valid URL or path starting with /' }
+).optional().or(z.literal(''))
+
 // Newsletter validation schemas
 export const createNewsletterSchema = z.object({
   subject: z.string().min(1, 'Subject is required').max(200),
   preheader: z.string().max(200).optional(),
+  introText: z.string().max(2000).optional(),
+  heroImageUrl: urlOrPathSchema,
   heroTitle: z.string().max(100).optional(),
   heroSubtitle: z.string().max(200).optional(),
   heroCTALabel: z.string().max(50).optional(),
-  heroCTAUrl: z.string().url().optional().or(z.literal('')),
+  heroCTAUrl: urlOrPathSchema,
   createdBy: z.string().optional(),
 })
 
 export const updateNewsletterSchema = z.object({
   subject: z.string().min(1).max(200).optional(),
   preheader: z.string().max(200).optional(),
-  heroImageUrl: z.string().url().optional().or(z.literal('')),
+  introText: z.string().max(2000).optional().nullable(),
+  heroImageUrl: urlOrPathSchema,
   heroTitle: z.string().max(100).optional(),
   heroSubtitle: z.string().max(200).optional(),
   heroCTALabel: z.string().max(50).optional(),
-  heroCTAUrl: z.string().url().optional().or(z.literal('')),
+  heroCTAUrl: urlOrPathSchema,
 })
 
 export const scheduleNewsletterSchema = z.object({
@@ -99,8 +108,8 @@ export const newsletterListSchema = paginationSchema.extend({
 })
 
 export const contentFilterSchema = z.object({
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.string().optional(), // Accepts YYYY-MM-DD or ISO datetime
+  endDate: z.string().optional(),   // Accepts YYYY-MM-DD or ISO datetime
   category: z.string().optional(),
   status: z.string().optional(),
   tags: z.string().optional(), // Comma-separated list

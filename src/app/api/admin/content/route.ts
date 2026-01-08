@@ -6,7 +6,8 @@
 import { NextRequest } from 'next/server'
 import { contentFilterSchema } from '@/lib/validation'
 import { successResponse, errorResponse, validationErrorResponse } from '@/lib/api-response'
-import { getAllEvents, getAllNews } from '@/lib/data'
+import { prisma } from '@/lib/prisma'
+import { ContentStatus, EventCategory, Prisma } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,32 +23,52 @@ export async function GET(request: NextRequest) {
 
     const { startDate, endDate, category, tags } = validation.data
 
-    // Fetch events
-    let events = getAllEvents()
+    // Build event query filters
+    // Include both PUBLISHED and DRAFT for admin selection
+    const eventWhere: Prisma.EventWhereInput = {
+      status: { in: [ContentStatus.PUBLISHED, ContentStatus.DRAFT] },
+    }
 
-    // Apply filters
     if (startDate) {
-      events = events.filter((e) => new Date(e.date) >= new Date(startDate))
+      eventWhere.date = { ...eventWhere.date as object, gte: new Date(startDate) }
     }
     if (endDate) {
-      events = events.filter((e) => new Date(e.date) <= new Date(endDate))
+      eventWhere.date = { ...eventWhere.date as object, lte: new Date(endDate) }
     }
-    if (category) {
-      events = events.filter((e) => e.category === category)
+    if (category && Object.values(EventCategory).includes(category as EventCategory)) {
+      eventWhere.category = category as EventCategory
     }
 
-    // Fetch news articles
-    let articles = getAllNews()
+    // Fetch events from database
+    const events = await prisma.event.findMany({
+      where: eventWhere,
+      orderBy: { date: 'desc' },
+    })
+
+    // Build article query filters
+    // Include both PUBLISHED and DRAFT for admin selection
+    const articleWhere: Prisma.ArticleWhereInput = {
+      status: { in: [ContentStatus.PUBLISHED, ContentStatus.DRAFT] },
+    }
 
     if (category) {
-      articles = articles.filter((a) => a.category === category)
+      articleWhere.category = category
     }
     if (tags) {
       const tagList = tags.split(',').map((t) => t.trim())
-      articles = articles.filter((a) =>
-        a.tags.some((tag) => tagList.includes(tag))
-      )
+      // Filter by tags - articles have tags as JSON array
+      articleWhere.OR = tagList.map(tag => ({
+        tags: {
+          array_contains: [tag],
+        },
+      }))
     }
+
+    // Fetch articles from database
+    const articles = await prisma.article.findMany({
+      where: articleWhere,
+      orderBy: { publishedAt: 'desc' },
+    })
 
     // Format content for newsletter builder
     const content = [
@@ -58,7 +79,7 @@ export async function GET(request: NextRequest) {
         subtitle: event.subtitle,
         description: event.description,
         imageUrl: event.imageUrl,
-        date: event.date,
+        date: event.date.toISOString(),
         category: event.category,
         featured: event.featured,
       })),
@@ -68,7 +89,7 @@ export async function GET(request: NextRequest) {
         title: article.title,
         excerpt: article.excerpt,
         imageUrl: article.imageUrl,
-        publishedAt: article.publishedAt,
+        publishedAt: article.publishedAt?.toISOString(),
         category: article.category,
         featured: article.featured,
       })),
@@ -76,8 +97,8 @@ export async function GET(request: NextRequest) {
 
     // Sort by date (newest first)
     content.sort((a, b) => {
-      const dateA = new Date('date' in a ? a.date : a.publishedAt)
-      const dateB = new Date('date' in b ? b.date : b.publishedAt)
+      const dateA = new Date('date' in a ? a.date : (a.publishedAt || ''))
+      const dateB = new Date('date' in b ? b.date : (b.publishedAt || ''))
       return dateB.getTime() - dateA.getTime()
     })
 

@@ -7,7 +7,27 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
+
+// Available pages for CTA link
+const pageOptions = [
+  { value: '', label: 'Keine Seite ausgewählt' },
+  { value: '/', label: 'Startseite' },
+  { value: '/events', label: 'Events' },
+  { value: '/news', label: 'News' },
+  { value: '/training', label: 'Training' },
+  { value: '/business', label: 'Business' },
+  { value: '/about', label: 'Über uns' },
+  { value: '/contact', label: 'Kontakt' },
+  { value: '/newsletter', label: 'Newsletter Archiv' },
+]
 
 /**
  * NewsletterForm component
@@ -25,11 +45,11 @@ const newsletterSchema = z.object({
   subject: z.string().min(1, 'Betreff ist erforderlich').max(200, 'Betreff zu lang (max 200 Zeichen)'),
   preheader: z.string().max(200, 'Preheader zu lang (max 200 Zeichen)').optional(),
   introText: z.string().max(2000, 'Intro-Text zu lang (max 2000 Zeichen)').optional(),
-  heroImageUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
+  heroImageUrl: z.string().optional().or(z.literal('')),
   heroTitle: z.string().max(100, 'Hero-Titel zu lang (max 100 Zeichen)').optional(),
   heroSubtitle: z.string().max(200, 'Hero-Untertitel zu lang (max 200 Zeichen)').optional(),
   heroCTALabel: z.string().max(50, 'CTA-Label zu lang (max 50 Zeichen)').optional(),
-  heroCTAUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
+  heroCTAUrl: z.string().optional().or(z.literal('')),
 })
 
 type NewsletterFormData = z.infer<typeof newsletterSchema>
@@ -261,31 +281,14 @@ export default function NewsletterForm({
           Hero-Bereich
         </h2>
 
-        <div className="space-y-2">
-          <Label htmlFor="heroImageUrl">Hero-Bild URL</Label>
-          <Input
-            id="heroImageUrl"
-            type="url"
-            value={formData.heroImageUrl}
-            onChange={(e) => updateField('heroImageUrl', e.target.value)}
-            hasError={!!errors.heroImageUrl}
-            placeholder="https://..."
-          />
-          {errors.heroImageUrl && (
-            <p className="text-sm text-[var(--pepe-error)]">{errors.heroImageUrl}</p>
-          )}
-          {formData.heroImageUrl && (
-            <div className="mt-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={formData.heroImageUrl}
-                alt="Hero preview"
-                className="max-h-40 rounded border border-[var(--pepe-line)]"
-                onError={(e) => (e.currentTarget.style.display = 'none')}
-              />
-            </div>
-          )}
-        </div>
+        <ImageDropzone
+          label="Hero-Bild"
+          value={formData.heroImageUrl}
+          onChange={(url) => updateField('heroImageUrl', url)}
+          hasError={!!errors.heroImageUrl}
+          error={errors.heroImageUrl}
+          placeholder="Hero-Bild hier ablegen oder klicken zum Hochladen"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -336,15 +339,22 @@ export default function NewsletterForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="heroCTAUrl">CTA-Button URL</Label>
-            <Input
-              id="heroCTAUrl"
-              type="url"
-              value={formData.heroCTAUrl}
-              onChange={(e) => updateField('heroCTAUrl', e.target.value)}
-              hasError={!!errors.heroCTAUrl}
-              placeholder="https://..."
-            />
+            <Label htmlFor="heroCTAUrl">CTA-Button Seite</Label>
+            <Select
+              value={formData.heroCTAUrl || 'none'}
+              onValueChange={(value) => updateField('heroCTAUrl', value === 'none' ? '' : value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seite auswählen" />
+              </SelectTrigger>
+              <SelectContent>
+                {pageOptions.map((option) => (
+                  <SelectItem key={option.value || 'none'} value={option.value || 'none'}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.heroCTAUrl && (
               <p className="text-sm text-[var(--pepe-error)]">{errors.heroCTAUrl}</p>
             )}

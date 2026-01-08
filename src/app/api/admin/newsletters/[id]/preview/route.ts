@@ -88,6 +88,19 @@ export async function GET(
       })
 
       for (const item of newsletter.content) {
+        // CUSTOM_SECTION items are standalone - each one is its own section
+        if (item.contentType === 'CUSTOM_SECTION') {
+          // Create a unique section for each custom content
+          const customSection = {
+            sectionHeading: item.sectionHeading || undefined,
+            sectionDescription: item.sectionDescription || undefined,
+            items: [], // No items - the heading/description IS the content
+          }
+          contentSections.push(customSection)
+          continue
+        }
+
+        // For EVENT/ARTICLE items, group by section heading
         const key = item.sectionHeading || 'default'
         if (!sections.has(key)) {
           sections.set(key, {
@@ -110,6 +123,11 @@ export async function GET(
               year: 'numeric',
             })
 
+            // Convert event image URL to absolute
+            const eventImageUrl = event.imageUrl
+              ? (event.imageUrl.startsWith('http') ? event.imageUrl : `${baseUrl}${event.imageUrl}`)
+              : undefined
+
             sections.get(key).items.push({
               type: 'event',
               data: {
@@ -121,33 +139,29 @@ export async function GET(
                 eventUrl: `${baseUrl}/events/${event.slug}`,
                 ctaUrl: event.ticketUrl || `${baseUrl}/events/${event.slug}`,
                 ctaLabel: event.ticketUrl ? 'Tickets kaufen' : 'Mehr erfahren',
-                imageUrl: event.imageUrl || undefined,
+                imageUrl: eventImageUrl,
               },
             })
           }
         } else if (item.contentType === 'ARTICLE' && item.contentId) {
           const article = articleMap.get(item.contentId)
           if (article) {
+            // Convert article image URL to absolute
+            const articleImageUrl = article.imageUrl
+              ? (article.imageUrl.startsWith('http') ? article.imageUrl : `${baseUrl}${article.imageUrl}`)
+              : undefined
+
             sections.get(key).items.push({
               type: 'article',
               data: {
                 title: article.title,
                 excerpt: article.excerpt,
                 articleUrl: `${baseUrl}/news/${article.slug}`,
-                imageUrl: article.imageUrl || undefined,
+                imageUrl: articleImageUrl,
                 category: article.category,
               },
             })
           }
-        } else if (item.contentType === 'CUSTOM_SECTION') {
-          // Custom section - use section heading/description as content
-          sections.get(key).items.push({
-            type: 'custom',
-            data: {
-              title: item.sectionHeading || '',
-              text: item.sectionDescription || '',
-            },
-          })
         }
       }
 
@@ -163,6 +177,17 @@ export async function GET(
       })
     }
 
+    // Helper to convert relative URLs to absolute URLs
+    const toAbsoluteUrl = (url: string | null | undefined): string | undefined => {
+      if (!url) return undefined
+      // Already absolute URL
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url
+      }
+      // Relative URL - prepend base URL
+      return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`
+    }
+
     // Dynamic import to avoid bundling react-email in client build
     const NewsletterTemplate = (await import('@/components/email/templates/NewsletterTemplate')).default
 
@@ -171,15 +196,16 @@ export async function GET(
       subject: newsletter.subject,
       preheader: newsletter.preheader || undefined,
       newsletterSlug: newsletter.slug,
-      heroImageUrl: newsletter.heroImageUrl || undefined,
+      heroImageUrl: toAbsoluteUrl(newsletter.heroImageUrl),
       heroTitle: newsletter.heroTitle || undefined,
       heroSubtitle: newsletter.heroSubtitle || undefined,
       heroCTALabel: newsletter.heroCTALabel || undefined,
-      heroCTAUrl: newsletter.heroCTAUrl || undefined,
+      heroCTAUrl: toAbsoluteUrl(newsletter.heroCTAUrl),
+      introText: newsletter.introText || undefined,
       contentSections,
       subscriberId: 'preview-subscriber-id',
       subscriberEmail: 'preview@example.com',
-      firstName: 'Vorschau',
+      // No firstName = shows "Liebe Freunde von PEPE,"
     })
 
     return new Response(html, {

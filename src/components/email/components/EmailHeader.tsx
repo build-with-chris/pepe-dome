@@ -23,8 +23,8 @@ export function EmailHeader({
   return (
     <Section
       style={{
-        backgroundColor: '#000000',
-        padding: '32px 20px',
+        backgroundColor: '#FFFFFF',
+        padding: '16px 20px',
         textAlign: 'center',
       }}
     >
@@ -32,7 +32,7 @@ export function EmailHeader({
         <Img
           src={logoUrl}
           alt="PEPE Dome"
-          width="200"
+          width="150"
           height="auto"
           style={{
             margin: '0 auto',

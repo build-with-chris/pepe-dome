@@ -51,7 +51,7 @@ export default function ImageDropzone({
     e.stopPropagation()
   }, [])
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     setIsUploading(true)
     setUploadError(null)
 
@@ -76,7 +76,7 @@ export default function ImageDropzone({
     } finally {
       setIsUploading(false)
     }
-  }
+  }, [onChange])
 
   const handleDrop = useCallback(
     async (e: React.DragEvent) => {
@@ -94,7 +94,7 @@ export default function ImageDropzone({
         }
       }
     },
-    [onChange]
+    [uploadFile]
   )
 
   const handleFileSelect = useCallback(
@@ -108,7 +108,7 @@ export default function ImageDropzone({
         fileInputRef.current.value = ''
       }
     },
-    [onChange]
+    [uploadFile]
   )
 
   const handleClick = useCallback(() => {
