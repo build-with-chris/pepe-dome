@@ -109,17 +109,17 @@ export default async function SubscribersAdminPage({ searchParams }: PageProps) 
   const totalSubscribers = Object.values(statsByStatus).reduce((a, b) => a + b, 0)
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[var(--pepe-white)]">Subscribers</h2>
-          <p className="text-[var(--pepe-t64)] mt-1">
+          <h1 className="text-xl font-semibold text-white">Subscribers</h1>
+          <p className="text-white/50 mt-1">
             {totalSubscribers} Subscribers insgesamt
           </p>
         </div>
         <Link href="/api/admin/subscribers/export">
-          <Button variant="secondary">
+          <Button variant="secondary" size="sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
@@ -129,35 +129,35 @@ export default async function SubscribersAdminPage({ searchParams }: PageProps) 
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Aktiv</p>
-          <p className="text-2xl font-bold text-[var(--pepe-success)]">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Aktiv</p>
+          <p className="text-2xl font-bold text-emerald-400">
             {statsByStatus.ACTIVE || 0}
           </p>
         </div>
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Ausstehend</p>
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Ausstehend</p>
           <p className="text-2xl font-bold text-yellow-400">
             {statsByStatus.PENDING || 0}
           </p>
         </div>
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Abgemeldet</p>
-          <p className="text-2xl font-bold text-[var(--pepe-t48)]">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Abgemeldet</p>
+          <p className="text-2xl font-bold text-white/40">
             {statsByStatus.UNSUBSCRIBED || 0}
           </p>
         </div>
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Bounced</p>
-          <p className="text-2xl font-bold text-[var(--pepe-error)]">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Bounced</p>
+          <p className="text-2xl font-bold text-red-400">
             {statsByStatus.BOUNCED || 0}
           </p>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 border-b border-[var(--pepe-line)] pb-4">
+      <div className="flex gap-2">
         <FilterTab href="/admin/subscribers" label="Alle" active={!status} />
         <FilterTab href="/admin/subscribers?status=ACTIVE" label="Aktiv" active={status === 'ACTIVE'} />
         <FilterTab href="/admin/subscribers?status=PENDING" label="Ausstehend" active={status === 'PENDING'} />
@@ -173,7 +173,7 @@ export default async function SubscribersAdminPage({ searchParams }: PageProps) 
 
       {/* Pagination */}
       {pagination.pages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-2 pt-4">
           {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
             <Link
               key={p}
@@ -182,10 +182,10 @@ export default async function SubscribersAdminPage({ searchParams }: PageProps) 
                 page: p.toString(),
               })}`}
               className={cn(
-                'px-4 py-2 rounded text-sm transition-colors',
+                'px-4 py-2 rounded-lg text-sm transition-colors',
                 p === pagination.page
-                  ? 'bg-[var(--pepe-gold)] text-[var(--pepe-black)] font-semibold'
-                  : 'bg-[var(--pepe-surface)] text-[var(--pepe-t80)] hover:bg-[var(--pepe-line)]'
+                  ? 'bg-[#016dca] text-white font-medium'
+                  : 'bg-white/[0.04] text-white/60 hover:bg-white/[0.08]'
               )}
             >
               {p}
@@ -210,10 +210,10 @@ function FilterTab({
     <Link
       href={href}
       className={cn(
-        'px-4 py-2 rounded-lg transition-colors text-sm',
+        'px-5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200',
         active
-          ? 'bg-[var(--pepe-gold)] text-[var(--pepe-black)] font-semibold'
-          : 'text-[var(--pepe-t80)] hover:bg-[var(--pepe-surface)]'
+          ? 'bg-[#016dca] text-white shadow-lg shadow-[#016dca]/20'
+          : 'bg-white/5 text-white/50 hover:text-white/80 hover:bg-white/10'
       )}
     >
       {label}

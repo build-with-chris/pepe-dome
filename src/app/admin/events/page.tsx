@@ -26,11 +26,9 @@ import { cn } from '@/lib/utils'
 /**
  * Events Admin Page
  *
- * Features:
- * - DataTable with columns: Title, Date, Category, Status, Actions
- * - Filters: Category, Status
- * - Search
- * - Delete confirmation dialog
+ * Consistent spacing system:
+ * - Section gaps: space-y-8 (32px)
+ * - Filter gaps: gap-4 (16px)
  */
 
 interface Event {
@@ -136,12 +134,9 @@ export default function EventsAdminPage() {
       sortable: true,
       cell: (row) => (
         <div className="flex items-center gap-2">
-          <span className="font-medium">{row.title}</span>
+          <span className="font-medium text-white">{row.title}</span>
           {row.featured && (
-            <Badge
-              variant="outline"
-              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
-            >
+            <Badge variant="outline" className="text-[10px] bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30">
               Featured
             </Badge>
           )}
@@ -153,21 +148,25 @@ export default function EventsAdminPage() {
       accessorKey: 'date',
       sortable: true,
       hideOnMobile: true,
-      cell: (row) => new Date(row.date).toLocaleDateString('de-DE'),
+      cell: (row) => (
+        <span className="text-white/60">{new Date(row.date).toLocaleDateString('de-DE')}</span>
+      ),
     },
     {
       header: 'Kategorie',
       accessorKey: 'category',
       sortable: true,
       hideOnMobile: true,
-      cell: (row) => categoryLabels[row.category] || row.category,
+      cell: (row) => (
+        <span className="text-white/60">{categoryLabels[row.category] || row.category}</span>
+      ),
     },
     {
       header: 'Status',
       accessorKey: 'status',
       sortable: true,
       cell: (row) => (
-        <Badge variant="outline" className={cn('text-xs border', statusColors[row.status])}>
+        <Badge variant="outline" className={cn('text-[10px] border', statusColors[row.status])}>
           {row.status}
         </Badge>
       ),
@@ -194,17 +193,17 @@ export default function EventsAdminPage() {
   )
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">Events</h2>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-xl font-semibold text-white">Events</h1>
+          <p className="text-white/50 mt-1">
             {pagination.total} {pagination.total === 1 ? 'Event' : 'Events'} insgesamt
           </p>
         </div>
         <Link href="/admin/events/new">
-          <Button variant="primary">
+          <Button variant="primary" size="sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -262,27 +261,19 @@ export default function EventsAdminPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-[#111113] border-white/[0.08]">
           <DialogHeader>
-            <DialogTitle>Event löschen</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-white">Event löschen</DialogTitle>
+            <DialogDescription className="text-white/50">
               Sind Sie sicher, dass Sie das Event &quot;{eventToDelete?.title}&quot; löschen möchten?
               Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={() => setDeleteDialogOpen(false)}
-              disabled={deleting}
-            >
+          <DialogFooter className="gap-3">
+            <Button variant="ghost" onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
               Abbrechen
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
+            <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
               {deleting ? 'Löschen...' : 'Event löschen'}
             </Button>
           </DialogFooter>

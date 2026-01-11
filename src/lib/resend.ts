@@ -33,6 +33,9 @@ export const EMAIL_CONFIG = {
   /** Maximum recipients per batch send */
   MAX_BATCH_SIZE: 50,
 
+  /** Delay between individual emails (ms) to respect Resend rate limit of 2/sec */
+  EMAIL_DELAY_MS: 550,
+
   /** Delay between batches (ms) to avoid rate limits */
   BATCH_DELAY_MS: 1000,
 
@@ -60,9 +63,10 @@ export function generateEmailUrls(subscriberId: string, token?: string) {
 
 /**
  * Batch send emails with rate limiting
+ * Sends emails sequentially with delay to respect Resend's rate limit (2/sec on free tier)
  *
  * @param emails Array of email send requests
- * @param batchSize Number of emails to send per batch (default: 50)
+ * @param batchSize Number of emails to send per batch (default: 50) - batch pause happens after this many
  * @returns Array of send results
  */
 export async function batchSendEmails<T>(
@@ -72,37 +76,43 @@ export async function batchSendEmails<T>(
 ): Promise<Array<{ success: boolean; email: T; error?: string; id?: string }>> {
   const results: Array<{ success: boolean; email: T; error?: string; id?: string }> = []
 
-  for (let i = 0; i < emails.length; i += batchSize) {
-    const batch = emails.slice(i, i + batchSize)
+  for (let i = 0; i < emails.length; i++) {
+    const email = emails[i]
 
-    // Send batch in parallel
-    const batchResults = await Promise.allSettled(
-      batch.map(async (email) => {
-        try {
-          const result = await sendFn(email)
-          return { success: true, email, id: result.id }
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-          return { success: false, email, error: errorMessage }
-        }
-      })
-    )
-
-    // Collect results
-    for (const result of batchResults) {
-      if (result.status === 'fulfilled') {
-        results.push(result.value)
-      } else {
+    try {
+      const result = await sendFn(email)
+      // Check if Resend returned an error in the response
+      if (result.error) {
+        console.error(`[EMAIL] API error for email ${i + 1}:`, result.error)
         results.push({
           success: false,
-          email: batch[0], // Fallback
-          error: result.reason?.message || 'Promise rejected'
+          email,
+          error: result.error.message || 'API error',
+        })
+      } else {
+        results.push({
+          success: true,
+          email,
+          id: result.data?.id || result.id,
         })
       }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      console.error(`[EMAIL] Exception for email ${i + 1}:`, errorMessage)
+      results.push({
+        success: false,
+        email,
+        error: errorMessage,
+      })
     }
 
-    // Delay between batches to avoid rate limits
-    if (i + batchSize < emails.length) {
+    // Delay between each email to respect rate limit (550ms = ~1.8/sec, safely under 2/sec)
+    if (i < emails.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, EMAIL_CONFIG.EMAIL_DELAY_MS))
+    }
+
+    // Additional pause after each batch
+    if ((i + 1) % batchSize === 0 && i < emails.length - 1) {
       await new Promise(resolve => setTimeout(resolve, EMAIL_CONFIG.BATCH_DELAY_MS))
     }
   }

@@ -377,7 +377,7 @@ export async function sendNewsletter(
     }
 
     // Send via Resend
-    return await resend.emails.send({
+    const result = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: recipient.email,
       subject: newsletter.subject,
@@ -388,6 +388,8 @@ export async function sendNewsletter(
         { name: 'subscriber_id', value: recipient.id },
       ],
     })
+
+    return result
   }
 
   // Send in batches

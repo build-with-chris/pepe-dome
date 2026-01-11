@@ -21,8 +21,8 @@ import { cn } from '@/lib/utils'
 
 /**
  * Newsletter Editor - Split View
- * Left: Edit form (dynamic height)
- * Right: Sticky phone preview + send actions
+ * Left: Edit form
+ * Right: Preview + Test mail + Send actions
  */
 
 interface ContentBlock {
@@ -85,13 +85,20 @@ export default function NewsletterEditClient({
   // Modal states
   const [showSendModal, setShowSendModal] = useState(false)
   const [showScheduleModal, setShowScheduleModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [isScheduling, setIsScheduling] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
   const [scheduleError, setScheduleError] = useState<string | null>(null)
   const [subscriberCount, setSubscriberCount] = useState<number>(0)
   const [scheduleDate, setScheduleDate] = useState<Date | undefined>(undefined)
   const [scheduleTime, setScheduleTime] = useState('10:00')
+
+  // Test mail states
+  const [isTestSending, setIsTestSending] = useState(false)
+  const [testSendStatus, setTestSendStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [testSendMessage, setTestSendMessage] = useState('')
 
   const openSendModal = async () => {
     setSendError(null)
@@ -150,6 +157,42 @@ export default function NewsletterEditClient({
     }
   }
 
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Fehler beim Löschen')
+      router.push('/admin/newsletters')
+      router.refresh()
+    } catch (err) {
+      console.error('Delete error:', err)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const handleTestSend = async () => {
+    setIsTestSending(true)
+    setTestSendStatus('idle')
+    setTestSendMessage('')
+    try {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/test-send`, { method: 'POST' })
+      const data = await res.json()
+      if (res.ok) {
+        setTestSendStatus('success')
+        setTestSendMessage(data.message || 'Test-E-Mail wurde erfolgreich versendet')
+      } else {
+        setTestSendStatus('error')
+        setTestSendMessage(data.error?.message || 'Fehler beim Versenden der Test-E-Mail')
+      }
+    } catch (err) {
+      setTestSendStatus('error')
+      setTestSendMessage(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
+    } finally {
+      setIsTestSending(false)
+    }
+  }
+
   const handleContentReorder = async (newContent: ContentBlock[]) => {
     setSelectedContent(newContent)
     try {
@@ -190,17 +233,9 @@ export default function NewsletterEditClient({
   ]
 
   return (
-    <div className={cn(
-      'grid gap-6 transition-all duration-300',
-      previewMode === 'desktop'
-        ? 'grid-cols-1'
-        : 'grid-cols-1 xl:grid-cols-[1fr,400px]'
-    )}>
-      {/* LEFT: Editor */}
-      <div className={cn(
-        'space-y-6',
-        previewMode === 'desktop' && 'order-2'
-      )}>
+    <div className="grid gap-6 grid-cols-1 xl:grid-cols-[2fr,1fr]">
+      {/* LEFT: Editor (2/3) */}
+      <div className="space-y-6">
         {/* Section Tabs */}
         <div className="flex gap-2.5">
           {sections.map((section) => (
@@ -220,10 +255,10 @@ export default function NewsletterEditClient({
         </div>
 
         {/* Editor Card */}
-        <div className="bg-[#111113] border border-white/[0.08] rounded-2xl overflow-hidden">
+        <div className="bg-[#111113] border border-white/[0.08] rounded-xl">
           {/* Basics */}
           {activeSection === 'basics' && (
-            <div className="p-7">
+            <div className="p-6">
               {canEdit ? (
                 <NewsletterForm
                   mode="edit"
@@ -239,7 +274,7 @@ export default function NewsletterEditClient({
 
           {/* Hero */}
           {activeSection === 'hero' && (
-            <div className="p-7">
+            <div className="p-6">
               {canEdit ? (
                 <NewsletterForm
                   mode="edit"
@@ -255,9 +290,9 @@ export default function NewsletterEditClient({
 
           {/* Content */}
           {activeSection === 'content' && (
-            <div className="p-7">
-              <div className="flex items-center justify-between mb-7">
-                <h3 className="text-[13px] font-semibold text-white tracking-[-0.01em]">Inhalte verwalten</h3>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[13px] font-semibold text-white">Inhalte verwalten</h3>
                 {canEdit && (
                   <div className="flex gap-2.5">
                     <Button variant="ghost" size="sm" onClick={handleAddTextSnippet}>
@@ -271,7 +306,7 @@ export default function NewsletterEditClient({
               </div>
 
               {selectedContent.length === 0 && !showContentSelector ? (
-                <div className="py-20 text-center">
+                <div className="py-16 text-center">
                   <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
                     <svg className="w-7 h-7 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -309,93 +344,108 @@ export default function NewsletterEditClient({
         </div>
       </div>
 
-      {/* RIGHT: Preview Panel (sticky) */}
-      <div className={cn(
-        'xl:sticky xl:top-6 xl:self-start space-y-5',
-        previewMode === 'desktop' && 'order-1'
-      )}>
-        {/* Preview Controls */}
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Vorschau</span>
-          <div className="flex gap-1 p-1.5 bg-white/5 rounded-xl">
-            <button
-              onClick={() => setPreviewMode('mobile')}
-              className={cn(
-                'p-2 rounded-lg transition-all duration-200',
-                previewMode === 'mobile' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
-              )}
-              title="Mobile"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setPreviewMode('desktop')}
-              className={cn(
-                'p-2 rounded-lg transition-all duration-200',
-                previewMode === 'desktop' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
-              )}
-              title="Desktop"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Phone Mockup */}
-        <div className={cn(
-          'relative mx-auto transition-all duration-300',
-          previewMode === 'mobile' ? 'w-[320px]' : 'w-full max-w-[600px]'
-        )}>
-          {/* Phone frame (only for mobile) */}
-          {previewMode === 'mobile' && (
-            <div className="absolute inset-0 border-[12px] border-[#1a1a1c] rounded-[40px] pointer-events-none z-10">
-              {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-[#1a1a1c] rounded-b-2xl" />
-              {/* Home indicator */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/20 rounded-full" />
+      {/* RIGHT: Preview + Actions (1/3, sticky) */}
+      <div className="xl:sticky xl:top-6 xl:self-start space-y-4">
+        {/* Preview Card */}
+        <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5">
+          {/* Preview Header */}
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Vorschau</span>
+            <div className="flex gap-1 p-1 bg-white/5 rounded-lg">
+              <button
+                onClick={() => setPreviewMode('mobile')}
+                className={cn(
+                  'p-1.5 rounded transition-all',
+                  previewMode === 'mobile' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
+                )}
+                title="Mobile"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </button>
+              <button
+                onClick={() => setPreviewMode('desktop')}
+                className={cn(
+                  'p-1.5 rounded transition-all',
+                  previewMode === 'desktop' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'
+                )}
+                title="Desktop"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </button>
             </div>
-          )}
+          </div>
 
-          {/* Preview content */}
+          {/* Preview Frame */}
           <div className={cn(
-            'bg-white overflow-hidden',
-            previewMode === 'mobile'
-              ? 'rounded-[28px] mx-3 my-3'
-              : 'rounded-xl border border-white/10'
+            'bg-white overflow-hidden rounded-lg',
+            'ring-1 ring-[#016dca]/30 shadow-[0_0_20px_rgba(1,109,202,0.15)]'
           )}>
-            <div className={cn(
-              'overflow-y-auto',
-              previewMode === 'mobile' ? 'max-h-[580px]' : 'max-h-[500px]'
-            )}>
-              <AdminEmailPreview
-                newsletterId={newsletter.id}
-                slug={newsletter.slug}
-                canTestSend={canTestSend}
-              />
+            <div className="overflow-y-auto max-h-[400px]">
+              <AdminEmailPreview newsletterId={newsletter.id} />
             </div>
           </div>
         </div>
 
-        {/* Send Actions */}
+        {/* Test Mail Card */}
+        {canTestSend && (
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Test-E-Mail</span>
+              <button
+                onClick={() => newsletter.slug && window.open(`/newsletter/${newsletter.slug}`, '_blank')}
+                className="text-[11px] text-[#016dca] hover:underline"
+              >
+                Als Webseite
+              </button>
+            </div>
+
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleTestSend}
+              disabled={isTestSending}
+              className="w-full"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              {isTestSending ? 'Wird gesendet...' : 'Test senden'}
+            </Button>
+
+            {testSendStatus !== 'idle' && (
+              <div className={cn(
+                'p-3 rounded-lg text-xs',
+                testSendStatus === 'success'
+                  ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                  : 'bg-red-500/10 border border-red-500/20 text-red-400'
+              )}>
+                {testSendMessage}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Send Actions Card */}
         {canEdit && (newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED') && (
-          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-5">
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Versenden</span>
               {newsletter.status === 'SCHEDULED' && newsletter.scheduledAt && (
-                <span className="text-xs text-blue-400">
-                  Geplant: {new Date(newsletter.scheduledAt).toLocaleDateString('de-DE')}
+                <span className="text-[11px] text-blue-400">
+                  {new Date(newsletter.scheduledAt).toLocaleDateString('de-DE')}
                 </span>
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {newsletter.status === 'DRAFT' && (
                 <Button
                   variant="secondary"
+                  size="sm"
                   onClick={() => setShowScheduleModal(true)}
                   disabled={!canSend}
                   className="w-full"
@@ -405,45 +455,61 @@ export default function NewsletterEditClient({
               )}
               <Button
                 variant="primary"
+                size="sm"
                 onClick={openSendModal}
                 disabled={!canSend}
                 className={newsletter.status === 'DRAFT' ? 'w-full' : 'w-full col-span-2'}
               >
-                Jetzt senden
+                Senden
               </Button>
             </div>
 
             {!canSend && (
-              <p className="text-[10px] text-white/30 text-center pt-1">
-                Nur Super Admins können Newsletter versenden
+              <p className="text-[10px] text-white/30 text-center">
+                Nur Super Admins können versenden
               </p>
             )}
           </div>
         )}
 
-        {/* Stats */}
+        {/* Stats Card */}
         {newsletter.status === 'SENT' && newsletter.stats && (
           <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5">
             <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Statistiken</span>
-            <div className="grid grid-cols-3 gap-4 mt-5">
+            <div className="grid grid-cols-3 gap-3 mt-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#016dca]">{newsletter.stats.uniqueOpenCount}</p>
-                <p className="text-[11px] text-white/40 mt-1">Öffnungen</p>
+                <p className="text-xl font-bold text-[#016dca]">{newsletter.stats.uniqueOpenCount}</p>
+                <p className="text-[10px] text-white/40 mt-0.5">Öffnungen</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#016dca]">{newsletter.stats.uniqueClickCount}</p>
-                <p className="text-[11px] text-white/40 mt-1">Klicks</p>
+                <p className="text-xl font-bold text-[#016dca]">{newsletter.stats.uniqueClickCount}</p>
+                <p className="text-[10px] text-white/40 mt-0.5">Klicks</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-emerald-400">
+                <p className="text-xl font-bold text-emerald-400">
                   {newsletter.recipientCount > 0
                     ? ((newsletter.stats.uniqueOpenCount / newsletter.recipientCount) * 100).toFixed(0)
                     : '0'}%
                 </p>
-                <p className="text-[11px] text-white/40 mt-1">Rate</p>
+                <p className="text-[10px] text-white/40 mt-0.5">Rate</p>
               </div>
             </div>
           </div>
+        )}
+
+        {/* Delete Button */}
+        {canEdit && newsletter.status !== 'SENT' && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowDeleteModal(true)}
+            className="w-full text-red-400 hover:text-red-400 hover:bg-red-500/10"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Löschen
+          </Button>
         )}
       </div>
 
@@ -517,6 +583,25 @@ export default function NewsletterEditClient({
             </Button>
             <Button variant="primary" onClick={handleSchedule} disabled={isScheduling || !scheduleDate}>
               {isScheduling ? 'Planen...' : 'Planen'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+        <DialogContent className="bg-[#111113] border-white/[0.08] max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-white text-lg">Newsletter löschen</DialogTitle>
+            <DialogDescription className="text-white/50 text-sm">
+              Sind Sie sicher? Diese Aktion kann nicht rückgängig gemacht werden.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-3 pt-4">
+            <Button variant="ghost" onClick={() => setShowDeleteModal(false)} disabled={isDeleting}>
+              Abbrechen
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting ? 'Löschen...' : 'Löschen'}
             </Button>
           </DialogFooter>
         </DialogContent>

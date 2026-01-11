@@ -30,11 +30,11 @@ export default async function TestRecipientsAdminPage() {
   }))
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Page Header */}
       <div>
-        <h2 className="text-2xl font-bold text-[var(--pepe-white)]">Test-Empfänger</h2>
-        <p className="text-[var(--pepe-t64)] mt-1">
+        <h1 className="text-xl font-semibold text-white">Test-Empfänger</h1>
+        <p className="text-white/50 mt-1">
           E-Mail-Adressen für Newsletter-Tests verwalten
         </p>
       </div>

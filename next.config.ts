@@ -19,25 +19,6 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     '@react-email/components',
     '@react-email/render',
-    '@react-email/html',
-    '@react-email/head',
-    '@react-email/preview',
-    '@react-email/body',
-    '@react-email/container',
-    '@react-email/section',
-    '@react-email/text',
-    '@react-email/img',
-    '@react-email/hr',
-    '@react-email/link',
-    '@react-email/button',
-    '@react-email/heading',
-    '@react-email/row',
-    '@react-email/column',
-    '@react-email/font',
-    '@react-email/tailwind',
-    '@react-email/code-block',
-    '@react-email/code-inline',
-    '@react-email/markdown',
   ],
   // Configure webpack to handle react-email packages properly
   webpack: (config, { isServer }) => {
@@ -49,6 +30,18 @@ const nextConfig: NextConfig = {
         '@react-email/render': false,
       }
     }
+
+    // Mark react-email packages as external for server builds too
+    if (isServer) {
+      config.externals = config.externals || []
+      if (Array.isArray(config.externals)) {
+        config.externals.push({
+          '@react-email/components': 'commonjs @react-email/components',
+          '@react-email/render': 'commonjs @react-email/render',
+        })
+      }
+    }
+
     return config
   },
 }

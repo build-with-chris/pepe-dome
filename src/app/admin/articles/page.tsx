@@ -26,11 +26,9 @@ import { cn } from '@/lib/utils'
 /**
  * Articles Admin Page
  *
- * Features:
- * - DataTable with columns: Title, Category, Author, Status, Date, Actions
- * - Filters: Category, Status
- * - Search
- * - Delete confirmation dialog
+ * Consistent spacing system:
+ * - Section gaps: space-y-8 (32px)
+ * - Filter gaps: gap-4 (16px)
  */
 
 interface Article {
@@ -201,17 +199,17 @@ export default function ArticlesAdminPage() {
   )
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">Artikel</h2>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-xl font-semibold text-white">Artikel</h1>
+          <p className="text-white/50 mt-1">
             {pagination.total} {pagination.total === 1 ? 'Artikel' : 'Artikel'} insgesamt
           </p>
         </div>
         <Link href="/admin/articles/new">
-          <Button variant="primary">
+          <Button variant="primary" size="sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -269,27 +267,19 @@ export default function ArticlesAdminPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-[#111113] border-white/[0.08]">
           <DialogHeader>
-            <DialogTitle>Artikel löschen</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-white">Artikel löschen</DialogTitle>
+            <DialogDescription className="text-white/50">
               Sind Sie sicher, dass Sie den Artikel &quot;{articleToDelete?.title}&quot; löschen möchten?
               Diese Aktion kann nicht rückgängig gemacht werden.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={() => setDeleteDialogOpen(false)}
-              disabled={deleting}
-            >
+          <DialogFooter className="gap-3">
+            <Button variant="ghost" onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
               Abbrechen
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
+            <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
               {deleting ? 'Löschen...' : 'Artikel löschen'}
             </Button>
           </DialogFooter>

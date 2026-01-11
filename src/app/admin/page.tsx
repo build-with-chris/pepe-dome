@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { getUserRole, isSuperAdmin, canEdit } from '@/lib/roles.server'
-import { ROLES } from '@/lib/roles'
+import { isSuperAdmin, canEdit } from '@/lib/roles.server'
 import StatsCard, { StatsIcons } from '@/components/admin/StatsCard'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/badge'
@@ -10,11 +9,11 @@ import { cn } from '@/lib/utils'
 /**
  * Admin Dashboard
  *
- * Features:
- * - Stats overview (subscribers, events, articles)
- * - Role-based stat visibility (subscribers = Super Admin only)
- * - Recent activity section
- * - Quick actions section (hidden from Viewer)
+ * Consistent spacing system:
+ * - Section gaps: space-y-8 (32px)
+ * - Card internal: p-6 (24px)
+ * - Grid gaps: gap-6 (24px)
+ * - Small gaps: gap-4 (16px)
  */
 
 async function getDashboardStats() {
@@ -44,7 +43,6 @@ async function getDashboardStats() {
     prisma.newsletter.count({ where: { status: 'SENT' } }),
     prisma.subscriber.count(),
     prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
-    // Recent events
     prisma.event.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
@@ -57,7 +55,6 @@ async function getDashboardStats() {
         createdAt: true,
       },
     }),
-    // Recent articles
     prisma.article.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
@@ -70,7 +67,6 @@ async function getDashboardStats() {
         createdAt: true,
       },
     }),
-    // Last sent newsletter
     prisma.newsletter.findFirst({
       where: { status: 'SENT' },
       orderBy: { sentAt: 'desc' },
@@ -110,81 +106,68 @@ const categoryLabels: Record<string, string> = {
 }
 
 export default async function AdminDashboard() {
-  const [stats, userRole, isAdmin, canCreate] = await Promise.all([
+  const [stats, isAdmin, canCreate] = await Promise.all([
     getDashboardStats(),
-    getUserRole(),
     isSuperAdmin(),
     canEdit(),
   ])
 
-  // Calculate newsletter open rate
   const openRate = stats.lastNewsletter?.stats && stats.lastNewsletter.recipientCount > 0
     ? ((stats.lastNewsletter.stats.uniqueOpenCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
     : null
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
+      {/* Page Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">
-          Willkommen im Admin-Bereich
-        </h2>
-        <p className="text-gray-400 mt-1">
-          Verwalten Sie Events, Artikel und Newsletter fur den PEPE Dome.
+        <h1 className="text-xl font-semibold text-white">Dashboard</h1>
+        <p className="text-white/50 mt-1">
+          Übersicht über Events, Artikel und Newsletter
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Subscribers - Super Admin only */}
         {isAdmin && (
           <StatsCard
             icon={StatsIcons.subscribers}
             value={stats.subscribers.active}
-            label="Active Subscribers"
-            description={`${stats.subscribers.total} total subscribers`}
+            label="Aktive Abonnenten"
+            description={`${stats.subscribers.total} gesamt`}
             variant="gold"
             href="/admin/subscribers"
           />
         )}
-
-        {/* Events */}
         <StatsCard
           icon={StatsIcons.events}
           value={stats.events.upcoming}
-          label="Upcoming Events"
-          description={`${stats.events.total} total events`}
+          label="Kommende Events"
+          description={`${stats.events.total} gesamt`}
           href="/admin/events"
         />
-
-        {/* Articles */}
         <StatsCard
           icon={StatsIcons.articles}
           value={stats.articles.published}
-          label="Published Articles"
-          description={`${stats.articles.total - stats.articles.published} drafts`}
+          label="Veröffentlichte Artikel"
+          description={`${stats.articles.total - stats.articles.published} Entwürfe`}
           href="/admin/articles"
         />
-
-        {/* Newsletters */}
         <StatsCard
           icon={StatsIcons.newsletters}
           value={stats.newsletters.sent}
-          label="Sent Newsletters"
-          description={openRate ? `${openRate}% avg. open rate` : 'No newsletters sent yet'}
+          label="Gesendete Newsletter"
+          description={openRate ? `${openRate}% Öffnungsrate` : 'Noch keine gesendet'}
           href="/admin/newsletters"
         />
       </div>
 
-      {/* Quick Actions - Hidden from Viewer */}
+      {/* Quick Actions */}
       {canCreate && (
-        <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl">
-          <h3 className="text-lg font-semibold text-white mb-4">
-            Schnellaktionen
-          </h3>
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
+          <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-5">Schnellaktionen</h2>
           <div className="flex flex-wrap gap-3">
             <Link href="/admin/events/new">
-              <Button variant="primary" size="md">
+              <Button variant="primary" size="sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -192,7 +175,7 @@ export default async function AdminDashboard() {
               </Button>
             </Link>
             <Link href="/admin/articles/new">
-              <Button variant="primary" size="md">
+              <Button variant="primary" size="sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -200,7 +183,7 @@ export default async function AdminDashboard() {
               </Button>
             </Link>
             <Link href="/admin/newsletters/new">
-              <Button variant="secondary" size="md">
+              <Button variant="secondary" size="sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -211,46 +194,39 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      {/* Recent Activity */}
+      {/* Recent Activity Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Events */}
-        <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">
-              Letzte Events
-            </h3>
-            <Link href="/admin/events" className="text-sm text-[#016dca] hover:underline">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzte Events</h2>
+            <Link href="/admin/events" className="text-xs text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
 
           {stats.recentEvents.length === 0 ? (
-            <p className="text-gray-400 text-sm">Keine Events vorhanden</p>
+            <p className="text-white/40 text-[13px]">Keine Events vorhanden</p>
           ) : (
             <div className="space-y-3">
               {stats.recentEvents.map((event) => (
                 <Link
                   key={event.id}
                   href={`/admin/events/${event.id}/edit`}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                  className="flex items-center justify-between p-3.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-white truncate">
-                      {event.title}
-                    </p>
+                    <p className="text-[13px] font-medium text-white truncate">{event.title}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-white/40">
                         {new Date(event.date).toLocaleDateString('de-DE')}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-white/40">
                         {categoryLabels[event.category] || event.category}
                       </span>
                     </div>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={cn('text-xs border', statusColors[event.status])}
-                  >
+                  <Badge variant="outline" className={cn('text-[10px] border ml-3', statusColors[event.status])}>
                     {event.status}
                   </Badge>
                 </Link>
@@ -260,43 +236,32 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Recent Articles */}
-        <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">
-              Letzte Artikel
-            </h3>
-            <Link href="/admin/articles" className="text-sm text-[#016dca] hover:underline">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzte Artikel</h2>
+            <Link href="/admin/articles" className="text-xs text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
 
           {stats.recentArticles.length === 0 ? (
-            <p className="text-gray-400 text-sm">Keine Artikel vorhanden</p>
+            <p className="text-white/40 text-[13px]">Keine Artikel vorhanden</p>
           ) : (
             <div className="space-y-3">
               {stats.recentArticles.map((article) => (
                 <Link
                   key={article.id}
                   href={`/admin/articles/${article.id}/edit`}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                  className="flex items-center justify-between p-3.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-white truncate">
-                      {article.title}
-                    </p>
+                    <p className="text-[13px] font-medium text-white truncate">{article.title}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-500">
-                        {article.author}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {article.category}
-                      </span>
+                      <span className="text-xs text-white/40">{article.author}</span>
+                      <span className="text-xs text-white/40">{article.category}</span>
                     </div>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={cn('text-xs border', statusColors[article.status])}
-                  >
+                  <Badge variant="outline" className={cn('text-[10px] border ml-3', statusColors[article.status])}>
                     {article.status}
                   </Badge>
                 </Link>
@@ -306,24 +271,20 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      {/* Newsletter Stats - Super Admin only */}
+      {/* Newsletter Stats */}
       {isAdmin && stats.lastNewsletter && (
-        <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">
-              Letzter Newsletter
-            </h3>
-            <Link href="/admin/newsletters" className="text-sm text-[#016dca] hover:underline">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzter Newsletter</h2>
+            <Link href="/admin/newsletters" className="text-xs text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             <div className="flex-1">
-              <p className="font-medium text-white">
-                {stats.lastNewsletter.subject}
-              </p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-[15px] font-medium text-white">{stats.lastNewsletter.subject}</p>
+              <p className="text-[13px] text-white/40 mt-1.5">
                 Gesendet am{' '}
                 {stats.lastNewsletter.sentAt
                   ? new Date(stats.lastNewsletter.sentAt).toLocaleDateString('de-DE', {
@@ -336,12 +297,12 @@ export default async function AdminDashboard() {
             </div>
 
             {stats.lastNewsletter.stats && (
-              <div className="flex gap-6">
+              <div className="flex gap-8">
                 <div>
                   <p className="text-2xl font-bold text-[#016dca]">
                     {stats.lastNewsletter.recipientCount.toLocaleString('de-DE')}
                   </p>
-                  <p className="text-xs text-gray-400">Empfanger</p>
+                  <p className="text-xs text-white/40 mt-1">Empfänger</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-emerald-400">
@@ -349,7 +310,7 @@ export default async function AdminDashboard() {
                       ? ((stats.lastNewsletter.stats.uniqueOpenCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
                       : '0'}%
                   </p>
-                  <p className="text-xs text-gray-400">Offnungsrate</p>
+                  <p className="text-xs text-white/40 mt-1">Öffnungsrate</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-blue-400">
@@ -357,7 +318,7 @@ export default async function AdminDashboard() {
                       ? ((stats.lastNewsletter.stats.uniqueClickCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
                       : '0'}%
                   </p>
-                  <p className="text-xs text-gray-400">Klickrate</p>
+                  <p className="text-xs text-white/40 mt-1">Klickrate</p>
                 </div>
               </div>
             )}

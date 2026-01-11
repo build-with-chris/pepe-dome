@@ -126,16 +126,16 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Gesamt</p>
-          <p className="text-2xl font-bold text-[var(--pepe-white)]">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Gesamt</p>
+          <p className="text-2xl font-bold text-white">
             {recipients.length}
           </p>
         </div>
-        <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg p-4">
-          <p className="text-sm text-[var(--pepe-t64)]">Aktiv</p>
-          <p className="text-2xl font-bold text-[var(--pepe-success)]">
+        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
+          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Aktiv</p>
+          <p className="text-2xl font-bold text-emerald-400">
             {activeCount}
           </p>
         </div>
@@ -152,41 +152,42 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
       {isAdding ? (
         <form
           onSubmit={handleAdd}
-          className="p-4 bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg space-y-4"
+          className="p-6 bg-white/[0.02] border border-white/[0.08] rounded-xl space-y-4"
         >
           <div>
-            <label className="block text-sm text-[var(--pepe-t64)] mb-1">
+            <label className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
               E-Mail *
             </label>
             <input
               type="email"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded text-[var(--pepe-white)] focus:border-[var(--pepe-gold)] focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
               placeholder="test@example.com"
               required
               autoFocus
             />
           </div>
           <div>
-            <label className="block text-sm text-[var(--pepe-t64)] mb-1">
+            <label className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
               Name (optional)
             </label>
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="w-full px-3 py-2 bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded text-[var(--pepe-white)] focus:border-[var(--pepe-gold)] focus:outline-none"
+              className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
               placeholder="Test Person"
             />
           </div>
-          <div className="flex gap-2">
-            <Button type="submit" disabled={loading === 'add'}>
+          <div className="flex gap-3 pt-2">
+            <Button type="submit" variant="primary" size="sm" disabled={loading === 'add'}>
               {loading === 'add' ? 'Speichern...' : 'Hinzufügen'}
             </Button>
             <Button
               type="button"
-              variant="secondary"
+              variant="ghost"
+              size="sm"
               onClick={() => setIsAdding(false)}
             >
               Abbrechen
@@ -194,7 +195,7 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
           </div>
         </form>
       ) : (
-        <Button onClick={() => setIsAdding(true)}>
+        <Button variant="primary" size="sm" onClick={() => setIsAdding(true)}>
           <svg
             className="w-4 h-4"
             fill="none"
@@ -213,56 +214,56 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
       )}
 
       {/* Recipients Table */}
-      <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-lg overflow-hidden">
+      <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl overflow-hidden">
         <table className="w-full">
-          <thead className="bg-[var(--pepe-surface)]">
+          <thead className="bg-white/[0.02]">
             <tr>
-              <th className="text-left px-4 py-3 text-sm font-medium text-[var(--pepe-t64)]">
+              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
                 E-Mail
               </th>
-              <th className="text-left px-4 py-3 text-sm font-medium text-[var(--pepe-t64)]">
+              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
                 Name
               </th>
-              <th className="text-left px-4 py-3 text-sm font-medium text-[var(--pepe-t64)]">
+              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
                 Status
               </th>
-              <th className="text-right px-4 py-3 text-sm font-medium text-[var(--pepe-t64)]">
+              <th className="text-right px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
                 Aktionen
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--pepe-line)]">
+          <tbody className="divide-y divide-white/[0.06]">
             {recipients.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
-                  className="px-4 py-8 text-center text-[var(--pepe-t48)]"
+                  className="px-5 py-12 text-center text-white/40"
                 >
                   Keine Test-Empfänger vorhanden
                 </td>
               </tr>
             ) : (
               recipients.map((recipient) => (
-                <tr key={recipient.id} className="hover:bg-[var(--pepe-surface)]/50">
-                  <td className="px-4 py-3 text-[var(--pepe-white)]">
+                <tr key={recipient.id} className="hover:bg-white/[0.02] transition-colors">
+                  <td className="px-5 py-4 text-[13px] text-white">
                     {recipient.email}
                   </td>
-                  <td className="px-4 py-3 text-[var(--pepe-t80)]">
+                  <td className="px-5 py-4 text-[13px] text-white/60">
                     {recipient.name || '-'}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-4">
                     <span
                       className={cn(
-                        'px-2 py-1 rounded text-xs font-medium border',
+                        'px-2.5 py-1 rounded-lg text-[10px] font-medium border',
                         recipient.isActive
-                          ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
                           : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
                       )}
                     >
                       {recipient.isActive ? 'Aktiv' : 'Inaktiv'}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() =>
@@ -270,10 +271,10 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
                         }
                         disabled={loading === recipient.id}
                         className={cn(
-                          'px-3 py-1 rounded text-xs transition-colors',
+                          'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
                           recipient.isActive
                             ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
-                            : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
+                            : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
                         )}
                       >
                         {loading === recipient.id
@@ -285,7 +286,7 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
                       <button
                         onClick={() => handleDelete(recipient.id)}
                         disabled={loading === recipient.id}
-                        className="px-3 py-1 rounded text-xs bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
                       >
                         {loading === recipient.id ? '...' : 'Löschen'}
                       </button>

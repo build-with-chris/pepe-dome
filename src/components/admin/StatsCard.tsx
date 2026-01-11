@@ -96,9 +96,9 @@ export default function StatsCard({
   const CardContent = (
     <div
       className={cn(
-        'bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-xl',
+        'bg-white/[0.02] border border-white/[0.08] rounded-xl p-6',
         'transition-all duration-200',
-        href && 'hover:bg-white/[0.05] hover:border-white/20 hover:-translate-y-0.5 cursor-pointer',
+        href && 'hover:bg-white/[0.04] hover:border-white/[0.12] cursor-pointer',
         className
       )}
     >
@@ -125,11 +125,11 @@ export default function StatsCard({
       </div>
 
       {/* Label */}
-      <div className="text-sm text-gray-400 mt-1">{label}</div>
+      <div className="text-[13px] text-white/50 mt-2">{label}</div>
 
       {/* Description */}
       {description && (
-        <div className="text-xs text-gray-500 mt-2">{description}</div>
+        <div className="text-xs text-white/40 mt-1">{description}</div>
       )}
     </div>
   )

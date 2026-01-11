@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils'
 import { getRoleFromMetadata, getRoleDisplayName, ROLES, type UserRole } from '@/lib/roles'
 
 /**
- * Admin Layout - Fully isolated from public site styles
- * Uses CSS Grid for a clean sidebar + content layout
+ * Admin Layout
+ *
+ * Uses flexbox for sidebar + content layout
+ * Sidebar: 240px fixed, Content: flexible
  */
 
 interface AdminLayoutProps {
@@ -83,14 +85,12 @@ const navItems: NavItem[] = [
   },
 ]
 
-// Sidebar width constant
-const SIDEBAR_WIDTH = 240 // 60 * 4 = 240px (w-60)
-
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, isLoaded } = useUser()
   const pathname = usePathname()
 
+  // Don't show admin layout for auth pages
   if (pathname.includes('/sign-in') || pathname.includes('/sign-up')) {
     return <>{children}</>
   }
@@ -108,27 +108,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    // Root container - full viewport, isolate from any external styles
-    <div
-      className="admin-layout-root"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        display: 'flex',
-        background: '#09090b',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Mobile overlay */}
+    <div className="flex h-screen bg-[#09090b] overflow-hidden">
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="lg:hidden"
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            zIndex: 40,
-          }}
+          className="fixed inset-0 z-40 bg-black/70 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -136,55 +120,31 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside
         className={cn(
+          'fixed lg:static top-0 left-0 z-50 h-full w-60 flex-shrink-0 flex flex-col',
+          'bg-[#0c0c0e] border-r border-white/[0.06]',
           'transition-transform duration-200 lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          width: SIDEBAR_WIDTH,
-          background: '#0c0c0e',
-          borderRight: '1px solid rgba(255,255,255,0.06)',
-          display: 'flex',
-          flexDirection: 'column',
-          zIndex: 50,
-        }}
       >
         {/* Logo */}
-        <div
-          style={{
-            height: 56,
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 20px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-          }}
-        >
+        <div className="h-14 flex items-center px-5 border-b border-white/[0.06] flex-shrink-0">
           <Link href="/admin" className="flex items-center gap-3">
             <Image
               src="/PEPE_logos_dome.svg"
               alt="Pepe Dome"
-              width={144}
-              height={38}
-              className="h-[38px] w-auto"
+              width={120}
+              height={32}
+              className="h-8 w-auto"
             />
-            <span className="text-[9px] font-semibold text-[#016dca]/90 bg-[#016dca]/8 px-2 py-1 rounded-md uppercase tracking-widest">
+            <span className="text-[9px] font-semibold text-[#016dca]/90 bg-[#016dca]/10 px-2 py-1 rounded uppercase tracking-widest">
               Admin
             </span>
           </Link>
         </div>
 
-        {/* Nav */}
-        <nav
-          style={{
-            flex: 1,
-            padding: '12px 10px',
-            overflowY: 'auto',
-          }}
-        >
-          <div className="space-y-0.5">
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto p-3">
+          <div className="space-y-1">
             {filteredNavItems.map((item) => {
               const active = isActive(item.href)
               return (
@@ -193,16 +153,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-md text-[12px] font-medium tracking-wide transition-all duration-150',
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors',
                     active
-                      ? 'bg-white/[0.06] text-white'
-                      : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03]'
+                      ? 'bg-white/[0.08] text-white'
+                      : 'text-white/50 hover:text-white/80 hover:bg-white/[0.04]'
                   )}
                 >
-                  <span className={cn(
-                    'transition-colors',
-                    active ? 'text-[#016dca]' : 'text-white/30'
-                  )}>{item.icon}</span>
+                  <span className={cn(active ? 'text-[#016dca]' : 'text-white/40')}>
+                    {item.icon}
+                  </span>
                   {item.label}
                 </Link>
               )
@@ -210,33 +169,31 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </nav>
 
-        {/* User */}
+        {/* User Section */}
         {isLoaded && user && (
-          <div style={{ padding: 12, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-white/[0.03] transition-colors cursor-pointer">
+          <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
+            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors">
               <UserButton
                 afterSignOutUrl="/"
-                appearance={{
-                  elements: { avatarBox: 'w-7 h-7' },
-                }}
+                appearance={{ elements: { avatarBox: 'w-8 h-8' } }}
               />
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-medium text-white/80 truncate tracking-wide">
+                <p className="text-[13px] font-medium text-white/90 truncate">
                   {user.firstName || user.emailAddresses[0]?.emailAddress?.split('@')[0]}
                 </p>
-                <p className="text-[10px] text-white/30 tracking-wide">{getRoleDisplayName(userRole)}</p>
+                <p className="text-[11px] text-white/40">{getRoleDisplayName(userRole)}</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Back link */}
-        <div style={{ padding: 10, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        {/* Back to Website */}
+        <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
           <Link
             href="/"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-md text-[11px] font-medium text-white/30 hover:text-white/60 hover:bg-white/[0.03] transition-all duration-150 tracking-wide"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors"
           >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Zur Website
@@ -244,67 +201,42 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </aside>
 
-      {/* Main area - positioned next to sidebar */}
-      <div
-        className="lg:ml-[240px] ml-0"
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          height: '100vh',
-        }}
-      >
-        {/* Top bar - sticky within main area */}
-        <header
-          style={{
-            height: 44,
-            minHeight: 44,
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            background: '#0a0a0c',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 16px',
-          }}
-        >
-          {/* Mobile menu button */}
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Bar */}
+        <header className="h-14 flex items-center px-6 bg-[#09090b] border-b border-white/[0.06] flex-shrink-0">
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-1.5 -ml-1 mr-3 text-white/40 hover:text-white/70 rounded"
+            className="lg:hidden p-2 -ml-2 mr-4 text-white/50 hover:text-white rounded-lg hover:bg-white/[0.04]"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
 
-          <div style={{ flex: 1 }} />
+          <div className="flex-1" />
 
-          {/* User on desktop - minimal */}
+          {/* Desktop User */}
           {isLoaded && user && (
-            <div className="hidden lg:flex items-center gap-2">
-              <span className="text-[11px] text-white/40 tracking-wide">
+            <div className="hidden lg:flex items-center gap-3">
+              <span className="text-[13px] text-white/50">
                 {user.firstName || user.emailAddresses[0]?.emailAddress?.split('@')[0]}
               </span>
               <UserButton
                 afterSignOutUrl="/"
-                appearance={{
-                  elements: { avatarBox: 'w-6 h-6' },
-                }}
+                appearance={{ elements: { avatarBox: 'w-7 h-7' } }}
               />
             </div>
           )}
         </header>
 
-        {/* Page content - scrollable */}
-        <div
-          style={{
-            flex: 1,
-            overflow: 'auto',
-            padding: 20,
-          }}
-        >
-          {children}
-        </div>
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto p-6">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )
