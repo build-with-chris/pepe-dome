@@ -111,7 +111,7 @@ export default function HomeEN() {
       </section>
 
       {/* Next Highlight Section */}
-      {nextEvent && (
+      {nextEvent ? (
         <section className={`py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-${nextEvent.color.primary}/5 to-${nextEvent.color.secondary}/5 ${nextEvent.id === 'freeman-festival' ? 'relative' : ''}`}>
           {/* Freeman Festival Glow Effect */}
           {nextEvent.id === 'freeman-festival' && (
@@ -304,6 +304,30 @@ export default function HomeEN() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+      ) : (
+        <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-gray-500/5 to-gray-600/5">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <span className="text-6xl mb-4 block">❄️</span>
+              <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+                Winter Break
+              </h2>
+              <p className="text-xl text-white/80 mb-6">
+                We are taking a short winter break until March
+              </p>
+              <p className="text-lg text-white/70">
+                Starting in March, we&apos;ll be back with exciting events at Pepe Dome!
+              </p>
+            </div>
+            <Link
+              href="/en/veranstaltungen"
+              className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            >
+              <span>View all events</span>
+              <span>→</span>
+            </Link>
           </div>
         </section>
       )}

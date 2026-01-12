@@ -142,6 +142,24 @@ export default function VeranstaltungenPage() {
         </p>
       </section>
 
+      {/* Umbau-Hilfe Hinweis */}
+      <section className="py-6 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/50 rounded-xl p-6 text-center">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className="text-3xl">🔨</span>
+              <h3 className="text-xl font-bold text-white">Umbau-Hilfe gesucht!</h3>
+            </div>
+            <p className="text-white/90 mb-2">
+              Vom <strong>19.01 - 26.01</strong> brauchen wir Unterstützung beim Umbau.
+            </p>
+            <p className="text-white/80 text-sm">
+              Für jede Hilfe sind wir sehr dankbar! Es gibt Essen und Trinken für alle Helfer. 🍕🥤
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Filter Section */}
       <section className="py-10 px-6">
         <div className="max-w-4xl mx-auto">

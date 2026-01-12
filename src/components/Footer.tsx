@@ -58,16 +58,11 @@ export default function Footer() {
           <div>
             <h3 className="display text-lg font-semibold mb-4">Events</h3>
             <nav className="space-y-2">
-              <div className="text-white/70 text-sm">
-                <span className="font-semibold">Nächste Events:</span>
+              <div className="text-white/70 text-sm mb-3">
+                <span className="font-semibold">❄️ Winterpause bis März</span>
               </div>
-              <div className="text-white/60 text-xs">
-                🎬 Circus meets Cinema<br />
-                10.–11. Oktober 2025
-              </div>
-              <div className="text-white/60 text-xs">
-                🎪 Freeman Festival<br />
-                14.–16. November 2025
+              <div className="text-white/60 text-xs mb-3">
+                Wir machen eine kleine Pause und sind ab März wieder mit spannenden Veranstaltungen für euch da!
               </div>
               <Link href="/veranstaltungen" className="inline-block text-yellow-400 hover:text-yellow-300 transition-colors text-sm mt-2">
                 Alle Events ansehen →
