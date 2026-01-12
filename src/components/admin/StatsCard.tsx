@@ -31,6 +31,8 @@ interface StatsCardProps {
   className?: string
   /** Accent color variant */
   variant?: 'default' | 'gold' | 'success' | 'warning' | 'error'
+  /** Compact mode for smaller cards */
+  compact?: boolean
 }
 
 const variantStyles = {
@@ -90,13 +92,15 @@ export default function StatsCard({
   href,
   className,
   variant = 'default',
+  compact = false,
 }: StatsCardProps) {
   const styles = variantStyles[variant]
 
   const CardContent = (
     <div
       className={cn(
-        'bg-white/[0.02] border border-white/[0.08] rounded-xl p-6',
+        'bg-white/[0.02] border border-white/[0.08] rounded-xl',
+        compact ? 'p-4' : 'p-6',
         'transition-all duration-200',
         href && 'hover:bg-white/[0.04] hover:border-white/[0.12] cursor-pointer',
         className
@@ -105,7 +109,11 @@ export default function StatsCard({
       <div className="flex items-start justify-between">
         {/* Icon */}
         {icon && (
-          <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', styles.icon)}>
+          <div className={cn(
+            'rounded-xl flex items-center justify-center',
+            compact ? 'w-9 h-9 [&_svg]:w-4 [&_svg]:h-4' : 'w-12 h-12',
+            styles.icon
+          )}>
             {icon}
           </div>
         )}
@@ -120,16 +128,26 @@ export default function StatsCard({
       </div>
 
       {/* Value */}
-      <div className={cn('text-3xl font-bold mt-4', styles.value)}>
+      <div className={cn(
+        'font-bold',
+        compact ? 'text-2xl mt-3' : 'text-3xl mt-4',
+        styles.value
+      )}>
         {typeof value === 'number' ? value.toLocaleString('de-DE') : value}
       </div>
 
       {/* Label */}
-      <div className="text-[13px] text-white/50 mt-2">{label}</div>
+      <div className={cn(
+        'text-white/50',
+        compact ? 'text-[12px] mt-1' : 'text-[13px] mt-2'
+      )}>{label}</div>
 
       {/* Description */}
       {description && (
-        <div className="text-xs text-white/40 mt-1">{description}</div>
+        <div className={cn(
+          'text-white/40',
+          compact ? 'text-[10px] mt-0.5' : 'text-xs mt-1'
+        )}>{description}</div>
       )}
     </div>
   )

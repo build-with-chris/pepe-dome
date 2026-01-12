@@ -29,17 +29,5 @@ export default async function TestRecipientsAdminPage() {
     updatedAt: r.updatedAt.toISOString(),
   }))
 
-  return (
-    <div className="space-y-8">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-white">Test-Empfänger</h1>
-        <p className="text-white/50 mt-1">
-          E-Mail-Adressen für Newsletter-Tests verwalten
-        </p>
-      </div>
-
-      <TestRecipientsClient initialRecipients={serializedRecipients} />
-    </div>
-  )
+  return <TestRecipientsClient initialRecipients={serializedRecipients} />
 }

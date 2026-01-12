@@ -14,21 +14,21 @@ import { cn } from "@/lib/utils"
  */
 const textareaVariants = cva(
   [
-    "flex w-full rounded-lg border px-3 py-2 text-sm",
+    "flex w-full rounded-lg border px-3 py-2.5 text-sm",
     "min-h-[120px] resize-y",
-    "bg-[var(--pepe-coal)] text-[var(--pepe-white)]",
-    "border-[var(--pepe-line)]",
-    "placeholder:text-[var(--pepe-t48)]",
+    "bg-white/[0.04] text-white",
+    "border-white/[0.08]",
+    "placeholder:text-white/30",
     "transition-all duration-200",
     "focus-visible:outline-none",
-    "focus-visible:border-[var(--pepe-gold)]",
-    "focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold-glow)]",
+    "focus-visible:border-[#016dca]",
+    "focus-visible:ring-1 focus-visible:ring-[#016dca]/20",
     "disabled:cursor-not-allowed disabled:opacity-50",
   ].join(" "),
   {
     variants: {
       hasError: {
-        true: "border-[var(--pepe-error)] focus-visible:border-[var(--pepe-error)] focus-visible:ring-[rgba(255,59,59,0.25)]",
+        true: "border-red-500/50 focus-visible:border-red-500 focus-visible:ring-red-500/20",
         false: "",
       },
     },

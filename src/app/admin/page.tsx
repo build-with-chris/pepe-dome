@@ -2,18 +2,18 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { isSuperAdmin, canEdit } from '@/lib/roles.server'
 import StatsCard, { StatsIcons } from '@/components/admin/StatsCard'
+import { AdminCard } from '@/components/admin/AdminCard'
+import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { CATEGORY_LABELS } from '@/lib/admin-constants'
 
 /**
  * Admin Dashboard
  *
  * Consistent spacing system:
- * - Section gaps: space-y-8 (32px)
- * - Card internal: p-6 (24px)
- * - Grid gaps: gap-6 (24px)
- * - Small gaps: gap-4 (16px)
+ * - Section gaps: space-y-6
+ * - Card internal: p-6
+ * - Grid gaps: gap-5
  */
 
 async function getDashboardStats() {
@@ -85,26 +85,6 @@ async function getDashboardStats() {
   }
 }
 
-const statusColors: Record<string, string> = {
-  DRAFT: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  PUBLISHED: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  ARCHIVED: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-  SENT: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  SCHEDULED: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-}
-
-const categoryLabels: Record<string, string> = {
-  SHOW: 'Show',
-  PREMIERE: 'Premiere',
-  FESTIVAL: 'Festival',
-  WORKSHOP: 'Workshop',
-  OPEN_TRAINING: 'Training',
-  KINDERTRAINING: 'Kinder',
-  BUSINESS: 'Business',
-  OPEN_AIR: 'Open Air',
-  EVENT: 'Event',
-}
-
 export default async function AdminDashboard() {
   const [stats, isAdmin, canCreate] = await Promise.all([
     getDashboardStats(),
@@ -117,174 +97,144 @@ export default async function AdminDashboard() {
     : null
 
   return (
-    <div className="space-y-8">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-white">Dashboard</h1>
-        <p className="text-white/50 mt-1">
-          Übersicht über Events, Artikel und Newsletter
-        </p>
-      </div>
-
+    <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         {isAdmin && (
           <StatsCard
             icon={StatsIcons.subscribers}
             value={stats.subscribers.active}
-            label="Aktive Abonnenten"
+            label="Abonnenten"
             description={`${stats.subscribers.total} gesamt`}
             variant="gold"
             href="/admin/subscribers"
+            compact
           />
         )}
         <StatsCard
           icon={StatsIcons.events}
           value={stats.events.upcoming}
-          label="Kommende Events"
+          label="Events"
           description={`${stats.events.total} gesamt`}
           href="/admin/events"
+          compact
         />
         <StatsCard
           icon={StatsIcons.articles}
           value={stats.articles.published}
-          label="Veröffentlichte Artikel"
+          label="Artikel"
           description={`${stats.articles.total - stats.articles.published} Entwürfe`}
           href="/admin/articles"
+          compact
         />
         <StatsCard
           icon={StatsIcons.newsletters}
           value={stats.newsletters.sent}
-          label="Gesendete Newsletter"
-          description={openRate ? `${openRate}% Öffnungsrate` : 'Noch keine gesendet'}
+          label="Newsletter"
+          description={openRate ? `${openRate}% Öffnung` : 'Keine gesendet'}
           href="/admin/newsletters"
+          compact
         />
       </div>
 
       {/* Quick Actions */}
       {canCreate && (
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
-          <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-5">Schnellaktionen</h2>
-          <div className="flex flex-wrap gap-3">
+        <AdminCard title="Schnellaktionen" padding="md">
+          <div className="flex gap-3 -mt-2">
             <Link href="/admin/events/new">
-              <Button variant="primary" size="sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Neues Event
-              </Button>
+              <Button variant="primary" size="sm">+ Event</Button>
             </Link>
             <Link href="/admin/articles/new">
-              <Button variant="primary" size="sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Neuer Artikel
-              </Button>
+              <Button variant="primary" size="sm">+ Artikel</Button>
             </Link>
             <Link href="/admin/newsletters/new">
-              <Button variant="secondary" size="sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Neuer Newsletter
-              </Button>
+              <Button variant="secondary" size="sm">+ Newsletter</Button>
             </Link>
           </div>
-        </div>
+        </AdminCard>
       )}
 
       {/* Recent Activity Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Events */}
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzte Events</h2>
+        <AdminCard
+          title="Letzte Events"
+          action={
             <Link href="/admin/events" className="text-xs text-[#016dca] hover:underline">
-              Alle anzeigen
+              Alle →
             </Link>
-          </div>
-
+          }
+        >
           {stats.recentEvents.length === 0 ? (
-            <p className="text-white/40 text-[13px]">Keine Events vorhanden</p>
+            <p className="text-white/40 text-sm">Keine Events</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {stats.recentEvents.map((event) => (
                 <Link
                   key={event.id}
                   href={`/admin/events/${event.id}/edit`}
-                  className="flex items-center justify-between p-3.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-medium text-white truncate">{event.title}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-white/40">
-                        {new Date(event.date).toLocaleDateString('de-DE')}
-                      </span>
-                      <span className="text-xs text-white/40">
-                        {categoryLabels[event.category] || event.category}
-                      </span>
-                    </div>
+                    <p className="text-sm font-medium text-white truncate">{event.title}</p>
+                    <span className="text-xs text-white/40">
+                      {new Date(event.date).toLocaleDateString('de-DE')} · {CATEGORY_LABELS[event.category] || event.category}
+                    </span>
                   </div>
-                  <Badge variant="outline" className={cn('text-[10px] border ml-3', statusColors[event.status])}>
-                    {event.status}
-                  </Badge>
+                  <StatusBadge status={event.status} className="ml-3" />
                 </Link>
               ))}
             </div>
           )}
-        </div>
+        </AdminCard>
 
         {/* Recent Articles */}
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzte Artikel</h2>
+        <AdminCard
+          title="Letzte Artikel"
+          action={
             <Link href="/admin/articles" className="text-xs text-[#016dca] hover:underline">
-              Alle anzeigen
+              Alle →
             </Link>
-          </div>
-
+          }
+        >
           {stats.recentArticles.length === 0 ? (
-            <p className="text-white/40 text-[13px]">Keine Artikel vorhanden</p>
+            <p className="text-white/40 text-sm">Keine Artikel</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {stats.recentArticles.map((article) => (
                 <Link
                   key={article.id}
                   href={`/admin/articles/${article.id}/edit`}
-                  className="flex items-center justify-between p-3.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-medium text-white truncate">{article.title}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-white/40">{article.author}</span>
-                      <span className="text-xs text-white/40">{article.category}</span>
-                    </div>
+                    <p className="text-sm font-medium text-white truncate">{article.title}</p>
+                    <span className="text-xs text-white/40">
+                      {article.author} · {article.category}
+                    </span>
                   </div>
-                  <Badge variant="outline" className={cn('text-[10px] border ml-3', statusColors[article.status])}>
-                    {article.status}
-                  </Badge>
+                  <StatusBadge status={article.status} className="ml-3" />
                 </Link>
               ))}
             </div>
           )}
-        </div>
+        </AdminCard>
       </div>
 
       {/* Newsletter Stats */}
       {isAdmin && stats.lastNewsletter && (
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Letzter Newsletter</h2>
+        <AdminCard
+          title="Letzter Newsletter"
+          action={
             <Link href="/admin/newsletters" className="text-xs text-[#016dca] hover:underline">
               Alle anzeigen
             </Link>
-          </div>
-
+          }
+        >
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             <div className="flex-1">
-              <p className="text-[15px] font-medium text-white">{stats.lastNewsletter.subject}</p>
-              <p className="text-[13px] text-white/40 mt-1.5">
+              <p className="text-base font-medium text-white">{stats.lastNewsletter.subject}</p>
+              <p className="text-sm text-white/40 mt-1">
                 Gesendet am{' '}
                 {stats.lastNewsletter.sentAt
                   ? new Date(stats.lastNewsletter.sentAt).toLocaleDateString('de-DE', {
@@ -323,7 +273,7 @@ export default async function AdminDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </AdminCard>
       )}
     </div>
   )

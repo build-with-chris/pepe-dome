@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import DataTable, { type Column } from '@/components/admin/DataTable'
+import { PageHeader } from '@/components/admin/PageHeader'
+import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -21,13 +23,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { cn } from '@/lib/utils'
+import { CATEGORY_LABELS } from '@/lib/admin-constants'
 
 /**
  * Events Admin Page
  *
  * Consistent spacing system:
- * - Section gaps: space-y-8 (32px)
+ * - Section gaps: space-y-6
  * - Filter gaps: gap-4 (16px)
  */
 
@@ -49,24 +51,6 @@ interface PaginatedResponse {
     total: number
     pages: number
   }
-}
-
-const categoryLabels: Record<string, string> = {
-  SHOW: 'Show',
-  PREMIERE: 'Premiere',
-  FESTIVAL: 'Festival',
-  WORKSHOP: 'Workshop',
-  OPEN_TRAINING: 'Open Training',
-  KINDERTRAINING: 'Kindertraining',
-  BUSINESS: 'Business',
-  OPEN_AIR: 'Open Air',
-  EVENT: 'Event',
-}
-
-const statusColors: Record<string, string> = {
-  DRAFT: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  PUBLISHED: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  ARCHIVED: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
 }
 
 export default function EventsAdminPage() {
@@ -158,18 +142,14 @@ export default function EventsAdminPage() {
       sortable: true,
       hideOnMobile: true,
       cell: (row) => (
-        <span className="text-white/60">{categoryLabels[row.category] || row.category}</span>
+        <span className="text-white/60">{CATEGORY_LABELS[row.category] || row.category}</span>
       ),
     },
     {
       header: 'Status',
       accessorKey: 'status',
       sortable: true,
-      cell: (row) => (
-        <Badge variant="outline" className={cn('text-[10px] border', statusColors[row.status])}>
-          {row.status}
-        </Badge>
-      ),
+      cell: (row) => <StatusBadge status={row.status} />,
     },
   ]
 
@@ -193,24 +173,22 @@ export default function EventsAdminPage() {
   )
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-white">Events</h1>
-          <p className="text-white/50 mt-1">
-            {pagination.total} {pagination.total === 1 ? 'Event' : 'Events'} insgesamt
-          </p>
-        </div>
-        <Link href="/admin/events/new">
-          <Button variant="primary" size="sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Neues Event
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Events"
+        description={`${pagination.total} ${pagination.total === 1 ? 'Event' : 'Events'} insgesamt`}
+        action={
+          <Link href="/admin/events/new">
+            <Button variant="primary" size="sm">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Neues Event
+            </Button>
+          </Link>
+        }
+      />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
@@ -232,7 +210,7 @@ export default function EventsAdminPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Alle Kategorien</SelectItem>
-            {Object.entries(categoryLabels).map(([value, label]) => (
+            {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
               <SelectItem key={value} value={value}>
                 {label}
               </SelectItem>

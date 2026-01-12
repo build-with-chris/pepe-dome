@@ -13,15 +13,15 @@ import { cn } from "@/lib/utils"
  */
 const inputVariants = cva(
   [
-    "flex w-full rounded-lg border px-3 py-2 text-sm",
-    "bg-[var(--pepe-coal)] text-[var(--pepe-white)]",
-    "border-[var(--pepe-line)]",
-    "placeholder:text-[var(--pepe-t48)]",
+    "flex w-full rounded-lg border px-3 py-2.5 text-sm",
+    "bg-white/[0.04] text-white",
+    "border-white/[0.08]",
+    "placeholder:text-white/30",
     "transition-all duration-200",
-    "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-[var(--pepe-t80)]",
+    "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-white/60",
     "focus-visible:outline-none",
-    "focus-visible:border-[var(--pepe-gold)]",
-    "focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold-glow)]",
+    "focus-visible:border-[#016dca]",
+    "focus-visible:ring-1 focus-visible:ring-[#016dca]/20",
     "disabled:cursor-not-allowed disabled:opacity-50",
   ].join(" "),
   {
@@ -32,7 +32,7 @@ const inputVariants = cva(
         lg: "h-12 text-base px-4",
       },
       hasError: {
-        true: "border-[var(--pepe-error)] focus-visible:border-[var(--pepe-error)] focus-visible:ring-[rgba(255,59,59,0.25)]",
+        true: "border-red-500/50 focus-visible:border-red-500 focus-visible:ring-red-500/20",
         false: "",
       },
     },

@@ -14,8 +14,8 @@ import NewsletterEditClient from './NewsletterEditClient'
 const statusColors: Record<string, string> = {
   DRAFT: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
   SCHEDULED: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  SENDING: 'bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border-[var(--pepe-gold)]/30',
-  SENT: 'bg-green-500/20 text-green-400 border-green-500/30',
+  SENDING: 'bg-[#016dca]/20 text-[#016dca] border-[#016dca]/30',
+  SENT: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
 }
 
 const statusLabels: Record<string, string> = {
@@ -54,19 +54,20 @@ export default async function EditNewsletterPage({ params }: PageProps) {
   const canEditNewsletter = newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED'
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div>
         <Link
           href="/admin/newsletters"
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-[#016dca] transition-colors mb-4"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
+          Zurück zu Newsletter
         </Link>
-        <div className="flex-1 min-w-0 flex items-center gap-2">
-          <h1 className="text-base font-semibold text-white truncate">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-semibold text-white truncate">
             {newsletter.subject}
           </h1>
           <Badge

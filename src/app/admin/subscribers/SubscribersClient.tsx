@@ -5,11 +5,20 @@ import { useRouter } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/Button'
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { AdminCard } from '@/components/admin/AdminCard'
 import { cn } from '@/lib/utils'
 
 const INTEREST_OPTIONS = [
@@ -20,7 +29,6 @@ const INTEREST_OPTIONS = [
 
 /**
  * Subscribers Client Component
- * Handles interactive subscriber table and detail modal
  */
 
 interface Subscriber {
@@ -60,7 +68,7 @@ interface SubscribersClientProps {
 const eventTypeLabels: Record<string, string> = {
   SENT: 'Gesendet',
   DELIVERED: 'Zugestellt',
-  OPENED: 'Geoffnet',
+  OPENED: 'Geöffnet',
   CLICKED: 'Geklickt',
   BOUNCED: 'Bounced',
   COMPLAINED: 'Beschwerde',
@@ -161,69 +169,59 @@ export default function SubscribersClient({
 
   return (
     <>
-      {/* Add Subscriber Button */}
-      <div className="flex justify-end mb-4">
-        <Button variant="primary" size="sm" onClick={() => setIsAddDialogOpen(true)}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Subscriber hinzufügen
-        </Button>
-      </div>
-
       {/* Subscribers Table */}
       <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl overflow-hidden">
         {subscribers.length === 0 ? (
-          <div className="p-12 text-center">
-            <p className="text-white/40">Keine Subscribers gefunden</p>
+          <div className="p-16 text-center">
+            <p className="text-white/40 text-sm">Keine Abonnenten gefunden</p>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-white/[0.02]">
-              <tr>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider">Email</th>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider hidden md:table-cell">Name</th>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider">Status</th>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider hidden md:table-cell">Interessen</th>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider hidden md:table-cell">Angemeldet</th>
-                <th className="px-5 py-4 text-left text-[11px] font-semibold text-white/40 uppercase tracking-wider hidden lg:table-cell">Letzte Aktivität</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.06]">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-white/[0.04]">
+                <TableHead>Email</TableHead>
+                <TableHead className="hidden md:table-cell">Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="hidden md:table-cell">Interessen</TableHead>
+                <TableHead className="hidden md:table-cell">Angemeldet</TableHead>
+                <TableHead className="hidden lg:table-cell">Letzte Aktivität</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {subscribers.map((subscriber) => (
-                <tr
+                <TableRow
                   key={subscriber.id}
                   onClick={() => handleRowClick(subscriber.id)}
-                  className="hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  className="cursor-pointer"
                 >
-                  <td className="px-5 py-4 text-[13px] text-white">
+                  <TableCell className="text-white font-medium">
                     {subscriber.email}
-                  </td>
-                  <td className="px-5 py-4 text-[13px] text-white/60 hidden md:table-cell">
+                  </TableCell>
+                  <TableCell className="text-white/60 hidden md:table-cell">
                     {subscriber.firstName || '-'}
-                  </td>
-                  <td className="px-5 py-4">
+                  </TableCell>
+                  <TableCell>
                     <Badge variant="outline" className={cn('text-[10px] border', statusColors[subscriber.status])}>
                       {statusLabels[subscriber.status] || subscriber.status}
                     </Badge>
-                  </td>
-                  <td className="px-5 py-4 text-[13px] text-white/60 hidden md:table-cell">
+                  </TableCell>
+                  <TableCell className="text-white/60 hidden md:table-cell">
                     {Array.isArray(subscriber.interests) && subscriber.interests.length > 0
                       ? (subscriber.interests as string[]).join(', ')
                       : '-'}
-                  </td>
-                  <td className="px-5 py-4 text-[13px] text-white/40 hidden md:table-cell">
+                  </TableCell>
+                  <TableCell className="text-white/40 hidden md:table-cell">
                     {new Date(subscriber.createdAt).toLocaleDateString('de-DE')}
-                  </td>
-                  <td className="px-5 py-4 text-[13px] text-white/40 hidden lg:table-cell">
+                  </TableCell>
+                  <TableCell className="text-white/40 hidden lg:table-cell">
                     {subscriber.lastOpenAt
                       ? new Date(subscriber.lastOpenAt).toLocaleDateString('de-DE')
                       : '-'}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         )}
       </div>
 
@@ -235,7 +233,7 @@ export default function SubscribersClient({
           </DialogHeader>
           <form onSubmit={handleAddSubscriber} className="space-y-4">
             <div>
-              <label htmlFor="add-email" className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
+              <label htmlFor="add-email" className="block text-xs text-white/50 uppercase tracking-wider mb-2">
                 E-Mail-Adresse *
               </label>
               <input
@@ -246,11 +244,11 @@ export default function SubscribersClient({
                 placeholder="email@example.com"
                 required
                 disabled={isAdding}
-                className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#016dca]"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#016dca]"
               />
             </div>
             <div>
-              <label htmlFor="add-firstName" className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
+              <label htmlFor="add-firstName" className="block text-xs text-white/50 uppercase tracking-wider mb-2">
                 Vorname (optional)
               </label>
               <input
@@ -260,11 +258,11 @@ export default function SubscribersClient({
                 onChange={(e) => setAddForm((prev) => ({ ...prev, firstName: e.target.value }))}
                 placeholder="Max"
                 disabled={isAdding}
-                className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#016dca]"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#016dca]"
               />
             </div>
             <div>
-              <label className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">Interessen (optional)</label>
+              <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">Interessen (optional)</label>
               <div className="space-y-2">
                 {INTEREST_OPTIONS.map((option) => (
                   <label key={option.id} className="flex items-center gap-3 cursor-pointer group">
@@ -299,9 +297,7 @@ export default function SubscribersClient({
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
         <DialogContent className="bg-[#111113] border-white/[0.08] max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-white">
-              Subscriber Details
-            </DialogTitle>
+            <DialogTitle className="text-white">Subscriber Details</DialogTitle>
           </DialogHeader>
 
           {isLoading ? (
@@ -312,9 +308,8 @@ export default function SubscribersClient({
           ) : selectedSubscriber ? (
             <div className="space-y-6">
               {/* Basic Info */}
-              <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Kontakt</h3>
+              <AdminCard title="Kontakt" padding="md">
+                <div className="flex items-center justify-between mb-4 -mt-2">
                   <Badge
                     variant="outline"
                     className={cn('text-[10px] border', statusColors[selectedSubscriber.status])}
@@ -325,19 +320,19 @@ export default function SubscribersClient({
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-white/40 text-xs">E-Mail</p>
+                    <p className="text-white/40 text-xs mb-1">E-Mail</p>
                     <p className="text-white font-medium">{selectedSubscriber.email}</p>
                   </div>
                   <div>
-                    <p className="text-white/40 text-xs">Name</p>
+                    <p className="text-white/40 text-xs mb-1">Name</p>
                     <p className="text-white">{selectedSubscriber.firstName || '-'}</p>
                   </div>
                 </div>
 
                 {Array.isArray(selectedSubscriber.interests) && selectedSubscriber.interests.length > 0 && (
-                  <div>
-                    <p className="text-white/40 text-xs">Interessen</p>
-                    <div className="flex flex-wrap gap-2 mt-1">
+                  <div className="mt-4">
+                    <p className="text-white/40 text-xs mb-2">Interessen</p>
+                    <div className="flex flex-wrap gap-2">
                       {(selectedSubscriber.interests as string[]).map((interest, i) => (
                         <span
                           key={i}
@@ -349,20 +344,19 @@ export default function SubscribersClient({
                     </div>
                   </div>
                 )}
-              </div>
+              </AdminCard>
 
               {/* Dates */}
-              <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
-                <h3 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-4">Zeitstempel</h3>
+              <AdminCard title="Zeitstempel" padding="md">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-white/40 text-xs">Registriert am</p>
+                    <p className="text-white/40 text-xs mb-1">Registriert am</p>
                     <p className="text-white">
                       {new Date(selectedSubscriber.createdAt).toLocaleString('de-DE')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-white/40 text-xs">Bestätigt am</p>
+                    <p className="text-white/40 text-xs mb-1">Bestätigt am</p>
                     <p className="text-white">
                       {selectedSubscriber.confirmedAt
                         ? new Date(selectedSubscriber.confirmedAt).toLocaleString('de-DE')
@@ -370,7 +364,7 @@ export default function SubscribersClient({
                     </p>
                   </div>
                   <div>
-                    <p className="text-white/40 text-xs">Letzte Öffnung</p>
+                    <p className="text-white/40 text-xs mb-1">Letzte Öffnung</p>
                     <p className="text-white">
                       {selectedSubscriber.lastOpenAt
                         ? new Date(selectedSubscriber.lastOpenAt).toLocaleString('de-DE')
@@ -378,7 +372,7 @@ export default function SubscribersClient({
                     </p>
                   </div>
                   <div>
-                    <p className="text-white/40 text-xs">Letzter Klick</p>
+                    <p className="text-white/40 text-xs mb-1">Letzter Klick</p>
                     <p className="text-white">
                       {selectedSubscriber.lastClickAt
                         ? new Date(selectedSubscriber.lastClickAt).toLocaleString('de-DE')
@@ -387,21 +381,17 @@ export default function SubscribersClient({
                   </div>
                   {selectedSubscriber.unsubscribedAt && (
                     <div className="col-span-2">
-                      <p className="text-white/40 text-xs">Abgemeldet am</p>
+                      <p className="text-white/40 text-xs mb-1">Abgemeldet am</p>
                       <p className="text-red-400">
                         {new Date(selectedSubscriber.unsubscribedAt).toLocaleString('de-DE')}
                       </p>
                     </div>
                   )}
                 </div>
-              </div>
+              </AdminCard>
 
               {/* Activity History */}
-              <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
-                <h3 className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-4">
-                  Aktivitätshistorie ({selectedSubscriber.activity.length})
-                </h3>
-
+              <AdminCard title={`Aktivitätshistorie (${selectedSubscriber.activity.length})`} padding="md">
                 {selectedSubscriber.activity.length === 0 ? (
                   <p className="text-white/40 text-sm">Keine Aktivität vorhanden</p>
                 ) : (
@@ -434,7 +424,7 @@ export default function SubscribersClient({
                     ))}
                   </div>
                 )}
-              </div>
+              </AdminCard>
 
               {/* Actions */}
               <div className="flex justify-end">

@@ -61,20 +61,20 @@ export default async function EditEventPage({ params }: PageProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <Link
           href="/admin/events"
-          className="inline-flex items-center gap-2 text-sm text-[var(--pepe-t64)] hover:text-[var(--pepe-gold)] mb-4"
+          className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-[#016dca] transition-colors mb-4"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Zuruck zu Events
+          Zurück zu Events
         </Link>
-        <h2 className="text-2xl font-bold text-[var(--pepe-white)]">Event bearbeiten</h2>
-        <p className="text-[var(--pepe-t64)] mt-1">
+        <h1 className="text-xl font-semibold text-white">Event bearbeiten</h1>
+        <p className="text-white/50 mt-1">
           Bearbeiten Sie das Event &quot;{event.title}&quot;.
         </p>
       </div>

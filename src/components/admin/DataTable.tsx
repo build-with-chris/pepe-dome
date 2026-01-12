@@ -174,7 +174,7 @@ export default function DataTable<T extends object>({
     const value = getNestedValue(row, column.accessorKey as string)
 
     if (value === null || value === undefined) {
-      return <span className="text-gray-600">-</span>
+      return <span className="text-white/40">-</span>
     }
 
     return String(value)
@@ -213,7 +213,7 @@ export default function DataTable<T extends object>({
         <div className="flex items-center gap-4">
           <div className="relative flex-1 max-w-sm">
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -234,24 +234,23 @@ export default function DataTable<T extends object>({
             />
           </div>
           {totalItems !== undefined && (
-            <span className="text-sm text-gray-400">
-              {totalItems.toLocaleString('de-DE')} items
+            <span className="text-sm text-white/40">
+              {totalItems.toLocaleString('de-DE')} Einträge
             </span>
           )}
         </div>
       )}
 
       {/* Table */}
-      <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-white/5 border-b border-white/10 hover:bg-white/5">
+            <TableRow className="hover:bg-white/[0.04]">
               {columns.map((column) => (
                 <TableHead
                   key={column.accessorKey as string}
                   className={cn(
-                    'text-gray-400 font-medium',
-                    column.sortable && 'cursor-pointer select-none hover:text-white',
+                    column.sortable && 'cursor-pointer select-none hover:text-white/80',
                     column.hideOnMobile && 'hidden md:table-cell',
                     column.className
                   )}
@@ -264,8 +263,8 @@ export default function DataTable<T extends object>({
                 </TableHead>
               ))}
               {actions && (
-                <TableHead className="text-gray-400 font-medium text-right">
-                  Actions
+                <TableHead className="text-right">
+                  Aktionen
                 </TableHead>
               )}
             </TableRow>
@@ -275,7 +274,7 @@ export default function DataTable<T extends object>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length + (actions ? 1 : 0)}
-                  className="h-24 text-center text-gray-400"
+                  className="h-24 text-center text-white/40"
                 >
                   <div className="flex items-center justify-center gap-2">
                     <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -293,7 +292,7 @@ export default function DataTable<T extends object>({
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    Loading...
+                    Lädt...
                   </div>
                 </TableCell>
               </TableRow>
@@ -301,7 +300,7 @@ export default function DataTable<T extends object>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length + (actions ? 1 : 0)}
-                  className="h-24 text-center text-gray-400"
+                  className="h-24 text-center text-white/40"
                 >
                   {emptyMessage}
                 </TableCell>
@@ -310,10 +309,7 @@ export default function DataTable<T extends object>({
               processedData.map((row) => (
                 <TableRow
                   key={getRowKey(row)}
-                  className={cn(
-                    'border-b border-white/5 hover:bg-white/5 transition-colors',
-                    onRowClick && 'cursor-pointer'
-                  )}
+                  className={cn(onRowClick && 'cursor-pointer')}
                   onClick={() => onRowClick?.(row)}
                 >
                   {columns.map((column) => (
@@ -343,9 +339,9 @@ export default function DataTable<T extends object>({
       {/* Pagination */}
       {totalPages > 1 && onPageChange && (
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-400">
-            Page {page} of {totalPages}
-            {totalItems !== undefined && ` (${totalItems.toLocaleString('de-DE')} total)`}
+          <div className="text-[13px] text-white/40">
+            Seite {page} von {totalPages}
+            {totalItems !== undefined && ` (${totalItems.toLocaleString('de-DE')} gesamt)`}
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -354,7 +350,7 @@ export default function DataTable<T extends object>({
               onClick={() => onPageChange(page - 1)}
               disabled={page <= 1}
             >
-              Previous
+              Zurück
             </Button>
             {/* Page numbers */}
             <div className="flex gap-1">
@@ -376,10 +372,10 @@ export default function DataTable<T extends object>({
                     key={pageNum}
                     onClick={() => onPageChange(pageNum)}
                     className={cn(
-                      'px-3 py-1 rounded-xl text-sm transition-colors',
+                      'px-3 py-1.5 rounded-lg text-[13px] transition-colors',
                       page === pageNum
-                        ? 'bg-[#016dca] text-black font-medium'
-                        : 'bg-white/5 text-white/80 hover:bg-white/10'
+                        ? 'bg-[#016dca] text-white font-medium'
+                        : 'bg-white/[0.04] text-white/60 hover:bg-white/[0.08]'
                     )}
                   >
                     {pageNum}
@@ -393,7 +389,7 @@ export default function DataTable<T extends object>({
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages}
             >
-              Next
+              Weiter
             </Button>
           </div>
         </div>

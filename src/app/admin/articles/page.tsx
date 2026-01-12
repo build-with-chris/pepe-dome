@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import DataTable, { type Column } from '@/components/admin/DataTable'
+import { PageHeader } from '@/components/admin/PageHeader'
+import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -21,13 +23,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { cn } from '@/lib/utils'
 
 /**
  * Articles Admin Page
  *
  * Consistent spacing system:
- * - Section gaps: space-y-8 (32px)
+ * - Section gaps: space-y-6
  * - Filter gaps: gap-4 (16px)
  */
 
@@ -53,7 +54,7 @@ interface PaginatedResponse {
   }
 }
 
-const categories = [
+const ARTICLE_CATEGORIES = [
   'Announcement',
   'News',
   'Feature',
@@ -63,12 +64,6 @@ const categories = [
   'Events',
   'Community',
 ]
-
-const statusColors: Record<string, string> = {
-  DRAFT: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  PUBLISHED: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  ARCHIVED: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-}
 
 export default function ArticlesAdminPage() {
   const router = useRouter()
@@ -135,12 +130,9 @@ export default function ArticlesAdminPage() {
       sortable: true,
       cell: (row) => (
         <div className="flex items-center gap-2">
-          <span className="font-medium">{row.title}</span>
+          <span className="font-medium text-white">{row.title}</span>
           {row.featured && (
-            <Badge
-              variant="outline"
-              className="text-xs bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30"
-            >
+            <Badge variant="outline" className="text-[10px] bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30">
               Featured
             </Badge>
           )}
@@ -152,30 +144,31 @@ export default function ArticlesAdminPage() {
       accessorKey: 'category',
       sortable: true,
       hideOnMobile: true,
+      cell: (row) => <span className="text-white/60">{row.category}</span>,
     },
     {
       header: 'Autor',
       accessorKey: 'author',
       sortable: true,
       hideOnMobile: true,
+      cell: (row) => <span className="text-white/60">{row.author}</span>,
     },
     {
       header: 'Status',
       accessorKey: 'status',
       sortable: true,
-      cell: (row) => (
-        <Badge variant="outline" className={cn('text-xs border', statusColors[row.status])}>
-          {row.status}
-        </Badge>
-      ),
+      cell: (row) => <StatusBadge status={row.status} />,
     },
     {
       header: 'Datum',
       accessorKey: 'publishedAt',
       sortable: true,
       hideOnMobile: true,
-      cell: (row) =>
-        new Date(row.publishedAt || row.createdAt).toLocaleDateString('de-DE'),
+      cell: (row) => (
+        <span className="text-white/60">
+          {new Date(row.publishedAt || row.createdAt).toLocaleDateString('de-DE')}
+        </span>
+      ),
     },
   ]
 
@@ -199,24 +192,22 @@ export default function ArticlesAdminPage() {
   )
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-white">Artikel</h1>
-          <p className="text-white/50 mt-1">
-            {pagination.total} {pagination.total === 1 ? 'Artikel' : 'Artikel'} insgesamt
-          </p>
-        </div>
-        <Link href="/admin/articles/new">
-          <Button variant="primary" size="sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Neuer Artikel
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Artikel"
+        description={`${pagination.total} ${pagination.total === 1 ? 'Artikel' : 'Artikel'} insgesamt`}
+        action={
+          <Link href="/admin/articles/new">
+            <Button variant="primary" size="sm">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Neuer Artikel
+            </Button>
+          </Link>
+        }
+      />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
@@ -238,7 +229,7 @@ export default function ArticlesAdminPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Alle Kategorien</SelectItem>
-            {categories.map((cat) => (
+            {ARTICLE_CATEGORIES.map((cat) => (
               <SelectItem key={cat} value={cat}>
                 {cat}
               </SelectItem>

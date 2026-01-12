@@ -2,6 +2,18 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { PageHeader } from '@/components/admin/PageHeader'
+import { StatsGrid, StatCard } from '@/components/admin/StatsGrid'
+import { AdminCard } from '@/components/admin/AdminCard'
 import { cn } from '@/lib/utils'
 
 interface TestRecipient {
@@ -125,156 +137,131 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
 
   return (
     <div className="space-y-6">
+      {/* Page Header */}
+      <PageHeader
+        title="Test-Empfänger"
+        description="E-Mail-Adressen für Newsletter-Tests verwalten"
+        action={
+          !isAdding ? (
+            <Button variant="primary" size="sm" onClick={() => setIsAdding(true)}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Neuer Empfänger
+            </Button>
+          ) : undefined
+        }
+      />
+
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
-          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Gesamt</p>
-          <p className="text-2xl font-bold text-white">
-            {recipients.length}
-          </p>
-        </div>
-        <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl p-5">
-          <p className="text-[11px] text-white/50 uppercase tracking-wider mb-2">Aktiv</p>
-          <p className="text-2xl font-bold text-emerald-400">
-            {activeCount}
-          </p>
-        </div>
-      </div>
+      <StatsGrid columns={2}>
+        <StatCard label="Gesamt" value={recipients.length} variant="default" />
+        <StatCard label="Aktiv" value={activeCount} variant="success" />
+      </StatsGrid>
 
       {/* Error */}
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
           {error}
         </div>
       )}
 
       {/* Add Form */}
-      {isAdding ? (
-        <form
-          onSubmit={handleAdd}
-          className="p-6 bg-white/[0.02] border border-white/[0.08] rounded-xl space-y-4"
-        >
-          <div>
-            <label className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
-              E-Mail *
-            </label>
-            <input
-              type="email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
-              placeholder="test@example.com"
-              required
-              autoFocus
-            />
-          </div>
-          <div>
-            <label className="block text-[11px] text-white/50 uppercase tracking-wider mb-2">
-              Name (optional)
-            </label>
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
-              placeholder="Test Person"
-            />
-          </div>
-          <div className="flex gap-3 pt-2">
-            <Button type="submit" variant="primary" size="sm" disabled={loading === 'add'}>
-              {loading === 'add' ? 'Speichern...' : 'Hinzufügen'}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsAdding(false)}
-            >
-              Abbrechen
-            </Button>
-          </div>
-        </form>
-      ) : (
-        <Button variant="primary" size="sm" onClick={() => setIsAdding(true)}>
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Neuen Test-Empfänger hinzufügen
-        </Button>
+      {isAdding && (
+        <AdminCard padding="lg">
+          <form onSubmit={handleAdd} className="space-y-4">
+            <div>
+              <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">
+                E-Mail *
+              </label>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
+                placeholder="test@example.com"
+                required
+                autoFocus
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">
+                Name (optional)
+              </label>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white focus:border-[#016dca] focus:outline-none"
+                placeholder="Test Person"
+              />
+            </div>
+            <div className="flex gap-3 pt-2">
+              <Button type="submit" variant="primary" size="sm" disabled={loading === 'add'}>
+                {loading === 'add' ? 'Speichern...' : 'Hinzufügen'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsAdding(false)}
+              >
+                Abbrechen
+              </Button>
+            </div>
+          </form>
+        </AdminCard>
       )}
 
       {/* Recipients Table */}
       <div className="bg-white/[0.02] border border-white/[0.08] rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-white/[0.02]">
-            <tr>
-              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
-                E-Mail
-              </th>
-              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="text-left px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="text-right px-5 py-4 text-[11px] font-semibold text-white/40 uppercase tracking-wider">
-                Aktionen
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/[0.06]">
-            {recipients.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={4}
-                  className="px-5 py-12 text-center text-white/40"
-                >
-                  Keine Test-Empfänger vorhanden
-                </td>
-              </tr>
-            ) : (
-              recipients.map((recipient) => (
-                <tr key={recipient.id} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="px-5 py-4 text-[13px] text-white">
+        {recipients.length === 0 ? (
+          <div className="p-16 text-center">
+            <p className="text-white/40 text-sm">Keine Test-Empfänger vorhanden</p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-white/[0.04]">
+                <TableHead>E-Mail</TableHead>
+                <TableHead className="hidden sm:table-cell">Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Aktionen</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {recipients.map((recipient) => (
+                <TableRow key={recipient.id}>
+                  <TableCell className="text-white font-medium">
                     {recipient.email}
-                  </td>
-                  <td className="px-5 py-4 text-[13px] text-white/60">
+                  </TableCell>
+                  <TableCell className="text-white/60 hidden sm:table-cell">
                     {recipient.name || '-'}
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
                       className={cn(
-                        'px-2.5 py-1 rounded-lg text-[10px] font-medium border',
+                        'text-[10px] border',
                         recipient.isActive
                           ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
                           : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
                       )}
                     >
                       {recipient.isActive ? 'Aktiv' : 'Inaktiv'}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex justify-end gap-2">
-                      <button
-                        onClick={() =>
-                          handleToggleActive(recipient.id, recipient.isActive)
-                        }
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleToggleActive(recipient.id, recipient.isActive)}
                         disabled={loading === recipient.id}
                         className={cn(
-                          'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
                           recipient.isActive
-                            ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
-                            : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                            ? 'text-yellow-400 hover:text-yellow-300'
+                            : 'text-emerald-400 hover:text-emerald-300'
                         )}
                       >
                         {loading === recipient.id
@@ -282,21 +269,23 @@ export default function TestRecipientsClient({ initialRecipients }: Props) {
                           : recipient.isActive
                           ? 'Deaktivieren'
                           : 'Aktivieren'}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleDelete(recipient.id)}
                         disabled={loading === recipient.id}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                        className="text-red-400 hover:text-red-300"
                       >
                         {loading === recipient.id ? '...' : 'Löschen'}
-                      </button>
+                      </Button>
                     </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   )
