@@ -39,9 +39,6 @@ export default function Footer() {
               <Link href="/veranstaltungen" className="block text-white/70 hover:text-white transition-colors text-sm">
                 Events
               </Link>
-              <Link href="/freeman" className="block text-white/70 hover:text-white transition-colors text-sm">
-                Freeman Festival
-              </Link>
               <Link href="/training" className="block text-white/70 hover:text-white transition-colors text-sm">
                 Training
               </Link>
