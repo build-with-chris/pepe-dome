@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface NavigationProps {
-  currentPage?: 'home' | 'veranstaltungen' | 'freeman' | 'training' | 'business' | 'ueber' | 'kontakt' | 'impressum' | 'datenschutz';
+  currentPage?: 'home' | 'veranstaltungen' | 'training' | 'business' | 'ueber' | 'kontakt' | 'impressum' | 'datenschutz';
 }
 
 export default function Navigation({ currentPage = 'home' }: NavigationProps) {
@@ -129,12 +129,6 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
           >
             {t('navigation.contact')}
           </Link>
-          <Link
-            href={getLocalizedPath("/freeman")}
-            className="btn-primary btn-sm"
-          >
-            {t('navigation.freeman')}
-          </Link>
 
           {/* Language Switcher - Direct toggle */}
           <button
@@ -237,13 +231,6 @@ export default function Navigation({ currentPage = 'home' }: NavigationProps) {
               onClick={closeMenu}
             >
               {t('navigation.contact')}
-            </Link>
-            <Link
-              href={getLocalizedPath("/freeman")}
-              className="btn-primary mt-3"
-              onClick={closeMenu}
-            >
-              {t('navigation.freeman')}
             </Link>
           </div>
         </div>

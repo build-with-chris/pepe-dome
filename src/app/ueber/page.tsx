@@ -624,6 +624,34 @@ export default function UeberPage() {
         </div>
       </section>
 
+      {/* Freeman Festival Section */}
+      <section className="py-20 px-6 bg-black/10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              Das war das FreeMan 2025
+            </h2>
+            <p className="text-xl text-white/80 mb-6">
+              Ein Festival der Artistik im Pepe Dome
+            </p>
+          </div>
+          <div className="bg-black/20 border border-white/10 rounded-xl p-8">
+            <p className="text-lg text-white/80 mb-6 leading-relaxed">
+              Vom 14.–16. November 2025 fand das Freeman Festival – Festival der Artistik im Pepe Dome statt. 
+              Internationale Spitzen-Artist:innen zeigten Akrobatik und Entertainment auf Weltklasse-Niveau 
+              als Teil von ZEIT FÜR ZIRKUS 2025.
+            </p>
+            <Link
+              href="/freeman"
+              className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-semibold"
+            >
+              <span>Mehr über das Freeman Festival 2025 erfahren</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">

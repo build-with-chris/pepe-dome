@@ -624,6 +624,34 @@ export default function AboutPageEN() {
         </div>
       </section>
 
+      {/* Freeman Festival Section */}
+      <section className="py-20 px-6 bg-black/10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="display text-3xl md:text-4xl font-bold mb-4">
+              That was FreeMan 2025
+            </h2>
+            <p className="text-xl text-white/80 mb-6">
+              A Festival of Artistry at Pepe Dome
+            </p>
+          </div>
+          <div className="bg-black/20 border border-white/10 rounded-xl p-8">
+            <p className="text-lg text-white/80 mb-6 leading-relaxed">
+              From November 14–16, 2025, the Freeman Festival – Festival of Artistry took place at Pepe Dome. 
+              International top artists showed acrobatics and entertainment at world-class level 
+              as part of ZEIT FÜR ZIRKUS 2025.
+            </p>
+            <Link
+              href="/en/freeman"
+              className="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors font-semibold"
+            >
+              <span>Learn more about Freeman Festival 2025</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">
