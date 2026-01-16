@@ -190,14 +190,24 @@ export default function HomeEN() {
                     </div>
                   ) : (
                     <div className="flex flex-col sm:flex-row gap-4">
-                      <a
-                        href={nextEvent.externalTicketUrl || "/en/kontakt#kontaktformular"}
-                        target={nextEvent.externalTicketUrl ? "_blank" : undefined}
-                        rel={nextEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
-                        className="btn-primary px-8 py-4 text-lg font-semibold"
-                      >
-                        Get Tickets
-                      </a>
+                      {nextEvent.registrationEmail ? (
+                        <a
+                          href={`mailto:${nextEvent.registrationEmail}?subject=Registration: ${nextEvent.title}`}
+                          className="btn-primary px-8 py-4 text-lg font-semibold inline-flex items-center gap-2"
+                        >
+                          <span>📧</span>
+                          <span>Register via Email</span>
+                        </a>
+                      ) : (
+                        <a
+                          href={nextEvent.externalTicketUrl || "/en/kontakt#kontaktformular"}
+                          target={nextEvent.externalTicketUrl ? "_blank" : undefined}
+                          rel={nextEvent.externalTicketUrl ? "noopener noreferrer" : undefined}
+                          className="btn-primary px-8 py-4 text-lg font-semibold"
+                        >
+                          Get Tickets
+                        </a>
+                      )}
                       <div className="flex flex-col items-center justify-center text-white/70 text-sm">
                         <div className="flex items-center gap-1 mb-1">
                           📅 {nextEvent.time}

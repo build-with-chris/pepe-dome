@@ -504,6 +504,7 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
       { icon: '📧', text: 'Registration: mindmambo@gmail.com' }
     ],
     dateRange: 'JANUARY 31, 2026',
+    registrationEmail: 'mindmambo@gmail.com',
     descriptionPages: [
       'What is Design Thinking?\n\nDesign Thinking is a creative and structured method to develop solutions together for complex questions. The focus is on people and their real needs. Step by step, experiences are made visible, challenges are specified, ideas are developed and initial solution approaches are tested. It is not about perfect concepts, but about practical, everyday impulses that arise from the life world of the participants.',
       'Your Role in the Workshop\n\nAll participants bring their experience from school life and act as experts on the topic of teacher health. In addition, one person from each development team (3-4 people) is recruited as a "user", whose perspective is particularly deepened and included as a representative.\n\nThis means: Not all participants are users - but everyone is an expert.',

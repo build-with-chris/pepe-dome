@@ -1031,33 +1031,52 @@ export default function VeranstaltungenPage() {
                 </div>
               ) : (
                 /* Single Event Layout */
-                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') ? (
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border border-green-400/50 rounded-full text-green-300 font-semibold">
-                      <span>🎁</span>
-                      <span>Kostenlos</span>
+                <div className="space-y-4">
+                  {/* Prominent Email Registration CTA */}
+                  {selectedEventData.registrationEmail ? (
+                    <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400/50 rounded-xl p-6 text-center">
+                      <h3 className="text-xl font-bold text-white mb-2">📧 Anmeldung per E-Mail</h3>
+                      <p className="text-white/80 mb-4 text-sm">
+                        Melden Sie sich direkt per E-Mail an:
+                      </p>
+                      <a
+                        href={`mailto:${selectedEventData.registrationEmail}?subject=Anmeldung: ${selectedEventData.title}`}
+                        className="inline-flex items-center gap-2 btn-primary px-8 py-4 text-lg font-bold hover:scale-105 transition-transform"
+                      >
+                        <span>📧</span>
+                        <span>Jetzt anmelden: {selectedEventData.registrationEmail}</span>
+                      </a>
                     </div>
-                  ) : selectedEventData.ticketsDisabled ? (
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-500/30 border border-gray-400/50 rounded-full text-gray-300 font-semibold opacity-50 cursor-not-allowed">
-                      <span>🎫</span>
-                      <span>Tickets bald verfügbar</span>
-                    </div>
-                  ) : (
-                  <a
-                    href={selectedEventData.externalTicketUrl || "/kontakt#kontaktformular"}
-                    target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
-                    rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
-                    className="btn-primary px-8 py-4 text-lg font-semibold"
-                  >
-                    {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') || selectedEventData.price?.toLowerCase().includes('eintritt frei') ? 'Anmelden' : 'Tickets kaufen'}
-                  </a>
-                  )}
-                  <div className="text-white/70">
-                    <div className="flex items-center gap-2 mb-1 text-sm">
-                      📅 {selectedEventData.time}
-                    </div>
-                    <div className="text-sm">
-                      {getEventPrice(selectedEventData.price || '')}
+                  ) : null}
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') ? (
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/30 to-emerald-500/30 border border-green-400/50 rounded-full text-green-300 font-semibold">
+                        <span>🎁</span>
+                        <span>Kostenlos</span>
+                      </div>
+                    ) : selectedEventData.ticketsDisabled ? (
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-500/30 border border-gray-400/50 rounded-full text-gray-300 font-semibold opacity-50 cursor-not-allowed">
+                        <span>🎫</span>
+                        <span>Tickets bald verfügbar</span>
+                      </div>
+                    ) : !selectedEventData.registrationEmail ? (
+                      <a
+                        href={selectedEventData.externalTicketUrl || "/kontakt#kontaktformular"}
+                        target={selectedEventData.externalTicketUrl ? "_blank" : undefined}
+                        rel={selectedEventData.externalTicketUrl ? "noopener noreferrer" : undefined}
+                        className="btn-primary px-8 py-4 text-lg font-semibold"
+                      >
+                        {selectedEventData.price?.toLowerCase().includes('kostenlos') || selectedEventData.price?.toLowerCase().includes('free') || selectedEventData.price?.toLowerCase().includes('eintritt frei') ? 'Anmelden' : 'Tickets kaufen'}
+                      </a>
+                    ) : null}
+                    <div className="text-white/70">
+                      <div className="flex items-center gap-2 mb-1 text-sm">
+                        📅 {selectedEventData.time}
+                      </div>
+                      <div className="text-sm">
+                        {getEventPrice(selectedEventData.price || '')}
+                      </div>
                     </div>
                   </div>
                 </div>

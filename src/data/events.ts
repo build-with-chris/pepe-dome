@@ -74,6 +74,7 @@ export interface Event {
   ticketsDisabled?: boolean;
   isOneDay?: boolean;
   descriptionPages?: string[]; // Additional description pages for pagination
+  registrationEmail?: string; // Email address for registration (shows as prominent CTA)
   freemanShows?: Array<{
     day: string;
     date: string;
@@ -927,6 +928,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       'Ihre Rolle im Workshop\n\nAlle Teilnehmenden bringen ihre Erfahrung aus dem Schulalltag ein und wirken als Expertinnen und Experten für das Thema Lehrergesundheit. Zusätzlich wird aus jedem Entwicklungsteam (3–4 Personen) jeweils eine Person als „User" rekrutiert, deren Perspektive stellvertretend besonders vertieft einbezogen wird.\n\nDas bedeutet: Nicht alle Teilnehmenden sind User – aber alle sind Expertinnen und Experten.',
       'Weitere Informationen\n\nDie Teilnahme ist kostenlos, da der Workshop im Rahmen einer wissenschaftlichen Abschlussarbeit durchgeführt wird.\n\nBei Fragen oder Interesse wenden Sie sich bitte an Sigrid Grün: mindmambo@gmail.com\n\nWir freuen uns auf Ihre Erfahrung, Ihre Perspektive und Ihre Ideen - und darauf, gemeinsam in einem besonderen Raum neue Wege für mehr Gesundheit und Resilienz im Lehrerberuf zu entwickeln. Manchmal braucht es einen ungewöhnlichen Ort, um das Gewohnte neu zu denken.'
     ],
+    registrationEmail: 'mindmambo@gmail.com',
     isOneDay: true
   }
 ];
