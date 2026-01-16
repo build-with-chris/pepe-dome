@@ -73,6 +73,7 @@ export interface Event {
   externalTicketUrl?: string;
   ticketsDisabled?: boolean;
   isOneDay?: boolean;
+  descriptionPages?: string[]; // Additional description pages for pagination
   freemanShows?: Array<{
     day: string;
     date: string;
@@ -897,6 +898,36 @@ const rawEvents: Omit<Event, 'status'>[] = [
     ],
     externalTicketUrl: '',
     isOneDay: false
+  },
+  {
+    id: 'design-thinking-lehrergesundheit',
+    title: 'Design-Thinking-Workshop „Lehrergesundheit"',
+    subtitle: 'Ein Zirkus als Denkraum für neue Perspektiven',
+    description: 'Liebe Lehrerinnen und Lehrer,\n\nder Schulalltag verlangt viel von Lehrkräften: Sie jonglieren täglich mit Unterricht, Verantwortung, Beziehungen und Erwartungen. Oft bleibt dabei wenig Raum, Gesundheit und Wohlbefinden bewusst in den Blick zu nehmen. Genau hier setzt unser Design-Thinking-Workshop zum Thema Lehrergesundheit an, zu dem wir Sie herzlich einladen.\n\n📅 Samstag, den 31. Januar, 14-17.30 Uhr\n📍 Pepe Dome, Ostpark München\n\nDer Workshop findet bewusst in einem Zirkuszelt statt. Der Zirkus dient dabei als Denkraum, der Abstand zum gewohnten Schulkontext schafft und neue Perspektiven ermöglicht. Als Sinnbild für den Lehrerberuf - Balance halten, flexibel reagieren, vieles gleichzeitig im Blick haben - macht er Komplexität sichtbar, ohne zu bewerten. Gleichzeitig lädt dieser ungewöhnliche Ort dazu ein, gewohnte Denkmuster zu verlassen, spielerischer zu denken und neue Lösungswege zu erkunden.',
+    date: '2026-01-31',
+    dateRange: '31. JANUAR 2026',
+    time: '14:00-17:30 Uhr',
+    price: 'Kostenlos (im Rahmen einer wissenschaftlichen Abschlussarbeit)',
+    features: [
+      { icon: '🎪', text: 'Workshop in einem Zirkuszelt als Denkraum' },
+      { icon: '💡', text: 'Design Thinking Methode für komplexe Fragestellungen' },
+      { icon: '🤝', text: 'Gemeinsame Lösungsentwicklung im Team' },
+      { icon: '🎁', text: 'Kostenlose Teilnahme' },
+      { icon: '📧', text: 'Anmeldung: mindmambo@gmail.com' }
+    ],
+    category: 'workshop',
+    color: {
+      primary: 'emerald-500',
+      secondary: 'teal-500',
+      accent: 'emerald-400'
+    },
+    emoji: '💡',
+    descriptionPages: [
+      'Was ist Design Thinking?\n\nDesign Thinking ist eine kreative und strukturierte Methode, um gemeinsam Lösungen für komplexe Fragestellungen zu entwickeln. Im Mittelpunkt stehen die Menschen und ihre realen Bedürfnisse. Schritt für Schritt werden Erfahrungen sichtbar gemacht, Herausforderungen präzisiert, Ideen entwickelt und erste Lösungsansätze erprobt. Dabei geht es nicht um perfekte Konzepte, sondern um praxisnahe, alltagstaugliche Impulse, die aus der Lebenswelt der Beteiligten entstehen.',
+      'Ihre Rolle im Workshop\n\nAlle Teilnehmenden bringen ihre Erfahrung aus dem Schulalltag ein und wirken als Expertinnen und Experten für das Thema Lehrergesundheit. Zusätzlich wird aus jedem Entwicklungsteam (3–4 Personen) jeweils eine Person als „User" rekrutiert, deren Perspektive stellvertretend besonders vertieft einbezogen wird.\n\nDas bedeutet: Nicht alle Teilnehmenden sind User – aber alle sind Expertinnen und Experten.',
+      'Weitere Informationen\n\nDie Teilnahme ist kostenlos, da der Workshop im Rahmen einer wissenschaftlichen Abschlussarbeit durchgeführt wird.\n\nBei Fragen oder Interesse wenden Sie sich bitte an Sigrid Grün: mindmambo@gmail.com\n\nWir freuen uns auf Ihre Erfahrung, Ihre Perspektive und Ihre Ideen - und darauf, gemeinsam in einem besonderen Raum neue Wege für mehr Gesundheit und Resilienz im Lehrerberuf zu entwickeln. Manchmal braucht es einen ungewöhnlichen Ort, um das Gewohnte neu zu denken.'
+    ],
+    isOneDay: true
   }
 ];
 

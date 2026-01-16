@@ -317,8 +317,11 @@ export default function HomeEN() {
               <p className="text-xl text-white/80 mb-6">
                 We are taking a short winter break until March
               </p>
+              <p className="text-lg text-white/70 mb-4">
+                Currently no shows are taking place, but other events like workshops are still possible.
+              </p>
               <p className="text-lg text-white/70">
-                Starting in March, we&apos;ll be back with exciting events at Pepe Dome!
+                Starting in March, we&apos;ll be back with exciting shows at Pepe Dome!
               </p>
             </div>
             <Link

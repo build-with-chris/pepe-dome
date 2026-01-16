@@ -12,6 +12,7 @@ export default function EventDetailPage() {
   const eventId = params.eventId as string;
   const event = getEventById(eventId);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
+  const [descriptionPage, setDescriptionPage] = useState<number>(0);
   const [expandedTalks, setExpandedTalks] = useState<Set<string>>(new Set());
   const [expandedShows, setExpandedShows] = useState<Set<string>>(new Set());
   const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
@@ -191,24 +192,84 @@ export default function EventDetailPage() {
 
             {/* Event Content */}
             <div className="event-modal-content p-6 md:p-8">
-              {/* Desktop: Full description, Mobile: Truncated */}
-              <p className="event-modal-description">
-                <span className="hidden md:block">{event.description}</span>
-                <span className="md:hidden">
-                  {isDescriptionExpanded
-                    ? event.description
-                    : getTruncatedDescription(event.description)
-                  }
-                  {event.description.length > 150 && (
-                    <button
-                      onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                      className="event-description-toggle"
-                    >
-                      {isDescriptionExpanded ? '👆 Weniger anzeigen' : '👇 Weiterlesen'}
-                    </button>
-                  )}
-                </span>
-              </p>
+              {/* Description with pagination support */}
+              {event.descriptionPages && event.descriptionPages.length > 0 ? (
+                <div className="event-modal-description">
+                  {/* Main description */}
+                  <p className="mb-4">{event.description}</p>
+                  
+                  {/* Pagination for additional pages */}
+                  <div className="mt-6 space-y-4">
+                    <div className="bg-black/20 border border-white/10 rounded-lg p-4">
+                      <p className="text-white/80 whitespace-pre-line leading-relaxed">
+                        {event.descriptionPages[descriptionPage]}
+                      </p>
+                    </div>
+                    
+                    {/* Pagination controls */}
+                    {event.descriptionPages.length > 1 && (
+                      <div className="flex items-center justify-between gap-4">
+                        <button
+                          onClick={() => setDescriptionPage(Math.max(0, descriptionPage - 1))}
+                          disabled={descriptionPage === 0}
+                          className={`px-4 py-2 rounded-lg border transition-colors ${
+                            descriptionPage === 0
+                              ? 'border-white/20 text-white/40 cursor-not-allowed'
+                              : 'border-white/30 text-white/80 hover:border-white/50 hover:text-white'
+                          }`}
+                        >
+                          ← Zurück
+                        </button>
+                        
+                        <div className="flex gap-2">
+                          {event.descriptionPages.map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setDescriptionPage(index)}
+                              className={`w-2 h-2 rounded-full transition-all ${
+                                index === descriptionPage
+                                  ? 'bg-yellow-400 w-6'
+                                  : 'bg-white/30 hover:bg-white/50'
+                              }`}
+                              aria-label={`Seite ${index + 1}`}
+                            />
+                          ))}
+                        </div>
+                        
+                        <button
+                          onClick={() => setDescriptionPage(Math.min((event.descriptionPages?.length ?? 1) - 1, descriptionPage + 1))}
+                          disabled={descriptionPage === (event.descriptionPages?.length ?? 1) - 1}
+                          className={`px-4 py-2 rounded-lg border transition-colors ${
+                            descriptionPage === (event.descriptionPages?.length ?? 1) - 1
+                              ? 'border-white/20 text-white/40 cursor-not-allowed'
+                              : 'border-white/30 text-white/80 hover:border-white/50 hover:text-white'
+                          }`}
+                        >
+                          Weiter →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <p className="event-modal-description">
+                  <span className="hidden md:block">{event.description}</span>
+                  <span className="md:hidden">
+                    {isDescriptionExpanded
+                      ? event.description
+                      : getTruncatedDescription(event.description)
+                    }
+                    {event.description.length > 150 && (
+                      <button
+                        onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                        className="event-description-toggle"
+                      >
+                        {isDescriptionExpanded ? '👆 Weniger anzeigen' : '👇 Weiterlesen'}
+                      </button>
+                    )}
+                  </span>
+                </p>
+              )}
 
               {/* Video */}
               {event.video && (

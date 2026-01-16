@@ -489,6 +489,26 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
         ticketUrl: 'https://rausgegangen.de/events/facets-of-the-world-from-nature-to-composition-26-werke-von--3/',
       }
     ]
+  },
+  'design-thinking-lehrergesundheit': {
+    title: 'Design Thinking Workshop "Teacher Health"',
+    subtitle: 'A Circus as a Thinking Space for New Perspectives',
+    description: 'Dear Teachers,\n\nSchool life demands a lot from teachers: You juggle daily with teaching, responsibility, relationships and expectations. Often there is little room to consciously focus on health and well-being. This is exactly where our Design Thinking workshop on teacher health comes in, to which we cordially invite you.\n\n📅 Saturday, January 31, 2-5:30 PM\n📍 Pepe Dome, Ostpark Munich\n\nThe workshop is deliberately held in a circus tent. The circus serves as a thinking space that creates distance from the familiar school context and enables new perspectives. As a symbol for the teaching profession - maintaining balance, reacting flexibly, keeping many things in view at the same time - it makes complexity visible without judging. At the same time, this unusual place invites you to leave familiar thought patterns, think more playfully and explore new solution paths.',
+    time: '2:00-5:30 PM',
+    price: 'Free (as part of a scientific thesis)',
+    features: [
+      { icon: '🎪', text: 'Workshop in a circus tent as a thinking space' },
+      { icon: '💡', text: 'Design Thinking method for complex questions' },
+      { icon: '🤝', text: 'Joint solution development in teams' },
+      { icon: '🎁', text: 'Free participation' },
+      { icon: '📧', text: 'Registration: mindmambo@gmail.com' }
+    ],
+    dateRange: 'JANUARY 31, 2026',
+    descriptionPages: [
+      'What is Design Thinking?\n\nDesign Thinking is a creative and structured method to develop solutions together for complex questions. The focus is on people and their real needs. Step by step, experiences are made visible, challenges are specified, ideas are developed and initial solution approaches are tested. It is not about perfect concepts, but about practical, everyday impulses that arise from the life world of the participants.',
+      'Your Role in the Workshop\n\nAll participants bring their experience from school life and act as experts on the topic of teacher health. In addition, one person from each development team (3-4 people) is recruited as a "user", whose perspective is particularly deepened and included as a representative.\n\nThis means: Not all participants are users - but everyone is an expert.',
+      'Further Information\n\nParticipation is free, as the workshop is conducted as part of a scientific thesis.\n\nFor questions or interest, please contact Sigrid Grün: mindmambo@gmail.com\n\nWe look forward to your experience, your perspective and your ideas - and to developing new paths together in a special space for more health and resilience in the teaching profession. Sometimes it takes an unusual place to rethink the familiar.'
+    ]
   }
 };
 

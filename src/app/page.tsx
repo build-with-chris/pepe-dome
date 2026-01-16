@@ -340,8 +340,11 @@ export default function Home() {
               <p className="text-xl text-white/80 mb-6">
                 Wir machen eine kleine Winterpause bis März
               </p>
+              <p className="text-lg text-white/70 mb-4">
+                Aktuell finden keine Shows statt, aber andere Veranstaltungen wie Workshops und Events sind weiterhin möglich.
+              </p>
               <p className="text-lg text-white/70">
-                Ab März geht es wieder los mit spannenden Veranstaltungen im Pepe Dome!
+                Ab März geht es wieder los mit spannenden Shows im Pepe Dome!
               </p>
             </div>
             <Link
