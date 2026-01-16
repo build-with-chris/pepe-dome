@@ -923,6 +923,7 @@ const rawEvents: Omit<Event, 'status'>[] = [
       accent: 'emerald-400'
     },
     emoji: '💡',
+    image: '/Design Thinking.jpeg',
     descriptionPages: [
       'Was ist Design Thinking?\n\nDesign Thinking ist eine kreative und strukturierte Methode, um gemeinsam Lösungen für komplexe Fragestellungen zu entwickeln. Im Mittelpunkt stehen die Menschen und ihre realen Bedürfnisse. Schritt für Schritt werden Erfahrungen sichtbar gemacht, Herausforderungen präzisiert, Ideen entwickelt und erste Lösungsansätze erprobt. Dabei geht es nicht um perfekte Konzepte, sondern um praxisnahe, alltagstaugliche Impulse, die aus der Lebenswelt der Beteiligten entstehen.',
       'Ihre Rolle im Workshop\n\nAlle Teilnehmenden bringen ihre Erfahrung aus dem Schulalltag ein und wirken als Expertinnen und Experten für das Thema Lehrergesundheit. Zusätzlich wird aus jedem Entwicklungsteam (3–4 Personen) jeweils eine Person als „User" rekrutiert, deren Perspektive stellvertretend besonders vertieft einbezogen wird.\n\nDas bedeutet: Nicht alle Teilnehmenden sind User – aber alle sind Expertinnen und Experten.',
