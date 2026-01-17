@@ -429,6 +429,34 @@ export const eventTranslationsEN: Record<string, Partial<Event>> = {
     ],
     dateRange: 'DECEMBER 28, 2025'
   },
+  'circus-poetry-feb-27': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature Meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: '6:00 PM • Duration: 1 hour',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini, and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'FEBRUARY 27, 2026'
+  },
+  'circus-poetry-feb-28': {
+    title: 'Circus & Poetry',
+    subtitle: 'Literature Meets Artistry',
+    description: 'A poetic evening that blurs boundaries: Circus & Poetry combines classical literature with modern circus art, creating an experience full of poetry, movement, and emotion. Poems by Rainer Maria Rilke, a touching adaptation by Antoine de Saint-Exupéry, and impressive artistry by Elefteria and Chris merge into a sensual overall composition. Between words and body art, a space emerges where language flies and artistry tells stories. Sigrid Grün, Julian Bellini, and Michael Heiduk give voice and soul to the texts, while Elefteria and Chris transform the stage into a poetic circus with excerpts from their current creation.',
+    time: '6:00 PM • Duration: 1 hour',
+    price: 'Tickets available',
+    features: [
+      { icon: '📖', text: 'Poems by Rainer Maria Rilke and Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Performed by Sigrid Grün, Julian Bellini, and Michael Heiduk' },
+      { icon: '🤸', text: 'Artistry by Elefteria and Chris' },
+      { icon: '✨', text: 'Poetic circus art full of movement and emotion' }
+    ],
+    dateRange: 'FEBRUARY 28, 2026'
+  },
   'outta-space-sylvester': {
     title: 'Outta Space Party Service',
     subtitle: 'New Year\'s Eve with Breakdance Crew',

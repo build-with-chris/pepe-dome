@@ -776,6 +776,56 @@ const rawEvents: Omit<Event, 'status'>[] = [
     isOneDay: true
   },
   {
+    id: 'circus-poetry-feb-27',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2026-02-27',
+    dateRange: '27. FEBRUAR 2026',
+    time: '18:00 Uhr • Dauer: 1 Stunde',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/Circus & Poetry 2.webp',
+    isOneDay: true
+  },
+  {
+    id: 'circus-poetry-feb-28',
+    title: 'Circus & Poetry',
+    subtitle: 'Literatur trifft Artistik',
+    description: 'Ein poetischer Abend, der Grenzen verschwimmen lässt: Circus & Poetry verbindet klassische Literatur mit moderner Zirkuskunst und schafft ein Erlebnis voller Poesie, Bewegung und Emotion. Gedichte von Rainer Maria Rilke, eine berührende Adaption von Antoine de Saint-Exupéry und eindrucksvolle Artistik von Elefteria und Chris verschmelzen zu einer sinnlichen Gesamtkomposition. Zwischen Worten und Körperkunst entsteht ein Raum, in dem Sprache fliegt und Artistik erzählt. Sigrid Grün, Julian Bellini und Michael Heiduk verleihen den Texten Stimme und Seele, während Elefteria und Chris mit Auszügen aus ihrer aktuellen Kreation die Bühne in einen poetischen Zirkus verwandeln.',
+    date: '2026-02-28',
+    dateRange: '28. FEBRUAR 2026',
+    time: '18:00 Uhr • Dauer: 1 Stunde',
+    price: 'Tickets verfügbar',
+    features: [
+      { icon: '📖', text: 'Gedichte von Rainer Maria Rilke und Antoine de Saint-Exupéry' },
+      { icon: '🎭', text: 'Vorgetragen von Sigrid Grün, Julian Bellini und Michael Heiduk' },
+      { icon: '🤸', text: 'Artistik von Elefteria und Chris' },
+      { icon: '✨', text: 'Poetische Zirkuskunst voller Bewegung und Emotion' }
+    ],
+    category: 'performance',
+    color: {
+      primary: 'violet-500',
+      secondary: 'purple-500',
+      accent: 'violet-400'
+    },
+    emoji: '📖',
+    image: '/Circus & Poetry 2.webp',
+    isOneDay: true
+  },
+  {
     id: 'circus-poetry-sep',
     title: 'Circus & Poetry',
     subtitle: 'Literatur trifft Artistik',
