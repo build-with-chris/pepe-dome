@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Outfit, Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import Script from 'next/script'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { getSiteContent } from '@/lib/data'
@@ -38,6 +39,20 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
+        <head>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-CGE01LR2LC"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-CGE01LR2LC');
+            `}
+          </Script>
+        </head>
         <body className="antialiased">
           <ConditionalLayout>
             {children}
