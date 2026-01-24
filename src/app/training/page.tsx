@@ -53,17 +53,18 @@ export default function TrainingPage() {
         title="Training & Kurse"
         subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome - für alle Levels"
         size="md"
+        dotCloudIcon="training"
       />
 
       {/* Intro Section */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-32">
         <div className="stage-container">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-8">
                 Professionelles Training in einzigartiger Atmosphäre
               </h2>
-              <p className="text-lg text-[var(--pepe-t80)] mb-6 leading-relaxed">
+              <p className="text-lg text-[var(--pepe-t80)] mb-8 leading-relaxed">
                 Im Pepe Dome bieten wir tägliches Profitraining und strukturierte Kurse für alle
                 Erfahrungsstufen. Die geodätische Kuppel mit 8,5 Metern Deckenhöhe bietet optimale
                 Bedingungen für Luftakrobatik und Bodenarbeit.
@@ -100,13 +101,13 @@ export default function TrainingPage() {
       </section>
 
       {/* Profitraining */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <span className="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-8">
               Täglich 10:00 - 14:00 Uhr
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-5">
               Profitraining
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg">
@@ -119,30 +120,30 @@ export default function TrainingPage() {
       </section>
 
       {/* Disciplines */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-32">
         <div className="stage-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               Unsere Disziplinen
             </h2>
-            <p className="text-[var(--pepe-t64)] max-w-2xl mx-auto">
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
               Von Luftakrobatik bis Bodenarbeit - entdecke die Vielfalt zeitgenössischer Zirkuskunst.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {disciplines.map((discipline, index) => (
               <div
                 key={index}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 text-center hover:border-[var(--pepe-gold)] transition-all duration-300"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
               >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
                   <span className="text-3xl">{discipline.icon}</span>
                 </div>
-                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-4">
                   {discipline.name}
                 </h3>
-                <p className="text-[var(--pepe-t64)] text-sm">
+                <p className="text-[var(--pepe-t64)] leading-relaxed">
                   {discipline.description}
                 </p>
               </div>
@@ -152,62 +153,62 @@ export default function TrainingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
+      <section className="py-20 md:py-32 bg-[var(--pepe-ink)]">
         <div className="stage-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               Preise
             </h2>
-            <p className="text-[var(--pepe-t64)] max-w-2xl mx-auto">
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
               Flexible Optionen für jeden Trainingsbedarf - von der Schnupperstunde bis zur 20er-Karte.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Non-Aerial Pricing */}
-            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-xl p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-10 text-center">
                 Boden-Kurse
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {pricingNonAerial.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-3 border-b border-[var(--pepe-line)] last:border-0"
+                    className="flex items-center justify-between py-5 border-b border-[var(--pepe-line)] last:border-0"
                   >
                     <div>
                       <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm">{item.description}</p>
+                      <p className="text-[var(--pepe-t48)] text-sm mt-2">{item.description}</p>
                     </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg">{item.price}</span>
+                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4">{item.price}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Aerial Pricing */}
-            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-xl p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-10 text-center">
                 Aerial-Kurse
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {pricingAerial.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-3 border-b border-[var(--pepe-line)] last:border-0"
+                    className="flex items-center justify-between py-5 border-b border-[var(--pepe-line)] last:border-0"
                   >
                     <div>
                       <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm">{item.description}</p>
+                      <p className="text-[var(--pepe-t48)] text-sm mt-2">{item.description}</p>
                     </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg">{item.price}</span>
+                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4">{item.price}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-12">
             <a
               href="https://www.eversports.de/s/pepe-dome"
               target="_blank"
@@ -222,53 +223,53 @@ export default function TrainingPage() {
       </section>
 
       {/* Facility Features */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-32">
         <div className="stage-container">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="order-2 lg:order-1">
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-10">
                 Einzigartige Location
               </h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">📐</span>
+              <div className="space-y-8">
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[var(--pepe-gold)] text-xl">📐</span>
                   </div>
                   <div>
-                    <h4 className="text-[var(--pepe-white)] font-semibold mb-1">8,5 Meter Deckenhöhe</h4>
-                    <p className="text-[var(--pepe-t64)] text-sm">Optimale Bedingungen für Luftakrobatik aller Art.</p>
+                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">8,5 Meter Deckenhöhe</h4>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Optimale Bedingungen für Luftakrobatik aller Art.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">🔊</span>
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[var(--pepe-gold)] text-xl">🔊</span>
                   </div>
                   <div>
-                    <h4 className="text-[var(--pepe-white)] font-semibold mb-1">Perfekte Akustik</h4>
-                    <p className="text-[var(--pepe-t64)] text-sm">Die geodätische Kuppelform sorgt für optimale Klangverteilung.</p>
+                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Perfekte Akustik</h4>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Die geodätische Kuppelform sorgt für optimale Klangverteilung.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">🌳</span>
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[var(--pepe-gold)] text-xl">🌳</span>
                   </div>
                   <div>
-                    <h4 className="text-[var(--pepe-white)] font-semibold mb-1">Grüne Oase</h4>
-                    <p className="text-[var(--pepe-t64)] text-sm">Im Ostpark München - Training im Grünen.</p>
+                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Grüne Oase</h4>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Im Ostpark München - Training im Grünen.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">♿</span>
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[var(--pepe-gold)] text-xl">♿</span>
                   </div>
                   <div>
-                    <h4 className="text-[var(--pepe-white)] font-semibold mb-1">Barrierefreier Zugang</h4>
-                    <p className="text-[var(--pepe-t64)] text-sm">Vollständig zugänglich für alle.</p>
+                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Barrierefreier Zugang</h4>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Vollständig zugänglich für alle.</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="relative h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] order-1 lg:order-2">
+            <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] order-1 lg:order-2">
               <Image
                 src="/TheDome.png"
                 alt="Pepe Dome Interior"
@@ -282,13 +283,18 @@ export default function TrainingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+            {/* Decorative Icon */}
+            <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+              <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#127947;</span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               Bereit für dein erstes Training?
             </h2>
-            <p className="text-[var(--pepe-t80)] text-lg mb-8">
+            <p className="text-[var(--pepe-t80)] text-lg mb-12">
               Buche jetzt deine Schnupperstunde und entdecke die Welt der zeitgenössischen Zirkuskunst.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

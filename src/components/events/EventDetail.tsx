@@ -8,6 +8,7 @@ import { formatDate, getCategoryClasses } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 import EventCard from './EventCard'
+import { MarkdownText } from '@/components/ui/MarkdownText'
 import SignupForm from '@/components/newsletter/SignupForm'
 
 // Flexible event type that works with both JSON and DB data
@@ -94,9 +95,7 @@ export default function EventDetail({ event }: EventDetailProps) {
 
             {/* Description */}
             <div className="prose prose-invert prose-lg max-w-none mb-8">
-              <p className="body-lg">
-                {event.description}
-              </p>
+              <MarkdownText content={event.description} className="body-lg space-y-4" />
             </div>
 
             {/* Highlights */}

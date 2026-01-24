@@ -12,6 +12,7 @@
 @import '../styling/card-components.css';
 @import '../styling/animations.css';
 @import '../styling/particles.css';
+@import '../styling/dotcloud.css';
 
 /* ===== shadcn/ui Theme Variables ===== */
 /* Maps shadcn semantic colors to pepe design tokens */
@@ -52,6 +53,7 @@
 }
 
 /* ===== Base Reset ===== */
+@layer base {
 * {
   box-sizing: border-box;
   margin: 0;
@@ -71,9 +73,10 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
 }
+}
 
 /* ===== Layout System ===== */
-
+@layer base {
 /* Public site main - padding for fixed navbar */
 main {
   padding-top: 80px; /* Navbar height */
@@ -88,8 +91,10 @@ main {
   padding: 0 clamp(var(--space-6), 5vw, var(--space-16));
   width: 100%;
 }
+}
 
-/* Page section spacing */
+/* Page section spacing and Bento Grid (legacy classes) */
+@layer components {
 .page-section {
   padding: var(--space-20) 0;
 }
@@ -102,7 +107,6 @@ main {
   padding: var(--space-24) 0 var(--space-20);
 }
 
-/* Content spacing */
 .content-block {
   margin-bottom: var(--space-12);
 }
@@ -128,8 +132,7 @@ main {
   padding: var(--space-12) 0;
 }
 
-/* ===== Bento Grid System ===== */
-
+/* Bento Grid System */
 .bento-grid {
   display: grid;
   gap: var(--space-6);
@@ -165,9 +168,10 @@ main {
     grid-row: span 1;
   }
 }
+}
 
 /* ===== Accessibility ===== */
-
+@layer base {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -184,6 +188,7 @@ main {
   outline: 2px solid var(--pepe-gold);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
 }
 
 /* ===== Tailwind v4 Theme ===== */

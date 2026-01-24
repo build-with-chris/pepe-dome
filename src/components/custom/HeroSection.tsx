@@ -3,6 +3,9 @@
 import { cn } from '@/lib/utils'
 import { HTMLAttributes, ReactNode, forwardRef } from 'react'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+const DotCloudIcon = dynamic(() => import('@/components/ui/DotCloudIcon'), { ssr: false })
 
 /**
  * HeroSection component following PEPE Dome design system
@@ -12,6 +15,7 @@ import Image from 'next/image'
  * - Gold accents
  * - Flexible content area with children prop
  * - Responsive padding
+ * - Optional DotCloud icon for decorative background
  */
 export interface HeroSectionProps extends HTMLAttributes<HTMLElement> {
   /** Main title */
@@ -28,6 +32,10 @@ export interface HeroSectionProps extends HTMLAttributes<HTMLElement> {
   centered?: boolean
   /** Show overlay gradient on background image */
   overlay?: boolean
+  /** Optional DotCloud icon name for decorative background */
+  dotCloudIcon?: string
+  /** DotCloud size override (default: 300) */
+  dotCloudSize?: number
 }
 
 const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
@@ -41,14 +49,16 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       size = 'md',
       centered = true,
       overlay = true,
+      dotCloudIcon,
+      dotCloudSize,
       ...props
     },
     ref
   ) => {
     const sizeClasses = {
-      sm: 'py-20 md:py-28',
-      md: 'py-28 md:py-36 min-h-[50vh]',
-      lg: 'py-36 md:py-48 min-h-[70vh]',
+      sm: 'py-24 md:py-32',
+      md: 'py-32 md:py-40 min-h-[50vh]',
+      lg: 'py-40 md:py-52 min-h-[70vh]',
     }
 
     return (
@@ -78,11 +88,26 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           </>
         )}
 
+        {/* DotCloud Icon Layer */}
+        {dotCloudIcon && (
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{ zIndex: 1 }}
+          >
+            <DotCloudIcon
+              iconName={dotCloudIcon}
+              size={dotCloudSize ?? 300}
+              noGlow={true}
+              opacity={0.35}
+            />
+          </div>
+        )}
+
         {/* Content Container */}
         <div
           className={cn(
             'relative z-10 stage-container',
-            'flex flex-col gap-6',
+            'flex flex-col gap-8',
             centered && 'items-center text-center'
           )}
         >
@@ -123,7 +148,7 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           {children && (
             <div
               className={cn(
-                'flex flex-wrap gap-4 mt-4',
+                'flex flex-wrap gap-4 mt-6',
                 centered && 'justify-center'
               )}
             >

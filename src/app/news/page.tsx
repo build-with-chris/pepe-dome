@@ -35,16 +35,17 @@ export default async function NewsPage() {
         title="News & Magazin"
         subtitle="Aktuelles aus dem Pepe Dome - Shows, Events, Hintergründe und mehr"
         size="sm"
+        dotCloudIcon="news"
       />
 
-      <div className="stage-container py-20 md:py-28">
+      <div className="stage-container py-20 md:py-32">
         {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 justify-center mb-12">
+        <div className="flex flex-wrap gap-3 justify-center mb-16">
           <button
             className={cn(
-              'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-              'border',
-              'bg-[var(--pepe-gold)] text-[var(--pepe-black)] border-[var(--pepe-gold)]'
+              'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
+              'border backdrop-blur-sm',
+              'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_16px_var(--pepe-gold-glow),0_4px_12px_rgba(0,0,0,0.3)]'
             )}
           >
             Alle
@@ -53,10 +54,10 @@ export default async function NewsPage() {
             <button
               key={cat.id}
               className={cn(
-                'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-                'border',
-                'bg-transparent text-[var(--pepe-t80)] border-[var(--pepe-line)]',
-                'hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)]'
+                'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
+                'border backdrop-blur-sm',
+                'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)]',
+                'hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
               )}
             >
               {cat.label}
@@ -66,7 +67,7 @@ export default async function NewsPage() {
 
         {/* Featured Article (Large) */}
         {featuredArticle && (
-          <div className="mb-12">
+          <div className="mb-16">
             <NewsCard
               title={featuredArticle.title}
               excerpt={featuredArticle.excerpt}
@@ -105,12 +106,15 @@ export default async function NewsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-surface)] flex items-center justify-center">
-              <span className="text-[var(--pepe-t32)] text-3xl">📰</span>
+          <div className="text-center py-20 bg-[var(--pepe-ink)] rounded-2xl border border-[var(--pepe-line)]">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+              <span className="text-[var(--pepe-gold)] text-4xl">&#128240;</span>
             </div>
-            <p className="text-[var(--pepe-t64)] text-lg">
-              Keine weiteren Artikel verfugbar.
+            <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
+              Noch keine Artikel
+            </h3>
+            <p className="text-[var(--pepe-t64)] text-lg max-w-md mx-auto">
+              Hier erscheinen bald spannende News und Geschichten aus dem Pepe Dome.
             </p>
           </div>
         )}

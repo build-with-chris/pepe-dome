@@ -13,6 +13,7 @@ import { getAllEvents, getEventById, getUpcomingEvents } from '@/lib/db-data'
 import { getRecentArticles } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
+import { MarkdownText } from '@/components/ui/MarkdownText'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { cn } from '@/lib/utils'
@@ -124,9 +125,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
 
             {/* Description */}
             <div className="prose prose-invert prose-lg max-w-none mb-8">
-              <p className="text-lg text-[var(--pepe-t80)] leading-relaxed whitespace-pre-wrap">
-                {event.description}
-              </p>
+              <MarkdownText content={event.description} className="text-lg text-[var(--pepe-t80)] leading-relaxed space-y-4" />
             </div>
 
             {/* Highlights */}

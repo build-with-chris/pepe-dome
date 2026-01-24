@@ -356,8 +356,8 @@ export default function ContactPage() {
         </div>
 
         {/* Map Section (Optional) */}
-        <section className="mt-20">
-          <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+        <section className="mt-32 pt-16 border-t border-[var(--pepe-line)]">
+          <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-10 text-center">
             So findest du uns
           </h2>
           <div className="relative h-80 rounded-xl overflow-hidden bg-[var(--pepe-surface)] border border-[var(--pepe-line)]">

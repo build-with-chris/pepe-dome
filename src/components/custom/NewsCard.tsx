@@ -45,9 +45,9 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
   ) => {
     const cardClasses = cn(
       // Base styles
-      'group flex flex-col overflow-hidden rounded-xl',
+      'group flex flex-col overflow-hidden rounded-2xl',
       'bg-[var(--pepe-ink)] border border-[var(--pepe-line)]',
-      'transition-all duration-300',
+      'transition-all duration-300 ease-out',
       // Hover effects
       'hover:border-[var(--pepe-gold)]',
       'hover:-translate-y-1',
@@ -74,7 +74,7 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
               src={image}
               alt={title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-[var(--pepe-t32)]">
@@ -101,7 +101,7 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
         {/* Content Section */}
         <div
           className={cn(
-            'flex flex-col gap-3 p-6',
+            'flex flex-col gap-4 p-6',
             featured && 'md:p-8'
           )}
         >
@@ -127,9 +127,9 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
           {excerpt && (
             <p
               className={cn(
-                'text-sm text-[var(--pepe-t80)] leading-relaxed',
+                'text-[var(--pepe-t80)] leading-relaxed',
                 'line-clamp-3',
-                featured && 'md:line-clamp-4 md:text-base'
+                featured && 'md:line-clamp-4'
               )}
             >
               {excerpt}
@@ -139,8 +139,8 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
           {/* Meta Row - Author and Date */}
           <div
             className={cn(
-              'flex items-center gap-2 mt-auto pt-3',
-              'text-xs text-[var(--pepe-t64)]',
+              'flex items-center gap-3 mt-auto pt-4',
+              'text-sm text-[var(--pepe-t64)]',
               'border-t border-[var(--pepe-line2)]'
             )}
           >

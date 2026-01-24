@@ -140,11 +140,12 @@ export default function EventsPage() {
         title="Event-Kalender"
         subtitle="Entdecke Shows, Workshops, Festivals und mehr im Pepe Dome"
         size="sm"
+        dotCloudIcon="events"
       />
 
-      <div className="stage-container py-20 md:py-28">
+      <div className="stage-container py-20 md:py-32">
         {/* Month Navigation */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] capitalize">
               {monthName}
@@ -168,9 +169,9 @@ export default function EventsPage() {
         </div>
 
         {/* Filters Row */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-16">
           {/* Category Filter (Task 3.2.1) */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {CATEGORIES.map(cat => (
               <button
                 key={cat.id}
@@ -179,11 +180,11 @@ export default function EventsPage() {
                   setVisibleCount(ITEMS_PER_PAGE)
                 }}
                 className={cn(
-                  'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-                  'border',
+                  'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
+                  'border backdrop-blur-sm',
                   selectedCategory === cat.id
-                    ? 'bg-[var(--pepe-gold)] text-[var(--pepe-black)] border-[var(--pepe-gold)]'
-                    : 'bg-transparent text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)]'
+                    ? 'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_16px_var(--pepe-gold-glow),0_4px_12px_rgba(0,0,0,0.3)]'
+                    : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
                 )}
               >
                 {cat.label}
@@ -195,11 +196,11 @@ export default function EventsPage() {
           <button
             onClick={() => setShowPast(!showPast)}
             className={cn(
-              'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-              'border',
+              'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
+              'border backdrop-blur-sm',
               showPast
-                ? 'bg-[var(--pepe-surface)] text-[var(--pepe-white)] border-[var(--pepe-line)]'
-                : 'bg-transparent text-[var(--pepe-t64)] border-[var(--pepe-line)] hover:text-[var(--pepe-t80)]'
+                ? 'bg-[var(--pepe-surface)] text-[var(--pepe-white)] border-[var(--pepe-gold)]/40 shadow-[0_0_8px_var(--pepe-gold-glow)]'
+                : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t64)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/40 hover:text-[var(--pepe-t80)] hover:shadow-[0_0_8px_var(--pepe-gold-glow)]'
             )}
           >
             {showPast ? 'Vergangene ausblenden' : 'Vergangene anzeigen'}
@@ -255,20 +256,23 @@ export default function EventsPage() {
             )}
           </>
         ) : (
-          <div className="text-center py-16 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-surface)] flex items-center justify-center">
-              <span className="text-[var(--pepe-t32)] text-3xl">📅</span>
+          <div className="text-center py-20 bg-[var(--pepe-ink)] rounded-2xl border border-[var(--pepe-line)]">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+              <span className="text-[var(--pepe-gold)] text-4xl">&#128197;</span>
             </div>
-            <p className="text-[var(--pepe-t64)] text-lg mb-4">
-              Keine Events in diesem Monat gefunden.
+            <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
+              Keine Events gefunden
+            </h3>
+            <p className="text-[var(--pepe-t64)] text-lg mb-8 max-w-md mx-auto">
+              In diesem Monat sind keine Events geplant. Schau in einen anderen Monat oder entferne die Filter.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button variant="secondary" onClick={goToToday}>
-                Zuruck zum aktuellen Monat
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="primary" onClick={goToToday}>
+                Aktueller Monat
               </Button>
               {selectedCategory !== 'all' && (
-                <Button variant="ghost" onClick={() => setSelectedCategory('all')}>
-                  Alle Kategorien anzeigen
+                <Button variant="secondary" onClick={() => setSelectedCategory('all')}>
+                  Alle Kategorien
                 </Button>
               )}
             </div>

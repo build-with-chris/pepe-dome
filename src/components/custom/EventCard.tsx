@@ -47,9 +47,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
   ) => {
     const cardClasses = cn(
       // Base styles
-      'group flex overflow-hidden rounded-xl',
+      'group flex overflow-hidden rounded-2xl',
       'bg-[var(--pepe-ink)] border border-[var(--pepe-line)]',
-      'transition-all duration-300',
+      'transition-all duration-300 ease-out',
       // Hover effects
       'hover:border-[var(--pepe-gold)]',
       'hover:-translate-y-1',
@@ -83,7 +83,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               src={image}
               alt={title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-[var(--pepe-t32)]">
@@ -121,7 +121,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
         {/* Content Section */}
         <div
           className={cn(
-            'flex flex-col gap-3',
+            'flex flex-col gap-4',
             compact ? 'p-4 justify-center flex-1' : 'p-6',
             featured && !compact && 'md:p-8'
           )}
@@ -161,9 +161,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
           {description && !compact && (
             <p
               className={cn(
-                'text-sm text-[var(--pepe-t80)] leading-relaxed',
+                'text-[var(--pepe-t80)] leading-relaxed',
                 'line-clamp-3',
-                featured && 'md:line-clamp-4 md:text-base'
+                featured && 'md:line-clamp-4'
               )}
             >
               {description}

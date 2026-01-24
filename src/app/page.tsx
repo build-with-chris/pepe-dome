@@ -16,6 +16,7 @@ import EventCard from '@/components/custom/EventCard'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { Button } from '@/components/ui/Button'
+import HomeDotCloud from '@/components/custom/HomeDotCloud'
 
 export default async function HomePage() {
   const homepage = getHomepageContent()
@@ -54,10 +55,13 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/40 via-transparent to-[var(--pepe-black)]/40" />
         </div>
 
+        {/* DotCloud Icon Layer */}
+        <HomeDotCloud />
+
         <div className="stage-container relative z-10 py-24">
           <div className="max-w-4xl mx-auto text-center">
             {/* Logo */}
-            <div className="mb-8 flex justify-center">
+            <div className="mb-10 flex justify-center">
               <Image
                 src="/PEPE_logos_dome.svg"
                 alt="PEPE Dome Logo"
@@ -69,22 +73,22 @@ export default async function HomePage() {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--pepe-white)] mb-5 leading-tight">
               {homepage.hero.title}
             </h1>
 
             {/* Subtitle / Tagline */}
-            <p className="text-xl md:text-2xl text-[var(--pepe-gold)] font-medium mb-4">
+            <p className="text-xl md:text-2xl text-[var(--pepe-gold)] font-medium mb-5">
               {homepage.hero.subtitle}
             </p>
 
             {/* Description */}
-            <p className="text-lg text-[var(--pepe-t80)] mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-[var(--pepe-t80)] mb-10 max-w-2xl mx-auto leading-relaxed">
               {homepage.hero.description}
             </p>
 
             {/* Decorative Gold Line */}
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full mx-auto mb-8" />
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full mx-auto mb-10" />
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -107,15 +111,15 @@ export default async function HomePage() {
       </section>
 
       {/* ===== Task 3.1.2: Featured Events Section ===== */}
-      <section className="py-20 md:py-28 bg-[var(--pepe-black)]">
+      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
         <div className="stage-container">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
                 Kommende Events
               </h2>
-              <p className="text-[var(--pepe-t64)]">
+              <p className="text-[var(--pepe-t64)] text-lg">
                 Entdecke unsere nachsten Shows, Workshops und Festivals
               </p>
             </div>
@@ -158,15 +162,15 @@ export default async function HomePage() {
       </section>
 
       {/* ===== Task 3.1.3: Latest News Section ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
         <div className="stage-container">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
                 Aktuelles & Highlights
               </h2>
-              <p className="text-[var(--pepe-t64)]">
+              <p className="text-[var(--pepe-t64)] text-lg">
                 News, Backstage Stories und mehr
               </p>
             </div>
@@ -207,30 +211,35 @@ export default async function HomePage() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 md:py-28 bg-[var(--pepe-black)]">
+      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
         <div className="stage-container">
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] text-center mb-14">
-            Was dich erwartet
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              Was dich erwartet
+            </h2>
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
+              Entdecke die Vielfalt des Pepe Dome
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {homepage.features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-8 text-center hover:border-[var(--pepe-gold)] transition-colors duration-300"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
               >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-[var(--pepe-gold)] text-3xl">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                  <span className="text-[var(--pepe-gold)] text-3xl leading-none">
                     {feature.icon === 'show' && '🎭'}
                     {feature.icon === 'training' && '💪'}
                     {feature.icon === 'dome' && '🏛️'}
                     {feature.icon === 'community' && '🤝'}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
+                <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">
+                <p className="text-sm text-[var(--pepe-t64)] leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -240,10 +249,15 @@ export default async function HomePage() {
       </section>
 
       {/* ===== Task 3.1.4: Newsletter CTA Section ===== */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+            {/* Decorative Icon */}
+            <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+              <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#9993;</span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               Bleib auf dem Laufenden
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg mb-10">
