@@ -13,7 +13,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getNewsletterBySlug, getPublishedNewsletters } from '@/lib/newsletters'
+import { getNewsletterBySlug } from '@/lib/newsletters'
 import { getEventById, getNewsBySlug } from '@/lib/data'
 import SignupForm from '@/components/newsletter/SignupForm'
 
@@ -23,20 +23,7 @@ interface NewsletterPageProps {
   }>
 }
 
-/**
- * Task 8.1.5: Generate static params for all sent newsletters
- */
-export async function generateStaticParams() {
-  try {
-    const newsletters = await getPublishedNewsletters()
-    return newsletters.map((newsletter) => ({
-      slug: newsletter.slug,
-    }))
-  } catch (error) {
-    console.error('Failed to generate static params for newsletters:', error)
-    return []
-  }
-}
+export const dynamic = 'force-dynamic'
 
 /**
  * Task 8.1.4: Generate SEO metadata for newsletter

@@ -9,7 +9,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAllEvents, getEventById, getUpcomingEvents } from '@/lib/db-data'
+import { getEventById, getUpcomingEvents } from '@/lib/db-data'
 import { getRecentArticles } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
@@ -18,16 +18,7 @@ import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { cn } from '@/lib/utils'
 
-export async function generateStaticParams() {
-  try {
-    const events = await getAllEvents()
-    return events.map((event) => ({
-      id: event.id,
-    }))
-  } catch {
-    return []
-  }
-}
+export const dynamic = 'force-dynamic'
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

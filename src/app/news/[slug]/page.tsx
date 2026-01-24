@@ -9,7 +9,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAllArticles, getArticleBySlug, getRecentArticles } from '@/lib/db-data'
+import { getArticleBySlug, getRecentArticles } from '@/lib/db-data'
 import { getUpcomingEvents } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
@@ -23,16 +23,7 @@ function getReadingTime(content: string): number {
   return Math.ceil(wordCount / wordsPerMinute)
 }
 
-export async function generateStaticParams() {
-  try {
-    const articles = await getAllArticles()
-    return articles.map((article) => ({
-      slug: article.slug,
-    }))
-  } catch {
-    return []
-  }
-}
+export const dynamic = 'force-dynamic'
 
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

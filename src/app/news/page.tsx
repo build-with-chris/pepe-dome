@@ -15,6 +15,8 @@ import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 export default async function NewsPage() {
   const [allArticles, featuredArticles] = await Promise.all([
     getAllArticles(),

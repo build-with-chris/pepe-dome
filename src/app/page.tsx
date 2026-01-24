@@ -18,6 +18,8 @@ import SignupForm from '@/components/custom/SignupForm'
 import { Button } from '@/components/ui/Button'
 import HomeDotCloud from '@/components/custom/HomeDotCloud'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const homepage = getHomepageContent()
   const [featuredArticles, recentArticles, upcomingEvents, featuredEvents] = await Promise.all([
