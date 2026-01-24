@@ -19,10 +19,14 @@ import SignupForm from '@/components/custom/SignupForm'
 import { cn } from '@/lib/utils'
 
 export async function generateStaticParams() {
-  const events = await getAllEvents()
-  return events.map((event) => ({
-    id: event.id,
-  }))
+  try {
+    const events = await getAllEvents()
+    return events.map((event) => ({
+      id: event.id,
+    }))
+  } catch {
+    return []
+  }
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {

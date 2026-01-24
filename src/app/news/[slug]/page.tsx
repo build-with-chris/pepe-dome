@@ -24,10 +24,14 @@ function getReadingTime(content: string): number {
 }
 
 export async function generateStaticParams() {
-  const articles = await getAllArticles()
-  return articles.map((article) => ({
-    slug: article.slug,
-  }))
+  try {
+    const articles = await getAllArticles()
+    return articles.map((article) => ({
+      slug: article.slug,
+    }))
+  } catch {
+    return []
+  }
 }
 
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
