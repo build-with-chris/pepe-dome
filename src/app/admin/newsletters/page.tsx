@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getNewsletters } from '@/lib/newsletters'
 import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
 import { Button } from '@/components/ui/Button'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatsGrid, StatCard } from '@/components/admin/StatsGrid'

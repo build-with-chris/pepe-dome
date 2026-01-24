@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import ArticleForm from '@/components/admin/forms/ArticleForm'
+
+export const dynamic = 'force-dynamic'
 import { canEdit } from '@/lib/roles.server'
 
 /**

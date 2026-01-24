@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
 import { isSuperAdmin, canEdit } from '@/lib/roles.server'
 import StatsCard, { StatsIcons } from '@/components/admin/StatsCard'
 import { AdminCard } from '@/components/admin/AdminCard'

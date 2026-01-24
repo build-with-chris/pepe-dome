@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { isSuperAdmin } from '@/lib/roles.server'
+
+export const dynamic = 'force-dynamic'
 import TestRecipientsClient from './TestRecipientsClient'
 
 /**

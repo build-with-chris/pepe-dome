@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { getNewsletterWithContent } from '@/lib/newsletters'
+
+export const dynamic = 'force-dynamic'
 import { canEdit, canSendNewsletter, canTestSendNewsletter } from '@/lib/roles.server'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'

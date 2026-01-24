@@ -18,7 +18,7 @@ import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 
-export const revalidate = 3600 // Revalidate every hour
+export const dynamic = 'force-dynamic'
 
 export default async function NewsletterPage() {
   const mockNewsletters = getAllNewsletters()

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { isSuperAdmin } from '@/lib/roles.server'
+
+export const dynamic = 'force-dynamic'
 import { Button } from '@/components/ui/Button'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { StatsGrid, StatCard } from '@/components/admin/StatsGrid'
