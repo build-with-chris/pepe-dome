@@ -3,10 +3,10 @@
  * GET /api/subscribers/confirm?token=xxx
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { confirmSubscriber } from '@/lib/subscribers'
 import { subscriberConfirmSchema } from '@/lib/validation'
-import { errorResponse, validationErrorResponse } from '@/lib/api-response'
+import { validationErrorResponse } from '@/lib/api-response'
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,32 +23,21 @@ export async function GET(request: NextRequest) {
     // Confirm subscriber
     const subscriber = await confirmSubscriber(validation.data.token)
 
-    // TODO: Send welcome email (Phase 4)
     console.log('Subscriber confirmed:', subscriber.email)
 
-    // Redirect to confirmation success page
-    const redirectUrl = new URL(
-      '/newsletter/confirm',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    )
-    redirectUrl.searchParams.set('success', 'true')
-    redirectUrl.searchParams.set('email', subscriber.email)
-
-    return Response.redirect(redirectUrl.toString(), 302)
+    return NextResponse.json({
+      success: true,
+      email: subscriber.email,
+    })
   } catch (error: any) {
     console.error('Confirmation error:', error)
 
-    // Redirect to error page
-    const redirectUrl = new URL(
-      '/newsletter/confirm',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    return NextResponse.json(
+      {
+        success: false,
+        error: { message: error.message || 'Invalid or expired confirmation link' },
+      },
+      { status: 400 }
     )
-    redirectUrl.searchParams.set('success', 'false')
-    redirectUrl.searchParams.set(
-      'error',
-      error.message || 'Invalid or expired confirmation link'
-    )
-
-    return Response.redirect(redirectUrl.toString(), 302)
   }
 }
