@@ -14,6 +14,7 @@ import EventCard from '@/components/custom/EventCard'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
 
 type EventData = {
   id: string
@@ -145,25 +146,28 @@ export default function EventsPage() {
 
       <div className="stage-container py-20 md:py-32">
         {/* Month Navigation */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] capitalize">
-              {monthName}
-            </h2>
-            <p className="text-[var(--pepe-t64)]">
-              {loading ? 'Laden...' : `${filteredEvents.length} ${filteredEvents.length === 1 ? 'Event' : 'Events'} gefunden`}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">
+          <div className="text-center sm:text-left">
+            <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
+              <CalendarIcon className="w-6 h-6 text-[var(--pepe-gold)]" />
+              <h2 className="text-2xl md:text-4xl font-bold text-[var(--pepe-white)] capitalize">
+                {monthName}
+              </h2>
+            </div>
+            <p className="text-[var(--pepe-t64)] text-lg">
+              {loading ? 'Laden...' : `${filteredEvents.length} ${filteredEvents.length === 1 ? 'Event' : 'Events'} im Fokus`}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={goToPreviousMonth}>
-              Zuruck
+          <div className="flex items-center gap-4">
+            <Button variant="secondary" size="icon" onClick={goToPreviousMonth} className="rounded-full w-12 h-12">
+              <ChevronLeft className="w-6 h-6" />
             </Button>
-            <Button variant="secondary" size="sm" onClick={goToToday}>
+            <Button variant="ghost" onClick={goToToday} className="px-6 font-semibold hover:text-[var(--pepe-gold)]">
               Heute
             </Button>
-            <Button variant="ghost" size="sm" onClick={goToNextMonth}>
-              Weiter
+            <Button variant="secondary" size="icon" onClick={goToNextMonth} className="rounded-full w-12 h-12">
+              <ChevronRight className="w-6 h-6" />
             </Button>
           </div>
         </div>

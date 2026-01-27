@@ -32,25 +32,43 @@ const features = [
   { label: 'Kapazität', value: 'Bis zu 200 Personen' },
   { label: 'Deckenhöhe', value: '8,5 Meter' },
   { label: 'Architektur', value: 'Geodätische Kuppel' },
-  { label: 'Barrierefreiheit', value: 'Vollständig zugänglich' },
+  { label: 'Barrierefreiheit', value: 'Barrierearm (mit Begleitperson)' },
 ]
 
 const packages = [
   {
-    name: 'Basic',
-    description: 'Für kleinere Veranstaltungen',
-    features: ['Venue-Miete (4 Std.)', 'Basis-Technik', 'Bestuhlung nach Wahl'],
+    name: 'Basic Event',
+    description: 'Ideal für Meetings, kleine Workshops oder private Feiern im exklusiven Rahmen.',
+    features: [
+      'Exklusive Venue-Miete (4 Std.)',
+      'Basis-Technik (Sound & Standard-Licht)',
+      'Bestuhlung nach Wahl (bis 100 Pers.)',
+      'Betreuung vor Ort',
+      'Barrierearmer Zugang'
+    ],
   },
   {
-    name: 'Premium',
-    description: 'Unser beliebtestes Paket',
-    features: ['Venue-Miete (6 Std.)', 'Full-Service Technik', 'Bestuhlung & Dekoration', 'Show-Performance (30 Min.)'],
+    name: 'Premium Show',
+    description: 'Unser Bestseller für Firmenfeiern mit einem Hauch von Zirkusmagie.',
+    features: [
+      'Exklusive Venue-Miete (6 Std.)',
+      'Full-Service Technik & Operator',
+      'Bestuhlung & Lounge-Bereich',
+      'Show-Performance (30 Min.) inklusive',
+      'Catering-Optionen zubuchbar'
+    ],
     highlighted: true,
   },
   {
-    name: 'Deluxe',
-    description: 'Das Rundum-Sorglos-Paket',
-    features: ['Venue-Miete (ganztägig)', 'Premium-Technik & Licht', 'Komplette Eventplanung', 'Show-Performance (60 Min.)', 'Catering-Koordination'],
+    name: 'Deluxe Production',
+    description: 'Das Full-Service Paket für Großevents, Galas und Produktlaunches.',
+    features: [
+      'Exklusive Venue-Miete (ganztägig)',
+      'Premium Licht- & Sounddesign',
+      'Komplette Eventplanung & Regie',
+      'Maßgeschneiderte Show (60 Min.)',
+      'Catering-Koordination & Service'
+    ],
   },
 ]
 

@@ -50,7 +50,7 @@ export default function TrainingPage() {
     <div className="min-h-screen bg-[var(--pepe-black)]">
       {/* Hero Section */}
       <HeroSection
-        title="Training & Kurse"
+        title="Workshops & Training"
         subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome - für alle Levels"
         size="md"
         dotCloudIcon="training"
@@ -263,8 +263,8 @@ export default function TrainingPage() {
                     <span className="text-[var(--pepe-gold)] text-xl">♿</span>
                   </div>
                   <div>
-                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Barrierefreier Zugang</h4>
-                    <p className="text-[var(--pepe-t64)] leading-relaxed">Vollständig zugänglich für alle.</p>
+                    <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Barrierearmer Zugang</h4>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Vollständig zugänglich (mit Begleitperson empfohlen).</p>
                   </div>
                 </div>
               </div>
@@ -297,22 +297,22 @@ export default function TrainingPage() {
             <p className="text-[var(--pepe-t80)] text-lg mb-12">
               Buche jetzt deine Schnupperstunde und entdecke die Welt der zeitgenössischen Zirkuskunst.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="https://www.eversports.de/s/pepe-dome"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="primary" size="lg">
-                  Kurse auf Eversports
-                </Button>
-              </a>
-              <Link href="/events?category=TRAINING">
-                <Button variant="secondary" size="lg">
-                  Alle Trainings-Events
-                </Button>
-              </Link>
-            </div>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href="https://www.eversports.de/s/pepe-dome"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="primary" size="lg">
+                    Kurse auf Eversports
+                  </Button>
+                </a>
+                <Link href="/events?category=WORKSHOP">
+                  <Button variant="secondary" size="lg">
+                    Alle Workshops
+                  </Button>
+                </Link>
+              </div>
           </div>
         </div>
       </section>

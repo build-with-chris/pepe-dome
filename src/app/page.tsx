@@ -62,45 +62,33 @@ export default async function HomePage() {
 
         <div className="stage-container relative z-10 py-24">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Logo */}
-            <div className="mb-10 flex justify-center">
-              <Image
-                src="/PEPE_logos_dome.svg"
-                alt="PEPE Dome Logo"
-                width={280}
-                height={80}
-                className="h-16 md:h-20 w-auto"
-                priority
-              />
-            </div>
-
             {/* Main Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--pepe-white)] mb-5 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] mb-6 leading-tight">
               {homepage.hero.title}
             </h1>
 
             {/* Subtitle / Tagline */}
-            <p className="text-xl md:text-2xl text-[var(--pepe-gold)] font-medium mb-5">
+            <p className="text-xl md:text-3xl text-[var(--pepe-gold)] font-medium mb-8">
               {homepage.hero.subtitle}
             </p>
 
             {/* Description */}
-            <p className="text-lg text-[var(--pepe-t80)] mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-[var(--pepe-t80)] mb-12 max-w-2xl mx-auto leading-relaxed">
               {homepage.hero.description}
             </p>
 
             {/* Decorative Gold Line */}
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full mx-auto mb-10" />
+            <div className="w-32 h-1.5 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full mx-auto mb-12 shadow-[0_0_15px_var(--pepe-gold-glow)]" />
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/events">
-                <Button variant="primary" size="lg" className="min-w-[200px]">
+                <Button variant="primary" size="xl" className="min-w-[220px]">
                   {homepage.hero.cta.primary}
                 </Button>
               </Link>
               <Link href="/newsletter">
-                <Button variant="secondary" size="lg" className="min-w-[200px]">
+                <Button variant="secondary" size="xl" className="min-w-[220px]">
                   {homepage.hero.cta.secondary}
                 </Button>
               </Link>
@@ -225,27 +213,51 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {homepage.features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
-              >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-[var(--pepe-gold)] text-3xl leading-none">
-                    {feature.icon === 'show' && '🎭'}
-                    {feature.icon === 'training' && '💪'}
-                    {feature.icon === 'dome' && '🏛️'}
-                    {feature.icon === 'community' && '🤝'}
-                  </span>
+            {homepage.features.map((feature, index) => {
+              const featureImages: Record<string, string> = {
+                'show': '/Entertainment.webp',
+                'training': '/CircusSchool.webp',
+                'dome': '/GeodomeEvening.webp',
+                'community': '/Circus&Cinema.webp'
+              };
+              
+              return (
+                <div
+                  key={index}
+                  className="group bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
+                >
+                  {/* Feature Image */}
+                  <div className="relative h-48 w-full overflow-hidden">
+                    <Image
+                      src={featureImages[feature.icon] || '/TheDome.png'}
+                      alt={feature.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-ink)] to-transparent" />
+                    
+                    {/* Icon Overlay */}
+                    <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/20 backdrop-blur-md flex items-center justify-center border border-[var(--pepe-gold)]/30">
+                      <span className="text-[var(--pepe-gold)] text-2xl leading-none">
+                        {feature.icon === 'show' && '🎭'}
+                        {feature.icon === 'training' && '💪'}
+                        {feature.icon === 'dome' && '🏛️'}
+                        {feature.icon === 'community' && '🤝'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-8 text-center lg:text-left">
+                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-gold)] transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-[var(--pepe-t64)] leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-[var(--pepe-t64)] leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

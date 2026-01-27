@@ -48,7 +48,7 @@ public/               # Static assets
 - 🏛️ **Geodätische Architektur** - Einzigartige Kuppelkonstruktion
 - 🎪 **8,50 Meter Höhe** - Perfekt für spektakuläre Luftakrobatik
 - 🌿 **Ostpark Lage** - Mitten im Grünen
-- ♿ **Barrierefrei** - Zugänglich für alle
+- ♿ **Barrierearm** - Zugang mit Begleitperson empfohlen
 - 📱 **Responsive Design** - Optimiert für alle Geräte
 
 ## Contact
