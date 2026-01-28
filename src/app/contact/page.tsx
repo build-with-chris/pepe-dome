@@ -355,32 +355,36 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Map Section (Optional) */}
+        {/* Map Section */}
         <section className="mt-32 pt-16 border-t border-[var(--pepe-line)]">
           <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-10 text-center">
             So findest du uns
           </h2>
-          <div className="relative h-80 rounded-xl overflow-hidden bg-[var(--pepe-surface)] border border-[var(--pepe-line)]">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <svg className="w-16 h-16 mx-auto mb-4 text-[var(--pepe-t48)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                </svg>
-                <p className="text-[var(--pepe-t64)]">
-                  Karte wird geladen...
-                </p>
-                <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(site.address.street + ', ' + site.address.city)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-block"
-                >
-                  <Button variant="secondary" size="sm">
-                    In Google Maps öffnen
-                  </Button>
-                </a>
-              </div>
-            </div>
+          <div className="relative h-96 rounded-2xl overflow-hidden border border-[var(--pepe-line)] shadow-2xl group">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.1!2d11.63!3d48.11!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75eb88888888%3A0x8888888888888888!2sPepe%20Dome!5e0!3m2!1sen!2sde!4v1234567890"
+              width="100%"
+              height="100%"
+              style={{ border: 0, opacity: 0.7 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="grayscale invert contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:invert-0 group-hover:opacity-100"
+            />
+            <div className="absolute inset-0 pointer-events-none border-[var(--pepe-gold)]/20 border-2 rounded-2xl"></div>
+          </div>
+          <div className="text-center mt-8">
+            <a
+              href="https://maps.google.com/?q=PepeDome+im+Ostpark+München"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[var(--pepe-gold)] hover:underline font-medium"
+            >
+              <span>Route in Google Maps planen</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
           </div>
         </section>
       </div>
