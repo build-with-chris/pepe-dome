@@ -11,7 +11,7 @@ export default function AGPage() {
       {/* Hero Section */}
       <HeroSection
         title="Allgemeine Geschäftsbedingungen (AGB)"
-        subtitle="für Veranstaltungen, Tickets, Workshops/Kurse und Raummiete im „Pepe Dome""
+        subtitle="für Veranstaltungen, Tickets, Workshops/Kurse und Raummiete im &quot;Pepe Dome&quot;"
         size="sm"
       />
 
@@ -34,7 +34,7 @@ export default function AGPage() {
                   1. Diese AGB gelten für alle Verträge, die über diese Website sowie über
                   angebundene Ticket-/Buchungsdienstleister (z.B. Ticketplattformen) über den
                   Besuch von Veranstaltungen, den Erwerb von Tickets/Mehrfachkarten, die
-                  Teilnahme an Workshops/Kursen sowie die Anmietung von Räumen im „Pepe Dome"
+                  Teilnahme an Workshops/Kursen sowie die Anmietung von Räumen im &quot;Pepe Dome&quot;
                   geschlossen werden.
                 </p>
                 <p>
@@ -43,7 +43,7 @@ export default function AGPage() {
                 </p>
                 <p>
                   3. Angebote wie Artist Booking/Showvermittlung sind nicht Vertragsgegenstand
-                  dieser Website. Hierfür verweisen wir auf „Pepe Shows" (pepeshows.de).
+                  dieser Website. Hierfür verweisen wir auf &quot;Pepe Shows&quot; (pepeshows.de).
                 </p>
               </div>
             </section>
@@ -55,7 +55,7 @@ export default function AGPage() {
               </h2>
               <p className="text-[var(--pepe-t80)]">
                 Vertragspartner ist ausschließlich: Circus Akademie München e.V. (nachfolgend
-                „Veranstalter").
+                &quot;Veranstalter&quot;).
               </p>
             </section>
 
