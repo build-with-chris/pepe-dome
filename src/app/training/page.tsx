@@ -88,7 +88,7 @@ export default function TrainingPage() {
             </div>
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
               <Image
-                src="/TheDome.png"
+                src="/images/shows/aerial-silk-01.jpg"
                 alt="Training im Pepe Dome"
                 fill
                 className="object-cover"
@@ -271,10 +271,10 @@ export default function TrainingPage() {
             </div>
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] order-1 lg:order-2">
               <Image
-                src="/TheDome.png"
+                src="/images/dome/dome-aerial-01.webp"
                 alt="Pepe Dome Interior"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>

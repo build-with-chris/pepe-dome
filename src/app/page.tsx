@@ -17,6 +17,7 @@ import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { Button } from '@/components/ui/Button'
 import HomeDotCloud from '@/components/custom/HomeDotCloud'
+import VideoCarousel from '@/components/custom/VideoCarousel'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,10 +47,10 @@ export default async function HomePage() {
         {/* Background Image */}
         <div className="absolute inset-0 pointer-events-none">
           <Image
-            src="/TheDome.png"
+            src="/images/dome/dome-outdoor-hero.webp"
             alt="Pepe Dome"
             fill
-            className="object-cover object-center opacity-25"
+            className="object-cover object-center opacity-30"
             sizes="100vw"
             priority
           />
@@ -98,6 +99,19 @@ export default async function HomePage() {
 
         {/* Bottom Fade */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent" />
+      </section>
+
+      {/* ===== Video Carousel Section ===== */}
+      <section className="py-8 md:py-16 bg-[var(--pepe-black)]">
+        <div className="stage-container mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] text-center mb-4">
+            Erlebe PEPE Shows
+          </h2>
+          <p className="text-[var(--pepe-t64)] text-lg text-center max-w-2xl mx-auto">
+            Zeitgenossischer Zirkus auf hochstem Niveau
+          </p>
+        </div>
+        <VideoCarousel />
       </section>
 
       {/* ===== Task 3.1.2: Featured Events Section ===== */}
@@ -215,10 +229,10 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {homepage.features.map((feature, index) => {
               const featureImages: Record<string, string> = {
-                'show': '/Entertainment.webp',
-                'training': '/CircusSchool.webp',
-                'dome': '/GeodomeEvening.webp',
-                'community': '/Circus&Cinema.webp'
+                'show': '/images/shows/carmen-jonas-duo.jpg',
+                'training': '/images/artists/chris.jpg',
+                'dome': '/images/dome/dome-interior.jpg',
+                'community': '/images/shows/jawad-performance.jpg'
               };
               
               return (

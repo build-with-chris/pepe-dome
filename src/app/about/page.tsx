@@ -26,7 +26,7 @@ export default function AboutPage() {
       icon: '🏛️',
       link: '/events',
       color: 'gold',
-      image: '/TheDome.png',
+      image: '/images/dome/dome-interior.jpg',
     },
     {
       name: 'PEPE Shows',
@@ -34,7 +34,7 @@ export default function AboutPage() {
       icon: '🎭',
       link: '/events?category=SHOW',
       color: 'bronze',
-      image: null,
+      image: '/images/shows/carmen-jonas-acro.jpg',
     },
     {
       name: 'PEPE Art',
@@ -42,7 +42,7 @@ export default function AboutPage() {
       icon: '🎨',
       link: '/events?category=WORKSHOP',
       color: 'copper',
-      image: null,
+      image: '/images/artists/yuhui.jpg',
     },
   ]
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
             {/* Image */}
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
               <Image
-                src="/TheDome.png"
+                src="/images/dome/dome-outdoor-hero.webp"
                 alt="PEPE Dome"
                 fill
                 className="object-cover"
@@ -175,10 +175,10 @@ export default function AboutPage() {
             </div>
             
             <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--pepe-line)] shadow-glow-sm">
-              <Image 
-                src="/Circus&Cinema.webp" 
-                alt="Netzwerk Arbeit" 
-                fill 
+              <Image
+                src="/images/shows/jonas-acrobatics.jpg"
+                alt="Netzwerk Arbeit"
+                fill
                 className="object-cover opacity-60"
               />
               <div className="absolute inset-0 flex items-center justify-center">

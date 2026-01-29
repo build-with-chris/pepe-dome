@@ -112,7 +112,7 @@ export default function BusinessPage() {
             </div>
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
               <Image
-                src="/TheDome.png"
+                src="/images/dome/dome-exterior.webp"
                 alt="Pepe Dome für Business Events"
                 fill
                 className="object-cover"
@@ -237,7 +237,7 @@ export default function BusinessPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
               <Image
-                src="/TheDome.png"
+                src="/images/dome/dome-interior.jpg"
                 alt="Pepe Dome Venue"
                 fill
                 className="object-cover"
