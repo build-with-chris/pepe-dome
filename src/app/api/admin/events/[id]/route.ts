@@ -7,8 +7,8 @@ const eventUpdateSchema = z.object({
   title: z.string().min(1).optional(),
   subtitle: z.string().optional().nullable(),
   description: z.string().min(1).optional(),
-  date: z.string().transform((val) => new Date(val)).optional(),
-  endDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
+  date: z.string().transform((val) => val ? new Date(val) : undefined).optional(),
+  endDate: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : null),
   time: z.string().optional().nullable(),
   location: z.string().min(1).optional(),
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']).optional(),
@@ -18,8 +18,8 @@ const eventUpdateSchema = z.object({
   featured: z.boolean().optional(),
   highlights: z.array(z.string()).optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
-  recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable(),
-  recurrenceEnd: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
+  recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable().or(z.literal('')),
+  recurrenceEnd: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : null),
 })
 
 // GET - Get single event
@@ -64,7 +64,6 @@ export async function PUT(
 
   try {
     const body = await request.json()
-    console.log('Update event request body:', body)
     const data = eventUpdateSchema.parse(body)
 
     // Clean up empty strings to null

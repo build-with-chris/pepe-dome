@@ -8,7 +8,7 @@ const eventSchema = z.object({
   subtitle: z.string().optional(),
   description: z.string().min(1, 'Description is required'),
   date: z.string().transform((val) => new Date(val)),
-  endDate: z.string().optional().transform((val) => val ? new Date(val) : undefined),
+  endDate: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : undefined),
   time: z.string().optional(),
   location: z.string().min(1, 'Location is required'),
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']),
@@ -18,8 +18,8 @@ const eventSchema = z.object({
   featured: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
-  recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional(),
-  recurrenceEnd: z.string().optional().transform((val) => val ? new Date(val) : undefined),
+  recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().or(z.literal('')),
+  recurrenceEnd: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : undefined),
 })
 
 function generateSlug(title: string): string {
