@@ -12,9 +12,9 @@ const eventUpdateSchema = z.object({
   time: z.string().optional().nullable(),
   location: z.string().min(1).optional(),
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']).optional(),
-  ticketUrl: z.string().url().optional().nullable().or(z.literal('')),
+  ticketUrl: z.string().optional().nullable().or(z.literal('')),
   price: z.string().optional().nullable(),
-  imageUrl: z.string().url().optional().nullable().or(z.literal('')),
+  imageUrl: z.string().optional().nullable().or(z.literal('')),
   featured: z.boolean().optional(),
   highlights: z.array(z.string()).optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
@@ -64,6 +64,7 @@ export async function PUT(
 
   try {
     const body = await request.json()
+    console.log('Update event request body:', body)
     const data = eventUpdateSchema.parse(body)
 
     // Clean up empty strings to null

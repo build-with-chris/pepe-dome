@@ -39,7 +39,7 @@ const eventSchema = z.object({
   time: z.string().optional(),
   location: z.string().min(1, 'Location ist erforderlich'),
   category: z.string().min(1, 'Kategorie ist erforderlich'),
-  ticketUrl: z.string().url('Ungultige URL').optional().or(z.literal('')),
+  ticketUrl: z.string().optional().or(z.literal('')),
   price: z.string().optional(),
   imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
