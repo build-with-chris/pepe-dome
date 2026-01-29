@@ -25,8 +25,11 @@ export const metadata: Metadata = {
   description: siteContent.description,
   keywords: ['Pepe Dome', 'München', 'Ostpark', 'Artistik', 'Zirkus', 'Shows', 'Events', 'Kultur'],
   icons: {
-    icon: '/PepeDome Logo ausgeschnitten.png',
-    shortcut: '/PepeDome Logo ausgeschnitten.png',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/PepeDome Logo ausgeschnitten.png' },
+    ],
+    shortcut: '/favicon.ico',
     apple: '/PepeDome Logo ausgeschnitten.png',
   },
 }
