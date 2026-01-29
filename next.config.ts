@@ -4,7 +4,6 @@ import path from 'path'
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
-  turbopack: {},
   outputFileTracingRoot: path.join(__dirname, './'),
   images: {
     remotePatterns: [
