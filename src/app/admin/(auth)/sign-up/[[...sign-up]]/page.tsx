@@ -14,6 +14,7 @@ export default function SignUpPage() {
               card: 'bg-[var(--color-bg-secondary)] border border-[var(--color-border)]',
             }
           }}
+          fallbackRedirectUrl="/admin"
         />
       </div>
     </div>
