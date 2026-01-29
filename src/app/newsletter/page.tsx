@@ -9,6 +9,7 @@
  * - Newsletter archive section
  */
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getAllNewsletters, getNewsletterContent } from '@/lib/data'
@@ -17,6 +18,11 @@ import SignupForm from '@/components/custom/SignupForm'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
+
+export const metadata: Metadata = {
+  title: 'Newsletter | Pepe Dome München',
+  description: 'Melde dich für den Pepe Dome Newsletter an und erhalte monatliche Updates zu Shows, Workshops und Events.',
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -109,7 +115,7 @@ export default async function NewsletterPage() {
                 Newsletter Archiv
               </h2>
               <p className="text-[var(--pepe-t64)]">
-                Stobere durch vergangene Newsletter und entdecke, was du verpasst hast.
+                Stöbere durch vergangene Newsletter und entdecke, was du verpasst hast.
               </p>
 
               {/* Year Filter */}
@@ -225,7 +231,7 @@ export default async function NewsletterPage() {
                       </span>
                       {newsletter.sentCount && (
                         <span className="text-[var(--pepe-t48)]">
-                          {newsletter.sentCount} Empfanger
+                          {newsletter.sentCount} Empfänger
                         </span>
                       )}
                     </div>

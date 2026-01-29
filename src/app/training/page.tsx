@@ -2,10 +2,16 @@
  * Training Page - Zeitgenössischer Zirkus und Artistik
  */
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
+
+export const metadata: Metadata = {
+  title: 'Workshops & Training | Pepe Dome München',
+  description: 'Professionelles Training für zeitgenössischen Zirkus und Artistik. Profitraining, Aerial Arts, Ground Arts und Workshops im Pepe Dome.',
+}
 
 const disciplines = [
   {
