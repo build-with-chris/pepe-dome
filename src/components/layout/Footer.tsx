@@ -97,7 +97,7 @@ export default function Footer() {
                 Ostpark
               </div>
               <div className="footer-link">
-                81925 München
+                81735 München
               </div>
             </div>
           </div>

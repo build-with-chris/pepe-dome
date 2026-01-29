@@ -8,9 +8,9 @@
     "emergencyPhone": "+49 159 048 914 19",
     "whatsapp": "+49 179 699 0707",
     "address": {
-      "street": "Ostpark",
+      "street": "Albert-Schweitzer-Straße 62 (Theatron Ostpark)",
       "city": "München",
-      "zip": "81925",
+      "zip": "81735",
       "country": "Deutschland"
     },
     "hours": {
@@ -124,7 +124,7 @@
     "info": {
       "address": {
         "title": "Adresse",
-        "content": "Pepe Dome\nOstpark\n81925 München"
+        "content": "Pepe Dome im Theatron im Ostpark\nAlbert-Schweitzer-Straße 62\n81735 München"
       },
       "email": {
         "title": "E-Mail",

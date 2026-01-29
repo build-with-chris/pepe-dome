@@ -256,7 +256,7 @@ export default function AboutPage() {
             {/* Map Iframe */}
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden border border-[var(--pepe-line)] shadow-2xl group">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.1!2d11.63!3d48.11!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75eb88888888%3A0x8888888888888888!2sPepe%20Dome!5e0!3m2!1sen!2sde!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.116634887349!2d11.640768!3d48.1119726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479ddfe1623e7b83%3A0x8f776b2413dcab9e!2sPepe%20Dome%20im%20Theatron%20im%20Ostpark!5e0!3m2!1sde!2sde!4v1738148400000"
                 width="100%"
                 height="100%"
                 style={{ border: 0, opacity: 0.7 }}
