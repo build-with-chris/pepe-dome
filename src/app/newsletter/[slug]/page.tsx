@@ -261,11 +261,19 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
                           <span>🕐 {item.data.time}</span>
                           <span>📍 {item.data.location}</span>
                         </div>
-                        {item.data.ticketUrl && (
-                          <Link href={item.data.ticketUrl} className="btn-secondary">
-                            Tickets sichern
-                          </Link>
-                        )}
+                        {item.data.ticketUrl && (() => {
+                          const isEmail = item.data.ticketUrl.includes('@') && !item.data.ticketUrl.startsWith('http');
+                          const href = isEmail && !item.data.ticketUrl.startsWith('mailto:') 
+                            ? `mailto:${item.data.ticketUrl}` 
+                            : item.data.ticketUrl;
+                          const label = isEmail ? 'Anmelden via Mail' : 'Tickets sichern';
+                          
+                          return (
+                            <Link href={href} className="btn-secondary">
+                              {label}
+                            </Link>
+                          );
+                        })()}
                       </div>
                     </div>
                   )}

@@ -220,18 +220,26 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
               </div>
 
               {/* Ticket CTA Button (Gold) */}
-              {event.ticketUrl ? (
-                <a
-                  href={event.ticketUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button variant="primary" size="lg" className="w-full">
-                    Tickets kaufen
-                  </Button>
-                </a>
-              ) : (
+              {event.ticketUrl ? (() => {
+                const isEmail = event.ticketUrl.includes('@') && !event.ticketUrl.startsWith('http');
+                const href = isEmail && !event.ticketUrl.startsWith('mailto:') 
+                  ? `mailto:${event.ticketUrl}` 
+                  : event.ticketUrl;
+                const buttonText = isEmail ? 'Anmelden via Mail' : 'Tickets kaufen';
+
+                return (
+                  <a
+                    href={href}
+                    target={isEmail ? undefined : "_blank"}
+                    rel={isEmail ? undefined : "noopener noreferrer"}
+                    className="block"
+                  >
+                    <Button variant="primary" size="lg" className="w-full">
+                      {buttonText}
+                    </Button>
+                  </a>
+                );
+              })() : (
                 <Button variant="secondary" size="lg" className="w-full" disabled>
                   {event.price === 'Eintritt frei' ? 'Eintritt frei' : 'Tickets folgen'}
                 </Button>

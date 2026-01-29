@@ -138,7 +138,11 @@ export async function GET(
                 location: event.location,
                 eventUrl: `${baseUrl}/events/${event.slug}`,
                 ctaUrl: event.ticketUrl || `${baseUrl}/events/${event.slug}`,
-                ctaLabel: event.ticketUrl ? 'Tickets kaufen' : 'Mehr erfahren',
+                ctaLabel: (() => {
+                  if (!event.ticketUrl) return 'Mehr erfahren';
+                  const isEmail = event.ticketUrl.includes('@') && !event.ticketUrl.startsWith('http');
+                  return isEmail ? 'Anmelden via Mail' : 'Tickets kaufen';
+                })(),
                 imageUrl: eventImageUrl,
               },
             })

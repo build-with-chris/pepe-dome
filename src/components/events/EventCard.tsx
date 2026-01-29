@@ -150,11 +150,15 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
             <span className="text-pepe-gold font-semibold">
               {event.price}
             </span>
-            {event.ticketUrl && (
-              <span className="text-sm text-pepe-t64">
-                Tickets verfügbar →
-              </span>
-            )}
+            {event.ticketUrl && (() => {
+              const isEmail = event.ticketUrl.includes('@') && !event.ticketUrl.startsWith('http');
+              const label = isEmail ? 'Anmeldung via Mail →' : 'Tickets verfügbar →';
+              return (
+                <span className="text-sm text-pepe-t64">
+                  {label}
+                </span>
+              );
+            })()}
           </div>
         </div>
       </article>

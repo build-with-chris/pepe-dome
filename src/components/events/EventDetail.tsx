@@ -156,16 +156,24 @@ export default function EventDetail({ event }: EventDetailProps) {
                 </div>
               </div>
 
-              {event.ticketUrl ? (
-                <a
-                  href={event.ticketUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary w-full"
-                >
-                  Tickets kaufen
-                </a>
-              ) : (
+              {event.ticketUrl ? (() => {
+                const isEmail = event.ticketUrl.includes('@') && !event.ticketUrl.startsWith('http');
+                const href = isEmail && !event.ticketUrl.startsWith('mailto:') 
+                  ? `mailto:${event.ticketUrl}` 
+                  : event.ticketUrl;
+                const buttonText = isEmail ? 'Anmelden via Mail' : 'Tickets kaufen';
+
+                return (
+                  <a
+                    href={href}
+                    target={isEmail ? undefined : "_blank"}
+                    rel={isEmail ? undefined : "noopener noreferrer"}
+                    className="btn btn-primary w-full text-center"
+                  >
+                    {buttonText}
+                  </a>
+                );
+              })() : (
                 <Button variant="secondary" className="w-full" disabled>
                   {event.price === 'Eintritt frei' ? 'Eintritt frei' : 'Auf Anfrage'}
                 </Button>
