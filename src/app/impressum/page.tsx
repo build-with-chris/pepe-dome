@@ -13,7 +13,7 @@ export default function ImpressumPage() {
       {/* Hero Section */}
       <HeroSection
         title="Impressum"
-        subtitle="Rechtliche Angaben gemäß § 5 TMG"
+        subtitle="Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)"
         size="sm"
       />
 
@@ -22,88 +22,149 @@ export default function ImpressumPage() {
         <div className="stage-container">
           <div className="max-w-4xl mx-auto space-y-12">
             
+            {/* Betreiber */}
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
               <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
-                Angaben gemäß § 5 TMG
+                Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)
               </h2>
               
-              <div className="grid md:grid-cols-2 gap-12 text-[var(--pepe-t80)]">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
-                      Betreiber der Website
-                    </h3>
-                    <p className="leading-relaxed">
-                      Michael Heiduk<br />
-                      Ranharzweg 18<br />
-                      85521 Ottobrunn
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
-                      Kontakt
-                    </h3>
-                    <p className="leading-relaxed">
-                      Telefon: {site.phone}<br />
-                      E-Mail: {site.email}
-                    </p>
-                  </div>
+              <div className="space-y-8 text-[var(--pepe-t80)] leading-relaxed">
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Betreiber
+                  </h3>
+                  <p className="text-[var(--pepe-white)] font-semibold mb-4">
+                    Circus Akademie München e.V.
+                  </p>
                 </div>
 
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
-                      Verantwortlich für den Inhalt
-                    </h3>
-                    <p className="leading-relaxed">
-                      Christoph Hermann<br />
-                      Kiebitzweg 12a<br />
-                      85464 Finsing
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Anschrift
+                  </h3>
+                  <p className="leading-relaxed">
+                    Ranhazweg 18<br />
+                    85521 Ottobrunn<br />
+                    Deutschland
+                  </p>
+                </div>
 
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
-                      Umsatzsteuer-ID
-                    </h3>
-                    <p className="leading-relaxed">
-                      Zum aktuellen Zeitpunkt ist keine Umsatzsteuer-Identifikationsnummer vorhanden.
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Kontakt
+                  </h3>
+                  <p className="leading-relaxed">
+                    Telefon: <a href={`tel:${site.phone}`} className="text-[var(--pepe-gold)] hover:underline">{site.phone}</a><br />
+                    E-Mail: <a href={`mailto:${site.email}`} className="text-[var(--pepe-gold)] hover:underline">{site.email}</a><br />
+                    <span className="text-[var(--pepe-t64)]">Kontaktformular: Nachrichten über das Kontaktformular werden an die genannte E-Mail-Adresse weitergeleitet.</span>
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Vereinsregister
+                  </h3>
+                  <p className="leading-relaxed">
+                    Eingetragen im Vereinsregister.<br />
+                    Registergericht: Amtsgericht München<br />
+                    Registernummer: VR 208483
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Vertretungsberechtigung
+                  </h3>
+                  <p className="leading-relaxed mb-3">
+                    Der Verein wird durch den Vorstand vertreten; jedes Vorstandsmitglied ist einzelvertretungsberechtigt.
+                  </p>
+                  <p className="leading-relaxed">
+                    <strong className="text-[var(--pepe-white)]">Vorstand (laut Register):</strong> Doro Auer, Mathias Eder, Marius Eichhöfer, Michael Heiduk, Johannes Thumser, Karl Trautmann.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                    Umsatzsteuer-ID
+                  </h3>
+                  <p className="leading-relaxed">
+                    Keine Umsatzsteuer-Identifikationsnummer vorhanden.
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl space-y-10">
-              <section>
-                <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-6">Haftungsausschluss</h2>
-                <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
-                  <div>
-                    <h3 className="text-lg font-semibold text-[var(--pepe-white)] mb-3">Haftung für Inhalte</h3>
-                    <p>
-                      Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[var(--pepe-white)] mb-3">Haftung für Links</h3>
-                    <p>
-                      Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section className="pt-10 border-t border-[var(--pepe-line)]">
-                <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-6">EU-Streitschlichtung</h2>
-                <p className="text-[var(--pepe-t80)] leading-relaxed">
-                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                  <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="text-[var(--pepe-gold)] hover:underline ml-1">
-                    https://ec.europa.eu/consumers/odr/
-                  </a>.
-                  Unsere E-Mail-Adresse finden Sie oben im Impressum. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+            {/* Verantwortlich für den Inhalt */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
+                Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV
+              </h2>
+              
+              <div className="space-y-4 text-[var(--pepe-t80)] leading-relaxed">
+                <p className="text-[var(--pepe-white)] font-semibold">
+                  Christoph Hermann
                 </p>
-              </section>
+                <p>
+                  Kiebitzweg 12a<br />
+                  85464 Finsing<br />
+                  Deutschland
+                </p>
+                <p>
+                  E-Mail: <a href="mailto:Chris@pepearts.de" className="text-[var(--pepe-gold)] hover:underline">Chris@pepearts.de</a>
+                </p>
+              </div>
+            </div>
+
+            {/* Verbraucherstreitbeilegung */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
+                Verbraucherstreitbeilegung
+              </h2>
+              
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
+                <p>
+                  Der Verein ist nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+                </p>
+              </div>
+            </div>
+
+            {/* Haftung für Inhalte */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
+                Haftung für Inhalte
+              </h2>
+              
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
+                <p>
+                  Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Eine Verpflichtung zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht jedoch nicht.
+                </p>
+              </div>
+            </div>
+
+            {/* Haftung für Links */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
+                Haftung für Links
+              </h2>
+              
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
+                <p>
+                  Diese Website enthält ggf. Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für diese fremden Inhalte übernehmen wir keine Gewähr.
+                </p>
+              </div>
+            </div>
+
+            {/* Urheberrecht */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
+                Urheberrecht
+              </h2>
+              
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
+                <p>
+                  Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Eine Vervielfältigung, Bearbeitung, Verbreitung oder Verwertung außerhalb der Grenzen des Urheberrechts bedarf der vorherigen schriftlichen Zustimmung.
+                </p>
+              </div>
             </div>
 
           </div>
