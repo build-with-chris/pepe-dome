@@ -1,6 +1,7 @@
 /**
  * AGB Page
  */
+/* eslint-disable react/no-unescaped-entities */
 
 import HeroSection from '@/components/custom/HeroSection'
 
