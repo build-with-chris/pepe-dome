@@ -1,6 +1,7 @@
 /**
  * Impressum Page
  */
+/* eslint-disable react/no-unescaped-entities */
 
 import HeroSection from '@/components/custom/HeroSection'
 import { getSiteContent } from '@/lib/data'
