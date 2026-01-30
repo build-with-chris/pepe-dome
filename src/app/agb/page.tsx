@@ -10,7 +10,7 @@ export default function AGPage() {
       {/* Hero Section */}
       <HeroSection
         title="Allgemeine Geschäftsbedingungen (AGB)"
-        subtitle="für Veranstaltungen, Tickets, Workshops/Kurse und Raummiete im „Pepe Dome""
+        subtitle="für Veranstaltungen, Tickets, Workshops/Kurse und Raummiete im &quot;Pepe Dome&quot;"
         size="sm"
       />
 
@@ -33,13 +33,13 @@ export default function AGPage() {
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <ol className="list-decimal pl-6 space-y-4">
                   <li>
-                    Diese AGB gelten für alle Verträge, die über diese Website sowie über angebundene Ticket-/Buchungsdienstleister (z.B. Ticketplattformen) über den Besuch von Veranstaltungen, den Erwerb von Tickets/Mehrfachkarten, die Teilnahme an Workshops/Kursen sowie die Anmietung von Räumen im „Pepe Dome" geschlossen werden.
+                    Diese AGB gelten für alle Verträge, die über diese Website sowie über angebundene Ticket-/Buchungsdienstleister (z.B. Ticketplattformen) über den Besuch von Veranstaltungen, den Erwerb von Tickets/Mehrfachkarten, die Teilnahme an Workshops/Kursen sowie die Anmietung von Räumen im &quot;Pepe Dome&quot; geschlossen werden.
                   </li>
                   <li>
                     Abweichende Bedingungen von Kund:innen gelten nicht, außer wir stimmen ihnen ausdrücklich schriftlich zu.
                   </li>
                   <li>
-                    Angebote wie Artist Booking/Showvermittlung sind nicht Vertragsgegenstand dieser Website. Hierfür verweisen wir auf „Pepe Shows" (<a href="https://pepeshows.de" target="_blank" rel="noopener noreferrer" className="text-[var(--pepe-gold)] hover:underline">pepeshows.de</a>).
+                    Angebote wie Artist Booking/Showvermittlung sind nicht Vertragsgegenstand dieser Website. Hierfür verweisen wir auf &quot;Pepe Shows&quot; (<a href="https://pepeshows.de" target="_blank" rel="noopener noreferrer" className="text-[var(--pepe-gold)] hover:underline">pepeshows.de</a>).
                   </li>
                 </ol>
               </div>
@@ -53,7 +53,7 @@ export default function AGPage() {
               
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <p>
-                  Vertragspartner ist ausschließlich: <strong className="text-[var(--pepe-white)]">Circus Akademie München e.V.</strong> (nachfolgend „Veranstalter").
+                  Vertragspartner ist ausschließlich: <strong className="text-[var(--pepe-white)]">Circus Akademie München e.V.</strong> (nachfolgend &quot;Veranstalter&quot;).
                 </p>
               </div>
             </div>
