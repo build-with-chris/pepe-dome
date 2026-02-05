@@ -40,3 +40,6 @@ next-env.d.ts
 # uploaded files
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# clerk configuration (can include secrets)
+/.clerk/

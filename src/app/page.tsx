@@ -101,6 +101,35 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent" />
       </section>
 
+      {/* ===== Vision & Mission Section ===== */}
+      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+              {/* Vision */}
+              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                  Vision
+                </h2>
+                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
+                  Der Pepe Dome wird ein langfristiger, lebendiger Ort für zeitgenössischen Zirkus, kulturelle Begegnung, künstlerische Ausbildung, Community-Programme und öffentlich zugängliche Events.
+                </p>
+              </div>
+
+              {/* Mission */}
+              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                  Mission
+                </h2>
+                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
+                  Förderung von zeitgenössischer Zirkuskunst und kultureller Teilhabe in München, verbunden mit inklusiven Bildungs- und Trainingsangeboten. Kulturfokus Ostpark.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== Video Carousel Section ===== */}
       <section className="py-8 md:py-16 bg-[var(--pepe-black)]">
         <div className="stage-container mb-8">

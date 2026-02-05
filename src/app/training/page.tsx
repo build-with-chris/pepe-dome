@@ -106,6 +106,39 @@ export default function TrainingPage() {
         </div>
       </section>
 
+      {/* Training unter der Woche Section */}
+      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+              Unter der Woche ist der Schwerpunkt auf Training:
+            </h2>
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed text-lg">
+                <div className="flex items-start gap-4">
+                  <span className="text-[var(--pepe-gold)] text-xl mt-1">☀️</span>
+                  <div>
+                    <p className="font-semibold text-[var(--pepe-white)] mb-2">Untertags</p>
+                    <p>Für die Profi Community der Münchner Artisten (gefördert durch das Kulturreferat)</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="text-[var(--pepe-gold)] text-xl mt-1">🌙</span>
+                  <div>
+                    <p className="font-semibold text-[var(--pepe-white)] mb-2">Abends und nachmittags</p>
+                    <p>Sind bezahlte Kurse für Kinder, Jugendliche und Erwachsene Hobby Artisten.</p>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-[var(--pepe-line)]">
+                  <p className="text-[var(--pepe-gold)] font-semibold mb-4">Freut euch auf die kommende Saison</p>
+                  <p>In den bayerischen Ferien bieten wir den Raum für Residencies und Kinderferien Mitmachprogramme an.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Profitraining */}
       <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">

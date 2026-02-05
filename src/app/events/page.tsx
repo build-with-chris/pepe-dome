@@ -144,6 +144,131 @@ export default function EventsPage() {
         dotCloudIcon="events"
       />
 
+      {/* Programm Section */}
+      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-4 text-center">
+              Programm
+            </h2>
+            <p className="text-lg text-[var(--pepe-t80)] leading-relaxed text-center">
+              Unser Programm setzt sich aus selbsttragenden und geförderten Projekten zusammen sowie internationalen, regionalen und städtischen Festivalbeteiligungen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Geplante Projekte 2026 Section */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+              Für 2026 in Planung
+            </h2>
+            <p className="text-[var(--pepe-t64)] text-center mb-12">
+              Aktuell finden noch Umbauarbeiten statt, aber wir planen hochmotiviert eine neue Saison.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* David Eisele */}
+              <a
+                href="http://www.davideisele.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  David Eisele - Tornados Eye
+                </h3>
+                <p className="text-sm text-[var(--pepe-t64)] mb-3">zeitgenössischer Zirkus - Solo</p>
+                <p className="text-xs text-[var(--pepe-t48)]">davideisele.com</p>
+              </a>
+
+              {/* Zirkuswerkstatt Stuttgart */}
+              <a
+                href="https://www.kreativhaltig.de/zirkuswerk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Zirkuswerkstatt Stuttgart
+                </h3>
+                <p className="text-xs text-[var(--pepe-t48)]">kreativhaltig.de</p>
+              </a>
+
+              {/* Saucisson - taigi Cirkas */}
+              <a
+                href="https://taigicirkas.com/saucisson/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Saucisson - taigi Cirkas
+                </h3>
+                <p className="text-sm text-[var(--pepe-t64)] mb-3">Litauen - Circus Next Laureat</p>
+                <p className="text-xs text-[var(--pepe-t48)]">taigicirkas.com</p>
+              </a>
+
+              {/* Baltic Nordic Circus Showcase */}
+              <a
+                href="https://www.balticnordiccircus.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Baltic Nordic Circus Showcase
+                </h3>
+                <p className="text-sm text-[var(--pepe-t64)] mb-3">gefördert durch Litauen und Goethe Institut</p>
+                <p className="text-xs text-[var(--pepe-t48)]">balticnordiccircus.com</p>
+              </a>
+
+              {/* Daniela Maier und Jakob Vöckler */}
+              <a
+                href="https://www.danimisima.de/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Daniela Maier und Jakob Vöckler
+                </h3>
+                <p className="text-sm text-[var(--pepe-t64)] mb-3">gefördert durch das Kulturreferat München - Solo Präsentationen</p>
+                <p className="text-xs text-[var(--pepe-t48)]">danimisima.de</p>
+              </a>
+
+              {/* Wunder. Punkt Festival */}
+              <a
+                href="https://figurentheater-gfp.de/festival/festival-2024.php"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Wunder. Punkt Festival
+                </h3>
+                <p className="text-xs text-[var(--pepe-t48)]">figurentheater-gfp.de</p>
+              </a>
+
+              {/* Zeit für Zirkus */}
+              <a
+                href="https://zeitfuerzirkus.de/info"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
+              >
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  Zeit für Zirkus
+                </h3>
+                <p className="text-xs text-[var(--pepe-t48)]">zeitfuerzirkus.de</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="stage-container py-20 md:py-32">
         {/* Month Navigation */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">

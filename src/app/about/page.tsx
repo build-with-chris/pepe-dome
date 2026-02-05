@@ -88,6 +88,137 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Hintergrund & Projektidee Section */}
+      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-8 text-center">
+              Hintergrund & Projektidee
+            </h2>
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
+              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed text-lg">
+                <p>
+                  Der Pepe Dome ist eine geodätische Kuppel mit ca. 200 Platzkapazität, die seit August 2025 als Bühne, Trainingsort und Kulturraum im Münchner Ostpark etabliert wurde.
+                </p>
+                <p>
+                  Zuvor wurde es als Lunatico Theaterzelt an selber Stelle temporär schon mal aufgebaut. Im Rahmen des Nebourhoods Projektes und der Auflösung der Festspielhaus GmbH wurde uns das Objekt zugespielt.
+                </p>
+                <p>
+                  Er wurde als Spielstätte für zeitgenössischen Zirkus und kulturelle Formate reaktiviert, mit dem Ziel, eine dauerhafte kulturelle Heimat im Stadtteil Neuperlach zu schaffen. Gespräche laufen, den Dome langfristig in die lokale Stadtentwicklungspläne zu integrieren.
+                </p>
+                <p>
+                  Als gemeinnütziger Verein übernimmt die Circus Akademie München e.V. ab 2026 den Betrieb, um künstlerische, pädagogische und soziale Ziele zu verwirklichen.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Kultur, Bildung & Forschung Section */}
+      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              Unsere Bereiche
+            </h2>
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
+              Drei Säulen des Pepe Dome: Kultur, Bildung und Forschung
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Kultur */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 hover:border-[var(--pepe-gold)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                <span className="text-[var(--pepe-gold)] text-3xl">🎭</span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+                Kultur
+              </h3>
+              <ul className="space-y-3 text-[var(--pepe-t80)] leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>zeitgenössische Zirkusshows & Gastspiele</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Festivalformate (z. B. Freeman Festival, Zeit für Zirkus Wunder.punkt Festival, Spiel:Art)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Community-Events (Netzwerktreffen, Themen-Abende, Kino im Dome)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Kinderprogramm (Kasperltheater, Clownshows, Kinder-Jugendzirkusvorstellungen)</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Bildung */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 hover:border-[var(--pepe-gold)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                <span className="text-[var(--pepe-gold)] text-3xl">📚</span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+                Bildung
+              </h3>
+              <ul className="space-y-3 text-[var(--pepe-t80)] leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Offene Trainings für Profis (gefördert durch das Kulturreferat)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Kurse & Workshops für Einsteiger*innen bis Fortgeschrittene</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Angebote für Kinder, Jugendliche, Senior*innen</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Pädagogische Programme und Kooperationen mit Schulen & Kulturinstitutionen</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Ausbildung zum Zirkuspädagogen Artisten</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Forschung */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 hover:border-[var(--pepe-gold)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                <span className="text-[var(--pepe-gold)] text-3xl">🔬</span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+                Forschung
+              </h3>
+              <ul className="space-y-3 text-[var(--pepe-t80)] leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Kooperationen mit Stadtteilmanagement im Bezug auf Nachhaltigkeit</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Kooperationen mit Universitäten</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Movement and sustainability</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                  <span>Design Thinking für Lehrer</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PEPE Ecosystem Section */}
       <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/50 to-[var(--pepe-black)]">
         <div className="stage-container">
