@@ -103,11 +103,32 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
     notFound()
   }
 
+  // Define content item data types
+  type EventData = {
+    imageUrl?: string | null
+    title: string
+    subtitle?: string | null
+    description: string
+    date: string
+    time?: string | null
+    location: string
+    ticketUrl?: string | null
+  }
+
+  type ArticleData = {
+    imageUrl?: string | null
+    title: string
+    excerpt: string
+    slug: string
+  }
+
+  type ContentItemData = EventData | ArticleData | Record<string, never>
+
   // Group content by sections
   const contentSections: {
     heading?: string
     description?: string
-    items: Array<{ type: string; data: unknown }>
+    items: Array<{ type: string; data: ContentItemData }>
   }[] = []
 
   let currentSection: typeof contentSections[0] | null = null
@@ -132,13 +153,33 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
     }
 
     // Fetch the actual content data based on contentId and contentType
-    let contentData = null
+    let contentData: ContentItemData | null = null
     if (item.contentId) {
       try {
         if (item.contentType === 'EVENT') {
-          contentData = getEventById(item.contentId)
+          const event = getEventById(item.contentId)
+          if (event) {
+            contentData = {
+              imageUrl: event.imageUrl || null,
+              title: event.title,
+              subtitle: event.subtitle || null,
+              description: event.description,
+              date: event.date,
+              time: event.time || null,
+              location: event.location,
+              ticketUrl: event.ticketUrl,
+            } as EventData
+          }
         } else if (item.contentType === 'ARTICLE') {
-          contentData = getNewsBySlug(item.contentId)
+          const article = getNewsBySlug(item.contentId)
+          if (article) {
+            contentData = {
+              imageUrl: article.imageUrl || null,
+              title: article.title,
+              excerpt: article.excerpt,
+              slug: article.slug,
+            } as ArticleData
+          }
         }
       } catch (error) {
         console.error(`Failed to fetch content ${item.contentId}:`, error)
@@ -148,7 +189,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
     if (contentData || item.contentType === 'CUSTOM_SECTION') {
       currentSection.items.push({
         type: item.contentType.toLowerCase(),
-        data: contentData || {},
+        data: contentData || ({} as ContentItemData),
       })
     }
   }
@@ -239,7 +280,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
               {section.items.map((item, itemIndex) => (
                 <div key={itemIndex} className="card p-6 md:p-8">
                   {/* Event Content */}
-                  {item.type === 'event' && item.data && (
+                  {item.type === 'event' && item.data && 'date' in item.data && (
                     <div className="flex flex-col md:flex-row gap-6">
                       {item.data.imageUrl && (
                         <div className="md:w-1/3">
@@ -279,7 +320,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
                   )}
 
                   {/* Article Content */}
-                  {item.type === 'article' && item.data && (
+                  {item.type === 'article' && item.data && 'slug' in item.data && (
                     <div className="flex flex-col md:flex-row gap-6">
                       {item.data.imageUrl && (
                         <div className="md:w-1/3">
