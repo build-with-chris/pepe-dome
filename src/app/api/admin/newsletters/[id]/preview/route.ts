@@ -77,12 +77,12 @@ export async function GET(
 
       // Create lookup maps (by both id and slug for flexibility)
       const eventMap = new Map<string, typeof events[0]>()
-      events.forEach((e) => {
+      events.forEach((e: typeof events[0]) => {
         eventMap.set(e.id, e)
         eventMap.set(e.slug, e)
       })
       const articleMap = new Map<string, typeof articles[0]>()
-      articles.forEach((a) => {
+      articles.forEach((a: typeof articles[0]) => {
         articleMap.set(a.id, a)
         articleMap.set(a.slug, a)
       })
