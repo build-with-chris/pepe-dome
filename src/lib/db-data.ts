@@ -6,6 +6,19 @@
 import { prisma } from './prisma'
 import type { Event, Article } from '@prisma/client'
 
+// Safe database query wrapper - returns fallback on error
+async function safeDbQuery<T>(
+  queryFn: () => Promise<T>,
+  fallback: T
+): Promise<T> {
+  try {
+    return await queryFn()
+  } catch (error) {
+    console.error('Database query error:', error)
+    return fallback
+  }
+}
+
 // Re-export types for convenience
 export type { Event, Article }
 
@@ -85,75 +98,89 @@ function transformArticle(article: Article): ArticleData {
 // ============================================
 
 export async function getAllEvents(): Promise<EventData[]> {
-  const events = await prisma.event.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: { date: 'asc' },
-  })
-  return events.map(transformEvent)
+  return safeDbQuery(async () => {
+    const events = await prisma.event.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { date: 'asc' },
+    })
+    return events.map(transformEvent)
+  }, [])
 }
 
 export async function getUpcomingEvents(): Promise<EventData[]> {
-  const events = await prisma.event.findMany({
-    where: {
-      status: 'PUBLISHED',
-      date: { gte: new Date() },
-    },
-    orderBy: { date: 'asc' },
-  })
-  return events.map(transformEvent)
+  return safeDbQuery(async () => {
+    const events = await prisma.event.findMany({
+      where: {
+        status: 'PUBLISHED',
+        date: { gte: new Date() },
+      },
+      orderBy: { date: 'asc' },
+    })
+    return events.map(transformEvent)
+  }, [])
 }
 
 export async function getFeaturedEvents(): Promise<EventData[]> {
-  const events = await prisma.event.findMany({
-    where: {
-      status: 'PUBLISHED',
-      featured: true,
-    },
-    orderBy: { date: 'asc' },
-  })
-  return events.map(transformEvent)
+  return safeDbQuery(async () => {
+    const events = await prisma.event.findMany({
+      where: {
+        status: 'PUBLISHED',
+        featured: true,
+      },
+      orderBy: { date: 'asc' },
+    })
+    return events.map(transformEvent)
+  }, [])
 }
 
 export async function getEventBySlug(slug: string): Promise<EventData | null> {
-  const event = await prisma.event.findUnique({
-    where: { slug },
-  })
-  return event ? transformEvent(event) : null
+  return safeDbQuery(async () => {
+    const event = await prisma.event.findUnique({
+      where: { slug },
+    })
+    return event ? transformEvent(event) : null
+  }, null)
 }
 
 export async function getEventById(id: string): Promise<EventData | null> {
-  const event = await prisma.event.findUnique({
-    where: { id },
-  })
-  return event ? transformEvent(event) : null
+  return safeDbQuery(async () => {
+    const event = await prisma.event.findUnique({
+      where: { id },
+    })
+    return event ? transformEvent(event) : null
+  }, null)
 }
 
 export async function getEventsByMonth(year: number, month: number): Promise<EventData[]> {
-  const startDate = new Date(year, month - 1, 1)
-  const endDate = new Date(year, month, 0, 23, 59, 59)
+  return safeDbQuery(async () => {
+    const startDate = new Date(year, month - 1, 1)
+    const endDate = new Date(year, month, 0, 23, 59, 59)
 
-  const events = await prisma.event.findMany({
-    where: {
-      status: 'PUBLISHED',
-      date: {
-        gte: startDate,
-        lte: endDate,
+    const events = await prisma.event.findMany({
+      where: {
+        status: 'PUBLISHED',
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
       },
-    },
-    orderBy: { date: 'asc' },
-  })
-  return events.map(transformEvent)
+      orderBy: { date: 'asc' },
+    })
+    return events.map(transformEvent)
+  }, [])
 }
 
 export async function getEventsByCategory(category: string): Promise<EventData[]> {
-  const events = await prisma.event.findMany({
-    where: {
-      status: 'PUBLISHED',
-      category: category as any,
-    },
-    orderBy: { date: 'asc' },
-  })
-  return events.map(transformEvent)
+  return safeDbQuery(async () => {
+    const events = await prisma.event.findMany({
+      where: {
+        status: 'PUBLISHED',
+        category: category as any,
+      },
+      orderBy: { date: 'asc' },
+    })
+    return events.map(transformEvent)
+  }, [])
 }
 
 // ============================================
@@ -161,47 +188,57 @@ export async function getEventsByCategory(category: string): Promise<EventData[]
 // ============================================
 
 export async function getAllArticles(): Promise<ArticleData[]> {
-  const articles = await prisma.article.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: { publishedAt: 'desc' },
-  })
-  return articles.map(transformArticle)
+  return safeDbQuery(async () => {
+    const articles = await prisma.article.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { publishedAt: 'desc' },
+    })
+    return articles.map(transformArticle)
+  }, [])
 }
 
 export async function getFeaturedArticles(): Promise<ArticleData[]> {
-  const articles = await prisma.article.findMany({
-    where: {
-      status: 'PUBLISHED',
-      featured: true,
-    },
-    orderBy: { publishedAt: 'desc' },
-  })
-  return articles.map(transformArticle)
+  return safeDbQuery(async () => {
+    const articles = await prisma.article.findMany({
+      where: {
+        status: 'PUBLISHED',
+        featured: true,
+      },
+      orderBy: { publishedAt: 'desc' },
+    })
+    return articles.map(transformArticle)
+  }, [])
 }
 
 export async function getRecentArticles(limit: number = 5): Promise<ArticleData[]> {
-  const articles = await prisma.article.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: { publishedAt: 'desc' },
-    take: limit,
-  })
-  return articles.map(transformArticle)
+  return safeDbQuery(async () => {
+    const articles = await prisma.article.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { publishedAt: 'desc' },
+      take: limit,
+    })
+    return articles.map(transformArticle)
+  }, [])
 }
 
 export async function getArticleBySlug(slug: string): Promise<ArticleData | null> {
-  const article = await prisma.article.findUnique({
-    where: { slug },
-  })
-  return article ? transformArticle(article) : null
+  return safeDbQuery(async () => {
+    const article = await prisma.article.findUnique({
+      where: { slug },
+    })
+    return article ? transformArticle(article) : null
+  }, null)
 }
 
 export async function getArticlesByCategory(category: string): Promise<ArticleData[]> {
-  const articles = await prisma.article.findMany({
-    where: {
-      status: 'PUBLISHED',
-      category,
-    },
-    orderBy: { publishedAt: 'desc' },
-  })
-  return articles.map(transformArticle)
+  return safeDbQuery(async () => {
+    const articles = await prisma.article.findMany({
+      where: {
+        status: 'PUBLISHED',
+        category,
+      },
+      orderBy: { publishedAt: 'desc' },
+    })
+    return articles.map(transformArticle)
+  }, [])
 }
