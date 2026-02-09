@@ -264,9 +264,8 @@ export default function NewsletterTemplate({
 
               {/* Section Items */}
               {section.items.map((item, itemIndex) => {
-                const itemData = item.data;
-
                 if (item.type === 'event') {
+                  const itemData = item.data as EventDataForEmail;
                   return (
                     <EmailEventCard
                       key={itemIndex}
@@ -280,6 +279,7 @@ export default function NewsletterTemplate({
                     />
                   );
                 } else if (item.type === 'article') {
+                  const itemData = item.data as ArticleDataForEmail;
                   return (
                     <EmailNewsCard
                       key={itemIndex}
@@ -292,6 +292,7 @@ export default function NewsletterTemplate({
                   );
                 } else if (item.type === 'custom') {
                   // Custom section with text and optional image
+                  const itemData = item.data as CustomDataForEmail;
                   const customImageUrl = itemData.imageUrl;
                   const customTitle = itemData.title;
                   const customText = itemData.text;
