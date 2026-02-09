@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
   const month = searchParams.get('month')
 
   try {
-    let whereClause: any = { status: 'PUBLISHED' }
+    let whereClause: Prisma.EventWhereInput = { status: 'PUBLISHED' }
 
     // If year and month provided, filter by month
     if (year && month) {

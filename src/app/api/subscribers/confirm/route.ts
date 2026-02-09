@@ -29,13 +29,13 @@ export async function GET(request: NextRequest) {
       success: true,
       email: subscriber.email,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Confirmation error:', error)
 
     return NextResponse.json(
       {
         success: false,
-        error: { message: error.message || 'Invalid or expired confirmation link' },
+        error: { message: error instanceof Error ? error.message : 'Invalid or expired confirmation link' },
       },
       { status: 400 }
     )

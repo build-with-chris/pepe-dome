@@ -107,7 +107,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
   const contentSections: {
     heading?: string
     description?: string
-    items: Array<{ type: string; data: any }>
+    items: Array<{ type: string; data: unknown }>
   }[] = []
 
   let currentSection: typeof contentSections[0] | null = null

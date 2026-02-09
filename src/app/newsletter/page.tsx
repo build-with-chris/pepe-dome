@@ -39,7 +39,16 @@ export default async function NewsletterPage() {
   }
 
   // Group newsletters by year for filtering
-  const newslettersByYear = publishedNewsletters.reduce((acc: Record<number, typeof publishedNewsletters>, newsletter) => {
+  const newslettersByYear = publishedNewsletters.reduce((acc: Record<number, typeof publishedNewsletters>, newsletter: {
+    id: string
+    slug: string
+    subject: string
+    preheader: string | null
+    sentAt: Date | null
+    heroTitle: string | null
+    heroSubtitle: string | null
+    heroImageUrl: string | null
+  }) => {
     const year = new Date(newsletter.sentAt!).getFullYear()
     if (!acc[year]) acc[year] = []
     acc[year].push(newsletter)

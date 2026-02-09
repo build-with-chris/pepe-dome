@@ -2,6 +2,8 @@
  * Standardized API response utilities
  */
 
+import { ZodError, ZodIssue } from 'zod'
+
 export interface ApiResponse<T = any> {
   data: T | null
   error: ApiError | null
@@ -67,8 +69,8 @@ export function errorResponse(
 /**
  * Create a validation error response from Zod errors
  */
-export function validationErrorResponse(errors: any): Response {
-  const details = errors.issues?.map((issue: any) => ({
+export function validationErrorResponse(errors: ZodError | { issues?: ZodIssue[] }): Response {
+  const details = errors.issues?.map((issue: ZodIssue) => ({
     field: issue.path.join('.'),
     message: issue.message,
   }))

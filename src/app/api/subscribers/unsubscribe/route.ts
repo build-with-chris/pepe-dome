@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     redirectUrl.searchParams.set('success', 'true')
 
     return Response.redirect(redirectUrl.toString(), 302)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Unsubscribe error:', error)
 
     // Redirect to error page
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     redirectUrl.searchParams.set('success', 'false')
     redirectUrl.searchParams.set(
       'error',
-      error.message || 'Failed to unsubscribe'
+      error instanceof Error ? error.message : 'Failed to unsubscribe'
     )
 
     return Response.redirect(redirectUrl.toString(), 302)
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('success', 'true')
 
     return Response.redirect(redirectUrl.toString(), 302)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Unsubscribe error:', error)
 
     // Redirect to error page
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('success', 'false')
     redirectUrl.searchParams.set(
       'error',
-      error.message || 'Failed to unsubscribe'
+      error instanceof Error ? error.message : 'Failed to unsubscribe'
     )
 
     return Response.redirect(redirectUrl.toString(), 302)

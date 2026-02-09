@@ -3,7 +3,7 @@
  */
 
 import { prisma } from './prisma'
-import { SubscriberStatus } from '@prisma/client'
+import { SubscriberStatus, Prisma } from '@prisma/client'
 import crypto from 'crypto'
 
 /**
@@ -25,7 +25,7 @@ export function validateEmail(email: string): boolean {
  * Get active subscribers, optionally filtered by interests
  */
 export async function getActiveSubscribers(interests?: string[]) {
-  const where: any = {
+  const where: Prisma.SubscriberWhereInput = {
     status: SubscriberStatus.ACTIVE,
   }
 

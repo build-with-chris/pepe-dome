@@ -60,11 +60,11 @@ export async function POST(request: NextRequest) {
     const newsletter = await createNewsletter(validation.data)
 
     return successResponse(newsletter, undefined, 201)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Newsletter creation error:', error)
 
     // Handle unique constraint violations (duplicate slug)
-    if (error.code === 'P2002') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
       return errorResponse(
         'DUPLICATE_SLUG',
         'A newsletter with this title already exists for this month.',
