@@ -3,7 +3,7 @@
  */
 
 import { prisma } from './prisma'
-import { NewsletterStatus, ContentType } from '@prisma/client'
+import { NewsletterStatus, ContentType, Prisma } from '@prisma/client'
 
 /**
  * Generate a URL-friendly slug from a title
@@ -176,7 +176,7 @@ export async function replaceNewsletterContent(
   }[]
 ) {
   // Delete all existing content and create new ones in a transaction
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     // Delete existing content
     await tx.newsletterContent.deleteMany({
       where: { newsletterId },
