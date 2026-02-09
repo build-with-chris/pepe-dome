@@ -67,7 +67,17 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       lastOpenAt: subscriber.lastOpenAt,
       lastClickAt: subscriber.lastClickAt,
       metadata: subscriber.metadata,
-      activity: subscriber.newsletterEvents.map((event) => ({
+      activity: subscriber.newsletterEvents.map((event: {
+        id: string
+        eventType: string
+        createdAt: Date
+        eventData: unknown
+        newsletter: {
+          id: string
+          subject: string
+          slug: string
+        } | null
+      }) => ({
         id: event.id,
         eventType: event.eventType,
         createdAt: event.createdAt,
