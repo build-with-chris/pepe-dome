@@ -119,7 +119,18 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
         </AdminCard>
       ) : (
         <div className="space-y-3">
-          {newsletters.map((newsletter) => (
+          {newsletters.map((newsletter: {
+            id: string
+            subject: string
+            preheader: string | null
+            heroImageUrl: string | null
+            status: string
+            sentAt: Date | null
+            scheduledAt: Date | null
+            createdAt: Date
+            recipientCount: number
+            stats?: { uniqueOpenCount: number; uniqueClickCount: number } | null
+          }) => (
             <NewsletterListItem key={newsletter.id} newsletter={newsletter} />
           ))}
         </div>
