@@ -36,7 +36,7 @@ interface Subscriber {
   email: string
   firstName: string | null
   status: string
-  interests: unknown
+  interests: string[] | null
   createdAt: string
   confirmedAt: string | null
   lastOpenAt: string | null
@@ -45,7 +45,7 @@ interface Subscriber {
 
 interface SubscriberDetail extends Subscriber {
   unsubscribedAt: string | null
-  metadata: unknown
+  metadata: Record<string, unknown> | null
   activity: {
     id: string
     eventType: string
@@ -55,7 +55,7 @@ interface SubscriberDetail extends Subscriber {
       subject: string
       slug: string
     } | null
-    eventData: unknown
+    eventData: Record<string, unknown> | null
   }[]
 }
 
@@ -206,8 +206,8 @@ export default function SubscribersClient({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-white/60 hidden md:table-cell">
-                    {Array.isArray(subscriber.interests) && subscriber.interests.length > 0
-                      ? (subscriber.interests as string[]).join(', ')
+                    {subscriber.interests && subscriber.interests.length > 0
+                      ? subscriber.interests.join(', ')
                       : '-'}
                   </TableCell>
                   <TableCell className="text-white/40 hidden md:table-cell">
@@ -329,11 +329,11 @@ export default function SubscribersClient({
                   </div>
                 </div>
 
-                {Array.isArray(selectedSubscriber.interests) && selectedSubscriber.interests.length > 0 && (
+                {selectedSubscriber.interests && selectedSubscriber.interests.length > 0 && (
                   <div className="mt-4">
                     <p className="text-white/40 text-xs mb-2">Interessen</p>
                     <div className="flex flex-wrap gap-2">
-                      {(selectedSubscriber.interests as string[]).map((interest, i) => (
+                      {selectedSubscriber.interests.map((interest, i) => (
                         <span
                           key={i}
                           className="px-2.5 py-1 bg-[#016dca]/10 text-[#016dca] text-xs rounded-lg"

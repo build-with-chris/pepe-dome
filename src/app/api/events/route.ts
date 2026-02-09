@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       price: string | null
       imageUrl: string | null
       featured: boolean
-      highlights: unknown
+      highlights: string[] | null
     }) => ({
       id: event.id,
       slug: event.slug,

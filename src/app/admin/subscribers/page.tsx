@@ -54,7 +54,7 @@ async function getSubscribers(status?: SubscriberStatus, page = 1, limit = 50) {
       email: string
       firstName: string | null
       status: string
-      interests: unknown
+      interests: string[] | null
       createdAt: Date
       confirmedAt: Date | null
       lastOpenAt: Date | null

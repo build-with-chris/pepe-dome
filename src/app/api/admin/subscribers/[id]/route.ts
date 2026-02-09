@@ -71,7 +71,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         id: string
         eventType: string
         createdAt: Date
-        eventData: unknown
+        eventData: Record<string, unknown> | null
         newsletter: {
           id: string
           subject: string

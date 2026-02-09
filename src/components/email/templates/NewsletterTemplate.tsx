@@ -24,12 +24,43 @@ import { EmailButton } from '../components/EmailButton';
 import { EmailEventCard } from '../components/EmailEventCard';
 import { EmailNewsCard } from '../components/EmailNewsCard';
 
+type EventDataForEmail = {
+  title: string
+  description?: string
+  date?: string
+  time?: string
+  location?: string
+  category?: string
+  imageUrl?: string
+  eventUrl?: string
+  ctaUrl?: string
+  ctaLabel?: string
+}
+
+type ArticleDataForEmail = {
+  title: string
+  excerpt?: string
+  imageUrl?: string
+  articleUrl?: string
+  category?: string
+}
+
+type CustomDataForEmail = {
+  title?: string
+  text?: string
+  imageUrl?: string
+  ctaUrl?: string
+  ctaLabel?: string
+}
+
+type ContentItemDataForEmail = EventDataForEmail | ArticleDataForEmail | CustomDataForEmail | Record<string, never>
+
 interface NewsletterContentSection {
   sectionHeading?: string;
   sectionDescription?: string;
   items: Array<{
     type: 'event' | 'article' | 'custom';
-    data: unknown;
+    data: ContentItemDataForEmail;
   }>;
 }
 
@@ -233,7 +264,7 @@ export default function NewsletterTemplate({
 
               {/* Section Items */}
               {section.items.map((item, itemIndex) => {
-                const itemData = item.data as Record<string, string | undefined>;
+                const itemData = item.data;
 
                 if (item.type === 'event') {
                   return (

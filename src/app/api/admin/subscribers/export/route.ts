@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       email: string
       firstName: string | null
       status: string
-      interests: unknown
+      interests: string[] | null
       confirmedAt: Date | null
       unsubscribedAt: Date | null
       createdAt: Date

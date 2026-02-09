@@ -15,10 +15,41 @@ type ContentItemType = 'event' | 'article' | 'custom'
 /**
  * Content section type for newsletter templates
  */
+type EventDataForEmail = {
+  title: string
+  description?: string
+  date?: string
+  time?: string
+  location?: string
+  category?: string
+  imageUrl?: string
+  eventUrl?: string
+  ctaUrl?: string
+  ctaLabel?: string
+}
+
+type ArticleDataForEmail = {
+  title: string
+  excerpt?: string
+  imageUrl?: string
+  articleUrl?: string
+  category?: string
+}
+
+type CustomDataForEmail = {
+  title?: string
+  text?: string
+  imageUrl?: string
+  ctaUrl?: string
+  ctaLabel?: string
+}
+
+type ContentItemDataForEmail = EventDataForEmail | ArticleDataForEmail | CustomDataForEmail | Record<string, never>
+
 interface ContentSection {
   sectionHeading: string
   sectionDescription?: string
-  items: Array<{ type: ContentItemType; data: unknown }>
+  items: Array<{ type: ContentItemType; data: ContentItemDataForEmail }>
 }
 
 /**
@@ -263,7 +294,7 @@ export async function sendNewsletter(
   const contentSections: ContentSection[] = []
 
   // Group newsletter content by section
-  const sectionMap = new Map<string, { description?: string; items: Array<{ type: ContentItemType; data: unknown }> }>()
+  const sectionMap = new Map<string, { description?: string; items: Array<{ type: ContentItemType; data: ContentItemDataForEmail }> }>()
 
   for (const item of newsletter.content) {
     // CUSTOM_SECTION items are standalone - each one is its own section (same as preview)
@@ -286,7 +317,7 @@ export async function sendNewsletter(
     }
 
     // Get the actual data based on content type
-    let data: unknown = null
+    let data: ContentItemDataForEmail | null = null
     let type: ContentItemType = 'custom'
 
     if (item.contentId) {
