@@ -396,7 +396,17 @@ export default function SubscribersClient({
                   <p className="text-white/40 text-sm">Keine Aktivität vorhanden</p>
                 ) : (
                   <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {selectedSubscriber.activity.map((event) => (
+                    {selectedSubscriber.activity.map((event: {
+                      id: string
+                      eventType: string
+                      createdAt: string
+                      newsletter: {
+                        id: string
+                        subject: string
+                        slug: string
+                      } | null
+                      eventData: unknown
+                    }) => (
                       <div
                         key={event.id}
                         className="flex items-start justify-between p-3 bg-white/[0.02] rounded-lg text-sm"

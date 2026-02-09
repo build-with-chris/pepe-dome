@@ -25,7 +25,23 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform to frontend format
-    const transformedEvents = events.map(event => ({
+    const transformedEvents = events.map((event: {
+      id: string
+      slug: string
+      title: string
+      subtitle: string | null
+      description: string
+      date: Date
+      endDate: Date | null
+      time: string | null
+      location: string
+      category: string
+      ticketUrl: string | null
+      price: string | null
+      imageUrl: string | null
+      featured: boolean
+      highlights: unknown
+    }) => ({
       id: event.id,
       slug: event.slug,
       title: event.title,
@@ -40,7 +56,7 @@ export async function GET(request: NextRequest) {
       price: event.price,
       imageUrl: event.imageUrl,
       featured: event.featured,
-      highlights: event.highlights || [],
+      highlights: (event.highlights as string[]) || [],
     }))
 
     return NextResponse.json(transformedEvents)

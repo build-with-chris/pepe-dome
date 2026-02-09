@@ -62,7 +62,17 @@ export async function GET(request: NextRequest) {
     ]
 
     // Generate CSV rows
-    const rows = subscribers.map((subscriber) => {
+    const rows = subscribers.map((subscriber: {
+      email: string
+      firstName: string | null
+      status: string
+      interests: unknown
+      confirmedAt: Date | null
+      unsubscribedAt: Date | null
+      createdAt: Date
+      lastOpenAt: Date | null
+      lastClickAt: Date | null
+    }) => {
       const interests = Array.isArray(subscriber.interests)
         ? (subscriber.interests as string[]).join('; ')
         : ''
@@ -91,8 +101,8 @@ export async function GET(request: NextRequest) {
     // Build CSV content
     const csvContent = [
       headers.join(','),
-      ...rows.map((row) =>
-        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+      ...rows.map((row: string[]) =>
+        row.map((cell: string) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
       ),
     ].join('\n')
 

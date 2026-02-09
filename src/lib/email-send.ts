@@ -238,12 +238,12 @@ export async function sendNewsletter(
 
   // Create lookup maps (by both id and slug for flexibility)
   const eventsMap = new Map<string, typeof events[0]>()
-  events.forEach((e) => {
+  events.forEach((e: typeof events[0]) => {
     eventsMap.set(e.id, e)
     eventsMap.set(e.slug, e)
   })
   const articlesMap = new Map<string, typeof articles[0]>()
-  articles.forEach((a) => {
+  articles.forEach((a: typeof articles[0]) => {
     articlesMap.set(a.id, a)
     articlesMap.set(a.slug, a)
   })

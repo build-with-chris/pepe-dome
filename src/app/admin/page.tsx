@@ -171,7 +171,14 @@ export default async function AdminDashboard() {
             <p className="text-white/40 text-sm">Keine Events</p>
           ) : (
             <div className="space-y-2">
-              {stats.recentEvents.map((event) => (
+              {stats.recentEvents.map((event: {
+                id: string
+                title: string
+                date: Date
+                category: string
+                status: string
+                createdAt: Date
+              }) => (
                 <Link
                   key={event.id}
                   href={`/admin/events/${event.id}/edit`}
@@ -203,7 +210,14 @@ export default async function AdminDashboard() {
             <p className="text-white/40 text-sm">Keine Artikel</p>
           ) : (
             <div className="space-y-2">
-              {stats.recentArticles.map((article) => (
+              {stats.recentArticles.map((article: {
+                id: string
+                title: string
+                category: string
+                author: string
+                status: string
+                createdAt: Date
+              }) => (
                 <Link
                   key={article.id}
                   href={`/admin/articles/${article.id}/edit`}

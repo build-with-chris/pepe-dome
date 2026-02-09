@@ -49,7 +49,17 @@ async function getSubscribers(status?: SubscriberStatus, page = 1, limit = 50) {
   ])
 
   return {
-    subscribers: subscribers.map((s) => ({
+    subscribers: subscribers.map((s: {
+      id: string
+      email: string
+      firstName: string | null
+      status: string
+      interests: unknown
+      createdAt: Date
+      confirmedAt: Date | null
+      lastOpenAt: Date | null
+      lastClickAt: Date | null
+    }) => ({
       ...s,
       createdAt: s.createdAt.toISOString(),
       confirmedAt: s.confirmedAt?.toISOString() || null,
@@ -94,12 +104,12 @@ export default async function SubscribersAdminPage({ searchParams }: PageProps) 
 
   const { subscribers, pagination, stats } = await getSubscribers(status, page)
 
-  const statsByStatus = stats.reduce((acc, s) => {
+  const statsByStatus = stats.reduce((acc: Record<string, number>, s: { status: string; _count: number }) => {
     acc[s.status] = s._count
     return acc
   }, {} as Record<string, number>)
 
-  const totalSubscribers = Object.values(statsByStatus).reduce((a, b) => a + b, 0)
+  const totalSubscribers = (Object.values(statsByStatus) as number[]).reduce((a: number, b: number) => a + b, 0)
 
   return (
     <div className="space-y-6">

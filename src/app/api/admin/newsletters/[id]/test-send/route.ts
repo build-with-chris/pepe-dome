@@ -42,7 +42,7 @@ export async function POST(
     }
 
     // Send newsletter to test recipients only (not to all subscribers)
-    const testEmails = testRecipients.map((r) => r.email)
+    const testEmails = testRecipients.map((r: { email: string }) => r.email)
 
     const result = await sendNewsletter(id, {
       testRecipients: testEmails,

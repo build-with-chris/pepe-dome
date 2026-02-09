@@ -25,7 +25,13 @@ export default async function TestRecipientsAdminPage() {
 
   const testRecipients = await getTestRecipients()
 
-  const serializedRecipients = testRecipients.map((r) => ({
+  const serializedRecipients = testRecipients.map((r: {
+    id: string
+    email: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+  }) => ({
     ...r,
     createdAt: r.createdAt.toISOString(),
     updatedAt: r.updatedAt.toISOString(),

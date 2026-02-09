@@ -39,7 +39,7 @@ export default async function NewsletterPage() {
   }
 
   // Group newsletters by year for filtering
-  const newslettersByYear = publishedNewsletters.reduce((acc, newsletter) => {
+  const newslettersByYear = publishedNewsletters.reduce((acc: Record<number, typeof publishedNewsletters>, newsletter) => {
     const year = new Date(newsletter.sentAt!).getFullYear()
     if (!acc[year]) acc[year] = []
     acc[year].push(newsletter)
@@ -141,7 +141,16 @@ export default async function NewsletterPage() {
 
             {/* Published Newsletters Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {publishedNewsletters.map(newsletter => (
+              {publishedNewsletters.map((newsletter: {
+                id: string
+                slug: string
+                subject: string
+                preheader: string | null
+                sentAt: Date | null
+                heroTitle: string | null
+                heroSubtitle: string | null
+                heroImageUrl: string | null
+              }) => (
                 <Link key={newsletter.id} href={`/newsletter/${newsletter.slug}`} className="group">
                   <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 h-full hover:border-[var(--pepe-gold)] transition-all duration-300 hover:-translate-y-1">
                     {/* Date Badge */}

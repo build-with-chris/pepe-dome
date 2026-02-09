@@ -72,7 +72,16 @@ export async function GET(request: NextRequest) {
 
     // Format content for newsletter builder
     const content = [
-      ...events.map((event) => ({
+      ...events.map((event: {
+        id: string
+        title: string
+        subtitle: string | null
+        description: string
+        imageUrl: string | null
+        date: Date
+        category: string
+        featured: boolean
+      }) => ({
         id: event.id,
         type: 'EVENT' as const,
         title: event.title,
@@ -83,7 +92,15 @@ export async function GET(request: NextRequest) {
         category: event.category,
         featured: event.featured,
       })),
-      ...articles.map((article) => ({
+      ...articles.map((article: {
+        id: string
+        title: string
+        excerpt: string
+        imageUrl: string | null
+        publishedAt: Date | null
+        category: string
+        featured: boolean
+      }) => ({
         id: article.id,
         type: 'ARTICLE' as const,
         title: article.title,
