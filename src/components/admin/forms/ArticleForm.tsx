@@ -192,7 +192,14 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
       })
 
       if (!res.ok) {
-        const err = await res.json()
+        const text = await res.text()
+        let err: { error?: string } = {}
+        try {
+          err = text ? JSON.parse(text) : {}
+        } catch {
+          setErrors({ form: `Fehler ${res.status}: ${text.slice(0, 100)}` })
+          return
+        }
         throw new Error(err.error || 'Fehler beim Speichern')
       }
 

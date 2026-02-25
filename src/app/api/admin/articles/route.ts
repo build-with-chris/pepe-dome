@@ -9,7 +9,7 @@ const articleSchema = z.object({
   content: z.string().min(1, 'Content is required'),
   category: z.string().min(1, 'Category is required'),
   author: z.string().min(1, 'Author is required'),
-  imageUrl: z.string().url().optional().or(z.literal('')),
+  imageUrl: z.string().url().optional().or(z.literal('')).nullable(),
   tags: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
@@ -124,7 +124,11 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Validation error', details: error.issues }, { status: 400 })
     }
-    console.error('Error creating article:', error)
-    return NextResponse.json({ error: 'Failed to create article' }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('Error creating article:', message, error)
+    return NextResponse.json(
+      { error: message || 'Failed to create article' },
+      { status: 500 }
+    )
   }
 }
