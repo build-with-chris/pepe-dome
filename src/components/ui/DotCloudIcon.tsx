@@ -82,10 +82,11 @@ function DotCloudIcon({
     let mounted = true
 
     const loadParticles = async () => {
-      try {
-        const imagePath = `/doticons/${iconName}.jpg`
+      const primaryPath = `/doticons/${iconName}.jpg`
+      const fallbackPath = '/doticons/placeholder.jpg'
 
-        const particleData = await imageToParticles({
+      const tryLoad = async (imagePath: string) =>
+        imageToParticles({
           imagePath,
           sampleGap,
           densityMultiplier: density * 1.2,
@@ -94,15 +95,19 @@ function DotCloudIcon({
           maxDotSize,
         })
 
-        if (mounted) {
+      try {
+        let particleData = await tryLoad(primaryPath).catch(() => null)
+        if (particleData == null && primaryPath !== fallbackPath) {
+          particleData = await tryLoad(fallbackPath).catch(() => null)
+        }
+        if (mounted && particleData != null) {
           setParticles(particleData)
           setIsLoaded(true)
-        }
-      } catch {
-        // Silent fallback: render nothing if image fails to load (Task 2.6)
-        if (mounted) {
+        } else if (mounted) {
           setHasError(true)
         }
+      } catch {
+        if (mounted) setHasError(true)
       }
     }
 

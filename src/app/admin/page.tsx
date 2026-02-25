@@ -18,72 +18,100 @@ import { CATEGORY_LABELS } from '@/lib/admin-constants'
  * - Grid gaps: gap-5
  */
 
-async function getDashboardStats() {
-  const [
-    eventCount,
-    upcomingEventCount,
-    articleCount,
-    publishedArticleCount,
-    newsletterCount,
-    sentNewsletterCount,
-    subscriberCount,
-    activeSubscriberCount,
-    recentEvents,
-    recentArticles,
-    lastNewsletter,
-  ] = await Promise.all([
-    prisma.event.count(),
-    prisma.event.count({
-      where: {
-        date: { gte: new Date() },
-        status: 'PUBLISHED',
-      },
-    }),
-    prisma.article.count(),
-    prisma.article.count({ where: { status: 'PUBLISHED' } }),
-    prisma.newsletter.count(),
-    prisma.newsletter.count({ where: { status: 'SENT' } }),
-    prisma.subscriber.count(),
-    prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
-    prisma.event.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        date: true,
-        category: true,
-        status: true,
-        createdAt: true,
-      },
-    }),
-    prisma.article.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        category: true,
-        author: true,
-        status: true,
-        createdAt: true,
-      },
-    }),
-    prisma.newsletter.findFirst({
-      where: { status: 'SENT' },
-      orderBy: { sentAt: 'desc' },
-      include: { stats: true },
-    }),
-  ])
+const EMPTY_DASHBOARD_STATS = {
+  events: { total: 0, upcoming: 0 },
+  articles: { total: 0, published: 0 },
+  newsletters: { total: 0, sent: 0 },
+  subscribers: { total: 0, active: 0 },
+  recentEvents: [] as Array<{
+    id: string
+    title: string
+    date: Date
+    category: string
+    status: string
+    createdAt: Date
+  }>,
+  recentArticles: [] as Array<{
+    id: string
+    title: string
+    category: string
+    author: string
+    status: string
+    createdAt: Date
+  }>,
+  lastNewsletter: null,
+}
 
-  return {
-    events: { total: eventCount, upcoming: upcomingEventCount },
-    articles: { total: articleCount, published: publishedArticleCount },
-    newsletters: { total: newsletterCount, sent: sentNewsletterCount },
-    subscribers: { total: subscriberCount, active: activeSubscriberCount },
-    recentEvents,
-    recentArticles,
-    lastNewsletter,
+async function getDashboardStats() {
+  try {
+    const [
+      eventCount,
+      upcomingEventCount,
+      articleCount,
+      publishedArticleCount,
+      newsletterCount,
+      sentNewsletterCount,
+      subscriberCount,
+      activeSubscriberCount,
+      recentEvents,
+      recentArticles,
+      lastNewsletter,
+    ] = await Promise.all([
+      prisma.event.count(),
+      prisma.event.count({
+        where: {
+          date: { gte: new Date() },
+          status: 'PUBLISHED',
+        },
+      }),
+      prisma.article.count(),
+      prisma.article.count({ where: { status: 'PUBLISHED' } }),
+      prisma.newsletter.count(),
+      prisma.newsletter.count({ where: { status: 'SENT' } }),
+      prisma.subscriber.count(),
+      prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
+      prisma.event.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          title: true,
+          date: true,
+          category: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
+      prisma.article.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          title: true,
+          category: true,
+          author: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
+      prisma.newsletter.findFirst({
+        where: { status: 'SENT' },
+        orderBy: { sentAt: 'desc' },
+        include: { stats: true },
+      }),
+    ])
+
+    return {
+      events: { total: eventCount, upcoming: upcomingEventCount },
+      articles: { total: articleCount, published: publishedArticleCount },
+      newsletters: { total: newsletterCount, sent: sentNewsletterCount },
+      subscribers: { total: subscriberCount, active: activeSubscriberCount },
+      recentEvents,
+      recentArticles,
+      lastNewsletter,
+    }
+  } catch {
+    return EMPTY_DASHBOARD_STATS
   }
 }
 

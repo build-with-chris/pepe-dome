@@ -9,7 +9,10 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "npx tsx scripts/seed-jan-feb-2026.ts",
+    "db:reset": "prisma migrate reset --force"
   },
   "keywords": [
     "pepe-dome",
