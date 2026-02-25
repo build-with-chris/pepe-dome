@@ -16,31 +16,46 @@ import { cn } from '@/lib/utils'
  * Admin Newsletter Dashboard
  */
 
-async function getNewsletterStats() {
-  const [totalSubscribers, recentNewsletter] = await Promise.all([
-    prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
-    prisma.newsletter.findFirst({
-      where: { status: 'SENT' },
-      orderBy: { sentAt: 'desc' },
-      include: { stats: true },
-    }),
-  ])
+const EMPTY_NEWSLETTER_STATS = {
+  totalSubscribers: 0,
+  lastNewsletter: null as {
+    subject: string
+    sentAt: Date | null
+    recipientCount: number
+    openRate: string
+    clickRate: string
+  } | null,
+}
 
-  return {
-    totalSubscribers,
-    lastNewsletter: recentNewsletter
-      ? {
-          subject: recentNewsletter.subject,
-          sentAt: recentNewsletter.sentAt,
-          recipientCount: recentNewsletter.recipientCount,
-          openRate: recentNewsletter.stats
-            ? ((recentNewsletter.stats.uniqueOpenCount / recentNewsletter.recipientCount) * 100).toFixed(1)
-            : '0',
-          clickRate: recentNewsletter.stats
-            ? ((recentNewsletter.stats.uniqueClickCount / recentNewsletter.recipientCount) * 100).toFixed(1)
-            : '0',
-        }
-      : null,
+async function getNewsletterStats() {
+  try {
+    const [totalSubscribers, recentNewsletter] = await Promise.all([
+      prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
+      prisma.newsletter.findFirst({
+        where: { status: 'SENT' },
+        orderBy: { sentAt: 'desc' },
+        include: { stats: true },
+      }),
+    ])
+
+    return {
+      totalSubscribers,
+      lastNewsletter: recentNewsletter
+        ? {
+            subject: recentNewsletter.subject,
+            sentAt: recentNewsletter.sentAt,
+            recipientCount: recentNewsletter.recipientCount,
+            openRate: recentNewsletter.stats
+              ? ((recentNewsletter.stats.uniqueOpenCount / recentNewsletter.recipientCount) * 100).toFixed(1)
+              : '0',
+            clickRate: recentNewsletter.stats
+              ? ((recentNewsletter.stats.uniqueClickCount / recentNewsletter.recipientCount) * 100).toFixed(1)
+              : '0',
+          }
+        : null,
+    }
+  } catch {
+    return EMPTY_NEWSLETTER_STATS
   }
 }
 
@@ -60,10 +75,22 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
   const status = params.status as 'DRAFT' | 'SCHEDULED' | 'SENT' | undefined
   const page = parseInt(params.page || '1', 10)
 
-  const [{ newsletters, pagination }, stats] = await Promise.all([
-    getNewsletters({ page, limit: 20, status }),
-    getNewsletterStats(),
-  ])
+  let newsletters: Awaited<ReturnType<typeof getNewsletters>>['newsletters'] = []
+  let pagination: Awaited<ReturnType<typeof getNewsletters>>['pagination'] = {
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 0,
+  }
+  try {
+    const result = await getNewsletters({ page, limit: 20, status })
+    newsletters = result.newsletters
+    pagination = result.pagination
+  } catch {
+    // leave newsletters/pagination empty
+  }
+
+  const stats = await getNewsletterStats()
 
   return (
     <div className="space-y-6">

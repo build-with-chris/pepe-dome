@@ -46,8 +46,13 @@ export default async function EditNewsletterPage({ params }: PageProps) {
     canTestSendNewsletter(),
   ])
 
-  // Fetch newsletter
-  const newsletter = await getNewsletterWithContent(id)
+  // Fetch newsletter (guard against DB errors)
+  let newsletter: Awaited<ReturnType<typeof getNewsletterWithContent>> = null
+  try {
+    newsletter = await getNewsletterWithContent(id)
+  } catch {
+    notFound()
+  }
 
   if (!newsletter) {
     notFound()

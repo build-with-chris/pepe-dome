@@ -45,8 +45,7 @@ export async function GET(request: NextRequest) {
       orderBy: { date: 'desc' },
     })
 
-    // Build article query filters
-    // Include both PUBLISHED and DRAFT for admin selection
+    // Build article query filters (no Prisma JSON array filter - filter in memory if tags needed)
     const articleWhere: Prisma.ArticleWhereInput = {
       status: { in: [ContentStatus.PUBLISHED, ContentStatus.DRAFT] },
     }
@@ -54,21 +53,21 @@ export async function GET(request: NextRequest) {
     if (category) {
       articleWhere.category = category
     }
-    if (tags) {
-      const tagList = tags.split(',').map((t) => t.trim())
-      // Filter by tags - articles have tags as JSON array
-      articleWhere.OR = tagList.map(tag => ({
-        tags: {
-          array_contains: [tag],
-        },
-      }))
-    }
 
-    // Fetch articles from database
-    const articles = await prisma.article.findMany({
+    let articles = await prisma.article.findMany({
       where: articleWhere,
       orderBy: { publishedAt: 'desc' },
     })
+
+    if (tags) {
+      const tagList = tags.split(',').map((t) => t.trim()).filter(Boolean)
+      if (tagList.length > 0) {
+        articles = articles.filter((a: { tags: unknown }) => {
+          const articleTags = Array.isArray(a.tags) ? (a.tags as string[]) : []
+          return tagList.some((tag) => articleTags.includes(tag))
+        })
+      }
+    }
 
     // Format content for newsletter builder
     const content = [

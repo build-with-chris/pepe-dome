@@ -56,13 +56,22 @@ export default function ContentSelector({
       if (filters.tags) params.append('tags', filters.tags)
 
       const response = await fetch(`/api/admin/content?${params}`)
-      const result = await response.json()
+      let result: { data?: ContentItem[]; error?: unknown } = {}
+      try {
+        result = await response.json()
+      } catch {
+        setAvailableContent([])
+        return
+      }
 
       if (response.ok) {
         setAvailableContent(result.data || [])
+      } else {
+        setAvailableContent([])
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
+      setAvailableContent([])
     } finally {
       setIsLoading(false)
     }

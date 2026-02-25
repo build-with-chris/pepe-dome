@@ -29,45 +29,53 @@ function generateSlug(title: string): string {
 
 // GET - List all articles
 export async function GET(request: NextRequest) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  try {
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  const searchParams = request.nextUrl.searchParams
-  const status = searchParams.get('status')
-  const category = searchParams.get('category')
-  const page = parseInt(searchParams.get('page') || '1')
-  const limit = parseInt(searchParams.get('limit') || '20')
+    const searchParams = request.nextUrl.searchParams
+    const status = searchParams.get('status')
+    const category = searchParams.get('category')
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '20')
 
-  const where: Record<string, unknown> = {}
-  if (status) where.status = status
-  if (category) where.category = category
+    const where: Record<string, unknown> = {}
+    if (status) where.status = status
+    if (category) where.category = category
 
-  const [articles, total] = await Promise.all([
-    prisma.article.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
-      include: {
-        events: {
-          include: { event: { select: { id: true, title: true } } }
+    const [articles, total] = await Promise.all([
+      prisma.article.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          events: {
+            include: { event: { select: { id: true, title: true } } }
+          }
         }
-      }
-    }),
-    prisma.article.count({ where }),
-  ])
+      }),
+      prisma.article.count({ where }),
+    ])
 
-  return NextResponse.json({
-    articles,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit),
-    },
-  })
+    return NextResponse.json({
+      articles,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    })
+  } catch (error) {
+    console.error('Error fetching articles:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch articles', articles: [], pagination: { page: 1, limit: 20, total: 0, pages: 0 } },
+      { status: 500 }
+    )
+  }
 }
 
 // POST - Create new article
