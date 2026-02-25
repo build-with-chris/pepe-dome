@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { existsSync } from 'fs'
+import { getSupabaseAdmin, UPLOAD_BUCKET } from '@/lib/supabase-server'
 
 // Maximum file size: 10MB
 const MAX_FILE_SIZE = 10 * 1024 * 1024
@@ -50,41 +51,91 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Ensure uploads directory exists
+    const filename = generateFilename(file.name)
+
+    // Supabase Storage (Production oder lokal, wenn konfiguriert)
+    const supabase = getSupabaseAdmin()
+    if (supabase) {
+      // In Serverless (Vercel) File oft als ArrayBuffer/Buffer uploaden, sonst kann der Request fehlschlagen
+      const arrayBuffer = await file.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      const { data, error } = await supabase.storage
+        .from(UPLOAD_BUCKET)
+        .upload(filename, buffer, {
+          contentType: file.type,
+          upsert: false,
+        })
+
+      if (error) {
+        console.error('Supabase upload error:', error.message, error)
+        return NextResponse.json(
+          {
+            error:
+              error.message === 'The resource already exists'
+                ? 'Datei mit diesem Namen existiert bereits.'
+                : `Supabase: ${error.message}`,
+          },
+          { status: 500 }
+        )
+      }
+
+      const path = data?.path ?? filename
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(UPLOAD_BUCKET).getPublicUrl(path)
+
+      return NextResponse.json({
+        success: true,
+        url: publicUrl,
+        filename,
+        size: file.size,
+        type: file.type,
+      })
+    }
+
+    // Fallback: Lokales Dateisystem (nur für lokale Entwicklung)
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true })
     }
-
-    // Generate unique filename
-    const filename = generateFilename(file.name)
     const filepath = path.join(uploadsDir, filename)
-
-    // Convert file to buffer and save
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     await writeFile(filepath, buffer)
 
-    // Return public URL
-    const url = `/uploads/${filename}`
-
     return NextResponse.json({
       success: true,
-      url,
+      url: `/uploads/${filename}`,
       filename,
       size: file.size,
       type: file.type,
     })
   } catch (error) {
-    console.error('Upload error:', error)
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('Upload error:', message, error)
+    if (process.env.VERCEL) {
+      const hasSupabase =
+        (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL) &&
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      if (!hasSupabase) {
+        return NextResponse.json(
+          {
+            error:
+              'Supabase Storage nicht konfiguriert. NEXT_PUBLIC_SUPABASE_URL und SUPABASE_SERVICE_ROLE_KEY in Vercel setzen.',
+          },
+          { status: 503 }
+        )
+      }
+    }
     return NextResponse.json(
-      { error: 'Fehler beim Hochladen der Datei' },
+      { error: `Fehler beim Hochladen: ${message}` },
       { status: 500 }
     )
   }
 }
 
-// Optional: Handle DELETE to remove images
+// Optional: Handle DELETE to remove images (Supabase Storage oder lokale Datei)
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -97,21 +148,27 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Prevent directory traversal
     const sanitizedFilename = path.basename(filename)
-    const filepath = path.join(process.cwd(), 'public', 'uploads', sanitizedFilename)
 
-    // Check if file exists before deleting
-    if (!existsSync(filepath)) {
-      return NextResponse.json(
-        { error: 'Datei nicht gefunden' },
-        { status: 404 }
-      )
+    const supabase = getSupabaseAdmin()
+    if (supabase) {
+      const { error } = await supabase.storage.from(UPLOAD_BUCKET).remove([sanitizedFilename])
+      if (error) {
+        if (error.message?.includes('not found') || error.message?.includes('Object not found')) {
+          return NextResponse.json({ error: 'Datei nicht gefunden' }, { status: 404 })
+        }
+        console.error('Supabase delete error:', error)
+        return NextResponse.json({ error: 'Fehler beim Löschen' }, { status: 500 })
+      }
+      return NextResponse.json({ success: true })
     }
 
+    const filepath = path.join(process.cwd(), 'public', 'uploads', sanitizedFilename)
+    if (!existsSync(filepath)) {
+      return NextResponse.json({ error: 'Datei nicht gefunden' }, { status: 404 })
+    }
     const { unlink } = await import('fs/promises')
     await unlink(filepath)
-
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Delete error:', error)
