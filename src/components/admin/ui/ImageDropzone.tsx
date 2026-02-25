@@ -64,15 +64,31 @@ export default function ImageDropzone({
         body: formData,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload fehlgeschlagen')
+      const text = await response.text()
+      let data: { error?: string; url?: string } = {}
+      try {
+        data = text ? JSON.parse(text) : {}
+      } catch {
+        console.error('Upload response was not JSON:', response.status, text?.slice(0, 200))
+        setUploadError(`Serverfehler ${response.status}. Antwort war kein JSON – prüfe Vercel-Logs oder Supabase.`)
+        return
       }
 
-      onChange(data.url)
+      if (!response.ok) {
+        const msg = data?.error || `Upload fehlgeschlagen (${response.status})`
+        setUploadError(msg)
+        return
+      }
+
+      if (data.url) {
+        onChange(data.url)
+      } else {
+        setUploadError('Upload: Keine URL in der Antwort.')
+      }
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : 'Upload fehlgeschlagen')
+      const msg = err instanceof Error ? err.message : 'Upload fehlgeschlagen'
+      setUploadError(msg)
+      console.error('Upload error:', err)
     } finally {
       setIsUploading(false)
     }
