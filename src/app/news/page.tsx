@@ -88,7 +88,7 @@ export default async function NewsPage() {
         )}
 
         {/* Articles Grid */}
-        {remainingArticles.length > 0 ? (
+        {remainingArticles.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {remainingArticles.map(article => (
               <NewsCard
@@ -106,18 +106,6 @@ export default async function NewsPage() {
                 href={`/news/${article.slug}`}
               />
             ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-[var(--pepe-ink)] rounded-2xl border border-[var(--pepe-line)]">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <span className="text-[var(--pepe-gold)] text-4xl">&#128240;</span>
-            </div>
-            <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
-              Noch keine Artikel
-            </h3>
-            <p className="text-[var(--pepe-t64)] text-lg max-w-md mx-auto">
-              Hier erscheinen bald spannende News und Geschichten aus dem Pepe Dome.
-            </p>
           </div>
         )}
 
