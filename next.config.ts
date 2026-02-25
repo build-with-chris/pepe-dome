@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      // Supabase Storage (Artikel-/Event-Bilder)
+      {
+        protocol: 'https',
+        hostname: 'wwawsyhykrbvfgvhqbev.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
     ],
   },
   // Externalize react-email packages to prevent Html component conflicts during static generation
