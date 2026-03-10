@@ -198,8 +198,8 @@ function NavbarWithClerk() {
 
   return (
     <NavbarContent
-      isSignedIn={isSignedIn}
-      isLoaded={isLoaded}
+      isSignedIn={!!isSignedIn}
+      isLoaded={!!isLoaded}
       pathname={pathname ?? null}
       isScrolled={isScrolled}
       isMobileMenuOpen={isMobileMenuOpen}

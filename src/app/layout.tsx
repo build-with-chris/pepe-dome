@@ -34,7 +34,10 @@ export const metadata: Metadata = {
   },
 }
 
-const skipClerkInDev = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
+// Only skip Clerk in development and when the dev flag is explicitly set.
+const skipClerkInDev =
+  process.env.NODE_ENV === 'development' &&
+  process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
 
 function LayoutContent({
   children,

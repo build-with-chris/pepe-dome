@@ -11,7 +11,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getHomepageContent } from '@/lib/data'
-import { getFeaturedArticles, getRecentArticles, getUpcomingEvents, getFeaturedEvents } from '@/lib/db-data'
+import {
+  getFeaturedArticles,
+  getRecentArticles,
+  getUpcomingEvents,
+  getFeaturedEvents,
+  type EventData,
+  type ArticleData,
+} from '@/lib/db-data'
 import EventCard from '@/components/custom/EventCard'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
@@ -23,8 +30,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   let homepage: ReturnType<typeof getHomepageContent>
-  let displayEvents: Awaited<ReturnType<typeof getFeaturedEvents>>
-  let displayNews: Awaited<ReturnType<typeof getFeaturedArticles>>[]
+  let displayEvents: EventData[] = []
+  let displayNews: ArticleData[] = []
 
   try {
     homepage = getHomepageContent()

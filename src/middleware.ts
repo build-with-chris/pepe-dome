@@ -11,7 +11,10 @@ const isProtectedRoute = createRouteMatcher([
 ])
 
 // Set NEXT_PUBLIC_DISABLE_CLERK_IN_DEV=true in .env to browse the frontend without login (avoids JWKS errors)
-const skipClerkInDev = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
+// This only applies in development; in production Clerk is always enabled.
+const skipClerkInDev =
+  process.env.NODE_ENV === 'development' &&
+  process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
 
 export default skipClerkInDev
   ? function middleware() {
