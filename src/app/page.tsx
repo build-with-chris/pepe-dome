@@ -75,7 +75,7 @@ export default async function HomePage() {
             loop
             playsInline
           >
-            <source src="/videos/PepeDome Atmosphäre.mp4" type="video/mp4" />
+            <source src="/videos/PepeDome-Atmosphaere.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/50 via-transparent to-[var(--pepe-black)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/30 via-transparent to-[var(--pepe-black)]/30" />
