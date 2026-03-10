@@ -10,17 +10,23 @@ const isProtectedRoute = createRouteMatcher([
   '/admin/subscribers(.*)',
 ])
 
-export default clerkMiddleware(async (auth, req) => {
-  // Protect admin routes - redirect to sign-in if not authenticated
-  if (isProtectedRoute(req)) {
-    const { userId } = await auth()
-    if (!userId) {
-      const signInUrl = new URL('/admin/sign-in', req.url)
-      signInUrl.searchParams.set('redirect_url', req.url)
-      return NextResponse.redirect(signInUrl)
+// Set NEXT_PUBLIC_DISABLE_CLERK_IN_DEV=true in .env to browse the frontend without login (avoids JWKS errors)
+const skipClerkInDev = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
+
+export default skipClerkInDev
+  ? function middleware() {
+      return NextResponse.next()
     }
-  }
-})
+  : clerkMiddleware(async (auth, req) => {
+      if (isProtectedRoute(req)) {
+        const { userId } = await auth()
+        if (!userId) {
+          const signInUrl = new URL('/admin/sign-in', req.url)
+          signInUrl.searchParams.set('redirect_url', req.url)
+          return NextResponse.redirect(signInUrl)
+        }
+      }
+    })
 
 export const config = {
   matcher: [

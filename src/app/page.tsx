@@ -22,83 +22,94 @@ import VideoCarousel from '@/components/custom/VideoCarousel'
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const homepage = getHomepageContent()
-  const [featuredArticles, recentArticles, upcomingEvents, featuredEvents] = await Promise.all([
-    getFeaturedArticles(),
-    getRecentArticles(4),
-    getUpcomingEvents(),
-    getFeaturedEvents(),
-  ])
+  let homepage: ReturnType<typeof getHomepageContent>
+  let displayEvents: Awaited<ReturnType<typeof getFeaturedEvents>>
+  let displayNews: Awaited<ReturnType<typeof getFeaturedArticles>>[]
 
-  // Get 3 events for the featured section (prefer featured, then upcoming)
-  const displayEvents = featuredEvents.length > 0
-    ? featuredEvents.slice(0, 3)
-    : upcomingEvents.slice(0, 3)
-
-  // Get 3 news articles
-  const displayNews = featuredArticles.length > 0
-    ? [...featuredArticles, ...recentArticles.filter(a => !featuredArticles.find(f => f.id === a.id))].slice(0, 3)
-    : recentArticles.slice(0, 3)
+  try {
+    homepage = getHomepageContent()
+    const [featuredArticles, recentArticles, upcomingEvents, featuredEvents] = await Promise.all([
+      getFeaturedArticles(),
+      getRecentArticles(4),
+      getUpcomingEvents(),
+      getFeaturedEvents(),
+    ])
+    displayEvents = featuredEvents.length > 0
+      ? featuredEvents.slice(0, 3)
+      : upcomingEvents.slice(0, 3)
+    displayNews = featuredArticles.length > 0
+      ? [...featuredArticles, ...recentArticles.filter(a => !featuredArticles.find(f => f.id === a.id))].slice(0, 3)
+      : recentArticles.slice(0, 3)
+  } catch (err) {
+    console.error('HomePage data error:', err)
+    homepage = {
+      hero: {
+        title: 'Pepe Dome',
+        subtitle: 'Zuhause für Artistik & Kultur',
+        description: '',
+        cta: { primary: 'Aktuelle Events', secondary: 'Newsletter abonnieren' },
+      },
+      features: [],
+    }
+    displayEvents = []
+    displayNews = []
+  }
 
   return (
     <>
       {/* ===== Task 3.1.1: Hero Section ===== */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
-        {/* Background Image */}
+      <section className="relative min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
+        {/* Background Video - brighter, cleaner view */}
         <div className="absolute inset-0 pointer-events-none">
-          <Image
-            src="/images/dome/dome-outdoor-hero.webp"
-            alt="Pepe Dome"
-            fill
-            className="object-cover object-center opacity-30"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/60 via-transparent to-[var(--pepe-black)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/40 via-transparent to-[var(--pepe-black)]/40" />
+          <video
+            className="w-full h-full object-cover object-center opacity-65"
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/videos/PepeDome Atmosphäre.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/50 via-transparent to-[var(--pepe-black)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/30 via-transparent to-[var(--pepe-black)]/30" />
         </div>
 
         {/* DotCloud Icon Layer */}
         <HomeDotCloud />
 
-        <div className="stage-container relative z-10 py-24">
+        {/* Title + tagline: upper part */}
+        <div className="stage-container relative z-10 flex-shrink-0 pt-16 md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Main Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
               {homepage.hero.title}
             </h1>
-
-            {/* Subtitle / Tagline */}
-            <p className="text-xl md:text-3xl text-[var(--pepe-gold)] font-medium mb-8">
+            <p className="text-xl md:text-3xl text-[var(--pepe-gold)] font-medium">
               {homepage.hero.subtitle}
             </p>
+          </div>
+        </div>
 
-            {/* Description */}
-            <p className="text-lg md:text-xl text-[var(--pepe-t80)] mb-12 max-w-2xl mx-auto leading-relaxed">
-              {homepage.hero.description}
-            </p>
+        {/* Spacer: pushes CTAs into last quarter */}
+        <div className="relative z-10 flex-1 min-h-[1rem]" />
 
-            {/* Decorative Gold Line */}
-            <div className="w-32 h-1.5 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full mx-auto mb-12 shadow-[0_0_15px_var(--pepe-gold-glow)]" />
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link href="/events">
-                <Button variant="primary" size="xl" className="min-w-[220px]">
-                  {homepage.hero.cta.primary}
-                </Button>
-              </Link>
-              <Link href="/newsletter">
-                <Button variant="secondary" size="xl" className="min-w-[220px]">
-                  {homepage.hero.cta.secondary}
-                </Button>
-              </Link>
-            </div>
+        {/* Last quarter of viewport: CTAs — desktop: side by side, mobile: stacked and centered */}
+        <div className="relative z-10 h-[25vh] min-h-[140px] flex items-center justify-center pb-6 md:pb-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
+            <Link href="/events" className="w-full sm:w-auto flex justify-center sm:block">
+              <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
+                {homepage.hero.cta.primary}
+              </Button>
+            </Link>
+            <Link href="/newsletter" className="w-full sm:w-auto flex justify-center sm:block">
+              <Button variant="secondary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
+                {homepage.hero.cta.secondary}
+              </Button>
+            </Link>
           </div>
         </div>
 
         {/* Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
       </section>
 
       {/* ===== Vision & Mission Section ===== */}

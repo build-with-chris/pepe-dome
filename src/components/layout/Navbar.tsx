@@ -14,31 +14,25 @@ const navigation = [
   { label: "Kontakt", href: "/contact" }
 ]
 
-export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
-  const { isSignedIn, isLoaded } = useUser()
+// When true, Clerk is disabled in dev so you can browse the frontend without login
+const clerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isMobileMenuOpen])
-
+function NavbarContent({
+  isSignedIn,
+  isLoaded,
+  pathname,
+  isScrolled,
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
+}: {
+  isSignedIn: boolean
+  isLoaded: boolean
+  pathname: string | null
+  isScrolled: boolean
+  isMobileMenuOpen: boolean
+  setIsMobileMenuOpen: (v: boolean) => void
+}) {
+  const showAuth = !clerkDisabled
   return (
     <nav
       className={`nav transition-all duration-300 ${
@@ -47,7 +41,6 @@ export default function Navbar() {
     >
       <div className="stage-container">
         <div className="nav-content">
-          {/* Logo */}
           <div className="nav-brand">
             <Link href="/" className="nav-brand-link">
               <img
@@ -58,8 +51,6 @@ export default function Navbar() {
               />
             </Link>
           </div>
-
-          {/* Desktop Navigation */}
           <div className="nav-links">
             {navigation.map((link) => (
               <Link
@@ -71,11 +62,8 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-
-          {/* Desktop Actions */}
           <div className="nav-actions">
-            {/* Auth Section */}
-            {isLoaded && isSignedIn ? (
+            {showAuth && isLoaded && isSignedIn ? (
               <div className="flex items-center gap-3">
                 <Link
                   href="/admin"
@@ -98,7 +86,7 @@ export default function Navbar() {
                   }}
                 />
               </div>
-            ) : isLoaded ? (
+            ) : showAuth && isLoaded ? (
               <SignInButton mode="modal">
                 <button className="nav-link text-sm">
                   Login
@@ -106,8 +94,6 @@ export default function Navbar() {
               </SignInButton>
             ) : null}
           </div>
-
-          {/* Mobile Menu Button */}
           <button
             className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -119,8 +105,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="mobile-menu-overlay">
           <div className="mobile-menu-backdrop" onClick={() => setIsMobileMenuOpen(false)} />
@@ -155,9 +139,7 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-
-                {/* Auth links for mobile */}
-                {isLoaded && isSignedIn ? (
+                {showAuth && isLoaded && isSignedIn ? (
                   <Link
                     href="/admin"
                     className={`mobile-menu-link ${pathname?.startsWith('/admin') ? 'active' : ''}`}
@@ -166,7 +148,7 @@ export default function Navbar() {
                   >
                     Admin Dashboard
                   </Link>
-                ) : isLoaded ? (
+                ) : showAuth && isLoaded ? (
                   <SignInButton mode="modal">
                     <button
                       className="mobile-menu-link"
@@ -177,8 +159,7 @@ export default function Navbar() {
                   </SignInButton>
                 ) : null}
               </nav>
-
-              {isLoaded && isSignedIn && (
+              {showAuth && isLoaded && isSignedIn && (
                 <div className="mobile-menu-cta">
                   <div className="flex items-center justify-center gap-4">
                     <UserButton
@@ -197,4 +178,63 @@ export default function Navbar() {
       )}
     </nav>
   )
+}
+
+function NavbarWithClerk() {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const { isSignedIn, isLoaded } = useUser()
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMobileMenuOpen])
+
+  return (
+    <NavbarContent
+      isSignedIn={isSignedIn}
+      isLoaded={isLoaded}
+      pathname={pathname ?? null}
+      isScrolled={isScrolled}
+      isMobileMenuOpen={isMobileMenuOpen}
+      setIsMobileMenuOpen={setIsMobileMenuOpen}
+    />
+  )
+}
+
+function NavbarWithoutClerk() {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMobileMenuOpen])
+
+  return (
+    <NavbarContent
+      isSignedIn={false}
+      isLoaded={true}
+      pathname={pathname ?? null}
+      isScrolled={isScrolled}
+      isMobileMenuOpen={isMobileMenuOpen}
+      setIsMobileMenuOpen={setIsMobileMenuOpen}
+    />
+  )
+}
+
+export default function Navbar() {
+  return clerkDisabled ? <NavbarWithoutClerk /> : <NavbarWithClerk />
 }

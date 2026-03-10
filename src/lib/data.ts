@@ -140,18 +140,53 @@ export function getLatestNewsletter(): Newsletter | null {
   return sorted.length > 0 ? sorted[0] : null
 }
 
-// CONTENT FUNCTIONS
+// CONTENT FUNCTIONS - safe fallbacks to avoid 500 when JSON is missing/malformed
+
+const defaultSite = {
+  name: 'Pepe Dome',
+  tagline: 'Zuhause für Artistik & Kultur in München',
+  description: 'Der Pepe Dome im Ostpark München – Shows, Training und Events.',
+  email: '',
+  phone: '',
+  emergencyPhone: '',
+  whatsapp: '',
+  address: { street: '', city: 'München', zip: '', country: 'Deutschland' },
+  hours: { weekdays: '', weekends: '' },
+  social: { instagram: '', facebook: '', youtube: '' },
+}
+
+const defaultHomepage = {
+  hero: {
+    title: 'Pepe Dome',
+    subtitle: 'Zuhause für Artistik & Kultur',
+    description: '',
+    cta: { primary: 'Aktuelle Events', secondary: 'Newsletter abonnieren' },
+  },
+  features: [] as { title: string; description: string; icon: string }[],
+}
 
 export function getSiteContent() {
-  return contentData.site
+  try {
+    return (contentData as { site?: typeof defaultSite })?.site ?? defaultSite
+  } catch {
+    return defaultSite
+  }
 }
 
 export function getNavigation() {
-  return contentData.navigation
+  try {
+    return (contentData as { navigation?: { main: unknown[]; footer: unknown[] } })?.navigation ?? { main: [], footer: [] }
+  } catch {
+    return { main: [], footer: [] }
+  }
 }
 
 export function getHomepageContent() {
-  return contentData.homepage
+  try {
+    return (contentData as { homepage?: typeof defaultHomepage })?.homepage ?? defaultHomepage
+  } catch {
+    return defaultHomepage
+  }
 }
 
 export function getAboutContent() {

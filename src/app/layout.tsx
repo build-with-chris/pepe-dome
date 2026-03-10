@@ -34,34 +34,49 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+const skipClerkInDev = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
+
+function LayoutContent({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
-        <head>
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-CGE01LR2LC"
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
+    <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-CGE01LR2LC"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-CGE01LR2LC');
             `}
-          </Script>
-        </head>
-        <body className="antialiased">
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-        </body>
-      </html>
+        </Script>
+      </head>
+      <body className="antialiased">
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
+      </body>
+    </html>
+  )
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  if (skipClerkInDev) {
+    return <LayoutContent>{children}</LayoutContent>
+  }
+  return (
+    <ClerkProvider>
+      <LayoutContent>{children}</LayoutContent>
     </ClerkProvider>
   )
 }
