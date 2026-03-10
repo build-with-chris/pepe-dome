@@ -152,7 +152,7 @@ export default async function HomePage() {
       <section className="py-8 md:py-16 bg-[var(--pepe-black)]">
         <div className="stage-container mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] text-center mb-4">
-            Erlebe PEPE Shows
+            Erlebe den Dome live.
           </h2>
           <p className="text-[var(--pepe-t64)] text-lg text-center max-w-2xl mx-auto">
             Zeitgenossischer Zirkus auf hochstem Niveau
@@ -165,15 +165,13 @@ export default async function HomePage() {
       <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
         <div className="stage-container">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-                Kommende Events
-              </h2>
-              <p className="text-[var(--pepe-t64)] text-lg">
-                Entdecke unsere nachsten Shows, Workshops und Festivals
-              </p>
-            </div>
+          <div className="flex flex-col items-center text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+              Kommende Events
+            </h2>
+            <p className="text-[var(--pepe-t64)] text-lg mb-6">
+              Entdecke unsere nachsten Shows, Workshops und Festivals
+            </p>
             <Link href="/events">
               <Button variant="ghost" size="sm">
                 Alle Events anzeigen
@@ -215,16 +213,14 @@ export default async function HomePage() {
       {/* ===== Task 3.1.3: Latest News Section ===== */}
       <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
         <div className="stage-container">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-16">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-                Aktuelles & Highlights
-              </h2>
-              <p className="text-[var(--pepe-t64)] text-lg">
-                News, Backstage Stories und mehr
-              </p>
-            </div>
+          {/* Section Header – zentriert */}
+          <div className="flex flex-col items-center text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+              Aktuelles & Highlights
+            </h2>
+            <p className="text-[var(--pepe-t64)] text-lg mb-6">
+              News, Backstage Stories und mehr
+            </p>
             <Link href="/news">
               <Button variant="ghost" size="sm">
                 Alle News anzeigen
@@ -232,29 +228,31 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* News Grid - 3 columns */}
+          {/* News Grid – halbe Größe (schmalerer Block), weniger überladen */}
           {displayNews.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displayNews.map((article, index) => (
-                <NewsCard
-                  key={article.id}
-                  title={article.title}
-                  excerpt={article.excerpt}
-                  date={new Date(article.publishedAt).toLocaleDateString('de-DE', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                  })}
-                  author={article.author}
-                  category={article.category}
-                  image={article.imageUrl || undefined}
-                  href={`/news/${article.slug}`}
-                  featured={index === 0 && displayNews.length === 3}
-                />
-              ))}
+            <div className="mx-auto max-w-3xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {displayNews.map((article) => (
+                  <NewsCard
+                    key={article.id}
+                    title={article.title}
+                    excerpt={article.excerpt}
+                    date={new Date(article.publishedAt).toLocaleDateString('de-DE', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                    author={article.author}
+                    category={article.category}
+                    image={article.imageUrl || undefined}
+                    href={`/news/${article.slug}`}
+                    featured={false}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="text-center py-12 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
+            <div className="text-center py-12 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)] max-w-2xl mx-auto">
               <p className="text-[var(--pepe-t64)]">Keine News verfugbar</p>
             </div>
           )}
@@ -273,13 +271,14 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Mobile: 1 Spalte | Tablet + Desktop: 2×2 Grid (explizit) */}
+          <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-6 sm:gap-8">
             {homepage.features.map((feature, index) => {
               const featureImages: Record<string, string> = {
                 'show': '/images/shows/carmen-jonas-duo.jpg',
-                'training': '/images/artists/chris.jpg',
-                'dome': '/images/dome/dome-interior.jpg',
-                'community': '/images/shows/jawad-performance.jpg'
+                'training': '/images/Kategorien/Training.webp',
+                'dome': '/images/Kategorien/Location.webp',
+                'community': '/images/Kategorien/Community.webp'
               };
               
               return (
@@ -287,8 +286,8 @@ export default async function HomePage() {
                   key={index}
                   className="group bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
                 >
-                  {/* Feature Image */}
-                  <div className="relative h-48 w-full overflow-hidden">
+                  {/* Feature Image – 16:9 Landscape */}
+                  <div className="relative aspect-video w-full overflow-hidden">
                     <Image
                       src={featureImages[feature.icon] || '/TheDome.png'}
                       alt={feature.title}

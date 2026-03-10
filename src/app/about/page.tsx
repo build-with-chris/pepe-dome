@@ -37,12 +37,12 @@ export default function AboutPage() {
       image: '/images/shows/carmen-jonas-acro.jpg',
     },
     {
-      name: 'PEPE Art',
+      name: 'pepe Arts',
       description: 'Künstlerische Entwicklung und Produktion - Residenzen, Workshops und kreative Zusammenarbeit.',
       icon: '🎨',
       link: '/events?category=WORKSHOP',
       color: 'copper',
-      image: '/images/artists/yuhui.jpg',
+      image: '/images/artists/michi.jpg',
     },
   ]
 
@@ -305,19 +305,17 @@ export default function AboutPage() {
               </div>
             </div>
             
-            <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--pepe-line)] shadow-glow-sm">
-              <Image
-                src="/images/shows/jonas-acrobatics.jpg"
-                alt="Netzwerk Arbeit"
-                fill
-                className="object-cover opacity-60"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8 backdrop-blur-sm bg-black/30 rounded-2xl border border-white/10">
-                  <p className="text-2xl font-bold text-white mb-2">Stark im Verbund</p>
-                  <p className="text-[var(--pepe-gold)]">Kollaboration & Gemeinschaft</p>
-                </div>
+            <div>
+              <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--pepe-line)] shadow-glow-sm">
+                <Image
+                  src="/images/shows/jonas-acrobatics.jpg"
+                  alt="Netzwerk Arbeit"
+                  fill
+                  className="object-cover"
+                />
               </div>
+              <p className="text-2xl font-bold text-[var(--pepe-white)] mt-6 mb-2">Stark im Verbund</p>
+              <p className="text-[var(--pepe-gold)]">Kollaboration & Gemeinschaft</p>
             </div>
           </div>
         </div>

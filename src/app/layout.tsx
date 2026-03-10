@@ -18,7 +18,19 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const siteContent = getSiteContent()
+function getSiteContentSafe() {
+  try {
+    return getSiteContent()
+  } catch {
+    return {
+      name: 'Pepe Dome',
+      tagline: 'Zuhause für Artistik & Kultur in München',
+      description: 'Der Pepe Dome im Ostpark München – Shows, Training und Events.',
+    }
+  }
+}
+
+const siteContent = getSiteContentSafe()
 
 export const metadata: Metadata = {
   title: siteContent.name + ' - ' + siteContent.tagline,
