@@ -271,8 +271,8 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* Mobile: 1 Spalte | Tablet + Desktop: 2×2 Grid (explizit) */}
-          <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-6 sm:gap-8">
+          {/* Mobile: 1 Card pro Zeile | Tablet + Desktop: 2×2 Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {homepage.features.map((feature, index) => {
               const featureImages: Record<string, string> = {
                 'show': '/images/shows/carmen-jonas-duo.jpg',
