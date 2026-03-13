@@ -19,12 +19,15 @@ import {
   type EventData,
   type ArticleData,
 } from '@/lib/db-data'
+import nextDynamic from 'next/dynamic'
 import EventCard from '@/components/custom/EventCard'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { Button } from '@/components/ui/Button'
 import HomeDotCloud from '@/components/custom/HomeDotCloud'
-import VideoCarousel from '@/components/custom/VideoCarousel'
+import HeroBackgroundVideo from '@/components/custom/HeroBackgroundVideo'
+
+const VideoCarousel = nextDynamic(() => import('@/components/custom/VideoCarousel'), { ssr: true })
 
 export const dynamic = 'force-dynamic'
 
@@ -66,17 +69,9 @@ export default async function HomePage() {
     <>
       {/* ===== Task 3.1.1: Hero Section ===== */}
       <section className="relative min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
-        {/* Background Video - brighter, cleaner view */}
+        {/* Background Video: ein Element, Quelle je nach Viewport (Desktop = PepeDome-Atmosphaere, Mobile = Hochkant) */}
         <div className="absolute inset-0 pointer-events-none">
-          <video
-            className="w-full h-full object-cover object-center opacity-65"
-            autoPlay
-            muted
-            loop
-            playsInline
-          >
-            <source src="/videos/PepeDome-Atmosphaere.mp4" type="video/mp4" />
-          </video>
+          <HeroBackgroundVideo />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/50 via-transparent to-[var(--pepe-black)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/30 via-transparent to-[var(--pepe-black)]/30" />
         </div>
@@ -84,8 +79,8 @@ export default async function HomePage() {
         {/* DotCloud Icon Layer */}
         <HomeDotCloud />
 
-        {/* Title + tagline: upper part */}
-        <div className="stage-container relative z-10 flex-shrink-0 pt-16 md:pt-20">
+        {/* Title + tagline — nur Mobile: 20% höher; Desktop unverändert (pt-20) */}
+        <div className="stage-container relative z-10 flex-shrink-0 pt-[2.31rem] md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
               {homepage.hero.title}
@@ -99,8 +94,8 @@ export default async function HomePage() {
         {/* Spacer: pushes CTAs into last quarter */}
         <div className="relative z-10 flex-1 min-h-[1rem]" />
 
-        {/* Last quarter of viewport: CTAs — desktop: side by side, mobile: stacked and centered */}
-        <div className="relative z-10 h-[25vh] min-h-[140px] flex items-center justify-center pb-6 md:pb-8">
+        {/* Last quarter of viewport: CTAs — mobile: 5% tiefer, desktop: side by side */}
+        <div className="relative z-10 h-[25vh] min-h-[140px] flex items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
             <Link href="/events" className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
@@ -292,6 +287,8 @@ export default async function HomePage() {
                       src={featureImages[feature.icon] || '/TheDome.png'}
                       alt={feature.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-ink)] to-transparent" />

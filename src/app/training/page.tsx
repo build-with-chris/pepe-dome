@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
+import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapImages'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -309,13 +310,7 @@ export default function TrainingPage() {
               </div>
             </div>
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] order-1 lg:order-2">
-              <Image
-                src="/images/dome/dome-aerial-01.webp"
-                alt="Pepe Dome Interior"
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+              <TrainingsortOverlapImages />
             </div>
           </div>
         </div>

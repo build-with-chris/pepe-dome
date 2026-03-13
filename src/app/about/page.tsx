@@ -26,7 +26,7 @@ export default function AboutPage() {
       icon: '🏛️',
       link: '/events',
       color: 'gold',
-      image: '/images/dome/dome-interior.jpg',
+      image: '/images/Aufbau/dome-interior.jpg',
     },
     {
       name: 'PEPE Shows',
@@ -63,7 +63,7 @@ export default function AboutPage() {
             {/* Image */}
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
               <Image
-                src="/images/dome/dome-outdoor-hero.webp"
+                src="/images/Aufbau/dome-outdoor-hero.webp"
                 alt="PEPE Dome"
                 fill
                 className="object-cover"
