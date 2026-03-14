@@ -266,8 +266,8 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* Mobile: 1 Card pro Zeile | Tablet + Desktop: 2×2 Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          {/* Mobile: 1 Spalte. Tablet + Desktop: 2×2 Grid (siehe .features-grid in components.css) */}
+          <div className="features-grid">
             {homepage.features.map((feature, index) => {
               const featureImages: Record<string, string> = {
                 'show': '/images/shows/carmen-jonas-duo.jpg',
@@ -279,7 +279,7 @@ export default async function HomePage() {
               return (
                 <div
                   key={index}
-                  className="group bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
+                  className="group min-w-0 bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
                 >
                   {/* Feature Image – 16:9 Landscape */}
                   <div className="relative aspect-video w-full overflow-hidden">

@@ -7,7 +7,7 @@ const VIDEO = {
   desktop: '/videos/PepeDome-Atmosphaere.mp4',
 }
 
-const POSTER = '/images/Aufbau/dome-outdoor-hero.webp'
+const POSTER = '/images/Aufbau/hero-poster.webp'
 const MD_BREAKPOINT = 768
 
 export default function HeroBackgroundVideo() {

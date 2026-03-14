@@ -172,7 +172,7 @@ export default function EventsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* David Eisele */}
               <a
-                href="http://www.davideisele.com/"
+                href="https://www.tornadoseye.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
@@ -181,7 +181,7 @@ export default function EventsPage() {
                   David Eisele - Tornados Eye
                 </h3>
                 <p className="text-sm text-[var(--pepe-t64)] mb-3">zeitgenössischer Zirkus - Solo</p>
-                <p className="text-xs text-[var(--pepe-t48)]">davideisele.com</p>
+                <p className="text-xs text-[var(--pepe-t48)]">tornadoseye.com</p>
               </a>
 
               {/* Zirkuswerkstatt Stuttgart */}

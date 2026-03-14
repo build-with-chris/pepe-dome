@@ -2962,6 +2962,20 @@
 
 /* ===== Grid System ===== */
 
+/* Feature cards „Was dich erwartet“: Mobile 1 Spalte, Tablet/Desktop 2 Spalten (2×2) */
+.features-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+}
+
 .grid {
   display: grid;
 }
@@ -2987,6 +3001,9 @@
 .gap-8 { gap: var(--space-8); }
 
 @media (min-width: 768px) {
+  .md\\:block {
+    display: block;
+  }
   .md\\:grid-cols-2 {
     grid-template-columns: repeat(2, 1fr);
   }
