@@ -47,9 +47,12 @@ export default async function HomePage() {
     displayEvents = featuredEvents.length > 0
       ? featuredEvents.slice(0, 3)
       : upcomingEvents.slice(0, 3)
-    displayNews = featuredArticles.length > 0
-      ? [...featuredArticles, ...recentArticles.filter(a => !featuredArticles.find(f => f.id === a.id))].slice(0, 3)
-      : recentArticles.slice(0, 3)
+    const merged = featuredArticles.length > 0
+      ? [...featuredArticles, ...recentArticles.filter(a => !featuredArticles.find(f => f.id === a.id))]
+      : recentArticles
+    displayNews = merged
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      .slice(0, 1)
   } catch (err) {
     console.error('HomePage data error:', err)
     homepage = {
@@ -223,10 +226,10 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* News Grid – halbe Größe (schmalerer Block), weniger überladen */}
+          {/* Nur der aktuellste Artikel */}
           {displayNews.length > 0 ? (
-            <div className="mx-auto max-w-3xl">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="mx-auto max-w-2xl">
+              <div className="grid grid-cols-1 gap-5">
                 {displayNews.map((article) => (
                   <NewsCard
                     key={article.id}
