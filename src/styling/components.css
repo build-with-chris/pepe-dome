@@ -3000,6 +3000,22 @@
 .gap-6 { gap: var(--space-6); }
 .gap-8 { gap: var(--space-8); }
 
+/* VideoCarousel: Mobile nur unter 768px, Desktop ab 768px – unabhängig von Tailwind */
+.video-carousel-mobile {
+  display: block;
+}
+.video-carousel-desktop {
+  display: none;
+}
+@media (min-width: 768px) {
+  .video-carousel-mobile {
+    display: none;
+  }
+  .video-carousel-desktop {
+    display: block;
+  }
+}
+
 @media (min-width: 768px) {
   .md\\:block {
     display: block;

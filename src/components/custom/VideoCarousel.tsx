@@ -23,11 +23,25 @@ const defaultVideos: VideoItem[] = [
 
 const THUMBNAIL_TIME = 3
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const out = [...arr]
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
+}
+
 export default function VideoCarousel({
-  videos = defaultVideos,
+  videos: videosProp,
   autoPlay = true,
   showControls = true,
 }: VideoCarouselProps) {
+  const [videos] = useState(() => {
+    const list = videosProp && videosProp.length > 0 ? [...videosProp] : defaultVideos
+    return shuffleArray(list)
+  })
+
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
@@ -80,10 +94,10 @@ export default function VideoCarousel({
   return (
     <section className="relative w-full overflow-hidden bg-[var(--pepe-black)]">
       <div className="stage-container py-6 md:py-10">
-        {/* ========== MOBILE: ein großes Video (≥75% Screen) + Strip „weitere Videos“ ========== */}
-        <div className="md:hidden">
-          {/* Hauptvideo: mind. 75vh, wirkt stark; Lazy: nur dieses eine geladen */}
+        {/* ========== MOBILE: ein großes Video + Auswahl-Strip ÜBER dem Video ========== */}
+        <div className="video-carousel-mobile">
           <div className="relative mx-auto w-full max-w-[min(90vw,400px)] min-h-[75vh] flex flex-col items-center">
+            {/* Hauptvideo */}
             <div className="relative aspect-[9/16] w-full min-h-[75vh] max-h-[85vh] overflow-hidden rounded-2xl bg-[var(--pepe-ink)] shadow-xl">
               <video
                 ref={mobileMainRef}
@@ -96,8 +110,51 @@ export default function VideoCarousel({
                 preload="auto"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
+
+              {/* Videoauswahl über dem unteren Bereich des Videos */}
+              <div className="absolute bottom-0 left-0 right-0 z-10 pt-8 pb-3 px-2 bg-gradient-to-t from-[var(--pepe-black)]/95 via-[var(--pepe-black)]/70 to-transparent rounded-b-2xl">
+                <p className="text-center text-xs font-medium text-[var(--pepe-t64)] mb-2">
+                  Weitere Videos
+                </p>
+                <div className="flex justify-center gap-2 overflow-x-auto">
+                  {videos.map((video, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => goToVideo(index)}
+                      className={`relative flex shrink-0 flex-col items-center rounded-xl overflow-hidden border-2 transition-all ${
+                        index === activeIndex
+                          ? 'border-[var(--pepe-gold)] ring-2 ring-[var(--pepe-gold)]/30'
+                          : 'border-white/30 opacity-80'
+                      }`}
+                    >
+                      <div className="relative h-14 w-[2.625rem] overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
+                        <video
+                          src={video.src}
+                          className="h-full w-full object-cover object-top"
+                          muted
+                          playsInline
+                          preload="metadata"
+                          onLoadedData={(e) => {
+                            const v = e.currentTarget
+                            const t = Number.isFinite(v.duration) && v.duration >= THUMBNAIL_TIME
+                              ? THUMBNAIL_TIME
+                              : 0
+                            v.currentTime = t
+                          }}
+                        />
+                      </div>
+                      <span className="mt-1 max-w-[70px] truncate text-[9px] font-medium text-[var(--pepe-t80)]">
+                        {video.title}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-            <h3 className="mt-4 text-xl font-bold text-[var(--pepe-white)] text-center">
+
+            {/* Titel unter dem Video – größer */}
+            <h3 className="mt-4 text-2xl font-bold text-[var(--pepe-white)] text-center px-2">
               {videos[activeIndex]?.title}
             </h3>
             {showControls && (
@@ -120,46 +177,10 @@ export default function VideoCarousel({
               </button>
             )}
           </div>
-
-          {/* Strip: weitere Videos erkennbar, Lazy (nur Metadata für Thumbnail) */}
-          <p className="mt-6 mb-3 text-center text-sm text-[var(--pepe-t64)]">
-            Weitere Videos
-          </p>
-          <div className="flex justify-center gap-2 overflow-x-auto pb-2">
-            {videos.map((video, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => goToVideo(index)}
-                className={`relative flex shrink-0 flex-col items-center rounded-xl overflow-hidden border-2 transition-all ${
-                  index === activeIndex
-                    ? 'border-[var(--pepe-gold)] ring-2 ring-[var(--pepe-gold)]/30'
-                    : 'border-transparent opacity-70'
-                }`}
-              >
-                <div className="relative h-16 w-9 overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
-                  <video
-                    src={video.src}
-                    className="h-full w-full object-cover"
-                    muted
-                    playsInline
-                    preload="metadata"
-                    onLoadedMetadata={(e) => {
-                      const v = e.currentTarget
-                      v.currentTime = THUMBNAIL_TIME
-                    }}
-                  />
-                </div>
-                <span className="mt-1 max-w-[72px] truncate text-[10px] text-[var(--pepe-t80)]">
-                  {video.title}
-                </span>
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* ========== DESKTOP: 4 nebeneinander, Portrait ========== */}
-        <div className="hidden md:block">
+        <div className="video-carousel-desktop">
           <div className="flex items-center justify-center gap-6">
             {videos.map((video, index) => (
               <button
@@ -191,7 +212,7 @@ export default function VideoCarousel({
                     <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
                   )}
                 </div>
-                <span className="mt-2 text-center text-sm font-medium text-[var(--pepe-t80)]">
+                <span className="mt-2 text-center text-base font-semibold text-[var(--pepe-t80)]">
                   {video.title}
                 </span>
               </button>
@@ -199,7 +220,7 @@ export default function VideoCarousel({
           </div>
 
           <div className="mt-6 text-center">
-            <h3 className="text-2xl font-bold text-[var(--pepe-white)] md:text-3xl">
+            <h3 className="text-3xl font-bold text-[var(--pepe-white)] md:text-4xl">
               {videos[activeIndex]?.title}
             </h3>
             {videos[activeIndex]?.description && (
