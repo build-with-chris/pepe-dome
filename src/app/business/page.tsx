@@ -111,14 +111,18 @@ export default function BusinessPage() {
               </Link>
             </div>
             <div className="relative h-80 lg:h-[450px] rounded-2xl overflow-hidden bg-[var(--pepe-surface)]">
-              <Image
-                src="/images/Aufbau/dome-exterior.webp"
-                alt="Pepe Dome für Business Events"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+              <video
+                src="/videos/vertical-03.mp4"
+                poster="/images/Aufbau/business-intro-poster.webp"
+                className="absolute inset-0 h-full w-full object-cover"
+                muted
+                loop
+                playsInline
+                autoPlay
+                preload="metadata"
+                aria-label="Pepe Dome für Business Events"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)]/60 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
