@@ -46,6 +46,27 @@ Ersetze `USER`, `PASSWORD`, `HOST` und `DATABASE` mit den Werten aus deinem Anbi
 1. Vercel Dashboard → dein Projekt → **Settings** → **Environment Variables**.
 2. `DATABASE_URL` anlegen und die gleiche Connection-URL eintragen (für Production die **External** URL des Anbieters verwenden).
 
+### Supabase: „MaxClientsInSessionMode“ / Newsletter-Versand schlägt fehl
+
+Wenn du **Supabase** mit dem **Session-Mode-Pooler** (Port 5432) nutzt und beim Newsletter-Versand dieser Fehler auftritt:
+
+```text
+FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+```
+
+dann begrenzt Supabase die Anzahl gleichzeitiger Verbindungen. Die App darf nicht zu viele Verbindungen öffnen.
+
+**Lösung:** An die `DATABASE_URL` den Parameter **`connection_limit=3`** (oder `2`) anhängen. Beispiel:
+
+```text
+postgresql://postgres.[ref]:[PASSWORD]@aws-0-[region].pooler.supabase.com:5432/postgres?sslmode=require&connection_limit=3
+```
+
+- **Lokal:** In der `.env` die `DATABASE_URL` entsprechend anpassen.
+- **Vercel:** In den Environment Variables die `DATABASE_URL` für Production (und ggf. Preview) bearbeiten und `&connection_limit=3` ans Ende setzen. Anschließend einen neuen Deploy auslösen.
+
+Alternativ kannst du in Supabase auf den **Transaction-Mode-Pooler** (Port **6543**) wechseln und die Connection-URL mit Port 6543 verwenden – dann sind mehr „virtuelle“ Verbindungen möglich; die URL bleibt ansonsten gleich.
+
 ---
 
 ## 3. Schema anwenden (Tabellen anlegen)

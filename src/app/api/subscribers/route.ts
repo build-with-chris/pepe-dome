@@ -15,6 +15,7 @@ import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { createSubscriber, validateEmail } from '@/lib/subscribers'
 import { prisma } from '@/lib/prisma'
 import { sendConfirmationEmail } from '@/lib/email-send'
+import { getBaseUrlFromRequest } from '@/lib/resend'
 
 export async function POST(request: NextRequest) {
   try {
@@ -96,9 +97,10 @@ export async function POST(request: NextRequest) {
       interests,
     })
 
-    // Send confirmation email via Resend
+    // Send confirmation email via Resend (Basis-URL aus Request, damit Link auf echte Domain zeigt)
+    const baseUrl = getBaseUrlFromRequest(request)
     try {
-      await sendConfirmationEmail(subscriber.id)
+      await sendConfirmationEmail(subscriber.id, baseUrl)
       console.log(`Confirmation email sent to ${subscriber.email}`)
     } catch (emailError) {
       // Log error but don't fail the signup

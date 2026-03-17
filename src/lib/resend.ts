@@ -42,15 +42,22 @@ export const EMAIL_CONFIG = {
   /** Maximum retries for failed sends */
   MAX_RETRIES: 3,
 
-  /** Base URL for email links */
-  BASE_URL: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+  /** Base URL for email links (Bestätigung, Abmeldung etc.). In Produktion z. B. https://pepe-dome.de setzen. */
+  BASE_URL: process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3004',
 }
 
 /**
- * Generate URLs for email links
+ * Generate URLs for email links.
+ * @param subscriberId - Subscriber ID
+ * @param token - Double opt-in token (for confirm link)
+ * @param baseUrlOverride - Optional base URL (z. B. aus Request); überschreibt Env, damit Bestätigungsmail immer die richtige Domain nutzt
  */
-export function generateEmailUrls(subscriberId: string, token?: string) {
-  const base = EMAIL_CONFIG.BASE_URL
+export function generateEmailUrls(
+  subscriberId: string,
+  token?: string,
+  baseUrlOverride?: string
+) {
+  const base = baseUrlOverride || EMAIL_CONFIG.BASE_URL
 
   return {
     confirm: `${base}/newsletter/confirm?token=${token || 'MISSING_TOKEN'}`,
@@ -59,6 +66,28 @@ export function generateEmailUrls(subscriberId: string, token?: string) {
     privacy: `${base}/privacy`,
     home: base,
   }
+}
+
+/**
+ * Basis-URL aus einem Request ermitteln (für E-Mails, damit Links auf die echte Domain zeigen).
+ * Berücksichtigt x-forwarded-host / x-forwarded-proto hinter Proxy (z. B. Vercel).
+ */
+export function getBaseUrlFromRequest(request: Request): string {
+  const url = request.url
+  if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+    try {
+      return new URL(url).origin
+    } catch {
+      // fallback below
+    }
+  }
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+  const proto = request.headers.get('x-forwarded-proto') || request.headers.get('x-forwarded-protocol') || 'https'
+  if (host) {
+    const scheme = proto.split(',')[0].trim().toLowerCase()
+    return `${scheme}://${host.split(',')[0].trim()}`
+  }
+  return EMAIL_CONFIG.BASE_URL
 }
 
 /**

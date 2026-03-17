@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server'
 import { contentFilterSchema } from '@/lib/validation'
 import { successResponse, errorResponse, validationErrorResponse } from '@/lib/api-response'
 import { prisma } from '@/lib/prisma'
-import { ContentStatus, EventCategory, Prisma } from '@prisma/client'
+import { EventCategory, Prisma } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,11 +23,8 @@ export async function GET(request: NextRequest) {
 
     const { startDate, endDate, category, tags } = validation.data
 
-    // Build event query filters
-    // Include both PUBLISHED and DRAFT for admin selection
-    const eventWhere: Prisma.EventWhereInput = {
-      status: { in: [ContentStatus.PUBLISHED, ContentStatus.DRAFT] },
-    }
+    // Build event query filters – alle Status, damit alle Einträge in der DB im Newsletter-Builder wählbar sind
+    const eventWhere: Prisma.EventWhereInput = {}
 
     if (startDate) {
       eventWhere.date = { ...eventWhere.date as object, gte: new Date(startDate) }
@@ -45,10 +42,8 @@ export async function GET(request: NextRequest) {
       orderBy: { date: 'desc' },
     })
 
-    // Build article query filters (no Prisma JSON array filter - filter in memory if tags needed)
-    const articleWhere: Prisma.ArticleWhereInput = {
-      status: { in: [ContentStatus.PUBLISHED, ContentStatus.DRAFT] },
-    }
+    // Build article query filters – alle Status (PUBLISHED, DRAFT, ARCHIVED), damit alle Artikel geladen werden
+    const articleWhere: Prisma.ArticleWhereInput = {}
 
     if (category) {
       articleWhere.category = category

@@ -56,9 +56,10 @@ interface ContentSection {
  * Send double opt-in confirmation email
  *
  * @param subscriberId - Subscriber database ID
+ * @param baseUrl - Optional: Basis-URL für den Bestätigungs-Link (z. B. aus Request, damit nicht localhost in der Mail steht)
  * @returns Resend email ID or error
  */
-export async function sendConfirmationEmail(subscriberId: string) {
+export async function sendConfirmationEmail(subscriberId: string, baseUrl?: string) {
   // Dynamic imports to avoid bundling react-email in client build
   const { render } = await import('@react-email/render')
   const ConfirmationEmail = (await import('@/components/email/templates/ConfirmationEmail')).default
@@ -80,8 +81,8 @@ export async function sendConfirmationEmail(subscriberId: string) {
     throw new Error('Subscriber missing double opt-in token')
   }
 
-  // Generate URLs
-  const urls = generateEmailUrls(subscriber.id, subscriber.doubleOptInToken)
+  // Generate URLs (baseUrl aus Request nutzen, damit Bestätigungs-Link auf die echte Domain zeigt)
+  const urls = generateEmailUrls(subscriber.id, subscriber.doubleOptInToken, baseUrl)
 
   // Render email template
   const emailHtml = await render(

@@ -14,6 +14,7 @@ import {
 } from '@/lib/api-response'
 import { generateOptInToken } from '@/lib/subscribers'
 import { sendConfirmationEmail } from '@/lib/email-send'
+import { getBaseUrlFromRequest } from '@/lib/resend'
 
 export async function GET(request: NextRequest) {
   try {
@@ -142,8 +143,9 @@ export async function POST(request: NextRequest) {
     })
 
     if (!skipConfirmation) {
+      const baseUrl = getBaseUrlFromRequest(request)
       try {
-        await sendConfirmationEmail(subscriber.id)
+        await sendConfirmationEmail(subscriber.id, baseUrl)
       } catch (emailError) {
         console.error('Failed to send confirmation email:', emailError)
       }

@@ -5,6 +5,7 @@
 
 import { prisma } from './prisma'
 import type { Event, Article } from '@prisma/client'
+import { ContentStatus } from '@prisma/client'
 
 // Safe database query wrapper - returns fallback on error
 async function safeDbQuery<T>(
@@ -190,8 +191,8 @@ export async function getEventsByCategory(category: string): Promise<EventData[]
 export async function getAllArticles(): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
-      where: { status: 'PUBLISHED' },
-      orderBy: { publishedAt: 'desc' },
+      where: { status: ContentStatus.PUBLISHED },
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
     return articles.map(transformArticle)
   }, [])
@@ -201,10 +202,10 @@ export async function getFeaturedArticles(): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: {
-        status: 'PUBLISHED',
+        status: ContentStatus.PUBLISHED,
         featured: true,
       },
-      orderBy: { publishedAt: 'desc' },
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
     return articles.map(transformArticle)
   }, [])
@@ -213,8 +214,8 @@ export async function getFeaturedArticles(): Promise<ArticleData[]> {
 export async function getRecentArticles(limit: number = 5): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
-      where: { status: 'PUBLISHED' },
-      orderBy: { publishedAt: 'desc' },
+      where: { status: ContentStatus.PUBLISHED },
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
       take: limit,
     })
     return articles.map(transformArticle)
@@ -223,8 +224,8 @@ export async function getRecentArticles(limit: number = 5): Promise<ArticleData[
 
 export async function getArticleBySlug(slug: string): Promise<ArticleData | null> {
   return safeDbQuery(async () => {
-    const article = await prisma.article.findUnique({
-      where: { slug },
+    const article = await prisma.article.findFirst({
+      where: { slug, status: ContentStatus.PUBLISHED },
     })
     return article ? transformArticle(article) : null
   }, null)
@@ -234,10 +235,10 @@ export async function getArticlesByCategory(category: string): Promise<ArticleDa
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: {
-        status: 'PUBLISHED',
+        status: ContentStatus.PUBLISHED,
         category,
       },
-      orderBy: { publishedAt: 'desc' },
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
     return articles.map(transformArticle)
   }, [])
