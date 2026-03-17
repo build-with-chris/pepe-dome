@@ -450,12 +450,16 @@ export async function sendNewsletter(
       },
     })
 
-    // Create stats record
-    await prisma.newsletterStats.create({
-      data: {
+    // Create or update stats record (unique on newsletter_id – z. B. bei Test-Versand oder erneutem Versand)
+    await prisma.newsletterStats.upsert({
+      where: { newsletterId: newsletter.id },
+      create: {
         newsletterId: newsletter.id,
         sentCount: successCount,
-        // Note: failureCount is logged but not stored in stats
+      },
+      update: {
+        sentCount: successCount,
+        updatedAt: new Date(),
       },
     })
   }
