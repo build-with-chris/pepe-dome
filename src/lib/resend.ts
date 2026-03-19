@@ -24,7 +24,7 @@ export const resend = new Resend(process.env.RESEND_API_KEY)
  * Default sender email address
  * Resend requires verified domain or test email
  */
-export const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'PEPE Dome <newsletter@pepe-dome.de>'
+export const DEFAULT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'PEPE Dome <info@pepeshows.de>'
 
 /**
  * Email configuration constants

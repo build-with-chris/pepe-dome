@@ -231,6 +231,28 @@ export default function EventForm({ event, mode }: EventFormProps) {
             </h2>
 
             <div className="space-y-5">
+              {/* Startseite: Featured-Events (sichtbar ohne Sidebar-Scroll auf Mobile) */}
+              <div className="rounded-lg border border-white/[0.12] bg-white/[0.03] p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="featured-home" className="cursor-pointer text-white">
+                      Auf Startseite anzeigen
+                    </Label>
+                    <p className="text-xs text-white/50 leading-relaxed max-w-xl">
+                      Wenn aktiv, erscheint das Event in der Sektion &quot;Kommende Events&quot; auf der Startseite
+                      (Featured Events). Es werden bis zu drei Featured-Events angezeigt; ohne Featured
+                      nutzt die Startseite einfach die nachsten kommenden Events.
+                    </p>
+                  </div>
+                  <Switch
+                    id="featured-home"
+                    checked={!!formData.featured}
+                    onCheckedChange={(checked) => updateField('featured', checked)}
+                    className="shrink-0"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2.5">
                 <Label htmlFor="title" hasError={!!errors.title} required>
                   Titel
@@ -524,23 +546,6 @@ export default function EventForm({ event, mode }: EventFormProps) {
                 </Select>
               </div>
 
-              <div className="pt-3 border-t border-white/[0.08]">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="featured" className="cursor-pointer text-white">
-                      Featured Event
-                    </Label>
-                    <p className="text-[11px] text-white/40 mt-0.5">
-                      Prominent auf der Startseite
-                    </p>
-                  </div>
-                  <Switch
-                    id="featured"
-                    checked={formData.featured}
-                    onCheckedChange={(checked) => updateField('featured', checked)}
-                  />
-                </div>
-              </div>
             </div>
           </div>
 
