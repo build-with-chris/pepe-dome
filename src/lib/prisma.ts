@@ -67,11 +67,18 @@ function createPrismaClient() {
 
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   })
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+// Cache the Prisma instance globally to avoid exhausting DB connections
+// in both development (hot-reload) and production (serverless).
+globalForPrisma.prisma = prisma
 
 export default prisma
