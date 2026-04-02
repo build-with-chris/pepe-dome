@@ -97,13 +97,18 @@ export async function sendConfirmationEmail(subscriberId: string, baseUrl?: stri
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
-    subject: 'Bestatige deine Newsletter-Anmeldung bei PEPE Dome',
+    subject: 'Bestätige deine Newsletter-Anmeldung bei PEPE Dome',
     html: emailHtml,
     tags: [
       { name: 'type', value: 'confirmation' },
       { name: 'subscriber_id', value: subscriber.id },
     ],
   })
+
+  // Resend SDK returns { data, error } instead of throwing
+  if (result.error) {
+    throw new Error(`Resend API error: ${result.error.message}`)
+  }
 
   // Update subscriber record
   await prisma.subscriber.update({
@@ -165,6 +170,11 @@ export async function sendWelcomeEmail(subscriberId: string) {
       { name: 'subscriber_id', value: subscriber.id },
     ],
   })
+
+  // Resend SDK returns { data, error } instead of throwing
+  if (result.error) {
+    throw new Error(`Resend API error: ${result.error.message}`)
+  }
 
   return result
 }

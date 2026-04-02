@@ -65,6 +65,7 @@ export default function EventsAdminPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [duplicating, setDuplicating] = useState<string | null>(null)
 
   const fetchEvents = useCallback(async (page = 1) => {
     setLoading(true)
@@ -108,6 +109,20 @@ export default function EventsAdminPage() {
   function confirmDelete(event: Event) {
     setEventToDelete(event)
     setDeleteDialogOpen(true)
+  }
+
+  async function handleDuplicate(event: Event) {
+    setDuplicating(event.id)
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}/duplicate`, { method: 'POST' })
+      if (!res.ok) throw new Error('Failed to duplicate event')
+      const duplicate = await res.json()
+      router.push(`/admin/events/${duplicate.id}/edit`)
+    } catch (error) {
+      console.error('Error duplicating event:', error)
+    } finally {
+      setDuplicating(null)
+    }
   }
 
   // Table columns
@@ -156,6 +171,14 @@ export default function EventsAdminPage() {
   // Row actions
   const actions = (row: Event) => (
     <div className="flex items-center justify-end gap-2">
+      <Button
+        variant="ghost"
+        size="xs"
+        onClick={(e) => { e.stopPropagation(); handleDuplicate(row) }}
+        disabled={duplicating === row.id}
+      >
+        {duplicating === row.id ? 'Dupliziere...' : 'Duplizieren'}
+      </Button>
       <Link href={`/admin/events/${row.id}/edit`}>
         <Button variant="ghost" size="xs">
           Bearbeiten

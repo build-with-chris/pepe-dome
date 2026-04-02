@@ -103,10 +103,14 @@ export async function POST(request: NextRequest) {
       await sendConfirmationEmail(subscriber.id, baseUrl)
       console.log(`Confirmation email sent to ${subscriber.email}`)
     } catch (emailError) {
-      // Log error but don't fail the signup
-      // User is created, we can retry sending later
       console.error('Failed to send confirmation email:', emailError)
-      // In production, you might want to queue this for retry
+      // Rollback: delete the PENDING subscriber so they can retry
+      await prisma.subscriber.delete({ where: { id: subscriber.id } }).catch(() => {})
+      return errorResponse(
+        'EMAIL_SEND_FAILED',
+        'Die Bestätigungs-Mail konnte nicht gesendet werden. Bitte versuche es erneut.',
+        500
+      )
     }
 
     // Return success response without exposing the token
