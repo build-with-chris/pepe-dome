@@ -44,13 +44,18 @@ export default function VideoCarousel({
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const [isMuted, setIsMuted] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const mobileMainRef = useRef<HTMLVideoElement>(null)
+  const mobileContainerRef = useRef<HTMLDivElement>(null)
+  const desktopActiveContainerRef = useRef<HTMLDivElement>(null)
 
   // Desktop: only active video plays; others paused at thumbnail time
   useEffect(() => {
     videoRefs.current.forEach((video, index) => {
       if (!video) return
+      video.muted = isMuted
       if (index === activeIndex) {
         video.currentTime = 0
         if (isPlaying) video.play().catch(() => {})
@@ -59,16 +64,17 @@ export default function VideoCarousel({
         video.currentTime = THUMBNAIL_TIME
       }
     })
-  }, [activeIndex, isPlaying])
+  }, [activeIndex, isPlaying, isMuted])
 
   // Mobile: when activeIndex or isPlaying changes, (re)load and play the single video
   useEffect(() => {
     const main = mobileMainRef.current
     if (!main || !videos[activeIndex]) return
+    main.muted = isMuted
     main.currentTime = 0
     main.load()
     if (isPlaying) main.play().catch(() => {})
-  }, [activeIndex, isPlaying, videos])
+  }, [activeIndex, isPlaying, videos, isMuted])
 
   const handleVideoEnd = () => {
     setActiveIndex((prev) => (prev + 1) % videos.length)
@@ -91,6 +97,70 @@ export default function VideoCarousel({
     }
   }
 
+  const toggleMute = () => {
+    const newMuted = !isMuted
+    setIsMuted(newMuted)
+    // Update all video refs
+    videoRefs.current.forEach((v) => { if (v) v.muted = newMuted })
+    if (mobileMainRef.current) mobileMainRef.current.muted = newMuted
+  }
+
+  const toggleFullscreen = async () => {
+    const container = mobileContainerRef.current ?? desktopActiveContainerRef.current
+    const video = mobileMainRef.current ?? videoRefs.current[activeIndex]
+    if (!video) return
+
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen()
+        setIsFullscreen(false)
+      } else if (video.requestFullscreen) {
+        // Try video element first for native controls on mobile
+        await video.requestFullscreen()
+        setIsFullscreen(true)
+      } else if ((video as any).webkitEnterFullscreen) {
+        // iOS Safari fallback
+        ;(video as any).webkitEnterFullscreen()
+        setIsFullscreen(true)
+      }
+    } catch {
+      // Fallback: try container
+      if (container?.requestFullscreen) {
+        await container.requestFullscreen().catch(() => {})
+        setIsFullscreen(true)
+      }
+    }
+  }
+
+  // Listen for fullscreen exit
+  useEffect(() => {
+    const handleFSChange = () => {
+      if (!document.fullscreenElement) setIsFullscreen(false)
+    }
+    document.addEventListener('fullscreenchange', handleFSChange)
+    return () => document.removeEventListener('fullscreenchange', handleFSChange)
+  }, [])
+
+  const MuteIcon = () => isMuted ? (
+    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+    </svg>
+  ) : (
+    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728" />
+    </svg>
+  )
+
+  const FullscreenIcon = () => (
+    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+    </svg>
+  )
+
+  const controlBtnClass = "flex h-10 w-10 items-center justify-center rounded-full bg-[var(--pepe-black)]/60 text-[var(--pepe-white)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:text-[var(--pepe-gold)]"
+
   return (
     <section className="relative w-full overflow-hidden bg-[var(--pepe-black)]">
       <div className="stage-container py-6 md:py-10">
@@ -98,7 +168,7 @@ export default function VideoCarousel({
         <div className="video-carousel-mobile">
           <div className="relative mx-auto w-full max-w-[min(90vw,400px)] min-h-[75vh] flex flex-col items-center">
             {/* Hauptvideo */}
-            <div className="relative aspect-[9/16] w-full min-h-[75vh] max-h-[85vh] overflow-hidden rounded-2xl bg-[var(--pepe-ink)] shadow-xl">
+            <div ref={mobileContainerRef} className="relative aspect-[9/16] w-full min-h-[75vh] max-h-[85vh] overflow-hidden rounded-2xl bg-[var(--pepe-ink)] shadow-xl">
               <video
                 ref={mobileMainRef}
                 src={videos[activeIndex]?.src ?? ''}
@@ -110,6 +180,16 @@ export default function VideoCarousel({
                 preload="auto"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
+
+              {/* Sound + Fullscreen Controls */}
+              <div className="absolute top-3 right-3 z-20 flex gap-2">
+                <button type="button" onClick={toggleMute} className={controlBtnClass} aria-label={isMuted ? 'Ton an' : 'Ton aus'}>
+                  <MuteIcon />
+                </button>
+                <button type="button" onClick={toggleFullscreen} className={controlBtnClass} aria-label="Vollbild">
+                  <FullscreenIcon />
+                </button>
+              </div>
 
               {/* Videoauswahl über dem unteren Bereich des Videos */}
               <div className="absolute bottom-0 left-0 right-0 z-10 pt-8 pb-3 px-2 bg-gradient-to-t from-[var(--pepe-black)]/95 via-[var(--pepe-black)]/70 to-transparent rounded-b-2xl">
@@ -193,7 +273,10 @@ export default function VideoCarousel({
                     : 'z-0 opacity-70 hover:opacity-90'
                 }`}
               >
-                <div className="relative aspect-[9/16] h-[36vw] max-h-[52vh] w-auto overflow-hidden rounded-2xl bg-[var(--pepe-ink)] shadow-xl">
+                <div
+                  ref={index === activeIndex ? desktopActiveContainerRef : undefined}
+                  className="relative aspect-[9/16] h-[36vw] max-h-[52vh] w-auto overflow-hidden rounded-2xl bg-[var(--pepe-ink)] shadow-xl"
+                >
                   <video
                     ref={(el) => { videoRefs.current[index] = el }}
                     src={video.src}
@@ -209,7 +292,18 @@ export default function VideoCarousel({
                     preload={index === activeIndex ? 'auto' : 'none'}
                   />
                   {index === activeIndex && (
-                    <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
+                    <>
+                      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
+                      {/* Sound + Fullscreen Controls */}
+                      <div className="absolute top-3 right-3 z-20 flex gap-2">
+                        <button type="button" onClick={(e) => { e.stopPropagation(); toggleMute() }} className={controlBtnClass} aria-label={isMuted ? 'Ton an' : 'Ton aus'}>
+                          <MuteIcon />
+                        </button>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); toggleFullscreen() }} className={controlBtnClass} aria-label="Vollbild">
+                          <FullscreenIcon />
+                        </button>
+                      </div>
+                    </>
                   )}
                 </div>
                 <span className="mt-2 text-center text-base font-semibold text-[var(--pepe-t80)]">
