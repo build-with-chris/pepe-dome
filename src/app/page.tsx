@@ -82,23 +82,20 @@ export default async function HomePage() {
         {/* DotCloud Icon Layer */}
         <HomeDotCloud />
 
-        {/* Title + tagline — nur Mobile: 20% höher; Desktop unverändert (pt-20) */}
+        {/* Title only */}
         <div className="stage-container relative z-10 flex-shrink-0 pt-[2.31rem] md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight">
               {homepage.hero.title}
             </h1>
-            <p className="text-xl md:text-3xl text-[var(--pepe-gold)] font-medium">
-              {homepage.hero.subtitle}
-            </p>
           </div>
         </div>
 
         {/* Spacer: pushes CTAs into last quarter */}
         <div className="relative z-10 flex-1 min-h-[1rem]" />
 
-        {/* Last quarter of viewport: CTAs — mobile: 5% tiefer, desktop: side by side */}
-        <div className="relative z-10 h-[25vh] min-h-[140px] flex items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
+        {/* CTAs + Subtitle darunter */}
+        <div className="relative z-10 h-[25vh] min-h-[180px] flex flex-col items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
             <Link href="/events" className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
@@ -111,6 +108,9 @@ export default async function HomePage() {
               </Button>
             </Link>
           </div>
+          <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold)] font-medium">
+            {homepage.hero.subtitle}
+          </p>
         </div>
 
         {/* Bottom Fade */}

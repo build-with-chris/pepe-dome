@@ -37,10 +37,16 @@ export default function VideoCarousel({
   autoPlay = true,
   showControls = true,
 }: VideoCarouselProps) {
-  const [videos] = useState(() => {
-    const list = videosProp && videosProp.length > 0 ? [...videosProp] : defaultVideos
-    return shuffleArray(list)
-  })
+  // Use stable initial order for SSR/hydration, then shuffle client-side
+  const initialVideos = videosProp && videosProp.length > 0 ? videosProp : defaultVideos
+  const [videos, setVideos] = useState(initialVideos)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    setVideos(shuffleArray(initialVideos))
+    setHydrated(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
@@ -105,41 +111,18 @@ export default function VideoCarousel({
     if (mobileMainRef.current) mobileMainRef.current.muted = newMuted
   }
 
-  const toggleFullscreen = async () => {
-    const container = mobileContainerRef.current ?? desktopActiveContainerRef.current
-    const video = mobileMainRef.current ?? videoRefs.current[activeIndex]
-    if (!video) return
-
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen()
-        setIsFullscreen(false)
-      } else if (video.requestFullscreen) {
-        // Try video element first for native controls on mobile
-        await video.requestFullscreen()
-        setIsFullscreen(true)
-      } else if ((video as any).webkitEnterFullscreen) {
-        // iOS Safari fallback
-        ;(video as any).webkitEnterFullscreen()
-        setIsFullscreen(true)
-      }
-    } catch {
-      // Fallback: try container
-      if (container?.requestFullscreen) {
-        await container.requestFullscreen().catch(() => {})
-        setIsFullscreen(true)
-      }
-    }
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => !prev)
   }
 
-  // Listen for fullscreen exit
+  // Close fullscreen on Escape key
   useEffect(() => {
-    const handleFSChange = () => {
-      if (!document.fullscreenElement) setIsFullscreen(false)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) setIsFullscreen(false)
     }
-    document.addEventListener('fullscreenchange', handleFSChange)
-    return () => document.removeEventListener('fullscreenchange', handleFSChange)
-  }, [])
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isFullscreen])
 
   const MuteIcon = () => isMuted ? (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -161,8 +144,47 @@ export default function VideoCarousel({
 
   const controlBtnClass = "flex h-10 w-10 items-center justify-center rounded-full bg-[var(--pepe-black)]/60 text-[var(--pepe-white)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:text-[var(--pepe-gold)]"
 
+  const CloseIcon = () => (
+    <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  )
+
   return (
     <section className="relative w-full overflow-hidden bg-[var(--pepe-black)]">
+      {/* ========== FULLSCREEN OVERLAY (Mobile + Desktop) ========== */}
+      {isFullscreen && (
+        <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
+          <video
+            src={videos[activeIndex]?.src ?? ''}
+            className="h-full w-full object-contain"
+            autoPlay
+            playsInline
+            muted={isMuted}
+            loop={false}
+            onEnded={handleVideoEnd}
+          />
+          {/* X-Button oben rechts */}
+          <button
+            type="button"
+            onClick={() => setIsFullscreen(false)}
+            className="absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-md hover:bg-white/25 active:bg-white/30 transition-all"
+            aria-label="Vollbild schliessen"
+          >
+            <CloseIcon />
+          </button>
+          {/* Mute-Button unten rechts */}
+          <button
+            type="button"
+            onClick={toggleMute}
+            className="absolute bottom-8 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-md hover:bg-white/25 active:bg-white/30 transition-all"
+            aria-label={isMuted ? 'Ton an' : 'Ton aus'}
+          >
+            <MuteIcon />
+          </button>
+        </div>
+      )}
+
       <div className="stage-container py-6 md:py-10">
         {/* ========== MOBILE: ein großes Video + Auswahl-Strip ÜBER dem Video ========== */}
         <div className="video-carousel-mobile">
@@ -263,11 +285,13 @@ export default function VideoCarousel({
         <div className="video-carousel-desktop">
           <div className="flex items-center justify-center gap-6">
             {videos.map((video, index) => (
-              <button
+              <div
                 key={index}
-                type="button"
+                role="button"
+                tabIndex={0}
                 onClick={() => goToVideo(index)}
-                className={`relative flex shrink-0 flex-col items-center transition-all duration-300 ${
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') goToVideo(index) }}
+                className={`relative flex shrink-0 cursor-pointer flex-col items-center transition-all duration-300 ${
                   index === activeIndex
                     ? 'z-10 scale-[1.02] opacity-100'
                     : 'z-0 opacity-70 hover:opacity-90'
@@ -309,7 +333,7 @@ export default function VideoCarousel({
                 <span className="mt-2 text-center text-base font-semibold text-[var(--pepe-t80)]">
                   {video.title}
                 </span>
-              </button>
+              </div>
             ))}
           </div>
 
