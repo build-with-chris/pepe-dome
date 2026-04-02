@@ -3,7 +3,7 @@
     "name": "Pepe Dome",
     "tagline": "Zuhause für Artistik & Kultur in München",
     "description": "Der Pepe Dome im Ostpark München ist eine einzigartige geodätische Kuppel für spektakuläre Shows, professionelles Training und unvergessliche Events.",
-    "email": "info@pepearts.de",
+    "email": "info@pepe-dome.de",
     "phone": "+49 179 699 0707",
     "emergencyPhone": "+49 159 048 914 19",
     "whatsapp": "+49 179 699 0707",
@@ -128,7 +128,7 @@
       },
       "email": {
         "title": "E-Mail",
-        "content": "info@pepearts.de"
+        "content": "info@pepe-dome.de"
       },
       "phone": {
         "title": "WhatsApp",

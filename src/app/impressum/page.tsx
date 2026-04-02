@@ -111,7 +111,7 @@ export default function ImpressumPage() {
                   Deutschland
                 </p>
                 <p>
-                  E-Mail: <a href="mailto:Chris@pepearts.de" className="text-[var(--pepe-gold)] hover:underline">Chris@pepearts.de</a>
+                  E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-gold)] hover:underline">info@pepe-dome.de</a>
                 </p>
               </div>
             </div>

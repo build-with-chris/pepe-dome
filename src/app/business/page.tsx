@@ -317,9 +317,9 @@ export default function BusinessPage() {
                   Kontakt aufnehmen
                 </Button>
               </Link>
-              <a href="mailto:info@pepearts.de">
+              <a href="mailto:info@pepe-dome.de">
                 <Button variant="secondary" size="lg">
-                  info@pepearts.de
+                  info@pepe-dome.de
                 </Button>
               </a>
             </div>

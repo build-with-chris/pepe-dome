@@ -33,7 +33,7 @@ export default function DatenschutzPage() {
                 <div className="bg-[var(--pepe-black)]/50 border border-[var(--pepe-line)] rounded-lg p-6">
                   <p className="text-[var(--pepe-white)] font-semibold mb-2">Circus Akademie München e.V. (Zirkusakademie München e.V.)</p>
                   <p>Ranhazweg 18, 85521 Ottobrunn, Deutschland</p>
-                  <p>E-Mail: <a href="mailto:info@paperarts.de" className="text-[var(--pepe-gold)] hover:underline">info@paperarts.de</a></p>
+                  <p>E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-gold)] hover:underline">info@pepe-dome.de</a></p>
                 </div>
                 <p>
                   Einen Datenschutzbeauftragten haben wir nicht bestellt, da keine gesetzliche Pflicht besteht.

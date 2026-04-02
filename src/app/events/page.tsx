@@ -8,7 +8,7 @@
 
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import EventCard from '@/components/custom/EventCard'
 import HeroSection from '@/components/custom/HeroSection'
@@ -55,6 +55,20 @@ export default function EventsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showPast, setShowPast] = useState(false)
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
+  const [showStickyNav, setShowStickyNav] = useState(false)
+  const monthNavRef = useRef<HTMLDivElement>(null)
+
+  // Show sticky nav when main month navigation scrolls out of view
+  useEffect(() => {
+    const el = monthNavRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyNav(!entry.isIntersecting),
+      { threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   // Fetch events for the selected month
   useEffect(() => {
@@ -144,10 +158,45 @@ export default function EventsPage() {
         dotCloudIcon="events"
       />
 
+      {/* Sticky Month Navigation — erscheint beim Scrollen */}
+      <div
+        className={cn(
+          'fixed top-16 left-0 right-0 z-40 transition-all duration-300',
+          showStickyNav
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0 pointer-events-none'
+        )}
+      >
+        <div className="bg-[var(--pepe-black)]/90 backdrop-blur-lg border-b border-[var(--pepe-line)]">
+          <div className="stage-container flex items-center justify-between py-3">
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="w-4 h-4 text-[var(--pepe-gold)]" />
+              <span className="text-sm md:text-base font-bold text-[var(--pepe-white)] capitalize">
+                {monthName}
+              </span>
+              <span className="text-xs text-[var(--pepe-t64)] ml-1">
+                {!loading && `${filteredEvents.length} ${filteredEvents.length === 1 ? 'Event' : 'Events'}`}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={goToPreviousMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button onClick={goToToday} className="px-3 py-1 text-xs font-semibold text-[var(--pepe-t80)] hover:text-[var(--pepe-gold)] transition-colors">
+                Heute
+              </button>
+              <button onClick={goToNextMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Events + Monatsfilter direkt nach Hero */}
       <div className="stage-container py-10 md:py-16">
         {/* Month Navigation */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">
+        <div ref={monthNavRef} className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">
           <div className="text-center sm:text-left">
             <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
               <CalendarIcon className="w-6 h-6 text-[var(--pepe-gold)]" />
@@ -283,6 +332,37 @@ export default function EventsPage() {
             </div>
           </div>
         )}
+        {/* Monats-Schnellwahl nach den Events */}
+        <div className="mt-16 flex flex-col items-center gap-4">
+          <p className="text-sm text-[var(--pepe-t64)] font-medium">Weiteren Monat anzeigen</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {Array.from({ length: 12 }, (_, i) => {
+              const m = i + 1
+              const label = new Date(year, i).toLocaleDateString('de-DE', { month: 'short' })
+              const isActive = m === month
+              return (
+                <button
+                  key={m}
+                  onClick={() => {
+                    setMonth(m)
+                    setVisibleCount(ITEMS_PER_PAGE)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                  className={cn(
+                    'px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300',
+                    'border',
+                    isActive
+                      ? 'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_12px_var(--pepe-gold-glow)]'
+                      : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)]'
+                  )}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+          <span className="text-sm font-bold text-[var(--pepe-t64)] mt-1">{year}</span>
+        </div>
       </div>
 
       {/* Programm Section */}
