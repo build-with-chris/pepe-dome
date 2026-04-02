@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import ConfirmContent from '@/components/newsletter/ConfirmContent'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Anmeldung bestätigen | Pepe Dome Newsletter',
   description: 'Bestätige deine Anmeldung zum Pepe Dome Newsletter.',

@@ -10,20 +10,15 @@ export default function ParticleBackground() {
     const container = containerRef.current
     if (!container) return
 
-    // Create particles (doticons - using simple dots for now, will be replaced with actual icons)
+    // Create particles
     const particleCount = 25
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div')
 
-      // Random size class
       const sizeClass = Math.random() > 0.7 ? 'large' : Math.random() > 0.4 ? '' : 'small'
-
-      // Random color class (gold/bronze/copper theme)
       const colorClass = Math.random() > 0.7 ? 'bronze' : Math.random() > 0.5 ? 'amber' : Math.random() > 0.3 ? 'copper' : ''
 
       particle.className = `particle ${sizeClass} ${colorClass}`.trim()
-
-      // Random position
       particle.style.left = Math.random() * 100 + '%'
       particle.style.animationDelay = Math.random() * 20 + 's'
       particle.style.animationDuration = (15 + Math.random() * 10) + 's'
@@ -32,30 +27,37 @@ export default function ParticleBackground() {
       particlesRef.current.push(particle)
     }
 
-    // Mouse tracking for repulsion effect
+    // Throttled mouse tracking (runs max ~15fps instead of every mousemove)
+    let ticking = false
     const handleMouseMove = (e: MouseEvent) => {
-      particlesRef.current.forEach(particle => {
-        const rect = particle.getBoundingClientRect()
-        const dx = rect.left + rect.width / 2 - e.clientX
-        const dy = rect.top + rect.height / 2 - e.clientY
-        const distance = Math.sqrt(dx * dx + dy * dy)
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const mx = e.clientX
+        const my = e.clientY
+        particlesRef.current.forEach(particle => {
+          const rect = particle.getBoundingClientRect()
+          const dx = rect.left + rect.width / 2 - mx
+          const dy = rect.top + rect.height / 2 - my
+          const distance = dx * dx + dy * dy // skip sqrt, compare squared
 
-        if (distance < 150) {
-          particle.classList.add('repelled')
-          if (distance < 75) {
-            particle.classList.add('dispersed')
+          if (distance < 22500) { // 150^2
+            particle.classList.add('repelled')
+            if (distance < 5625) { // 75^2
+              particle.classList.add('dispersed')
+            }
+          } else {
+            particle.classList.remove('repelled', 'dispersed')
           }
-        } else {
-          particle.classList.remove('repelled', 'dispersed')
-        }
+        })
+        ticking = false
       })
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
-      // Clean up particles
       particlesRef.current.forEach(particle => {
         if (particle.parentNode) {
           particle.parentNode.removeChild(particle)
