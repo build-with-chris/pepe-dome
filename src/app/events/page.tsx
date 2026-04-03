@@ -224,7 +224,7 @@ export default function EventsPage() {
 
         {/* Events Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div
                 key={i}
@@ -242,8 +242,8 @@ export default function EventsPage() {
           </div>
         ) : displayedEvents.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displayedEvents.map((event, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {displayedEvents.map((event) => (
                 <EventCard
                   key={event.id}
                   title={event.title}
@@ -256,7 +256,6 @@ export default function EventsPage() {
                   category={event.category}
                   image={event.imageUrl || undefined}
                   href={`/events/${event.id}`}
-                  featured={event.featured && index < 2}
                 />
               ))}
             </div>
