@@ -312,7 +312,7 @@ export default function VideoCarousel({
                     ref={(el) => { videoRefs.current[index] = el }}
                     src={video.src}
                     poster={video.poster}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover"
                     muted
                     playsInline
                     loop={false}
