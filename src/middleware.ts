@@ -1,13 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-// Routes that require authentication (exclude sign-in/sign-up)
+// Routes that require authentication (UI + API admin routes)
 const isProtectedRoute = createRouteMatcher([
   '/admin',
   '/admin/events(.*)',
   '/admin/articles(.*)',
   '/admin/newsletters(.*)',
   '/admin/subscribers(.*)',
+  '/api/admin(.*)',
 ])
 
 // Set NEXT_PUBLIC_DISABLE_CLERK_IN_DEV=true in .env to browse the frontend without login (avoids JWKS errors)
@@ -24,11 +25,23 @@ export default skipClerkInDev
       if (isProtectedRoute(req)) {
         const { userId } = await auth()
         if (!userId) {
+          // API routes: return 401 instead of redirect
+          if (req.nextUrl.pathname.startsWith('/api/')) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+          }
           const signInUrl = new URL('/admin/sign-in', req.url)
           signInUrl.searchParams.set('redirect_url', req.url)
           return NextResponse.redirect(signInUrl)
         }
       }
+
+      // Security headers for all responses
+      const response = NextResponse.next()
+      response.headers.set('X-Frame-Options', 'DENY')
+      response.headers.set('X-Content-Type-Options', 'nosniff')
+      response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+      response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+      return response
     })
 
 export const config = {

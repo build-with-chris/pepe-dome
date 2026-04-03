@@ -27,29 +27,30 @@ import { Prisma } from '@prisma/client'
  * Vercel Cron Jobs include special headers for verification
  */
 function isAuthorized(request: NextRequest): boolean {
-  // Vercel Cron Jobs send authorization header
   const authHeader = request.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
 
-  // If running on Vercel with cron, check the special header
-  const isVercelCron = request.headers.get('x-vercel-cron') === 'true'
-  if (isVercelCron) {
-    return true
-  }
-
-  // Otherwise, check secret token
+  // CRON_SECRET is required in production — reject if not configured
   if (!cronSecret) {
-    console.warn('CRON_SECRET not configured - allowing request (dev mode)')
-    return true
+    if (process.env.NODE_ENV === 'development') {
+      return true
+    }
+    console.error('CRON_SECRET not configured in production — blocking request')
+    return false
   }
 
   if (!authHeader) {
     return false
   }
 
-  // Expect: "Bearer <secret>"
+  // Expect: "Bearer <secret>" — use timing-safe comparison
   const token = authHeader.replace('Bearer ', '')
-  return token === cronSecret
+  if (token.length !== cronSecret.length) return false
+  let mismatch = 0
+  for (let i = 0; i < token.length; i++) {
+    mismatch |= token.charCodeAt(i) ^ cronSecret.charCodeAt(i)
+  }
+  return mismatch === 0
 }
 
 /**
