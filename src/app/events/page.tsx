@@ -182,9 +182,9 @@ export default function EventsPage() {
               <button onClick={goToPreviousMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <button onClick={goToToday} className="px-3 py-1 text-xs font-semibold text-[var(--pepe-t80)] hover:text-[var(--pepe-gold)] transition-colors">
-                Heute
-              </button>
+              <span className="px-3 py-1 text-xs font-bold text-[var(--pepe-white)] capitalize min-w-[100px] text-center">
+                {monthName}
+              </span>
               <button onClick={goToNextMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -213,52 +213,13 @@ export default function EventsPage() {
             <Button variant="secondary" size="icon" onClick={goToPreviousMonth} className="rounded-full w-12 h-12">
               <ChevronLeft className="w-6 h-6" />
             </Button>
-            <Button variant="ghost" onClick={goToToday} className="px-6 font-semibold hover:text-[var(--pepe-gold)]">
-              Heute
-            </Button>
+            <span className="text-lg font-bold text-[var(--pepe-white)] capitalize min-w-[140px] text-center">
+              {monthName}
+            </span>
             <Button variant="secondary" size="icon" onClick={goToNextMonth} className="rounded-full w-12 h-12">
               <ChevronRight className="w-6 h-6" />
             </Button>
           </div>
-        </div>
-
-        {/* Filters Row */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-16">
-          {/* Category Filter (Task 3.2.1) */}
-          <div className="flex flex-wrap gap-3">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  setSelectedCategory(cat.id)
-                  setVisibleCount(ITEMS_PER_PAGE)
-                }}
-                className={cn(
-                  'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
-                  'border backdrop-blur-sm',
-                  selectedCategory === cat.id
-                    ? 'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_16px_var(--pepe-gold-glow),0_4px_12px_rgba(0,0,0,0.3)]'
-                    : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Past Events Toggle */}
-          <button
-            onClick={() => setShowPast(!showPast)}
-            className={cn(
-              'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
-              'border backdrop-blur-sm',
-              showPast
-                ? 'bg-[var(--pepe-surface)] text-[var(--pepe-white)] border-[var(--pepe-gold)]/40 shadow-[0_0_8px_var(--pepe-gold-glow)]'
-                : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t64)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/40 hover:text-[var(--pepe-t80)] hover:shadow-[0_0_8px_var(--pepe-gold-glow)]'
-            )}
-          >
-            {showPast ? 'Vergangene ausblenden' : 'Vergangene anzeigen'}
-          </button>
         </div>
 
         {/* Events Grid */}
