@@ -6,6 +6,7 @@ interface VideoItem {
   src: string
   title: string
   description?: string
+  poster?: string
 }
 
 interface VideoCarouselProps {
@@ -15,10 +16,10 @@ interface VideoCarouselProps {
 }
 
 const defaultVideos: VideoItem[] = [
-  { src: '/videos/showreel.mp4', title: 'TwoGether - lokale Künstler' },
-  { src: '/videos/vertical-01.mp4', title: 'Einblicke Shows und Workshop' },
-  { src: '/videos/vertical-02.mp4', title: 'Freeman Festival 2025' },
-  { src: '/videos/vertical-03.mp4', title: 'Abendstimmung' },
+  { src: '/videos/showreel.mp4', title: 'TwoGether - lokale Künstler', poster: '/images/posters/showreel.jpg' },
+  { src: '/videos/vertical-01.mp4', title: 'Einblicke Shows und Workshop', poster: '/images/posters/vertical-01.jpg' },
+  { src: '/videos/vertical-02.mp4', title: 'Freeman Festival 2025', poster: '/images/posters/vertical-02.jpg' },
+  { src: '/videos/vertical-03.mp4', title: 'Abendstimmung', poster: '/images/posters/vertical-03.jpg' },
 ]
 
 const THUMBNAIL_TIME = 3
@@ -157,6 +158,7 @@ export default function VideoCarousel({
         <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
           <video
             src={videos[activeIndex]?.src ?? ''}
+            poster={videos[activeIndex]?.poster}
             className="h-full w-full object-contain"
             autoPlay
             playsInline
@@ -194,6 +196,7 @@ export default function VideoCarousel({
               <video
                 ref={mobileMainRef}
                 src={videos[activeIndex]?.src ?? ''}
+                poster={videos[activeIndex]?.poster}
                 className="h-full w-full object-contain"
                 muted
                 playsInline
@@ -231,20 +234,24 @@ export default function VideoCarousel({
                       }`}
                     >
                       <div className="relative h-14 w-[2.625rem] overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
-                        <video
-                          src={video.src}
-                          className="h-full w-full object-cover object-top"
-                          muted
-                          playsInline
-                          preload="metadata"
-                          onLoadedData={(e) => {
-                            const v = e.currentTarget
-                            const t = Number.isFinite(v.duration) && v.duration >= THUMBNAIL_TIME
-                              ? THUMBNAIL_TIME
-                              : 0
-                            v.currentTime = t
-                          }}
-                        />
+                        {video.poster ? (
+                          <img src={video.poster} alt={video.title} className="h-full w-full object-cover object-top" loading="lazy" />
+                        ) : (
+                          <video
+                            src={video.src}
+                            className="h-full w-full object-cover object-top"
+                            muted
+                            playsInline
+                            preload="metadata"
+                            onLoadedData={(e) => {
+                              const v = e.currentTarget
+                              const t = Number.isFinite(v.duration) && v.duration >= THUMBNAIL_TIME
+                                ? THUMBNAIL_TIME
+                                : 0
+                              v.currentTime = t
+                            }}
+                          />
+                        )}
                       </div>
                       <span className="mt-1 max-w-[70px] truncate text-[9px] font-medium text-[var(--pepe-t80)]">
                         {video.title}
@@ -304,6 +311,7 @@ export default function VideoCarousel({
                   <video
                     ref={(el) => { videoRefs.current[index] = el }}
                     src={video.src}
+                    poster={video.poster}
                     className="h-full w-full object-contain"
                     muted
                     playsInline
