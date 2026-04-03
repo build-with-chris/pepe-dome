@@ -8,12 +8,19 @@
  */
 
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getCategories } from '@/lib/data'
 import { getAllArticles, getFeaturedArticles } from '@/lib/db-data'
 import NewsCard from '@/components/custom/NewsCard'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+
+export const metadata: Metadata = {
+  title: 'News & Aktuelles',
+  description: 'Aktuelle News, Backstage Stories und Highlights aus dem Pepe Dome München. Zeitgenössischer Zirkus, Shows und Events.',
+  alternates: { canonical: 'https://www.pepe-dome.de/news' },
+}
 
 export const dynamic = 'force-dynamic'
 

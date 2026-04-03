@@ -9,14 +9,17 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getArticleBySlug, getRecentArticles } from '@/lib/db-data'
 import { getUpcomingEvents } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
 import SignupForm from '@/components/custom/SignupForm'
 import ShareButtons from '@/components/custom/ShareButtons'
+import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 
-// Reading time calculation
+const BASE_URL = 'https://www.pepe-dome.de'
+
 function getReadingTime(content: string): number {
   const wordsPerMinute = 200
   const wordCount = content.split(/\s+/).length
@@ -24,6 +27,38 @@ function getReadingTime(content: string): number {
 }
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
+  if (!article) return { title: 'Artikel nicht gefunden - Pepe Dome' }
+
+  const title = article.title
+  const description = article.excerpt.slice(0, 160)
+
+  return {
+    title,
+    description,
+    keywords: [article.category, 'Pepe Dome', 'München', ...(article.tags || [])],
+    alternates: { canonical: `${BASE_URL}/news/${article.slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/news/${article.slug}`,
+      siteName: 'Pepe Dome',
+      type: 'article',
+      publishedTime: article.publishedAt,
+      authors: [article.author],
+      ...(article.imageUrl && { images: [{ url: article.imageUrl, width: 1200, height: 630, alt: article.title }] }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(article.imageUrl && { images: [article.imageUrl] }),
+    },
+  }
+}
 
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -58,6 +93,24 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      {/* JSON-LD Structured Data */}
+      <ArticleJsonLd
+        headline={article.title}
+        description={article.excerpt}
+        author={article.author}
+        datePublished={article.publishedAt}
+        image={article.imageUrl}
+        url={`/news/${article.slug}`}
+        tags={article.tags}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'News', url: '/news' },
+          { name: article.title, url: `/news/${article.slug}` },
+        ]}
+      />
+
       {/* Hero Image Section */}
       <section className="relative h-[45vh] min-h-[350px] max-h-[500px] overflow-hidden">
         {article.imageUrl ? (
@@ -274,7 +327,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
                   })}
                   category={event.category}
                   image={event.imageUrl || undefined}
-                  href={`/events/${event.id}`}
+                  href={`/events/${event.slug}`}
                 />
               ))}
             </div>

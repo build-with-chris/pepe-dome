@@ -10,9 +10,16 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getAboutContent, getSiteContent } from '@/lib/data'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
+
+export const metadata: Metadata = {
+  title: 'Über uns',
+  description: 'Der Pepe Dome ist ein Ort für zeitgenössischen Zirkus, kulturelle Begegnung und künstlerische Ausbildung im Ostpark München.',
+  alternates: { canonical: 'https://www.pepe-dome.de/about' },
+}
 
 export default function AboutPage() {
   const about = getAboutContent()

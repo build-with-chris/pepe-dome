@@ -192,7 +192,7 @@ export default async function HomePage() {
                   })}
                   category={event.category}
                   image={event.imageUrl || undefined}
-                  href={`/events/${event.id}`}
+                  href={`/events/${event.slug}`}
                 />
               ))}
             </div>

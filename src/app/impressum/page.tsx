@@ -3,8 +3,15 @@
  */
 /* eslint-disable react/no-unescaped-entities */
 
+import type { Metadata } from 'next'
 import HeroSection from '@/components/custom/HeroSection'
 import { getSiteContent } from '@/lib/data'
+
+export const metadata: Metadata = {
+  title: 'Impressum',
+  description: 'Impressum des Pepe Dome München. Angaben gemäß § 5 DDG.',
+  alternates: { canonical: 'https://www.pepe-dome.de/impressum' },
+}
 
 export default function ImpressumPage() {
   const site = getSiteContent()

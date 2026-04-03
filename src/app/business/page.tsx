@@ -4,8 +4,15 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
+
+export const metadata: Metadata = {
+  title: 'Business & Corporate Events',
+  description: 'Corporate Events, Teambuilding und Raumvermietung im Pepe Dome München. Einzigartige Location für Firmenevents.',
+  alternates: { canonical: 'https://www.pepe-dome.de/business' },
+}
 
 const services = [
   {

@@ -35,7 +35,7 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
 
   if (variant === 'compact') {
     return (
-      <Link href={`/events/${event.id}`} className="group block">
+      <Link href={`/events/${event.slug || event.id}`} className="group block">
         <article className="card card-interactive p-4">
           <div className="flex gap-4">
             <div className={cn(
@@ -64,7 +64,7 @@ export default function EventCard({ event, variant = 'default' }: EventCardProps
   }
 
   return (
-    <Link href={`/events/${event.id}`} className="group block">
+    <Link href={`/events/${event.slug || event.id}`} className="group block">
       <article className={cn(
         'card card-interactive overflow-hidden',
         variant === 'featured' && 'bento-item-wide'

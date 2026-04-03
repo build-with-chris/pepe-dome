@@ -3,7 +3,15 @@
  */
 /* eslint-disable react/no-unescaped-entities */
 
+import type { Metadata } from 'next'
 import HeroSection from '@/components/custom/HeroSection'
+
+export const metadata: Metadata = {
+  title: 'Datenschutzerklärung',
+  description: 'Datenschutzerklärung des Pepe Dome München. Informationen zum Umgang mit personenbezogenen Daten.',
+  alternates: { canonical: 'https://www.pepe-dome.de/datenschutz' },
+  robots: { index: true, follow: true },
+}
 
 export default function DatenschutzPage() {
   return (

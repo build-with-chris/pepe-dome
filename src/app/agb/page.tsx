@@ -3,7 +3,14 @@
  */
 /* eslint-disable react/no-unescaped-entities */
 
+import type { Metadata } from 'next'
 import HeroSection from '@/components/custom/HeroSection'
+
+export const metadata: Metadata = {
+  title: 'Allgemeine Geschäftsbedingungen',
+  description: 'AGB des Pepe Dome München für Veranstaltungen, Tickets, Workshops und Raummiete.',
+  alternates: { canonical: 'https://www.pepe-dome.de/agb' },
+}
 
 export default function AGPage() {
   return (
