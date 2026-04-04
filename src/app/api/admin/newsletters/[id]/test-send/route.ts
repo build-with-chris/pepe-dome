@@ -48,11 +48,34 @@ export async function POST(
       testRecipients: testEmails,
     })
 
+    // If all sends failed, return error with details
+    if (result.success === 0 && result.failed > 0) {
+      const failureDetails = result.results
+        .filter((r: { success: boolean }) => !r.success)
+        .map((r: { error?: string }) => r.error)
+        .join('; ')
+      return errorResponse(
+        'SEND_FAILED',
+        `Test-E-Mail konnte nicht zugestellt werden: ${failureDetails || 'Unbekannter Fehler'}`,
+        502
+      )
+    }
+
+    // If some succeeded and some failed, return success with warning
+    if (result.failed > 0) {
+      return successResponse({
+        sent: result.success,
+        failed: result.failed,
+        recipients: testEmails,
+        message: `${result.success} von ${result.total} Test-E-Mails versendet. ${result.failed} fehlgeschlagen.`,
+      })
+    }
+
     return successResponse({
       sent: result.success,
       failed: result.failed,
       recipients: testEmails,
-      message: `Test email sent to ${result.success} recipient(s)`,
+      message: `Test-E-Mail erfolgreich an ${result.success} Empfänger versendet`,
     })
   } catch (error) {
     console.error('Test send error:', error)
