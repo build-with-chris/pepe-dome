@@ -37,7 +37,8 @@ export default skipClerkInDev
 
       // Security headers for all responses
       const response = NextResponse.next()
-      response.headers.set('X-Frame-Options', 'DENY')
+      // SAMEORIGIN allows admin preview iframes (same domain), but blocks external clickjacking
+      response.headers.set('X-Frame-Options', 'SAMEORIGIN')
       response.headers.set('X-Content-Type-Options', 'nosniff')
       response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
       response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
