@@ -26,6 +26,9 @@ export async function getUserRole(): Promise<UserRole> {
 
   const role = user.publicMetadata?.role as string | undefined
 
+  // Debug: log role resolution (remove after confirming it works)
+  console.log(`[ROLE] User ${user.id} (${user.emailAddresses?.[0]?.emailAddress}): publicMetadata =`, JSON.stringify(user.publicMetadata), `→ role = ${role || '(none, defaulting to editor)'}`)
+
   if (role === ROLES.SUPER_ADMIN || role === ROLES.EDITOR || role === ROLES.VIEWER) {
     return role
   }
