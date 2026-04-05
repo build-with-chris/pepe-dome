@@ -51,8 +51,8 @@ export async function POST(
     // If all sends failed, return error with details
     if (result.success === 0 && result.failed > 0) {
       const failureDetails = result.results
-        .filter((r: { success: boolean }) => !r.success)
-        .map((r: { error?: string }) => r.error)
+        .filter((r) => !r.success)
+        .map((r) => ('error' in r ? r.error : 'Unknown error'))
         .join('; ')
       return errorResponse(
         'SEND_FAILED',
