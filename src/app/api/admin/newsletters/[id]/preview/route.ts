@@ -4,6 +4,7 @@
  */
 
 import { NextRequest } from 'next/server'
+export const dynamic = 'force-dynamic'
 import { errorResponse } from '@/lib/api-response'
 import { getNewsletterWithContent } from '@/lib/newsletters'
 import { renderEmailToHtml } from '@/lib/email-renderer'
@@ -215,6 +216,7 @@ export async function GET(
     return new Response(html, {
       headers: {
         'Content-Type': 'text/html',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     })
   } catch (error) {
