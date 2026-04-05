@@ -71,14 +71,15 @@ interface NewsletterEditClientProps {
 type EditSection = 'basics' | 'hero' | 'content'
 
 export default function NewsletterEditClient({
-  newsletter,
+  newsletter: initialNewsletter,
   canEdit,
   canSend,
   canTestSend,
 }: NewsletterEditClientProps) {
   const router = useRouter()
+  const [newsletter, setNewsletter] = useState(initialNewsletter)
   const [activeSection, setActiveSection] = useState<EditSection>('basics')
-  const [selectedContent, setSelectedContent] = useState<ContentBlock[]>(newsletter.content || [])
+  const [selectedContent, setSelectedContent] = useState<ContentBlock[]>(initialNewsletter.content || [])
   const [showContentSelector, setShowContentSelector] = useState(false)
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
   const [previewKey, setPreviewKey] = useState(0)
@@ -266,7 +267,10 @@ export default function NewsletterEditClient({
                   newsletter={newsletter}
                   initialContent={selectedContent}
                   section="basics"
-                  onSave={() => setPreviewKey((k) => k + 1)}
+                  onSave={(savedData) => {
+                    setNewsletter((prev) => ({ ...prev, ...savedData }))
+                    setPreviewKey((k) => k + 1)
+                  }}
                 />
               ) : (
                 <ReadOnlyField label="Betreff" value={newsletter.subject} />
@@ -283,7 +287,10 @@ export default function NewsletterEditClient({
                   newsletter={newsletter}
                   initialContent={selectedContent}
                   section="hero"
-                  onSave={() => setPreviewKey((k) => k + 1)}
+                  onSave={(savedData) => {
+                    setNewsletter((prev) => ({ ...prev, ...savedData }))
+                    setPreviewKey((k) => k + 1)
+                  }}
                 />
               ) : (
                 <ReadOnlyField label="Hero" value={newsletter.heroTitle || '—'} />
