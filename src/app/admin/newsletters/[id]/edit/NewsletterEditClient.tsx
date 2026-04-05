@@ -121,9 +121,13 @@ export default function NewsletterEditClient({
       const res = await fetch(`/api/admin/newsletters/${newsletter.id}/send`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Versenden')
+      // Update local state to reflect sent status
+      setNewsletter((prev) => ({ ...prev, status: 'SENT', sentAt: new Date().toISOString() }))
       setShowSendModal(false)
-      router.push('/admin/newsletters')
+      setPreviewKey((k) => k + 1)
+      // Navigate with refresh
       router.refresh()
+      router.push('/admin/newsletters')
     } catch (err) {
       setSendError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
     } finally {
@@ -150,6 +154,7 @@ export default function NewsletterEditClient({
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Planen')
+      setNewsletter((prev) => ({ ...prev, status: 'SCHEDULED' }))
       setShowScheduleModal(false)
       router.refresh()
     } catch (err) {
