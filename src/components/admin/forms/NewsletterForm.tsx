@@ -107,6 +107,7 @@ export default function NewsletterForm({
 }: NewsletterFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Form state
@@ -194,7 +195,9 @@ export default function NewsletterForm({
       }
 
       if (mode === 'edit' && onSave) {
-        // Stay on page, let parent refresh preview
+        // Stay on page, show success, let parent refresh preview
+        setSaved(true)
+        setTimeout(() => setSaved(false), 3000)
         onSave()
       } else {
         router.push('/admin/newsletters')
@@ -345,7 +348,7 @@ export default function NewsletterForm({
 
   // Render form actions
   const renderActions = (compact = false) => (
-    <div className={compact ? 'flex gap-4 mt-8 pt-5 border-t border-white/[0.08]' : 'flex gap-4'}>
+    <div className={compact ? 'flex items-center gap-4 mt-8 pt-5 border-t border-white/[0.08]' : 'flex items-center gap-4'}>
       <Button type="submit" variant="primary" size="md" disabled={loading}>
         {loading ? 'Speichern...' : 'Speichern'}
       </Button>
@@ -357,6 +360,9 @@ export default function NewsletterForm({
       >
         Abbrechen
       </Button>
+      {saved && (
+        <span className="text-emerald-400 text-sm font-medium">Gespeichert!</span>
+      )}
     </div>
   )
 
