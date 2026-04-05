@@ -81,6 +81,7 @@ export default function NewsletterEditClient({
   const [selectedContent, setSelectedContent] = useState<ContentBlock[]>(newsletter.content || [])
   const [showContentSelector, setShowContentSelector] = useState(false)
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
+  const [previewKey, setPreviewKey] = useState(0)
 
   // Modal states
   const [showSendModal, setShowSendModal] = useState(false)
@@ -265,6 +266,7 @@ export default function NewsletterEditClient({
                   newsletter={newsletter}
                   initialContent={selectedContent}
                   section="basics"
+                  onSave={() => setPreviewKey((k) => k + 1)}
                 />
               ) : (
                 <ReadOnlyField label="Betreff" value={newsletter.subject} />
@@ -281,6 +283,7 @@ export default function NewsletterEditClient({
                   newsletter={newsletter}
                   initialContent={selectedContent}
                   section="hero"
+                  onSave={() => setPreviewKey((k) => k + 1)}
                 />
               ) : (
                 <ReadOnlyField label="Hero" value={newsletter.heroTitle || '—'} />
@@ -385,7 +388,7 @@ export default function NewsletterEditClient({
             'ring-1 ring-[#016dca]/30 shadow-[0_0_20px_rgba(1,109,202,0.15)]'
           )}>
             <div className="overflow-y-auto max-h-[400px]">
-              <AdminEmailPreview newsletterId={newsletter.id} />
+              <AdminEmailPreview newsletterId={newsletter.id} refreshKey={previewKey} />
             </div>
           </div>
         </div>

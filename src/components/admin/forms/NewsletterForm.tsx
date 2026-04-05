@@ -94,6 +94,8 @@ interface NewsletterFormProps {
   onContentChange?: (content: ContentBlock[]) => void
   /** Render only a specific section: 'basics', 'hero', or 'all' (default) */
   section?: 'basics' | 'hero' | 'all'
+  /** Callback after successful save (edit mode). If provided, stays on page instead of redirecting. */
+  onSave?: () => void
 }
 
 export default function NewsletterForm({
@@ -101,6 +103,7 @@ export default function NewsletterForm({
   mode,
   initialContent = [],
   section = 'all',
+  onSave,
 }: NewsletterFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -190,8 +193,13 @@ export default function NewsletterForm({
         }
       }
 
-      router.push('/admin/newsletters')
-      router.refresh()
+      if (mode === 'edit' && onSave) {
+        // Stay on page, let parent refresh preview
+        onSave()
+      } else {
+        router.push('/admin/newsletters')
+        router.refresh()
+      }
     } catch (err) {
       setErrors({
         form: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
