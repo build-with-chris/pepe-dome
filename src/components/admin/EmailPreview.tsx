@@ -26,7 +26,7 @@ export default function AdminEmailPreview({
       title="E-Mail-Vorschau"
       className="w-full h-full border-none"
       style={{ minHeight: '500px' }}
-      sandbox="allow-same-origin"
+      sandbox="allow-same-origin allow-scripts"
     />
   )
 }
