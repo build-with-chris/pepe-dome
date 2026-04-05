@@ -2,11 +2,10 @@
 
 /**
  * Admin Email Preview Component
- * Clean, simple preview of newsletter email - ONLY the email content
- * All UI (test send, buttons) is handled by parent component
+ * Fetches rendered newsletter HTML and displays it via srcdoc (no iframe sandbox issues).
  */
 
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 interface AdminEmailPreviewProps {
   newsletterId: string
@@ -15,18 +14,46 @@ interface AdminEmailPreviewProps {
 export default function AdminEmailPreview({
   newsletterId,
 }: AdminEmailPreviewProps) {
-  // Re-render iframe when the page is navigated to (e.g. after saving)
-  const searchParams = useSearchParams()
-  const cacheBuster = searchParams.toString() || Date.now()
+  const [html, setHtml] = useState<string>('')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+
+    fetch(`/api/admin/newsletters/${newsletterId}/preview?t=${Date.now()}`)
+      .then((res) => res.text())
+      .then((text) => {
+        if (!cancelled) {
+          setHtml(text)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHtml('<p style="padding:2rem;color:#999;">Vorschau konnte nicht geladen werden.</p>')
+          setLoading(false)
+        }
+      })
+
+    return () => { cancelled = true }
+  }, [newsletterId])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center" style={{ minHeight: '500px' }}>
+        <span className="text-white/40 text-sm">Vorschau wird geladen...</span>
+      </div>
+    )
+  }
 
   return (
     <iframe
-      key={cacheBuster}
-      src={`/api/admin/newsletters/${newsletterId}/preview?t=${cacheBuster}`}
+      srcDoc={html}
       title="E-Mail-Vorschau"
       className="w-full h-full border-none"
       style={{ minHeight: '500px' }}
-      sandbox="allow-same-origin allow-scripts"
+      sandbox=""
     />
   )
 }
