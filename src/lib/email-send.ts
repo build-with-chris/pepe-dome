@@ -394,11 +394,16 @@ export async function sendNewsletter(
     }
   }
 
-  // Batch send function
-  const sendToRecipient = async (recipient: typeof recipients[0]) => {
-    const urls = generateEmailUrls(recipient.id)
+  // Render all emails first (fast: just string generation, no network)
+  const emailPayloads: Array<{
+    from: string
+    to: string
+    subject: string
+    html: string
+    tags: Array<{ name: string; value: string }>
+  }> = []
 
-    // Render personalized email
+  for (const recipient of recipients) {
     const emailHtml = await render(
       NewsletterTemplate({
         subject: newsletter.subject,
@@ -417,13 +422,7 @@ export async function sendNewsletter(
       })
     )
 
-    if (options?.dryRun) {
-      // Dry run: just return success
-      return { id: 'dry-run', success: true }
-    }
-
-    // Send via Resend
-    const result = await resend.emails.send({
+    emailPayloads.push({
       from: DEFAULT_FROM_EMAIL,
       to: recipient.email,
       subject: newsletter.subject,
@@ -434,20 +433,51 @@ export async function sendNewsletter(
         { name: 'subscriber_id', value: recipient.id },
       ],
     })
-
-    return result
   }
 
-  // Send in batches
-  const results = await batchSendEmails(
-    recipients,
-    sendToRecipient,
-    50 // batch size
-  )
+  if (options?.dryRun) {
+    return {
+      success: emailPayloads.length,
+      failed: 0,
+      total: emailPayloads.length,
+      results: emailPayloads.map((e) => ({ success: true, email: e.to, id: 'dry-run' })),
+    }
+  }
 
-  // Count successes and failures
-  const successCount = results.filter(r => r.success).length
-  const failureCount = results.filter(r => !r.success).length
+  // Send via Resend Batch API (up to 100 per call, way faster than one-by-one)
+  let successCount = 0
+  let failureCount = 0
+  const allResults: Array<{ success: boolean; email: string; error?: string; id?: string }> = []
+
+  // Split into chunks of 100 (Resend batch limit)
+  for (let i = 0; i < emailPayloads.length; i += 100) {
+    const chunk = emailPayloads.slice(i, i + 100)
+    try {
+      const batchResult = await resend.batch.send(chunk)
+
+      if (batchResult.error) {
+        console.error('[EMAIL] Batch API error:', batchResult.error)
+        // Mark all in this chunk as failed
+        for (const email of chunk) {
+          failureCount++
+          allResults.push({ success: false, email: email.to, error: batchResult.error.message })
+        }
+      } else {
+        // Mark all in this chunk as success
+        const ids = batchResult.data?.data || []
+        for (let j = 0; j < chunk.length; j++) {
+          successCount++
+          allResults.push({ success: true, email: chunk[j].to, id: ids[j]?.id })
+        }
+      }
+    } catch (error) {
+      console.error('[EMAIL] Batch send exception:', error)
+      for (const email of chunk) {
+        failureCount++
+        allResults.push({ success: false, email: email.to, error: error instanceof Error ? error.message : 'Unknown error' })
+      }
+    }
+  }
 
   // Update newsletter status
   if (!options?.dryRun && !options?.testRecipients) {
@@ -475,7 +505,7 @@ export async function sendNewsletter(
   }
 
   // Log any failures
-  const failures = results.filter(r => !r.success)
+  const failures = allResults.filter(r => !r.success)
   if (failures.length > 0) {
     console.error('Newsletter send failures:', failures)
   }
@@ -484,6 +514,6 @@ export async function sendNewsletter(
     success: successCount,
     failed: failureCount,
     total: recipients.length,
-    results,
+    results: allResults,
   }
 }
