@@ -122,7 +122,7 @@ export default function NewsletterEditClient({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Versenden')
       // Update local state to reflect sent status
-      setNewsletter((prev) => ({ ...prev, status: 'SENT', sentAt: new Date().toISOString() }))
+      setNewsletter((prev) => ({ ...prev, status: 'SENT' as const, sentAt: new Date() }))
       setShowSendModal(false)
       setPreviewKey((k) => k + 1)
       // Navigate with refresh
@@ -154,7 +154,7 @@ export default function NewsletterEditClient({
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error?.message || 'Fehler beim Planen')
-      setNewsletter((prev) => ({ ...prev, status: 'SCHEDULED' }))
+      setNewsletter((prev) => ({ ...prev, status: 'SCHEDULED' as const }))
       setShowScheduleModal(false)
       router.refresh()
     } catch (err) {
