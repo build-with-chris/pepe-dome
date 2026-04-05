@@ -3,16 +3,20 @@
 /**
  * Admin Email Preview Component
  * Fetches rendered newsletter HTML and displays it via srcdoc (no iframe sandbox issues).
+ * Pass refreshKey to trigger a re-fetch (e.g. after saving).
  */
 
 import { useEffect, useState } from 'react'
 
 interface AdminEmailPreviewProps {
   newsletterId: string
+  /** Increment to trigger a preview refresh */
+  refreshKey?: number
 }
 
 export default function AdminEmailPreview({
   newsletterId,
+  refreshKey = 0,
 }: AdminEmailPreviewProps) {
   const [html, setHtml] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -37,7 +41,7 @@ export default function AdminEmailPreview({
       })
 
     return () => { cancelled = true }
-  }, [newsletterId])
+  }, [newsletterId, refreshKey])
 
   if (loading) {
     return (
