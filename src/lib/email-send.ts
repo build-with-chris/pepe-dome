@@ -160,11 +160,16 @@ export async function sendWelcomeEmail(subscriberId: string) {
   )
 
   // Send via Resend
+  const unsubscribeUrl = `${urls.home}/newsletter/unsubscribe/${subscriber.id}`
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
     subject: 'Willkommen beim PEPE Dome Newsletter!',
     html: emailHtml,
+    headers: {
+      'List-Unsubscribe': `<${unsubscribeUrl}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
     tags: [
       { name: 'type', value: 'welcome' },
       { name: 'subscriber_id', value: subscriber.id },
@@ -400,6 +405,7 @@ export async function sendNewsletter(
     to: string
     subject: string
     html: string
+    headers: Record<string, string>
     tags: Array<{ name: string; value: string }>
   }> = []
 
@@ -422,11 +428,17 @@ export async function sendNewsletter(
       })
     )
 
+    const unsubscribeUrl = `${baseUrl}/newsletter/unsubscribe/${recipient.id}`
+
     emailPayloads.push({
       from: DEFAULT_FROM_EMAIL,
       to: recipient.email,
       subject: newsletter.subject,
       html: emailHtml,
+      headers: {
+        'List-Unsubscribe': `<${unsubscribeUrl}>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
       tags: [
         { name: 'type', value: 'newsletter' },
         { name: 'newsletter_id', value: newsletter.id },
