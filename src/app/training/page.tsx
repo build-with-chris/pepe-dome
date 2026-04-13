@@ -14,6 +14,103 @@ export const metadata: Metadata = {
   description: 'Professionelles Training für zeitgenössischen Zirkus und Artistik. Profitraining, Aerial Arts, Ground Arts und Workshops im Pepe Dome.',
 }
 
+// ── Kursprogramm Frühjahr 2026 ─────────────────────────────────────────────
+// Daten aus dem offiziellen PDF-Flyer. Drei Zielgruppen-Farben:
+//   Kinder  → Gold     Teens → Bronze/Orange     Erwachsene → Blau/Teal
+
+type CourseSlot = {
+  time: string
+  title: string
+  detail?: string
+  target: 'kinder' | 'teens' | 'erwachsene'
+}
+
+type DaySchedule = {
+  day: string
+  trainer: string
+  slots: CourseSlot[]
+  note?: string // z.B. "In Planung"
+}
+
+const schedule: DaySchedule[] = [
+  {
+    day: 'Montag',
+    trainer: 'Olesia',
+    slots: [
+      { time: '16:00 – 17:00', title: 'Luftartistik', detail: 'Kinder ab 5 J. · Trapez, Ring, Tuch', target: 'kinder' },
+      { time: '17:00 – 18:00', title: 'Luftartistik', detail: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
+      { time: '18:30 – 19:30', title: 'Luftring', detail: 'Beginner', target: 'erwachsene' },
+      { time: '19:30 – 20:30', title: 'Luftring', detail: 'Intermediate', target: 'erwachsene' },
+    ],
+  },
+  {
+    day: 'Dienstag',
+    trainer: 'Marlon',
+    slots: [
+      { time: '18:30 – 19:30', title: 'Aerial Silks', detail: 'Intermediate', target: 'erwachsene' },
+      { time: '19:45 – 21:00', title: 'Straps', detail: 'Open Level', target: 'erwachsene' },
+    ],
+  },
+  {
+    day: 'Mittwoch',
+    trainer: 'Jana',
+    slots: [
+      { time: '16:00 – 17:00', title: 'Zirkuskünste', detail: 'Kinder ab 5 J.', target: 'kinder' },
+      { time: '17:30 – 18:30', title: 'Vertikaltuch', detail: 'Kinder ab 5 J.', target: 'kinder' },
+      { time: '18:30 – 19:30', title: 'Aerial Silks', detail: 'Open Level', target: 'erwachsene' },
+      { time: '19:30 – 20:30', title: 'Conditioning', detail: 'for Aerial', target: 'erwachsene' },
+    ],
+  },
+  {
+    day: 'Donnerstag',
+    trainer: 'Marcel',
+    slots: [
+      { time: 'Zeit folgt', title: 'Tricking & Breaking', detail: 'ab 14. April', target: 'teens' },
+    ],
+  },
+  {
+    day: 'Freitag',
+    trainer: 'Olesia',
+    slots: [
+      { time: '17:30 – 18:30', title: 'Luftartistik', detail: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
+      { time: '18:30 – 19:30', title: 'Flexibility', detail: 'Open Level', target: 'erwachsene' },
+    ],
+  },
+  {
+    day: 'Samstag',
+    trainer: '',
+    slots: [],
+    note: 'In Planung — Workshops & Vermietung folgen',
+  },
+  {
+    day: 'Sonntag',
+    trainer: 'Rufus',
+    slots: [],
+    note: 'Programm folgt in Kürze',
+  },
+]
+
+const targetStyles = {
+  kinder: {
+    border: 'border-[var(--pepe-gold)]/60',
+    bg: 'bg-[var(--pepe-gold)]/10',
+    dot: 'bg-[var(--pepe-gold)]',
+    label: 'Kinder',
+  },
+  teens: {
+    border: 'border-amber-500/60',
+    bg: 'bg-amber-500/10',
+    dot: 'bg-amber-500',
+    label: 'Teens',
+  },
+  erwachsene: {
+    border: 'border-sky-500/60',
+    bg: 'bg-sky-500/10',
+    dot: 'bg-sky-500',
+    label: 'Erwachsene',
+  },
+}
+
 const disciplines = [
   {
     name: 'Aerial Arts',
@@ -136,6 +233,148 @@ export default function TrainingPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Kursprogramm Frühjahr 2026 ───────────────────────────── */}
+      <section id="kursprogramm" className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/40 to-[var(--pepe-black)]">
+        <div className="stage-container">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/15 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/30 mb-6">
+              Kursprogramm
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+              Frühjahr 2026
+            </h2>
+            <p className="text-[var(--pepe-t64)] text-lg max-w-xl mx-auto">
+              Stand der Dinge — Programm wächst laufend
+            </p>
+          </div>
+
+          {/* Hinweis: ab Mai buchbar */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <div className="flex items-center gap-3 px-5 py-4 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-300">
+              <span className="text-xl flex-shrink-0">&#128197;</span>
+              <p className="text-sm md:text-base leading-relaxed">
+                <span className="font-bold">Buchbar ab Mai 2026</span> — Das Kursprogramm steht, die Anmeldung öffnet bald.
+                Schon jetzt könnt ihr euch einen Überblick verschaffen.
+              </p>
+            </div>
+          </div>
+
+          {/* Legende */}
+          <div className="flex flex-wrap justify-center gap-6 mb-10">
+            {(['kinder', 'teens', 'erwachsene'] as const).map((t) => (
+              <div key={t} className="flex items-center gap-2 text-sm text-[var(--pepe-t80)]">
+                <span className={`inline-block w-3 h-3 rounded-full ${targetStyles[t].dot}`} />
+                {targetStyles[t].label}
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: Wochenplan-Grid (ab md) */}
+          <div className="hidden md:grid grid-cols-7 gap-3">
+            {schedule.map((day) => (
+              <div key={day.day} className="flex flex-col">
+                {/* Tag-Header */}
+                <div className="text-center mb-3">
+                  <p className="text-[var(--pepe-white)] font-bold text-base">{day.day}</p>
+                  {day.trainer && (
+                    <p className="text-[var(--pepe-t48)] text-xs mt-1">mit {day.trainer}</p>
+                  )}
+                </div>
+
+                {/* Slots */}
+                <div className="flex-1 space-y-2">
+                  {day.slots.map((slot, i) => {
+                    const s = targetStyles[slot.target]
+                    return (
+                      <div
+                        key={i}
+                        className={`rounded-xl border p-3 ${s.border} ${s.bg} transition-all duration-200 hover:scale-[1.03]`}
+                      >
+                        <p className="text-[var(--pepe-t64)] text-[11px] font-medium mb-1">{slot.time}</p>
+                        <p className="text-[var(--pepe-white)] font-semibold text-sm leading-tight">{slot.title}</p>
+                        {slot.detail && (
+                          <p className="text-[var(--pepe-t48)] text-[11px] mt-1 leading-snug">{slot.detail}</p>
+                        )}
+                      </div>
+                    )
+                  })}
+                  {day.note && (
+                    <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 p-3">
+                      <p className="text-[var(--pepe-t48)] text-xs italic leading-snug">{day.note}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: Akkordeon-Liste (unter md) */}
+          <div className="md:hidden space-y-4">
+            {schedule.map((day) => (
+              <div
+                key={day.day}
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--pepe-line)]">
+                  <div>
+                    <p className="text-[var(--pepe-white)] font-bold">{day.day}</p>
+                    {day.trainer && (
+                      <p className="text-[var(--pepe-t48)] text-xs mt-0.5">mit {day.trainer}</p>
+                    )}
+                  </div>
+                  <span className="text-[var(--pepe-t48)] text-xs">
+                    {day.slots.length > 0
+                      ? `${day.slots.length} ${day.slots.length === 1 ? 'Kurs' : 'Kurse'}`
+                      : '—'}
+                  </span>
+                </div>
+                {day.slots.length > 0 && (
+                  <div className="p-4 space-y-3">
+                    {day.slots.map((slot, i) => {
+                      const s = targetStyles[slot.target]
+                      return (
+                        <div
+                          key={i}
+                          className={`rounded-xl border p-4 ${s.border} ${s.bg}`}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`w-2 h-2 rounded-full ${s.dot}`} />
+                            <span className="text-[var(--pepe-t64)] text-xs font-medium">{slot.time}</span>
+                          </div>
+                          <p className="text-[var(--pepe-white)] font-semibold">{slot.title}</p>
+                          {slot.detail && (
+                            <p className="text-[var(--pepe-t48)] text-sm mt-1">{slot.detail}</p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+                {day.note && (
+                  <div className="px-5 py-4">
+                    <p className="text-[var(--pepe-t48)] text-sm italic">{day.note}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-12">
+            <a
+              href="https://www.eversports.de/s/pepe-dome"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="primary" size="lg">
+                Kurs vormerken auf Eversports
+              </Button>
+            </a>
           </div>
         </div>
       </section>

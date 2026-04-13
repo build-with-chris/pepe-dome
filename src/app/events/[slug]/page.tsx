@@ -92,6 +92,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
         description={event.description}
         startDate={event.date}
         endDate={event.endDate}
+        time={event.time}
         location={event.location}
         image={event.imageUrl}
         url={`/events/${event.slug}`}
