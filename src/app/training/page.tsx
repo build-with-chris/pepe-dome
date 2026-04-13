@@ -90,23 +90,25 @@ const schedule: DaySchedule[] = [
   },
 ]
 
-const targetStyles = {
+// Inline-Styles statt Tailwind-Klassen, weil Tailwind v4 dynamisch
+// zusammengesetzte Klassen aus JS-Objekten beim Build wegpurged.
+const targetColors = {
   kinder: {
-    border: 'border-[var(--pepe-gold)]/60',
-    bg: 'bg-[var(--pepe-gold)]/10',
-    dot: 'bg-[var(--pepe-gold)]',
+    border: 'rgba(196, 167, 103, 0.5)',  // Gold
+    bg: 'rgba(196, 167, 103, 0.12)',
+    dot: '#c4a767',
     label: 'Kinder',
   },
   teens: {
-    border: 'border-amber-500/60',
-    bg: 'bg-amber-500/10',
-    dot: 'bg-amber-500',
+    border: 'rgba(245, 158, 11, 0.5)',   // Amber/Orange
+    bg: 'rgba(245, 158, 11, 0.12)',
+    dot: '#f59e0b',
     label: 'Teens',
   },
   erwachsene: {
-    border: 'border-sky-500/60',
-    bg: 'bg-sky-500/10',
-    dot: 'bg-sky-500',
+    border: 'rgba(56, 189, 248, 0.5)',   // Sky-Blue
+    bg: 'rgba(56, 189, 248, 0.12)',
+    dot: '#38bdf8',
     label: 'Erwachsene',
   },
 }
@@ -242,7 +244,10 @@ export default function TrainingPage() {
         <div className="stage-container">
           {/* Header */}
           <div className="text-center mb-6">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/15 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/30 mb-6">
+            <span
+              className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest mb-6"
+              style={{ background: 'rgba(196,167,103,0.15)', color: 'var(--pepe-gold)', border: '1px solid rgba(196,167,103,0.3)' }}
+            >
               Kursprogramm
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
@@ -255,7 +260,10 @@ export default function TrainingPage() {
 
           {/* Hinweis: ab Mai buchbar */}
           <div className="max-w-2xl mx-auto mb-12">
-            <div className="flex items-center gap-3 px-5 py-4 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-300">
+            <div
+              className="flex items-center gap-3 px-5 py-4 rounded-xl"
+              style={{ background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.3)', color: '#7dd3fc' }}
+            >
               <span className="text-xl flex-shrink-0">&#128197;</span>
               <p className="text-sm md:text-base leading-relaxed">
                 <span className="font-bold">Buchbar ab Mai 2026</span> — Das Kursprogramm steht, die Anmeldung öffnet bald.
@@ -268,8 +276,11 @@ export default function TrainingPage() {
           <div className="flex flex-wrap justify-center gap-6 mb-10">
             {(['kinder', 'teens', 'erwachsene'] as const).map((t) => (
               <div key={t} className="flex items-center gap-2 text-sm text-[var(--pepe-t80)]">
-                <span className={`inline-block w-3 h-3 rounded-full ${targetStyles[t].dot}`} />
-                {targetStyles[t].label}
+                <span
+                  className="inline-block w-3 h-3 rounded-full"
+                  style={{ backgroundColor: targetColors[t].dot }}
+                />
+                {targetColors[t].label}
               </div>
             ))}
           </div>
@@ -289,11 +300,12 @@ export default function TrainingPage() {
                 {/* Slots */}
                 <div className="flex-1 space-y-2">
                   {day.slots.map((slot, i) => {
-                    const s = targetStyles[slot.target]
+                    const c = targetColors[slot.target]
                     return (
                       <div
                         key={i}
-                        className={`rounded-xl border p-3 ${s.border} ${s.bg} transition-all duration-200 hover:scale-[1.03]`}
+                        className="rounded-xl p-3 transition-all duration-200 hover:scale-[1.03]"
+                        style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
                       >
                         <p className="text-[var(--pepe-t64)] text-[11px] font-medium mb-1">{slot.time}</p>
                         <p className="text-[var(--pepe-white)] font-semibold text-sm leading-tight">{slot.title}</p>
@@ -304,7 +316,10 @@ export default function TrainingPage() {
                     )
                   })}
                   {day.note && (
-                    <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 p-3">
+                    <div
+                      className="rounded-xl p-3"
+                      style={{ border: '1px solid var(--pepe-line)', backgroundColor: 'rgba(30,30,36,0.6)' }}
+                    >
                       <p className="text-[var(--pepe-t48)] text-xs italic leading-snug">{day.note}</p>
                     </div>
                   )}
@@ -318,9 +333,13 @@ export default function TrainingPage() {
             {schedule.map((day) => (
               <div
                 key={day.day}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden"
+                className="rounded-2xl overflow-hidden"
+                style={{ backgroundColor: 'var(--pepe-ink)', border: '1px solid var(--pepe-line)' }}
               >
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--pepe-line)]">
+                <div
+                  className="flex items-center justify-between px-5 py-4"
+                  style={{ borderBottom: '1px solid var(--pepe-line)' }}
+                >
                   <div>
                     <p className="text-[var(--pepe-white)] font-bold">{day.day}</p>
                     {day.trainer && (
@@ -336,14 +355,18 @@ export default function TrainingPage() {
                 {day.slots.length > 0 && (
                   <div className="p-4 space-y-3">
                     {day.slots.map((slot, i) => {
-                      const s = targetStyles[slot.target]
+                      const c = targetColors[slot.target]
                       return (
                         <div
                           key={i}
-                          className={`rounded-xl border p-4 ${s.border} ${s.bg}`}
+                          className="rounded-xl p-4"
+                          style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
                         >
                           <div className="flex items-center gap-2 mb-1">
-                            <span className={`w-2 h-2 rounded-full ${s.dot}`} />
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: c.dot }}
+                            />
                             <span className="text-[var(--pepe-t64)] text-xs font-medium">{slot.time}</span>
                           </div>
                           <p className="text-[var(--pepe-white)] font-semibold">{slot.title}</p>
