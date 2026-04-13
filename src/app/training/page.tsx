@@ -1,5 +1,6 @@
 /**
  * Training Page - Zeitgenössischer Zirkus und Artistik
+ * Kursprogramm Frühjahr 2026 aus dem offiziellen PDF-Flyer
  */
 
 import type { Metadata } from 'next'
@@ -11,145 +12,176 @@ import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
   title: 'Workshops & Training | Pepe Dome München',
-  description: 'Professionelles Training für zeitgenössischen Zirkus und Artistik. Profitraining, Aerial Arts, Ground Arts und Workshops im Pepe Dome.',
+  description:
+    'Kursprogramm Frühjahr 2026: Luftartistik, Aerial Silks, Straps, Vertikaltuch, Zirkuskünste, Conditioning und mehr. Kurse für Kinder, Teens und Erwachsene im Pepe Dome München.',
 }
 
-// ── Kursprogramm Frühjahr 2026 ─────────────────────────────────────────────
-// Daten aus dem offiziellen PDF-Flyer. Drei Zielgruppen-Farben:
-//   Kinder  → Gold     Teens → Bronze/Orange     Erwachsene → Blau/Teal
+// ── Kursprogramm-Daten ────────────────────────────────────────────────────
+// Farben pro Zielgruppe (inline styles, weil Tailwind v4 dynamische
+// Klassen aus JS-Objekten beim Build entfernt)
+const COLORS = {
+  kinder:      { dot: '#c4a767', border: 'rgba(196,167,103,0.45)', bg: 'rgba(196,167,103,0.08)' },
+  teens:       { dot: '#f59e0b', border: 'rgba(245,158,11,0.45)',  bg: 'rgba(245,158,11,0.08)' },
+  erwachsene:  { dot: '#38bdf8', border: 'rgba(56,189,248,0.45)',  bg: 'rgba(56,189,248,0.08)' },
+} as const
 
-type CourseSlot = {
-  time: string
-  title: string
-  detail?: string
-  target: 'kinder' | 'teens' | 'erwachsene'
-}
+type Target = keyof typeof COLORS
 
-type DaySchedule = {
-  day: string
-  trainer: string
-  slots: CourseSlot[]
-  note?: string // z.B. "In Planung"
-}
+type Kurs = { time: string; title: string; sub?: string; target: Target }
 
-const schedule: DaySchedule[] = [
+type Tag = { day: string; trainer: string; kurse: Kurs[]; note?: string }
+
+const woche: Tag[] = [
   {
     day: 'Montag',
     trainer: 'Olesia',
-    slots: [
-      { time: '16:00 – 17:00', title: 'Luftartistik', detail: 'Kinder ab 5 J. · Trapez, Ring, Tuch', target: 'kinder' },
-      { time: '17:00 – 18:00', title: 'Luftartistik', detail: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
-      { time: '18:30 – 19:30', title: 'Luftring', detail: 'Beginner', target: 'erwachsene' },
-      { time: '19:30 – 20:30', title: 'Luftring', detail: 'Intermediate', target: 'erwachsene' },
+    kurse: [
+      { time: '16:00 – 17:00', title: 'Luftartistik',  sub: 'Kinder ab 5 J. · Trapez, Ring, Tuch', target: 'kinder' },
+      { time: '17:00 – 18:00', title: 'Luftartistik',  sub: 'Teens ab 11 J. · Trapez, Ring, Tuch',  target: 'teens' },
+      { time: '18:30 – 19:30', title: 'Luftring',      sub: 'Beginner',                             target: 'erwachsene' },
+      { time: '19:30 – 20:30', title: 'Luftring',      sub: 'Intermediate',                         target: 'erwachsene' },
     ],
   },
   {
     day: 'Dienstag',
     trainer: 'Marlon',
-    slots: [
-      { time: '18:30 – 19:30', title: 'Aerial Silks', detail: 'Intermediate', target: 'erwachsene' },
-      { time: '19:45 – 21:00', title: 'Straps', detail: 'Open Level', target: 'erwachsene' },
+    kurse: [
+      { time: '18:30 – 19:30', title: 'Aerial Silks', sub: 'Intermediate', target: 'erwachsene' },
+      { time: '19:45 – 21:00', title: 'Straps',       sub: 'Open Level',   target: 'erwachsene' },
     ],
   },
   {
     day: 'Mittwoch',
     trainer: 'Jana',
-    slots: [
-      { time: '16:00 – 17:00', title: 'Zirkuskünste', detail: 'Kinder ab 5 J.', target: 'kinder' },
-      { time: '17:30 – 18:30', title: 'Vertikaltuch', detail: 'Kinder ab 5 J.', target: 'kinder' },
-      { time: '18:30 – 19:30', title: 'Aerial Silks', detail: 'Open Level', target: 'erwachsene' },
-      { time: '19:30 – 20:30', title: 'Conditioning', detail: 'for Aerial', target: 'erwachsene' },
+    kurse: [
+      { time: '16:00 – 17:00', title: 'Zirkuskünste',  sub: 'Kinder ab 5 J.',  target: 'kinder' },
+      { time: '17:30 – 18:30', title: 'Vertikaltuch',  sub: 'Kinder ab 5 J.',  target: 'kinder' },
+      { time: '18:30 – 19:30', title: 'Aerial Silks',  sub: 'Open Level',      target: 'erwachsene' },
+      { time: '19:30 – 20:30', title: 'Conditioning',  sub: 'for Aerial',      target: 'erwachsene' },
     ],
   },
   {
     day: 'Donnerstag',
     trainer: 'Marcel',
-    slots: [
-      { time: 'Zeit folgt', title: 'Tricking & Breaking', detail: 'ab 14. April', target: 'teens' },
+    kurse: [
+      { time: 'Zeit folgt', title: 'Tricking & Breaking', sub: 'ab 14. April', target: 'teens' },
     ],
   },
   {
     day: 'Freitag',
     trainer: 'Olesia',
-    slots: [
-      { time: '17:30 – 18:30', title: 'Luftartistik', detail: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
-      { time: '18:30 – 19:30', title: 'Flexibility', detail: 'Open Level', target: 'erwachsene' },
+    kurse: [
+      { time: '17:30 – 18:30', title: 'Luftartistik', sub: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
+      { time: '18:30 – 19:30', title: 'Flexibility',  sub: 'Open Level',                          target: 'erwachsene' },
     ],
   },
   {
     day: 'Samstag',
     trainer: '',
-    slots: [],
+    kurse: [],
     note: 'In Planung — Workshops & Vermietung folgen',
   },
   {
     day: 'Sonntag',
     trainer: 'Rufus',
-    slots: [],
+    kurse: [],
     note: 'Programm folgt in Kürze',
   },
 ]
 
-// Inline-Styles statt Tailwind-Klassen, weil Tailwind v4 dynamisch
-// zusammengesetzte Klassen aus JS-Objekten beim Build wegpurged.
-const targetColors = {
-  kinder: {
-    border: 'rgba(196, 167, 103, 0.5)',  // Gold
-    bg: 'rgba(196, 167, 103, 0.12)',
-    dot: '#c4a767',
-    label: 'Kinder',
-  },
-  teens: {
-    border: 'rgba(245, 158, 11, 0.5)',   // Amber/Orange
-    bg: 'rgba(245, 158, 11, 0.12)',
-    dot: '#f59e0b',
-    label: 'Teens',
-  },
-  erwachsene: {
-    border: 'rgba(56, 189, 248, 0.5)',   // Sky-Blue
-    bg: 'rgba(56, 189, 248, 0.12)',
-    dot: '#38bdf8',
-    label: 'Erwachsene',
-  },
-}
+// ── Sonstige Daten ────────────────────────────────────────────────────────
 
 const disciplines = [
-  {
-    name: 'Aerial Arts',
-    description: 'Vertikaltuch, Trapez, Aerial Hoop, Strapaten, Spanish Web',
-    icon: '🎪',
-  },
-  {
-    name: 'Ground Arts',
-    description: 'Handstand, Akrobatik, Kontorsion, Cyr Wheel, Jonglage',
-    icon: '🤸',
-  },
-  {
-    name: 'Movement & Flow',
-    description: 'Contemporary Dance, Floor Work, Improvisation',
-    icon: '💃',
-  },
-  {
-    name: 'Conditioning',
-    description: 'Flexibilität, Verletzungsprävention, Kraftaufbau',
-    icon: '💪',
-  },
+  { name: 'Aerial Arts',       description: 'Vertikaltuch, Trapez, Aerial Hoop, Strapaten, Spanish Web', icon: '🎪' },
+  { name: 'Ground Arts',       description: 'Handstand, Akrobatik, Kontorsion, Cyr Wheel, Jonglage',     icon: '🤸' },
+  { name: 'Movement & Flow',   description: 'Contemporary Dance, Floor Work, Improvisation',             icon: '💃' },
+  { name: 'Conditioning',      description: 'Flexibilität, Verletzungsprävention, Kraftaufbau',          icon: '💪' },
 ]
 
 const pricingNonAerial = [
   { name: 'Schnupperstunde', price: '12€', description: 'Einmalig zum Kennenlernen' },
-  { name: 'Einzelstunde', price: '20€', description: 'Flexibel buchbar' },
-  { name: '5er-Karte', price: '90€', description: '18€ pro Stunde' },
-  { name: '10er-Karte', price: '165€', description: '16,50€ pro Stunde' },
-  { name: '20er-Karte', price: '300€', description: '15€ pro Stunde' },
+  { name: 'Einzelstunde',    price: '20€', description: 'Flexibel buchbar' },
+  { name: '5er-Karte',       price: '90€', description: '18€ pro Stunde' },
+  { name: '10er-Karte',      price: '165€', description: '16,50€ pro Stunde' },
+  { name: '20er-Karte',      price: '300€', description: '15€ pro Stunde' },
 ]
 
 const pricingAerial = [
   { name: 'Einzelstunde', price: '25€', description: 'Flexibel buchbar' },
-  { name: '5er-Karte', price: '120€', description: '24€ pro Stunde' },
-  { name: '10er-Karte', price: '220€', description: '22€ pro Stunde' },
-  { name: '20er-Karte', price: '400€', description: '20€ pro Stunde' },
+  { name: '5er-Karte',    price: '120€', description: '24€ pro Stunde' },
+  { name: '10er-Karte',   price: '220€', description: '22€ pro Stunde' },
+  { name: '20er-Karte',   price: '400€', description: '20€ pro Stunde' },
 ]
+
+// ── Kurs-Karte (inline-styled, purge-safe) ────────────────────────────────
+
+function KursKarte({ kurs }: { kurs: Kurs }) {
+  const c = COLORS[kurs.target]
+  return (
+    <div
+      className="rounded-xl p-4 transition-all duration-200 hover:scale-[1.02]"
+      style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
+    >
+      <div className="flex items-center gap-2.5 mb-2">
+        <span
+          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+          style={{ backgroundColor: c.dot }}
+        />
+        <span className="text-[var(--pepe-t64)] text-xs font-semibold tracking-wide">
+          {kurs.time}
+        </span>
+      </div>
+      <p className="text-[var(--pepe-white)] font-bold text-base leading-snug">{kurs.title}</p>
+      {kurs.sub && (
+        <p className="text-[var(--pepe-t48)] text-sm mt-1 leading-snug">{kurs.sub}</p>
+      )}
+    </div>
+  )
+}
+
+// ── Tag-Karte ─────────────────────────────────────────────────────────────
+
+function TagKarte({ tag }: { tag: Tag }) {
+  const hasKurse = tag.kurse.length > 0
+  return (
+    <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden">
+      {/* Tag-Header */}
+      <div className="px-5 py-4 border-b border-[var(--pepe-line)] flex items-center justify-between">
+        <div>
+          <h4 className="text-[var(--pepe-white)] font-bold text-lg">{tag.day}</h4>
+          {tag.trainer && (
+            <p className="text-[var(--pepe-t48)] text-sm mt-0.5">mit {tag.trainer}</p>
+          )}
+        </div>
+        {hasKurse && (
+          <span className="text-[var(--pepe-t48)] text-xs font-medium">
+            {tag.kurse.length} {tag.kurse.length === 1 ? 'Kurs' : 'Kurse'}
+          </span>
+        )}
+      </div>
+
+      {/* Kurs-Slots */}
+      {hasKurse && (
+        <div className="p-4 space-y-3">
+          {tag.kurse.map((kurs, i) => (
+            <KursKarte key={i} kurs={kurs} />
+          ))}
+        </div>
+      )}
+
+      {/* Platzhalter-Notiz */}
+      {tag.note && (
+        <div className="px-5 py-5">
+          <p className="text-[var(--pepe-t48)] text-sm italic">{tag.note}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE
+// ═══════════════════════════════════════════════════════════════════════════
 
 export default function TrainingPage() {
   return (
@@ -157,7 +189,7 @@ export default function TrainingPage() {
       {/* Hero Section */}
       <HeroSection
         title="Workshops & Training"
-        subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome - für alle Levels"
+        subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
         size="md"
         dotCloudIcon="training"
       />
@@ -176,18 +208,14 @@ export default function TrainingPage() {
                 Bedingungen für Luftakrobatik und Bodenarbeit.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://www.eversports.de/s/pepe-dome"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="primary" size="lg">
-                    Kurse buchen
-                  </Button>
-                </a>
                 <Link href="/contact">
-                  <Button variant="secondary" size="lg">
+                  <Button variant="primary" size="lg">
                     Kontakt aufnehmen
+                  </Button>
+                </Link>
+                <Link href="#kursprogramm">
+                  <Button variant="secondary" size="lg">
+                    Zum Kursprogramm
                   </Button>
                 </Link>
               </div>
@@ -239,165 +267,80 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* ── Kursprogramm Frühjahr 2026 ───────────────────────────── */}
-      <section id="kursprogramm" className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/40 to-[var(--pepe-black)]">
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* KURSPROGRAMM FRÜHJAHR 2026                                      */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section id="kursprogramm" className="py-20 md:py-32">
         <div className="stage-container">
           {/* Header */}
-          <div className="text-center mb-6">
-            <span
-              className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest mb-6"
-              style={{ background: 'rgba(196,167,103,0.15)', color: 'var(--pepe-gold)', border: '1px solid rgba(196,167,103,0.3)' }}
-            >
+          <div className="text-center mb-8">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
               Kursprogramm
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+            <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-4">
               Frühjahr 2026
             </h2>
-            <p className="text-[var(--pepe-t64)] text-lg max-w-xl mx-auto">
-              Stand der Dinge — Programm wächst laufend
+            <p className="text-[var(--pepe-t64)] text-lg max-w-2xl mx-auto">
+              Stand der Dinge — Programm wächst laufend. Kurse für Kinder, Teens und Erwachsene,
+              angeleitet von erfahrenen Trainer:innen.
             </p>
           </div>
 
           {/* Hinweis: ab Mai buchbar */}
-          <div className="max-w-2xl mx-auto mb-12">
-            <div
-              className="flex items-center gap-3 px-5 py-4 rounded-xl"
-              style={{ background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.3)', color: '#7dd3fc' }}
-            >
-              <span className="text-xl flex-shrink-0">&#128197;</span>
-              <p className="text-sm md:text-base leading-relaxed">
-                <span className="font-bold">Buchbar ab Mai 2026</span> — Das Kursprogramm steht, die Anmeldung öffnet bald.
-                Schon jetzt könnt ihr euch einen Überblick verschaffen.
-              </p>
+          <div className="max-w-2xl mx-auto mb-14">
+            <div className="flex items-start gap-4 px-6 py-5 rounded-2xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)]">
+              <span className="text-2xl mt-0.5">&#128197;</span>
+              <div>
+                <p className="text-[var(--pepe-white)] font-bold mb-1">Buchbar ab Mai 2026</p>
+                <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">
+                  Das Kursprogramm steht, die Anmeldung öffnet in Kürze.
+                  Schon jetzt könnt ihr euch einen Überblick über Zeiten, Disziplinen und Trainer:innen verschaffen.
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Legende */}
-          <div className="flex flex-wrap justify-center gap-6 mb-10">
-            {(['kinder', 'teens', 'erwachsene'] as const).map((t) => (
-              <div key={t} className="flex items-center gap-2 text-sm text-[var(--pepe-t80)]">
-                <span
-                  className="inline-block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: targetColors[t].dot }}
-                />
-                {targetColors[t].label}
-              </div>
+          <div className="flex flex-wrap justify-center gap-8 mb-12">
+            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
+              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#c4a767' }} />
+              Kinder
+            </div>
+            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
+              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#f59e0b' }} />
+              Teens
+            </div>
+            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
+              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#38bdf8' }} />
+              Erwachsene
+            </div>
+          </div>
+
+          {/* ── Wochenplan: Mo–Fr als Karten ────────────────────────── */}
+          {/* Desktop: 2er/3er Grid, Mobile: gestapelt */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+            {woche.filter((t) => t.kurse.length > 0).map((tag) => (
+              <TagKarte key={tag.day} tag={tag} />
             ))}
           </div>
 
-          {/* Desktop: Wochenplan-Grid (ab md) */}
-          <div className="hidden md:grid grid-cols-7 gap-3">
-            {schedule.map((day) => (
-              <div key={day.day} className="flex flex-col">
-                {/* Tag-Header */}
-                <div className="text-center mb-3">
-                  <p className="text-[var(--pepe-white)] font-bold text-base">{day.day}</p>
-                  {day.trainer && (
-                    <p className="text-[var(--pepe-t48)] text-xs mt-1">mit {day.trainer}</p>
-                  )}
-                </div>
-
-                {/* Slots */}
-                <div className="flex-1 space-y-2">
-                  {day.slots.map((slot, i) => {
-                    const c = targetColors[slot.target]
-                    return (
-                      <div
-                        key={i}
-                        className="rounded-xl p-3 transition-all duration-200 hover:scale-[1.03]"
-                        style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
-                      >
-                        <p className="text-[var(--pepe-t64)] text-[11px] font-medium mb-1">{slot.time}</p>
-                        <p className="text-[var(--pepe-white)] font-semibold text-sm leading-tight">{slot.title}</p>
-                        {slot.detail && (
-                          <p className="text-[var(--pepe-t48)] text-[11px] mt-1 leading-snug">{slot.detail}</p>
-                        )}
-                      </div>
-                    )
-                  })}
-                  {day.note && (
-                    <div
-                      className="rounded-xl p-3"
-                      style={{ border: '1px solid var(--pepe-line)', backgroundColor: 'rgba(30,30,36,0.6)' }}
-                    >
-                      <p className="text-[var(--pepe-t48)] text-xs italic leading-snug">{day.note}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile: Akkordeon-Liste (unter md) */}
-          <div className="md:hidden space-y-4">
-            {schedule.map((day) => (
-              <div
-                key={day.day}
-                className="rounded-2xl overflow-hidden"
-                style={{ backgroundColor: 'var(--pepe-ink)', border: '1px solid var(--pepe-line)' }}
-              >
-                <div
-                  className="flex items-center justify-between px-5 py-4"
-                  style={{ borderBottom: '1px solid var(--pepe-line)' }}
-                >
-                  <div>
-                    <p className="text-[var(--pepe-white)] font-bold">{day.day}</p>
-                    {day.trainer && (
-                      <p className="text-[var(--pepe-t48)] text-xs mt-0.5">mit {day.trainer}</p>
-                    )}
-                  </div>
-                  <span className="text-[var(--pepe-t48)] text-xs">
-                    {day.slots.length > 0
-                      ? `${day.slots.length} ${day.slots.length === 1 ? 'Kurs' : 'Kurse'}`
-                      : '—'}
-                  </span>
-                </div>
-                {day.slots.length > 0 && (
-                  <div className="p-4 space-y-3">
-                    {day.slots.map((slot, i) => {
-                      const c = targetColors[slot.target]
-                      return (
-                        <div
-                          key={i}
-                          className="rounded-xl p-4"
-                          style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
-                        >
-                          <div className="flex items-center gap-2 mb-1">
-                            <span
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: c.dot }}
-                            />
-                            <span className="text-[var(--pepe-t64)] text-xs font-medium">{slot.time}</span>
-                          </div>
-                          <p className="text-[var(--pepe-white)] font-semibold">{slot.title}</p>
-                          {slot.detail && (
-                            <p className="text-[var(--pepe-t48)] text-sm mt-1">{slot.detail}</p>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-                {day.note && (
-                  <div className="px-5 py-4">
-                    <p className="text-[var(--pepe-t48)] text-sm italic">{day.note}</p>
-                  </div>
-                )}
-              </div>
+          {/* Sa + So: schmaler Hinweis */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {woche.filter((t) => t.kurse.length === 0).map((tag) => (
+              <TagKarte key={tag.day} tag={tag} />
             ))}
           </div>
 
           {/* CTA */}
-          <div className="text-center mt-12">
-            <a
-              href="https://www.eversports.de/s/pepe-dome"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          <div className="text-center mt-14">
+            <p className="text-[var(--pepe-t64)] mb-6">
+              Fragen zum Kursprogramm? Wir beraten dich gerne.
+            </p>
+            <Link href="/contact">
               <Button variant="primary" size="lg">
-                Kurs vormerken auf Eversports
+                Kontakt aufnehmen
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -429,7 +372,7 @@ export default function TrainingPage() {
               Unsere Disziplinen
             </h2>
             <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Von Luftakrobatik bis Bodenarbeit - entdecke die Vielfalt zeitgenössischer Zirkuskunst.
+              Von Luftakrobatik bis Bodenarbeit — entdecke die Vielfalt zeitgenössischer Zirkuskunst.
             </p>
           </div>
 
@@ -462,7 +405,7 @@ export default function TrainingPage() {
               Preise
             </h2>
             <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Flexible Optionen für jeden Trainingsbedarf - von der Schnupperstunde bis zur 20er-Karte.
+              Flexible Optionen für jeden Trainingsbedarf — von der Schnupperstunde bis zur 20er-Karte.
             </p>
           </div>
 
@@ -509,18 +452,6 @@ export default function TrainingPage() {
               </div>
             </div>
           </div>
-
-          <div className="text-center mt-12">
-            <a
-              href="https://www.eversports.de/s/pepe-dome"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="primary" size="lg">
-                Jetzt Kurs buchen
-              </Button>
-            </a>
-          </div>
         </div>
       </section>
 
@@ -557,7 +488,7 @@ export default function TrainingPage() {
                   </div>
                   <div>
                     <h4 className="text-[var(--pepe-white)] font-semibold mb-4">Grüne Oase</h4>
-                    <p className="text-[var(--pepe-t64)] leading-relaxed">Im Ostpark München - Training im Grünen.</p>
+                    <p className="text-[var(--pepe-t64)] leading-relaxed">Im Ostpark München — Training im Grünen.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-5">
@@ -582,7 +513,6 @@ export default function TrainingPage() {
       <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Decorative Icon */}
             <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
               <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#127947;</span>
             </div>
@@ -591,24 +521,20 @@ export default function TrainingPage() {
               Bereit für dein erstes Training?
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg mb-12">
-              Buche jetzt deine Schnupperstunde und entdecke die Welt der zeitgenössischen Zirkuskunst.
+              Melde dich bei uns und entdecke die Welt der zeitgenössischen Zirkuskunst.
             </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="https://www.eversports.de/s/pepe-dome"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="primary" size="lg">
-                    Kurse auf Eversports
-                  </Button>
-                </a>
-                <Link href="/events?category=WORKSHOP">
-                  <Button variant="secondary" size="lg">
-                    Alle Workshops
-                  </Button>
-                </Link>
-              </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="/contact">
+                <Button variant="primary" size="lg">
+                  Kontakt aufnehmen
+                </Button>
+              </Link>
+              <Link href="/events?category=WORKSHOP">
+                <Button variant="secondary" size="lg">
+                  Alle Workshops
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
