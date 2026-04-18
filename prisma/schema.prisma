@@ -123,6 +123,23 @@ model TestRecipient {
   @@map("test_recipients")
 }
 
+model CourseInterest {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  courseSlug  String   @map("course_slug")
+  courseTitle String   @map("course_title")
+  gdprConsent Boolean  @default(false) @map("gdpr_consent")
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([email])
+  @@index([courseSlug])
+  @@index([createdAt])
+  @@map("course_interests")
+}
+
 model Event {
   id            String             @id @default(uuid())
   slug          String             @unique

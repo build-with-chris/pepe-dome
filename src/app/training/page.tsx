@@ -9,6 +9,7 @@ import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
 import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapImages'
 import { Button } from '@/components/ui/Button'
+import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
 
 export const metadata: Metadata = {
   title: 'Workshops & Training | Pepe Dome München',
@@ -17,62 +18,169 @@ export const metadata: Metadata = {
 }
 
 // ── Kursprogramm-Daten ────────────────────────────────────────────────────
-// Farben pro Zielgruppe (inline styles, weil Tailwind v4 dynamische
-// Klassen aus JS-Objekten beim Build entfernt)
-const COLORS = {
-  kinder:      { dot: '#c4a767', border: 'rgba(196,167,103,0.45)', bg: 'rgba(196,167,103,0.08)' },
-  teens:       { dot: '#f59e0b', border: 'rgba(245,158,11,0.45)',  bg: 'rgba(245,158,11,0.08)' },
-  erwachsene:  { dot: '#38bdf8', border: 'rgba(56,189,248,0.45)',  bg: 'rgba(56,189,248,0.08)' },
-} as const
-
-type Target = keyof typeof COLORS
-
-type Kurs = { time: string; title: string; sub?: string; target: Target }
-
-type Tag = { day: string; trainer: string; kurse: Kurs[]; note?: string }
+// Typen & Karten-Komponente leben in CourseScheduleGrid (Client Component),
+// damit das Modal mit Anmeldeformular interaktiv werden kann.
+// Hier bleibt nur der Inhalt.
 
 const woche: Tag[] = [
   {
     day: 'Montag',
     trainer: 'Olesia',
     kurse: [
-      { time: '16:00 – 17:00', title: 'Luftartistik',  sub: 'Kinder ab 5 J. · Trapez, Ring, Tuch', target: 'kinder' },
-      { time: '17:00 – 18:00', title: 'Luftartistik',  sub: 'Teens ab 11 J. · Trapez, Ring, Tuch',  target: 'teens' },
-      { time: '18:30 – 19:30', title: 'Luftring',      sub: 'Beginner',                             target: 'erwachsene' },
-      { time: '19:30 – 20:30', title: 'Luftring',      sub: 'Intermediate',                         target: 'erwachsene' },
+      {
+        slug: 'luftartistik-kinder-mo',
+        time: '16:00 – 17:00',
+        title: 'Luftartistik',
+        sub: 'Kinder ab 5 J. · Trapez, Ring, Tuch',
+        target: 'kinder',
+        trainer: 'Olesia',
+        day: 'Montag',
+        description:
+          'Spielerisches Kennenlernen der Luftartistik — Trapez, Ring und Tuch. Wir bauen Kraft, Koordination und Mut behutsam auf, immer mit Sicherung.',
+        inhalte: ['Grundlagen an Trapez, Ring und Tuch', 'Kraft- und Koordinationsspiele', 'Erste Figuren und kleine Abläufe'],
+        fuerWen: 'Kinder ab 5 Jahren, keine Vorkenntnisse nötig',
+      },
+      {
+        slug: 'luftartistik-teens-mo',
+        time: '17:00 – 18:00',
+        title: 'Luftartistik',
+        sub: 'Teens ab 11 J. · Trapez, Ring, Tuch',
+        target: 'teens',
+        trainer: 'Olesia',
+        day: 'Montag',
+        description:
+          'Luftartistik für Teenager — mit mehr Anspruch an Technik und Ausdruck. Wir arbeiten an sauberen Figuren, Übergängen und eigenen kleinen Choreografien.',
+        inhalte: ['Technikarbeit an Trapez, Ring, Tuch', 'Kraft- und Flexibilitätstraining', 'Kleine Choreografien entwickeln'],
+        fuerWen: 'Teens ab 11 Jahren, Anfänger und Fortgeschrittene',
+      },
+      {
+        slug: 'luftring-beginner-mo',
+        time: '18:30 – 19:30',
+        title: 'Luftring',
+        sub: 'Beginner',
+        target: 'erwachsene',
+        trainer: 'Olesia',
+        day: 'Montag',
+        description:
+          'Einstieg in den Luftring (Aerial Hoop). Grundlagen an der Stange, sichere Mounts und erste Figuren in der Höhe.',
+        inhalte: ['Mounts & Dismounts', 'Basisfiguren am Ring', 'Kraftaufbau für Luftakrobatik'],
+        fuerWen: 'Erwachsene ohne oder mit wenig Erfahrung',
+      },
+      {
+        slug: 'luftring-intermediate-mo',
+        time: '19:30 – 20:30',
+        title: 'Luftring',
+        sub: 'Intermediate',
+        target: 'erwachsene',
+        trainer: 'Olesia',
+        day: 'Montag',
+        description:
+          'Für alle, die am Luftring bereits sicher unterwegs sind. Komplexere Figuren, Übergänge und erste Drops mit sauberer Technik.',
+        inhalte: ['Fortgeschrittene Figuren', 'Flows & Übergänge', 'Saubere Drops und Rollen'],
+        fuerWen: 'Erwachsene mit solider Ring-Grundlage',
+      },
     ],
   },
   {
     day: 'Dienstag',
     trainer: 'Marlon',
     kurse: [
-      { time: '18:30 – 19:30', title: 'Aerial Silks', sub: 'Intermediate', target: 'erwachsene' },
-      { time: '19:45 – 21:00', title: 'Straps',       sub: 'Open Level',   target: 'erwachsene' },
+      {
+        slug: 'aerial-silks-intermediate-di',
+        time: '18:30 – 19:30',
+        title: 'Aerial Silks',
+        sub: 'Intermediate',
+        target: 'erwachsene',
+        trainer: 'Marlon',
+        day: 'Dienstag',
+        description:
+          'Aerial Silks für Fortgeschrittene. Komplexe Klettertechniken, Wraps und saubere Drops — mit Fokus auf Präzision und Sicherheit.',
+        inhalte: ['Fortgeschrittene Wraps', 'Kontrollierte Drops', 'Flows und Choreografie-Elemente'],
+        fuerWen: 'Erwachsene mit Silks-Erfahrung',
+      },
+      {
+        slug: 'straps-open-level-di',
+        time: '19:45 – 21:00',
+        title: 'Straps',
+        sub: 'Open Level',
+        target: 'erwachsene',
+        trainer: 'Marlon',
+        day: 'Dienstag',
+        description:
+          'Straps (Strapaten) — die vielleicht anspruchsvollste Luftdisziplin. Kraft, Kontrolle und Körperspannung stehen im Mittelpunkt.',
+        inhalte: ['Krafttraining für Straps', 'Grundpositionen & Figuren', 'Individuelle Progression'],
+        fuerWen: 'Alle Level — individuelle Einteilung vor Ort',
+      },
     ],
   },
   {
     day: 'Mittwoch',
-    trainer: 'Jana',
+    trainer: 'Dani',
     kurse: [
-      { time: '16:00 – 17:00', title: 'Zirkuskünste',  sub: 'Kinder ab 5 J.',  target: 'kinder' },
-      { time: '17:30 – 18:30', title: 'Vertikaltuch',  sub: 'Kinder ab 5 J.',  target: 'kinder' },
-      { time: '18:30 – 19:30', title: 'Aerial Silks',  sub: 'Open Level',      target: 'erwachsene' },
-      { time: '19:30 – 20:30', title: 'Conditioning',  sub: 'for Aerial',      target: 'erwachsene' },
+      {
+        slug: 'urban-acrobatics-mi',
+        time: '17:00 – 18:30',
+        title: 'Urban Acrobatics',
+        sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
+        target: 'erwachsene',
+        trainer: 'Dani',
+        day: 'Mittwoch',
+        description:
+          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
+        inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
+        fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
+      },
     ],
   },
   {
     day: 'Donnerstag',
     trainer: 'Marcel',
     kurse: [
-      { time: 'Zeit folgt', title: 'Tricking & Breaking', sub: 'ab 14. April', target: 'teens' },
+      {
+        slug: 'tricking-breaking-do',
+        time: 'Zeit folgt',
+        title: 'Tricking & Breaking',
+        sub: 'ab 14. April',
+        target: 'teens',
+        trainer: 'Marcel',
+        day: 'Donnerstag',
+        description:
+          'Explosive Sprünge, Kicks und Breakdance-Moves. Tricking und Breaking kombinieren Martial Arts, Turnen und Tanz.',
+        inhalte: ['Tricking-Basics (Kicks, Flips)', 'Breaking-Grundlagen', 'Kombinationen & Flows'],
+        fuerWen: 'Teens und junge Erwachsene, Einstieg möglich',
+      },
     ],
   },
   {
     day: 'Freitag',
     trainer: 'Olesia',
     kurse: [
-      { time: '17:30 – 18:30', title: 'Luftartistik', sub: 'Teens ab 11 J. · Trapez, Ring, Tuch', target: 'teens' },
-      { time: '18:30 – 19:30', title: 'Flexibility',  sub: 'Open Level',                          target: 'erwachsene' },
+      {
+        slug: 'luftartistik-teens-fr',
+        time: '17:30 – 18:30',
+        title: 'Luftartistik',
+        sub: 'Teens ab 11 J. · Trapez, Ring, Tuch',
+        target: 'teens',
+        trainer: 'Olesia',
+        day: 'Freitag',
+        description:
+          'Luftartistik für Teens am Freitag — zweite Wocheneinheit für alle, die tiefer einsteigen wollen.',
+        inhalte: ['Vertiefung Trapez, Ring, Tuch', 'Ausdruck & Performance', 'Choreografie-Arbeit'],
+        fuerWen: 'Teens ab 11 Jahren',
+      },
+      {
+        slug: 'flexibility-fr',
+        time: '18:30 – 19:30',
+        title: 'Flexibility',
+        sub: 'Open Level',
+        target: 'erwachsene',
+        trainer: 'Olesia',
+        day: 'Freitag',
+        description:
+          'Mobilität und Flexibilität für Artist:innen und alle, die es werden wollen. Aktives und passives Dehnen, Körperkontrolle, saubere Progression.',
+        inhalte: ['Hüft- und Rückenmobilität', 'Spagat-Progression', 'Aktive Flexibilität'],
+        fuerWen: 'Alle Level — Einsteiger willkommen',
+      },
     ],
   },
   {
@@ -83,9 +191,81 @@ const woche: Tag[] = [
   },
   {
     day: 'Sonntag',
-    trainer: 'Rufus',
-    kurse: [],
-    note: 'Programm folgt in Kürze',
+    trainer: 'Leopoldini & Feuerinsel',
+    kurse: [
+      {
+        slug: 'akrobatik-kids-so',
+        time: '10:00 – 11:00',
+        title: 'Akrobatik Kids',
+        sub: '10–14 Jahre · mit Rufus (Leopoldini)',
+        target: 'kinder',
+        trainer: 'Rufus (Leopoldini)',
+        day: 'Sonntag',
+        description:
+          'Spielerischer Einstieg in die Welt der Akrobatik für Kinder zwischen 10 und 14 Jahren. Von ersten Handständen über Balanceübungen bis zu einfacher Partner- und Bodenakrobatik. Ohne Leistungsdruck, mit viel Spaß — Kraft, Beweglichkeit und Koordination wachsen nebenbei, kleine Erfolgserlebnisse stehen im Mittelpunkt. In Kooperation mit Leopoldini, die bei uns sowohl trainieren als auch unterrichten.',
+        inhalte: [
+          'Erste Handstände & Balance',
+          'Partner- und Bodenakrobatik',
+          'Kraft, Beweglichkeit, Koordination',
+          'Körpergefühl & Vertrauen aufbauen',
+        ],
+        fuerWen: 'Kinder 10–14 Jahre — Anfänger:innen und neugierige Kids mit ersten Vorerfahrungen',
+      },
+      {
+        slug: 'akrobatik-basics-so',
+        time: '11:15 – 12:15',
+        title: 'Akrobatik Basics',
+        sub: 'Jugendliche & junge Erwachsene · mit Rufus (Leopoldini)',
+        target: 'teens',
+        trainer: 'Rufus (Leopoldini)',
+        day: 'Sonntag',
+        description:
+          'Für Jugendliche und junge Erwachsene, die die Grundlagen der Akrobatik erlernen oder vertiefen möchten. Handstand, Balance, Körperspannung, erste akrobatische Übergänge — mit Fokus auf saubere Technik und sicherem Aufbau, und Raum zum kreativen Ausprobieren. In Kooperation mit Leopoldini, die bei uns sowohl trainieren als auch unterrichten.',
+        inhalte: [
+          'Handstand & Körperspannung',
+          'Balance-Training',
+          'Akrobatische Übergänge',
+          'Saubere Technik, sicherer Aufbau',
+        ],
+        fuerWen: 'Jugendliche & junge Erwachsene — Einsteiger:innen und mit Vorerfahrung',
+      },
+      {
+        slug: 'flow-arts-basics-so',
+        time: '16:00 – 17:00',
+        title: 'Flow Arts Basics',
+        sub: 'Buugeng & Doppelstäbe · mit Feuerinsel',
+        target: 'erwachsene',
+        trainer: 'Feuerinsel München',
+        day: 'Sonntag',
+        description:
+          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von einer erfahrenen Künstlerin der Feuerinsel München.',
+        inhalte: [
+          'Buugeng-Grundlagen & optische Illusionen',
+          'Doppelstäbe-Technik & Rhythmus',
+          'Bewegungsabläufe und eigener Flow',
+          'Spaß, Ausdruck & gemeinsames Erleben',
+        ],
+        fuerWen: 'Anfänger:innen und alle, die ihre Grundlagen vertiefen möchten',
+      },
+      {
+        slug: 'dynamic-flow-so',
+        time: '17:00 – 18:00',
+        title: 'Dynamic Flow',
+        sub: 'Levistick & Ropedart · mit Feuerinsel',
+        target: 'erwachsene',
+        trainer: 'Feuerinsel München',
+        day: 'Sonntag',
+        description:
+          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der scheinbar schwerelos schwebt, und der Ropedart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge — und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von einer erfahrenen Trainerin der Feuerinsel München.',
+        inhalte: [
+          'Levistick: Feinmotorik & Illusion',
+          'Ropedart: Ganzkörper-Dynamik',
+          'Timing, Kontrolle, Flow',
+          'Erste Tricks und Übergänge',
+        ],
+        fuerWen: 'Einsteiger:innen und leicht Fortgeschrittene',
+      },
+    ],
   },
 ]
 
@@ -112,72 +292,6 @@ const pricingAerial = [
   { name: '10er-Karte',   price: '220€', description: '22€ pro Stunde' },
   { name: '20er-Karte',   price: '400€', description: '20€ pro Stunde' },
 ]
-
-// ── Kurs-Karte (inline-styled, purge-safe) ────────────────────────────────
-
-function KursKarte({ kurs }: { kurs: Kurs }) {
-  const c = COLORS[kurs.target]
-  return (
-    <div
-      className="rounded-xl p-4 transition-all duration-200 hover:scale-[1.02]"
-      style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
-    >
-      <div className="flex items-center gap-2.5 mb-2">
-        <span
-          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-          style={{ backgroundColor: c.dot }}
-        />
-        <span className="text-[var(--pepe-t64)] text-xs font-semibold tracking-wide">
-          {kurs.time}
-        </span>
-      </div>
-      <p className="text-[var(--pepe-white)] font-bold text-base leading-snug">{kurs.title}</p>
-      {kurs.sub && (
-        <p className="text-[var(--pepe-t48)] text-sm mt-1 leading-snug">{kurs.sub}</p>
-      )}
-    </div>
-  )
-}
-
-// ── Tag-Karte ─────────────────────────────────────────────────────────────
-
-function TagKarte({ tag }: { tag: Tag }) {
-  const hasKurse = tag.kurse.length > 0
-  return (
-    <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden">
-      {/* Tag-Header */}
-      <div className="px-5 py-4 border-b border-[var(--pepe-line)] flex items-center justify-between">
-        <div>
-          <h4 className="text-[var(--pepe-white)] font-bold text-lg">{tag.day}</h4>
-          {tag.trainer && (
-            <p className="text-[var(--pepe-t48)] text-sm mt-0.5">mit {tag.trainer}</p>
-          )}
-        </div>
-        {hasKurse && (
-          <span className="text-[var(--pepe-t48)] text-xs font-medium">
-            {tag.kurse.length} {tag.kurse.length === 1 ? 'Kurs' : 'Kurse'}
-          </span>
-        )}
-      </div>
-
-      {/* Kurs-Slots */}
-      {hasKurse && (
-        <div className="p-4 space-y-3">
-          {tag.kurse.map((kurs, i) => (
-            <KursKarte key={i} kurs={kurs} />
-          ))}
-        </div>
-      )}
-
-      {/* Platzhalter-Notiz */}
-      {tag.note && (
-        <div className="px-5 py-5">
-          <p className="text-[var(--pepe-t48)] text-sm italic">{tag.note}</p>
-        </div>
-      )}
-    </div>
-  )
-}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PAGE
@@ -316,20 +430,8 @@ export default function TrainingPage() {
             </div>
           </div>
 
-          {/* ── Wochenplan: Mo–Fr als Karten ────────────────────────── */}
-          {/* Desktop: 2er/3er Grid, Mobile: gestapelt */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
-            {woche.filter((t) => t.kurse.length > 0).map((tag) => (
-              <TagKarte key={tag.day} tag={tag} />
-            ))}
-          </div>
-
-          {/* Sa + So: schmaler Hinweis */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {woche.filter((t) => t.kurse.length === 0).map((tag) => (
-              <TagKarte key={tag.day} tag={tag} />
-            ))}
-          </div>
+          {/* ── Wochenplan: klickbare Kurse mit Detail-Modal ───────── */}
+          <CourseScheduleGrid woche={woche} />
 
           {/* CTA */}
           <div className="text-center mt-14">

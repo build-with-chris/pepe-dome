@@ -11,6 +11,23 @@ export const subscriberSignupSchema = z.object({
   interests: z.array(z.string()).optional(),
 })
 
+// Course interest validation schema
+export const courseInterestSchema = z.object({
+  name: z.string().min(2, 'Name muss mindestens 2 Zeichen enthalten').max(100),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
+  phone: z
+    .string()
+    .max(30)
+    .regex(/^[0-9+\s\-()/]*$/, 'Nur Ziffern und + - ( ) / erlaubt')
+    .optional()
+    .or(z.literal('')),
+  courseSlug: z.string().min(1).max(100),
+  courseTitle: z.string().min(1).max(200),
+  gdprConsent: z.boolean().refine((val) => val === true, {
+    message: 'DSGVO-Einwilligung ist erforderlich',
+  }),
+})
+
 export const subscriberConfirmSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 })
