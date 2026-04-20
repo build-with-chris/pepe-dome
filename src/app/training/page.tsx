@@ -296,6 +296,46 @@ export default function TrainingPage() {
         </div>
       </section>
 
+      {/* Ferienkurs-Banner */}
+      <section className="py-10 md:py-14 border-y border-[var(--pepe-gold)]/30" style={{ background: 'linear-gradient(135deg, rgba(196, 167, 103, 0.12), rgba(1, 109, 202, 0.08) 50%, transparent)' }}>
+        <div className="stage-container">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center">
+              <div className="flex-shrink-0">
+                <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)] text-black">
+                  Neu · Ferienkurs
+                </span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
+                  Akrobatik-Ferienkurs by Leopoldini
+                </h3>
+                <p className="text-[var(--pepe-t80)] mb-3 text-base md:text-lg">
+                  <strong className="text-[var(--pepe-white)]">26. Mai – 5. Juni 2026</strong> · täglich 10–15 Uhr · für 10–15 Jahre · max. 30 Plätze
+                </p>
+                <p className="text-[var(--pepe-t64)] mb-5 text-sm md:text-base leading-relaxed">
+                  Zwei Wochen Pfingstferien voller Zirkusabenteuer: Jonglieren, Akrobatik,
+                  Handstand und mehr — ein bunter Mix, der Kraft, Koordination und Kreativität
+                  fördert. Trainer:innen und Preis werden in Kürze ergänzt.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/news/akrobatik-ferienkurs-pfingsten-2026">
+                    <Button variant="primary" size="md">
+                      Mehr erfahren
+                    </Button>
+                  </Link>
+                  <Link href="/contact">
+                    <Button variant="secondary" size="md">
+                      Platz vormerken
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Training unter der Woche Section */}
       <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
         <div className="stage-container">

@@ -1,5 +1,27 @@
 [
   {
+    "id": "akrobatik-ferienkurs-pfingsten-2026",
+    "title": "Akrobatik-Ferienkurs by Leopoldini",
+    "subtitle": "2-Wochen-Ferienkurs · 10–15 Jahre",
+    "description": "Zwei Wochen Ferienspaß im Pepe Dome: Jonglage, Akrobatik, Handstand und mehr. Ein bunter Mix für Kinder und Jugendliche von 10 bis 15 Jahren — täglich von 10 bis 15 Uhr in den bayerischen Pfingstferien.",
+    "date": "2026-05-26",
+    "endDate": "2026-06-05",
+    "time": "10:00 – 15:00 Uhr (täglich)",
+    "location": "Pepe Dome, Ostpark München",
+    "category": "Ferienkurs",
+    "price": "Preis folgt in Kürze",
+    "imageUrl": "/images/shows/jonas-acrobatics.jpg",
+    "featured": true,
+    "highlights": [
+      "10 Tage Ferienprogramm (26. Mai – 5. Juni 2026)",
+      "Täglich 10–15 Uhr",
+      "Für Kinder & Jugendliche von 10–15 Jahren",
+      "Jonglage, Akrobatik, Handstand & mehr",
+      "Max. 30 Plätze — begrenzt",
+      "In Kooperation mit Leopoldini"
+    ]
+  },
+  {
     "id": "freeman-festival-2025",
     "title": "Freeman Festival 2025",
     "subtitle": "Das Festival der Artistik",
