@@ -513,7 +513,7 @@ export default function TrainingPage() {
                   <p className="text-[var(--pepe-t64)] mb-5 text-sm leading-relaxed">
                     Infos, aktuelle Zeiten und Änderungen laufen über eine <strong className="text-[var(--pepe-white)]">WhatsApp-Gruppe</strong>. Zugang
                     bekommst du auf Anfrage — schick uns kurz eine Nachricht über das Kontaktformular,
-                    Betreff „Profitraining".
+                    Betreff &bdquo;Profitraining&ldquo;.
                   </p>
                   <Link href="/contact?betreff=Profitraining">
                     <Button variant="primary" size="md">
