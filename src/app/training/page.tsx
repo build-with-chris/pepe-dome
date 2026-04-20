@@ -29,7 +29,7 @@ const woche: Tag[] = [
     kurse: [
       {
         slug: 'akrobatik-kids-mo',
-        time: '10:00 – 11:00',
+        time: '16:00 – 17:30',
         title: 'Akrobatik Kids',
         sub: '10–14 Jahre · mit Rufus (Leopoldini)',
         target: 'kinder',
@@ -47,7 +47,7 @@ const woche: Tag[] = [
       },
       {
         slug: 'akrobatik-basics-mo',
-        time: '11:15 – 12:15',
+        time: '17:45 – 19:15',
         title: 'Akrobatik Basics',
         sub: 'Jugendliche & junge Erwachsene · mit Rufus (Leopoldini)',
         target: 'teens',
