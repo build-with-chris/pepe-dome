@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
+import { useUser, UserButton } from '@clerk/nextjs'
+import NewsletterInline from '@/components/newsletter/NewsletterInline'
 
 const navigation = [
   { label: "Events", href: "/events" },
@@ -86,13 +87,9 @@ function NavbarContent({
                   }}
                 />
               </div>
-            ) : showAuth && isLoaded ? (
-              <SignInButton mode="modal">
-                <button className="nav-link text-sm">
-                  Login
-                </button>
-              </SignInButton>
-            ) : null}
+            ) : (
+              <NewsletterInline />
+            )}
           </div>
           <button
             className="mobile-menu-btn"
@@ -139,7 +136,7 @@ function NavbarContent({
                     {link.label}
                   </Link>
                 ))}
-                {showAuth && isLoaded && isSignedIn ? (
+                {showAuth && isLoaded && isSignedIn && (
                   <Link
                     href="/admin"
                     className={`mobile-menu-link ${pathname?.startsWith('/admin') ? 'active' : ''}`}
@@ -148,18 +145,9 @@ function NavbarContent({
                   >
                     Admin Dashboard
                   </Link>
-                ) : showAuth && isLoaded ? (
-                  <SignInButton mode="modal">
-                    <button
-                      className="mobile-menu-link"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Login
-                    </button>
-                  </SignInButton>
-                ) : null}
+                )}
               </nav>
-              {showAuth && isLoaded && isSignedIn && (
+              {showAuth && isLoaded && isSignedIn ? (
                 <div className="mobile-menu-cta">
                   <div className="flex items-center justify-center gap-4">
                     <UserButton
@@ -171,7 +159,11 @@ function NavbarContent({
                     />
                   </div>
                 </div>
-              )}
+              ) : showAuth && isLoaded ? (
+                <div className="mobile-menu-cta">
+                  <NewsletterInline />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

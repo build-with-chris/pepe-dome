@@ -112,6 +112,7 @@ export default function Footer() {
             <Link href="/impressum" className="footer-legal-link">Impressum</Link>
             <Link href="/datenschutz" className="footer-legal-link">Datenschutz</Link>
             <Link href="/agb" className="footer-legal-link">AGB</Link>
+            <Link href="/admin/sign-in" className="footer-legal-link">Login</Link>
           </div>
         </div>
       </div>

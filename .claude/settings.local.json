@@ -31,7 +31,9 @@
       "Bash(timeout 10 npm run dev)",
       "Bash(npx tsx scripts/seed-from-live-site.ts)",
       "Bash(python3:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(dig +short TXT _dmarc.pepe-dome.de)",
+      "Bash(dig +short TXT pepe-dome.de)"
     ],
     "deny": [],
     "ask": []
