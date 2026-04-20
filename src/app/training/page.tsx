@@ -264,20 +264,23 @@ export default function TrainingPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-8">
                 Professionelles Training in einzigartiger Atmosphäre
               </h2>
-              <p className="text-lg text-[var(--pepe-t80)] mb-8 leading-relaxed">
-                Im Pepe Dome bieten wir tägliches Profitraining und strukturierte Kurse für alle
-                Erfahrungsstufen. Die geodätische Kuppel mit 8,5 Metern Deckenhöhe bietet optimale
-                Bedingungen für Luftakrobatik und Bodenarbeit.
+              <p className="text-lg text-[var(--pepe-t80)] mb-6 leading-relaxed">
+                Strukturierte Kurse für Kinder, Teens und Erwachsene — von den ersten
+                Handständen bis zu fortgeschrittener Luftakrobatik. Die geodätische Kuppel
+                mit 8,5 Metern Deckenhöhe bietet optimale Bedingungen.
+              </p>
+              <p className="text-[var(--pepe-gold)] font-semibold mb-8">
+                ✦ Voranmeldung läuft — einfach Kurs auswählen und Formular ausfüllen.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/contact">
+                <Link href="#kursprogramm">
                   <Button variant="primary" size="lg">
-                    Kontakt aufnehmen
+                    Zum Kursprogramm
                   </Button>
                 </Link>
-                <Link href="#kursprogramm">
+                <Link href="/contact">
                   <Button variant="secondary" size="lg">
-                    Zum Kursprogramm
+                    Kontakt
                   </Button>
                 </Link>
               </div>
@@ -336,34 +339,52 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* Training unter der Woche Section */}
-      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* SO GEHT DIE VORANMELDUNG                                         */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20 bg-[var(--pepe-ink)]/40">
         <div className="stage-container">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-6 text-center">
-              Unter der Woche ist der Schwerpunkt auf Training:
-            </h2>
-            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
-              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed text-lg">
-                <div className="flex items-start gap-4">
-                  <span className="text-[var(--pepe-gold)] text-xl mt-1">☀️</span>
-                  <div>
-                    <p className="font-semibold text-[var(--pepe-white)] mb-2">Untertags</p>
-                    <p>Für die Profi Community der Münchner Artisten (gefördert durch das Kulturreferat)</p>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-10">
+              <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-4">
+                Voranmeldung geöffnet
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-3">
+                So sicherst du dir deinen Platz
+              </h2>
+              <p className="text-[var(--pepe-t64)] max-w-xl mx-auto">
+                In 3 Schritten zum Kurs — ab Mai 2026 starten wir, Voranmeldung läuft schon jetzt.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+              {[
+                {
+                  step: '1',
+                  title: 'Kurs auswählen',
+                  text: 'Klick im Wochenplan unten auf eine Kurskarte — du siehst Inhalte, Trainer:in und Zielgruppe.',
+                },
+                {
+                  step: '2',
+                  title: 'Voranmeldung ausfüllen',
+                  text: 'Kurzes Formular: Name, E-Mail, ggf. Alter des Kindes. Unverbindlich und kostenlos.',
+                },
+                {
+                  step: '3',
+                  title: 'Bestätigung erhalten',
+                  text: 'Wir melden uns bei dir mit allen Details zum Kursstart, Bezahlung und Location.',
+                },
+              ].map((s) => (
+                <div
+                  key={s.step}
+                  className="relative bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-7"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[var(--pepe-gold)] text-black font-bold text-lg flex items-center justify-center mb-4">
+                    {s.step}
                   </div>
+                  <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">{s.title}</h3>
+                  <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">{s.text}</p>
                 </div>
-                <div className="flex items-start gap-4">
-                  <span className="text-[var(--pepe-gold)] text-xl mt-1">🌙</span>
-                  <div>
-                    <p className="font-semibold text-[var(--pepe-white)] mb-2">Abends und nachmittags</p>
-                    <p>Sind bezahlte Kurse für Kinder, Jugendliche und Erwachsene Hobby Artisten.</p>
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-[var(--pepe-line)]">
-                  <p className="text-[var(--pepe-gold)] font-semibold mb-4">Freut euch auf die kommende Saison</p>
-                  <p>In den bayerischen Ferien bieten wir den Raum für Residencies und Kinderferien Mitmachprogramme an.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -372,38 +393,23 @@ export default function TrainingPage() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* KURSPROGRAMM FRÜHJAHR 2026                                      */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="kursprogramm" className="py-20 md:py-32">
+      <section id="kursprogramm" className="py-20 md:py-28">
         <div className="stage-container">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
               Kursprogramm
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-4">
-              Frühjahr 2026
+              Wochenplan Frühjahr 2026
             </h2>
-            <p className="text-[var(--pepe-t64)] text-lg max-w-2xl mx-auto">
-              Stand der Dinge — Programm wächst laufend. Kurse für Kinder, Teens und Erwachsene,
-              angeleitet von erfahrenen Trainer:innen.
+            <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
+              <span className="text-[var(--pepe-gold)] font-semibold">Klick auf einen Kurs</span> für Details und zur Voranmeldung.
             </p>
           </div>
 
-          {/* Hinweis: ab Mai buchbar */}
-          <div className="max-w-2xl mx-auto mb-14">
-            <div className="flex items-start gap-4 px-6 py-5 rounded-2xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)]">
-              <span className="text-2xl mt-0.5">&#128197;</span>
-              <div>
-                <p className="text-[var(--pepe-white)] font-bold mb-1">Buchbar ab Mai 2026</p>
-                <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">
-                  Das Kursprogramm steht, die Anmeldung öffnet in Kürze.
-                  Schon jetzt könnt ihr euch einen Überblick über Zeiten, Disziplinen und Trainer:innen verschaffen.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Legende */}
-          <div className="flex flex-wrap justify-center gap-8 mb-12">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-10">
             <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
               <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#c4a767' }} />
               Kinder
@@ -420,102 +426,40 @@ export default function TrainingPage() {
 
           {/* ── Wochenplan: klickbare Kurse mit Detail-Modal ───────── */}
           <CourseScheduleGrid woche={woche} />
-
-          {/* CTA */}
-          <div className="text-center mt-14">
-            <p className="text-[var(--pepe-t64)] mb-6">
-              Fragen zum Kursprogramm? Wir beraten dich gerne.
-            </p>
-            <Link href="/contact">
-              <Button variant="primary" size="lg">
-                Kontakt aufnehmen
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Profitraining */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* PREISE                                                          */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-block px-4 py-2 rounded-full text-sm font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-8">
-              Täglich 10:00 - 14:00 Uhr
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-5">
-              Profitraining
-            </h2>
-            <p className="text-[var(--pepe-t80)] text-lg">
-              Für professionelle Artist:innen und fortgeschrittene Trainer:innen.
-              Gemeinsames Training, kreativer Austausch und kollaborative Übungen
-              in der inspirierenden Dome-Atmosphäre.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Disciplines */}
-      <section className="py-20 md:py-32">
-        <div className="stage-container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
-              Unsere Disziplinen
-            </h2>
-            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Von Luftakrobatik bis Bodenarbeit — entdecke die Vielfalt zeitgenössischer Zirkuskunst.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {disciplines.map((discipline, index) => (
-              <div
-                key={index}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
-              >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-3xl">{discipline.icon}</span>
-                </div>
-                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-4">
-                  {discipline.name}
-                </h3>
-                <p className="text-[var(--pepe-t64)] leading-relaxed">
-                  {discipline.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="py-20 md:py-32 bg-[var(--pepe-ink)]">
-        <div className="stage-container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
               Preise
             </h2>
             <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Flexible Optionen für jeden Trainingsbedarf — von der Schnupperstunde bis zur 20er-Karte.
+              Flexible Optionen — Schnupperstunde, Einzelstunde oder 20er-Karte. Gilt für Boden- und Aerial-Kurse.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto">
             {/* Non-Aerial Pricing */}
             <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-10 text-center">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
                 Boden-Kurse
               </h3>
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {pricingNonAerial.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-5 border-b border-[var(--pepe-line)] last:border-0"
+                    className="flex items-center justify-between py-4 border-b border-[var(--pepe-line)] last:border-0"
                   >
                     <div>
                       <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm mt-2">{item.description}</p>
+                      <p className="text-[var(--pepe-t48)] text-sm mt-1">{item.description}</p>
                     </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4">{item.price}</span>
+                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4 whitespace-nowrap">{item.price}</span>
                   </div>
                 ))}
               </div>
@@ -523,24 +467,97 @@ export default function TrainingPage() {
 
             {/* Aerial Pricing */}
             <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-10 text-center">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
                 Aerial-Kurse
               </h3>
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {pricingAerial.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-5 border-b border-[var(--pepe-line)] last:border-0"
+                    className="flex items-center justify-between py-4 border-b border-[var(--pepe-line)] last:border-0"
                   >
                     <div>
                       <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm mt-2">{item.description}</p>
+                      <p className="text-[var(--pepe-t48)] text-sm mt-1">{item.description}</p>
                     </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4">{item.price}</span>
+                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4 whitespace-nowrap">{item.price}</span>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* PROFITRAINING — WhatsApp-Gruppe auf Anfrage                    */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10">
+              <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-start">
+                <div className="w-14 h-14 rounded-2xl bg-[#25D366]/15 flex items-center justify-center flex-shrink-0">
+                  <span className="text-3xl">💬</span>
+                </div>
+                <div className="flex-1">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-3">
+                    Für Profis
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-3">
+                    Profitraining
+                  </h2>
+                  <p className="text-[var(--pepe-t80)] mb-2 leading-relaxed">
+                    Untertags offenes Training für die Profi-Artist:innen-Community München — gefördert durch das Kulturreferat.
+                  </p>
+                  <p className="text-[var(--pepe-t64)] mb-5 text-sm leading-relaxed">
+                    Infos, aktuelle Zeiten und Änderungen laufen über eine <strong className="text-[var(--pepe-white)]">WhatsApp-Gruppe</strong>. Zugang
+                    bekommst du auf Anfrage — schick uns kurz eine Nachricht über das Kontaktformular,
+                    Betreff „Profitraining".
+                  </p>
+                  <Link href="/contact?betreff=Profitraining">
+                    <Button variant="primary" size="md">
+                      Zugang anfragen
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* DISZIPLINEN                                                      */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28">
+        <div className="stage-container">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+              Unsere Disziplinen
+            </h2>
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
+              Von Luftakrobatik bis Bodenarbeit — die Vielfalt zeitgenössischer Zirkuskunst.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {disciplines.map((discipline, index) => (
+              <div
+                key={index}
+                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
+              >
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
+                  <span className="text-2xl">{discipline.icon}</span>
+                </div>
+                <h3 className="text-base font-bold text-[var(--pepe-white)] mb-2">
+                  {discipline.name}
+                </h3>
+                <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">
+                  {discipline.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
