@@ -137,35 +137,9 @@ const woche: Tag[] = [
   },
   {
     day: 'Freitag',
-    trainer: 'Olesia',
-    kurse: [
-      {
-        slug: 'luftartistik-teens-fr',
-        time: '17:30 – 18:30',
-        title: 'Luftartistik',
-        sub: 'Teens ab 11 J. · Trapez, Ring, Tuch',
-        target: 'teens',
-        trainer: 'Olesia',
-        day: 'Freitag',
-        description:
-          'Luftartistik für Teens am Freitag — zweite Wocheneinheit für alle, die tiefer einsteigen wollen.',
-        inhalte: ['Vertiefung Trapez, Ring, Tuch', 'Ausdruck & Performance', 'Choreografie-Arbeit'],
-        fuerWen: 'Teens ab 11 Jahren',
-      },
-      {
-        slug: 'flexibility-fr',
-        time: '18:30 – 19:30',
-        title: 'Flexibility',
-        sub: 'Open Level',
-        target: 'erwachsene',
-        trainer: 'Olesia',
-        day: 'Freitag',
-        description:
-          'Mobilität und Flexibilität für Artist:innen und alle, die es werden wollen. Aktives und passives Dehnen, Körperkontrolle, saubere Progression.',
-        inhalte: ['Hüft- und Rückenmobilität', 'Spagat-Progression', 'Aktive Flexibilität'],
-        fuerWen: 'Alle Level — Einsteiger willkommen',
-      },
-    ],
+    trainer: '',
+    kurse: [],
+    note: 'Kurse pausiert — neues Programm folgt',
   },
   {
     day: 'Samstag',
