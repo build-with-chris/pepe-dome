@@ -3,11 +3,27 @@
     "events": "Events",
     "training": "Training",
     "business": "Business",
+    "news": "News",
     "about": "Über uns",
     "contact": "Kontakt",
     "freeman": "Freeman Festival",
     "home": "Start",
-    "menuToggle": "Menü öffnen/schließen"
+    "menuToggle": "Menü öffnen",
+    "closeMenu": "Menü schließen"
+  },
+  "footer": {
+    "newsletter": "Newsletter",
+    "newsletterContext": "Bleib auf dem Laufenden mit News zu Events, Shows und Workshops.",
+    "navigation": "Navigation",
+    "ecosystem": "PEPE Ecosystem",
+    "city": "81735 München",
+    "rights": "Alle Rechte vorbehalten.",
+    "legal": {
+      "imprint": "Impressum",
+      "privacy": "Datenschutz",
+      "terms": "AGB",
+      "login": "Login"
+    }
   },
   "homepage": {
     "meta": {

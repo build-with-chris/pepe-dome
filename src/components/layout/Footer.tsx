@@ -2,12 +2,15 @@
  * Footer component matching PEPE Shows design
  * 3-column layout: Brand | Navigation columns | Contact
  */
+'use client'
 
 import Link from 'next/link'
 import { Instagram } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
 
 export default function Footer() {
+  const { t } = useTranslation()
   return (
     <footer className="footer">
       <div className="stage-container">
@@ -46,10 +49,13 @@ export default function Footer() {
 
             {/* Newsletter */}
             <div className="footer-newsletter">
-              <h4 className="footer-newsletter-title">Newsletter</h4>
+              <h4 className="footer-newsletter-title">{t('footer.newsletter', 'Newsletter')}</h4>
               <SignupForm
                 variant="simple"
-                contextMessage="Bleib auf dem Laufenden mit News zu Events, Shows und Workshops."
+                contextMessage={t(
+                  'footer.newsletterContext',
+                  'Bleib auf dem Laufenden mit News zu Events, Shows und Workshops.'
+                )}
               />
             </div>
           </div>
@@ -57,17 +63,17 @@ export default function Footer() {
           {/* Main Links */}
           <div className="footer-links">
             <div className="footer-group">
-              <h4 className="footer-title">Navigation</h4>
+              <h4 className="footer-title">{t('footer.navigation', 'Navigation')}</h4>
               <div className="footer-link-group">
-                <Link href="/events" className="footer-link">Events</Link>
-                <Link href="/news" className="footer-link">News</Link>
-                <Link href="/newsletter" className="footer-link">Newsletter</Link>
-                <Link href="/about" className="footer-link">Über uns</Link>
+                <Link href="/events" className="footer-link">{t('navigation.events', 'Events')}</Link>
+                <Link href="/news" className="footer-link">{t('navigation.news', 'News')}</Link>
+                <Link href="/newsletter" className="footer-link">{t('footer.newsletter', 'Newsletter')}</Link>
+                <Link href="/about" className="footer-link">{t('navigation.about', 'Über uns')}</Link>
               </div>
             </div>
 
             <div className="footer-group">
-              <h4 className="footer-title">PEPE Ecosystem</h4>
+              <h4 className="footer-title">{t('footer.ecosystem', 'PEPE Ecosystem')}</h4>
               <div className="footer-link-group">
                 <a href="https://pepeshows.de" target="_blank" rel="noopener noreferrer" className="footer-link">
                   PEPE Shows
@@ -75,14 +81,14 @@ export default function Footer() {
                 <a href="https://pepearts.de" target="_blank" rel="noopener noreferrer" className="footer-link">
                   PEPE Arts
                 </a>
-                <Link href="/contact" className="footer-link">Kontakt</Link>
+                <Link href="/contact" className="footer-link">{t('navigation.contact', 'Kontakt')}</Link>
               </div>
             </div>
           </div>
 
           {/* Contact Info */}
           <div className="footer-group">
-            <h4 className="footer-title">Kontakt</h4>
+            <h4 className="footer-title">{t('navigation.contact', 'Kontakt')}</h4>
             <div className="footer-link-group">
               <a href="mailto:info@pepe-dome.de" className="footer-link">
                 info@pepe-dome.de
@@ -97,7 +103,7 @@ export default function Footer() {
                 Ostpark
               </div>
               <div className="footer-link">
-                81735 München
+                {t('footer.city', '81735 München')}
               </div>
             </div>
           </div>
@@ -106,13 +112,13 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            &copy; {new Date().getFullYear()} PEPE Dome. Alle Rechte vorbehalten.
+            &copy; {new Date().getFullYear()} PEPE Dome. {t('footer.rights', 'Alle Rechte vorbehalten.')}
           </p>
           <div className="footer-legal">
-            <Link href="/impressum" className="footer-legal-link">Impressum</Link>
-            <Link href="/datenschutz" className="footer-legal-link">Datenschutz</Link>
-            <Link href="/agb" className="footer-legal-link">AGB</Link>
-            <Link href="/admin/sign-in" className="footer-legal-link">Login</Link>
+            <Link href="/impressum" className="footer-legal-link">{t('footer.legal.imprint', 'Impressum')}</Link>
+            <Link href="/datenschutz" className="footer-legal-link">{t('footer.legal.privacy', 'Datenschutz')}</Link>
+            <Link href="/agb" className="footer-legal-link">{t('footer.legal.terms', 'AGB')}</Link>
+            <Link href="/admin/sign-in" className="footer-legal-link">{t('footer.legal.login', 'Login')}</Link>
           </div>
         </div>
       </div>

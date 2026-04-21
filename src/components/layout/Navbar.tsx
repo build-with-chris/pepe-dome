@@ -3,18 +3,22 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 import { useUser, UserButton } from '@clerk/nextjs'
 import NewsletterInline from '@/components/newsletter/NewsletterInline'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
 
-const navigation = [
-  { label: "Events", href: "/events" },
-  { label: "Training", href: "/training" },
-  { label: "Business", href: "/business" },
-  { label: "News", href: "/news" },
-  { label: "Über uns", href: "/about" },
-  { label: "Kontakt", href: "/contact" }
-]
+function useNavigation() {
+  const { t } = useTranslation()
+  return [
+    { label: t('navigation.events', 'Events'), href: '/events' },
+    { label: t('navigation.training', 'Training'), href: '/training' },
+    { label: t('navigation.business', 'Business'), href: '/business' },
+    { label: t('navigation.news', 'News'), href: '/news' },
+    { label: t('navigation.about', 'Über uns'), href: '/about' },
+    { label: t('navigation.contact', 'Kontakt'), href: '/contact' },
+  ]
+}
 
 // When true, Clerk is disabled in dev so you can browse the frontend without login
 const clerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
@@ -35,6 +39,8 @@ function NavbarContent({
   setIsMobileMenuOpen: (v: boolean) => void
 }) {
   const showAuth = !clerkDisabled
+  const { t } = useTranslation()
+  const navigation = useNavigation()
   return (
     <nav
       className={`nav transition-all duration-300 ${
@@ -98,7 +104,7 @@ function NavbarContent({
           <button
             className="mobile-menu-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Menu öffnen"
+            aria-label={t('navigation.menuToggle', 'Menü öffnen')}
           >
             <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -123,7 +129,7 @@ function NavbarContent({
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="mobile-menu-close"
-                  aria-label="Menu schließen"
+                  aria-label={t('navigation.closeMenu', 'Menü schließen')}
                 >
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

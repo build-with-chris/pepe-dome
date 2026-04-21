@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import Script from 'next/script'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
+import I18nProvider from '@/components/layout/I18nProvider'
 import { getSiteContent } from '@/lib/data'
 import { OrganizationJsonLd } from '@/components/seo/JsonLd'
 
@@ -97,9 +98,11 @@ function LayoutContent({
       </head>
       <body className="antialiased">
         <OrganizationJsonLd />
-        <ConditionalLayout>
-          {children}
-        </ConditionalLayout>
+        <I18nProvider>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+        </I18nProvider>
       </body>
     </html>
   )

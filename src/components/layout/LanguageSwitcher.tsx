@@ -1,54 +1,62 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import i18n from '@/lib/i18n'
 
 interface LanguageSwitcherProps {
   className?: string
   variant?: 'default' | 'compact'
 }
 
-// EN is disabled until translations are wired up in components via useTranslation().
-// When ready: flip EN_READY to true and re-enable i18n.changeLanguage.
-const EN_READY = false
+type Lang = 'de' | 'en'
+
+const LANGS: { code: Lang; label: string; aria: string }[] = [
+  { code: 'de', label: 'DE', aria: 'Deutsch' },
+  { code: 'en', label: 'EN', aria: 'English' },
+]
 
 export default function LanguageSwitcher({ className = '', variant = 'default' }: LanguageSwitcherProps) {
-  const [showHint, setShowHint] = useState(false)
+  const [current, setCurrent] = useState<Lang>('de')
 
-  const handleEnClick = () => {
-    if (EN_READY) return
-    setShowHint(true)
-    window.clearTimeout((handleEnClick as any)._t)
-    ;(handleEnClick as any)._t = window.setTimeout(() => setShowHint(false), 2200)
+  useEffect(() => {
+    const initial: Lang = i18n.language?.startsWith('en') ? 'en' : 'de'
+    setCurrent(initial)
+    const handler = (lng: string) => setCurrent(lng.startsWith('en') ? 'en' : 'de')
+    i18n.on('languageChanged', handler)
+    return () => { i18n.off('languageChanged', handler) }
+  }, [])
+
+  const change = (lang: Lang) => {
+    if (lang === current) return
+    setCurrent(lang)
+    i18n.changeLanguage(lang)
+    // Hard-reload so that server-rendered content (metadata, page-level
+    // copy that doesn't use useTranslation yet) catches up with the new
+    // locale. Safer than hoping every component re-renders cleanly.
+    if (typeof window !== 'undefined') {
+      // Small delay so the state update is visible before the reload
+      setTimeout(() => window.location.reload(), 60)
+    }
   }
 
   return (
     <div
       className={`language-switcher ${variant === 'compact' ? 'is-compact' : ''} ${className}`}
       role="group"
-      aria-label="Sprache auswählen"
+      aria-label="Sprache / Language"
     >
-      <button
-        type="button"
-        className="language-switcher-btn is-active"
-        aria-pressed={true}
-        aria-label="Deutsch"
-      >
-        DE
-      </button>
-      <button
-        type="button"
-        onClick={handleEnClick}
-        className="language-switcher-btn"
-        aria-label="English (coming soon)"
-        title="Englische Version in Kürze"
-      >
-        EN
-      </button>
-      {showHint && (
-        <span className="language-switcher-hint" role="status">
-          Englische Version in Kürze
-        </span>
-      )}
+      {LANGS.map((l) => (
+        <button
+          key={l.code}
+          type="button"
+          onClick={() => change(l.code)}
+          className={`language-switcher-btn ${current === l.code ? 'is-active' : ''}`}
+          aria-pressed={current === l.code}
+          aria-label={l.aria}
+        >
+          {l.label}
+        </button>
+      ))}
     </div>
   )
 }
