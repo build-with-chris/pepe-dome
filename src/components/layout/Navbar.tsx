@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUser, UserButton } from '@clerk/nextjs'
 import NewsletterInline from '@/components/newsletter/NewsletterInline'
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
 
 const navigation = [
   { label: "Events", href: "/events" },
@@ -88,7 +89,10 @@ function NavbarContent({
                 />
               </div>
             ) : (
-              <NewsletterInline />
+              <>
+                <NewsletterInline />
+                <LanguageSwitcher variant="compact" />
+              </>
             )}
           </div>
           <button
@@ -114,15 +118,18 @@ function NavbarContent({
                   style={{ height: '40px', width: 'auto' }}
                 />
               </Link>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="mobile-menu-close"
-                aria-label="Menu schließen"
-              >
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-3">
+                <LanguageSwitcher variant="compact" />
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="mobile-menu-close"
+                  aria-label="Menu schließen"
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className="mobile-menu-body">
               <nav className="mobile-menu-nav">
@@ -147,7 +154,7 @@ function NavbarContent({
                   </Link>
                 )}
               </nav>
-              {showAuth && isLoaded && isSignedIn ? (
+              {showAuth && isLoaded && isSignedIn && (
                 <div className="mobile-menu-cta">
                   <div className="flex items-center justify-center gap-4">
                     <UserButton
@@ -159,11 +166,7 @@ function NavbarContent({
                     />
                   </div>
                 </div>
-              ) : showAuth && isLoaded ? (
-                <div className="mobile-menu-cta">
-                  <NewsletterInline />
-                </div>
-              ) : null}
+              )}
             </div>
           </div>
         </div>
