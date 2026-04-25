@@ -15,16 +15,15 @@ const prisma = new PrismaClient()
 const ARTICLE_SLUG = 'akrobatik-ferienkurs-pfingsten-2026'
 const EVENT_SLUG = 'akrobatik-ferienkurs-pfingsten-2026'
 
-const ARTICLE_CONTENT = `In den bayerischen Pfingstferien 2026 bieten wir gemeinsam mit Leopoldini einen zweiwöchigen Akrobatik-Ferienkurs für Kinder und Jugendliche von 10 bis 15 Jahren an.
+const ARTICLE_CONTENT = `In den bayerischen Pfingstferien 2026 bringt der Circus Leopoldini den großen Ferienspaß in den Pepe Dome München Ostpark. Vier Tage lang erlernst du täglich von 10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches.
 
-**Zeitraum:** 26. Mai bis 5. Juni 2026
-**Uhrzeit:** täglich von 10:00 bis 15:00 Uhr
-**Alter:** 10 bis 15 Jahre
-**Plätze:** begrenzt auf 30 Teilnehmer:innen
+**Zeitraum:** 26. bis 29. Mai 2026
+**Uhrzeit:** täglich von 10:00 bis 16:00 Uhr
+**Kostenbeitrag:** 160€
 **Ort:** Pepe Dome, Ostpark München
 
 **Was euch erwartet:**
-Ein bunter Mix aus verschiedenen Zirkusdisziplinen — von den ersten Handständen über Jonglier-Grundlagen bis hin zu Partner- und Bodenakrobatik. Die Teilnehmer:innen lernen spielerisch Körperkontrolle, Koordination, Kraft und Kreativität. Ohne Leistungsdruck, mit viel Spaß und kleinen Erfolgserlebnissen.
+Ein bunter Mix aus verschiedenen Zirkusdisziplinen — von den ersten Handständen über Jonglier-Grundlagen bis hin zu Partner- und Bodenakrobatik. Die Teilnehmer:innen lernen spielerisch Körperkontrolle, Koordination, Kraft und Kreativität. Ohne Leistungsdruck, mit viel Spaß und kleinen Erfolgserlebnissen — angeleitet von erfahrenen Leopoldini Coaches.
 
 **Inhalte im Überblick:**
 - Jonglage-Grundlagen (Bälle, Tücher, Keulen)
@@ -33,10 +32,7 @@ Ein bunter Mix aus verschiedenen Zirkusdisziplinen — von den ersten Handständ
 - Körperkontrolle & Körperspannung
 - Spielerisches Warm-up und Cool-down
 
-**Trainer:innen:** werden in Kürze ergänzt.
-**Preis:** wird in Kürze ergänzt.
-
-**Jetzt vormerken:** Melde dich bei uns, wenn du einen Platz für dein Kind reservieren möchtest — die Plätze sind begrenzt und werden nach Anmeldungseingang vergeben.`
+**Jetzt vormerken:** Melde dich bei uns, wenn du einen Platz reservieren möchtest — die Plätze sind begrenzt und werden nach Anmeldungseingang vergeben.`
 
 async function main() {
   console.log('→ Seeding Akrobatik-Ferienkurs Pfingsten 2026…')
@@ -45,49 +41,49 @@ async function main() {
   const event = await prisma.event.upsert({
     where: { slug: EVENT_SLUG },
     update: {
-      title: 'Akrobatik-Ferienkurs by Leopoldini',
-      subtitle: '2-Wochen-Ferienkurs · 10–15 Jahre',
+      title: 'Holi Poldini — Ferienkurs by Leopoldini',
+      subtitle: 'Ferienkurs Pfingsten 2026 · 4 Tage Zirkusabenteuer',
       description:
-        'Zwei Wochen Ferienspaß im Pepe Dome: Jonglage, Akrobatik, Handstand und mehr. Ein bunter Mix für Kinder und Jugendliche von 10 bis 15 Jahren — täglich von 10 bis 15 Uhr in den bayerischen Pfingstferien.',
+        'Ferienspaß mit dem Circus Leopoldini im Pepe Dome München Ostpark: täglich von 10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches. Vier Tage Akrobatik, Jonglage, Handstand und Zirkus pur in den bayerischen Pfingstferien.',
       date: new Date('2026-05-26T10:00:00+02:00'),
-      endDate: new Date('2026-06-05T15:00:00+02:00'),
-      time: '10:00 – 15:00 Uhr (täglich)',
+      endDate: new Date('2026-05-29T16:00:00+02:00'),
+      time: '10:00 – 16:00 Uhr (täglich)',
       location: 'Pepe Dome, Ostpark München',
       category: EventCategory.WORKSHOP,
-      price: 'Preis folgt in Kürze',
-      imageUrl: '/images/shows/jonas-acrobatics.jpg',
+      price: 'Kostenbeitrag 160€',
+      imageUrl: 'https://wwawsyhykrbvfgvhqbev.supabase.co/storage/v1/object/public/uploads/holi-poldini-2026.png',
       featured: true,
       highlights: [
-        '10 Tage Ferienprogramm (26. Mai – 5. Juni 2026)',
-        'Täglich 10–15 Uhr',
-        'Für Kinder & Jugendliche von 10–15 Jahren',
-        'Jonglage, Akrobatik, Handstand & mehr',
-        'Max. 30 Plätze — begrenzt',
-        'In Kooperation mit Leopoldini',
+        '4 Tage Ferienprogramm (26. – 29. Mai 2026)',
+        'Täglich 10 – 16 Uhr',
+        'Kostenbeitrag 160€',
+        'Akrobatik, Jonglage, Handstand & mehr',
+        'Erfahrene Leopoldini Coaches',
+        'Pepe Dome München Ostpark',
       ],
       status: ContentStatus.PUBLISHED,
     },
     create: {
       slug: EVENT_SLUG,
-      title: 'Akrobatik-Ferienkurs by Leopoldini',
-      subtitle: '2-Wochen-Ferienkurs · 10–15 Jahre',
+      title: 'Holi Poldini — Ferienkurs by Leopoldini',
+      subtitle: 'Ferienkurs Pfingsten 2026 · 4 Tage Zirkusabenteuer',
       description:
-        'Zwei Wochen Ferienspaß im Pepe Dome: Jonglage, Akrobatik, Handstand und mehr. Ein bunter Mix für Kinder und Jugendliche von 10 bis 15 Jahren — täglich von 10 bis 15 Uhr in den bayerischen Pfingstferien.',
+        'Ferienspaß mit dem Circus Leopoldini im Pepe Dome München Ostpark: täglich von 10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches. Vier Tage Akrobatik, Jonglage, Handstand und Zirkus pur in den bayerischen Pfingstferien.',
       date: new Date('2026-05-26T10:00:00+02:00'),
-      endDate: new Date('2026-06-05T15:00:00+02:00'),
-      time: '10:00 – 15:00 Uhr (täglich)',
+      endDate: new Date('2026-05-29T16:00:00+02:00'),
+      time: '10:00 – 16:00 Uhr (täglich)',
       location: 'Pepe Dome, Ostpark München',
       category: EventCategory.WORKSHOP,
-      price: 'Preis folgt in Kürze',
-      imageUrl: '/images/shows/jonas-acrobatics.jpg',
+      price: 'Kostenbeitrag 160€',
+      imageUrl: 'https://wwawsyhykrbvfgvhqbev.supabase.co/storage/v1/object/public/uploads/holi-poldini-2026.png',
       featured: true,
       highlights: [
-        '10 Tage Ferienprogramm (26. Mai – 5. Juni 2026)',
-        'Täglich 10–15 Uhr',
-        'Für Kinder & Jugendliche von 10–15 Jahren',
-        'Jonglage, Akrobatik, Handstand & mehr',
-        'Max. 30 Plätze — begrenzt',
-        'In Kooperation mit Leopoldini',
+        '4 Tage Ferienprogramm (26. – 29. Mai 2026)',
+        'Täglich 10 – 16 Uhr',
+        'Kostenbeitrag 160€',
+        'Akrobatik, Jonglage, Handstand & mehr',
+        'Erfahrene Leopoldini Coaches',
+        'Pepe Dome München Ostpark',
       ],
       status: ContentStatus.PUBLISHED,
     },
@@ -98,28 +94,28 @@ async function main() {
   const article = await prisma.article.upsert({
     where: { slug: ARTICLE_SLUG },
     update: {
-      title: 'Akrobatik-Ferienkurs by Leopoldini — 10 Tage Zirkuspower in den Pfingstferien',
+      title: 'Holi Poldini — Ferienspaß mit dem Circus Leopoldini im Pepe Dome',
       excerpt:
-        'Vom 26. Mai bis 5. Juni 2026 verwandelt sich der Pepe Dome in ein Ferien-Mitmachcamp für Kinder und Jugendliche von 10 bis 15 Jahren. Täglich 10–15 Uhr, max. 30 Plätze.',
+        'Vom 26. bis 29. Mai 2026 verwandelt sich der Pepe Dome in ein Ferien-Mitmachcamp mit dem Circus Leopoldini. Täglich 10 – 16 Uhr, Kostenbeitrag 160€.',
       content: ARTICLE_CONTENT,
       category: 'Ferienkurs',
       author: 'Redaktion Pepe Dome',
-      imageUrl: '/images/shows/jonas-acrobatics.jpg',
-      tags: ['Ferienkurs', 'Kinder', 'Jugendliche', 'Akrobatik', 'Pfingsten', 'Leopoldini'],
+      imageUrl: 'https://wwawsyhykrbvfgvhqbev.supabase.co/storage/v1/object/public/uploads/holi-poldini-2026.png',
+      tags: ['Ferienkurs', 'Kinder', 'Jugendliche', 'Akrobatik', 'Pfingsten', 'Leopoldini', 'Holi Poldini'],
       featured: true,
       status: ContentStatus.PUBLISHED,
       publishedAt: new Date('2026-04-20T09:00:00+02:00'),
     },
     create: {
       slug: ARTICLE_SLUG,
-      title: 'Akrobatik-Ferienkurs by Leopoldini — 10 Tage Zirkuspower in den Pfingstferien',
+      title: 'Holi Poldini — Ferienspaß mit dem Circus Leopoldini im Pepe Dome',
       excerpt:
-        'Vom 26. Mai bis 5. Juni 2026 verwandelt sich der Pepe Dome in ein Ferien-Mitmachcamp für Kinder und Jugendliche von 10 bis 15 Jahren. Täglich 10–15 Uhr, max. 30 Plätze.',
+        'Vom 26. bis 29. Mai 2026 verwandelt sich der Pepe Dome in ein Ferien-Mitmachcamp mit dem Circus Leopoldini. Täglich 10 – 16 Uhr, Kostenbeitrag 160€.',
       content: ARTICLE_CONTENT,
       category: 'Ferienkurs',
       author: 'Redaktion Pepe Dome',
-      imageUrl: '/images/shows/jonas-acrobatics.jpg',
-      tags: ['Ferienkurs', 'Kinder', 'Jugendliche', 'Akrobatik', 'Pfingsten', 'Leopoldini'],
+      imageUrl: 'https://wwawsyhykrbvfgvhqbev.supabase.co/storage/v1/object/public/uploads/holi-poldini-2026.png',
+      tags: ['Ferienkurs', 'Kinder', 'Jugendliche', 'Akrobatik', 'Pfingsten', 'Leopoldini', 'Holi Poldini'],
       featured: true,
       status: ContentStatus.PUBLISHED,
       publishedAt: new Date('2026-04-20T09:00:00+02:00'),

@@ -25,43 +25,25 @@ export const metadata: Metadata = {
 const woche: Tag[] = [
   {
     day: 'Montag',
-    trainer: 'Rufus (Leopoldini)',
+    trainer: 'Leopoldini Coaches',
     kurse: [
       {
-        slug: 'akrobatik-kids-mo',
-        time: '16:00 – 17:30',
-        title: 'Akrobatik Kids',
-        sub: '10–14 Jahre · mit Rufus (Leopoldini)',
-        target: 'kinder',
-        trainer: 'Rufus (Leopoldini)',
-        day: 'Montag',
-        description:
-          'Spielerischer Einstieg in die Welt der Akrobatik für Kinder zwischen 10 und 14 Jahren. Von ersten Handständen über Balanceübungen bis zu einfacher Partner- und Bodenakrobatik. Ohne Leistungsdruck, mit viel Spaß — Kraft, Beweglichkeit und Koordination wachsen nebenbei, kleine Erfolgserlebnisse stehen im Mittelpunkt. In Kooperation mit Leopoldini, die bei uns sowohl trainieren als auch unterrichten.',
-        inhalte: [
-          'Erste Handstände & Balance',
-          'Partner- und Bodenakrobatik',
-          'Kraft, Beweglichkeit, Koordination',
-          'Körpergefühl & Vertrauen aufbauen',
-        ],
-        fuerWen: 'Kinder 10–14 Jahre — Anfänger:innen und neugierige Kids mit ersten Vorerfahrungen',
-      },
-      {
-        slug: 'akrobatik-basics-mo',
-        time: '17:45 – 19:15',
-        title: 'Akrobatik Basics',
-        sub: 'Jugendliche & junge Erwachsene · mit Rufus (Leopoldini)',
+        slug: 'circus-dome-lab-mo',
+        time: '15:30 – 17:00',
+        title: 'Circus Dome Lab',
+        sub: 'Pepe Dome x Leopoldini · 11–15 Jahre · 140€ für den ganzen Kurs',
         target: 'teens',
-        trainer: 'Rufus (Leopoldini)',
+        trainer: 'Leopoldini Coaches',
         day: 'Montag',
         description:
-          'Für Jugendliche und junge Erwachsene, die die Grundlagen der Akrobatik erlernen oder vertiefen möchten. Handstand, Balance, Körperspannung, erste akrobatische Übergänge — mit Fokus auf saubere Technik und sicherem Aufbau, und Raum zum kreativen Ausprobieren. In Kooperation mit Leopoldini, die bei uns sowohl trainieren als auch unterrichten.',
+          'Zehn Wochen Zirkuswerkstatt für Kinder und Jugendliche von 11 bis 15 Jahren — gemeinsam mit den erfahrenen Coaches von Leopoldini. Akrobatik, Handstand, Partnerakrobatik und Zirkuskünste in einem festen Kurs mit fortlaufender Gruppe. Kursgebühr 140€ für den gesamten Zeitraum 11. Mai bis 13. Juli 2026.',
         inhalte: [
-          'Handstand & Körperspannung',
-          'Balance-Training',
-          'Akrobatische Übergänge',
-          'Saubere Technik, sicherer Aufbau',
+          'Akrobatik-Grundlagen & Handstand',
+          'Partner- und Bodenakrobatik',
+          'Körperspannung, Balance & Koordination',
+          'Zirkuskünste in fortlaufender Gruppe',
         ],
-        fuerWen: 'Jugendliche & junge Erwachsene — Einsteiger:innen und mit Vorerfahrung',
+        fuerWen: 'Kinder & Jugendliche 11–15 Jahre — fortlaufender Kurs vom 11. Mai bis 13. Juli 2026, 140€ gesamt',
       },
     ],
   },
@@ -285,15 +267,16 @@ export default function TrainingPage() {
               </div>
               <div className="flex-1">
                 <h3 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
-                  Akrobatik-Ferienkurs by Leopoldini
+                  Holi Poldini — Ferienkurs by Leopoldini
                 </h3>
                 <p className="text-[var(--pepe-t80)] mb-3 text-base md:text-lg">
-                  <strong className="text-[var(--pepe-white)]">26. Mai – 5. Juni 2026</strong> · täglich 10–15 Uhr · für 10–15 Jahre · max. 30 Plätze
+                  <strong className="text-[var(--pepe-white)]">26. – 29. Mai 2026</strong> · täglich 10–16 Uhr · Kostenbeitrag <strong className="text-[var(--pepe-white)]">160€</strong>
                 </p>
                 <p className="text-[var(--pepe-t64)] mb-5 text-sm md:text-base leading-relaxed">
-                  Zwei Wochen Pfingstferien voller Zirkusabenteuer: Jonglieren, Akrobatik,
-                  Handstand und mehr — ein bunter Mix, der Kraft, Koordination und Kreativität
-                  fördert. Trainer:innen und Preis werden in Kürze ergänzt.
+                  Ferienspaß mit dem Circus Leopoldini im Pepe Dome München Ostpark: täglich von
+                  10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches. Ein bunter Mix
+                  aus Akrobatik, Jonglage, Handstand und Co. — vier Tage Zirkusabenteuer in den
+                  Pfingstferien.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link href="/news/akrobatik-ferienkurs-pfingsten-2026">

@@ -33,7 +33,11 @@
       "Bash(python3:*)",
       "Bash(npx tsx:*)",
       "Bash(dig +short TXT _dmarc.pepe-dome.de)",
-      "Bash(dig +short TXT pepe-dome.de)"
+      "Bash(dig +short TXT pepe-dome.de)",
+      "Bash(ls .env*)",
+      "Bash(grep -c \"DATABASE_URL\" .env .env.local .env.development)",
+      "Bash(npx next:*)",
+      "Bash(wc -l public/locales/*/common.json)"
     ],
     "deny": [],
     "ask": []

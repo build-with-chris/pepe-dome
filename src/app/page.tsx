@@ -71,7 +71,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ===== Task 3.1.1: Hero Section ===== */}
-      <section className="relative min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
+      <section className="relative min-h-[100dvh] md:min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
         {/* Background Video: ein Element, Quelle je nach Viewport (Desktop = PepeDome-Atmosphaere, Mobile = Hochkant) */}
         <div className="absolute inset-0 pointer-events-none">
           <HeroBackgroundVideo />
