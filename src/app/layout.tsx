@@ -47,9 +47,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'Pepe Dome' }],
   creator: 'Pepe Dome',
   icons: {
-    icon: [{ url: '/favicon.ico' }, { url: '/PepeDome Logo ausgeschnitten.png' }],
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/PepeDome Logo ausgeschnitten.png',
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     type: 'website',
@@ -58,13 +62,16 @@ export const metadata: Metadata = {
     siteName: 'Pepe Dome',
     title: siteContent.name + ' - ' + siteContent.tagline,
     description: siteContent.description,
-    images: [{ url: '/PepeDome Logo ausgeschnitten.png', width: 800, height: 800, alt: 'Pepe Dome Logo' }],
+    images: [
+      { url: '/og-image.png',  width: 1200, height: 630,  alt: 'Pepe Dome' },
+      { url: '/og-square.png', width: 1200, height: 1200, alt: 'Pepe Dome' },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteContent.name + ' - ' + siteContent.tagline,
     description: siteContent.description,
-    images: ['/PepeDome Logo ausgeschnitten.png'],
+    images: ['/og-image.png'],
   },
   alternates: { canonical: BASE_URL },
   robots: { index: true, follow: true },
