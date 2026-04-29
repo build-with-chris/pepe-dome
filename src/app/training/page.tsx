@@ -81,22 +81,9 @@ const woche: Tag[] = [
   },
   {
     day: 'Mittwoch',
-    trainer: 'Dani',
-    kurse: [
-      {
-        slug: 'urban-acrobatics-mi',
-        time: '17:00 – 18:30',
-        title: 'Urban Acrobatics',
-        sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
-        target: 'erwachsene',
-        trainer: 'Dani',
-        day: 'Mittwoch',
-        description:
-          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
-        inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
-        fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
-      },
-    ],
+    trainer: '',
+    kurse: [],
+    note: 'In Planung — Programm folgt',
   },
   {
     day: 'Donnerstag',
@@ -131,18 +118,31 @@ const woche: Tag[] = [
   },
   {
     day: 'Sonntag',
-    trainer: 'Feuerinsel',
+    trainer: 'Dani · Oskar (Feuerinsel)',
     kurse: [
       {
-        slug: 'flow-arts-basics-so',
-        time: '16:00 – 17:00',
-        title: 'Flow Arts Basics',
-        sub: 'Buugeng & Doppelstäbe · mit Feuerinsel',
+        slug: 'urban-acrobatics-so',
+        time: '15:30 – 17:00',
+        title: 'Urban Acrobatics',
+        sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
         target: 'erwachsene',
-        trainer: 'Feuerinsel München',
+        trainer: 'Dani',
         day: 'Sonntag',
         description:
-          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von einer erfahrenen Künstlerin der Feuerinsel München — mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
+          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
+        inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
+        fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
+      },
+      {
+        slug: 'flow-arts-basics-so',
+        time: '17:00 – 18:00',
+        title: 'Flow Arts Basics',
+        sub: 'Buugeng & Doppelstäbe · mit Oskar (Feuerinsel)',
+        target: 'erwachsene',
+        trainer: 'Oskar (Feuerinsel München)',
+        day: 'Sonntag',
+        description:
+          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München — mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
         inhalte: [
           'Buugeng: Grundlagen & Bewegungsprinzipien',
           'Drehen mit Händen & Fingern, Ebenen & Symmetrie',
@@ -155,14 +155,14 @@ const woche: Tag[] = [
       },
       {
         slug: 'dynamic-flow-so',
-        time: '17:00 – 18:00',
+        time: '18:00 – 19:00',
         title: 'Dynamic Flow',
-        sub: 'Levistick (Long String) & Rope Dart · mit Feuerinsel',
+        sub: 'Levistick (Long String) & Rope Dart · mit Oskar (Feuerinsel)',
         target: 'erwachsene',
-        trainer: 'Feuerinsel München',
+        trainer: 'Oskar (Feuerinsel München)',
         day: 'Sonntag',
         description:
-          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge — und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von einer erfahrenen Trainerin der Feuerinsel München, die den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
+          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge — und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
         inhalte: [
           'Levistick mit Long String: Setups & Schnurkonfigurationen',
           'Übergänge zwischen Tricks, Illusionen & visuelle Täuschungen',
@@ -174,7 +174,7 @@ const woche: Tag[] = [
         fuerWen: 'Anfänger:innen willkommen — mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
     ],
-    note: 'Termine Sommer 2026: 03.05 · 10.05 · 14.06 · 28.06 · 05.07* · 26.07 — danach Sommerpause, weiter ab 13.09. *05.07 zeitgleich Sportfestival am Königsplatz.',
+    note: 'Flow Arts mit Oskar (Feuerinsel) an folgenden Terminen: 17.05. · 21.06. · 12.07.',
   },
 ]
 
