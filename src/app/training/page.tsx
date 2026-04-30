@@ -91,19 +91,19 @@ const woche: Tag[] = [
         slug: 'capoeira-kinder-di',
         time: '16:15 – 17:15',
         title: 'Capoeira für Kinder',
-        sub: '3–6 Jahre · mit Dayela',
+        sub: '3–6 Jahre · 8er-Kurs · mit Dayela',
         target: 'kinder',
         trainer: 'Dayela',
         day: 'Dienstag',
         description:
-          'Capoeira ist die brasilianische Kampfkunst, die Tanz, Akrobatik und Musik vereint. Spielerischer Einstieg für die Kleinsten — Bewegung, Rhythmus und Freude an der Gruppe stehen im Vordergrund.',
+          'Capoeira ist die brasilianische Kampfkunst, die Tanz, Akrobatik und Musik vereint. Spielerischer Einstieg für die Kleinsten — Bewegung, Rhythmus und Freude an der Gruppe stehen im Vordergrund. Geschlossener 8er-Kurs in fester Gruppe, damit die Kigakids den vertrauten Rahmen bekommen, den sie in dem Alter brauchen.',
         inhalte: [
           'Capoeira-Grundbewegungen (Ginga)',
           'Rhythmus, Musik & brasilianische Tradition',
           'Spielerische Partnerübungen',
           'Koordination, Beweglichkeit & Körpergefühl',
         ],
-        fuerWen: 'Kinder 3–6 Jahre',
+        fuerWen: 'Kinder 3–6 Jahre · geschlossener 8er-Kurs in fester Gruppe',
       },
       {
         slug: 'capoeira-erwachsene-di',
