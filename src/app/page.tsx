@@ -118,58 +118,50 @@ export default async function HomePage() {
       </section>
 
       {/* ===== Café Section ===== */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-14 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* Image */}
-              <div className="relative aspect-[4/3] lg:aspect-[5/4] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] shadow-2xl">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)_minmax(0,_1.1fr)] gap-8 md:gap-12 items-center">
+              {/* Image — kompakter, max-Höhe begrenzt */}
+              <div className="relative aspect-[4/3] w-full max-w-md mx-auto md:max-w-none rounded-2xl overflow-hidden bg-[var(--pepe-surface)] shadow-xl">
                 <Image
                   src="/Coffee.png"
                   alt="Café im Pepe Dome"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
+                  sizes="(max-width: 768px) 90vw, 420px"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)]/30 to-transparent pointer-events-none" />
               </div>
 
               {/* Text */}
               <div>
-                <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
+                <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-5">
                   Neu im Pepe Dome
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-6 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
                   Unser Café —<br />
                   <span className="text-[var(--pepe-gold)]">offen für alle</span>
                 </h2>
-                <p className="text-lg text-[var(--pepe-t80)] leading-relaxed mb-8">
+                <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed mb-6">
                   Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel
-                  oder triff Freunde. Unser Café ist Teil der Spielstätte und mitten im Ostpark.
+                  oder triff Freunde. Mitten im Ostpark.
                 </p>
 
                 {/* Öffnungszeiten */}
-                <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-7 mb-6">
-                  <div className="flex items-center gap-3 mb-4">
+                <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-5 md:p-6 mb-5">
+                  <div className="flex items-center gap-3 mb-3">
                     <span className="text-[var(--pepe-gold)] text-xl">🕐</span>
                     <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-sm">
                       Öffnungszeiten
                     </h3>
                   </div>
-                  <div className="space-y-2.5">
-                    <div className="flex items-baseline justify-between gap-4">
-                      <span className="text-[var(--pepe-t80)]">Werktags</span>
-                      <span className="text-[var(--pepe-white)] font-medium tabular-nums">
-                        12:00 – 21:00 Uhr
-                      </span>
-                    </div>
-                    <div className="flex items-baseline justify-between gap-4">
-                      <span className="text-[var(--pepe-t80)]">Wochenende</span>
-                      <span className="text-[var(--pepe-t64)] italic">
-                        Nach Veranstaltungsplan
-                      </span>
-                    </div>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="text-[var(--pepe-t80)]">Freitag – Sonntag</span>
+                    <span className="text-[var(--pepe-white)] font-bold tabular-nums text-lg">
+                      14:00 – 19:00 Uhr
+                    </span>
                   </div>
                 </div>
 
