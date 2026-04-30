@@ -460,7 +460,7 @@ export default function TrainingPage() {
       <section id="kursprogramm" className="py-20 md:py-28">
         <div className="stage-container">
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
               Kursprogramm
             </span>
@@ -470,6 +470,27 @@ export default function TrainingPage() {
             <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
               <span className="text-[var(--pepe-gold)] font-semibold">Klick auf einen Kurs</span> für Details und zur Voranmeldung.
             </p>
+          </div>
+
+          {/* Prominente Kursstart-Box */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <div
+              className="relative rounded-2xl px-6 py-7 text-center overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.06))',
+                border: '1px solid rgba(196,167,103,0.45)',
+              }}
+            >
+              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--pepe-gold)] mb-3">
+                Save the Date
+              </div>
+              <div className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
+                Kursstart <span className="text-[var(--pepe-gold)]">11. Mai 2026</span>
+              </div>
+              <p className="text-[var(--pepe-t80)] text-sm md:text-base">
+                Alle Kurse starten gemeinsam in die neue Saison. Voranmeldung jederzeit möglich.
+              </p>
+            </div>
           </div>
 
           {/* Legende */}

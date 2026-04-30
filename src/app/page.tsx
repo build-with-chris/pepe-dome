@@ -117,6 +117,71 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
       </section>
 
+      {/* ===== Café Section ===== */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+        <div className="stage-container">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              {/* Image */}
+              <div className="relative aspect-[4/3] lg:aspect-[5/4] rounded-2xl overflow-hidden bg-[var(--pepe-surface)] shadow-2xl">
+                <Image
+                  src="/Coffee.png"
+                  alt="Café im Pepe Dome"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)]/30 to-transparent pointer-events-none" />
+              </div>
+
+              {/* Text */}
+              <div>
+                <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
+                  Neu im Pepe Dome
+                </span>
+                <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-6 leading-tight">
+                  Unser Café —<br />
+                  <span className="text-[var(--pepe-gold)]">offen für alle</span>
+                </h2>
+                <p className="text-lg text-[var(--pepe-t80)] leading-relaxed mb-8">
+                  Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel
+                  oder triff Freunde. Unser Café ist Teil der Spielstätte und mitten im Ostpark.
+                </p>
+
+                {/* Öffnungszeiten */}
+                <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-7 mb-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-[var(--pepe-gold)] text-xl">🕐</span>
+                    <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-sm">
+                      Öffnungszeiten
+                    </h3>
+                  </div>
+                  <div className="space-y-2.5">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span className="text-[var(--pepe-t80)]">Werktags</span>
+                      <span className="text-[var(--pepe-white)] font-medium tabular-nums">
+                        12:00 – 21:00 Uhr
+                      </span>
+                    </div>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span className="text-[var(--pepe-t80)]">Wochenende</span>
+                      <span className="text-[var(--pepe-t64)] italic">
+                        Nach Veranstaltungsplan
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-[var(--pepe-t64)] text-sm">
+                  Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== Vision & Mission Section ===== */}
       <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
         <div className="stage-container">
