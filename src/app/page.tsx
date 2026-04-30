@@ -117,59 +117,56 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
       </section>
 
-      {/* ===== Café Section ===== */}
+      {/* ===== Café Section — Bild & Öffnungszeiten side-by-side, dezent ===== */}
       <section className="py-14 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)_minmax(0,_1.1fr)] gap-8 md:gap-12 items-center">
-              {/* Image — kompakter, max-Höhe begrenzt */}
-              <div className="relative aspect-[4/3] w-full max-w-md mx-auto md:max-w-none rounded-2xl overflow-hidden bg-[var(--pepe-surface)] shadow-xl">
-                <Image
-                  src="/Coffee.png"
-                  alt="Café im Pepe Dome"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 90vw, 420px"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)]/30 to-transparent pointer-events-none" />
-              </div>
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Eyebrow + Headline */}
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-5">
+              Neu im Pepe Dome
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
+              Unser Café — <span className="text-[var(--pepe-gold)]">offen für alle</span>
+            </h2>
+            <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed mb-10 max-w-xl mx-auto">
+              Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel
+              oder triff Freunde. Mitten im Ostpark.
+            </p>
 
-              {/* Text */}
-              <div>
-                <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-5">
-                  Neu im Pepe Dome
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
-                  Unser Café —<br />
-                  <span className="text-[var(--pepe-gold)]">offen für alle</span>
-                </h2>
-                <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed mb-6">
-                  Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel
-                  oder triff Freunde. Mitten im Ostpark.
-                </p>
+            {/* Bild + Öffnungszeiten Side-by-Side */}
+            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-4 md:p-5 max-w-2xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-left">
+                {/* kleines Bild */}
+                <div className="relative w-full sm:w-44 sm:h-32 aspect-[4/3] sm:aspect-auto flex-shrink-0 rounded-xl overflow-hidden bg-[var(--pepe-surface)]">
+                  <Image
+                    src="/Coffee.png"
+                    alt="Café im Pepe Dome"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 90vw, 176px"
+                    unoptimized
+                  />
+                </div>
 
                 {/* Öffnungszeiten */}
-                <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-5 md:p-6 mb-5">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-[var(--pepe-gold)] text-xl">🕐</span>
-                    <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-sm">
+                <div className="flex-1 w-full">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[var(--pepe-gold)] text-base">🕐</span>
+                    <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-xs">
                       Öffnungszeiten
                     </h3>
                   </div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="text-[var(--pepe-t80)]">Freitag – Sonntag</span>
-                    <span className="text-[var(--pepe-white)] font-bold tabular-nums text-lg">
-                      14:00 – 19:00 Uhr
-                    </span>
-                  </div>
+                  <p className="text-[var(--pepe-t80)] text-sm mb-1">Freitag – Sonntag</p>
+                  <p className="text-[var(--pepe-white)] font-bold tabular-nums text-xl md:text-2xl">
+                    14:00 – 19:00 Uhr
+                  </p>
                 </div>
-
-                <p className="text-[var(--pepe-t64)] text-sm">
-                  Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße
-                </p>
               </div>
             </div>
+
+            <p className="text-[var(--pepe-t64)] text-sm mt-6">
+              Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße
+            </p>
           </div>
         </div>
       </section>
