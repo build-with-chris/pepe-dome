@@ -46,8 +46,26 @@ const woche: Tag[] = [
         fuerWen: 'Kinder & Jugendliche 11–15 Jahre — fortlaufender Kurs vom 11. Mai bis 13. Juli 2026, 140€ gesamt',
       },
       {
-        slug: 'luftakrobatik-jugendliche-mo',
-        time: '17:15 – 18:45',
+        slug: 'luftakrobatik-aircrobatics-mo-1715',
+        time: '17:15 – 18:15',
+        title: 'Luftakrobatik',
+        sub: 'Jugendliche · mit Aircrobatics',
+        target: 'teens',
+        trainer: 'Aircrobatics',
+        day: 'Montag',
+        description:
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+        inhalte: [
+          'Trapez-Grundlagen',
+          'Aerial Hoop & Vertikaltuch',
+          'Kraft, Beweglichkeit & Körperspannung',
+          'Erste Figuren und Sequenzen',
+        ],
+        fuerWen: 'Jugendliche, alle Levels',
+      },
+      {
+        slug: 'luftakrobatik-aircrobatics-mo-1815',
+        time: '18:15 – 19:15',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
@@ -67,26 +85,8 @@ const woche: Tag[] = [
   },
   {
     day: 'Dienstag',
-    trainer: 'Aircrobatics · Dayela',
+    trainer: 'mit Dayela',
     kurse: [
-      {
-        slug: 'luftakrobatik-jugendliche-di-1430',
-        time: '14:30 – 16:00',
-        title: 'Luftakrobatik',
-        sub: 'Jugendliche · mit Aircrobatics',
-        target: 'teens',
-        trainer: 'Aircrobatics',
-        day: 'Dienstag',
-        description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
-        inhalte: [
-          'Trapez-Grundlagen',
-          'Aerial Hoop & Vertikaltuch',
-          'Kraft, Beweglichkeit & Körperspannung',
-          'Erste Figuren und Sequenzen',
-        ],
-        fuerWen: 'Jugendliche, alle Levels',
-      },
       {
         slug: 'capoeira-kinder-di',
         time: '16:15 – 17:15',
@@ -128,26 +128,8 @@ const woche: Tag[] = [
   },
   {
     day: 'Mittwoch',
-    trainer: 'Aircrobatics · Michael Heiduk',
+    trainer: 'mit Michael Heiduk',
     kurse: [
-      {
-        slug: 'luftakrobatik-jugendliche-mi-1430',
-        time: '14:30 – 16:00',
-        title: 'Luftakrobatik',
-        sub: 'Jugendliche · mit Aircrobatics',
-        target: 'teens',
-        trainer: 'Aircrobatics',
-        day: 'Mittwoch',
-        description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
-        inhalte: [
-          'Trapez-Grundlagen',
-          'Aerial Hoop & Vertikaltuch',
-          'Kraft, Beweglichkeit & Körperspannung',
-          'Erste Figuren und Sequenzen',
-        ],
-        fuerWen: 'Jugendliche, alle Levels',
-      },
       {
         slug: 'kinder-akrobatik-mi',
         time: '16:00 – 18:00',
@@ -167,14 +149,20 @@ const woche: Tag[] = [
         ],
         fuerWen: 'Kinder 5–12 Jahre · 12€ pro 2h',
       },
+    ],
+  },
+  {
+    day: 'Donnerstag',
+    trainer: 'Aircrobatics · Marcel',
+    kurse: [
       {
-        slug: 'luftakrobatik-jugendliche-mi-1800',
-        time: '18:00 – 19:30',
+        slug: 'luftakrobatik-aircrobatics-do-1600',
+        time: '16:00 – 17:00',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
-        day: 'Mittwoch',
+        day: 'Donnerstag',
         description:
           'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
@@ -185,12 +173,24 @@ const woche: Tag[] = [
         ],
         fuerWen: 'Jugendliche, alle Levels',
       },
-    ],
-  },
-  {
-    day: 'Donnerstag',
-    trainer: 'Marcel',
-    kurse: [
+      {
+        slug: 'luftakrobatik-aircrobatics-do-1700',
+        time: '17:00 – 18:00',
+        title: 'Luftakrobatik',
+        sub: 'Jugendliche · mit Aircrobatics',
+        target: 'teens',
+        trainer: 'Aircrobatics',
+        day: 'Donnerstag',
+        description:
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+        inhalte: [
+          'Trapez-Grundlagen',
+          'Aerial Hoop & Vertikaltuch',
+          'Kraft, Beweglichkeit & Körperspannung',
+          'Erste Figuren und Sequenzen',
+        ],
+        fuerWen: 'Jugendliche, alle Levels',
+      },
       {
         slug: 'tricking-breaking-do',
         time: 'Zeit folgt',
