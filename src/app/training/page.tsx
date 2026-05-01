@@ -128,18 +128,18 @@ const woche: Tag[] = [
   },
   {
     day: 'Mittwoch',
-    trainer: 'mit Michael Heiduk',
+    trainer: 'Michael Heiduk · Aircrobatics',
     kurse: [
       {
         slug: 'kinder-akrobatik-mi',
-        time: '16:00 – 18:00',
+        time: '16:00 – 17:00',
         title: 'Kinder Akrobatik',
-        sub: '5–12 Jahre · mit Michael Heiduk · 12€ pro 2h',
+        sub: '5–12 Jahre · mit Michael Heiduk',
         target: 'kinder',
         trainer: 'Michael Heiduk',
         day: 'Mittwoch',
         description:
-          'Spielerische Akrobatik für Kinder mit Michael Heiduk. Luftakrobatik, Tellerdrehen, Jonglieren — und alles, worauf die Kids gerade Lust haben. Zwei Stunden voller Bewegung, Kreativität und Spaß. Preis: 12€ pro 2h.',
+          'Spielerische Akrobatik für Kinder mit Michael Heiduk. Luftakrobatik, Tellerdrehen, Jonglieren — und alles, worauf die Kids gerade Lust haben. Eine Stunde voller Bewegung, Kreativität und Spaß.',
         inhalte: [
           'Luftakrobatik (kindgerecht)',
           'Tellerdrehen',
@@ -147,40 +147,16 @@ const woche: Tag[] = [
           'Spielerische Bodenakrobatik',
           'Freie Wahl je nach Lust der Gruppe',
         ],
-        fuerWen: 'Kinder 5–12 Jahre · 12€ pro 2h',
-      },
-    ],
-  },
-  {
-    day: 'Donnerstag',
-    trainer: 'Aircrobatics · Marcel',
-    kurse: [
-      {
-        slug: 'luftakrobatik-aircrobatics-do-1600',
-        time: '16:00 – 17:00',
-        title: 'Luftakrobatik',
-        sub: 'Jugendliche · mit Aircrobatics',
-        target: 'teens',
-        trainer: 'Aircrobatics',
-        day: 'Donnerstag',
-        description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
-        inhalte: [
-          'Trapez-Grundlagen',
-          'Aerial Hoop & Vertikaltuch',
-          'Kraft, Beweglichkeit & Körperspannung',
-          'Erste Figuren und Sequenzen',
-        ],
-        fuerWen: 'Jugendliche, alle Levels',
+        fuerWen: 'Kinder 5–12 Jahre',
       },
       {
-        slug: 'luftakrobatik-aircrobatics-do-1700',
+        slug: 'luftakrobatik-aircrobatics-mi-1700',
         time: '17:00 – 18:00',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
-        day: 'Donnerstag',
+        day: 'Mittwoch',
         description:
           'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
@@ -191,6 +167,30 @@ const woche: Tag[] = [
         ],
         fuerWen: 'Jugendliche, alle Levels',
       },
+      {
+        slug: 'luftakrobatik-aircrobatics-mi-1800',
+        time: '18:00 – 19:00',
+        title: 'Luftakrobatik',
+        sub: 'Jugendliche · mit Aircrobatics',
+        target: 'teens',
+        trainer: 'Aircrobatics',
+        day: 'Mittwoch',
+        description:
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+        inhalte: [
+          'Trapez-Grundlagen',
+          'Aerial Hoop & Vertikaltuch',
+          'Kraft, Beweglichkeit & Körperspannung',
+          'Erste Figuren und Sequenzen',
+        ],
+        fuerWen: 'Jugendliche, alle Levels',
+      },
+    ],
+  },
+  {
+    day: 'Donnerstag',
+    trainer: 'mit Marcel',
+    kurse: [
       {
         slug: 'tricking-breaking-do',
         time: 'Zeit folgt',
@@ -208,9 +208,22 @@ const woche: Tag[] = [
   },
   {
     day: 'Freitag',
-    trainer: '',
-    kurse: [],
-    note: 'Kurse pausiert — neues Programm folgt',
+    trainer: 'mit Dani',
+    kurse: [
+      {
+        slug: 'urban-acrobatics-fr',
+        time: '15:30 – 17:00',
+        title: 'Urban Acrobatics',
+        sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
+        target: 'erwachsene',
+        trainer: 'Dani',
+        day: 'Freitag',
+        description:
+          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
+        inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
+        fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
+      },
+    ],
   },
   {
     day: 'Samstag',
@@ -220,21 +233,8 @@ const woche: Tag[] = [
   },
   {
     day: 'Sonntag',
-    trainer: 'Dani · Tina & Oskar (Feuerinsel)',
+    trainer: 'Tina & Oskar (Feuerinsel)',
     kurse: [
-      {
-        slug: 'urban-acrobatics-so',
-        time: '15:30 – 17:00',
-        title: 'Urban Acrobatics',
-        sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
-        target: 'erwachsene',
-        trainer: 'Dani',
-        day: 'Sonntag',
-        description:
-          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
-        inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
-        fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
-      },
       {
         slug: 'flow-arts-basics-so',
         time: '17:00 – 18:00',
