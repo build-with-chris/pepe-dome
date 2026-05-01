@@ -4,9 +4,13 @@
  * CourseScheduleGrid
  * Interaktives Raster mit allen Kurs-Tagen.
  * Klick auf eine Kurskarte öffnet ein Detail-Modal mit Anmeldeformular.
+ *
+ * URL-Sharing: Beim Öffnen wird ?kurs=<slug> in die URL geschrieben
+ * (per history.replaceState — keine Navigation). Beim Laden mit so einer
+ * URL wird automatisch das passende Modal geöffnet.
  */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CourseDetailModal from './CourseDetailModal'
 
 // ── Typen ────────────────────────────────────────────────────────────────
@@ -203,6 +207,48 @@ function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => vo
 export default function CourseScheduleGrid({ woche }: { woche: Tag[] }) {
   const [selectedKurs, setSelectedKurs] = useState<Kurs | null>(null)
 
+  // Flachgelegte Kurs-Liste für Slug-Lookup
+  const allKurse = woche.flatMap((t) => t.kurse)
+
+  // ── URL ←→ Modal-State Synchronisation ────────────────────────────────
+  // Beim Mount: prüfen ob ?kurs=<slug> in der URL steht und entsprechend
+  // das Modal öffnen. Außerdem auf Browser-Back/Forward (popstate) reagieren.
+  useEffect(() => {
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(window.location.search)
+      const slug = params.get('kurs')
+      if (slug) {
+        const found = allKurse.find((k) => k.slug === slug)
+        if (found) {
+          setSelectedKurs(found)
+          return
+        }
+      }
+      setSelectedKurs(null)
+    }
+    syncFromUrl()
+    window.addEventListener('popstate', syncFromUrl)
+    return () => window.removeEventListener('popstate', syncFromUrl)
+    // allKurse bewusst nicht in deps — Daten sind statisch nach Mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Modal öffnen → URL aktualisieren (ohne Navigation)
+  const openKurs = (kurs: Kurs) => {
+    setSelectedKurs(kurs)
+    const url = new URL(window.location.href)
+    url.searchParams.set('kurs', kurs.slug)
+    window.history.replaceState({}, '', url.toString())
+  }
+
+  // Modal schließen → URL säubern
+  const closeKurs = () => {
+    setSelectedKurs(null)
+    const url = new URL(window.location.href)
+    url.searchParams.delete('kurs')
+    window.history.replaceState({}, '', url.toString())
+  }
+
   const tageMitKursen = woche.filter((t) => t.kurse.length > 0)
   const tageOhneKurse = woche.filter((t) => t.kurse.length === 0)
 
@@ -210,20 +256,17 @@ export default function CourseScheduleGrid({ woche }: { woche: Tag[] }) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
         {tageMitKursen.map((tag) => (
-          <TagKarte key={tag.day} tag={tag} onKursClick={setSelectedKurs} />
+          <TagKarte key={tag.day} tag={tag} onKursClick={openKurs} />
         ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
         {tageOhneKurse.map((tag) => (
-          <TagKarte key={tag.day} tag={tag} onKursClick={setSelectedKurs} />
+          <TagKarte key={tag.day} tag={tag} onKursClick={openKurs} />
         ))}
       </div>
 
-      <CourseDetailModal
-        kurs={selectedKurs}
-        onClose={() => setSelectedKurs(null)}
-      />
+      <CourseDetailModal kurs={selectedKurs} onClose={closeKurs} />
     </>
   )
 }

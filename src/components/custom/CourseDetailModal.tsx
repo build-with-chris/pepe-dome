@@ -10,6 +10,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import type { Kurs } from './CourseScheduleGrid'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
+type CopyState = 'idle' | 'copied'
 
 export default function CourseDetailModal({
   kurs,
@@ -24,6 +25,7 @@ export default function CourseDetailModal({
   const [gdprConsent, setGdprConsent] = useState(false)
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [copyState, setCopyState] = useState<CopyState>('idle')
 
   // ESC schließt das Modal
   useEffect(() => {
@@ -48,10 +50,30 @@ export default function CourseDetailModal({
     if (kurs) {
       setSubmitState('idle')
       setErrorMessage(null)
+      setCopyState('idle')
     }
   }, [kurs])
 
   if (!kurs) return null
+
+  // Shareable URL für diesen Kurs (nutzt window.location.origin)
+  const shareUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/training?kurs=${kurs.slug}#kursprogramm`
+      : ''
+
+  async function handleCopyLink() {
+    if (!kurs) return
+    const url = `${window.location.origin}/training?kurs=${kurs.slug}#kursprogramm`
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopyState('copied')
+      setTimeout(() => setCopyState('idle'), 2000)
+    } catch {
+      // Fallback: Prompt mit der URL zum manuellen Kopieren
+      window.prompt('URL zum Kopieren:', url)
+    }
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -103,15 +125,44 @@ export default function CourseDetailModal({
         className="relative bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Schließen-Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[var(--pepe-surface)] hover:bg-[var(--pepe-line)] flex items-center justify-center text-[var(--pepe-white)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
-          aria-label="Schließen"
-        >
-          <span className="text-xl leading-none" aria-hidden="true">×</span>
-        </button>
+        {/* Top-Right Buttons: Link teilen + Schließen */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleCopyLink}
+            className="h-10 px-3.5 rounded-full bg-[var(--pepe-surface)] hover:bg-[var(--pepe-line)] flex items-center gap-2 text-[var(--pepe-t80)] hover:text-[var(--pepe-white)] text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
+            aria-label="Link zu diesem Kurs kopieren"
+            title={shareUrl}
+          >
+            {copyState === 'copied' ? (
+              <>
+                <span aria-hidden="true">✓</span>
+                <span>Kopiert</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                  strokeLinejoin="round" aria-hidden="true"
+                >
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                <span>Link teilen</span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-10 h-10 rounded-full bg-[var(--pepe-surface)] hover:bg-[var(--pepe-line)] flex items-center justify-center text-[var(--pepe-white)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
+            aria-label="Schließen"
+          >
+            <span className="text-xl leading-none" aria-hidden="true">×</span>
+          </button>
+        </div>
 
         {/* Kurs-Details */}
         <div className="p-6 md:p-8 border-b border-[var(--pepe-line)]">
