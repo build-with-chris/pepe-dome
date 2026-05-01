@@ -10,6 +10,7 @@ import HeroSection from '@/components/custom/HeroSection'
 import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapImages'
 import { Button } from '@/components/ui/Button'
 import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
+import FerienkursButton from '@/components/custom/FerienkursButton'
 
 export const metadata: Metadata = {
   title: 'Workshops & Training | Pepe Dome München',
@@ -427,11 +428,7 @@ export default function TrainingPage() {
                       Mehr erfahren
                     </Button>
                   </Link>
-                  <Link href="/contact">
-                    <Button variant="secondary" size="md">
-                      Platz vormerken
-                    </Button>
-                  </Link>
+                  <FerienkursButton variant="secondary" size="md" label="Platz vormerken" />
                 </div>
               </div>
             </div>

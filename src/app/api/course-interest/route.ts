@@ -27,7 +27,8 @@ import { resend, DEFAULT_FROM_EMAIL } from '@/lib/resend'
  * der Coach direkt antworten kann.
  */
 const COURSE_FORWARD_RECIPIENTS: Record<string, string[]> = {
-  'circus-dome-lab-mo': ['doroauer23@gmail.com'], // Doro Auer · Leopoldini
+  'circus-dome-lab-mo':                       ['doroauer23@gmail.com'], // Doro · Leopoldini
+  'ferienkurs-holi-poldini-pfingsten-2026':   ['doroauer23@gmail.com'], // Doro · Leopoldini Ferienkurs
 }
 
 export async function POST(request: NextRequest) {
