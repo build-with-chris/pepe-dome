@@ -37,6 +37,8 @@ export type Termin = {
   title: string      // z.B. "Schnupperkurs Doppelstäbe"
   trainer?: string   // z.B. "Tina"
   sub?: string       // z.B. "Spendenbasis 5–15 €"
+  highlight?: boolean // visuell hervorheben (Gold-Akzent + Badge)
+  badge?: string     // z.B. "Schnuppern" oder "Spendenbasis"
 }
 
 export type Tag = {
@@ -117,27 +119,70 @@ function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => vo
           <p className="text-[var(--pepe-t64)] text-xs uppercase tracking-wider font-bold mb-3">
             {tag.termineTitel ?? 'Termine'}
           </p>
-          <ul className="space-y-2.5">
-            {tag.termine.map((t, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm">
-                <span className="text-[var(--pepe-gold)] font-bold tabular-nums whitespace-nowrap pt-px">
-                  {t.date}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[var(--pepe-white)] leading-snug">
-                    {t.title}
-                    {t.trainer && (
-                      <span className="text-[var(--pepe-t48)]"> · {t.trainer}</span>
-                    )}
-                  </p>
-                  {t.sub && (
-                    <p className="text-[var(--pepe-t48)] text-xs mt-0.5 italic leading-snug">
-                      {t.sub}
+          <ul className="space-y-2">
+            {tag.termine.map((t, i) =>
+              t.highlight ? (
+                // Hervorgehobener Termin: eigene Karte mit Gold-Akzent + Badge
+                <li key={i}>
+                  <div
+                    className="rounded-lg p-3 mb-1"
+                    style={{
+                      background:
+                        'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.06))',
+                      border: '1px solid rgba(196,167,103,0.45)',
+                    }}
+                  >
+                    <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                      <span className="text-[var(--pepe-gold)] font-bold tabular-nums">
+                        {t.date}
+                      </span>
+                      {t.badge && (
+                        <span
+                          className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest"
+                          style={{
+                            backgroundColor: 'var(--pepe-gold)',
+                            color: 'var(--pepe-black)',
+                          }}
+                        >
+                          {t.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[var(--pepe-white)] font-semibold leading-snug">
+                      {t.title}
+                      {t.trainer && (
+                        <span className="text-[var(--pepe-t64)] font-normal"> · {t.trainer}</span>
+                      )}
                     </p>
-                  )}
-                </div>
-              </li>
-            ))}
+                    {t.sub && (
+                      <p className="text-[var(--pepe-gold)] text-xs font-medium mt-1 leading-snug">
+                        {t.sub}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ) : (
+                // Standard-Eintrag (kompakt)
+                <li key={i} className="flex items-start gap-3 text-sm py-1">
+                  <span className="text-[var(--pepe-t80)] font-bold tabular-nums whitespace-nowrap pt-px min-w-[3.5rem]">
+                    {t.date}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[var(--pepe-white)] leading-snug">
+                      {t.title}
+                      {t.trainer && (
+                        <span className="text-[var(--pepe-t48)]"> · {t.trainer}</span>
+                      )}
+                    </p>
+                    {t.sub && (
+                      <p className="text-[var(--pepe-t48)] text-xs mt-0.5 italic leading-snug">
+                        {t.sub}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              )
+            )}
           </ul>
         </div>
       )}

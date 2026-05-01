@@ -280,9 +280,11 @@ const woche: Tag[] = [
     termine: [
       {
         date: '03.05.',
-        title: 'Schnupperkurs Doppelstäbe',
+        title: 'Doppelstäbe',
         trainer: 'Tina (Feuerinsel)',
-        sub: 'Unverbindlich · Spendenbasis 5 – 15 €',
+        sub: '🎟  Spendenbasis 5 – 15 € · keine Anmeldung nötig',
+        highlight: true,
+        badge: 'Schnupperkurs',
       },
       { date: '10.05.', title: 'Buugeng',   trainer: 'Tina (Feuerinsel)' },
       { date: '17.05.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
