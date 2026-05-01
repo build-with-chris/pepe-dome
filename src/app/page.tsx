@@ -15,12 +15,11 @@ import {
   getFeaturedArticles,
   getRecentArticles,
   getUpcomingEvents,
-  getFeaturedEvents,
   type EventData,
   type ArticleData,
 } from '@/lib/db-data'
 import nextDynamic from 'next/dynamic'
-import EventCard from '@/components/custom/EventCard'
+import EventsCarousel from '@/components/custom/EventsCarousel'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { Button } from '@/components/ui/Button'
@@ -38,15 +37,14 @@ export default async function HomePage() {
 
   try {
     homepage = getHomepageContent()
-    const [featuredArticles, recentArticles, upcomingEvents, featuredEvents] = await Promise.all([
+    const [featuredArticles, recentArticles, upcomingEvents] = await Promise.all([
       getFeaturedArticles(),
       getRecentArticles(4),
       getUpcomingEvents(),
-      getFeaturedEvents(),
     ])
-    displayEvents = featuredEvents.length > 0
-      ? featuredEvents.slice(0, 3)
-      : upcomingEvents.slice(0, 3)
+    // Immer die nächsten 3 Events chronologisch — KEIN featured-Vorrang
+    // (sonst bleibt z.B. Holipoldini auf Dauer als "Highlight" hängen)
+    displayEvents = upcomingEvents.slice(0, 3)
     const merged = featuredArticles.length > 0
       ? [...featuredArticles, ...recentArticles.filter(a => !featuredArticles.find(f => f.id === a.id))]
       : recentArticles
@@ -213,17 +211,19 @@ export default async function HomePage() {
         <VideoCarousel />
       </section>
 
-      {/* ===== Task 3.1.2: Featured Events Section ===== */}
-      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
+      {/* ===== Kommende Events — kompakt, horizontal mit Pfeilen ===== */}
+      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
         <div className="stage-container">
-          {/* Section Header */}
-          <div className="flex flex-col items-center text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Kommende Events
-            </h2>
-            <p className="text-[var(--pepe-t64)] text-lg mb-6">
-              Entdecke unsere nachsten Shows, Workshops und Festivals
-            </p>
+          {/* Section Header — Headline links, Link rechts (Pfeile sind oben rechts im Carousel) */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
+                Kommende Events
+              </h2>
+              <p className="text-[var(--pepe-t64)] text-sm md:text-base">
+                Die nächsten Shows, Workshops und Festivals
+              </p>
+            </div>
             <Link href="/events">
               <Button variant="ghost" size="sm">
                 Alle Events anzeigen
@@ -231,28 +231,21 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Events Grid */}
           {displayEvents.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-3xl mx-auto">
-              {displayEvents.map((event) => (
-                <EventCard
-                  key={event.id}
-                  title={event.title}
-                  description={event.description}
-                  date={new Date(event.date).toLocaleDateString('de-DE', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                  })}
-                  category={event.category}
-                  image={event.imageUrl || undefined}
-                  href={`/events/${event.slug}`}
-                />
-              ))}
-            </div>
+            <EventsCarousel
+              events={displayEvents.map((e) => ({
+                id: e.id,
+                slug: e.slug,
+                title: e.title,
+                description: e.description,
+                date: e.date,
+                category: e.category,
+                imageUrl: e.imageUrl,
+              }))}
+            />
           ) : (
-            <div className="text-center py-12 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
-              <p className="text-[var(--pepe-t64)]">Keine Events verfugbar</p>
+            <div className="text-center py-10 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
+              <p className="text-[var(--pepe-t64)]">Keine Events verfügbar</p>
               <Link href="/events" className="text-[var(--pepe-gold)] hover:underline mt-2 inline-block">
                 Alle Events anzeigen
               </Link>
