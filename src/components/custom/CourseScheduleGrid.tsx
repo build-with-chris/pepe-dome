@@ -30,6 +30,8 @@ export type Kurs = {
   description: string
   inhalte: string[]
   fuerWen: string
+  termine?: Termin[]       // optional: konkrete Datums-Liste (Sonntags-Flow-Arts)
+  termineTitel?: string    // Überschrift für die Termin-Liste im Modal
 }
 
 export type Termin = {

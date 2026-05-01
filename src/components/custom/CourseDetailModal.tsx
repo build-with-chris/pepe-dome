@@ -150,6 +150,75 @@ export default function CourseDetailModal({
               <p className="text-[var(--pepe-t80)] text-sm leading-relaxed">{kurs.fuerWen}</p>
             </div>
           </div>
+
+          {/* Termine — wenn der Kurs konkrete Datums-Slots hat (z.B. Sonntags-Flow-Arts) */}
+          {kurs.termine && kurs.termine.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-[var(--pepe-line)]">
+              <p className="text-[var(--pepe-gold)] text-xs font-semibold uppercase tracking-widest mb-3">
+                {kurs.termineTitel ?? 'Termine'}
+              </p>
+              <ul className="space-y-2">
+                {kurs.termine.map((t, i) =>
+                  t.highlight ? (
+                    <li key={i}>
+                      <div
+                        className="rounded-lg p-3"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.06))',
+                          border: '1px solid rgba(196,167,103,0.45)',
+                        }}
+                      >
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="text-[var(--pepe-gold)] font-bold tabular-nums">
+                            {t.date}
+                          </span>
+                          {t.badge && (
+                            <span
+                              className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest"
+                              style={{ backgroundColor: 'var(--pepe-gold)', color: 'var(--pepe-black)' }}
+                            >
+                              {t.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[var(--pepe-white)] font-semibold leading-snug text-sm">
+                          {t.title}
+                          {t.trainer && (
+                            <span className="text-[var(--pepe-t64)] font-normal"> · {t.trainer}</span>
+                          )}
+                        </p>
+                        {t.sub && (
+                          <p className="text-[var(--pepe-gold)] text-xs font-medium mt-1 leading-snug">
+                            {t.sub}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  ) : (
+                    <li key={i} className="flex items-baseline gap-3 text-sm py-1">
+                      <span className="text-[var(--pepe-t80)] font-bold tabular-nums whitespace-nowrap min-w-[3.5rem]">
+                        {t.date}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[var(--pepe-white)] leading-snug">
+                          {t.title}
+                          {t.trainer && (
+                            <span className="text-[var(--pepe-t48)]"> · {t.trainer}</span>
+                          )}
+                        </p>
+                        {t.sub && (
+                          <p className="text-[var(--pepe-t48)] text-xs mt-0.5 italic leading-snug">
+                            {t.sub}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Anmeldeformular */}
