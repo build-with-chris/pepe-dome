@@ -220,7 +220,7 @@ const woche: Tag[] = [
   },
   {
     day: 'Sonntag',
-    trainer: 'Dani · Oskar (Feuerinsel)',
+    trainer: 'Dani · Tina & Oskar (Feuerinsel)',
     kurse: [
       {
         slug: 'urban-acrobatics-so',
@@ -276,7 +276,20 @@ const woche: Tag[] = [
         fuerWen: 'Anfänger:innen willkommen — mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
     ],
-    note: 'Flow Arts mit Oskar (Feuerinsel) an folgenden Terminen: 17.05. · 21.06. · 12.07.',
+    termineTitel: 'Flow Arts — die nächsten Sonntage',
+    termine: [
+      {
+        date: '03.05.',
+        title: 'Schnupperkurs Doppelstäbe',
+        trainer: 'Tina (Feuerinsel)',
+        sub: 'Unverbindlich · Spendenbasis 5 – 15 €',
+      },
+      { date: '10.05.', title: 'Buugeng', trainer: 'Tina (Feuerinsel)' },
+      { date: '17.05.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
+      { date: '21.06.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
+      { date: '12.07.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
+    ],
+    note: 'Weitere Termine folgen.',
   },
 ]
 

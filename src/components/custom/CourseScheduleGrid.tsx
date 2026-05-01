@@ -32,11 +32,20 @@ export type Kurs = {
   fuerWen: string
 }
 
+export type Termin = {
+  date: string       // "03.05.2026" oder "03.05."
+  title: string      // z.B. "Schnupperkurs Doppelstäbe"
+  trainer?: string   // z.B. "Tina"
+  sub?: string       // z.B. "Spendenbasis 5–15 €"
+}
+
 export type Tag = {
   day: string
   trainer: string
   kurse: Kurs[]
   note?: string
+  termine?: Termin[]
+  termineTitel?: string  // Überschrift für die Termine-Liste
 }
 
 // ── Kurs-Karte (klickbar) ───────────────────────────────────────────────
@@ -100,6 +109,36 @@ function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => vo
           {tag.kurse.map((kurs) => (
             <KursKarte key={kurs.slug} kurs={kurs} onClick={() => onKursClick(kurs)} />
           ))}
+        </div>
+      )}
+
+      {tag.termine && tag.termine.length > 0 && (
+        <div className="px-5 py-4 border-t border-[var(--pepe-line)] bg-[var(--pepe-surface)]/40">
+          <p className="text-[var(--pepe-t64)] text-xs uppercase tracking-wider font-bold mb-3">
+            {tag.termineTitel ?? 'Termine'}
+          </p>
+          <ul className="space-y-2.5">
+            {tag.termine.map((t, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm">
+                <span className="text-[var(--pepe-gold)] font-bold tabular-nums whitespace-nowrap pt-px">
+                  {t.date}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[var(--pepe-white)] leading-snug">
+                    {t.title}
+                    {t.trainer && (
+                      <span className="text-[var(--pepe-t48)]"> · {t.trainer}</span>
+                    )}
+                  </p>
+                  {t.sub && (
+                    <p className="text-[var(--pepe-t48)] text-xs mt-0.5 italic leading-snug">
+                      {t.sub}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
