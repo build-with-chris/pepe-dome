@@ -360,20 +360,8 @@ const disciplines = [
   { name: 'Conditioning',      description: 'Flexibilität, Verletzungsprävention, Kraftaufbau',          icon: '💪' },
 ]
 
-const pricingNonAerial = [
-  { name: 'Schnupperstunde', price: '12€', description: 'Einmalig zum Kennenlernen' },
-  { name: 'Einzelstunde',    price: '20€', description: 'Flexibel buchbar' },
-  { name: '5er-Karte',       price: '90€', description: '18€ pro Stunde' },
-  { name: '10er-Karte',      price: '165€', description: '16,50€ pro Stunde' },
-  { name: '20er-Karte',      price: '300€', description: '15€ pro Stunde' },
-]
-
-const pricingAerial = [
-  { name: 'Einzelstunde', price: '25€', description: 'Flexibel buchbar' },
-  { name: '5er-Karte',    price: '120€', description: '24€ pro Stunde' },
-  { name: '10er-Karte',   price: '220€', description: '22€ pro Stunde' },
-  { name: '20er-Karte',   price: '400€', description: '20€ pro Stunde' },
-]
+// Preise laufen jetzt komplett über das Eversports-Widget — keine separate
+// Preisliste mehr auf der Seite (vermeidet Doppel-Pflege & widersprüchliche Stände).
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PAGE
@@ -391,23 +379,23 @@ export default function TrainingPage() {
       <HeroSection
         title="Workshops & Training"
         subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
-        size="md"
+        size="sm"
         dotCloudIcon="training"
       />
 
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* BUCHUNG — Eversports Widget (TOP PRIORITY, direkt unter Hero)   */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="buchung" className="pt-12 md:pt-16 pb-16 md:pb-20 bg-gradient-to-b from-[var(--pepe-ink)]/60 to-transparent">
+      <section id="buchung" className="pt-2 md:pt-4 pb-14 md:pb-20 bg-[var(--pepe-black)]">
         <div className="stage-container">
-          <div className="text-center mb-8 md:mb-10">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-5">
-              Buchung geöffnet
+          <div className="text-center mb-6">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-4">
+              🎟 Buchung geöffnet
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
-              Jetzt direkt online buchen
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
+              Direkt online buchen
             </h2>
-            <p className="text-[var(--pepe-t80)] text-base md:text-lg max-w-2xl mx-auto">
+            <p className="text-[var(--pepe-t80)] text-sm md:text-base max-w-xl mx-auto">
               Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.
             </p>
           </div>
@@ -417,7 +405,7 @@ export default function TrainingPage() {
             <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
           </div>
 
-          <p className="text-center text-sm text-[var(--pepe-t64)] mt-6">
+          <p className="text-center text-sm text-[var(--pepe-t64)] mt-5">
             Lieber erst die Übersicht? <Link href="#kursprogramm" className="text-[var(--pepe-gold)] hover:underline font-semibold">Wochenplan ansehen ↓</Link>
           </p>
         </div>
@@ -534,66 +522,6 @@ export default function TrainingPage() {
           </div>
 
           <CourseScheduleGrid woche={woche} />
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════ */}
-      {/* PREISE                                                          */}
-      {/* ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
-        <div className="stage-container">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Preise im Überblick
-            </h2>
-            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Schnupperstunde · Einzelstunde · 5er- bis 20er-Karte. Karten gelten flexibel für mehrere Kurse.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto">
-            {/* Boden-Kurse */}
-            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
-                Boden-Kurse
-              </h3>
-              <div className="space-y-4">
-                {pricingNonAerial.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between py-4 border-b border-[var(--pepe-line)] last:border-0"
-                  >
-                    <div>
-                      <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm mt-1">{item.description}</p>
-                    </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4 whitespace-nowrap">{item.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Aerial-Kurse */}
-            <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
-                Aerial-Kurse
-              </h3>
-              <div className="space-y-4">
-                {pricingAerial.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between py-4 border-b border-[var(--pepe-line)] last:border-0"
-                  >
-                    <div>
-                      <p className="text-[var(--pepe-white)] font-medium">{item.name}</p>
-                      <p className="text-[var(--pepe-t48)] text-sm mt-1">{item.description}</p>
-                    </div>
-                    <span className="text-[var(--pepe-gold)] font-bold text-lg ml-4 whitespace-nowrap">{item.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

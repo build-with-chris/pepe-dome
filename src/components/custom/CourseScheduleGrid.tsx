@@ -56,7 +56,8 @@ export type Tag = {
   termineTitel?: string  // Überschrift für die Termine-Liste
 }
 
-// ── Kurs-Karte (klickbar) ───────────────────────────────────────────────
+// ── Kurs-Karte (kompakt, klickbar) ──────────────────────────────────────
+// Single-Row Layout: [● Dot] [Zeit] [Titel + Sub] [→]
 
 function KursKarte({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
   const c = COLORS[kurs.target]
@@ -64,27 +65,33 @@ function KursKarte({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left rounded-xl p-4 transition-all duration-200 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
-      style={{ border: `1px solid ${c.border}`, backgroundColor: c.bg }}
+      className="w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 hover:bg-[var(--pepe-surface)]/60 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer group"
+      style={{ borderLeft: `3px solid ${c.dot}` }}
       aria-label={`Details zu ${kurs.title} anzeigen`}
     >
-      <div className="flex items-center gap-2.5 mb-2">
-        <span
-          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-          style={{ backgroundColor: c.dot }}
-        />
-        <span className="text-[var(--pepe-t64)] text-xs font-semibold tracking-wide">
+      <div className="flex items-center gap-3">
+        {/* Zeit */}
+        <span className="text-[var(--pepe-t80)] text-xs font-bold tabular-nums whitespace-nowrap min-w-[5.5rem]">
           {kurs.time}
         </span>
-      </div>
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1">
-          <p className="text-[var(--pepe-white)] font-bold text-base leading-snug">{kurs.title}</p>
+
+        {/* Titel + optionaler Sub */}
+        <div className="flex-1 min-w-0">
+          <p className="text-[var(--pepe-white)] font-semibold text-sm leading-snug truncate group-hover:text-[var(--pepe-gold)] transition-colors">
+            {kurs.title}
+          </p>
           {kurs.sub && (
-            <p className="text-[var(--pepe-t48)] text-sm mt-1 leading-snug">{kurs.sub}</p>
+            <p className="text-[var(--pepe-t48)] text-xs leading-snug truncate">
+              {kurs.sub}
+            </p>
           )}
         </div>
-        <span className="text-[var(--pepe-t48)] text-xs mt-1 flex-shrink-0" aria-hidden="true">
+
+        {/* Chevron */}
+        <span
+          className="text-[var(--pepe-t48)] text-sm flex-shrink-0 group-hover:text-[var(--pepe-gold)] group-hover:translate-x-0.5 transition-all"
+          aria-hidden="true"
+        >
           ›
         </span>
       </div>
@@ -92,28 +99,26 @@ function KursKarte({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
   )
 }
 
-// ── Tag-Karte ────────────────────────────────────────────────────────────
+// ── Tag-Karte (kompakt) ─────────────────────────────────────────────────
 
 function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => void }) {
   const hasKurse = tag.kurse.length > 0
   return (
-    <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden">
-      <div className="px-5 py-4 border-b border-[var(--pepe-line)] flex items-center justify-between">
-        <div>
-          <h4 className="text-[var(--pepe-white)] font-bold text-lg">{tag.day}</h4>
-          {tag.trainer && (
-            <p className="text-[var(--pepe-t48)] text-sm mt-0.5">mit {tag.trainer}</p>
-          )}
-        </div>
+    <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl overflow-hidden">
+      {/* Tag-Header — kompakt */}
+      <div className="px-4 py-2.5 border-b border-[var(--pepe-line)] flex items-baseline justify-between gap-3 bg-[var(--pepe-surface)]/40">
+        <h4 className="text-[var(--pepe-white)] font-bold text-base uppercase tracking-wide">
+          {tag.day}
+        </h4>
         {hasKurse && (
-          <span className="text-[var(--pepe-t48)] text-xs font-medium">
+          <span className="text-[var(--pepe-t48)] text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
             {tag.kurse.length} {tag.kurse.length === 1 ? 'Kurs' : 'Kurse'}
           </span>
         )}
       </div>
 
       {hasKurse && (
-        <div className="p-4 space-y-3">
+        <div className="p-2 space-y-1">
           {tag.kurse.map((kurs) => (
             <KursKarte key={kurs.slug} kurs={kurs} onClick={() => onKursClick(kurs)} />
           ))}
@@ -252,19 +257,45 @@ export default function CourseScheduleGrid({ woche }: { woche: Tag[] }) {
   const tageMitKursen = woche.filter((t) => t.kurse.length > 0)
   const tageOhneKurse = woche.filter((t) => t.kurse.length === 0)
 
+  // Smooth-Scroll zum Buchungs-Widget
+  const scrollToBuchung = () => {
+    const target = document.getElementById('buchung')
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+      {/* Globaler Eversports-Hinweis */}
+      <div className="max-w-3xl mx-auto mb-8">
+        <div className="flex items-center gap-3 rounded-xl bg-[var(--pepe-gold)]/10 border border-[var(--pepe-gold)]/30 px-4 py-3 text-sm">
+          <span className="text-xl leading-none flex-shrink-0" aria-hidden="true">🎟</span>
+          <p className="text-[var(--pepe-t80)] flex-1">
+            Alle Kurse buchst du direkt über das{' '}
+            <button
+              type="button"
+              onClick={scrollToBuchung}
+              className="text-[var(--pepe-gold)] font-bold underline-offset-2 hover:underline"
+            >
+              Eversports-Widget oben
+            </button>
+            . Klick auf einen Kurs für Details.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
         {tageMitKursen.map((tag) => (
           <TagKarte key={tag.day} tag={tag} onKursClick={openKurs} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-        {tageOhneKurse.map((tag) => (
-          <TagKarte key={tag.day} tag={tag} onKursClick={openKurs} />
-        ))}
-      </div>
+      {tageOhneKurse.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+          {tageOhneKurse.map((tag) => (
+            <TagKarte key={tag.day} tag={tag} onKursClick={openKurs} />
+          ))}
+        </div>
+      )}
 
       <CourseDetailModal kurs={selectedKurs} onClose={closeKurs} />
     </>
