@@ -4,6 +4,7 @@
  */
 
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
@@ -578,6 +579,37 @@ export default function TrainingPage() {
           <CourseScheduleGrid woche={woche} />
         </div>
       </section>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* ONLINE BUCHUNG — Eversports Widget                              */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section id="buchung" className="py-20 md:py-28 bg-[var(--pepe-ink)]/40">
+        <div className="stage-container">
+          <div className="text-center mb-10">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
+              Online Buchung
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+              Direkt buchen
+            </h2>
+            <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
+              Live-Verfügbarkeit, Schnupperstunden &amp; Karten — direkt aus dem Kursplan buchen.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-black)]/60 p-3 md:p-5">
+            {/* Eversports Widget — Loader unten via next/script (lädt nur 1×) */}
+            <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
+          </div>
+        </div>
+      </section>
+
+      <Script
+        id="eversports-widget-loader"
+        type="module"
+        src="https://widget-static.eversports.io/loader.js"
+        strategy="afterInteractive"
+      />
 
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* PREISE                                                          */}
