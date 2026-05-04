@@ -381,7 +381,9 @@ const pricingAerial = [
 export default function TrainingPage() {
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
-      {/* Hero Section */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* HERO                                                            */}
+      {/* ════════════════════════════════════════════════════════════════ */}
       <HeroSection
         title="Workshops & Training"
         subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
@@ -389,31 +391,30 @@ export default function TrainingPage() {
         dotCloudIcon="training"
       />
 
-      {/* Intro Section */}
-      <section className="py-20 md:py-32">
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* INTRO + QUICK FACTS                                             */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section className="pt-16 md:pt-24 pb-8 md:pb-12">
         <div className="stage-container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
                 Professionelles Training in einzigartiger Atmosphäre
               </h2>
-              <p className="text-lg text-[var(--pepe-t80)] mb-6 leading-relaxed">
-                Strukturierte Kurse für Kinder, Teens und Erwachsene — von den ersten
-                Handständen bis zu fortgeschrittener Luftakrobatik. Die geodätische Kuppel
-                mit 8,5 Metern Deckenhöhe bietet optimale Bedingungen.
-              </p>
-              <p className="text-[var(--pepe-gold)] font-semibold mb-8">
-                ✦ Voranmeldung läuft — einfach Kurs auswählen und Formular ausfüllen.
+              <p className="text-lg text-[var(--pepe-t80)] mb-8 leading-relaxed">
+                Strukturierte Wochenkurse für Kinder, Teens und Erwachsene — von den
+                ersten Handständen bis zur fortgeschrittenen Luftakrobatik. Die geodätische
+                Kuppel mit 8,5 Metern Deckenhöhe bietet optimale Bedingungen.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="#kursprogramm">
+                <Link href="#buchung">
                   <Button variant="primary" size="lg">
-                    Zum Kursprogramm
+                    Jetzt buchen
                   </Button>
                 </Link>
-                <Link href="/contact">
+                <Link href="#kursprogramm">
                   <Button variant="secondary" size="lg">
-                    Kontakt
+                    Kursplan ansehen
                   </Button>
                 </Link>
               </div>
@@ -432,131 +433,49 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* Ferienkurs-Banner */}
-      <section className="py-10 md:py-14 border-y border-[var(--pepe-gold)]/30" style={{ background: 'linear-gradient(135deg, rgba(196, 167, 103, 0.12), rgba(1, 109, 202, 0.08) 50%, transparent)' }}>
+      {/* Quick-Facts-Strip */}
+      <section className="pb-16 md:pb-24">
         <div className="stage-container">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center">
-              <div className="flex-shrink-0">
-                <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)] text-black">
-                  Neu · Ferienkurs
-                </span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
-                  Holi Poldini — Ferienkurs by Leopoldini
-                </h3>
-                <p className="text-[var(--pepe-t80)] mb-3 text-base md:text-lg">
-                  <strong className="text-[var(--pepe-white)]">26. – 29. Mai 2026</strong> · täglich 10–16 Uhr · Kostenbeitrag <strong className="text-[var(--pepe-white)]">160€</strong>
-                </p>
-                <p className="text-[var(--pepe-t64)] mb-5 text-sm md:text-base leading-relaxed">
-                  Ferienspaß mit dem Circus Leopoldini im Pepe Dome München Ostpark: täglich von
-                  10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches. Ein bunter Mix
-                  aus Akrobatik, Jonglage, Handstand und Co. — vier Tage Zirkusabenteuer in den
-                  Pfingstferien.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link href="/news/akrobatik-ferienkurs-pfingsten-2026">
-                    <Button variant="primary" size="md">
-                      Mehr erfahren
-                    </Button>
-                  </Link>
-                  <FerienkursButton variant="secondary" size="md" label="Platz vormerken" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
+            {[
+              { label: 'Kursstart', value: '11. Mai 2026',           icon: '🗓' },
+              { label: 'Zielgruppen', value: 'Kinder · Teens · Erwachsene', icon: '👥' },
+              { label: 'Schnupperstunde', value: 'ab 12 €',          icon: '🎟' },
+              { label: 'Location', value: 'Ostpark München',         icon: '📍' },
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] px-4 py-5 md:px-5 md:py-6"
+              >
+                <div className="text-2xl mb-2 leading-none">{f.icon}</div>
+                <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)] mb-1">
+                  {f.label}
+                </div>
+                <div className="text-sm md:text-base font-bold text-[var(--pepe-white)] leading-snug">
+                  {f.value}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* SO GEHT DIE VORANMELDUNG                                         */}
+      {/* WOCHENPLAN                                                      */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20 bg-[var(--pepe-ink)]/40">
-        <div className="stage-container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-10">
-              <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-4">
-                Voranmeldung geöffnet
-              </span>
-              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-3">
-                So sicherst du dir deinen Platz
-              </h2>
-              <p className="text-[var(--pepe-t64)] max-w-xl mx-auto">
-                In 3 Schritten zum Kurs — ab Mai 2026 starten wir, Voranmeldung läuft schon jetzt.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-              {[
-                {
-                  step: '1',
-                  title: 'Kurs auswählen',
-                  text: 'Klick im Wochenplan unten auf eine Kurskarte — du siehst Inhalte, Trainer:in und Zielgruppe.',
-                },
-                {
-                  step: '2',
-                  title: 'Voranmeldung ausfüllen',
-                  text: 'Kurzes Formular: Name, E-Mail, ggf. Alter des Kindes. Unverbindlich und kostenlos.',
-                },
-                {
-                  step: '3',
-                  title: 'Bestätigung erhalten',
-                  text: 'Wir melden uns bei dir mit allen Details zum Kursstart, Bezahlung und Location.',
-                },
-              ].map((s) => (
-                <div
-                  key={s.step}
-                  className="relative bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-7"
-                >
-                  <div className="w-10 h-10 rounded-full bg-[var(--pepe-gold)] text-black font-bold text-lg flex items-center justify-center mb-4">
-                    {s.step}
-                  </div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">{s.title}</h3>
-                  <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">{s.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════ */}
-      {/* KURSPROGRAMM FRÜHJAHR 2026                                      */}
-      {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="kursprogramm" className="py-20 md:py-28">
+      <section id="kursprogramm" className="py-20 md:py-28 bg-[var(--pepe-ink)]/40">
         <div className="stage-container">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
-              Kursprogramm
+              Schritt 1 — Kurs aussuchen
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-4">
-              Wochenplan Frühjahr 2026
+              Wochenplan
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
-              <span className="text-[var(--pepe-gold)] font-semibold">Klick auf einen Kurs</span> für Details und zur Voranmeldung.
+              Klick auf einen Kurs für Details. Buchen direkt unten über das Eversports-Widget.
             </p>
-          </div>
-
-          {/* Prominente Kursstart-Box */}
-          <div className="max-w-2xl mx-auto mb-12">
-            <div
-              className="relative rounded-2xl px-6 py-7 text-center overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.06))',
-                border: '1px solid rgba(196,167,103,0.45)',
-              }}
-            >
-              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--pepe-gold)] mb-3">
-                Save the Date
-              </div>
-              <div className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
-                Kursstart <span className="text-[var(--pepe-gold)]">11. Mai 2026</span>
-              </div>
-              <p className="text-[var(--pepe-t80)] text-sm md:text-base">
-                Alle Kurse starten gemeinsam in die neue Saison. Voranmeldung jederzeit möglich.
-              </p>
-            </div>
           </div>
 
           {/* Legende */}
@@ -575,7 +494,6 @@ export default function TrainingPage() {
             </div>
           </div>
 
-          {/* ── Wochenplan: klickbare Kurse mit Detail-Modal ───────── */}
           <CourseScheduleGrid woche={woche} />
         </div>
       </section>
@@ -583,21 +501,21 @@ export default function TrainingPage() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* ONLINE BUCHUNG — Eversports Widget                              */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="buchung" className="py-20 md:py-28 bg-[var(--pepe-ink)]/40">
+      <section id="buchung" className="py-20 md:py-28">
         <div className="stage-container">
           <div className="text-center mb-10">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
-              Online Buchung
+              Schritt 2 — Buchen
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Direkt buchen
+              Direkt online buchen
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
-              Live-Verfügbarkeit, Schnupperstunden &amp; Karten — direkt aus dem Kursplan buchen.
+              Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.
             </p>
           </div>
 
-          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-black)]/60 p-3 md:p-5">
+          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] p-3 md:p-5">
             {/* Eversports Widget — Loader unten via next/script (lädt nur 1×) */}
             <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
           </div>
@@ -612,21 +530,21 @@ export default function TrainingPage() {
       />
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* PREISE                                                          */}
+      {/* PREISE — direkt nach Buchung                                    */}
       {/* ════════════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Preise
+              Preise im Überblick
             </h2>
             <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              Flexible Optionen — Schnupperstunde, Einzelstunde oder 20er-Karte. Gilt für Boden- und Aerial-Kurse.
+              Schnupperstunde · Einzelstunde · 5er- bis 20er-Karte. Karten gelten flexibel für mehrere Kurse.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto">
-            {/* Non-Aerial Pricing */}
+            {/* Boden-Kurse */}
             <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
               <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
                 Boden-Kurse
@@ -647,7 +565,7 @@ export default function TrainingPage() {
               </div>
             </div>
 
-            {/* Aerial Pricing */}
+            {/* Aerial-Kurse */}
             <div className="bg-[var(--pepe-surface)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8">
               <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-8 text-center">
                 Aerial-Kurse
@@ -672,37 +590,73 @@ export default function TrainingPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* PROFITRAINING — WhatsApp-Gruppe auf Anfrage                    */}
+      {/* SPEZIELLE ANGEBOTE — Ferienkurs + Profitraining                 */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">
+      <section className="py-20 md:py-28">
         <div className="stage-container">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10">
-              <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-start">
-                <div className="w-14 h-14 rounded-2xl bg-[#25D366]/15 flex items-center justify-center flex-shrink-0">
-                  <span className="text-3xl">💬</span>
-                </div>
-                <div className="flex-1">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-3">
-                    Für Profis
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-3">
-                    Profitraining
-                  </h2>
-                  <p className="text-[var(--pepe-t80)] mb-2 leading-relaxed">
-                    Untertags offenes Training für die Profi-Artist:innen-Community München — gefördert durch das Kulturreferat.
-                  </p>
-                  <p className="text-[var(--pepe-t64)] mb-5 text-sm leading-relaxed">
-                    Infos, aktuelle Zeiten und Änderungen laufen über eine <strong className="text-[var(--pepe-white)]">WhatsApp-Gruppe</strong>. Zugang
-                    bekommst du auf Anfrage — schick uns kurz eine Nachricht über das Kontaktformular,
-                    Betreff &bdquo;Profitraining&ldquo;.
-                  </p>
-                  <Link href="/contact?betreff=Profitraining">
-                    <Button variant="primary" size="md">
-                      Zugang anfragen
-                    </Button>
-                  </Link>
-                </div>
+          <div className="text-center mb-12 md:mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+              Spezielle Angebote
+            </h2>
+            <p className="text-[var(--pepe-t64)] text-lg max-w-2xl mx-auto">
+              Außerhalb des Wochenkurses — Ferienprogramm und offenes Profi-Training.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
+            {/* Ferienkurs Holi Poldini */}
+            <div
+              className="rounded-2xl p-7 md:p-8 flex flex-col"
+              style={{
+                background: 'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.04))',
+                border: '1px solid rgba(196,167,103,0.45)',
+              }}
+            >
+              <span className="inline-block self-start px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-5">
+                Ferienkurs · Pfingsten
+              </span>
+              <h3 className="text-2xl md:text-2xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
+                Holi Poldini — by Leopoldini
+              </h3>
+              <p className="text-[var(--pepe-t80)] mb-3 text-base">
+                <strong className="text-[var(--pepe-white)]">26. – 29. Mai 2026</strong> · tägl. 10 – 16 Uhr · <strong className="text-[var(--pepe-white)]">160 €</strong>
+              </p>
+              <p className="text-[var(--pepe-t64)] mb-6 text-sm leading-relaxed flex-1">
+                Vier Tage Zirkusabenteuer in den Pfingstferien — Akrobatik, Jonglage,
+                Handstand und mehr mit den Coaches von Circus Leopoldini.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/news/akrobatik-ferienkurs-pfingsten-2026">
+                  <Button variant="primary" size="md">
+                    Mehr erfahren
+                  </Button>
+                </Link>
+                <FerienkursButton variant="secondary" size="md" label="Platz vormerken" />
+              </div>
+            </div>
+
+            {/* Profitraining */}
+            <div className="rounded-2xl p-7 md:p-8 bg-[var(--pepe-ink)] border border-[var(--pepe-line)] flex flex-col">
+              <span className="inline-block self-start px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/40 mb-5">
+                💬 Für Profis
+              </span>
+              <h3 className="text-2xl md:text-2xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
+                Profitraining
+              </h3>
+              <p className="text-[var(--pepe-t80)] mb-3 text-base">
+                Untertags · offenes Training für Münchens Profi-Artist:innen
+              </p>
+              <p className="text-[var(--pepe-t64)] mb-6 text-sm leading-relaxed flex-1">
+                Gefördert vom Kulturreferat. Aktuelle Zeiten &amp; Änderungen laufen über
+                eine WhatsApp-Gruppe — Zugang auf Anfrage über das Kontaktformular,
+                Betreff &bdquo;Profitraining&ldquo;.
+              </p>
+              <div>
+                <Link href="/contact?betreff=Profitraining">
+                  <Button variant="primary" size="md">
+                    Zugang anfragen
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
