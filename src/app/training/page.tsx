@@ -12,6 +12,7 @@ import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapIm
 import { Button } from '@/components/ui/Button'
 import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
 import FerienkursButton from '@/components/custom/FerienkursButton'
+import StickyBookingButton from '@/components/custom/StickyBookingButton'
 
 export const metadata: Metadata = {
   title: 'Workshops & Training | Pepe Dome München',
@@ -381,6 +382,9 @@ const pricingAerial = [
 export default function TrainingPage() {
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      {/* Floating CTA — sichtbar wenn man am Buchungs-Widget vorbei gescrollt ist */}
+      <StickyBookingButton targetId="buchung" />
+
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* HERO                                                            */}
       {/* ════════════════════════════════════════════════════════════════ */}
@@ -389,6 +393,41 @@ export default function TrainingPage() {
         subtitle="Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
         size="md"
         dotCloudIcon="training"
+      />
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* BUCHUNG — Eversports Widget (TOP PRIORITY, direkt unter Hero)   */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <section id="buchung" className="pt-12 md:pt-16 pb-16 md:pb-20 bg-gradient-to-b from-[var(--pepe-ink)]/60 to-transparent">
+        <div className="stage-container">
+          <div className="text-center mb-8 md:mb-10">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-5">
+              Buchung geöffnet
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
+              Jetzt direkt online buchen
+            </h2>
+            <p className="text-[var(--pepe-t80)] text-base md:text-lg max-w-2xl mx-auto">
+              Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-gold)]/40 bg-[var(--pepe-ink)] p-3 md:p-5 shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_24px_var(--pepe-gold-glow)]">
+            {/* Eversports Widget — Loader unten via next/script (lädt nur 1×) */}
+            <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
+          </div>
+
+          <p className="text-center text-sm text-[var(--pepe-t64)] mt-6">
+            Lieber erst die Übersicht? <Link href="#kursprogramm" className="text-[var(--pepe-gold)] hover:underline font-semibold">Wochenplan ansehen ↓</Link>
+          </p>
+        </div>
+      </section>
+
+      <Script
+        id="eversports-widget-loader"
+        type="module"
+        src="https://widget-static.eversports.io/loader.js"
+        strategy="afterInteractive"
       />
 
       {/* ════════════════════════════════════════════════════════════════ */}
@@ -468,13 +507,13 @@ export default function TrainingPage() {
           {/* Header */}
           <div className="text-center mb-10">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
-              Schritt 1 — Kurs aussuchen
+              Wochenplan
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-4">
-              Wochenplan
+              Alle Kurse im Überblick
             </h2>
             <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
-              Klick auf einen Kurs für Details. Buchen direkt unten über das Eversports-Widget.
+              Klick auf einen Kurs für Details. Buchung läuft oben über Eversports.
             </p>
           </div>
 
@@ -499,38 +538,7 @@ export default function TrainingPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* ONLINE BUCHUNG — Eversports Widget                              */}
-      {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="buchung" className="py-20 md:py-28">
-        <div className="stage-container">
-          <div className="text-center mb-10">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
-              Schritt 2 — Buchen
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              Direkt online buchen
-            </h2>
-            <p className="text-[var(--pepe-t80)] text-lg max-w-2xl mx-auto">
-              Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.
-            </p>
-          </div>
-
-          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] p-3 md:p-5">
-            {/* Eversports Widget — Loader unten via next/script (lädt nur 1×) */}
-            <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
-          </div>
-        </div>
-      </section>
-
-      <Script
-        id="eversports-widget-loader"
-        type="module"
-        src="https://widget-static.eversports.io/loader.js"
-        strategy="afterInteractive"
-      />
-
-      {/* ════════════════════════════════════════════════════════════════ */}
-      {/* PREISE — direkt nach Buchung                                    */}
+      {/* PREISE                                                          */}
       {/* ════════════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 bg-[var(--pepe-ink)]">
         <div className="stage-container">
