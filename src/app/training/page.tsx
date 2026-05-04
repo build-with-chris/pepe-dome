@@ -522,6 +522,25 @@ export default function TrainingPage() {
           </div>
 
           <CourseScheduleGrid woche={woche} />
+
+          {/* Hinweis-Box: Sonderfälle im Wochenplan */}
+          <div className="max-w-3xl mx-auto mt-8">
+            <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 px-5 py-4">
+              <div className="flex items-start gap-3">
+                <span className="text-lg leading-none flex-shrink-0 mt-0.5" aria-hidden="true">ℹ️</span>
+                <div className="space-y-1.5 text-sm">
+                  <p className="text-[var(--pepe-t80)]">
+                    <span className="font-bold text-[var(--pepe-white)]">Luftakrobatik (Aircrobatics)</span>{' '}
+                    startet erst <span className="font-bold text-[var(--pepe-gold)]">ab 18.05.</span>
+                  </p>
+                  <p className="text-[var(--pepe-t80)]">
+                    <span className="font-bold text-[var(--pepe-white)]">Tricking &amp; Breaking</span>{' '}
+                    folgt — Termine werden in Kürze bekannt gegeben.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
