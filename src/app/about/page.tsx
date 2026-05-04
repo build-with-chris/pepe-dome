@@ -150,7 +150,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[var(--pepe-gold)] mt-1">•</span>
-                  <span>Festivalformate (z. B. Freeman Festival, Zeit für Zirkus Wunder.punkt Festival, Spiel:Art)</span>
+                  <span>Festivalformate (z. B. Freeman Festival, Zeit für Zirkus, Spiel:Art)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[var(--pepe-gold)] mt-1">•</span>

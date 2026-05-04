@@ -356,10 +356,6 @@ export default function EventsPage() {
                 <p className="text-sm text-[var(--pepe-t64)] mb-3">zeitgenössischer Zirkus - Solo</p>
                 <p className="text-xs text-[var(--pepe-t48)]">tornadoseye.com</p>
               </a>
-              <a href="https://www.kreativhaltig.de/zirkuswerk" target="_blank" rel="noopener noreferrer" className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group">
-                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">Zirkuswerkstatt Stuttgart</h3>
-                <p className="text-xs text-[var(--pepe-t48)]">kreativhaltig.de</p>
-              </a>
               <a href="https://taigicirkas.com/saucisson/" target="_blank" rel="noopener noreferrer" className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group">
                 <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">Saucisson - taigi Cirkas</h3>
                 <p className="text-sm text-[var(--pepe-t64)] mb-3">Litauen - Circus Next Laureat</p>
@@ -369,10 +365,6 @@ export default function EventsPage() {
                 <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">Daniela Maier und Jakob Vöckler</h3>
                 <p className="text-sm text-[var(--pepe-t64)] mb-3">gefördert durch das Kulturreferat München - Solo Präsentationen</p>
                 <p className="text-xs text-[var(--pepe-t48)]">danimisima.de</p>
-              </a>
-              <a href="https://figurentheater-gfp.de/festival/festival-2024.php" target="_blank" rel="noopener noreferrer" className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group">
-                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">Wunder. Punkt Festival</h3>
-                <p className="text-xs text-[var(--pepe-t48)]">figurentheater-gfp.de</p>
               </a>
               <a href="https://zeitfuerzirkus.de/info" target="_blank" rel="noopener noreferrer" className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group">
                 <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">Zeit für Zirkus</h3>
