@@ -235,27 +235,55 @@ export default function CourseDetailModal({
           )}
         </div>
 
-        {/* Buchungs-CTA — verweist auf Eversports-Widget oben */}
+        {/* Buchungs-CTA — entweder externer Buchungs-Link (mailto/https)
+            oder Standard: zum Eversports-Widget oben scrollen. */}
         <div className="p-6 md:p-8 bg-gradient-to-br from-[var(--pepe-gold)]/10 to-transparent">
-          <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-1">
-                Bereit zum Mitmachen?
-              </h3>
-              <p className="text-[var(--pepe-t64)] text-sm">
-                Buche diesen Kurs direkt über Eversports — Schnupperstunde, Einzelstunde oder Karte.
-              </p>
+          {kurs.bookingUrl ? (
+            // ─── Externer Buchungs-Flow (z.B. Aircrobatics, Holi Poldini) ───
+            <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-1">
+                  {kurs.bookingUrl.startsWith('mailto:') ? 'Per E-Mail anmelden' : 'Direkt beim Anbieter buchen'}
+                </h3>
+                <p className="text-[var(--pepe-t64)] text-sm">
+                  {kurs.bookingNote ?? `Dieser Kurs läuft nicht über Eversports — Buchung direkt hier:`}
+                </p>
+                <p className="text-[var(--pepe-gold)] text-sm font-mono mt-1 break-all">
+                  {kurs.bookingUrl.replace(/^mailto:/, '').replace(/^https?:\/\//, '')}
+                </p>
+              </div>
+              <a
+                href={kurs.bookingUrl}
+                target={kurs.bookingUrl.startsWith('mailto:') ? undefined : '_blank'}
+                rel={kurs.bookingUrl.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--pepe-gold)] text-[var(--pepe-black)] rounded-full font-bold hover:bg-[var(--pepe-gold-hover)] active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] focus:ring-offset-2 focus:ring-offset-[var(--pepe-ink)] whitespace-nowrap"
+              >
+                <span aria-hidden="true">{kurs.bookingUrl.startsWith('mailto:') ? '✉️' : '↗'}</span>
+                <span>{kurs.bookingLabel ?? 'Direkt buchen'}</span>
+              </a>
             </div>
-            <button
-              type="button"
-              onClick={handleBookingClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--pepe-gold)] text-[var(--pepe-black)] rounded-full font-bold hover:bg-[var(--pepe-gold-hover)] active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] focus:ring-offset-2 focus:ring-offset-[var(--pepe-ink)] whitespace-nowrap"
-            >
-              <span aria-hidden="true">🎟</span>
-              <span>Zur Buchung</span>
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
+          ) : (
+            // ─── Standard: Eversports-Widget (alle anderen Kurse) ───
+            <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-1">
+                  Bereit zum Mitmachen?
+                </h3>
+                <p className="text-[var(--pepe-t64)] text-sm">
+                  Buche diesen Kurs direkt über Eversports — Schnupperstunde, Einzelstunde oder Karte.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleBookingClick}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--pepe-gold)] text-[var(--pepe-black)] rounded-full font-bold hover:bg-[var(--pepe-gold-hover)] active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] focus:ring-offset-2 focus:ring-offset-[var(--pepe-ink)] whitespace-nowrap"
+              >
+                <span aria-hidden="true">🎟</span>
+                <span>Zur Buchung</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

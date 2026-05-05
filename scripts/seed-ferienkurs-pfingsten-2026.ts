@@ -32,7 +32,7 @@ Ein bunter Mix aus verschiedenen Zirkusdisziplinen — von den ersten Handständ
 - Körperkontrolle & Körperspannung
 - Spielerisches Warm-up und Cool-down
 
-**Jetzt vormerken:** Melde dich bei uns, wenn du einen Platz reservieren möchtest — die Plätze sind begrenzt und werden nach Anmeldungseingang vergeben.`
+**Anmeldung & Vormerkung:** Die Anmeldung läuft direkt bei Circus Leopoldini per E-Mail an **info@circus-leopoldini.de**. Die Plätze sind begrenzt und werden nach Anmeldungseingang vergeben.`
 
 async function main() {
   console.log('→ Seeding Akrobatik-Ferienkurs Pfingsten 2026…')

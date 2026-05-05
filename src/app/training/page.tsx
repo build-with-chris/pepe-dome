@@ -11,7 +11,6 @@ import HeroSection from '@/components/custom/HeroSection'
 import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapImages'
 import { Button } from '@/components/ui/Button'
 import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
-import FerienkursButton from '@/components/custom/FerienkursButton'
 import StickyBookingButton from '@/components/custom/StickyBookingButton'
 
 export const metadata: Metadata = {
@@ -65,6 +64,9 @@ const woche: Tag[] = [
           'Erste Figuren und Sequenzen',
         ],
         fuerWen: 'Jugendliche, alle Levels',
+        bookingUrl: 'https://www.aircrobatic-studios.com',
+        bookingLabel: 'Bei Aircrobatic Studios buchen',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
       },
       {
         slug: 'luftakrobatik-aircrobatics-mo-1815',
@@ -83,6 +85,9 @@ const woche: Tag[] = [
           'Erste Figuren und Sequenzen',
         ],
         fuerWen: 'Jugendliche, alle Levels',
+        bookingUrl: 'https://www.aircrobatic-studios.com',
+        bookingLabel: 'Bei Aircrobatic Studios buchen',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
       },
     ],
   },
@@ -201,6 +206,9 @@ const woche: Tag[] = [
           'Erste Figuren und Sequenzen',
         ],
         fuerWen: 'Jugendliche, alle Levels',
+        bookingUrl: 'https://www.aircrobatic-studios.com',
+        bookingLabel: 'Bei Aircrobatic Studios buchen',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
       },
       {
         slug: 'luftakrobatik-aircrobatics-mi-1800',
@@ -219,6 +227,9 @@ const woche: Tag[] = [
           'Erste Figuren und Sequenzen',
         ],
         fuerWen: 'Jugendliche, alle Levels',
+        bookingUrl: 'https://www.aircrobatic-studios.com',
+        bookingLabel: 'Bei Aircrobatic Studios buchen',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
       },
     ],
   },
@@ -528,10 +539,20 @@ export default function TrainingPage() {
             <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 px-5 py-4">
               <div className="flex items-start gap-3">
                 <span className="text-lg leading-none flex-shrink-0 mt-0.5" aria-hidden="true">ℹ️</span>
-                <div className="space-y-1.5 text-sm">
+                <div className="space-y-2 text-sm">
                   <p className="text-[var(--pepe-t80)]">
                     <span className="font-bold text-[var(--pepe-white)]">Luftakrobatik (Aircrobatics)</span>{' '}
-                    startet erst <span className="font-bold text-[var(--pepe-gold)]">ab 18.05.</span>
+                    startet erst <span className="font-bold text-[var(--pepe-gold)]">ab 18.05.</span>{' '}
+                    Buchung direkt über{' '}
+                    <a
+                      href="https://www.aircrobatic-studios.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--pepe-gold)] font-semibold hover:underline"
+                    >
+                      aircrobatic-studios.com ↗
+                    </a>{' '}
+                    (nicht über Eversports).
                   </p>
                   <p className="text-[var(--pepe-t80)]">
                     <span className="font-bold text-[var(--pepe-white)]">Tricking &amp; Breaking</span>{' '}
@@ -576,17 +597,30 @@ export default function TrainingPage() {
               <p className="text-[var(--pepe-t80)] mb-3 text-base">
                 <strong className="text-[var(--pepe-white)]">26. – 29. Mai 2026</strong> · tägl. 10 – 16 Uhr · <strong className="text-[var(--pepe-white)]">160 €</strong>
               </p>
-              <p className="text-[var(--pepe-t64)] mb-6 text-sm leading-relaxed flex-1">
+              <p className="text-[var(--pepe-t64)] mb-4 text-sm leading-relaxed flex-1">
                 Vier Tage Zirkusabenteuer in den Pfingstferien — Akrobatik, Jonglage,
                 Handstand und mehr mit den Coaches von Circus Leopoldini.
               </p>
+              <div className="rounded-lg bg-[var(--pepe-black)]/40 border border-[var(--pepe-gold)]/30 px-3 py-2.5 mb-5 text-xs text-[var(--pepe-t80)]">
+                <span className="font-bold text-[var(--pepe-white)]">Anmeldung direkt</span> bei Circus Leopoldini:{' '}
+                <a
+                  href="mailto:info@circus-leopoldini.de?subject=Anmeldung%20Holi%20Poldini%20Ferienkurs%20Pfingsten%202026"
+                  className="text-[var(--pepe-gold)] font-semibold hover:underline break-all"
+                >
+                  info@circus-leopoldini.de
+                </a>
+              </div>
               <div className="flex flex-wrap gap-3">
                 <Link href="/news/akrobatik-ferienkurs-pfingsten-2026">
-                  <Button variant="primary" size="md">
+                  <Button variant="secondary" size="md">
                     Mehr erfahren
                   </Button>
                 </Link>
-                <FerienkursButton variant="secondary" size="md" label="Platz vormerken" />
+                <a href="mailto:info@circus-leopoldini.de?subject=Anmeldung%20Holi%20Poldini%20Ferienkurs%20Pfingsten%202026">
+                  <Button variant="primary" size="md">
+                    ✉️ Per E-Mail anmelden
+                  </Button>
+                </a>
               </div>
             </div>
 

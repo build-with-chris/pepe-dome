@@ -36,6 +36,13 @@ export type Kurs = {
   fuerWen: string
   termine?: Termin[]       // optional: konkrete Datums-Liste (Sonntags-Flow-Arts)
   termineTitel?: string    // Überschrift für die Termin-Liste im Modal
+  /** Wenn gesetzt: Buchung läuft NICHT über Eversports, sondern hier direkt
+   *  (https://… oder mailto:…). Im Modal erscheint dann der entsprechende Button. */
+  bookingUrl?: string
+  /** Optionaler Button-Label für bookingUrl (Default: „Direkt buchen"). */
+  bookingLabel?: string
+  /** Optionaler Hinweistext über dem Buchungs-Button im Modal. */
+  bookingNote?: string
 }
 
 export type Termin = {
