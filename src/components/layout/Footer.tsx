@@ -5,12 +5,22 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Instagram } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
+import { LOCALES, localizedHref, type Locale } from '@/i18n/config'
+
+function localeFromPathname(pathname: string | null): Locale {
+  const seg = pathname?.split('/')[1] ?? ''
+  return (LOCALES as readonly string[]).includes(seg) ? (seg as Locale) : 'de'
+}
 
 export default function Footer() {
   const { t } = useTranslation()
+  const pathname = usePathname()
+  const lang = localeFromPathname(pathname)
+  const href = (p: string) => localizedHref(lang, p)
   return (
     <footer className="footer">
       <div className="stage-container">
@@ -65,10 +75,10 @@ export default function Footer() {
             <div className="footer-group">
               <h4 className="footer-title">{t('footer.navigation', 'Navigation')}</h4>
               <div className="footer-link-group">
-                <Link href="/events" className="footer-link">{t('navigation.events', 'Events')}</Link>
-                <Link href="/news" className="footer-link">{t('navigation.news', 'News')}</Link>
-                <Link href="/newsletter" className="footer-link">{t('footer.newsletter', 'Newsletter')}</Link>
-                <Link href="/about" className="footer-link">{t('navigation.about', 'Über uns')}</Link>
+                <Link href={href('/events')} className="footer-link">{t('navigation.events', 'Events')}</Link>
+                <Link href={href('/news')} className="footer-link">{t('navigation.news', 'News')}</Link>
+                <Link href={href('/newsletter')} className="footer-link">{t('footer.newsletter', 'Newsletter')}</Link>
+                <Link href={href('/about')} className="footer-link">{t('navigation.about', 'Über uns')}</Link>
               </div>
             </div>
 
@@ -81,7 +91,7 @@ export default function Footer() {
                 <a href="https://pepearts.de" target="_blank" rel="noopener noreferrer" className="footer-link">
                   PEPE Arts
                 </a>
-                <Link href="/contact" className="footer-link">{t('navigation.contact', 'Kontakt')}</Link>
+                <Link href={href('/contact')} className="footer-link">{t('navigation.contact', 'Kontakt')}</Link>
               </div>
             </div>
           </div>
@@ -115,9 +125,9 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} PEPE Dome. {t('footer.rights', 'Alle Rechte vorbehalten.')}
           </p>
           <div className="footer-legal">
-            <Link href="/impressum" className="footer-legal-link">{t('footer.legal.imprint', 'Impressum')}</Link>
-            <Link href="/datenschutz" className="footer-legal-link">{t('footer.legal.privacy', 'Datenschutz')}</Link>
-            <Link href="/agb" className="footer-legal-link">{t('footer.legal.terms', 'AGB')}</Link>
+            <Link href={href('/impressum')} className="footer-legal-link">{t('footer.legal.imprint', 'Impressum')}</Link>
+            <Link href={href('/datenschutz')} className="footer-legal-link">{t('footer.legal.privacy', 'Datenschutz')}</Link>
+            <Link href={href('/agb')} className="footer-legal-link">{t('footer.legal.terms', 'AGB')}</Link>
             <Link href="/admin/sign-in" className="footer-legal-link">{t('footer.legal.login', 'Login')}</Link>
           </div>
         </div>

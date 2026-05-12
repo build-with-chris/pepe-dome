@@ -7,16 +7,27 @@ import { useTranslation } from 'react-i18next'
 import { useUser, UserButton } from '@clerk/nextjs'
 import NewsletterInline from '@/components/newsletter/NewsletterInline'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
+import { LOCALES, localizedHref, type Locale } from '@/i18n/config'
 
-function useNavigation() {
+/**
+ * Liest die aktuelle Locale aus dem URL-Pfad ('/en/training' → 'en').
+ * Auf nicht-lokalisierten Pfaden (z.B. /admin) → null, dann nutzen wir
+ * den DEFAULT_LOCALE-Fallback in localizedHref().
+ */
+function localeFromPathname(pathname: string | null): Locale | null {
+  const seg = pathname?.split('/')[1] ?? ''
+  return (LOCALES as readonly string[]).includes(seg) ? (seg as Locale) : null
+}
+
+function useNavigation(lang: Locale) {
   const { t } = useTranslation()
   return [
-    { label: t('navigation.events', 'Events'), href: '/events' },
-    { label: t('navigation.training', 'Training'), href: '/training' },
-    { label: t('navigation.business', 'Business'), href: '/business' },
-    { label: t('navigation.news', 'News'), href: '/news' },
-    { label: t('navigation.about', 'Über uns'), href: '/about' },
-    { label: t('navigation.contact', 'Kontakt'), href: '/contact' },
+    { label: t('navigation.events', 'Events'),     href: localizedHref(lang, '/events') },
+    { label: t('navigation.training', 'Training'), href: localizedHref(lang, '/training') },
+    { label: t('navigation.business', 'Business'), href: localizedHref(lang, '/business') },
+    { label: t('navigation.news', 'News'),         href: localizedHref(lang, '/news') },
+    { label: t('navigation.about', 'Über uns'),    href: localizedHref(lang, '/about') },
+    { label: t('navigation.contact', 'Kontakt'),   href: localizedHref(lang, '/contact') },
   ]
 }
 
@@ -40,7 +51,9 @@ function NavbarContent({
 }) {
   const showAuth = !clerkDisabled
   const { t } = useTranslation()
-  const navigation = useNavigation()
+  const lang: Locale = localeFromPathname(pathname) ?? 'de'
+  const navigation = useNavigation(lang)
+  const homeHref = localizedHref(lang, '/')
   return (
     <nav
       className={`nav transition-all duration-300 ${
@@ -50,7 +63,7 @@ function NavbarContent({
       <div className="stage-container">
         <div className="nav-content">
           <div className="nav-brand">
-            <Link href="/" className="nav-brand-link">
+            <Link href={homeHref} className="nav-brand-link">
               <img
                 src="/PEPE_logos_dome.svg"
                 alt="Pepe Dome Logo"
@@ -117,7 +130,7 @@ function NavbarContent({
           <div className="mobile-menu-backdrop" onClick={() => setIsMobileMenuOpen(false)} />
           <div className="mobile-menu-content">
             <div className="mobile-menu-header">
-              <Link href="/" className="nav-brand-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link href={homeHref} className="nav-brand-link" onClick={() => setIsMobileMenuOpen(false)}>
                 <img
                   src="/PEPE_logos_dome.svg"
                   alt="Pepe Dome Logo"
