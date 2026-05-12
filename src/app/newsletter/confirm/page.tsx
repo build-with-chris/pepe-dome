@@ -1,32 +1,18 @@
-import type { Metadata } from 'next'
-import { Suspense } from 'react'
-import ConfirmContent from '@/components/newsletter/ConfirmContent'
+/**
+ * Alter Root-Pfad `/newsletter/confirm` → leitet auf die Default-Locale-Variante.
+ * Hinweis: Token bleibt erhalten — Confirmation-Mails alter Abonnent:innen
+ * funktionieren weiterhin.
+ */
 
-export const dynamic = 'force-dynamic'
+import { redirect } from 'next/navigation'
+import { DEFAULT_LOCALE } from '@/i18n/config'
 
-export const metadata: Metadata = {
-  title: 'Anmeldung bestätigen | Pepe Dome Newsletter',
-  description: 'Bestätige deine Anmeldung zum Pepe Dome Newsletter.',
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
-
-export default function NewsletterConfirmPage() {
-  return (
-    <div className="min-h-screen bg-[var(--pepe-black)]">
-      <Suspense
-        fallback={
-          <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <div className="w-8 h-8 border-3 border-[var(--pepe-gold)] border-t-transparent rounded-full animate-spin" />
-            </div>
-          </div>
-        }
-      >
-        <ConfirmContent />
-      </Suspense>
-    </div>
-  )
+export default async function NewsletterConfirmRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>
+}) {
+  const sp = await searchParams
+  const token = sp.token ? `?token=${encodeURIComponent(sp.token)}` : ''
+  redirect(`/${DEFAULT_LOCALE}/newsletter/confirm${token}`)
 }

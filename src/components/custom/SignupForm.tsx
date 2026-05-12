@@ -18,6 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
  * - Returning subscriber detection
  */
 
+type SignupLang = 'de' | 'en'
+
 interface SignupFormProps {
   /** Form variant - simple (email only) or extended (with name and interests) */
   variant?: 'simple' | 'extended'
@@ -27,20 +29,110 @@ interface SignupFormProps {
   className?: string
   /** Contextual message to display above form */
   contextMessage?: string
+  /** Language (defaults to 'de') */
+  lang?: SignupLang
 }
 
-const INTEREST_OPTIONS = [
-  { id: 'shows-events', label: 'Shows & Events' },
-  { id: 'workshops', label: 'Workshops & Community' },
-  { id: 'corporate', label: 'Corporate & Business Events' },
-]
+const STRINGS: Record<SignupLang, {
+  cardTitle: string
+  cardDescription: string
+  emailLabel: string
+  emailPlaceholder: string
+  firstNameLabel: string
+  firstNamePlaceholder: string
+  interestsLabel: string
+  interests: { id: string; label: string }[]
+  gdprPrefix: string
+  gdprPrivacyLink: string
+  privacyHref: string
+  submitSimple: string
+  submitExtended: string
+  loading: string
+  errorEmail: string
+  errorGdpr: string
+  errorGeneric: string
+  errorUnknown: string
+  privacyNoteSimple: string
+  privacyNoteExtended: string
+  returningTitle: string
+  returningText: string
+  returningCta: string
+  successTitle: string
+  successText: string
+}> = {
+  de: {
+    cardTitle: 'Newsletter abonnieren',
+    cardDescription: 'Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach.',
+    emailLabel: 'E-Mail-Adresse',
+    emailPlaceholder: 'deine@email.com',
+    firstNameLabel: 'Vorname (optional)',
+    firstNamePlaceholder: 'Max',
+    interestsLabel: 'Interessen (optional)',
+    interests: [
+      { id: 'shows-events', label: 'Shows & Events' },
+      { id: 'workshops',    label: 'Workshops & Community' },
+      { id: 'corporate',    label: 'Corporate & Business Events' },
+    ],
+    gdprPrefix: 'Ich stimme zu, dass meine Daten zum Versand des Newsletters verarbeitet werden. Mehr Informationen in unserer ',
+    gdprPrivacyLink: 'Datenschutzerklärung',
+    privacyHref: '/de/datenschutz',
+    submitSimple: 'Newsletter abonnieren',
+    submitExtended: 'Jetzt abonnieren',
+    loading: 'Wird gesendet…',
+    errorEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+    errorGdpr: 'Bitte stimme der Datenschutzerklärung zu.',
+    errorGeneric: 'Ein Fehler ist aufgetreten.',
+    errorUnknown: 'Ein unbekannter Fehler ist aufgetreten.',
+    privacyNoteSimple: 'Wir respektieren deine Privatsphäre. Abmeldung jederzeit möglich.',
+    privacyNoteExtended: 'Wir respektieren deine Privatsphäre und versenden nur qualitativ hochwertige Inhalte. Abmeldung jederzeit möglich.',
+    returningTitle: 'Danke, du bist schon dabei!',
+    returningText: 'Du hast unseren Newsletter bereits abonniert.',
+    returningCta: 'Trotzdem anmelden',
+    successTitle: 'Danke für deine Anmeldung!',
+    successText: 'Schau in dein Postfach und bestätige deine E-Mail-Adresse.',
+  },
+  en: {
+    cardTitle: 'Subscribe to our newsletter',
+    cardDescription: 'Get monthly updates on events, shows and workshops straight to your inbox.',
+    emailLabel: 'E-mail address',
+    emailPlaceholder: 'you@email.com',
+    firstNameLabel: 'First name (optional)',
+    firstNamePlaceholder: 'Alex',
+    interestsLabel: 'Interests (optional)',
+    interests: [
+      { id: 'shows-events', label: 'Shows & Events' },
+      { id: 'workshops',    label: 'Workshops & Community' },
+      { id: 'corporate',    label: 'Corporate & Business Events' },
+    ],
+    gdprPrefix: 'I agree that my data is processed to send the newsletter. More info in our ',
+    gdprPrivacyLink: 'privacy policy',
+    privacyHref: '/en/datenschutz',
+    submitSimple: 'Subscribe to newsletter',
+    submitExtended: 'Subscribe now',
+    loading: 'Sending…',
+    errorEmail: 'Please enter a valid e-mail address.',
+    errorGdpr: 'Please accept the privacy policy.',
+    errorGeneric: 'Something went wrong.',
+    errorUnknown: 'An unknown error occurred.',
+    privacyNoteSimple: 'We respect your privacy. Unsubscribe anytime.',
+    privacyNoteExtended: 'We respect your privacy and only send high-quality content. Unsubscribe anytime.',
+    returningTitle: 'Thanks, you’re already in!',
+    returningText: 'You’ve already subscribed to our newsletter.',
+    returningCta: 'Subscribe again',
+    successTitle: 'Thanks for subscribing!',
+    successText: 'Check your inbox and confirm your e-mail address.',
+  },
+}
 
 export default function SignupForm({
   variant = 'simple',
   onSuccess,
   className = '',
   contextMessage,
+  lang = 'de',
 }: SignupFormProps) {
+  const t = STRINGS[lang]
+  const INTEREST_OPTIONS = t.interests
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [interests, setInterests] = useState<string[]>([])
@@ -79,13 +171,13 @@ export default function SignupForm({
 
     // Validate email
     if (!validateEmail(email)) {
-      setValidationError('Bitte gib eine gultige E-Mail-Adresse ein.')
+      setValidationError(t.errorEmail)
       return
     }
 
     // Validate GDPR consent for extended variant
     if (variant === 'extended' && !gdprConsent) {
-      setValidationError('Bitte stimme der Datenschutzerklarung zu.')
+      setValidationError(t.errorGdpr)
       return
     }
 
@@ -112,7 +204,7 @@ export default function SignupForm({
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error?.message || 'Ein Fehler ist aufgetreten.')
+        throw new Error(result.error?.message || t.errorGeneric)
       }
 
       // Success
@@ -141,7 +233,7 @@ export default function SignupForm({
       if (error instanceof Error) {
         setErrorMessage(error.message)
       } else {
-        setErrorMessage('Ein unbekannter Fehler ist aufgetreten.')
+        setErrorMessage(t.errorUnknown)
       }
     }
   }
@@ -168,10 +260,10 @@ export default function SignupForm({
               </svg>
             </div>
             <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-2">
-              Danke, du bist schon dabei!
+              {t.returningTitle}
             </h3>
             <p className="text-[var(--pepe-t64)] text-sm mb-4">
-              Du hast unseren Newsletter bereits abonniert.
+              {t.returningText}
             </p>
           </div>
           <Button
@@ -179,7 +271,7 @@ export default function SignupForm({
             size="sm"
             onClick={() => setShowFormAnyway(true)}
           >
-            Trotzdem anmelden
+            {t.returningCta}
           </Button>
         </CardContent>
       </Card>
@@ -207,10 +299,10 @@ export default function SignupForm({
             </svg>
           </div>
           <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-2">
-            Danke fur deine Anmeldung!
+            {t.successTitle}
           </h3>
           <p className="text-[var(--pepe-t64)] text-sm">
-            Schau in dein Postfach und bestatige deine E-Mail-Adresse.
+            {t.successText}
           </p>
         </CardContent>
       </Card>
@@ -230,7 +322,7 @@ export default function SignupForm({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="deine@email.com"
+              placeholder={t.emailPlaceholder}
               required
               disabled={status === 'loading'}
               hasError={!!validationError}
@@ -246,7 +338,7 @@ export default function SignupForm({
             className="w-full"
             disabled={status === 'loading'}
           >
-            {status === 'loading' ? 'Wird gesendet...' : 'Newsletter abonnieren'}
+            {status === 'loading' ? t.loading : t.submitSimple}
           </Button>
 
           {status === 'error' && (
@@ -254,7 +346,7 @@ export default function SignupForm({
           )}
 
           <p className="text-xs text-[var(--pepe-t48)]">
-            Wir respektieren deine Privatsphare. Abmeldung jederzeit moglich.
+            {t.privacyNoteSimple}
           </p>
         </form>
       </div>
@@ -265,9 +357,9 @@ export default function SignupForm({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Newsletter abonnieren</CardTitle>
+        <CardTitle>{t.cardTitle}</CardTitle>
         <CardDescription>
-          Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach.
+          {t.cardDescription}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -279,36 +371,36 @@ export default function SignupForm({
           {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email" required>
-              E-Mail-Adresse
+              {t.emailLabel}
             </Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="deine@email.com"
+              placeholder={t.emailPlaceholder}
               required
               disabled={status === 'loading'}
-              hasError={!!validationError && validationError.includes('E-Mail')}
+              hasError={!!validationError && (validationError.includes('E-Mail') || validationError.includes('e-mail'))}
             />
           </div>
 
           {/* First Name Field */}
           <div className="space-y-2">
-            <Label htmlFor="firstName">Vorname (optional)</Label>
+            <Label htmlFor="firstName">{t.firstNameLabel}</Label>
             <Input
               id="firstName"
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Max"
+              placeholder={t.firstNamePlaceholder}
               disabled={status === 'loading'}
             />
           </div>
 
           {/* Interests */}
           <div className="space-y-3">
-            <Label>Interessen (optional)</Label>
+            <Label>{t.interestsLabel}</Label>
             <div className="space-y-2">
               {INTEREST_OPTIONS.map((option) => (
                 <label
@@ -351,15 +443,14 @@ export default function SignupForm({
                 )}
               />
               <span className="text-xs text-[var(--pepe-t64)] group-hover:text-[var(--pepe-t80)] transition-colors">
-                Ich stimme zu, dass meine Daten zum Versand des Newsletters verarbeitet werden.
-                Mehr Informationen in unserer{' '}
+                {t.gdprPrefix}
                 <a
-                  href="/datenschutz"
+                  href={t.privacyHref}
                   className="text-[var(--pepe-gold)] hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Datenschutzerklarung
+                  {t.gdprPrivacyLink}
                 </a>
                 .
               </span>
@@ -379,7 +470,7 @@ export default function SignupForm({
             className="w-full"
             disabled={status === 'loading'}
           >
-            {status === 'loading' ? 'Wird gesendet...' : 'Jetzt abonnieren'}
+            {status === 'loading' ? t.loading : t.submitExtended}
           </Button>
 
           {/* Error Message */}
@@ -389,8 +480,7 @@ export default function SignupForm({
 
           {/* Privacy Note */}
           <p className="text-xs text-[var(--pepe-t48)]">
-            Wir respektieren deine Privatsphare und versenden nur qualitativ hochwertige
-            Inhalte. Abmeldung jederzeit moglich.
+            {t.privacyNoteExtended}
           </p>
         </form>
       </CardContent>

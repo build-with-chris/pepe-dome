@@ -234,7 +234,7 @@ export default async function NewsArticlePage({
                   {t.newsletterTitle}
                 </h3>
                 <p className="text-[var(--pepe-t64)] mb-4">{t.newsletterText}</p>
-                <SignupForm variant="simple" />
+                <SignupForm variant="simple" lang={lang} />
               </div>
             </div>
           </article>

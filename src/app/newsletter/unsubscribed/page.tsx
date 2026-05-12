@@ -1,19 +1,10 @@
-import type { Metadata } from 'next'
-import UnsubscribedContent from '@/components/newsletter/UnsubscribedContent'
+/**
+ * Alter Root-Pfad `/newsletter/unsubscribed` → Redirect.
+ */
 
-export const metadata: Metadata = {
-  title: 'Abgemeldet | Pepe Dome Newsletter',
-  description: 'Du wurdest erfolgreich vom Newsletter abgemeldet.',
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
+import { redirect } from 'next/navigation'
+import { DEFAULT_LOCALE } from '@/i18n/config'
 
-export default function NewsletterUnsubscribedPage() {
-  return (
-    <div className="min-h-screen bg-[var(--pepe-black)]">
-      <UnsubscribedContent />
-    </div>
-  )
+export default function NewsletterUnsubscribedRedirect() {
+  redirect(`/${DEFAULT_LOCALE}/newsletter/unsubscribed`)
 }

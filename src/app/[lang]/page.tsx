@@ -368,7 +368,7 @@ export default async function HomePage({
             </p>
 
             <div className="max-w-md mx-auto">
-              <SignupForm variant="simple" />
+              <SignupForm variant="simple" lang={lang} />
             </div>
           </div>
         </div>

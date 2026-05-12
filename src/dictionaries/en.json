@@ -340,6 +340,78 @@
       "upcomingEvents": "Upcoming events"
     }
   },
+  "newsletter": {
+    "meta": {
+      "title": "Newsletter | Pepe Dome Munich",
+      "description": "Sign up for the Pepe Dome newsletter and get monthly updates on shows, workshops and events."
+    },
+    "hero": {
+      "title": "Newsletter",
+      "subtitle": "Get monthly updates on shows, workshops and events"
+    },
+    "intro": "Monthly updates on events, shows and workshops. Pick your interests and never miss a highlight.",
+    "benefits": {
+      "title": "What you get",
+      "items": [
+        { "icon": "📅", "title": "Event previews",     "text": "Be the first to know about new shows, workshops and festivals." },
+        { "icon": "🎭", "title": "Backstage stories", "text": "Exclusive behind-the-scenes content and interviews with artists." },
+        { "icon": "✨", "title": "Special offers",    "text": "Early-bird tickets and exclusive deals for subscribers." }
+      ]
+    },
+    "archive": {
+      "title": "Newsletter archive",
+      "subtitle": "Browse past newsletters and discover what you missed.",
+      "yearLabel": "Year:",
+      "allYears": "All years",
+      "sent": "Sent"
+    },
+    "confirm": {
+      "loadingTitle": "Confirming…",
+      "loadingText": "Please wait while we confirm your subscription.",
+      "successTitle": "Welcome to the PEPE Dome newsletter!",
+      "successText": "Your e-mail has been confirmed. You'll receive monthly updates on events, shows and workshops from now on.",
+      "nextStepsTitle": "What's next?",
+      "nextSteps": [
+        "You'll receive a welcome e-mail with all the important info",
+        "The next newsletter will be sent to you automatically",
+        "You can unsubscribe with one click at any time"
+      ],
+      "ctaEvents": "Discover upcoming events",
+      "ctaArchive": "Browse the newsletter archive",
+      "errorTitle": "Confirmation failed",
+      "errorMissingToken": "No confirmation token found.",
+      "errorGeneric": "Confirmation failed.",
+      "errorUnknown": "An unknown error occurred.",
+      "backHome": "Back to home",
+      "subscribeAgain": "Subscribe again"
+    },
+    "issue": {
+      "backToArchive": "← Back to archive",
+      "sentOn": "Sent on",
+      "ticketBuy": "Get tickets",
+      "ticketMail": "Register by e-mail",
+      "readMore": "Read more →",
+      "closingTitle": "See you soon at PEPE Dome!",
+      "closingText": "Follow us for daily updates and behind-the-scenes moments",
+      "ctaTitle": "Never miss a highlight",
+      "ctaText": "Subscribe to our newsletter for monthly updates on events, shows and workshops.",
+      "notFound": "Newsletter not found"
+    },
+    "unsubscribed": {
+      "title": "You've been unsubscribed",
+      "text": "Sorry to see you go! You won't receive further newsletters from us.",
+      "feedbackTitle": "Why did you unsubscribe?",
+      "feedbackHint": "Your feedback helps us improve our newsletter. (Optional)",
+      "feedbackPlaceholder": "Your feedback…",
+      "feedbackSubmit": "Send feedback",
+      "feedbackThanks": "Thanks for your feedback! We'll take it on board.",
+      "resubscribeTitle": "Changed your mind?",
+      "resubscribeText": "You can subscribe to our newsletter again at any time.",
+      "subscribeAgain": "Subscribe again",
+      "ctaEvents": "See upcoming events",
+      "backHome": "Back to home"
+    }
+  },
   "events": {
     "meta": {
       "title": "Events & Programme",

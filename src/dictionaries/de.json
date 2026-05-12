@@ -340,6 +340,78 @@
       "upcomingEvents": "Kommende Events"
     }
   },
+  "newsletter": {
+    "meta": {
+      "title": "Newsletter | Pepe Dome München",
+      "description": "Melde dich für den Pepe Dome Newsletter an und erhalte monatliche Updates zu Shows, Workshops und Events."
+    },
+    "hero": {
+      "title": "Newsletter",
+      "subtitle": "Erhalte monatlich Updates zu Shows, Workshops und Events"
+    },
+    "intro": "Erhalte monatlich Updates zu Events, Shows und Workshops. Wähle deine Interessen und verpasse keine Highlights mehr.",
+    "benefits": {
+      "title": "Was du bekommst",
+      "items": [
+        { "icon": "📅", "title": "Event-Vorschauen",  "text": "Sei der Erste, der von neuen Shows, Workshops und Festivals erfährt." },
+        { "icon": "🎭", "title": "Backstage Stories", "text": "Exklusive Einblicke hinter die Kulissen und Interviews mit Künstler:innen." },
+        { "icon": "✨", "title": "Special Offers",    "text": "Early-Bird-Tickets und exklusive Angebote für Abonnent:innen." }
+      ]
+    },
+    "archive": {
+      "title": "Newsletter-Archiv",
+      "subtitle": "Stöbere durch vergangene Newsletter und entdecke, was du verpasst hast.",
+      "yearLabel": "Jahr:",
+      "allYears": "Alle Jahre",
+      "sent": "Versendet"
+    },
+    "confirm": {
+      "loadingTitle": "Bestätigung läuft…",
+      "loadingText": "Bitte warten, während wir deine Anmeldung bestätigen.",
+      "successTitle": "Willkommen beim PEPE Dome Newsletter!",
+      "successText": "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du erhältst ab sofort monatliche Updates zu Events, Shows und Workshops.",
+      "nextStepsTitle": "Was kommt als Nächstes?",
+      "nextSteps": [
+        "Du erhältst eine Willkommens-E-Mail mit allen wichtigen Informationen",
+        "Der nächste Newsletter wird automatisch an dich versendet",
+        "Du kannst dich jederzeit mit einem Klick wieder abmelden"
+      ],
+      "ctaEvents": "Kommende Events entdecken",
+      "ctaArchive": "Newsletter-Archiv ansehen",
+      "errorTitle": "Bestätigung fehlgeschlagen",
+      "errorMissingToken": "Kein Bestätigungstoken gefunden.",
+      "errorGeneric": "Bestätigung fehlgeschlagen.",
+      "errorUnknown": "Ein unbekannter Fehler ist aufgetreten.",
+      "backHome": "Zur Startseite",
+      "subscribeAgain": "Erneut anmelden"
+    },
+    "issue": {
+      "backToArchive": "← Zurück zum Archiv",
+      "sentOn": "Versendet am",
+      "ticketBuy": "Tickets sichern",
+      "ticketMail": "Anmelden via Mail",
+      "readMore": "Weiterlesen →",
+      "closingTitle": "Bis bald im PEPE Dome!",
+      "closingText": "Folge uns für tägliche Updates und Behind-the-Scenes-Momente",
+      "ctaTitle": "Verpasse keine Highlights mehr",
+      "ctaText": "Abonniere unseren Newsletter und erhalte monatlich Updates zu Events, Shows und Workshops.",
+      "notFound": "Newsletter nicht gefunden"
+    },
+    "unsubscribed": {
+      "title": "Du wurdest abgemeldet",
+      "text": "Schade, dass du gehst! Du erhältst keine weiteren Newsletter von uns.",
+      "feedbackTitle": "Warum hast du dich abgemeldet?",
+      "feedbackHint": "Dein Feedback hilft uns, unseren Newsletter zu verbessern. (Optional)",
+      "feedbackPlaceholder": "Dein Feedback…",
+      "feedbackSubmit": "Feedback senden",
+      "feedbackThanks": "Danke für dein Feedback! Wir werden es berücksichtigen.",
+      "resubscribeTitle": "Hast du es dir anders überlegt?",
+      "resubscribeText": "Du kannst dich jederzeit wieder für unseren Newsletter anmelden.",
+      "subscribeAgain": "Wieder anmelden",
+      "ctaEvents": "Kommende Events ansehen",
+      "backHome": "Zur Startseite"
+    }
+  },
   "events": {
     "meta": {
       "title": "Events & Programm",
