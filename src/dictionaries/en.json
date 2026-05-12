@@ -1,0 +1,59 @@
+{
+  "home": {
+    "hero": {
+      "title": "Pepe Dome",
+      "subtitle": "Home for Circus & Culture",
+      "ctaPrimary": "Upcoming Events",
+      "ctaSecondary": "Subscribe to Newsletter"
+    },
+    "cafe": {
+      "eyebrow": "New at Pepe Dome",
+      "titleA": "Our Café — ",
+      "titleB": "open to everyone",
+      "text": "Come by for a coffee, watch the training inside the dome or meet friends. Right in the middle of Ostpark.",
+      "imageAlt": "Café at Pepe Dome",
+      "hoursLabel": "Opening hours",
+      "days": "Friday – Sunday",
+      "time": "2:00 PM – 7:00 PM",
+      "address": "Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße"
+    },
+    "vision": {
+      "title": "Vision",
+      "text": "Pepe Dome is becoming a long-term, vibrant place for contemporary circus, cultural exchange, artistic education, community programs and publicly accessible events."
+    },
+    "mission": {
+      "title": "Mission",
+      "text": "Promoting contemporary circus and cultural participation in Munich — paired with inclusive training and education. Cultural focus: Ostpark."
+    },
+    "videoCarousel": {
+      "title": "Experience the Dome live.",
+      "subtitle": "Contemporary circus at the highest level"
+    },
+    "upcomingEvents": {
+      "title": "Upcoming Events",
+      "subtitle": "The next shows, workshops and festivals",
+      "viewAll": "View all events",
+      "empty": "No events available"
+    },
+    "news": {
+      "title": "Latest & Highlights",
+      "subtitle": "News, backstage stories and more",
+      "viewAll": "View all news",
+      "empty": "No news available"
+    },
+    "features": {
+      "title": "What awaits you",
+      "subtitle": "Discover the variety of Pepe Dome",
+      "items": {
+        "show":      { "title": "Spectacular Shows",     "description": "From contemporary circus to innovative productions — experience artistry at the highest level." },
+        "training":  { "title": "Professional Training", "description": "Courses and workshops for every level — from beginners to professionals." },
+        "dome":      { "title": "Unique Location",       "description": "The geodesic dome offers 200 seats and 12 m ceiling height for spectacular aerial acts." },
+        "community": { "title": "Community & Culture",   "description": "A place for artists, culture lovers and curious minds to meet." }
+      }
+    },
+    "newsletter": {
+      "title": "Stay in the loop",
+      "text": "Get monthly updates on events, shows and workshops straight to your inbox."
+    }
+  }
+}

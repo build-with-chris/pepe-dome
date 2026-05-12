@@ -1,0 +1,59 @@
+{
+  "home": {
+    "hero": {
+      "title": "Pepe Dome",
+      "subtitle": "Zuhause für Artistik & Kultur",
+      "ctaPrimary": "Aktuelle Events",
+      "ctaSecondary": "Newsletter abonnieren"
+    },
+    "cafe": {
+      "eyebrow": "Neu im Pepe Dome",
+      "titleA": "Unser Café — ",
+      "titleB": "offen für alle",
+      "text": "Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel oder triff Freunde. Mitten im Ostpark.",
+      "imageAlt": "Café im Pepe Dome",
+      "hoursLabel": "Öffnungszeiten",
+      "days": "Freitag – Sonntag",
+      "time": "14:00 – 19:00 Uhr",
+      "address": "Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße"
+    },
+    "vision": {
+      "title": "Vision",
+      "text": "Der Pepe Dome wird ein langfristiger, lebendiger Ort für zeitgenössischen Zirkus, kulturelle Begegnung, künstlerische Ausbildung, Community-Programme und öffentlich zugängliche Events."
+    },
+    "mission": {
+      "title": "Mission",
+      "text": "Förderung von zeitgenössischer Zirkuskunst und kultureller Teilhabe in München, verbunden mit inklusiven Bildungs- und Trainingsangeboten. Kulturfokus Ostpark."
+    },
+    "videoCarousel": {
+      "title": "Erlebe den Dome live.",
+      "subtitle": "Zeitgenössischer Zirkus auf höchstem Niveau"
+    },
+    "upcomingEvents": {
+      "title": "Kommende Events",
+      "subtitle": "Die nächsten Shows, Workshops und Festivals",
+      "viewAll": "Alle Events anzeigen",
+      "empty": "Keine Events verfügbar"
+    },
+    "news": {
+      "title": "Aktuelles & Highlights",
+      "subtitle": "News, Backstage Stories und mehr",
+      "viewAll": "Alle News anzeigen",
+      "empty": "Keine News verfügbar"
+    },
+    "features": {
+      "title": "Was dich erwartet",
+      "subtitle": "Entdecke die Vielfalt des Pepe Dome",
+      "items": {
+        "show":      { "title": "Spektakuläre Shows",          "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen — erlebe Artistik auf höchstem Niveau." },
+        "training":  { "title": "Professionelles Training",    "description": "Kurse und Workshops für alle Levels — von Einsteiger:innen bis Profis." },
+        "dome":      { "title": "Einzigartige Location",       "description": "Die geodätische Kuppel bietet 200 Sitzplätze und 12 m Deckenhöhe für spektakuläre Luftartistik." },
+        "community": { "title": "Community & Kultur",          "description": "Ein Ort der Begegnung für Artist:innen, Kulturbegeisterte und Neugierige." }
+      }
+    },
+    "newsletter": {
+      "title": "Bleib auf dem Laufenden",
+      "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
+    }
+  }
+}
