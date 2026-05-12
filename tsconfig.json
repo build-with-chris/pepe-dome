@@ -39,6 +39,7 @@
   "exclude": [
     "node_modules",
     "_old",
-    "prisma/_pending-migrations"
+    "prisma/_pending-migrations",
+    "scripts"
   ]
 }
