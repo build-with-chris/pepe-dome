@@ -56,35 +56,52 @@ export type ArticleData = {
   featured: boolean
 }
 
-// Transform DB event to frontend format
-function transformEvent(event: Event): EventData {
+/**
+ * Locale-Type für Events/Article-Queries.
+ * Default ist 'de' — wenn ein englisches Feld in der DB null ist, fällt
+ * der Transformer auf das deutsche Feld zurück (so können Übersetzungen
+ * Stück für Stück nachgepflegt werden).
+ */
+export type DbLocale = 'de' | 'en'
+
+function pick<T>(de: T, en: T | null | undefined, locale: DbLocale): T {
+  if (locale === 'en' && en !== null && en !== undefined) return en
+  return de
+}
+
+// Transform DB event to frontend format (mit Locale-Auswahl)
+function transformEvent(event: Event, locale: DbLocale = 'de'): EventData {
   return {
     id: event.id,
     slug: event.slug,
-    title: event.title,
-    subtitle: event.subtitle,
-    description: event.description,
+    title:       pick(event.title,       event.titleEn,       locale),
+    subtitle:    pick(event.subtitle,    event.subtitleEn,    locale),
+    description: pick(event.description, event.descriptionEn, locale),
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
-    location: event.location,
+    location:    pick(event.location,    event.locationEn,    locale),
     category: event.category,
     ticketUrl: event.ticketUrl,
-    price: event.price,
+    price:       pick(event.price,       event.priceEn,       locale),
     imageUrl: event.imageUrl,
     featured: event.featured,
-    highlights: (event.highlights as string[]) || [],
+    highlights:  pick(
+      (event.highlights as string[]) || [],
+      (event.highlightsEn as string[] | null) ?? null,
+      locale
+    ),
   }
 }
 
-// Transform DB article to frontend format
-function transformArticle(article: Article): ArticleData {
+// Transform DB article to frontend format (mit Locale-Auswahl)
+function transformArticle(article: Article, locale: DbLocale = 'de'): ArticleData {
   return {
     id: article.id,
     slug: article.slug,
-    title: article.title,
-    excerpt: article.excerpt,
-    content: article.content,
+    title:   pick(article.title,   article.titleEn,   locale),
+    excerpt: pick(article.excerpt, article.excerptEn, locale),
+    content: pick(article.content, article.contentEn, locale),
     category: article.category,
     author: article.author,
     publishedAt: article.publishedAt?.toISOString() || article.createdAt.toISOString(),
@@ -98,17 +115,17 @@ function transformArticle(article: Article): ArticleData {
 // EVENT FUNCTIONS
 // ============================================
 
-export async function getAllEvents(): Promise<EventData[]> {
+export async function getAllEvents(locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
     const events = await prisma.event.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: { date: 'asc' },
     })
-    return events.map(transformEvent)
+    return events.map((e: Event) => transformEvent(e, locale))
   }, [])
 }
 
-export async function getUpcomingEvents(): Promise<EventData[]> {
+export async function getUpcomingEvents(locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
     const events = await prisma.event.findMany({
       where: {
@@ -117,11 +134,11 @@ export async function getUpcomingEvents(): Promise<EventData[]> {
       },
       orderBy: { date: 'asc' },
     })
-    return events.map(transformEvent)
+    return events.map((e: Event) => transformEvent(e, locale))
   }, [])
 }
 
-export async function getFeaturedEvents(): Promise<EventData[]> {
+export async function getFeaturedEvents(locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
     const events = await prisma.event.findMany({
       where: {
@@ -130,29 +147,29 @@ export async function getFeaturedEvents(): Promise<EventData[]> {
       },
       orderBy: { date: 'asc' },
     })
-    return events.map(transformEvent)
+    return events.map((e: Event) => transformEvent(e, locale))
   }, [])
 }
 
-export async function getEventBySlug(slug: string): Promise<EventData | null> {
+export async function getEventBySlug(slug: string, locale: DbLocale = 'de'): Promise<EventData | null> {
   return safeDbQuery(async () => {
     const event = await prisma.event.findUnique({
       where: { slug },
     })
-    return event ? transformEvent(event) : null
+    return event ? transformEvent(event, locale) : null
   }, null)
 }
 
-export async function getEventById(id: string): Promise<EventData | null> {
+export async function getEventById(id: string, locale: DbLocale = 'de'): Promise<EventData | null> {
   return safeDbQuery(async () => {
     const event = await prisma.event.findUnique({
       where: { id },
     })
-    return event ? transformEvent(event) : null
+    return event ? transformEvent(event, locale) : null
   }, null)
 }
 
-export async function getEventsByMonth(year: number, month: number): Promise<EventData[]> {
+export async function getEventsByMonth(year: number, month: number, locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
     const startDate = new Date(year, month - 1, 1)
     const endDate = new Date(year, month, 0, 23, 59, 59)
@@ -167,11 +184,11 @@ export async function getEventsByMonth(year: number, month: number): Promise<Eve
       },
       orderBy: { date: 'asc' },
     })
-    return events.map(transformEvent)
+    return events.map((e: Event) => transformEvent(e, locale))
   }, [])
 }
 
-export async function getEventsByCategory(category: string): Promise<EventData[]> {
+export async function getEventsByCategory(category: string, locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
     const events = await prisma.event.findMany({
       where: {
@@ -180,7 +197,7 @@ export async function getEventsByCategory(category: string): Promise<EventData[]
       },
       orderBy: { date: 'asc' },
     })
-    return events.map(transformEvent)
+    return events.map((e: Event) => transformEvent(e, locale))
   }, [])
 }
 
@@ -188,17 +205,17 @@ export async function getEventsByCategory(category: string): Promise<EventData[]
 // ARTICLE FUNCTIONS
 // ============================================
 
-export async function getAllArticles(): Promise<ArticleData[]> {
+export async function getAllArticles(locale: DbLocale = 'de'): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: { status: ContentStatus.PUBLISHED },
       orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
-    return articles.map(transformArticle)
+    return articles.map((a: Article) => transformArticle(a, locale))
   }, [])
 }
 
-export async function getFeaturedArticles(): Promise<ArticleData[]> {
+export async function getFeaturedArticles(locale: DbLocale = 'de'): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: {
@@ -207,31 +224,31 @@ export async function getFeaturedArticles(): Promise<ArticleData[]> {
       },
       orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
-    return articles.map(transformArticle)
+    return articles.map((a: Article) => transformArticle(a, locale))
   }, [])
 }
 
-export async function getRecentArticles(limit: number = 5): Promise<ArticleData[]> {
+export async function getRecentArticles(limit: number = 5, locale: DbLocale = 'de'): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: { status: ContentStatus.PUBLISHED },
       orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
       take: limit,
     })
-    return articles.map(transformArticle)
+    return articles.map((a: Article) => transformArticle(a, locale))
   }, [])
 }
 
-export async function getArticleBySlug(slug: string): Promise<ArticleData | null> {
+export async function getArticleBySlug(slug: string, locale: DbLocale = 'de'): Promise<ArticleData | null> {
   return safeDbQuery(async () => {
     const article = await prisma.article.findFirst({
       where: { slug, status: ContentStatus.PUBLISHED },
     })
-    return article ? transformArticle(article) : null
+    return article ? transformArticle(article, locale) : null
   }, null)
 }
 
-export async function getArticlesByCategory(category: string): Promise<ArticleData[]> {
+export async function getArticlesByCategory(category: string, locale: DbLocale = 'de'): Promise<ArticleData[]> {
   return safeDbQuery(async () => {
     const articles = await prisma.article.findMany({
       where: {
@@ -240,6 +257,6 @@ export async function getArticlesByCategory(category: string): Promise<ArticleDa
       },
       orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     })
-    return articles.map(transformArticle)
+    return articles.map((a: Article) => transformArticle(a, locale))
   }, [])
 }

@@ -36,7 +36,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params
   if (!isLocale(rawLang)) return {}
-  const article = await getArticleBySlug(slug)
+  const article = await getArticleBySlug(slug, rawLang)
   const dict = await getDictionary(rawLang)
 
   if (!article) {
@@ -83,12 +83,12 @@ export default async function NewsArticlePage({
   const t = dict.news.detail
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const article = await getArticleBySlug(slug)
+  const article = await getArticleBySlug(slug, lang)
   if (!article) notFound()
 
   const [upcomingEvents, recentArticles] = await Promise.all([
-    getUpcomingEvents(),
-    getRecentArticles(4),
+    getUpcomingEvents(lang),
+    getRecentArticles(4, lang),
   ])
 
   const relatedArticles = recentArticles.filter((a) => a.id !== article.id).slice(0, 3)

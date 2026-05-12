@@ -48,8 +48,8 @@ export default async function NewsPage({
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
   const [allArticles, featuredArticles] = await Promise.all([
-    getAllArticles(),
-    getFeaturedArticles(),
+    getAllArticles(lang),
+    getFeaturedArticles(lang),
   ])
   const categories = getCategories().news
   const newsHref = localizedHref(lang, '/news')

@@ -48,9 +48,9 @@ export default async function HomePage({
 
   try {
     const [featuredArticles, recentArticles, upcomingEvents] = await Promise.all([
-      getFeaturedArticles(),
-      getRecentArticles(4),
-      getUpcomingEvents(),
+      getFeaturedArticles(lang),
+      getRecentArticles(4, lang),
+      getUpcomingEvents(lang),
     ])
     displayEvents = upcomingEvents.slice(0, 3)
     const merged = featuredArticles.length > 0

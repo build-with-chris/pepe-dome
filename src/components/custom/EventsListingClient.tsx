@@ -73,7 +73,7 @@ export default function EventsListingClient({
     async function fetchEvents() {
       setLoading(true)
       try {
-        const res = await fetch(`/api/events?year=${year}&month=${month}`)
+        const res = await fetch(`/api/events?year=${year}&month=${month}&locale=${lang}`)
         if (res.ok) {
           const data = await res.json()
           setEvents(data)
@@ -85,7 +85,7 @@ export default function EventsListingClient({
       }
     }
     fetchEvents()
-  }, [year, month])
+  }, [year, month, lang])
 
   const filteredEvents = useMemo(() => {
     let filtered = events

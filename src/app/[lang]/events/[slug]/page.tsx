@@ -30,7 +30,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params
   if (!isLocale(rawLang)) return {}
-  const event = await getEventBySlug(slug)
+  const event = await getEventBySlug(slug, rawLang)
   const dict = await getDictionary(rawLang)
 
   if (!event) {
@@ -82,12 +82,12 @@ export default async function EventDetailPage({
   const t = dict.events.detail
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const event = await getEventBySlug(slug)
+  const event = await getEventBySlug(slug, lang)
   if (!event) notFound()
 
   const [upcomingEvents, recentArticles] = await Promise.all([
-    getUpcomingEvents(),
-    getRecentArticles(3),
+    getUpcomingEvents(lang),
+    getRecentArticles(3, lang),
   ])
 
   const similarEvents = upcomingEvents
