@@ -56,6 +56,35 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
   },
+  "news": {
+    "meta": {
+      "title": "News & Updates",
+      "description": "Latest news, backstage stories and highlights from Pepe Dome Munich. Contemporary circus, shows and events."
+    },
+    "hero": {
+      "title": "News & Magazine",
+      "subtitle": "What's new at Pepe Dome — shows, events, behind the scenes and more"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "loadMore": "Load more articles",
+    "detail": {
+      "readingTime": "min read",
+      "by": "By ",
+      "tags": "Tags",
+      "newsletterTitle": "Stay informed",
+      "newsletterText": "Get the latest news, backstage stories and event updates.",
+      "moreArticles": "More articles",
+      "allNews": "View all news",
+      "share": "Share",
+      "upcomingEvents": "Upcoming events",
+      "allEvents": "All events",
+      "breadcrumbHome": "Home",
+      "breadcrumbNews": "News",
+      "notFound": "Article not found"
+    }
+  },
   "business": {
     "meta": {
       "title": "Business & Corporate Events",

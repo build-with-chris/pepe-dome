@@ -56,6 +56,35 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
   },
+  "news": {
+    "meta": {
+      "title": "News & Aktuelles",
+      "description": "Aktuelle News, Backstage Stories und Highlights aus dem Pepe Dome München. Zeitgenössischer Zirkus, Shows und Events."
+    },
+    "hero": {
+      "title": "News & Magazin",
+      "subtitle": "Aktuelles aus dem Pepe Dome — Shows, Events, Hintergründe und mehr"
+    },
+    "filter": {
+      "all": "Alle"
+    },
+    "loadMore": "Weitere Artikel laden",
+    "detail": {
+      "readingTime": "Min. Lesezeit",
+      "by": "Von ",
+      "tags": "Tags",
+      "newsletterTitle": "Bleib informiert",
+      "newsletterText": "Erhalte die neuesten News, Backstage Stories und Event-Updates.",
+      "moreArticles": "Weitere Artikel",
+      "allNews": "Alle News anzeigen",
+      "share": "Teilen",
+      "upcomingEvents": "Kommende Events",
+      "allEvents": "Alle Events",
+      "breadcrumbHome": "Home",
+      "breadcrumbNews": "News",
+      "notFound": "Artikel nicht gefunden"
+    }
+  },
   "business": {
     "meta": {
       "title": "Business & Corporate Events",
