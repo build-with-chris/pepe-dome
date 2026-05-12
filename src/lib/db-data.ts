@@ -58,50 +58,44 @@ export type ArticleData = {
 
 /**
  * Locale-Type für Events/Article-Queries.
- * Default ist 'de' — wenn ein englisches Feld in der DB null ist, fällt
- * der Transformer auf das deutsche Feld zurück (so können Übersetzungen
- * Stück für Stück nachgepflegt werden).
+ * Aktuell wird die Locale durchgereicht, hat aber keine Wirkung — die
+ * englischen Übersetzungsspalten (title_en, …) sind noch nicht in der
+ * Live-DB. Sobald die Migration applied ist, wird der Transformer das
+ * EN-Feld wieder mit DE-Fallback auswählen.
  */
 export type DbLocale = 'de' | 'en'
 
-function pick<T>(de: T, en: T | null | undefined, locale: DbLocale): T {
-  if (locale === 'en' && en !== null && en !== undefined) return en
-  return de
-}
-
-// Transform DB event to frontend format (mit Locale-Auswahl)
-function transformEvent(event: Event, locale: DbLocale = 'de'): EventData {
+// Transform DB event to frontend format
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function transformEvent(event: Event, _locale: DbLocale = 'de'): EventData {
   return {
     id: event.id,
     slug: event.slug,
-    title:       pick(event.title,       event.titleEn,       locale),
-    subtitle:    pick(event.subtitle,    event.subtitleEn,    locale),
-    description: pick(event.description, event.descriptionEn, locale),
+    title: event.title,
+    subtitle: event.subtitle,
+    description: event.description,
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
-    location:    pick(event.location,    event.locationEn,    locale),
+    location: event.location,
     category: event.category,
     ticketUrl: event.ticketUrl,
-    price:       pick(event.price,       event.priceEn,       locale),
+    price: event.price,
     imageUrl: event.imageUrl,
     featured: event.featured,
-    highlights:  pick(
-      (event.highlights as string[]) || [],
-      (event.highlightsEn as string[] | null) ?? null,
-      locale
-    ),
+    highlights: (event.highlights as string[]) || [],
   }
 }
 
-// Transform DB article to frontend format (mit Locale-Auswahl)
-function transformArticle(article: Article, locale: DbLocale = 'de'): ArticleData {
+// Transform DB article to frontend format
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function transformArticle(article: Article, _locale: DbLocale = 'de'): ArticleData {
   return {
     id: article.id,
     slug: article.slug,
-    title:   pick(article.title,   article.titleEn,   locale),
-    excerpt: pick(article.excerpt, article.excerptEn, locale),
-    content: pick(article.content, article.contentEn, locale),
+    title: article.title,
+    excerpt: article.excerpt,
+    content: article.content,
     category: article.category,
     author: article.author,
     publishedAt: article.publishedAt?.toISOString() || article.createdAt.toISOString(),

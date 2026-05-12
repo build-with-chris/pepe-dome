@@ -2,34 +2,28 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma, type Event } from '@prisma/client'
 
-type Locale = 'de' | 'en'
+/**
+ * Locale-Parameter wird durchgereicht, hat aber aktuell keine Wirkung —
+ * die englischen Übersetzungsspalten sind noch nicht in der Live-DB.
+ */
 
-function pick<T>(de: T, en: T | null | undefined, locale: Locale): T {
-  if (locale === 'en' && en !== null && en !== undefined) return en
-  return de
-}
-
-function transform(event: Event, locale: Locale) {
+function transform(event: Event) {
   return {
     id: event.id,
     slug: event.slug,
-    title:       pick(event.title,       event.titleEn,       locale),
-    subtitle:    pick(event.subtitle,    event.subtitleEn,    locale),
-    description: pick(event.description, event.descriptionEn, locale),
+    title: event.title,
+    subtitle: event.subtitle,
+    description: event.description,
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
-    location:    pick(event.location,    event.locationEn,    locale),
+    location: event.location,
     category: event.category,
     ticketUrl: event.ticketUrl,
-    price:       pick(event.price,       event.priceEn,       locale),
+    price: event.price,
     imageUrl: event.imageUrl,
     featured: event.featured,
-    highlights:  pick(
-      (event.highlights as string[]) || [],
-      (event.highlightsEn as string[] | null) ?? null,
-      locale
-    ),
+    highlights: (event.highlights as string[]) || [],
   }
 }
 
@@ -37,8 +31,6 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const year = searchParams.get('year')
   const month = searchParams.get('month')
-  const rawLocale = searchParams.get('locale')
-  const locale: Locale = rawLocale === 'en' ? 'en' : 'de'
 
   try {
     const whereClause: Prisma.EventWhereInput = { status: 'PUBLISHED' }
@@ -57,7 +49,7 @@ export async function GET(request: NextRequest) {
       orderBy: { date: 'asc' },
     })
 
-    const transformedEvents = events.map((e: Event) => transform(e, locale))
+    const transformedEvents = events.map((e: Event) => transform(e))
     return NextResponse.json(transformedEvents)
   } catch (error) {
     console.error('Failed to fetch events:', error)
