@@ -56,6 +56,60 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
   },
+  "contact": {
+    "meta": {
+      "title": "Kontakt",
+      "description": "Kontaktiere den Pepe Dome München. Anfragen zu Events, Raumvermietung, Kooperationen und mehr."
+    },
+    "hero": {
+      "title": "Kontakt",
+      "subtitle": "Wir freuen uns auf deine Nachricht"
+    },
+    "cards": {
+      "address": {
+        "title": "Adresse",
+        "content": "Pepe Dome im Theatron im Ostpark\nAlbert-Schweitzer-Straße 62\n81735 München"
+      },
+      "email": {
+        "title": "E-Mail"
+      },
+      "phone": {
+        "title": "WhatsApp"
+      },
+      "hours": {
+        "title": "Öffnungszeiten",
+        "content": "Werktags: 12:00 – 21:00 Uhr\nWochenende: Nach Veranstaltungsplan"
+      },
+      "follow": "Folge uns"
+    },
+    "form": {
+      "title": "Nachricht senden",
+      "fields": {
+        "name": "Name",
+        "namePlaceholder": "Dein Name",
+        "email": "E-Mail",
+        "emailPlaceholder": "deine@email.de",
+        "subject": "Betreff",
+        "subjectPlaceholder": "Worum geht es?",
+        "message": "Nachricht",
+        "messagePlaceholder": "Deine Nachricht…",
+        "privacy": "Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Daten zu."
+      },
+      "submit": "Absenden",
+      "submitting": "Wird gesendet…",
+      "successTitle": "Nachricht gesendet!",
+      "successText": "Vielen Dank für deine Nachricht. Wir melden uns bald bei dir.",
+      "errors": {
+        "missing": "Bitte fülle alle Pflichtfelder aus.",
+        "privacy": "Bitte stimme der Datenschutzerklärung zu.",
+        "generic": "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
+      }
+    },
+    "map": {
+      "title": "So findest du uns",
+      "route": "Route in Google Maps planen"
+    }
+  },
   "about": {
     "meta": {
       "title": "Über uns",

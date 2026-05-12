@@ -56,6 +56,60 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
   },
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Get in touch with Pepe Dome Munich. Inquiries about events, room rental, partnerships and more."
+    },
+    "hero": {
+      "title": "Contact",
+      "subtitle": "We look forward to hearing from you"
+    },
+    "cards": {
+      "address": {
+        "title": "Address",
+        "content": "Pepe Dome im Theatron im Ostpark\nAlbert-Schweitzer-Straße 62\n81735 Munich"
+      },
+      "email": {
+        "title": "E-mail"
+      },
+      "phone": {
+        "title": "WhatsApp"
+      },
+      "hours": {
+        "title": "Opening hours",
+        "content": "Weekdays: 12:00 – 21:00\nWeekend: per event schedule"
+      },
+      "follow": "Follow us"
+    },
+    "form": {
+      "title": "Send a message",
+      "fields": {
+        "name": "Name",
+        "namePlaceholder": "Your name",
+        "email": "E-mail",
+        "emailPlaceholder": "you@email.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "What's it about?",
+        "message": "Message",
+        "messagePlaceholder": "Your message…",
+        "privacy": "I have read the privacy policy and agree to the processing of my data."
+      },
+      "submit": "Send",
+      "submitting": "Sending…",
+      "successTitle": "Message sent!",
+      "successText": "Thanks for your message — we'll get back to you soon.",
+      "errors": {
+        "missing": "Please fill in all required fields.",
+        "privacy": "Please accept the privacy policy.",
+        "generic": "Something went wrong. Please try again later."
+      }
+    },
+    "map": {
+      "title": "How to find us",
+      "route": "Plan route in Google Maps"
+    }
+  },
   "about": {
     "meta": {
       "title": "About us",
