@@ -32,6 +32,9 @@ export const MIGRATED_PATHS: ReadonlySet<string> = new Set([
   '/business',
   '/news',
   '/newsletter',
+  '/agb',
+  '/impressum',
+  '/datenschutz',
 ])
 
 /**

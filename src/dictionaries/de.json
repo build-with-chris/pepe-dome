@@ -1,4 +1,25 @@
 {
+  "legal": {
+    "enDisclaimer": "",
+    "agb": {
+      "meta": {
+        "title": "Allgemeine Geschäftsbedingungen",
+        "description": "AGB des Pepe Dome München für Veranstaltungen, Tickets, Workshops und Raummiete."
+      }
+    },
+    "impressum": {
+      "meta": {
+        "title": "Impressum",
+        "description": "Impressum des Pepe Dome München. Angaben gemäß § 5 DDG."
+      }
+    },
+    "datenschutz": {
+      "meta": {
+        "title": "Datenschutzerklärung",
+        "description": "Datenschutzerklärung des Pepe Dome München. Informationen zum Umgang mit personenbezogenen Daten."
+      }
+    }
+  },
   "home": {
     "hero": {
       "title": "Pepe Dome",

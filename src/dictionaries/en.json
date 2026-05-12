@@ -1,4 +1,25 @@
 {
+  "legal": {
+    "enDisclaimer": "Note: This document is legally binding in German only. The text below is the original German version — please contact us at info@pepe-dome.de if you need help understanding any section.",
+    "agb": {
+      "meta": {
+        "title": "Terms & Conditions",
+        "description": "Terms and conditions of Pepe Dome Munich for events, tickets, workshops and venue rental."
+      }
+    },
+    "impressum": {
+      "meta": {
+        "title": "Imprint",
+        "description": "Imprint of Pepe Dome Munich. Information per § 5 DDG."
+      }
+    },
+    "datenschutz": {
+      "meta": {
+        "title": "Privacy Policy",
+        "description": "Privacy policy of Pepe Dome Munich. Information about the processing of personal data."
+      }
+    }
+  },
   "home": {
     "hero": {
       "title": "Pepe Dome",
