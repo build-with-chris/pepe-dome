@@ -49,10 +49,25 @@ export async function GET(request: NextRequest) {
       orderBy: { date: 'asc' },
     })
 
-    const transformedEvents = events.map((e: Event) => transform(e))
-    return NextResponse.json(transformedEvents)
+    return NextResponse.json(events.map((e: Event) => transform(e)))
   } catch (error) {
-    console.error('Failed to fetch events:', error)
-    return NextResponse.json({ error: 'Failed to fetch events' }, { status: 500 })
+    const code = error instanceof Prisma.PrismaClientKnownRequestError ? error.code : undefined
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('[api/events] DB query failed', {
+      code,
+      message,
+      year,
+      month,
+      hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
+    })
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch events',
+        code: code ?? null,
+        message,
+        hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
+      },
+      { status: 500 },
+    )
   }
 }
