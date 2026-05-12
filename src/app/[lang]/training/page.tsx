@@ -245,6 +245,10 @@ export default async function TrainingPage({
                     <span className="font-bold text-[var(--pepe-white)]">{t.schedule.trickingNoteA}</span>{' '}
                     {t.schedule.trickingNoteB}
                   </p>
+                  <p className="text-[var(--pepe-t80)]">
+                    <span className="font-bold text-[var(--pepe-gold)]">{t.schedule.dropInNoteA}</span>{' '}
+                    {t.schedule.dropInNoteB}
+                  </p>
                 </div>
               </div>
             </div>

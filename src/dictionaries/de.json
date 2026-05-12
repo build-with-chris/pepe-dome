@@ -539,7 +539,9 @@
       "aircrobaticsNoteC": "Buchung direkt über",
       "aircrobaticsNoteD": "(nicht über Eversports).",
       "trickingNoteA": "Tricking & Breaking",
-      "trickingNoteB": "folgt — Termine werden in Kürze bekannt gegeben."
+      "trickingNoteB": "folgt — Termine werden in Kürze bekannt gegeben.",
+      "dropInNoteA": "Drop-in möglich:",
+      "dropInNoteB": "Du kannst zurzeit zu jedem Kurs spontan dazukommen und bar vor Ort bezahlen. Wir bevorzugen aber die Buchung über Eversports — so wissen wir vorab, wer kommt."
     },
     "specials": {
       "title": "Spezielle Angebote",

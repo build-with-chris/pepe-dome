@@ -162,7 +162,7 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'kinder-akrobatik-mi',
-        time: '16:00 – 17:00',
+        time: '16:30 – 18:00',
         title: 'Kinder Akrobatik',
         sub: '5–12 Jahre · mit Michael Heiduk',
         target: 'kinder',
