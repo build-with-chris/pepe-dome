@@ -56,6 +56,110 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
   },
+  "business": {
+    "meta": {
+      "title": "Business & Corporate Events",
+      "description": "Corporate Events, Teambuilding und Raumvermietung im Pepe Dome München. Einzigartige Location für Firmenevents."
+    },
+    "hero": {
+      "title": "Pepe Dome für Unternehmen",
+      "subtitle": "Einzigartige Corporate Events, Teambuilding und Shows in spektakulärer Atmosphäre"
+    },
+    "intro": {
+      "title": "Unvergessliche Erlebnisse für Ihr Team",
+      "text": "Der Pepe Dome bietet eine einzigartige Location für Ihre Corporate Events. Die geodätische Kuppel im Münchner Ostpark kombiniert spektakuläre Architektur mit professioneller Event-Infrastruktur — für Veranstaltungen, die in Erinnerung bleiben.",
+      "cta": "Anfrage senden",
+      "videoAlt": "Pepe Dome für Business Events",
+      "features": [
+        { "label": "Kapazität",        "value": "Bis zu 200 Personen" },
+        { "label": "Deckenhöhe",       "value": "8,5 Meter" },
+        { "label": "Architektur",      "value": "Geodätische Kuppel" },
+        { "label": "Barrierefreiheit", "value": "Barrierearm (mit Begleitperson)" }
+      ]
+    },
+    "services": {
+      "title": "Unsere Services",
+      "subtitle": "Von der Firmenfeier bis zum Teambuilding — wir bieten maßgeschneiderte Lösungen für jeden Anlass.",
+      "items": [
+        {
+          "title": "Corporate Events",
+          "description": "Firmenweihnachtsfeiern, Jubiläen, Produktlaunches und Kundenevents in einzigartiger Dome-Atmosphäre.",
+          "icon": "🎉",
+          "features": ["Bis zu 200 Gäste", "Professionelle Technik", "Catering-Partner", "Full-Service Organisation"]
+        },
+        {
+          "title": "Teambuilding",
+          "description": "Innovative Teambuilding-Erfahrungen durch gemeinsame Artistik-Workshops und kreative Challenges.",
+          "icon": "🤝",
+          "features": ["Artist-Workshops", "Akrobatik-Challenges", "Kreative Projekte", "Team-Olympiade"]
+        },
+        {
+          "title": "PepeShows",
+          "description": "Maßgeschneiderte Performances mit professionellen Artist:innen — unvergessliche Erlebnisse für Ihre Gäste.",
+          "icon": "🎭",
+          "features": ["Professionelle Artist:innen", "Musik & Akrobatik", "Individuelle Konzepte", "Weltklasse-Entertainment"]
+        }
+      ]
+    },
+    "packages": {
+      "title": "Event-Pakete",
+      "subtitle": "Wählen Sie das passende Paket für Ihre Veranstaltung — oder lassen Sie sich ein individuelles Angebot erstellen.",
+      "popularBadge": "Beliebt",
+      "ctaInquire": "Anfrage senden",
+      "bespokeText": "Benötigen Sie ein individuelles Angebot?",
+      "bespokeCta": "Bespoke-Paket anfragen",
+      "items": [
+        {
+          "name": "Basic Event",
+          "description": "Ideal für Meetings, kleine Workshops oder private Feiern im exklusiven Rahmen.",
+          "features": [
+            "Exklusive Venue-Miete (4 Std.)",
+            "Basis-Technik (Sound & Standard-Licht)",
+            "Bestuhlung nach Wahl (bis 100 Pers.)",
+            "Betreuung vor Ort",
+            "Barrierearmer Zugang"
+          ]
+        },
+        {
+          "name": "Premium Show",
+          "description": "Unser Bestseller für Firmenfeiern mit einem Hauch von Zirkusmagie.",
+          "features": [
+            "Exklusive Venue-Miete (6 Std.)",
+            "Full-Service Technik & Operator",
+            "Bestuhlung & Lounge-Bereich",
+            "Show-Performance (30 Min.) inklusive",
+            "Catering-Optionen zubuchbar"
+          ]
+        },
+        {
+          "name": "Deluxe Production",
+          "description": "Das Full-Service Paket für Großevents, Galas und Produktlaunches.",
+          "features": [
+            "Exklusive Venue-Miete (ganztägig)",
+            "Premium Licht- & Sounddesign",
+            "Komplette Eventplanung & Regie",
+            "Maßgeschneiderte Show (60 Min.)",
+            "Catering-Koordination & Service"
+          ]
+        }
+      ]
+    },
+    "venue": {
+      "title": "Professionelle Ausstattung",
+      "imageAlt": "Pepe Dome Venue",
+      "items": [
+        { "icon": "💡", "title": "Professionelle Lichttechnik", "text": "Modernste Beleuchtungssysteme für jede Stimmung." },
+        { "icon": "🔊", "title": "Premium Sound",                "text": "Hochwertige Beschallungsanlage mit optimaler Akustik." },
+        { "icon": "📽️", "title": "Projektionstechnik",            "text": "Beamer und Leinwand für Präsentationen und Visuals." },
+        { "icon": "🪑", "title": "Flexible Bestuhlung",          "text": "Verschiedene Aufbauvarianten für jeden Anlass." }
+      ]
+    },
+    "cta": {
+      "title": "Planen Sie Ihr nächstes Event",
+      "text": "Kontaktieren Sie uns für ein unverbindliches Beratungsgespräch. Wir freuen uns darauf, Ihre Vision in die Realität umzusetzen.",
+      "contact": "Kontakt aufnehmen"
+    }
+  },
   "contact": {
     "meta": {
       "title": "Kontakt",

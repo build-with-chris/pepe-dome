@@ -56,6 +56,110 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
   },
+  "business": {
+    "meta": {
+      "title": "Business & Corporate Events",
+      "description": "Corporate events, team building and venue rental at Pepe Dome Munich. A unique location for company events."
+    },
+    "hero": {
+      "title": "Pepe Dome for businesses",
+      "subtitle": "Unique corporate events, team building and shows in spectacular surroundings"
+    },
+    "intro": {
+      "title": "Unforgettable experiences for your team",
+      "text": "Pepe Dome offers a unique venue for your corporate events. The geodesic dome in Munich's Ostpark combines spectacular architecture with professional event infrastructure — for events people remember.",
+      "cta": "Send enquiry",
+      "videoAlt": "Pepe Dome for business events",
+      "features": [
+        { "label": "Capacity",      "value": "Up to 200 people" },
+        { "label": "Ceiling",       "value": "8.5 metres" },
+        { "label": "Architecture",  "value": "Geodesic dome" },
+        { "label": "Accessibility", "value": "Step-free (companion recommended)" }
+      ]
+    },
+    "services": {
+      "title": "Our services",
+      "subtitle": "From the company celebration to team building — tailored solutions for any occasion.",
+      "items": [
+        {
+          "title": "Corporate Events",
+          "description": "Company Christmas parties, anniversaries, product launches and customer events in a unique dome atmosphere.",
+          "icon": "🎉",
+          "features": ["Up to 200 guests", "Professional tech", "Catering partners", "Full-service organisation"]
+        },
+        {
+          "title": "Team Building",
+          "description": "Innovative team building through joint artistry workshops and creative challenges.",
+          "icon": "🤝",
+          "features": ["Artist workshops", "Acrobatic challenges", "Creative projects", "Team olympics"]
+        },
+        {
+          "title": "PepeShows",
+          "description": "Tailor-made performances with professional artists — unforgettable experiences for your guests.",
+          "icon": "🎭",
+          "features": ["Professional artists", "Music & acrobatics", "Custom concepts", "World-class entertainment"]
+        }
+      ]
+    },
+    "packages": {
+      "title": "Event packages",
+      "subtitle": "Choose the right package for your event — or let us put together a custom proposal.",
+      "popularBadge": "Popular",
+      "ctaInquire": "Send enquiry",
+      "bespokeText": "Need a custom proposal?",
+      "bespokeCta": "Request a bespoke package",
+      "items": [
+        {
+          "name": "Basic Event",
+          "description": "Ideal for meetings, small workshops or private celebrations in an exclusive setting.",
+          "features": [
+            "Exclusive venue rental (4 hrs)",
+            "Basic tech (sound & standard lighting)",
+            "Seating of your choice (up to 100 pax)",
+            "On-site support",
+            "Step-free access"
+          ]
+        },
+        {
+          "name": "Premium Show",
+          "description": "Our bestseller for company events with a touch of circus magic.",
+          "features": [
+            "Exclusive venue rental (6 hrs)",
+            "Full-service tech & operator",
+            "Seating & lounge area",
+            "Show performance (30 min) included",
+            "Catering options available"
+          ]
+        },
+        {
+          "name": "Deluxe Production",
+          "description": "The full-service package for big events, galas and product launches.",
+          "features": [
+            "Exclusive venue rental (full day)",
+            "Premium light & sound design",
+            "Full event planning & direction",
+            "Custom show (60 min)",
+            "Catering coordination & service"
+          ]
+        }
+      ]
+    },
+    "venue": {
+      "title": "Professional setup",
+      "imageAlt": "Pepe Dome venue",
+      "items": [
+        { "icon": "💡", "title": "Professional lighting", "text": "State-of-the-art lighting systems for any mood." },
+        { "icon": "🔊", "title": "Premium sound",        "text": "High-quality PA with optimal acoustics." },
+        { "icon": "📽️", "title": "Projection",            "text": "Projectors and screens for presentations and visuals." },
+        { "icon": "🪑", "title": "Flexible seating",     "text": "Different setup variants for every occasion." }
+      ]
+    },
+    "cta": {
+      "title": "Plan your next event",
+      "text": "Contact us for a no-obligation consultation. We're looking forward to turning your vision into reality.",
+      "contact": "Get in touch"
+    }
+  },
   "contact": {
     "meta": {
       "title": "Contact",
