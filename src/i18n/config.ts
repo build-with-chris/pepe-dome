@@ -27,6 +27,7 @@ export const MIGRATED_PATHS: ReadonlySet<string> = new Set([
   '/',
   '/training',
   '/events',
+  '/about',
 ])
 
 /**

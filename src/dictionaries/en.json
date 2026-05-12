@@ -56,6 +56,103 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
   },
+  "about": {
+    "meta": {
+      "title": "About us",
+      "description": "Pepe Dome is a venue for contemporary circus, cultural exchange and artistic education in Munich's Ostpark."
+    },
+    "hero": {
+      "title": "About Pepe Dome",
+      "subtitle": "Pepe Dome is where circus arts and culture intersect — a place making performance accessible to people of every age and background."
+    },
+    "story": {
+      "title": "Our story",
+      "text": "The search for a space for contemporary circus began in 2006. Across several temporary venues (MUCCA, CircusHub, Sugar Mountain) the project grew until its official opening on 1 August 2025 in Munich's Ostpark. The geodesic dome with 8.5 m ceiling provides excellent acoustics and step-free access for spectacular shows and rigorous training.",
+      "imageAlt": "PEPE Dome",
+      "contact": "Get in touch"
+    },
+    "background": {
+      "title": "Background & project idea",
+      "p1": "Pepe Dome is a geodesic dome with around 200 seats. Since August 2025 it serves as a stage, training space and cultural venue in Munich's Ostpark.",
+      "p2": "Before that, the Lunatico Theatre tent stood temporarily on the same spot. As part of the Nebourhoods project and the wind-down of Festspielhaus GmbH, the dome was handed over to us.",
+      "p3": "We reactivated it as a venue for contemporary circus and cultural formats — with the goal of creating a permanent cultural home in the Neuperlach neighbourhood. Talks are ongoing to integrate the dome into local urban development plans.",
+      "p4": "From 2026 the non-profit Circus Akademie München e.V. takes over operations to pursue artistic, educational and social goals."
+    },
+    "areas": {
+      "title": "Our areas",
+      "subtitle": "Three pillars of Pepe Dome: culture, education and research",
+      "kultur": {
+        "title": "Culture",
+        "items": [
+          "Contemporary circus shows & guest performances",
+          "Festival formats (e.g. Freeman Festival, Zeit für Zirkus, Spiel:Art)",
+          "Community events (network meetups, themed evenings, cinema at the dome)",
+          "Children's programme (puppet theatre, clown shows, kids/youth circus performances)"
+        ]
+      },
+      "bildung": {
+        "title": "Education",
+        "items": [
+          "Open training for pros (funded by the Department of Arts)",
+          "Courses & workshops from beginner to advanced",
+          "Programmes for kids, teens and seniors",
+          "Educational programmes and partnerships with schools & cultural institutions",
+          "Training to become a circus educator / performer"
+        ]
+      },
+      "forschung": {
+        "title": "Research",
+        "items": [
+          "Partnerships with neighbourhood management focused on sustainability",
+          "University partnerships",
+          "Movement and sustainability",
+          "Design thinking for teachers"
+        ]
+      }
+    },
+    "ecosystem": {
+      "title": "The PEPE ecosystem",
+      "subtitle": "Three pillars — one shared goal: to support and showcase circus arts as a contemporary art form.",
+      "items": {
+        "dome":  { "name": "PEPE Dome",  "description": "The geodesic dome in Ostpark — main stage for spectacular shows, festivals and events." },
+        "shows": { "name": "PEPE Shows", "description": "Contemporary circus at the highest level — from intimate cabarets to large productions." },
+        "arts":  { "name": "pepe Arts",  "description": "Artistic development and production — residencies, workshops and creative collaboration." }
+      }
+    },
+    "network": {
+      "title": "Network & engagement",
+      "text": "As an active part of the cultural scene we engage in various networks to promote the visibility and professionalisation of circus arts.",
+      "items": [
+        "Buzz member",
+        "Netzwerk Freie Szene München",
+        "LAG Zirkuspädagogik",
+        "Support SK3"
+      ],
+      "imageCaption": "Stronger together",
+      "imageSubcaption": "Collaboration & community"
+    },
+    "values": {
+      "title": "Our values",
+      "subtitle": "These principles guide our work and shape everything we do.",
+      "items": [
+        { "title": "Artistic excellence",    "description": "We aim for the highest quality in shows and training and champion circus arts as a contemporary art form." },
+        { "title": "Inclusion & community",  "description": "Everyone is welcome — regardless of background or experience. Culture for all." },
+        { "title": "Sustainability",         "description": "Creative reuse of materials over buying new — ecological responsibility matters to us." },
+        { "title": "Innovation",             "description": "We experiment with new formats and technologies to reimagine circus." }
+      ]
+    },
+    "team": {
+      "title": "The team",
+      "description": "Behind Pepe Dome stands the PepeCollective — a committed network of artists, cultural workers and organisers with 15+ years of experience.",
+      "cta": "Meet the team"
+    },
+    "location": {
+      "title": "Visit us at the Dome",
+      "text": "Pepe Dome sits in the beautiful Ostpark in Munich — easy to reach by public transport and with parking nearby.",
+      "contact": "Contact",
+      "upcomingEvents": "Upcoming events"
+    }
+  },
   "events": {
     "meta": {
       "title": "Events & Programme",

@@ -56,6 +56,103 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
   },
+  "about": {
+    "meta": {
+      "title": "Über uns",
+      "description": "Der Pepe Dome ist ein Ort für zeitgenössischen Zirkus, kulturelle Begegnung und künstlerische Ausbildung im Ostpark München."
+    },
+    "hero": {
+      "title": "Über den Pepe Dome",
+      "subtitle": "Der Pepe Dome ist ein Treffpunkt, an dem sich Artistik und Kultur kreuzen — ein Ort, der Performance für Menschen jeden Alters und jeder Herkunft zugänglich macht."
+    },
+    "story": {
+      "title": "Unsere Geschichte",
+      "text": "2006 begann die Suche nach einem Raum für zeitgenössischen Zirkus. Über mehrere temporäre Standorte (MUCCA, CircusHub, Sugar Mountain) entwickelte sich das Projekt bis zur offiziellen Eröffnung am 1. August 2025 im Ostpark München. Die geodätische Kuppel mit 8,5 Metern Höhe bietet optimale Akustik und barrierefreien Zugang für spektakuläre Shows und intensives Training.",
+      "imageAlt": "PEPE Dome",
+      "contact": "Kontakt aufnehmen"
+    },
+    "background": {
+      "title": "Hintergrund & Projektidee",
+      "p1": "Der Pepe Dome ist eine geodätische Kuppel mit ca. 200 Platzkapazität, die seit August 2025 als Bühne, Trainingsort und Kulturraum im Münchner Ostpark etabliert wurde.",
+      "p2": "Zuvor wurde es als Lunatico Theaterzelt an selber Stelle temporär schon mal aufgebaut. Im Rahmen des Nebourhoods Projektes und der Auflösung der Festspielhaus GmbH wurde uns das Objekt zugespielt.",
+      "p3": "Er wurde als Spielstätte für zeitgenössischen Zirkus und kulturelle Formate reaktiviert, mit dem Ziel, eine dauerhafte kulturelle Heimat im Stadtteil Neuperlach zu schaffen. Gespräche laufen, den Dome langfristig in die lokale Stadtentwicklungspläne zu integrieren.",
+      "p4": "Als gemeinnütziger Verein übernimmt die Circus Akademie München e.V. ab 2026 den Betrieb, um künstlerische, pädagogische und soziale Ziele zu verwirklichen."
+    },
+    "areas": {
+      "title": "Unsere Bereiche",
+      "subtitle": "Drei Säulen des Pepe Dome: Kultur, Bildung und Forschung",
+      "kultur": {
+        "title": "Kultur",
+        "items": [
+          "zeitgenössische Zirkusshows & Gastspiele",
+          "Festivalformate (z. B. Freeman Festival, Zeit für Zirkus, Spiel:Art)",
+          "Community-Events (Netzwerktreffen, Themen-Abende, Kino im Dome)",
+          "Kinderprogramm (Kasperltheater, Clownshows, Kinder-Jugendzirkusvorstellungen)"
+        ]
+      },
+      "bildung": {
+        "title": "Bildung",
+        "items": [
+          "Offene Trainings für Profis (gefördert durch das Kulturreferat)",
+          "Kurse & Workshops für Einsteiger*innen bis Fortgeschrittene",
+          "Angebote für Kinder, Jugendliche, Senior*innen",
+          "Pädagogische Programme und Kooperationen mit Schulen & Kulturinstitutionen",
+          "Ausbildung zum Zirkuspädagogen Artisten"
+        ]
+      },
+      "forschung": {
+        "title": "Forschung",
+        "items": [
+          "Kooperationen mit Stadtteilmanagement im Bezug auf Nachhaltigkeit",
+          "Kooperationen mit Universitäten",
+          "Movement and sustainability",
+          "Design Thinking für Lehrer"
+        ]
+      }
+    },
+    "ecosystem": {
+      "title": "Das PEPE Ökosystem",
+      "subtitle": "Drei Säulen — ein gemeinsames Ziel: Artistik als zeitgenössische Kunstform zu fördern und erlebbar zu machen.",
+      "items": {
+        "dome":  { "name": "PEPE Dome",  "description": "Die geodätische Kuppel im Ostpark — Hauptbühne für spektakuläre Shows, Festivals und Events." },
+        "shows": { "name": "PEPE Shows", "description": "Zeitgenössischer Zirkus auf höchstem Niveau — von intimen Cabarets bis zu großen Produktionen." },
+        "arts":  { "name": "pepe Arts",  "description": "Künstlerische Entwicklung und Produktion — Residenzen, Workshops und kreative Zusammenarbeit." }
+      }
+    },
+    "network": {
+      "title": "Netzwerk & Engagement",
+      "text": "Als aktiver Teil der Kulturszene engagieren wir uns in verschiedenen Netzwerken, um die Sichtbarkeit und Professionalisierung der Artistik zu fördern.",
+      "items": [
+        "Buzz Mitglied",
+        "Netzwerk Freie Szene München",
+        "LAG Zirkuspädagogik",
+        "Support SK3"
+      ],
+      "imageCaption": "Stark im Verbund",
+      "imageSubcaption": "Kollaboration & Gemeinschaft"
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "subtitle": "Diese Prinzipien leiten unsere Arbeit und prägen alles, was wir tun.",
+      "items": [
+        { "title": "Künstlerische Exzellenz", "description": "Wir streben nach höchster Qualität in Shows und Training und fördern Artistik als zeitgenössische Kunstform." },
+        { "title": "Inklusion & Community",   "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung — Kultur für alle." },
+        { "title": "Nachhaltigkeit",          "description": "Kreative Wiederverwendung von Materialien statt Neuanschaffung — ökologische Verantwortung ist uns wichtig." },
+        { "title": "Innovation",              "description": "Wir experimentieren mit neuen Formaten und Technologien, um Artistik neu zu denken." }
+      ]
+    },
+    "team": {
+      "title": "Das Team",
+      "description": "Hinter dem Pepe Dome steht das PepeCollective — ein engagiertes Netzwerk aus Artist:innen, Kulturschaffenden und Organisator:innen mit über 15 Jahren Erfahrung.",
+      "cta": "Lerne uns kennen"
+    },
+    "location": {
+      "title": "Besuche uns im Dome",
+      "text": "Der PEPE Dome befindet sich im wunderschönen Ostpark in München — leicht erreichbar mit öffentlichen Verkehrsmitteln und mit Parkmöglichkeiten in der Nähe.",
+      "contact": "Kontakt",
+      "upcomingEvents": "Kommende Events"
+    }
+  },
   "events": {
     "meta": {
       "title": "Events & Programm",

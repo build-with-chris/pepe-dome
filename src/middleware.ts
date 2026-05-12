@@ -33,6 +33,7 @@ const LOCALIZED_ROOT_PATHS: ReadonlySet<string> = new Set([
   '/',
   '/training',
   '/events',
+  '/about',
 ])
 
 /**
