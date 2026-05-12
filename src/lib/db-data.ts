@@ -66,7 +66,6 @@ export type ArticleData = {
 export type DbLocale = 'de' | 'en'
 
 // Transform DB event to frontend format
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function transformEvent(event: Event, _locale: DbLocale = 'de'): EventData {
   return {
     id: event.id,
@@ -88,7 +87,6 @@ function transformEvent(event: Event, _locale: DbLocale = 'de'): EventData {
 }
 
 // Transform DB article to frontend format
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function transformArticle(article: Article, _locale: DbLocale = 'de'): ArticleData {
   return {
     id: article.id,

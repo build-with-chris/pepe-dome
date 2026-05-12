@@ -10,7 +10,6 @@
 
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Script from 'next/script'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
@@ -18,6 +17,7 @@ import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapIm
 import { Button } from '@/components/ui/Button'
 import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
 import StickyBookingButton from '@/components/custom/StickyBookingButton'
+import EversportsWidget from '@/components/custom/EversportsWidget'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { WOCHE } from '@/data/training-data'
@@ -107,7 +107,7 @@ export default async function TrainingPage({
           </div>
 
           <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-gold)]/40 bg-[var(--pepe-ink)] p-3 md:p-5 shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_24px_var(--pepe-gold-glow)]">
-            <div data-eversports-widget-id="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
+            <EversportsWidget widgetId="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
           </div>
 
           <p className="text-center text-sm text-[var(--pepe-t64)] mt-5">
@@ -118,13 +118,6 @@ export default async function TrainingPage({
           </p>
         </div>
       </section>
-
-      <Script
-        id="eversports-widget-loader"
-        type="module"
-        src="https://widget-static.eversports.io/loader.js"
-        strategy="afterInteractive"
-      />
 
       {/* ── INTRO ── */}
       <section className="pt-16 md:pt-24 pb-8 md:pb-12">
