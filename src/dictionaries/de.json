@@ -55,5 +55,104 @@
       "title": "Bleib auf dem Laufenden",
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
+  },
+  "training": {
+    "meta": {
+      "title": "Workshops & Training | Pepe Dome München",
+      "description": "Kursprogramm Frühjahr 2026: Luftartistik, Aerial Silks, Straps, Vertikaltuch, Zirkuskünste, Conditioning und mehr. Kurse für Kinder, Teens und Erwachsene im Pepe Dome München."
+    },
+    "hero": {
+      "title": "Workshops & Training",
+      "subtitle": "Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
+    },
+    "booking": {
+      "pill": "🎟 Buchung geöffnet",
+      "title": "Direkt online buchen",
+      "text": "Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.",
+      "viewSchedule": "Lieber erst die Übersicht?",
+      "viewScheduleLink": "Wochenplan ansehen ↓"
+    },
+    "intro": {
+      "title": "Professionelles Training in einzigartiger Atmosphäre",
+      "text": "Strukturierte Wochenkurse für Kinder, Teens und Erwachsene — von den ersten Handständen bis zur fortgeschrittenen Luftakrobatik. Die geodätische Kuppel mit 8,5 Metern Deckenhöhe bietet optimale Bedingungen.",
+      "ctaBook": "Jetzt buchen",
+      "ctaSchedule": "Kursplan ansehen",
+      "imageAlt": "Training im Pepe Dome"
+    },
+    "facts": {
+      "courseStart": "Kursstart",
+      "courseStartValue": "11. Mai 2026",
+      "audience": "Zielgruppen",
+      "audienceValue": "Kinder · Teens · Erwachsene",
+      "trial": "Schnupperstunde",
+      "trialValue": "ab 12 €",
+      "location": "Location",
+      "locationValue": "Ostpark München"
+    },
+    "schedule": {
+      "pill": "Wochenplan",
+      "title": "Alle Kurse im Überblick",
+      "text": "Klick auf einen Kurs für Details. Buchung läuft oben über Eversports.",
+      "legendKids": "Kinder",
+      "legendTeens": "Teens",
+      "legendAdults": "Erwachsene",
+      "aircrobaticsNoteA": "Luftakrobatik (Aircrobatics)",
+      "aircrobaticsNoteB": "startet erst",
+      "aircrobaticsNoteDate": "ab 18.05.",
+      "aircrobaticsNoteC": "Buchung direkt über",
+      "aircrobaticsNoteD": "(nicht über Eversports).",
+      "trickingNoteA": "Tricking & Breaking",
+      "trickingNoteB": "folgt — Termine werden in Kürze bekannt gegeben."
+    },
+    "specials": {
+      "title": "Spezielle Angebote",
+      "subtitle": "Außerhalb des Wochenkurses — Ferienprogramm und offenes Profi-Training.",
+      "ferien": {
+        "pill": "Ferienkurs · Pfingsten",
+        "title": "Holi Poldini — by Leopoldini",
+        "dates": "26. – 29. Mai 2026",
+        "datesSuffix": " · tägl. 10 – 16 Uhr · ",
+        "price": "160 €",
+        "text": "Vier Tage Zirkusabenteuer in den Pfingstferien — Akrobatik, Jonglage, Handstand und mehr mit den Coaches von Circus Leopoldini.",
+        "directLabel": "Anmeldung direkt",
+        "directBy": " bei Circus Leopoldini:",
+        "more": "Mehr erfahren",
+        "register": "✉️ Per E-Mail anmelden"
+      },
+      "pro": {
+        "pill": "💬 Für Profis",
+        "title": "Profitraining",
+        "subtitle": "Untertags · offenes Training für Münchens Profi-Artist:innen",
+        "text": "Gefördert vom Kulturreferat. Aktuelle Zeiten & Änderungen laufen über eine WhatsApp-Gruppe — Zugang auf Anfrage über das Kontaktformular, Betreff „Profitraining\".",
+        "request": "Zugang anfragen"
+      }
+    },
+    "disciplines": {
+      "title": "Unsere Disziplinen",
+      "subtitle": "Von Luftakrobatik bis Bodenarbeit — die Vielfalt zeitgenössischer Zirkuskunst.",
+      "items": [
+        { "name": "Aerial Arts",     "description": "Vertikaltuch, Trapez, Aerial Hoop, Strapaten, Spanish Web", "icon": "🎪" },
+        { "name": "Ground Arts",     "description": "Handstand, Akrobatik, Kontorsion, Cyr Wheel, Jonglage",     "icon": "🤸" },
+        { "name": "Movement & Flow", "description": "Contemporary Dance, Floor Work, Improvisation",            "icon": "💃" },
+        { "name": "Conditioning",    "description": "Flexibilität, Verletzungsprävention, Kraftaufbau",          "icon": "💪" }
+      ]
+    },
+    "location": {
+      "title": "Einzigartige Location",
+      "ceiling": "8,5 Meter Deckenhöhe",
+      "ceilingText": "Optimale Bedingungen für Luftakrobatik aller Art.",
+      "acoustics": "Perfekte Akustik",
+      "acousticsText": "Die geodätische Kuppelform sorgt für optimale Klangverteilung.",
+      "park": "Grüne Oase",
+      "parkText": "Im Ostpark München — Training im Grünen.",
+      "access": "Barrierearmer Zugang",
+      "accessText": "Vollständig zugänglich (mit Begleitperson empfohlen)."
+    },
+    "cta": {
+      "title": "Bereit für dein erstes Training?",
+      "text": "Melde dich bei uns und entdecke die Welt der zeitgenössischen Zirkuskunst.",
+      "contact": "Kontakt aufnehmen",
+      "workshops": "Alle Workshops"
+    }
   }
 }

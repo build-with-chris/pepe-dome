@@ -31,6 +31,7 @@ function detectLocale(req: NextRequest): Locale {
  */
 const LOCALIZED_ROOT_PATHS: ReadonlySet<string> = new Set([
   '/',
+  '/training',
 ])
 
 /**

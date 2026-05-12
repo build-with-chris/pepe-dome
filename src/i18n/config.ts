@@ -25,6 +25,7 @@ export function isLocale(value: string): value is Locale {
  */
 export const MIGRATED_PATHS: ReadonlySet<string> = new Set([
   '/',
+  '/training',
 ])
 
 /**

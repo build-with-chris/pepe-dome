@@ -55,5 +55,104 @@
       "title": "Stay in the loop",
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
+  },
+  "training": {
+    "meta": {
+      "title": "Workshops & Training | Pepe Dome Munich",
+      "description": "Spring 2026 course program: aerial arts, aerial silks, straps, vertical fabric, circus arts, conditioning and more. Classes for kids, teens and adults at Pepe Dome Munich."
+    },
+    "hero": {
+      "title": "Workshops & Training",
+      "subtitle": "Contemporary circus and artistry at Pepe Dome — for every level"
+    },
+    "booking": {
+      "pill": "🎟 Booking open",
+      "title": "Book online — instantly",
+      "text": "Trial class, single session or pass — live availability via Eversports.",
+      "viewSchedule": "Prefer to browse first?",
+      "viewScheduleLink": "Show weekly schedule ↓"
+    },
+    "intro": {
+      "title": "Professional training in a unique atmosphere",
+      "text": "Structured weekly classes for kids, teens and adults — from first handstands to advanced aerial work. Our geodesic dome with 8.5 m ceiling height offers ideal conditions.",
+      "ctaBook": "Book now",
+      "ctaSchedule": "View schedule",
+      "imageAlt": "Training at Pepe Dome"
+    },
+    "facts": {
+      "courseStart": "Season start",
+      "courseStartValue": "11 May 2026",
+      "audience": "Audiences",
+      "audienceValue": "Kids · Teens · Adults",
+      "trial": "Trial class",
+      "trialValue": "from €12",
+      "location": "Location",
+      "locationValue": "Ostpark Munich"
+    },
+    "schedule": {
+      "pill": "Weekly schedule",
+      "title": "All classes at a glance",
+      "text": "Click any class for details. Booking happens above via Eversports.",
+      "legendKids": "Kids",
+      "legendTeens": "Teens",
+      "legendAdults": "Adults",
+      "aircrobaticsNoteA": "Aerial work (Aircrobatics)",
+      "aircrobaticsNoteB": "starts on",
+      "aircrobaticsNoteDate": "18 May.",
+      "aircrobaticsNoteC": "Bookings go through",
+      "aircrobaticsNoteD": "(not via Eversports).",
+      "trickingNoteA": "Tricking & Breaking",
+      "trickingNoteB": "will follow — dates announced soon."
+    },
+    "specials": {
+      "title": "Special offers",
+      "subtitle": "Outside the weekly schedule — holiday programmes and open pro training.",
+      "ferien": {
+        "pill": "Holiday week · Whitsun",
+        "title": "Holi Poldini — by Leopoldini",
+        "dates": "26 – 29 May 2026",
+        "datesSuffix": " · daily 10 AM – 4 PM · ",
+        "price": "€160",
+        "text": "Four days of circus adventure during Whitsun holidays — acrobatics, juggling, handstand and more with the coaches of Circus Leopoldini.",
+        "directLabel": "Sign up directly",
+        "directBy": " with Circus Leopoldini:",
+        "more": "Learn more",
+        "register": "✉️ Register by e-mail"
+      },
+      "pro": {
+        "pill": "💬 For pros",
+        "title": "Professional Training",
+        "subtitle": "Daytime · open training for Munich's pro artists",
+        "text": "Supported by the Munich Department of Arts and Culture. Current times and updates are shared in a WhatsApp group — request access via the contact form, subject \"Profitraining\".",
+        "request": "Request access"
+      }
+    },
+    "disciplines": {
+      "title": "Our disciplines",
+      "subtitle": "From aerial work to floor — the breadth of contemporary circus arts.",
+      "items": [
+        { "name": "Aerial Arts",     "description": "Vertical fabric, trapeze, aerial hoop, straps, Spanish web",   "icon": "🎪" },
+        { "name": "Ground Arts",     "description": "Handstand, acrobatics, contortion, Cyr wheel, juggling",       "icon": "🤸" },
+        { "name": "Movement & Flow", "description": "Contemporary dance, floor work, improvisation",                "icon": "💃" },
+        { "name": "Conditioning",    "description": "Flexibility, injury prevention, strength training",            "icon": "💪" }
+      ]
+    },
+    "location": {
+      "title": "A unique venue",
+      "ceiling": "8.5 m ceiling height",
+      "ceilingText": "Ideal conditions for aerial work of all kinds.",
+      "acoustics": "Perfect acoustics",
+      "acousticsText": "The geodesic dome shape provides excellent sound distribution.",
+      "park": "Green oasis",
+      "parkText": "Inside Munich's Ostpark — training in the green.",
+      "access": "Step-free access",
+      "accessText": "Fully accessible (companion recommended)."
+    },
+    "cta": {
+      "title": "Ready for your first session?",
+      "text": "Get in touch and step into the world of contemporary circus.",
+      "contact": "Contact us",
+      "workshops": "All workshops"
+    }
   }
 }
