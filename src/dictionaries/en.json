@@ -56,6 +56,66 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     }
   },
+  "events": {
+    "meta": {
+      "title": "Events & Programme",
+      "description": "All events at Pepe Dome Munich: shows, workshops, festivals, premieres and training. Discover the current programme."
+    },
+    "hero": {
+      "title": "Event Calendar",
+      "subtitle": "Discover shows, workshops, festivals and more at Pepe Dome"
+    },
+    "listing": {
+      "loading": "Loading…",
+      "eventSingular": "event",
+      "eventPlural": "events",
+      "inFocus": "in focus",
+      "loadMore": "Load more events",
+      "remaining": "remaining",
+      "emptyTitle": "No events found",
+      "emptyText": "Nothing scheduled this month. Check another month or clear the filters.",
+      "currentMonth": "Current month",
+      "allCategories": "All categories",
+      "monthQuickSelect": "Pick another month"
+    },
+    "programme": {
+      "title": "Programme",
+      "text": "Our programme combines self-supporting and funded projects together with international, regional and city-wide festival participations."
+    },
+    "planned": {
+      "title": "Planned for 2026",
+      "text": "Construction is still ongoing — but we're highly motivated for the new season.",
+      "items": {
+        "tornadosEye":  { "title": "David Eisele - Tornados Eye",       "sub": "Contemporary circus - solo" },
+        "saucisson":    { "title": "Saucisson - taigi Cirkas",          "sub": "Lithuania - Circus Next Laureate" },
+        "danielaJakob": { "title": "Daniela Maier & Jakob Vöckler",     "sub": "Funded by Munich's Department of Arts - solo presentations" },
+        "zeitFuer":     { "title": "Zeit für Zirkus",                   "sub": "" }
+      }
+    },
+    "detail": {
+      "highlight": "Highlight event",
+      "highlights": "Highlights",
+      "stayInformed": "Stay in the loop",
+      "stayInformedText": "Get updates about similar events — never miss a highlight.",
+      "infoTitle": "Event info",
+      "infoDate": "Date",
+      "infoTime": "Time",
+      "infoLocation": "Location",
+      "infoPrice": "Price",
+      "ticketsBuy": "Buy tickets",
+      "registerMail": "Register by e-mail",
+      "ticketsFree": "Free entry",
+      "ticketsSoon": "Tickets to come",
+      "askQuestion": "Questions? Get in touch",
+      "similar": "Similar events",
+      "allEvents": "All events",
+      "latestNews": "Latest news",
+      "allNews": "All news",
+      "notFound": "Event not found",
+      "breadcrumbHome": "Home",
+      "breadcrumbEvents": "Events"
+    }
+  },
   "training": {
     "meta": {
       "title": "Workshops & Training | Pepe Dome Munich",

@@ -56,6 +56,66 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     }
   },
+  "events": {
+    "meta": {
+      "title": "Events & Programm",
+      "description": "Alle Events im Pepe Dome München: Shows, Workshops, Festivals, Premieren und Training. Entdecke das aktuelle Programm."
+    },
+    "hero": {
+      "title": "Event-Kalender",
+      "subtitle": "Entdecke Shows, Workshops, Festivals und mehr im Pepe Dome"
+    },
+    "listing": {
+      "loading": "Laden…",
+      "eventSingular": "Event",
+      "eventPlural": "Events",
+      "inFocus": "im Fokus",
+      "loadMore": "Weitere Events laden",
+      "remaining": "verbleibend",
+      "emptyTitle": "Keine Events gefunden",
+      "emptyText": "In diesem Monat sind keine Events geplant. Schau in einen anderen Monat oder entferne die Filter.",
+      "currentMonth": "Aktueller Monat",
+      "allCategories": "Alle Kategorien",
+      "monthQuickSelect": "Weiteren Monat anzeigen"
+    },
+    "programme": {
+      "title": "Programm",
+      "text": "Unser Programm setzt sich aus selbsttragenden und geförderten Projekten zusammen sowie internationalen, regionalen und städtischen Festivalbeteiligungen."
+    },
+    "planned": {
+      "title": "Für 2026 in Planung",
+      "text": "Aktuell finden noch Umbauarbeiten statt, aber wir planen hochmotiviert eine neue Saison.",
+      "items": {
+        "tornadosEye":  { "title": "David Eisele - Tornados Eye",       "sub": "zeitgenössischer Zirkus - Solo" },
+        "saucisson":    { "title": "Saucisson - taigi Cirkas",          "sub": "Litauen - Circus Next Laureat" },
+        "danielaJakob": { "title": "Daniela Maier und Jakob Vöckler",   "sub": "gefördert durch das Kulturreferat München - Solo Präsentationen" },
+        "zeitFuer":     { "title": "Zeit für Zirkus",                   "sub": "" }
+      }
+    },
+    "detail": {
+      "highlight": "Highlight Event",
+      "highlights": "Highlights",
+      "stayInformed": "Bleib auf dem Laufenden",
+      "stayInformedText": "Erhalte Updates zu ähnlichen Events und verpasse keine Highlights mehr.",
+      "infoTitle": "Event-Informationen",
+      "infoDate": "Datum",
+      "infoTime": "Uhrzeit",
+      "infoLocation": "Ort",
+      "infoPrice": "Preis",
+      "ticketsBuy": "Tickets kaufen",
+      "registerMail": "Anmelden via Mail",
+      "ticketsFree": "Eintritt frei",
+      "ticketsSoon": "Tickets folgen",
+      "askQuestion": "Fragen? Kontakt aufnehmen",
+      "similar": "Ähnliche Events",
+      "allEvents": "Alle Events",
+      "latestNews": "Aktuelle News",
+      "allNews": "Alle News",
+      "notFound": "Event nicht gefunden",
+      "breadcrumbHome": "Home",
+      "breadcrumbEvents": "Events"
+    }
+  },
   "training": {
     "meta": {
       "title": "Workshops & Training | Pepe Dome München",

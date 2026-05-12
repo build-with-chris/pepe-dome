@@ -32,19 +32,38 @@ function detectLocale(req: NextRequest): Locale {
 const LOCALIZED_ROOT_PATHS: ReadonlySet<string> = new Set([
   '/',
   '/training',
+  '/events',
 ])
 
 /**
  * Wenn der User auf einen Pfad geht der bereits unter /[lang]/... liegt,
  * aber ohne Locale-Prefix — leiten wir auf die richtige Locale-URL um.
  */
+/**
+ * Trifft die Pfad-Wurzel auf einen migrierten Pfad?
+ *
+ * Beispiele mit LOCALIZED_ROOT_PATHS = { '/', '/events', '/training' }:
+ *   '/events'           → '/events'    (exact match)
+ *   '/events/holi-poldini' → '/events' (prefix match — Sub-Routen mit migrieren)
+ *   '/training'         → '/training'
+ *   '/about'            → null         (noch nicht migriert)
+ */
+function matchedRootPath(pathname: string): string | null {
+  if (LOCALIZED_ROOT_PATHS.has(pathname)) return pathname
+  for (const root of LOCALIZED_ROOT_PATHS) {
+    if (root === '/') continue
+    if (pathname === root || pathname.startsWith(root + '/')) return root
+  }
+  return null
+}
+
 function maybeRedirectToLocale(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl
   // Skip already-localized paths
   const firstSegment = pathname.split('/')[1]
   if ((LOCALES as readonly string[]).includes(firstSegment)) return null
 
-  if (LOCALIZED_ROOT_PATHS.has(pathname)) {
+  if (matchedRootPath(pathname) !== null) {
     const locale = detectLocale(req)
     const url = req.nextUrl.clone()
     url.pathname = pathname === '/' ? `/${locale}` : `/${locale}${pathname}`
