@@ -36,6 +36,7 @@
       "hoursLabel": "Opening hours",
       "days": "Friday – Sunday",
       "time": "2:00 PM – 7:00 PM",
+      "weatherNote": "Closed if it rains in the afternoon. A bit of morning rain is fine — we decide around midday.",
       "address": "Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße"
     },
     "vision": {

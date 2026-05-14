@@ -165,6 +165,10 @@ export default async function HomePage({
                   <p className="text-[var(--pepe-white)] font-bold tabular-nums text-xl md:text-2xl">
                     {t.cafe.time}
                   </p>
+                  <p className="mt-3 inline-flex items-start gap-2 text-[var(--pepe-t64)] text-xs md:text-sm leading-snug">
+                    <span aria-hidden className="text-[var(--pepe-gold)] mt-0.5">🌦️</span>
+                    <span>{t.cafe.weatherNote}</span>
+                  </p>
                 </div>
               </div>
             </div>
