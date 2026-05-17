@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import NewsletterForm from '@/components/admin/forms/NewsletterForm'
 import ContentSelector from '@/components/newsletter/ContentSelector'
@@ -101,6 +101,97 @@ export default function NewsletterEditClient({
   const [isTestSending, setIsTestSending] = useState(false)
   const [testSendStatus, setTestSendStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [testSendMessage, setTestSendMessage] = useState('')
+
+  // Resend-to-missing states (only relevant once status === 'SENT')
+  type SendStatus = {
+    activeSubscriberCount: number
+    alreadySentSubscriberCount: number
+    missingCount: number
+  }
+  const [sendStatus, setSendStatus] = useState<SendStatus | null>(null)
+  const [showResendMissingModal, setShowResendMissingModal] = useState(false)
+  const [showMarkSentModal, setShowMarkSentModal] = useState(false)
+  const [markSentEmails, setMarkSentEmails] = useState('')
+  const [isMarkingSent, setIsMarkingSent] = useState(false)
+  const [markSentFeedback, setMarkSentFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
+  const [isSendingMissing, setIsSendingMissing] = useState(false)
+  const [sendMissingFeedback, setSendMissingFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
+
+  const fetchSendStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/send-status`)
+      const data = await res.json()
+      if (res.ok && data?.data) {
+        setSendStatus({
+          activeSubscriberCount: data.data.activeSubscriberCount ?? 0,
+          alreadySentSubscriberCount: data.data.alreadySentSubscriberCount ?? 0,
+          missingCount: data.data.missingCount ?? 0,
+        })
+      }
+    } catch {
+      // Silently ignore — card just won't show counts
+    }
+  }, [newsletter.id])
+
+  useEffect(() => {
+    if (newsletter.status === 'SENT') {
+      fetchSendStatus()
+    }
+  }, [newsletter.status, fetchSendStatus])
+
+  const handleMarkSent = async () => {
+    setIsMarkingSent(true)
+    setMarkSentFeedback(null)
+    try {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/mark-sent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails: markSentEmails }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error?.message || 'Import fehlgeschlagen')
+      const d = data.data
+      setMarkSentFeedback({
+        type: 'success',
+        msg: `${d.createdCount} neu markiert, ${d.alreadyMarkedCount} bereits markiert, ${d.notFoundCount} nicht in der Datenbank gefunden.`,
+      })
+      setMarkSentEmails('')
+      await fetchSendStatus()
+    } catch (err) {
+      setMarkSentFeedback({
+        type: 'error',
+        msg: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
+      })
+    } finally {
+      setIsMarkingSent(false)
+    }
+  }
+
+  const handleSendMissing = async () => {
+    setIsSendingMissing(true)
+    setSendMissingFeedback(null)
+    try {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/send-missing`, {
+        method: 'POST',
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error?.message || 'Versand fehlgeschlagen')
+      setSendMissingFeedback({
+        type: 'success',
+        msg: `${data.data.recipientCount} versendet, ${data.data.failedCount} fehlgeschlagen.`,
+      })
+      setShowResendMissingModal(false)
+      await fetchSendStatus()
+      router.refresh()
+    } catch (err) {
+      setSendMissingFeedback({
+        type: 'error',
+        msg: err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten',
+      })
+    } finally {
+      setIsSendingMissing(false)
+    }
+  }
 
   const openSendModal = async () => {
     setSendError(null)
@@ -512,6 +603,77 @@ export default function NewsletterEditClient({
           </div>
         )}
 
+        {/* Wiederversand Card (status === SENT) */}
+        {newsletter.status === 'SENT' && (
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Wiederversand</span>
+            </div>
+
+            {sendStatus ? (
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between text-white/60">
+                  <span>Bereits angeschrieben</span>
+                  <span className="text-white font-medium">
+                    {sendStatus.alreadySentSubscriberCount.toLocaleString('de-DE')} / {sendStatus.activeSubscriberCount.toLocaleString('de-DE')}
+                  </span>
+                </div>
+                <div className="flex justify-between text-white/60">
+                  <span>Noch fehlend</span>
+                  <span className={cn(
+                    'font-medium',
+                    sendStatus.missingCount > 0 ? 'text-amber-400' : 'text-emerald-400'
+                  )}>
+                    {sendStatus.missingCount.toLocaleString('de-DE')}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-[11px] text-white/30">Lade Status…</p>
+            )}
+
+            {sendMissingFeedback && (
+              <div className={cn(
+                'p-3 rounded-lg text-xs',
+                sendMissingFeedback.type === 'success'
+                  ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                  : 'bg-red-500/10 border border-red-500/20 text-red-400'
+              )}>
+                {sendMissingFeedback.msg}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setShowResendMissingModal(true)}
+                disabled={!canSend || !sendStatus || sendStatus.missingCount === 0}
+                className="w-full"
+              >
+                {sendStatus && sendStatus.missingCount > 0
+                  ? `An ${sendStatus.missingCount.toLocaleString('de-DE')} fehlende senden`
+                  : 'Keine fehlenden Empfänger'}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setMarkSentFeedback(null)
+                  setShowMarkSentModal(true)
+                }}
+                className="w-full"
+              >
+                Bereits versendete importieren
+              </Button>
+            </div>
+
+            <p className="text-[10px] text-white/30 leading-relaxed">
+              Tipp: Im Resend-Dashboard nach Tag <code className="text-white/50">newsletter_id={newsletter.id.slice(0, 8)}…</code> filtern, Empfänger als CSV exportieren und hier importieren.
+            </p>
+          </div>
+        )}
+
         {/* Delete Button */}
         {canEdit && newsletter.status !== 'SENT' && (
           <Button
@@ -598,6 +760,85 @@ export default function NewsletterEditClient({
             </Button>
             <Button variant="primary" onClick={handleSchedule} disabled={isScheduling || !scheduleDate}>
               {isScheduling ? 'Planen...' : 'Planen'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showResendMissingModal} onOpenChange={setShowResendMissingModal}>
+        <DialogContent className="bg-[#111113] border-white/[0.08] max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-white text-lg">An fehlende Empfänger senden</DialogTitle>
+            <DialogDescription className="text-white/50 text-sm">
+              Der Newsletter wird nur an die ACTIVE Subscriber geschickt, für die noch kein SENT-Event existiert. Bereits angeschriebene Empfänger werden übersprungen.
+            </DialogDescription>
+          </DialogHeader>
+          {sendMissingFeedback?.type === 'error' && (
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+              {sendMissingFeedback.msg}
+            </div>
+          )}
+          {sendStatus && (
+            <div className="p-5 rounded-xl bg-[#016dca]/10 border border-[#016dca]/20 my-2">
+              <div className="flex items-center justify-between">
+                <span className="text-white/60 text-sm">Fehlende Empfänger</span>
+                <span className="text-2xl font-bold text-[#016dca]">
+                  {sendStatus.missingCount.toLocaleString('de-DE')}
+                </span>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="gap-3 pt-2">
+            <Button variant="ghost" onClick={() => setShowResendMissingModal(false)} disabled={isSendingMissing}>
+              Abbrechen
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSendMissing}
+              disabled={isSendingMissing || !sendStatus || sendStatus.missingCount === 0}
+            >
+              {isSendingMissing ? 'Senden…' : 'Senden'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showMarkSentModal} onOpenChange={setShowMarkSentModal}>
+        <DialogContent className="bg-[#111113] border-white/[0.08] max-w-lg">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-white text-lg">Bereits versendete importieren</DialogTitle>
+            <DialogDescription className="text-white/50 text-sm">
+              E-Mail-Adressen einfügen, die den Newsletter bereits erhalten haben. Eine Adresse pro Zeile (oder Komma-/Semikolon-getrennt). Diese werden vom Wiederversand ausgeschlossen.
+            </DialogDescription>
+          </DialogHeader>
+          <textarea
+            value={markSentEmails}
+            onChange={(e) => setMarkSentEmails(e.target.value)}
+            placeholder={'max@example.com\nanna@example.com\n…'}
+            rows={10}
+            className="w-full px-3 py-2 bg-black/30 border border-white/[0.08] rounded-lg text-white text-sm font-mono placeholder:text-white/20 focus:outline-none focus:border-[#016dca]/50"
+            disabled={isMarkingSent}
+          />
+          {markSentFeedback && (
+            <div className={cn(
+              'p-3 rounded-lg text-xs',
+              markSentFeedback.type === 'success'
+                ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                : 'bg-red-500/10 border border-red-500/20 text-red-400'
+            )}>
+              {markSentFeedback.msg}
+            </div>
+          )}
+          <DialogFooter className="gap-3 pt-2">
+            <Button variant="ghost" onClick={() => setShowMarkSentModal(false)} disabled={isMarkingSent}>
+              Schließen
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleMarkSent}
+              disabled={isMarkingSent || markSentEmails.trim().length === 0}
+            >
+              {isMarkingSent ? 'Importiere…' : 'Importieren'}
             </Button>
           </DialogFooter>
         </DialogContent>

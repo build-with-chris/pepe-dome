@@ -198,6 +198,8 @@ export async function sendNewsletter(
     testRecipients?: string[]
     /** Dry run - render but don't send */
     dryRun?: boolean
+    /** Resume mode: send only to ACTIVE subscribers who do NOT yet have a SENT NewsletterEvent for this newsletter. Allows status === 'SENT'. */
+    resumeMissing?: boolean
   }
 ) {
   // Dynamic imports to avoid bundling react-email in client build
@@ -218,8 +220,8 @@ export async function sendNewsletter(
     throw new Error('Newsletter not found')
   }
 
-  // Only block real sends for already-sent newsletters (allow test sends)
-  if (newsletter.status === 'SENT' && !options?.testRecipients) {
+  // Only block real sends for already-sent newsletters (allow test sends and resume-missing)
+  if (newsletter.status === 'SENT' && !options?.testRecipients && !options?.resumeMissing) {
     throw new Error('Newsletter already sent')
   }
 
@@ -235,10 +237,30 @@ export async function sendNewsletter(
     }))
   } else {
     // Production: fetch active subscribers
-    recipients = await prisma.subscriber.findMany({
+    const allActive = await prisma.subscriber.findMany({
       where: { status: 'ACTIVE' },
       select: { id: true, email: true, firstName: true },
     })
+
+    if (options?.resumeMissing) {
+      // Exclude subscribers who already have a SENT event for this newsletter
+      const alreadySent = await prisma.newsletterEvent.findMany({
+        where: {
+          newsletterId,
+          eventType: 'SENT',
+          subscriberId: { not: null },
+        },
+        select: { subscriberId: true },
+      })
+      const sentIds = new Set(
+        alreadySent
+          .map((e: { subscriberId: string | null }) => e.subscriberId)
+          .filter((id: string | null): id is string => id !== null)
+      )
+      recipients = allActive.filter((s: { id: string }) => !sentIds.has(s.id))
+    } else {
+      recipients = allActive
+    }
   }
 
   if (recipients.length === 0) {
@@ -493,12 +515,34 @@ export async function sendNewsletter(
 
   // Update newsletter status
   if (!options?.dryRun && !options?.testRecipients) {
+    // Record SENT NewsletterEvents for every successful send so future resume-missing calls know who's done.
+    // recipients[i] corresponds to allResults[i] (pushed in order).
+    const successfulSubscriberIds: string[] = []
+    for (let k = 0; k < allResults.length; k++) {
+      if (allResults[k]?.success && recipients[k]) {
+        successfulSubscriberIds.push(recipients[k].id)
+      }
+    }
+
+    if (successfulSubscriberIds.length > 0) {
+      await prisma.newsletterEvent.createMany({
+        data: successfulSubscriberIds.map((subscriberId) => ({
+          newsletterId: newsletter.id,
+          subscriberId,
+          eventType: 'SENT' as const,
+        })),
+      })
+    }
+
     await prisma.newsletter.update({
       where: { id: newsletterId },
       data: {
         status: 'SENT',
         sentAt: new Date(),
-        recipientCount: successCount,
+        // Resume mode adds to the existing count instead of overwriting it
+        recipientCount: options?.resumeMissing
+          ? { increment: successCount }
+          : successCount,
       },
     })
 
@@ -510,7 +554,9 @@ export async function sendNewsletter(
         sentCount: successCount,
       },
       update: {
-        sentCount: successCount,
+        sentCount: options?.resumeMissing
+          ? { increment: successCount }
+          : successCount,
         updatedAt: new Date(),
       },
     })
