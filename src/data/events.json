@@ -1,27 +1,5 @@
 [
   {
-    "id": "akrobatik-ferienkurs-pfingsten-2026",
-    "title": "Holi Poldini — Ferienkurs by Leopoldini",
-    "subtitle": "Ferienkurs Pfingsten 2026 · 4 Tage Zirkusabenteuer",
-    "description": "Ferienspaß mit dem Circus Leopoldini im Pepe Dome München Ostpark: täglich von 10 bis 16 Uhr Zirkuskünste bei erfahrenen Leopoldini Coaches. Vier Tage Akrobatik, Jonglage, Handstand und Zirkus pur in den bayerischen Pfingstferien.",
-    "date": "2026-05-26",
-    "endDate": "2026-05-29",
-    "time": "10:00 – 16:00 Uhr (täglich)",
-    "location": "Pepe Dome, Ostpark München",
-    "category": "Ferienkurs",
-    "price": "Kostenbeitrag 160€",
-    "imageUrl": "https://wwawsyhykrbvfgvhqbev.supabase.co/storage/v1/object/public/uploads/holi-poldini-2026.png",
-    "featured": true,
-    "highlights": [
-      "4 Tage Ferienprogramm (26. – 29. Mai 2026)",
-      "Täglich 10 – 16 Uhr",
-      "Kostenbeitrag 160€",
-      "Akrobatik, Jonglage, Handstand & mehr",
-      "Erfahrene Leopoldini Coaches",
-      "Pepe Dome München Ostpark"
-    ]
-  },
-  {
     "id": "freeman-festival-2025",
     "title": "Freeman Festival 2025",
     "subtitle": "Das Festival der Artistik",

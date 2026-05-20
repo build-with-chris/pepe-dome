@@ -538,26 +538,14 @@
       "aircrobaticsNoteDate": "ab 18.05.",
       "aircrobaticsNoteC": "Buchung direkt über",
       "aircrobaticsNoteD": "(nicht über Eversports).",
-      "trickingNoteA": "Tricking & Breaking",
-      "trickingNoteB": "folgt — Termine werden in Kürze bekannt gegeben.",
+      "trickingNoteA": "Donnerstag",
+      "trickingNoteB": "voraussichtlich Luftakrobatik-Kurse mit Aircrobatics — Termine folgen.",
       "dropInNoteA": "Drop-in möglich:",
       "dropInNoteB": "Du kannst zurzeit zu jedem Kurs spontan dazukommen und bar vor Ort bezahlen. Wir bevorzugen aber die Buchung über Eversports — so wissen wir vorab, wer kommt."
     },
     "specials": {
       "title": "Spezielle Angebote",
-      "subtitle": "Außerhalb des Wochenkurses — Ferienprogramm und offenes Profi-Training.",
-      "ferien": {
-        "pill": "Ferienkurs · Pfingsten",
-        "title": "Holi Poldini — by Leopoldini",
-        "dates": "26. – 29. Mai 2026",
-        "datesSuffix": " · tägl. 10 – 16 Uhr · ",
-        "price": "160 €",
-        "text": "Vier Tage Zirkusabenteuer in den Pfingstferien — Akrobatik, Jonglage, Handstand und mehr mit den Coaches von Circus Leopoldini.",
-        "directLabel": "Anmeldung direkt",
-        "directBy": " bei Circus Leopoldini:",
-        "more": "Mehr erfahren",
-        "register": "✉️ Per E-Mail anmelden"
-      },
+      "subtitle": "Außerhalb des Wochenkurses — offenes Profi-Training.",
       "pro": {
         "pill": "💬 Für Profis",
         "title": "Profitraining",

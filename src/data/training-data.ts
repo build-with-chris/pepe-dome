@@ -17,26 +17,8 @@ import type { Tag } from '@/components/custom/CourseScheduleGrid'
 export const WOCHE: Tag[] = [
   {
     day: 'Montag',
-    trainer: 'Leopoldini Coaches',
+    trainer: 'Aircrobatics',
     kurse: [
-      {
-        slug: 'circus-dome-lab-mo',
-        time: '15:30 – 17:00',
-        title: 'Circus Dome Lab',
-        sub: 'Pepe Dome x Leopoldini · 11–15 Jahre · 140€ für den ganzen Kurs',
-        target: 'teens',
-        trainer: 'Leopoldini Coaches',
-        day: 'Montag',
-        description:
-          'Zehn Wochen Zirkuswerkstatt für Kinder und Jugendliche von 11 bis 15 Jahren — gemeinsam mit den erfahrenen Coaches von Leopoldini. Akrobatik, Handstand, Partnerakrobatik und Zirkuskünste in einem festen Kurs mit fortlaufender Gruppe. Kursgebühr 140€ für den gesamten Zeitraum 11. Mai bis 13. Juli 2026.',
-        inhalte: [
-          'Akrobatik-Grundlagen & Handstand',
-          'Partner- und Bodenakrobatik',
-          'Körperspannung, Balance & Koordination',
-          'Zirkuskünste in fortlaufender Gruppe',
-        ],
-        fuerWen: 'Kinder & Jugendliche 11–15 Jahre — fortlaufender Kurs vom 11. Mai bis 13. Juli 2026, 140€ gesamt',
-      },
       {
         slug: 'luftakrobatik-aircrobatics-mo-1715',
         time: '17:15 – 18:15',
@@ -225,26 +207,13 @@ export const WOCHE: Tag[] = [
   },
   {
     day: 'Donnerstag',
-    trainer: 'mit Marcel',
-    kurse: [
-      {
-        slug: 'tricking-breaking-do',
-        time: 'Zeit folgt',
-        title: 'Tricking & Breaking',
-        sub: 'ab 14. April',
-        target: 'teens',
-        trainer: 'Marcel',
-        day: 'Donnerstag',
-        description:
-          'Explosive Sprünge, Kicks und Breakdance-Moves. Tricking und Breaking kombinieren Martial Arts, Turnen und Tanz.',
-        inhalte: ['Tricking-Basics (Kicks, Flips)', 'Breaking-Grundlagen', 'Kombinationen & Flows'],
-        fuerWen: 'Teens und junge Erwachsene, Einstieg möglich',
-      },
-    ],
+    trainer: '',
+    kurse: [],
+    note: 'Voraussichtlich Luftakrobatik-Kurse mit Aircrobatics — Termine folgen.',
   },
   {
     day: 'Freitag',
-    trainer: 'mit Dani',
+    trainer: 'Dani · Cyr Wheel Coach',
     kurse: [
       {
         slug: 'urban-acrobatics-fr',
@@ -259,7 +228,26 @@ export const WOCHE: Tag[] = [
         inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
         fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
       },
+      {
+        slug: 'cyr-wheel-fr',
+        time: '17:00 – 18:30',
+        title: 'Cyr Wheel',
+        sub: 'Jugendliche & Erwachsene · an showfreien Freitagen',
+        target: 'erwachsene',
+        trainer: 'Dani',
+        day: 'Freitag',
+        description:
+          'Das Cyr Wheel — auch Deutsches Rad genannt — gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt — aktuelle Termine immer auf der Startseite.',
+        inhalte: [
+          'Cyr Wheel Grundtechniken (Wave, Pirouette, Coin)',
+          'Körperspannung & Balance im Rad',
+          'Kraft- und Konditionsaufbau',
+          'Erste Sequenzen und Übergänge',
+        ],
+        fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
+      },
     ],
+    note: 'Cyr Wheel findet an showfreien Freitagen statt — Termine immer auf der Startseite.',
   },
   {
     day: 'Samstag',

@@ -538,26 +538,14 @@
       "aircrobaticsNoteDate": "18 May.",
       "aircrobaticsNoteC": "Bookings go through",
       "aircrobaticsNoteD": "(not via Eversports).",
-      "trickingNoteA": "Tricking & Breaking",
-      "trickingNoteB": "will follow — dates announced soon.",
+      "trickingNoteA": "Thursday",
+      "trickingNoteB": "likely aerial classes with Aircrobatics — dates to follow.",
       "dropInNoteA": "Drop-in welcome:",
       "dropInNoteB": "You can currently join any class spontaneously and pay in cash on site. We prefer bookings via Eversports though — so we know in advance who's coming."
     },
     "specials": {
       "title": "Special offers",
-      "subtitle": "Outside the weekly schedule — holiday programmes and open pro training.",
-      "ferien": {
-        "pill": "Holiday week · Whitsun",
-        "title": "Holi Poldini — by Leopoldini",
-        "dates": "26 – 29 May 2026",
-        "datesSuffix": " · daily 10 AM – 4 PM · ",
-        "price": "€160",
-        "text": "Four days of circus adventure during Whitsun holidays — acrobatics, juggling, handstand and more with the coaches of Circus Leopoldini.",
-        "directLabel": "Sign up directly",
-        "directBy": " with Circus Leopoldini:",
-        "more": "Learn more",
-        "register": "✉️ Register by e-mail"
-      },
+      "subtitle": "Outside the weekly schedule — open pro training.",
       "pro": {
         "pill": "💬 For pros",
         "title": "Professional Training",
