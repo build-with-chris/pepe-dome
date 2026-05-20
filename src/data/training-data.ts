@@ -213,7 +213,7 @@ export const WOCHE: Tag[] = [
   },
   {
     day: 'Freitag',
-    trainer: 'Dani · Cyr Wheel Coach',
+    trainer: 'Dani & Chris',
     kurse: [
       {
         slug: 'urban-acrobatics-fr',
@@ -234,7 +234,7 @@ export const WOCHE: Tag[] = [
         title: 'Cyr Wheel',
         sub: 'Jugendliche & Erwachsene · an showfreien Freitagen',
         target: 'erwachsene',
-        trainer: 'Dani',
+        trainer: 'Chris',
         day: 'Freitag',
         description:
           'Das Cyr Wheel — auch Deutsches Rad genannt — gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt — aktuelle Termine immer auf der Startseite.',
