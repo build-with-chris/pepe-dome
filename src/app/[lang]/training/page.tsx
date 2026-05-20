@@ -261,46 +261,7 @@ export default async function TrainingPage({
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
-            {/* Ferienkurs Holi Poldini */}
-            <div
-              className="rounded-2xl p-7 md:p-8 flex flex-col"
-              style={{
-                background: 'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.04))',
-                border: '1px solid rgba(196,167,103,0.45)',
-              }}
-            >
-              <span className="inline-block self-start px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-5">
-                {t.specials.ferien.pill}
-              </span>
-              <h3 className="text-2xl md:text-2xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
-                {t.specials.ferien.title}
-              </h3>
-              <p className="text-[var(--pepe-t80)] mb-3 text-base">
-                <strong className="text-[var(--pepe-white)]">{t.specials.ferien.dates}</strong>{t.specials.ferien.datesSuffix}<strong className="text-[var(--pepe-white)]">{t.specials.ferien.price}</strong>
-              </p>
-              <p className="text-[var(--pepe-t64)] mb-4 text-sm leading-relaxed flex-1">
-                {t.specials.ferien.text}
-              </p>
-              <div className="rounded-lg bg-[var(--pepe-black)]/40 border border-[var(--pepe-gold)]/30 px-3 py-2.5 mb-5 text-xs text-[var(--pepe-t80)]">
-                <span className="font-bold text-[var(--pepe-white)]">{t.specials.ferien.directLabel}</span>{t.specials.ferien.directBy}{' '}
-                <a
-                  href="mailto:info@circus-leopoldini.de?subject=Anmeldung%20Holi%20Poldini%20Ferienkurs%20Pfingsten%202026"
-                  className="text-[var(--pepe-gold)] font-semibold hover:underline break-all"
-                >
-                  info@circus-leopoldini.de
-                </a>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Link href={localizedHref(lang, '/news') + '/akrobatik-ferienkurs-pfingsten-2026'}>
-                  <Button variant="secondary" size="md">{t.specials.ferien.more}</Button>
-                </Link>
-                <a href="mailto:info@circus-leopoldini.de?subject=Anmeldung%20Holi%20Poldini%20Ferienkurs%20Pfingsten%202026">
-                  <Button variant="primary" size="md">{t.specials.ferien.register}</Button>
-                </a>
-              </div>
-            </div>
-
+          <div className="max-w-2xl mx-auto">
             {/* Profitraining */}
             <div className="rounded-2xl p-7 md:p-8 bg-[var(--pepe-ink)] border border-[var(--pepe-line)] flex flex-col">
               <span className="inline-block self-start px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/40 mb-5">
