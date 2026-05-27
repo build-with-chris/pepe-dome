@@ -119,10 +119,17 @@ export async function getAllEvents(locale: DbLocale = 'de'): Promise<EventData[]
 
 export async function getUpcomingEvents(locale: DbLocale = 'de'): Promise<EventData[]> {
   return safeDbQuery(async () => {
+    // Cutoff = Beginn des heutigen Tages (lokal), damit Events, die heute später
+    // am Abend stattfinden (z.B. 20:00 Uhr), nicht herausgefiltert werden.
+    // Das `date`-Feld speichert nur das Kalenderdatum; die genaue Uhrzeit liegt
+    // im separaten String-Feld `time`.
+    const startOfToday = new Date()
+    startOfToday.setHours(0, 0, 0, 0)
+
     const events = await prisma.event.findMany({
       where: {
         status: 'PUBLISHED',
-        date: { gte: new Date() },
+        date: { gte: startOfToday },
       },
       orderBy: { date: 'asc' },
     })

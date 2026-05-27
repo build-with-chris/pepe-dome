@@ -52,11 +52,30 @@ export default function EventsListingClient({
   const [loading, setLoading] = useState(true)
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth() + 1)
+  const [initialized, setInitialized] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showPast] = useState(false)
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
   const [showStickyNav, setShowStickyNav] = useState(false)
   const monthNavRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function initMonth() {
+      try {
+        const res = await fetch('/api/events/next-available')
+        if (res.ok) {
+          const { year: y, month: m } = await res.json()
+          setYear(y)
+          setMonth(m)
+        }
+      } catch {
+        // keep defaults
+      } finally {
+        setInitialized(true)
+      }
+    }
+    initMonth()
+  }, [])
 
   useEffect(() => {
     const el = monthNavRef.current
@@ -70,6 +89,7 @@ export default function EventsListingClient({
   }, [])
 
   useEffect(() => {
+    if (!initialized) return
     async function fetchEvents() {
       setLoading(true)
       try {
@@ -85,7 +105,7 @@ export default function EventsListingClient({
       }
     }
     fetchEvents()
-  }, [year, month, lang])
+  }, [year, month, lang, initialized])
 
   const filteredEvents = useMemo(() => {
     let filtered = events

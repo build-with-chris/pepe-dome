@@ -91,9 +91,13 @@ export function getAllEvents(): Event[] {
 }
 
 export function getUpcomingEvents(): Event[] {
-  const now = new Date()
+  // Cutoff = Beginn des heutigen Tages, damit Events, die heute später
+  // am Abend stattfinden (Uhrzeit lebt im separaten `time`-Feld),
+  // nicht herausgefiltert werden.
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
   return eventsData
-    .filter(event => new Date(event.date) >= now)
+    .filter(event => new Date(event.date) >= startOfToday)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) as Event[]
 }
 
