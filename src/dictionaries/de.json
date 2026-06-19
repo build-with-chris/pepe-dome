@@ -36,7 +36,7 @@
       "hoursLabel": "Öffnungszeiten",
       "days": "Freitag – Sonntag",
       "time": "14:00 – 19:00 Uhr",
-      "address": "Ostpark, Albert-Schweitzer-Straße · U-Bahn Quiddestraße"
+      "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "vision": {
       "title": "Vision",
@@ -222,7 +222,7 @@
     "cards": {
       "address": {
         "title": "Adresse",
-        "content": "Pepe Dome im Theatron im Ostpark\nAlbert-Schweitzer-Straße 62\n81735 München"
+        "content": "Pepe Dome im Theatron im Ostpark\n81735 München"
       },
       "email": {
         "title": "E-Mail"
