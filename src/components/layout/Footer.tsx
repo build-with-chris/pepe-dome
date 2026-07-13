@@ -128,7 +128,7 @@ export default function Footer() {
             <Link href={href('/impressum')} className="footer-legal-link">{t('footer.legal.imprint', 'Impressum')}</Link>
             <Link href={href('/datenschutz')} className="footer-legal-link">{t('footer.legal.privacy', 'Datenschutz')}</Link>
             <Link href={href('/agb')} className="footer-legal-link">{t('footer.legal.terms', 'AGB')}</Link>
-            <Link href={href('/spenden')} className="footer-legal-link">{t('footer.legal.donate', 'Spenden')}</Link>
+            <Link href={href('/spenden')} className="footer-legal-link">{t('footer.legal.donate', 'Unterstützen')}</Link>
             <Link href="/admin/sign-in" className="footer-legal-link">{t('footer.legal.login', 'Login')}</Link>
           </div>
         </div>
