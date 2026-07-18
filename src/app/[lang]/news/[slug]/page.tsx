@@ -142,18 +142,18 @@ export default async function NewsArticlePage({
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)] to-[var(--pepe-ink)]" />
         )}
 
-        <nav className="absolute top-8 left-0 right-0 z-10">
+        <nav className="absolute top-8 left-0 right-0 z-10" aria-label="Breadcrumb">
           <div className="stage-container">
-            <div className="flex items-center gap-2 text-sm text-[var(--pepe-t64)]">
-              <Link href={homeHref} className="hover:text-[var(--pepe-white)] transition-colors">
+            <div className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 max-w-full">
+              <Link href={homeHref} className="text-white/70 hover:text-white transition-colors">
                 {t.breadcrumbHome}
               </Link>
-              <span>/</span>
-              <Link href={newsHref} className="hover:text-[var(--pepe-white)] transition-colors">
+              <span className="text-white/40" aria-hidden="true">/</span>
+              <Link href={newsHref} className="text-white/70 hover:text-white transition-colors">
                 {t.breadcrumbNews}
               </Link>
-              <span>/</span>
-              <span className="text-[var(--pepe-white)] truncate max-w-[200px]">{article.title}</span>
+              <span className="text-white/40" aria-hidden="true">/</span>
+              <span className="text-white font-medium truncate max-w-[200px]">{article.title}</span>
             </div>
           </div>
         </nav>
@@ -316,6 +316,7 @@ export default async function NewsArticlePage({
                     month: 'short',
                     year: 'numeric',
                   })}
+                  time={event.time}
                   category={event.category}
                   image={event.imageUrl || undefined}
                   href={`${eventsHref}/${event.slug}`}

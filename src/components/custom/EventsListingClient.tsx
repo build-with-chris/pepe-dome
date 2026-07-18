@@ -253,6 +253,7 @@ export default function EventsListingClient({
                     month: 'short',
                     year: 'numeric',
                   })}
+                  time={event.time}
                   category={event.category}
                   image={event.imageUrl || undefined}
                   href={`${eventsBaseHref}/${event.slug}`}

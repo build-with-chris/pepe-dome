@@ -3160,6 +3160,14 @@
   }
 }
 
+/*
+ * Legacy-Duplikate von Tailwind-Utilities. In @layer components, damit
+ * echte Tailwind-Utilities (inkl. responsiver Varianten wie sm:flex-row,
+ * lg:grid-cols-3) sie überschreiben können — unlayered würden sie immer
+ * gewinnen und alle Breakpoint-Layouts brechen.
+ */
+@layer components {
+
 .grid {
   display: grid;
 }
@@ -3272,10 +3280,6 @@
 .z-0 { z-index: 0; }
 .z-10 { z-index: 10; }
 .opacity-30 { opacity: 0.3; }
-.bg-gradient-to-t { background-image: linear-gradient(to top, var(--tw-gradient-stops)); }
-.from-black\/90 { --tw-gradient-from: rgba(0, 0, 0, 0.9); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0)); }
-.via-black\/50 { --tw-gradient-stops: var(--tw-gradient-from), rgba(0, 0, 0, 0.5), var(--tw-gradient-to, rgba(0, 0, 0, 0)); }
-.to-black\/20 { --tw-gradient-to: rgba(0, 0, 0, 0.2); }
 
 /* Color utilities */
 .text-pepe-gold { color: var(--pepe-gold); }
@@ -3285,6 +3289,8 @@
 .bg-pepe-dark { background-color: var(--pepe-dark); }
 .border-pepe-line { border-color: var(--pepe-line); }
 .border-t { border-top-width: 1px; }
+
+}
 
 /* ===== Form Elements ===== */
 

@@ -20,6 +20,8 @@ export interface EventCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string
   description?: string
   date: string
+  /** Start time, e.g. "19:30" — shown next to the date */
+  time?: string | null
   category?: string
   image?: string
   href?: string
@@ -36,6 +38,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       title,
       description,
       date,
+      time,
       category,
       image,
       href,
@@ -45,6 +48,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
     },
     ref
   ) => {
+    // DB-Zeiten sind uneinheitlich ("20:00" vs. "17:00 Uhr") — Suffix für einheitliche Badges entfernen
+    const timeLabel = time ? time.replace(/\s*Uhr\s*$/i, '') : null
+
     const cardClasses = cn(
       // Base styles
       'group flex overflow-hidden rounded-2xl',
@@ -113,6 +119,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
             <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm">
               <span className="text-xs font-semibold text-[var(--pepe-gold)] tracking-wide">
                 {date}
+                {timeLabel && <span className="text-white/90"> · {timeLabel}</span>}
               </span>
             </div>
           )}
@@ -131,6 +138,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
             {compact && (
               <span className="text-sm font-medium text-[var(--pepe-gold)] tracking-wide">
                 {date}
+                {timeLabel && <span className="text-[var(--pepe-t80)]"> · {timeLabel}</span>}
               </span>
             )}
             {category && (

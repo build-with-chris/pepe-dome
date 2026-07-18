@@ -143,7 +143,7 @@ export default async function EventDetailPage({
               priority
               sizes="100vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)] via-[var(--pepe-black)]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)] via-[var(--pepe-black)]/60 to-transparent" />
           </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)] to-[var(--pepe-ink)]" />
@@ -151,26 +151,26 @@ export default async function EventDetailPage({
 
         <nav className="absolute top-8 left-0 right-0 z-10" aria-label="Breadcrumb">
           <div className="stage-container">
-            <ol className="flex items-center gap-2 text-sm text-[var(--pepe-t64)]">
-              <li><Link href={homeHref} className="hover:text-[var(--pepe-white)] transition-colors">{t.breadcrumbHome}</Link></li>
-              <li><span aria-hidden="true">/</span></li>
-              <li><Link href={eventsHref} className="hover:text-[var(--pepe-white)] transition-colors">{t.breadcrumbEvents}</Link></li>
-              <li><span aria-hidden="true">/</span></li>
-              <li><span className="text-[var(--pepe-white)] truncate max-w-[200px]">{event.title}</span></li>
+            <ol className="inline-flex items-center gap-2 text-sm list-none m-0 px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 max-w-full">
+              <li className="m-0"><Link href={homeHref} className="text-white/70 hover:text-white transition-colors">{t.breadcrumbHome}</Link></li>
+              <li className="m-0 text-white/40" aria-hidden="true">/</li>
+              <li className="m-0"><Link href={eventsHref} className="text-white/70 hover:text-white transition-colors">{t.breadcrumbEvents}</Link></li>
+              <li className="m-0 text-white/40" aria-hidden="true">/</li>
+              <li className="m-0 text-white font-medium truncate max-w-[200px]">{event.title}</li>
             </ol>
           </div>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 z-10 pb-8">
+        <div className="absolute bottom-0 left-0 right-0 z-10 pb-8 pt-20 bg-gradient-to-t from-black/85 via-black/45 to-transparent">
           <div className="stage-container">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-4">
               {event.category}
             </span>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] mb-2 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] mb-2 leading-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
               {event.title}
             </h1>
             {event.subtitle && (
-              <p className="text-xl text-[var(--pepe-gold)] font-medium">{event.subtitle}</p>
+              <p className="text-xl text-[var(--pepe-gold-hover)] font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_12px_rgba(0,0,0,0.7)]">{event.subtitle}</p>
             )}
           </div>
         </div>
@@ -302,6 +302,7 @@ export default async function EventDetailPage({
                   title={e.title}
                   description={e.description}
                   date={new Date(e.date).toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' })}
+                  time={e.time}
                   category={e.category}
                   image={e.imageUrl || undefined}
                   href={`${eventsHref}/${e.slug}`}
