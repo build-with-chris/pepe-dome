@@ -37,7 +37,22 @@
       "Bash(ls .env*)",
       "Bash(grep -c \"DATABASE_URL\" .env .env.local .env.development)",
       "Bash(npx next:*)",
-      "Bash(wc -l public/locales/*/common.json)"
+      "Bash(wc -l public/locales/*/common.json)",
+      "WebFetch(domain:www.pepe-dome.de)",
+      "Bash(mkdir -p \"/tmp/flyer-assets\")",
+      "Read(//tmp/**)",
+      "Bash(brew list *)",
+      "Bash(pip3 install *)",
+      "Bash(grep -iE \"\\\\.\\(jpg|jpeg|png|webp\\)$\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=/tmp/pepe-flyer/PepeDome_Programm_Mai-Jul_2026.pdf --print-to-pdf-no-header --no-margins --virtual-time-budget=8000 file:///tmp/pepe-flyer/flyer.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=/tmp/pepe-flyer/PepeDome_Programm_Mai-Jul_2026.pdf --no-margins --virtual-time-budget=8000 file:///tmp/pepe-flyer/flyer.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=/tmp/pepe-flyer/PepeDome_Faltblatt_Mai-Jul_2026.pdf --no-margins --virtual-time-budget=8000 file:///tmp/pepe-flyer/flyer.html)",
+      "Bash(chmod +x /tmp/share-img/render.sh)",
+      "Bash(gs --version)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --window-size=1200,1200 --screenshot=/tmp/pepe-ads/PepeDome_GoogleAds_Square_1200x1200.png --virtual-time-budget=4000 file:///tmp/pepe-ads/square.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --window-size=1200,628 --screenshot=/tmp/pepe-ads/PepeDome_GoogleAds_Landscape_1200x628.png --virtual-time-budget=4000 file:///tmp/pepe-ads/landscape.html)",
+      "Bash(cp /tmp/pepe-ads/PepeDome_GoogleAds_Square_1200x1200.png \"/Users/chris/Downloads/\")",
+      "Bash(cp /tmp/pepe-ads/PepeDome_GoogleAds_Landscape_1200x628.png \"/Users/chris/Downloads/\")"
     ],
     "deny": [],
     "ask": []
