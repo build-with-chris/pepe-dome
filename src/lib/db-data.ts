@@ -7,16 +7,25 @@ import { prisma } from './prisma'
 import type { Event, Article } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
 
-// Safe database query wrapper - returns fallback on error
+// Safe database query wrapper - returns fallback on error.
+// Verbindungsabbrüche zur Supabase-Direktverbindung treten sporadisch auf
+// ("Can't reach database server") — ein kurzer Retry fängt diese Blips ab,
+// statt dem Besucher eine leere Seite ("Keine Events verfügbar") zu zeigen.
 async function safeDbQuery<T>(
   queryFn: () => Promise<T>,
   fallback: T
 ): Promise<T> {
   try {
     return await queryFn()
-  } catch (error) {
-    console.error('Database query error:', error)
-    return fallback
+  } catch (firstError) {
+    console.error('Database query error (retrying once):', firstError)
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    try {
+      return await queryFn()
+    } catch (error) {
+      console.error('Database query error:', error)
+      return fallback
+    }
   }
 }
 

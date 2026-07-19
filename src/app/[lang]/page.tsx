@@ -82,7 +82,15 @@ export default async function HomePage({
     dome: '🏛️',
     community: '🤝',
   }
+  // Jede Karte führt zur passenden Seite — keine Sackgassen
+  const featureLinks: Record<string, string> = {
+    show: '/events',
+    training: '/training',
+    dome: '/about',
+    community: '/news',
+  }
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
+  const pressQuotes = (t.press?.quotes ?? []) as { text: string; source: string }[]
 
   return (
     <>
@@ -98,33 +106,131 @@ export default async function HomePage({
 
         <div className="stage-container relative z-10 flex-shrink-0 pt-[2.31rem] md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.7)]">
               {t.hero.title}
             </h1>
+            <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold)] font-medium max-w-2xl mx-auto [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
+              {t.hero.subtitle}
+            </p>
           </div>
         </div>
 
         <div className="relative z-10 flex-1 min-h-[1rem]" />
 
-        <div className="relative z-10 h-[25vh] min-h-[180px] flex flex-col items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
+        <div className="relative z-10 h-[22vh] min-h-[160px] flex flex-col items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
             <Link href={localizedHref(lang, '/events')} className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
                 {t.hero.ctaPrimary}
               </Button>
             </Link>
-            <Link href={localizedHref(lang, '/newsletter')} className="w-full sm:w-auto flex justify-center sm:block">
+            <Link href={localizedHref(lang, '/training')} className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="secondary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
                 {t.hero.ctaSecondary}
               </Button>
             </Link>
           </div>
-          <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold)] font-medium">
-            {t.hero.subtitle}
-          </p>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
+      </section>
+
+      {/* ===== Kommende Events ===== */}
+      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
+                {t.upcomingEvents.title}
+              </h2>
+              <p className="text-[var(--pepe-t64)] text-sm md:text-base">
+                {t.upcomingEvents.subtitle}
+              </p>
+            </div>
+            <Link href={localizedHref(lang, '/events')}>
+              <Button variant="ghost" size="sm">
+                {t.upcomingEvents.viewAll}
+              </Button>
+            </Link>
+          </div>
+
+          {displayEvents.length > 0 ? (
+            <EventsCarousel
+              events={displayEvents.map((e) => ({
+                id: e.id,
+                slug: e.slug,
+                title: e.title,
+                description: e.description,
+                date: e.date,
+                category: e.category,
+                imageUrl: e.imageUrl,
+              }))}
+            />
+          ) : (
+            <div className="text-center py-10 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
+              <p className="text-[var(--pepe-t64)]">{t.upcomingEvents.empty}</p>
+              <Link href={localizedHref(lang, '/events')} className="text-[var(--pepe-gold)] hover:underline mt-2 inline-block">
+                {t.upcomingEvents.viewAll}
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ===== Features Grid ===== */}
+      <section className="py-16 md:py-24 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              {t.features.title}
+            </h2>
+            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
+              {t.features.subtitle}
+            </p>
+          </div>
+
+          <div className="features-grid">
+            {featureKeys.map((key) => {
+              const feature = t.features.items[key]
+              return (
+                <Link
+                  key={key}
+                  href={localizedHref(lang, featureLinks[key])}
+                  className="group min-w-0 block bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                      src={featureImages[key] || '/TheDome.png'}
+                      alt={feature.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      loading="lazy"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-ink)] to-transparent" />
+                    <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/20 backdrop-blur-md flex items-center justify-center border border-[var(--pepe-gold)]/30">
+                      <span className="text-[var(--pepe-gold)] text-2xl leading-none">
+                        {featureEmojis[key]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-8 text-center lg:text-left">
+                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-gold)] transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-[var(--pepe-t64)] leading-relaxed mb-4">
+                      {feature.description}
+                    </p>
+                    <span className="text-sm font-semibold text-[var(--pepe-gold)]">
+                      {t.features.more} →
+                    </span>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
       </section>
 
       {/* ===== Café Section ===== */}
@@ -174,31 +280,31 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* ===== Vision & Mission ===== */}
-      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
-        <div className="stage-container">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
-                  {t.vision.title}
-                </h2>
-                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
-                  {t.vision.text}
-                </p>
-              </div>
-              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
-                  {t.mission.title}
-                </h2>
-                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
-                  {t.mission.text}
-                </p>
-              </div>
+      {/* ===== Pressestimmen (erscheint erst, wenn Zitate im Dictionary stehen) ===== */}
+      {pressQuotes.length > 0 && (
+        <section className="py-16 md:py-24 bg-[var(--pepe-ink)]/30">
+          <div className="stage-container">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] text-center mb-12">
+              {t.press.title}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {pressQuotes.map((quote, index) => (
+                <blockquote
+                  key={index}
+                  className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8"
+                >
+                  <p className="text-[var(--pepe-t80)] text-lg leading-relaxed mb-4">
+                    „{quote.text}“
+                  </p>
+                  <footer className="text-sm text-[var(--pepe-gold)] font-semibold">
+                    {quote.source}
+                  </footer>
+                </blockquote>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== Video Carousel ===== */}
       <section className="py-8 md:py-16 bg-[var(--pepe-black)]">
@@ -211,48 +317,6 @@ export default async function HomePage({
           </p>
         </div>
         <VideoCarousel />
-      </section>
-
-      {/* ===== Kommende Events ===== */}
-      <section className="py-12 md:py-16 bg-[var(--pepe-black)]">
-        <div className="stage-container">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
-                {t.upcomingEvents.title}
-              </h2>
-              <p className="text-[var(--pepe-t64)] text-sm md:text-base">
-                {t.upcomingEvents.subtitle}
-              </p>
-            </div>
-            <Link href={localizedHref(lang, '/events')}>
-              <Button variant="ghost" size="sm">
-                {t.upcomingEvents.viewAll}
-              </Button>
-            </Link>
-          </div>
-
-          {displayEvents.length > 0 ? (
-            <EventsCarousel
-              events={displayEvents.map((e) => ({
-                id: e.id,
-                slug: e.slug,
-                title: e.title,
-                description: e.description,
-                date: e.date,
-                category: e.category,
-                imageUrl: e.imageUrl,
-              }))}
-            />
-          ) : (
-            <div className="text-center py-10 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
-              <p className="text-[var(--pepe-t64)]">{t.upcomingEvents.empty}</p>
-              <Link href={localizedHref(lang, '/events')} className="text-[var(--pepe-gold)] hover:underline mt-2 inline-block">
-                {t.upcomingEvents.viewAll}
-              </Link>
-            </div>
-          )}
-        </div>
       </section>
 
       {/* ===== Latest News ===== */}
@@ -297,58 +361,6 @@ export default async function HomePage({
               <p className="text-[var(--pepe-t64)]">{t.news.empty}</p>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ===== Features Grid ===== */}
-      <section className="py-20 md:py-32 bg-[var(--pepe-black)]">
-        <div className="stage-container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
-              {t.features.title}
-            </h2>
-            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              {t.features.subtitle}
-            </p>
-          </div>
-
-          <div className="features-grid">
-            {featureKeys.map((key) => {
-              const feature = t.features.items[key]
-              return (
-                <div
-                  key={key}
-                  className="group min-w-0 bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl overflow-hidden hover:border-[var(--pepe-gold)] transition-all duration-500 ease-out shadow-lg hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_15px_var(--pepe-gold-glow)]"
-                >
-                  <div className="relative aspect-video w-full overflow-hidden">
-                    <Image
-                      src={featureImages[key] || '/TheDome.png'}
-                      alt={feature.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      loading="lazy"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-ink)] to-transparent" />
-                    <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/20 backdrop-blur-md flex items-center justify-center border border-[var(--pepe-gold)]/30">
-                      <span className="text-[var(--pepe-gold)] text-2xl leading-none">
-                        {featureEmojis[key]}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-8 text-center lg:text-left">
-                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-gold)] transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm text-[var(--pepe-t64)] leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
         </div>
       </section>
 

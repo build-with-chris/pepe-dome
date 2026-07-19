@@ -22,10 +22,10 @@
   },
   "home": {
     "hero": {
-      "title": "Pepe Dome",
-      "subtitle": "Zuhause für Artistik & Kultur",
-      "ctaPrimary": "Aktuelle Events",
-      "ctaSecondary": "Newsletter abonnieren"
+      "title": "Erlebe Artistik hautnah",
+      "subtitle": "Außergewöhnliche Shows, offenes Training und Café — unter der Kuppel im Münchner Ostpark.",
+      "ctaPrimary": "Events & Tickets",
+      "ctaSecondary": "Training entdecken"
     },
     "cafe": {
       "eyebrow": "Neu im Pepe Dome",
@@ -37,14 +37,6 @@
       "days": "Freitag – Sonntag",
       "time": "14:00 – 19:00 Uhr",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
-    },
-    "vision": {
-      "title": "Vision",
-      "text": "Der Pepe Dome wird ein langfristiger, lebendiger Ort für zeitgenössischen Zirkus, kulturelle Begegnung, künstlerische Ausbildung, Community-Programme und öffentlich zugängliche Events."
-    },
-    "mission": {
-      "title": "Mission",
-      "text": "Förderung von zeitgenössischer Zirkuskunst und kultureller Teilhabe in München, verbunden mit inklusiven Bildungs- und Trainingsangeboten. Kulturfokus Ostpark."
     },
     "videoCarousel": {
       "title": "Erlebe den Dome live.",
@@ -66,15 +58,32 @@
       "title": "Was dich erwartet",
       "subtitle": "Entdecke die Vielfalt des Pepe Dome",
       "items": {
-        "show":      { "title": "Spektakuläre Shows",          "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen — erlebe Artistik auf höchstem Niveau." },
-        "training":  { "title": "Professionelles Training",    "description": "Kurse und Workshops für alle Levels — von Einsteiger:innen bis Profis." },
-        "dome":      { "title": "Einzigartige Location",       "description": "Die geodätische Kuppel bietet 200 Sitzplätze und 12 m Deckenhöhe für spektakuläre Luftartistik." },
-        "community": { "title": "Community & Kultur",          "description": "Ein Ort der Begegnung für Artist:innen, Kulturbegeisterte und Neugierige." }
-      }
+        "show": {
+          "title": "Spektakuläre Shows",
+          "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen — erlebe Artistik auf höchstem Niveau."
+        },
+        "training": {
+          "title": "Professionelles Training",
+          "description": "Kurse und Workshops für alle Levels — von Einsteiger:innen bis Profis."
+        },
+        "dome": {
+          "title": "Einzigartige Location",
+          "description": "Die geodätische Kuppel bietet 200 Sitzplätze und 12 m Deckenhöhe für spektakuläre Luftartistik."
+        },
+        "community": {
+          "title": "Community & Kultur",
+          "description": "Ein Ort der Begegnung für Artist:innen, Kulturbegeisterte und Neugierige."
+        }
+      },
+      "more": "Mehr erfahren"
     },
     "newsletter": {
       "title": "Bleib auf dem Laufenden",
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
+    },
+    "press": {
+      "title": "Das sagen andere",
+      "quotes": []
     }
   },
   "news": {
@@ -121,10 +130,22 @@
       "cta": "Anfrage senden",
       "videoAlt": "Pepe Dome für Business Events",
       "features": [
-        { "label": "Kapazität",        "value": "Bis zu 200 Personen" },
-        { "label": "Deckenhöhe",       "value": "8,5 Meter" },
-        { "label": "Architektur",      "value": "Geodätische Kuppel" },
-        { "label": "Barrierefreiheit", "value": "Barrierearm (mit Begleitperson)" }
+        {
+          "label": "Kapazität",
+          "value": "Bis zu 200 Personen"
+        },
+        {
+          "label": "Deckenhöhe",
+          "value": "8,5 Meter"
+        },
+        {
+          "label": "Architektur",
+          "value": "Geodätische Kuppel"
+        },
+        {
+          "label": "Barrierefreiheit",
+          "value": "Barrierearm (mit Begleitperson)"
+        }
       ]
     },
     "services": {
@@ -135,19 +156,34 @@
           "title": "Corporate Events",
           "description": "Firmenweihnachtsfeiern, Jubiläen, Produktlaunches und Kundenevents in einzigartiger Dome-Atmosphäre.",
           "icon": "🎉",
-          "features": ["Bis zu 200 Gäste", "Professionelle Technik", "Catering-Partner", "Full-Service Organisation"]
+          "features": [
+            "Bis zu 200 Gäste",
+            "Professionelle Technik",
+            "Catering-Partner",
+            "Full-Service Organisation"
+          ]
         },
         {
           "title": "Teambuilding",
           "description": "Innovative Teambuilding-Erfahrungen durch gemeinsame Artistik-Workshops und kreative Challenges.",
           "icon": "🤝",
-          "features": ["Artist-Workshops", "Akrobatik-Challenges", "Kreative Projekte", "Team-Olympiade"]
+          "features": [
+            "Artist-Workshops",
+            "Akrobatik-Challenges",
+            "Kreative Projekte",
+            "Team-Olympiade"
+          ]
         },
         {
           "title": "PepeShows",
           "description": "Maßgeschneiderte Performances mit professionellen Artist:innen — unvergessliche Erlebnisse für Ihre Gäste.",
           "icon": "🎭",
-          "features": ["Professionelle Artist:innen", "Musik & Akrobatik", "Individuelle Konzepte", "Weltklasse-Entertainment"]
+          "features": [
+            "Professionelle Artist:innen",
+            "Musik & Akrobatik",
+            "Individuelle Konzepte",
+            "Weltklasse-Entertainment"
+          ]
         }
       ]
     },
@@ -198,10 +234,26 @@
       "title": "Professionelle Ausstattung",
       "imageAlt": "Pepe Dome Venue",
       "items": [
-        { "icon": "💡", "title": "Professionelle Lichttechnik", "text": "Modernste Beleuchtungssysteme für jede Stimmung." },
-        { "icon": "🔊", "title": "Premium Sound",                "text": "Hochwertige Beschallungsanlage mit optimaler Akustik." },
-        { "icon": "📽️", "title": "Projektionstechnik",            "text": "Beamer und Leinwand für Präsentationen und Visuals." },
-        { "icon": "🪑", "title": "Flexible Bestuhlung",          "text": "Verschiedene Aufbauvarianten für jeden Anlass." }
+        {
+          "icon": "💡",
+          "title": "Professionelle Lichttechnik",
+          "text": "Modernste Beleuchtungssysteme für jede Stimmung."
+        },
+        {
+          "icon": "🔊",
+          "title": "Premium Sound",
+          "text": "Hochwertige Beschallungsanlage mit optimaler Akustik."
+        },
+        {
+          "icon": "📽️",
+          "title": "Projektionstechnik",
+          "text": "Beamer und Leinwand für Präsentationen und Visuals."
+        },
+        {
+          "icon": "🪑",
+          "title": "Flexible Bestuhlung",
+          "text": "Verschiedene Aufbauvarianten für jeden Anlass."
+        }
       ]
     },
     "cta": {
@@ -322,9 +374,18 @@
       "title": "Das PEPE Ökosystem",
       "subtitle": "Drei Säulen — ein gemeinsames Ziel: Artistik als zeitgenössische Kunstform zu fördern und erlebbar zu machen.",
       "items": {
-        "dome":  { "name": "PEPE Dome",  "description": "Die geodätische Kuppel im Ostpark — Hauptbühne für spektakuläre Shows, Festivals und Events." },
-        "shows": { "name": "PEPE Shows", "description": "Zeitgenössischer Zirkus auf höchstem Niveau — von intimen Cabarets bis zu großen Produktionen." },
-        "arts":  { "name": "pepe Arts",  "description": "Künstlerische Entwicklung und Produktion — Residenzen, Workshops und kreative Zusammenarbeit." }
+        "dome": {
+          "name": "PEPE Dome",
+          "description": "Die geodätische Kuppel im Ostpark — Hauptbühne für spektakuläre Shows, Festivals und Events."
+        },
+        "shows": {
+          "name": "PEPE Shows",
+          "description": "Zeitgenössischer Zirkus auf höchstem Niveau — von intimen Cabarets bis zu großen Produktionen."
+        },
+        "arts": {
+          "name": "pepe Arts",
+          "description": "Künstlerische Entwicklung und Produktion — Residenzen, Workshops und kreative Zusammenarbeit."
+        }
       }
     },
     "network": {
@@ -343,10 +404,22 @@
       "title": "Unsere Werte",
       "subtitle": "Diese Prinzipien leiten unsere Arbeit und prägen alles, was wir tun.",
       "items": [
-        { "title": "Künstlerische Exzellenz", "description": "Wir streben nach höchster Qualität in Shows und Training und fördern Artistik als zeitgenössische Kunstform." },
-        { "title": "Inklusion & Community",   "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung — Kultur für alle." },
-        { "title": "Nachhaltigkeit",          "description": "Kreative Wiederverwendung von Materialien statt Neuanschaffung — ökologische Verantwortung ist uns wichtig." },
-        { "title": "Innovation",              "description": "Wir experimentieren mit neuen Formaten und Technologien, um Artistik neu zu denken." }
+        {
+          "title": "Künstlerische Exzellenz",
+          "description": "Wir streben nach höchster Qualität in Shows und Training und fördern Artistik als zeitgenössische Kunstform."
+        },
+        {
+          "title": "Inklusion & Community",
+          "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung — Kultur für alle."
+        },
+        {
+          "title": "Nachhaltigkeit",
+          "description": "Kreative Wiederverwendung von Materialien statt Neuanschaffung — ökologische Verantwortung ist uns wichtig."
+        },
+        {
+          "title": "Innovation",
+          "description": "Wir experimentieren mit neuen Formaten und Technologien, um Artistik neu zu denken."
+        }
       ]
     },
     "team": {
@@ -359,6 +432,14 @@
       "text": "Der PEPE Dome befindet sich im wunderschönen Ostpark in München — leicht erreichbar mit öffentlichen Verkehrsmitteln und mit Parkmöglichkeiten in der Nähe.",
       "contact": "Kontakt",
       "upcomingEvents": "Kommende Events"
+    },
+    "vision": {
+      "title": "Vision",
+      "text": "Der Pepe Dome wird ein langfristiger, lebendiger Ort für zeitgenössischen Zirkus, kulturelle Begegnung, künstlerische Ausbildung, Community-Programme und öffentlich zugängliche Events."
+    },
+    "mission": {
+      "title": "Mission",
+      "text": "Förderung von zeitgenössischer Zirkuskunst und kultureller Teilhabe in München, verbunden mit inklusiven Bildungs- und Trainingsangeboten. Kulturfokus Ostpark."
     }
   },
   "newsletter": {
@@ -374,9 +455,21 @@
     "benefits": {
       "title": "Was du bekommst",
       "items": [
-        { "icon": "📅", "title": "Event-Vorschauen",  "text": "Sei der Erste, der von neuen Shows, Workshops und Festivals erfährt." },
-        { "icon": "🎭", "title": "Backstage Stories", "text": "Exklusive Einblicke hinter die Kulissen und Interviews mit Künstler:innen." },
-        { "icon": "✨", "title": "Special Offers",    "text": "Early-Bird-Tickets und exklusive Angebote für Abonnent:innen." }
+        {
+          "icon": "📅",
+          "title": "Event-Vorschauen",
+          "text": "Sei der Erste, der von neuen Shows, Workshops und Festivals erfährt."
+        },
+        {
+          "icon": "🎭",
+          "title": "Backstage Stories",
+          "text": "Exklusive Einblicke hinter die Kulissen und Interviews mit Künstler:innen."
+        },
+        {
+          "icon": "✨",
+          "title": "Special Offers",
+          "text": "Early-Bird-Tickets und exklusive Angebote für Abonnent:innen."
+        }
       ]
     },
     "archive": {
@@ -463,10 +556,22 @@
       "title": "Für 2026 in Planung",
       "text": "Aktuell finden noch Umbauarbeiten statt, aber wir planen hochmotiviert eine neue Saison.",
       "items": {
-        "tornadosEye":  { "title": "David Eisele - Tornados Eye",       "sub": "zeitgenössischer Zirkus - Solo" },
-        "saucisson":    { "title": "Saucisson - taigi Cirkas",          "sub": "Litauen - Circus Next Laureat" },
-        "danielaJakob": { "title": "Daniela Maier und Jakob Vöckler",   "sub": "gefördert durch das Kulturreferat München - Solo Präsentationen" },
-        "zeitFuer":     { "title": "Zeit für Zirkus",                   "sub": "" }
+        "tornadosEye": {
+          "title": "David Eisele - Tornados Eye",
+          "sub": "zeitgenössischer Zirkus - Solo"
+        },
+        "saucisson": {
+          "title": "Saucisson - taigi Cirkas",
+          "sub": "Litauen - Circus Next Laureat"
+        },
+        "danielaJakob": {
+          "title": "Daniela Maier und Jakob Vöckler",
+          "sub": "gefördert durch das Kulturreferat München - Solo Präsentationen"
+        },
+        "zeitFuer": {
+          "title": "Zeit für Zirkus",
+          "sub": ""
+        }
       }
     },
     "detail": {
@@ -558,10 +663,26 @@
       "title": "Unsere Disziplinen",
       "subtitle": "Von Luftakrobatik bis Bodenarbeit — die Vielfalt zeitgenössischer Zirkuskunst.",
       "items": [
-        { "name": "Aerial Arts",     "description": "Vertikaltuch, Trapez, Aerial Hoop, Strapaten, Spanish Web", "icon": "🎪" },
-        { "name": "Ground Arts",     "description": "Handstand, Akrobatik, Kontorsion, Cyr Wheel, Jonglage",     "icon": "🤸" },
-        { "name": "Movement & Flow", "description": "Contemporary Dance, Floor Work, Improvisation",            "icon": "💃" },
-        { "name": "Conditioning",    "description": "Flexibilität, Verletzungsprävention, Kraftaufbau",          "icon": "💪" }
+        {
+          "name": "Aerial Arts",
+          "description": "Vertikaltuch, Trapez, Aerial Hoop, Strapaten, Spanish Web",
+          "icon": "🎪"
+        },
+        {
+          "name": "Ground Arts",
+          "description": "Handstand, Akrobatik, Kontorsion, Cyr Wheel, Jonglage",
+          "icon": "🤸"
+        },
+        {
+          "name": "Movement & Flow",
+          "description": "Contemporary Dance, Floor Work, Improvisation",
+          "icon": "💃"
+        },
+        {
+          "name": "Conditioning",
+          "description": "Flexibilität, Verletzungsprävention, Kraftaufbau",
+          "icon": "💪"
+        }
       ]
     },
     "location": {

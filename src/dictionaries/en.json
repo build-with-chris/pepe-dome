@@ -22,10 +22,10 @@
   },
   "home": {
     "hero": {
-      "title": "Pepe Dome",
-      "subtitle": "Home for Circus & Culture",
-      "ctaPrimary": "Upcoming Events",
-      "ctaSecondary": "Subscribe to Newsletter"
+      "title": "Experience breathtaking acrobatics",
+      "subtitle": "Extraordinary shows, open training and a café — under the dome in Munich's Ostpark.",
+      "ctaPrimary": "Events & tickets",
+      "ctaSecondary": "Discover training"
     },
     "cafe": {
       "eyebrow": "New at Pepe Dome",
@@ -37,14 +37,6 @@
       "days": "Friday – Sunday",
       "time": "2:00 PM – 7:00 PM",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
-    },
-    "vision": {
-      "title": "Vision",
-      "text": "Pepe Dome is becoming a long-term, vibrant place for contemporary circus, cultural exchange, artistic education, community programs and publicly accessible events."
-    },
-    "mission": {
-      "title": "Mission",
-      "text": "Promoting contemporary circus and cultural participation in Munich — paired with inclusive training and education. Cultural focus: Ostpark."
     },
     "videoCarousel": {
       "title": "Experience the Dome live.",
@@ -66,15 +58,32 @@
       "title": "What awaits you",
       "subtitle": "Discover the variety of Pepe Dome",
       "items": {
-        "show":      { "title": "Spectacular Shows",     "description": "From contemporary circus to innovative productions — experience artistry at the highest level." },
-        "training":  { "title": "Professional Training", "description": "Courses and workshops for every level — from beginners to professionals." },
-        "dome":      { "title": "Unique Location",       "description": "The geodesic dome offers 200 seats and 12 m ceiling height for spectacular aerial acts." },
-        "community": { "title": "Community & Culture",   "description": "A place for artists, culture lovers and curious minds to meet." }
-      }
+        "show": {
+          "title": "Spectacular Shows",
+          "description": "From contemporary circus to innovative productions — experience artistry at the highest level."
+        },
+        "training": {
+          "title": "Professional Training",
+          "description": "Courses and workshops for every level — from beginners to professionals."
+        },
+        "dome": {
+          "title": "Unique Location",
+          "description": "The geodesic dome offers 200 seats and 12 m ceiling height for spectacular aerial acts."
+        },
+        "community": {
+          "title": "Community & Culture",
+          "description": "A place for artists, culture lovers and curious minds to meet."
+        }
+      },
+      "more": "Learn more"
     },
     "newsletter": {
       "title": "Stay in the loop",
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
+    },
+    "press": {
+      "title": "What others say",
+      "quotes": []
     }
   },
   "news": {
@@ -121,10 +130,22 @@
       "cta": "Send enquiry",
       "videoAlt": "Pepe Dome for business events",
       "features": [
-        { "label": "Capacity",      "value": "Up to 200 people" },
-        { "label": "Ceiling",       "value": "8.5 metres" },
-        { "label": "Architecture",  "value": "Geodesic dome" },
-        { "label": "Accessibility", "value": "Step-free (companion recommended)" }
+        {
+          "label": "Capacity",
+          "value": "Up to 200 people"
+        },
+        {
+          "label": "Ceiling",
+          "value": "8.5 metres"
+        },
+        {
+          "label": "Architecture",
+          "value": "Geodesic dome"
+        },
+        {
+          "label": "Accessibility",
+          "value": "Step-free (companion recommended)"
+        }
       ]
     },
     "services": {
@@ -135,19 +156,34 @@
           "title": "Corporate Events",
           "description": "Company Christmas parties, anniversaries, product launches and customer events in a unique dome atmosphere.",
           "icon": "🎉",
-          "features": ["Up to 200 guests", "Professional tech", "Catering partners", "Full-service organisation"]
+          "features": [
+            "Up to 200 guests",
+            "Professional tech",
+            "Catering partners",
+            "Full-service organisation"
+          ]
         },
         {
           "title": "Team Building",
           "description": "Innovative team building through joint artistry workshops and creative challenges.",
           "icon": "🤝",
-          "features": ["Artist workshops", "Acrobatic challenges", "Creative projects", "Team olympics"]
+          "features": [
+            "Artist workshops",
+            "Acrobatic challenges",
+            "Creative projects",
+            "Team olympics"
+          ]
         },
         {
           "title": "PepeShows",
           "description": "Tailor-made performances with professional artists — unforgettable experiences for your guests.",
           "icon": "🎭",
-          "features": ["Professional artists", "Music & acrobatics", "Custom concepts", "World-class entertainment"]
+          "features": [
+            "Professional artists",
+            "Music & acrobatics",
+            "Custom concepts",
+            "World-class entertainment"
+          ]
         }
       ]
     },
@@ -198,10 +234,26 @@
       "title": "Professional setup",
       "imageAlt": "Pepe Dome venue",
       "items": [
-        { "icon": "💡", "title": "Professional lighting", "text": "State-of-the-art lighting systems for any mood." },
-        { "icon": "🔊", "title": "Premium sound",        "text": "High-quality PA with optimal acoustics." },
-        { "icon": "📽️", "title": "Projection",            "text": "Projectors and screens for presentations and visuals." },
-        { "icon": "🪑", "title": "Flexible seating",     "text": "Different setup variants for every occasion." }
+        {
+          "icon": "💡",
+          "title": "Professional lighting",
+          "text": "State-of-the-art lighting systems for any mood."
+        },
+        {
+          "icon": "🔊",
+          "title": "Premium sound",
+          "text": "High-quality PA with optimal acoustics."
+        },
+        {
+          "icon": "📽️",
+          "title": "Projection",
+          "text": "Projectors and screens for presentations and visuals."
+        },
+        {
+          "icon": "🪑",
+          "title": "Flexible seating",
+          "text": "Different setup variants for every occasion."
+        }
       ]
     },
     "cta": {
@@ -322,9 +374,18 @@
       "title": "The PEPE ecosystem",
       "subtitle": "Three pillars — one shared goal: to support and showcase circus arts as a contemporary art form.",
       "items": {
-        "dome":  { "name": "PEPE Dome",  "description": "The geodesic dome in Ostpark — main stage for spectacular shows, festivals and events." },
-        "shows": { "name": "PEPE Shows", "description": "Contemporary circus at the highest level — from intimate cabarets to large productions." },
-        "arts":  { "name": "pepe Arts",  "description": "Artistic development and production — residencies, workshops and creative collaboration." }
+        "dome": {
+          "name": "PEPE Dome",
+          "description": "The geodesic dome in Ostpark — main stage for spectacular shows, festivals and events."
+        },
+        "shows": {
+          "name": "PEPE Shows",
+          "description": "Contemporary circus at the highest level — from intimate cabarets to large productions."
+        },
+        "arts": {
+          "name": "pepe Arts",
+          "description": "Artistic development and production — residencies, workshops and creative collaboration."
+        }
       }
     },
     "network": {
@@ -343,10 +404,22 @@
       "title": "Our values",
       "subtitle": "These principles guide our work and shape everything we do.",
       "items": [
-        { "title": "Artistic excellence",    "description": "We aim for the highest quality in shows and training and champion circus arts as a contemporary art form." },
-        { "title": "Inclusion & community",  "description": "Everyone is welcome — regardless of background or experience. Culture for all." },
-        { "title": "Sustainability",         "description": "Creative reuse of materials over buying new — ecological responsibility matters to us." },
-        { "title": "Innovation",             "description": "We experiment with new formats and technologies to reimagine circus." }
+        {
+          "title": "Artistic excellence",
+          "description": "We aim for the highest quality in shows and training and champion circus arts as a contemporary art form."
+        },
+        {
+          "title": "Inclusion & community",
+          "description": "Everyone is welcome — regardless of background or experience. Culture for all."
+        },
+        {
+          "title": "Sustainability",
+          "description": "Creative reuse of materials over buying new — ecological responsibility matters to us."
+        },
+        {
+          "title": "Innovation",
+          "description": "We experiment with new formats and technologies to reimagine circus."
+        }
       ]
     },
     "team": {
@@ -359,6 +432,14 @@
       "text": "Pepe Dome sits in the beautiful Ostpark in Munich — easy to reach by public transport and with parking nearby.",
       "contact": "Contact",
       "upcomingEvents": "Upcoming events"
+    },
+    "vision": {
+      "title": "Vision",
+      "text": "Pepe Dome is becoming a long-term, vibrant place for contemporary circus, cultural exchange, artistic education, community programs and publicly accessible events."
+    },
+    "mission": {
+      "title": "Mission",
+      "text": "Promoting contemporary circus and cultural participation in Munich — paired with inclusive training and education. Cultural focus: Ostpark."
     }
   },
   "newsletter": {
@@ -374,9 +455,21 @@
     "benefits": {
       "title": "What you get",
       "items": [
-        { "icon": "📅", "title": "Event previews",     "text": "Be the first to know about new shows, workshops and festivals." },
-        { "icon": "🎭", "title": "Backstage stories", "text": "Exclusive behind-the-scenes content and interviews with artists." },
-        { "icon": "✨", "title": "Special offers",    "text": "Early-bird tickets and exclusive deals for subscribers." }
+        {
+          "icon": "📅",
+          "title": "Event previews",
+          "text": "Be the first to know about new shows, workshops and festivals."
+        },
+        {
+          "icon": "🎭",
+          "title": "Backstage stories",
+          "text": "Exclusive behind-the-scenes content and interviews with artists."
+        },
+        {
+          "icon": "✨",
+          "title": "Special offers",
+          "text": "Early-bird tickets and exclusive deals for subscribers."
+        }
       ]
     },
     "archive": {
@@ -463,10 +556,22 @@
       "title": "Planned for 2026",
       "text": "Construction is still ongoing — but we're highly motivated for the new season.",
       "items": {
-        "tornadosEye":  { "title": "David Eisele - Tornados Eye",       "sub": "Contemporary circus - solo" },
-        "saucisson":    { "title": "Saucisson - taigi Cirkas",          "sub": "Lithuania - Circus Next Laureate" },
-        "danielaJakob": { "title": "Daniela Maier & Jakob Vöckler",     "sub": "Funded by Munich's Department of Arts - solo presentations" },
-        "zeitFuer":     { "title": "Zeit für Zirkus",                   "sub": "" }
+        "tornadosEye": {
+          "title": "David Eisele - Tornados Eye",
+          "sub": "Contemporary circus - solo"
+        },
+        "saucisson": {
+          "title": "Saucisson - taigi Cirkas",
+          "sub": "Lithuania - Circus Next Laureate"
+        },
+        "danielaJakob": {
+          "title": "Daniela Maier & Jakob Vöckler",
+          "sub": "Funded by Munich's Department of Arts - solo presentations"
+        },
+        "zeitFuer": {
+          "title": "Zeit für Zirkus",
+          "sub": ""
+        }
       }
     },
     "detail": {
@@ -558,10 +663,26 @@
       "title": "Our disciplines",
       "subtitle": "From aerial work to floor — the breadth of contemporary circus arts.",
       "items": [
-        { "name": "Aerial Arts",     "description": "Vertical fabric, trapeze, aerial hoop, straps, Spanish web",   "icon": "🎪" },
-        { "name": "Ground Arts",     "description": "Handstand, acrobatics, contortion, Cyr wheel, juggling",       "icon": "🤸" },
-        { "name": "Movement & Flow", "description": "Contemporary dance, floor work, improvisation",                "icon": "💃" },
-        { "name": "Conditioning",    "description": "Flexibility, injury prevention, strength training",            "icon": "💪" }
+        {
+          "name": "Aerial Arts",
+          "description": "Vertical fabric, trapeze, aerial hoop, straps, Spanish web",
+          "icon": "🎪"
+        },
+        {
+          "name": "Ground Arts",
+          "description": "Handstand, acrobatics, contortion, Cyr wheel, juggling",
+          "icon": "🤸"
+        },
+        {
+          "name": "Movement & Flow",
+          "description": "Contemporary dance, floor work, improvisation",
+          "icon": "💃"
+        },
+        {
+          "name": "Conditioning",
+          "description": "Flexibility, injury prevention, strength training",
+          "icon": "💪"
+        }
       ]
     },
     "location": {

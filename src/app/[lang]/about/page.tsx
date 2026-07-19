@@ -105,6 +105,32 @@ export default async function AboutPage({
         </div>
       </section>
 
+      {/* Vision & Mission (von der Startseite hierher verschoben) */}
+      <section className="py-16 md:py-24 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                  {t.vision.title}
+                </h2>
+                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
+                  {t.vision.text}
+                </p>
+              </div>
+              <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                  {t.mission.title}
+                </h2>
+                <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
+                  {t.mission.text}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hintergrund & Projektidee */}
       <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
         <div className="stage-container">
