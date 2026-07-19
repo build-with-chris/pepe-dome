@@ -53,12 +53,11 @@ interface PaginatedResponse {
   }
 }
 
-type Timeframe = 'upcoming' | 'past' | 'all'
+type Timeframe = 'upcoming' | 'past'
 
 const TIMEFRAME_OPTIONS: { value: Timeframe; label: string }[] = [
   { value: 'upcoming', label: 'Kommende' },
   { value: 'past', label: 'Vergangene' },
-  { value: 'all', label: 'Alle' },
 ]
 
 export default function EventsAdminPage() {
@@ -213,7 +212,7 @@ export default function EventsAdminPage() {
       <PageHeader
         title="Events"
         description={`${pagination.total} ${pagination.total === 1 ? 'Event' : 'Events'}${
-          timeframe === 'upcoming' ? ' (kommende)' : timeframe === 'past' ? ' (vergangene)' : ' insgesamt'
+          timeframe === 'upcoming' ? ' (kommende)' : ' (vergangene)'
         }`}
         action={
           <Link href="/admin/events/new">
