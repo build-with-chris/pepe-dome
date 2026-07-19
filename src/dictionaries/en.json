@@ -82,8 +82,21 @@
       "text": "Get monthly updates on events, shows and workshops straight to your inbox."
     },
     "press": {
-      "title": "What others say",
-      "quotes": []
+      "title": "What the press says",
+      "quotes": [
+        {
+          "text": "If you want to become a circus artist yourself, Pepe Dome is the place to be.",
+          "source": "Süddeutsche Zeitung"
+        },
+        {
+          "text": "A home for modern circus in Ostpark.",
+          "source": "tz"
+        },
+        {
+          "text": "A stage seating 200, a training space, a place of learning and a neighbourhood hub.",
+          "source": "Süddeutsche Zeitung"
+        }
+      ]
     }
   },
   "news": {

@@ -82,8 +82,21 @@
       "text": "Erhalte monatlich Updates zu Events, Shows und Workshops direkt in dein Postfach."
     },
     "press": {
-      "title": "Das sagen andere",
-      "quotes": []
+      "title": "Das sagt die Presse",
+      "quotes": [
+        {
+          "text": "Wer selber Artist werden möchte, ist im Pepe-Dom bestens aufgehoben.",
+          "source": "Süddeutsche Zeitung"
+        },
+        {
+          "text": "Heimat für modernen Zirkus im Ostpark.",
+          "source": "tz"
+        },
+        {
+          "text": "Bühne mit 200 Plätzen, Trainingsort, Bildungsstätte und Stadtteiltreff.",
+          "source": "Süddeutsche Zeitung"
+        }
+      ]
     }
   },
   "news": {
