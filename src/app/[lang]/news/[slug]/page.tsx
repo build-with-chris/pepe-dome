@@ -13,6 +13,7 @@ import type { Metadata } from 'next'
 import { getArticleBySlug, getRecentArticles, getUpcomingEvents } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
+import ArticleContent from '@/components/custom/ArticleContent'
 import SignupForm from '@/components/custom/SignupForm'
 import ShareButtons from '@/components/custom/ShareButtons'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
@@ -124,8 +125,8 @@ export default async function NewsArticlePage({
         ]}
       />
 
-      {/* Hero Image */}
-      <section className="relative h-[45vh] min-h-[350px] max-h-[500px] overflow-hidden">
+      {/* Hero Image mit Titel-Overlay */}
+      <section className="relative h-[55vh] min-h-[420px] max-h-[640px] overflow-hidden">
         {article.imageUrl ? (
           <>
             <Image
@@ -157,61 +158,40 @@ export default async function NewsArticlePage({
             </div>
           </div>
         </nav>
+
+        <div className="absolute bottom-0 left-0 right-0 z-10 pb-10 pt-24 bg-gradient-to-t from-black/85 via-black/45 to-transparent">
+          <div className="stage-container">
+            <div className="max-w-4xl">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 backdrop-blur-sm">
+                  {article.category}
+                </span>
+                <span className="text-sm text-white/70 [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
+                  {readingTime} {t.readingTime}
+                </span>
+              </div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
+                {article.title}
+              </h1>
+              <div className="flex items-center gap-2 mt-5 text-sm text-white/80 [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
+                <span>{t.by} <span className="font-semibold text-white">{article.author}</span></span>
+                <span className="text-white/40" aria-hidden="true">·</span>
+                <span>{formattedDate}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <div className="stage-container py-20 md:py-28">
         <div className="grid lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
-          <article>
-            <header className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
-                  {article.category}
-                </span>
-                <span className="text-sm text-[var(--pepe-t64)]">
-                  {readingTime} {t.readingTime}
-                </span>
-              </div>
+          <article className="max-w-[70ch]">
+            {/* Lead / Excerpt */}
+            <p className="text-xl md:text-2xl text-[var(--pepe-t80)] leading-relaxed border-l-4 border-[var(--pepe-gold)] pl-5 mb-10">
+              {article.excerpt}
+            </p>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
-                {article.title}
-              </h1>
-
-              <p className="text-xl text-[var(--pepe-t80)] mb-6 leading-relaxed">
-                {article.excerpt}
-              </p>
-
-              <div className="flex items-center gap-6 text-sm text-[var(--pepe-t64)] border-b border-[var(--pepe-line)] pb-6">
-                <div>
-                  <span className="text-[var(--pepe-t48)]">{t.by}</span>
-                  <span className="text-[var(--pepe-white)] font-medium">{article.author}</span>
-                </div>
-                <div>{formattedDate}</div>
-              </div>
-            </header>
-
-            <div className="prose prose-invert prose-lg max-w-none mb-8">
-              {article.content.split('\n\n').map((paragraph, index) => {
-                if (paragraph.startsWith('## ')) {
-                  return (
-                    <h2 key={index} className="text-2xl font-bold text-[var(--pepe-white)] mt-8 mb-4">
-                      {paragraph.replace('## ', '')}
-                    </h2>
-                  )
-                }
-                if (paragraph.startsWith('### ')) {
-                  return (
-                    <h3 key={index} className="text-xl font-bold text-[var(--pepe-white)] mt-6 mb-3">
-                      {paragraph.replace('### ', '')}
-                    </h3>
-                  )
-                }
-                return (
-                  <p key={index} className="text-lg text-[var(--pepe-t80)] mb-6 leading-relaxed">
-                    {paragraph}
-                  </p>
-                )
-              })}
-            </div>
+            <ArticleContent content={article.content} />
 
             {article.tags && article.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t border-[var(--pepe-line)]">
