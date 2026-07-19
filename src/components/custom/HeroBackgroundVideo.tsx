@@ -7,33 +7,45 @@ const VIDEO = {
   desktop: '/videos/PepeDome-Atmosphaere.mp4',
 }
 
-const POSTER = '/images/Aufbau/hero-poster.webp'
+// Poster = jeweils der erste Frame des zugehörigen Videos → nahtloser Übergang
+const POSTER = {
+  mobile: '/images/Aufbau/hero-poster-mobile.webp',
+  desktop: '/images/Aufbau/hero-poster.webp',
+}
+
 const MD_BREAKPOINT = 768
 
 export default function HeroBackgroundVideo() {
-  const [src, setSrc] = useState<string | null>(null)
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
 
   useEffect(() => {
-    const setSource = () => {
-      const isDesktop = window.matchMedia(`(min-width: ${MD_BREAKPOINT}px)`).matches
-      setSrc(isDesktop ? VIDEO.desktop : VIDEO.mobile)
-    }
-
-    setSource()
     const mql = window.matchMedia(`(min-width: ${MD_BREAKPOINT}px)`)
-    mql.addEventListener('change', setSource)
-    return () => mql.removeEventListener('change', setSource)
+    const update = () => setIsDesktop(mql.matches)
+    update()
+    mql.addEventListener('change', update)
+    return () => mql.removeEventListener('change', update)
   }, [])
 
-  if (src == null) {
+  if (isDesktop == null) {
+    // Vor der Hydration: Poster rein per CSS-Breakpoint, damit sofort das
+    // richtige Format sichtbar ist (Hochkant auf Mobile, Quer auf Desktop)
     return (
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center opacity-65 bg-[var(--pepe-ink)]"
-        style={{ backgroundImage: `url(${POSTER})` }}
-        aria-hidden
-      />
+      <>
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-65 bg-[var(--pepe-ink)] md:hidden"
+          style={{ backgroundImage: `url(${POSTER.mobile})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-65 bg-[var(--pepe-ink)] hidden md:block"
+          style={{ backgroundImage: `url(${POSTER.desktop})` }}
+          aria-hidden
+        />
+      </>
     )
   }
+
+  const src = isDesktop ? VIDEO.desktop : VIDEO.mobile
 
   return (
     <video
@@ -44,7 +56,7 @@ export default function HeroBackgroundVideo() {
       loop
       playsInline
       preload="auto"
-      poster={POSTER}
+      poster={isDesktop ? POSTER.desktop : POSTER.mobile}
       aria-hidden
     >
       <source src={src} type="video/mp4" />
