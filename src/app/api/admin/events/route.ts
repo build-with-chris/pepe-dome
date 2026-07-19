@@ -43,6 +43,8 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
   const category = searchParams.get('category')
+  // 'upcoming' (ab heute, nächstes zuerst) | 'past' (vor heute, jüngstes zuerst) | 'all'
+  const timeframe = searchParams.get('timeframe') || 'all'
   const page = parseInt(searchParams.get('page') || '1')
   const limit = parseInt(searchParams.get('limit') || '20')
 
@@ -50,10 +52,15 @@ export async function GET(request: NextRequest) {
   if (status) where.status = status
   if (category) where.category = category
 
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+  if (timeframe === 'upcoming') where.date = { gte: startOfToday }
+  else if (timeframe === 'past') where.date = { lt: startOfToday }
+
   const [events, total] = await Promise.all([
     prisma.event.findMany({
       where,
-      orderBy: { date: 'asc' },
+      orderBy: { date: timeframe === 'upcoming' ? 'asc' : 'desc' },
       skip: (page - 1) * limit,
       take: limit,
       include: {

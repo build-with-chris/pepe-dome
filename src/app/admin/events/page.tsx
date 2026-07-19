@@ -53,6 +53,14 @@ interface PaginatedResponse {
   }
 }
 
+type Timeframe = 'upcoming' | 'past' | 'all'
+
+const TIMEFRAME_OPTIONS: { value: Timeframe; label: string }[] = [
+  { value: 'upcoming', label: 'Kommende' },
+  { value: 'past', label: 'Vergangene' },
+  { value: 'all', label: 'Alle' },
+]
+
 export default function EventsAdminPage() {
   const router = useRouter()
   const [events, setEvents] = useState<Event[]>([])
@@ -60,6 +68,9 @@ export default function EventsAdminPage() {
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0, limit: 20 })
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  // Vergangene Events bleiben erhalten (wiederkehrende Shows), stehen aber
+  // standardmäßig nicht vorn — Standardansicht sind kommende Events
+  const [timeframe, setTimeframe] = useState<Timeframe>('upcoming')
 
   // Delete dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -71,6 +82,7 @@ export default function EventsAdminPage() {
     setLoading(true)
     try {
       const params = new URLSearchParams({ page: String(page), limit: '20' })
+      params.set('timeframe', timeframe)
       if (statusFilter && statusFilter !== 'all') params.set('status', statusFilter)
       if (categoryFilter && categoryFilter !== 'all') params.set('category', categoryFilter)
 
@@ -83,7 +95,7 @@ export default function EventsAdminPage() {
     } finally {
       setLoading(false)
     }
-  }, [statusFilter, categoryFilter])
+  }, [statusFilter, categoryFilter, timeframe])
 
   useEffect(() => {
     fetchEvents()
@@ -200,7 +212,9 @@ export default function EventsAdminPage() {
       {/* Page Header */}
       <PageHeader
         title="Events"
-        description={`${pagination.total} ${pagination.total === 1 ? 'Event' : 'Events'} insgesamt`}
+        description={`${pagination.total} ${pagination.total === 1 ? 'Event' : 'Events'}${
+          timeframe === 'upcoming' ? ' (kommende)' : timeframe === 'past' ? ' (vergangene)' : ' insgesamt'
+        }`}
         action={
           <Link href="/admin/events/new">
             <Button variant="primary" size="sm">
@@ -214,7 +228,25 @@ export default function EventsAdminPage() {
       />
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap items-center gap-4">
+        {/* Zeitraum-Umschalter: Vergangene ausblenden statt löschen */}
+        <div className="inline-flex rounded-lg border border-white/[0.08] bg-[#111113] p-1">
+          {TIMEFRAME_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setTimeframe(opt.value)}
+              className={
+                timeframe === opt.value
+                  ? 'px-3 py-1.5 rounded-md text-sm font-medium bg-[#016dca] text-white transition-colors'
+                  : 'px-3 py-1.5 rounded-md text-sm font-medium text-white/60 hover:text-white transition-colors'
+              }
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
