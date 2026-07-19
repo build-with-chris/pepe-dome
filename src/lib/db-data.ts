@@ -58,31 +58,46 @@ export type ArticleData = {
 
 /**
  * Locale-Type für Events/Article-Queries.
- * Aktuell wird die Locale durchgereicht, hat aber keine Wirkung — die
- * englischen Übersetzungsspalten (title_en, …) sind noch nicht in der
- * Live-DB. Sobald die Migration applied ist, wird der Transformer das
- * EN-Feld wieder mit DE-Fallback auswählen.
+ * Deutsch ist die Quelle in den Hauptspalten. Übersetzungen liegen in der
+ * JSON-Spalte `translations` (z.B. { "en": { "title": … } }) und werden im
+ * Transformer feldweise überlagert — fehlende Felder fallen auf DE zurück.
  */
 export type DbLocale = 'de' | 'en'
 
+/** Übersetzbare Event-Felder (Teilmenge; Rest bleibt immer DE) */
+export type EventTranslation = {
+  title?: string
+  subtitle?: string | null
+  description?: string
+  highlights?: string[]
+  price?: string | null
+}
+
 // Transform DB event to frontend format
-function transformEvent(event: Event, _locale: DbLocale = 'de'): EventData {
+// (exportiert, damit API-Routen mit eigenen Queries denselben Locale-Overlay nutzen)
+export function transformEvent(event: Event, locale: DbLocale = 'de'): EventData {
+  const translations = (event.translations ?? {}) as Record<string, EventTranslation>
+  const t = locale !== 'de' ? translations[locale] : undefined
+
   return {
     id: event.id,
     slug: event.slug,
-    title: event.title,
-    subtitle: event.subtitle,
-    description: event.description,
+    title: t?.title?.trim() || event.title,
+    subtitle: t?.subtitle?.trim() || event.subtitle,
+    description: t?.description?.trim() || event.description,
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
     location: event.location,
     category: event.category,
     ticketUrl: event.ticketUrl,
-    price: event.price,
+    price: t?.price?.trim() || event.price,
     imageUrl: event.imageUrl,
     featured: event.featured,
-    highlights: (event.highlights as string[]) || [],
+    highlights:
+      t?.highlights && t.highlights.length > 0
+        ? t.highlights
+        : (event.highlights as string[]) || [],
   }
 }
 

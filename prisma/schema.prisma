@@ -156,6 +156,9 @@ model Event {
   imageUrl      String?            @map("image_url")
   featured      Boolean            @default(false)
   highlights    Json               @default("[]")
+  /// Übersetzungen pro Locale, z.B. { "en": { "title": …, "description": … } }.
+  /// Deutsch bleibt die Quelle in den Hauptspalten; fehlende Felder fallen auf DE zurück.
+  translations  Json               @default("{}")
   status        ContentStatus      @default(DRAFT)
   createdBy     String?            @map("created_by")
   createdAt     DateTime           @default(now()) @map("created_at")

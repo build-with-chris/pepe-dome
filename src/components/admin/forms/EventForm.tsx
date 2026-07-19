@@ -51,6 +51,15 @@ const eventSchema = z.object({
 
 type EventFormData = z.infer<typeof eventSchema>
 
+/** Englische Übersetzung der übersetzbaren Event-Felder */
+interface EventTranslation {
+  title?: string
+  subtitle?: string | null
+  description?: string
+  highlights?: string[]
+  price?: string | null
+}
+
 interface Event {
   id: string
   slug: string
@@ -70,6 +79,7 @@ interface Event {
   status: string
   recurrence: string | null
   recurrenceEnd: string | null
+  translations?: Record<string, EventTranslation>
 }
 
 interface EventFormProps {
@@ -110,6 +120,62 @@ export default function EventForm({ event, mode }: EventFormProps) {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [highlights, setHighlights] = useState<string[]>(event?.highlights || [''])
+
+  // Englische Übersetzung (Highlights als eine Zeile pro Eintrag)
+  const en = event?.translations?.en
+  const [translating, setTranslating] = useState(false)
+  const [translateMessage, setTranslateMessage] = useState<string | null>(null)
+  const [enFields, setEnFields] = useState({
+    title: en?.title || '',
+    subtitle: en?.subtitle || '',
+    description: en?.description || '',
+    price: en?.price || '',
+    highlights: (en?.highlights || []).join('\n'),
+  })
+
+  function updateEnField(field: keyof typeof enFields, value: string) {
+    setEnFields((prev) => ({ ...prev, [field]: value }))
+  }
+
+  function buildTranslations(): Record<string, EventTranslation> {
+    return {
+      ...(event?.translations || {}),
+      en: {
+        title: enFields.title.trim(),
+        subtitle: enFields.subtitle.trim() || null,
+        description: enFields.description.trim(),
+        price: enFields.price.trim() || null,
+        highlights: enFields.highlights
+          .split('\n')
+          .map((h) => h.trim())
+          .filter(Boolean),
+      },
+    }
+  }
+
+  async function handleTranslate() {
+    if (!event?.id) return
+    setTranslating(true)
+    setTranslateMessage(null)
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}/translate`, { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Übersetzung fehlgeschlagen')
+      const newEn = (data.translations?.en || {}) as EventTranslation
+      setEnFields({
+        title: newEn.title || '',
+        subtitle: newEn.subtitle || '',
+        description: newEn.description || '',
+        price: newEn.price || '',
+        highlights: (newEn.highlights || []).join('\n'),
+      })
+      setTranslateMessage('Übersetzt und gespeichert — bei Bedarf unten anpassen und "Speichern" klicken.')
+    } catch (err) {
+      setTranslateMessage(err instanceof Error ? err.message : 'Übersetzung fehlgeschlagen')
+    } finally {
+      setTranslating(false)
+    }
+  }
 
   // Form state
   const [formData, setFormData] = useState<Partial<EventFormData>>({
@@ -189,10 +255,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
       const url = mode === 'create' ? '/api/admin/events' : `/api/admin/events/${event?.id}`
       const method = mode === 'create' ? 'POST' : 'PUT'
 
+      // translations läuft am zod-Schema vorbei (nur im Edit-Modus relevant)
+      const payload =
+        mode === 'edit' ? { ...result.data, translations: buildTranslations() } : result.data
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result.data),
+        body: JSON.stringify(payload),
       })
 
       if (!res.ok) {
@@ -479,6 +549,101 @@ export default function EventForm({ event, mode }: EventFormProps) {
                 + Highlight hinzufugen
               </Button>
             </div>
+          </div>
+
+          {/* Englische Übersetzung */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider">
+                Englische Übersetzung
+              </h2>
+              {mode === 'edit' && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleTranslate}
+                  disabled={translating}
+                >
+                  {translating ? 'Übersetze…' : 'Automatisch übersetzen (DeepL)'}
+                </Button>
+              )}
+            </div>
+
+            {mode === 'create' ? (
+              <p className="text-sm text-white/50">
+                Die englische Übersetzung ist verfügbar, sobald das Event erstellt wurde.
+              </p>
+            ) : (
+              <div className="space-y-5">
+                {translateMessage && (
+                  <p className="text-sm text-[#016dca]">{translateMessage}</p>
+                )}
+                <p className="text-xs text-white/50 leading-relaxed">
+                  Leere Felder fallen auf der Website automatisch auf den deutschen Text
+                  zurück. Nach der automatischen Übersetzung kannst du hier einzelne
+                  Formulierungen korrigieren und mit &quot;Speichern&quot; übernehmen.
+                </p>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-title">Titel (EN)</Label>
+                  <Input
+                    id="en-title"
+                    value={enFields.title}
+                    onChange={(e) => updateEnField('title', e.target.value)}
+                    placeholder="Event title"
+                    inputSize="lg"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-subtitle">Untertitel (EN)</Label>
+                  <Input
+                    id="en-subtitle"
+                    value={enFields.subtitle}
+                    onChange={(e) => updateEnField('subtitle', e.target.value)}
+                    placeholder="Optional subtitle"
+                    inputSize="lg"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-description">Beschreibung (EN)</Label>
+                  <Textarea
+                    id="en-description"
+                    value={enFields.description}
+                    onChange={(e) => updateEnField('description', e.target.value)}
+                    rows={5}
+                    placeholder="Event description…"
+                    className="min-h-[140px]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2.5">
+                    <Label htmlFor="en-price">Preis (EN)</Label>
+                    <Input
+                      id="en-price"
+                      value={enFields.price}
+                      onChange={(e) => updateEnField('price', e.target.value)}
+                      placeholder="e.g. Free entry"
+                      inputSize="lg"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-highlights">Highlights (EN, eine Zeile pro Highlight)</Label>
+                  <Textarea
+                    id="en-highlights"
+                    value={enFields.highlights}
+                    onChange={(e) => updateEnField('highlights', e.target.value)}
+                    rows={3}
+                    placeholder={'Live music\nFood trucks'}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

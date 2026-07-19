@@ -3,6 +3,14 @@ import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
 
+const translationSchema = z.object({
+  title: z.string().optional(),
+  subtitle: z.string().optional().nullable(),
+  description: z.string().optional(),
+  highlights: z.array(z.string()).optional(),
+  price: z.string().optional().nullable(),
+})
+
 const eventUpdateSchema = z.object({
   title: z.string().min(1).optional(),
   subtitle: z.string().optional().nullable(),
@@ -20,6 +28,7 @@ const eventUpdateSchema = z.object({
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable().or(z.literal('')),
   recurrenceEnd: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : null),
+  translations: z.record(z.string(), translationSchema).optional(),
 })
 
 // GET - Get single event

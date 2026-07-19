@@ -45,6 +45,10 @@ async function getEvent(id: string) {
     status: event.status,
     recurrence: event.recurrence,
     recurrenceEnd: event.recurrenceEnd?.toISOString() || null,
+    translations: (event.translations ?? {}) as Record<
+      string,
+      { title?: string; subtitle?: string | null; description?: string; highlights?: string[]; price?: string | null }
+    >,
   }
 }
 
