@@ -85,22 +85,7 @@ export const WOCHE: Tag[] = [
           'Bitte mitbringen: Turnschlappen oder Stoppersocken, turnbare Klamotten (keine Jeans, Röcke, Kleider) und etwas zu trinken',
         ],
         fuerWen:
-          'Kinder 3–6 Jahre · Schnupperstunde am 12.05. (unverbindlich), danach Anmeldung für den 4er-Kurs am 19.05. / 26.05. / 02.06. / 09.06. — damit die Kinder dranbleiben und sich eine vertraute Gruppe entwickelt.',
-        termineTitel: 'Die nächsten Capoeira-Dienstage',
-        termine: [
-          {
-            date: '12.05.',
-            title: 'Schnupperstunde',
-            trainer: 'Dayela',
-            sub: 'Unverbindlich · einfach vorbeikommen',
-            highlight: true,
-            badge: 'Schnupperkurs',
-          },
-          { date: '19.05.', title: '1. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '26.05.', title: '2. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '02.06.', title: '3. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '09.06.', title: '4. Termin · 4er-Kurs', trainer: 'Dayela' },
-        ],
+          'Kinder 3–6 Jahre · Einstieg jederzeit möglich — Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
       {
         slug: 'capoeira-erwachsene-di',
@@ -119,22 +104,7 @@ export const WOCHE: Tag[] = [
           'Capoeira-Spielflow am Ende der Stunde',
         ],
         fuerWen:
-          'Erwachsene, alle Levels · Schnupperstunde am 12.05. (unverbindlich), danach Anmeldung für den 4er-Kurs am 19.05. / 26.05. / 02.06. / 09.06. — damit man wirklich dranbleibt und Fortschritte spürbar werden.',
-        termineTitel: 'Die nächsten Capoeira-Dienstage',
-        termine: [
-          {
-            date: '12.05.',
-            title: 'Schnupperstunde',
-            trainer: 'Dayela',
-            sub: 'Unverbindlich · einfach vorbeikommen',
-            highlight: true,
-            badge: 'Schnupperkurs',
-          },
-          { date: '19.05.', title: '1. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '26.05.', title: '2. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '02.06.', title: '3. Termin · 4er-Kurs', trainer: 'Dayela' },
-          { date: '09.06.', title: '4. Termin · 4er-Kurs', trainer: 'Dayela' },
-        ],
+          'Erwachsene, alle Levels · Einstieg jederzeit möglich — Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
     ],
   },
@@ -209,7 +179,7 @@ export const WOCHE: Tag[] = [
     day: 'Donnerstag',
     trainer: '',
     kurse: [],
-    note: 'Voraussichtlich Luftakrobatik-Kurse mit Aircrobatics — Termine folgen.',
+    note: 'Tricking & Breaking in Planung — Termine folgen.',
   },
   {
     day: 'Freitag',
@@ -267,24 +237,6 @@ export const WOCHE: Tag[] = [
         target: 'erwachsene',
         trainer: 'Tina & Oskar (Feuerinsel München)',
         day: 'Sonntag',
-        termineTitel: 'Die nächsten Sonntage',
-        termine: [
-          {
-            date: '03.05.',
-            title: 'Doppelstäbe',
-            trainer: 'Tina (Feuerinsel)',
-            sub: '🎟  Spendenbasis 5 – 15 € · keine Anmeldung nötig',
-            highlight: true,
-            badge: 'Schnupperkurs',
-          },
-          { date: '10.05.', title: 'Buugeng',   trainer: 'Tina (Feuerinsel)' },
-          { date: '17.05.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
-          { date: '14.06.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)' },
-          { date: '21.06.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
-          { date: '28.06.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)', sub: '16:00 – 17:00' },
-          { date: '05.07.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)', sub: '16:00 – 17:00' },
-          { date: '12.07.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)', sub: '17:00 – 18:00' },
-        ],
         description:
           'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München — mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
         inhalte: [
@@ -305,24 +257,6 @@ export const WOCHE: Tag[] = [
         target: 'erwachsene',
         trainer: 'Tina & Oskar (Feuerinsel München)',
         day: 'Sonntag',
-        termineTitel: 'Die nächsten Sonntage',
-        termine: [
-          {
-            date: '03.05.',
-            title: 'Doppelstäbe',
-            trainer: 'Tina (Feuerinsel)',
-            sub: '🎟  Spendenbasis 5 – 15 € · keine Anmeldung nötig',
-            highlight: true,
-            badge: 'Schnupperkurs',
-          },
-          { date: '10.05.', title: 'Buugeng',   trainer: 'Tina (Feuerinsel)' },
-          { date: '17.05.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
-          { date: '14.06.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)' },
-          { date: '21.06.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)' },
-          { date: '28.06.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)', sub: '16:00 – 17:00' },
-          { date: '05.07.', title: 'Flow Arts', trainer: 'Tina (Feuerinsel)', sub: '16:00 – 17:00' },
-          { date: '12.07.', title: 'Flow Arts', trainer: 'Oskar (Feuerinsel)', sub: '17:00 – 18:00' },
-        ],
         description:
           'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge — und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
         inhalte: [
@@ -336,7 +270,6 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Anfänger:innen willkommen — mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
     ],
-    note: 'Termine bei Klick auf Flow Arts Basics oder Dynamic Flow.',
   },
 ]
 

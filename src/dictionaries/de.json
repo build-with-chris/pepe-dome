@@ -621,11 +621,19 @@
       "subtitle": "Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
     },
     "booking": {
-      "pill": "🎟 Buchung geöffnet",
-      "title": "Direkt online buchen",
-      "text": "Schnupperstunde, Einzelstunde oder Karte — Live-Verfügbarkeit über Eversports.",
+      "pill": "🎟 Buchung",
+      "title": "Kurs buchen — so geht's",
+      "text": "Unsere Kurse laufen über zwei Anbieter — je nachdem, welchen Kurs du besuchen möchtest.",
+      "eversportsTitle": "Pepe-Dome-Kurse",
+      "eversportsText": "Capoeira, Kinder-Akrobatik, Urban Acrobatics, Cyr Wheel und Flow Arts buchst du über Eversports — Schnupperstunde, Einzelstunde oder Karte, mit Live-Verfügbarkeit im Kalender unten. Spontan vorbeikommen geht auch: einfach bar vor Ort zahlen.",
+      "aircroTitle": "Luftakrobatik (Aircrobatics)",
+      "aircroText": "Die Luftakrobatik-Kurse montags und mittwochs veranstaltet unser Partner Aircrobatic Studios — Buchung direkt dort, nicht über Eversports.",
+      "aircroCta": "Bei Aircrobatic Studios buchen ↗",
+      "partnerPill": "In Vorbereitung",
+      "partnerText": "Wir arbeiten daran, dass du bald auch mit Wellpass oder Urban Sports Club an unseren Kursen teilnehmen kannst.",
+      "widgetLabel": "Eversports-Live-Buchung",
       "viewSchedule": "Lieber erst die Übersicht?",
-      "viewScheduleLink": "Wochenplan ansehen ↓"
+      "viewScheduleLink": "Wochenplan ansehen ↑"
     },
     "intro": {
       "title": "Professionelles Training in einzigartiger Atmosphäre",
@@ -635,8 +643,8 @@
       "imageAlt": "Training im Pepe Dome"
     },
     "facts": {
-      "courseStart": "Kursstart",
-      "courseStartValue": "11. Mai 2026",
+      "courseStart": "Einstieg",
+      "courseStartValue": "Jederzeit — Schnupperstunde möglich",
       "audience": "Zielgruppen",
       "audienceValue": "Kinder · Teens · Erwachsene",
       "trial": "Schnupperstunde",
@@ -647,17 +655,17 @@
     "schedule": {
       "pill": "Wochenplan",
       "title": "Alle Kurse im Überblick",
-      "text": "Klick auf einen Kurs für Details. Buchung läuft oben über Eversports.",
+      "text": "Klick auf einen Kurs für Details. Gebucht wird im Abschnitt darunter.",
       "legendKids": "Kinder",
       "legendTeens": "Teens",
       "legendAdults": "Erwachsene",
       "aircrobaticsNoteA": "Luftakrobatik (Aircrobatics)",
-      "aircrobaticsNoteB": "startet erst",
-      "aircrobaticsNoteDate": "ab 18.05.",
-      "aircrobaticsNoteC": "Buchung direkt über",
+      "aircrobaticsNoteB": "— Buchung direkt über",
+      "aircrobaticsNoteDate": "",
+      "aircrobaticsNoteC": "",
       "aircrobaticsNoteD": "(nicht über Eversports).",
-      "trickingNoteA": "Donnerstag",
-      "trickingNoteB": "voraussichtlich Luftakrobatik-Kurse mit Aircrobatics — Termine folgen.",
+      "trickingNoteA": "Donnerstag:",
+      "trickingNoteB": "Tricking & Breaking in Planung — Termine folgen.",
       "dropInNoteA": "Drop-in möglich:",
       "dropInNoteB": "Du kannst zurzeit zu jedem Kurs spontan dazukommen und bar vor Ort bezahlen. Wir bevorzugen aber die Buchung über Eversports — so wissen wir vorab, wer kommt."
     },

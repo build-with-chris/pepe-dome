@@ -621,11 +621,19 @@
       "subtitle": "Contemporary circus and artistry at Pepe Dome — for every level"
     },
     "booking": {
-      "pill": "🎟 Booking open",
-      "title": "Book online — instantly",
-      "text": "Trial class, single session or pass — live availability via Eversports.",
-      "viewSchedule": "Prefer to browse first?",
-      "viewScheduleLink": "Show weekly schedule ↓"
+      "pill": "🎟 Booking",
+      "title": "How to book a class",
+      "text": "Our classes run on two platforms — depending on which class you want to join.",
+      "eversportsTitle": "Pepe Dome classes",
+      "eversportsText": "Capoeira, kids' acrobatics, Urban Acrobatics, Cyr Wheel and Flow Arts are booked via Eversports — trial class, single session or pass, with live availability in the calendar below. Dropping in spontaneously works too: just pay cash on site.",
+      "aircroTitle": "Aerial acrobatics (Aircrobatics)",
+      "aircroText": "The aerial classes on Mondays and Wednesdays are run by our partner Aircrobatic Studios — book directly with them, not via Eversports.",
+      "aircroCta": "Book at Aircrobatic Studios ↗",
+      "partnerPill": "Coming soon",
+      "partnerText": "We are working on letting you join our classes with a Wellpass or Urban Sports Club membership soon.",
+      "widgetLabel": "Eversports live booking",
+      "viewSchedule": "Prefer an overview first?",
+      "viewScheduleLink": "View weekly schedule ↑"
     },
     "intro": {
       "title": "Professional training in a unique atmosphere",
@@ -635,9 +643,9 @@
       "imageAlt": "Training at Pepe Dome"
     },
     "facts": {
-      "courseStart": "Season start",
-      "courseStartValue": "11 May 2026",
-      "audience": "Audiences",
+      "courseStart": "Getting started",
+      "courseStartValue": "Any time — trial class available",
+      "audience": "For",
       "audienceValue": "Kids · Teens · Adults",
       "trial": "Trial class",
       "trialValue": "from €12",
@@ -647,17 +655,17 @@
     "schedule": {
       "pill": "Weekly schedule",
       "title": "All classes at a glance",
-      "text": "Click any class for details. Booking happens above via Eversports.",
+      "text": "Click a class for details. Booking happens in the section below.",
       "legendKids": "Kids",
       "legendTeens": "Teens",
       "legendAdults": "Adults",
-      "aircrobaticsNoteA": "Aerial work (Aircrobatics)",
-      "aircrobaticsNoteB": "starts on",
-      "aircrobaticsNoteDate": "18 May.",
-      "aircrobaticsNoteC": "Bookings go through",
+      "aircrobaticsNoteA": "Aerial acrobatics (Aircrobatics)",
+      "aircrobaticsNoteB": "— book directly via",
+      "aircrobaticsNoteDate": "",
+      "aircrobaticsNoteC": "",
       "aircrobaticsNoteD": "(not via Eversports).",
-      "trickingNoteA": "Thursday",
-      "trickingNoteB": "likely aerial classes with Aircrobatics — dates to follow.",
+      "trickingNoteA": "Thursday:",
+      "trickingNoteB": "Tricking & breaking planned — dates to follow.",
       "dropInNoteA": "Drop-in welcome:",
       "dropInNoteB": "You can currently join any class spontaneously and pay in cash on site. We prefer bookings via Eversports though — so we know in advance who's coming."
     },

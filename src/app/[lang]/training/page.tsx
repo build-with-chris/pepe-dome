@@ -50,8 +50,10 @@ const DAY_DE_TO_EN: Record<string, string> = {
 const NOTE_DE_TO_EN: Record<string, string> = {
   'In Planung — Workshops & Vermietung folgen':
     'In planning — workshops & rentals to follow',
-  'Termine bei Klick auf Flow Arts Basics oder Dynamic Flow.':
-    'Dates appear on click — see Flow Arts Basics or Dynamic Flow.',
+  'Tricking & Breaking in Planung — Termine folgen.':
+    'Tricking & breaking planned — dates to follow.',
+  'Cyr Wheel findet an showfreien Freitagen statt — Termine immer auf der Startseite.':
+    'Cyr Wheel takes place on show-free Fridays — dates always on the homepage.',
 }
 
 function localizeWoche(woche: Tag[], lang: Locale): Tag[] {
@@ -90,34 +92,6 @@ export default async function TrainingPage({
         size="sm"
         dotCloudIcon="training"
       />
-
-      {/* ── BUCHUNG — Eversports Widget ── */}
-      <section id="buchung" className="pt-2 md:pt-4 pb-14 md:pb-20 bg-[var(--pepe-black)]">
-        <div className="stage-container">
-          <div className="text-center mb-6">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-4">
-              {t.booking.pill}
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
-              {t.booking.title}
-            </h2>
-            <p className="text-[var(--pepe-t80)] text-sm md:text-base max-w-xl mx-auto">
-              {t.booking.text}
-            </p>
-          </div>
-
-          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-gold)]/40 bg-[var(--pepe-ink)] p-3 md:p-5 shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_24px_var(--pepe-gold-glow)]">
-            <EversportsWidget widgetId="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
-          </div>
-
-          <p className="text-center text-sm text-[var(--pepe-t64)] mt-5">
-            {t.booking.viewSchedule}{' '}
-            <Link href="#kursprogramm" className="text-[var(--pepe-gold)] hover:underline font-semibold">
-              {t.booking.viewScheduleLink}
-            </Link>
-          </p>
-        </div>
-      </section>
 
       {/* ── INTRO ── */}
       <section className="pt-16 md:pt-24 pb-8 md:pb-12">
@@ -222,8 +196,6 @@ export default async function TrainingPage({
                   <p className="text-[var(--pepe-t80)]">
                     <span className="font-bold text-[var(--pepe-white)]">{t.schedule.aircrobaticsNoteA}</span>{' '}
                     {t.schedule.aircrobaticsNoteB}{' '}
-                    <span className="font-bold text-[var(--pepe-gold)]">{t.schedule.aircrobaticsNoteDate}</span>{' '}
-                    {t.schedule.aircrobaticsNoteC}{' '}
                     <a
                       href="https://www.aircrobatic-studios.com"
                       target="_blank"
@@ -246,6 +218,80 @@ export default async function TrainingPage({
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── BUCHUNG — zwei Wege + Partner-Hinweis ── */}
+      <section id="buchung" className="py-16 md:py-24 bg-[var(--pepe-black)]">
+        <div className="stage-container">
+          <div className="text-center mb-10">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)] text-black mb-4">
+              {t.booking.pill}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-2">
+              {t.booking.title}
+            </h2>
+            <p className="text-[var(--pepe-t80)] text-sm md:text-base max-w-xl mx-auto">
+              {t.booking.text}
+            </p>
+          </div>
+
+          {/* Zwei Buchungswege */}
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-8">
+            <div className="rounded-2xl border border-[var(--pepe-gold)]/40 bg-[var(--pepe-ink)] p-7 md:p-8 flex flex-col">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
+                {t.booking.eversportsTitle}
+              </h3>
+              <p className="text-[var(--pepe-t80)] text-sm leading-relaxed flex-1">
+                {t.booking.eversportsText}
+              </p>
+              <p className="mt-5 text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)]">
+                ↓ {t.booking.widgetLabel}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] p-7 md:p-8 flex flex-col">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
+                {t.booking.aircroTitle}
+              </h3>
+              <p className="text-[var(--pepe-t80)] text-sm leading-relaxed flex-1">
+                {t.booking.aircroText}
+              </p>
+              <div className="mt-5">
+                <a
+                  href="https://www.aircrobatic-studios.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="secondary" size="md">{t.booking.aircroCta}</Button>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Eversports-Widget */}
+          <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--pepe-gold)]/40 bg-[var(--pepe-ink)] p-3 md:p-5 shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_24px_var(--pepe-gold-glow)]">
+            <EversportsWidget widgetId="02edab2c-44b5-47ec-9bbe-d915ce46a864" />
+          </div>
+
+          {/* Wellpass / USC in Vorbereitung */}
+          <div className="max-w-5xl mx-auto mt-8">
+            <div className="rounded-xl border border-[var(--pepe-gold)]/30 bg-[var(--pepe-gold)]/5 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+              <span className="inline-block self-start sm:self-auto flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
+                {t.booking.partnerPill}
+              </span>
+              <p className="text-[var(--pepe-t80)] text-sm">
+                {t.booking.partnerText}
+              </p>
+            </div>
+          </div>
+
+          <p className="text-center text-sm text-[var(--pepe-t64)] mt-6">
+            {t.booking.viewSchedule}{' '}
+            <Link href="#kursprogramm" className="text-[var(--pepe-gold)] hover:underline font-semibold">
+              {t.booking.viewScheduleLink}
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -282,39 +328,6 @@ export default async function TrainingPage({
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── DISZIPLINEN ── */}
-      <section className="py-20 md:py-28">
-        <div className="stage-container">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              {t.disciplines.title}
-            </h2>
-            <p className="text-lg text-[var(--pepe-t64)] max-w-2xl mx-auto leading-relaxed">
-              {t.disciplines.subtitle}
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.disciplines.items.map((d, i) => (
-              <div
-                key={i}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
-              >
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-2xl">{d.icon}</span>
-                </div>
-                <h3 className="text-base font-bold text-[var(--pepe-white)] mb-2">
-                  {d.name}
-                </h3>
-                <p className="text-[var(--pepe-t64)] text-sm leading-relaxed">
-                  {d.description}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
