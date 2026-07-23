@@ -84,21 +84,32 @@ export async function sendConfirmationEmail(subscriberId: string, baseUrl?: stri
   // Generate URLs (baseUrl aus Request nutzen, damit Bestätigungs-Link auf die echte Domain zeigt)
   const urls = generateEmailUrls(subscriber.id, subscriber.doubleOptInToken, baseUrl)
 
-  // Render email template
-  const emailHtml = await render(
-    ConfirmationEmail({
-      confirmationUrl: urls.confirm,
-      subscriberEmail: subscriber.email,
-      firstName: subscriber.firstName || undefined,
-    })
-  )
+  // Render email template — HTML + Plain-Text-Alternative.
+  // Reine HTML-Mails ohne Text-Teil bekommen bei Gmail/Outlook einen höheren
+  // Spam-Score; gerade die Bestätigungsmail muss aber zuverlässig ankommen.
+  const confirmationEmail = ConfirmationEmail({
+    confirmationUrl: urls.confirm,
+    subscriberEmail: subscriber.email,
+    firstName: subscriber.firstName || undefined,
+  })
+  const emailHtml = await render(confirmationEmail)
+  const emailText = await render(confirmationEmail, { plainText: true })
 
   // Send via Resend
+  // List-Unsubscribe-Header: von Gmail/Yahoo seit 2024 für Bulk-Mail gefordert.
+  // Fehlt er (wie bisher bei der Bestätigung), landet schon die erste Mail
+  // überdurchschnittlich oft im Spam — die Hauptursache der niedrigen
+  // Bestätigungsrate.
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
     subject: 'Bestätige deine Newsletter-Anmeldung bei PEPE Dome',
     html: emailHtml,
+    text: emailText,
+    headers: {
+      'List-Unsubscribe': `<${urls.unsubscribe}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
     tags: [
       { name: 'type', value: 'confirmation' },
       { name: 'subscriber_id', value: subscriber.id },
@@ -148,16 +159,16 @@ export async function sendWelcomeEmail(subscriberId: string) {
   // Generate URLs
   const urls = generateEmailUrls(subscriber.id)
 
-  // Render email template
-  const emailHtml = await render(
-    WelcomeEmail({
-      subscriberId: subscriber.id,
-      subscriberEmail: subscriber.email,
-      firstName: subscriber.firstName || undefined,
-      upcomingEventsUrl: `${urls.home}/events`,
-      newsletterArchiveUrl: `${urls.home}/newsletter`,
-    })
-  )
+  // Render email template — HTML + Plain-Text-Alternative (Deliverability)
+  const welcomeEmail = WelcomeEmail({
+    subscriberId: subscriber.id,
+    subscriberEmail: subscriber.email,
+    firstName: subscriber.firstName || undefined,
+    upcomingEventsUrl: `${urls.home}/events`,
+    newsletterArchiveUrl: `${urls.home}/newsletter`,
+  })
+  const emailHtml = await render(welcomeEmail)
+  const emailText = await render(welcomeEmail, { plainText: true })
 
   // Send via Resend
   const unsubscribeUrl = `${urls.home}/newsletter/unsubscribe/${subscriber.id}`
@@ -166,6 +177,7 @@ export async function sendWelcomeEmail(subscriberId: string) {
     to: subscriber.email,
     subject: 'Willkommen beim PEPE Dome Newsletter!',
     html: emailHtml,
+    text: emailText,
     headers: {
       'List-Unsubscribe': `<${unsubscribeUrl}>`,
       'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
@@ -427,28 +439,29 @@ export async function sendNewsletter(
     to: string
     subject: string
     html: string
+    text: string
     headers: Record<string, string>
     tags: Array<{ name: string; value: string }>
   }> = []
 
   for (const recipient of recipients) {
-    const emailHtml = await render(
-      NewsletterTemplate({
-        subject: newsletter.subject,
-        preheader: newsletter.preheader || undefined,
-        newsletterSlug: newsletter.slug,
-        heroImageUrl: toAbsoluteUrl(newsletter.heroImageUrl),
-        heroTitle: newsletter.heroTitle || undefined,
-        heroSubtitle: newsletter.heroSubtitle || undefined,
-        heroCTALabel: newsletter.heroCTALabel || undefined,
-        heroCTAUrl: toAbsoluteUrl(newsletter.heroCTAUrl),
-        introText: newsletter.introText || undefined,
-        contentSections,
-        subscriberId: recipient.id,
-        subscriberEmail: recipient.email,
-        firstName: recipient.firstName || undefined,
-      })
-    )
+    const newsletterEmail = NewsletterTemplate({
+      subject: newsletter.subject,
+      preheader: newsletter.preheader || undefined,
+      newsletterSlug: newsletter.slug,
+      heroImageUrl: toAbsoluteUrl(newsletter.heroImageUrl),
+      heroTitle: newsletter.heroTitle || undefined,
+      heroSubtitle: newsletter.heroSubtitle || undefined,
+      heroCTALabel: newsletter.heroCTALabel || undefined,
+      heroCTAUrl: toAbsoluteUrl(newsletter.heroCTAUrl),
+      introText: newsletter.introText || undefined,
+      contentSections,
+      subscriberId: recipient.id,
+      subscriberEmail: recipient.email,
+      firstName: recipient.firstName || undefined,
+    })
+    const emailHtml = await render(newsletterEmail)
+    const emailText = await render(newsletterEmail, { plainText: true })
 
     const unsubscribeUrl = `${baseUrl}/newsletter/unsubscribe/${recipient.id}`
 
@@ -457,6 +470,7 @@ export async function sendNewsletter(
       to: recipient.email,
       subject: newsletter.subject,
       html: emailHtml,
+      text: emailText,
       headers: {
         'List-Unsubscribe': `<${unsubscribeUrl}>`,
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
