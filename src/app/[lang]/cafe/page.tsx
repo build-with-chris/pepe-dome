@@ -11,8 +11,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
-import CafeReviewsSlider, { type SliderReview } from '@/components/custom/CafeReviewsSlider'
-import { getGoogleReviews } from '@/lib/google-reviews'
+import CafeReviewsSlider from '@/components/custom/CafeReviewsSlider'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 
@@ -44,23 +43,7 @@ export default async function CafePage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
   const t = dict.cafe
-
-  // Bewertungen: bevorzugt live aus Google Places, sonst manuell gepflegte
-  // Reviews aus dem Dictionary. Slider erscheint nur, wenn welche da sind.
-  const google = await getGoogleReviews(lang)
-  const manualReviews = (t.reviews?.items ?? []) as { text: string; author: string }[]
-  const sliderReviews: SliderReview[] =
-    google && google.reviews.length > 0
-      ? google.reviews
-      : manualReviews.map((r) => ({ author: r.author, text: r.text, rating: 5 }))
-
-  const ratingLine =
-    google && google.rating
-      ? `${google.rating.toLocaleString(lang === 'en' ? 'en-US' : 'de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}${
-          google.total ? ` · ${google.total} ${lang === 'en' ? 'reviews on Google' : 'Bewertungen bei Google'}` : ''
-        }`
-      : undefined
-  const viaLabel = lang === 'en' ? 'via Google' : 'via Google'
+  const reviewsWord = lang === 'en' ? 'reviews on Google' : 'Bewertungen bei Google'
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
@@ -101,6 +84,17 @@ export default async function CafePage({
               <p className="text-lg text-[var(--pepe-t80)] leading-relaxed">
                 {t.intro.text}
               </p>
+
+              {/* Google-Review-Slider — nutzt den Freiraum unter dem Intro-Text */}
+              <div className="mt-10">
+                <CafeReviewsSlider
+                  lang={lang}
+                  title={t.reviews.title}
+                  subtitle={t.reviews.subtitle}
+                  viaLabel="via Google"
+                  reviewsWord={reviewsWord}
+                />
+              </div>
             </div>
 
             {/* Öffnungszeiten-Karte */}
@@ -205,21 +199,6 @@ export default async function CafePage({
           </div>
         </div>
       </section>
-
-      {/* ── BEWERTUNGEN — Google-Review-Slider (erscheint, sobald Reviews da sind) ── */}
-      {sliderReviews.length > 0 && (
-        <section className="py-16 md:py-24">
-          <div className="stage-container">
-            <CafeReviewsSlider
-              reviews={sliderReviews}
-              title={t.reviews.title}
-              subtitle={t.reviews.subtitle}
-              ratingLine={ratingLine}
-              viaLabel={viaLabel}
-            />
-          </div>
-        </section>
-      )}
 
       {/* ── CTA ── */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-[var(--pepe-ink)] to-[var(--pepe-black)]">

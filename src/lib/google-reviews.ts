@@ -43,7 +43,13 @@ export async function getGoogleReviews(
 ): Promise<GoogleReviewsResult | null> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY
   const placeId = process.env.GOOGLE_PLACES_ID
-  if (!apiKey || !placeId) return null
+  if (!apiKey || !placeId) {
+    console.warn('[google-reviews] nicht konfiguriert', {
+      hasKey: Boolean(apiKey),
+      hasPlaceId: Boolean(placeId),
+    })
+    return null
+  }
 
   try {
     const res = await fetch(
