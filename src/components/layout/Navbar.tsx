@@ -30,6 +30,7 @@ function useNavigation(lang: Locale) {
     main: [
       { label: t('navigation.events', 'Events'),     href: localizedHref(lang, '/events') },
       { label: t('navigation.training', 'Training'), href: localizedHref(lang, '/training') },
+      { label: t('navigation.cafe', 'Café'),         href: localizedHref(lang, '/cafe') },
       { label: t('navigation.about', 'Über uns'),    href: localizedHref(lang, '/about') },
       { label: t('navigation.contact', 'Kontakt'),   href: localizedHref(lang, '/contact') },
     ],

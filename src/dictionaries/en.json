@@ -740,5 +740,65 @@
       "contact": "Contact us",
       "workshops": "All workshops"
     }
+  },
+  "cafe": {
+    "meta": {
+      "title": "Café at the Dome | Pepe Dome Munich",
+      "description": "The café at Pepe Dome in Ostpark: coffee, cake and a view of the dome. Open on weekends and whenever there's a show at the dome."
+    },
+    "hero": {
+      "title": "Café at the Dome",
+      "subtitle": "Coffee, cake and a view of the dome, right in the Ostpark."
+    },
+    "intro": {
+      "title": "More than just a coffee",
+      "text": "The café is as much part of the dome as the shows are. An open spot in the Ostpark where you can grab a coffee, watch training under the dome or simply meet friends. No pressure to buy, no rush."
+    },
+    "hours": {
+      "title": "When we're here",
+      "daysLabel": "Open",
+      "days": "Friday to Sunday",
+      "time": "2 to 7 pm",
+      "note": "And whenever there's a show at the dome. Best to check the event calendar first.",
+      "addressLabel": "How to find us",
+      "address": "Theatron im Ostpark, 81735 Munich",
+      "transport": "U-Bahn Quiddestraße (U5), a few minutes on foot",
+      "directions": "Open route in Google Maps"
+    },
+    "atmosphere": {
+      "title": "Outside, in the green",
+      "text": "Deck chairs on the steps of the Theatron, cool drinks in the shade, sometimes live music. Between dandelions and the dome, the afternoon stretches out on its own. Bring your friends and family.",
+      "baristaNote": "Behind the counter: Chris and the café team."
+    },
+    "reviews": {
+      "title": "What our guests say",
+      "subtitle": "Straight 5 stars on Google.",
+      "items": []
+    },
+    "cta": {
+      "title": "Just drop by",
+      "text": "On the weekend or around a show. We're looking forward to seeing you.",
+      "events": "See the event calendar",
+      "directions": "How to find us"
+    },
+    "anreise": {
+      "title": "How to find us",
+      "subtitle": "The dome sits in the middle of the Ostpark, a little hidden. The easiest ways to get here:",
+      "navTip": {
+        "icon": "🧭",
+        "title": "By sat-nav (easiest)",
+        "text": "Enter “Abenteuerspielplatz Maulwurfshausen” into your sat-nav. From there, turn into the park and walk straight ahead — the dome is right in front of you."
+      },
+      "car": {
+        "icon": "🚗",
+        "title": "By car & parking",
+        "text": "On weekends you can park nicely along the last stretch in front of Abenteuerspielplatz Maulwurfshausen. Alternatively park at Michaeligarten, from there it's about a 15-minute walk through the park."
+      },
+      "transit": {
+        "icon": "🚇",
+        "title": "By underground",
+        "text": "U5 to Quiddestraße. From there head into the Ostpark and follow the path towards the Theatron, just a few minutes on foot."
+      }
+    }
   }
 }

@@ -740,5 +740,65 @@
       "contact": "Kontakt aufnehmen",
       "workshops": "Alle Workshops"
     }
+  },
+  "cafe": {
+    "meta": {
+      "title": "Café am Dome | Pepe Dome München",
+      "description": "Das Café am Pepe Dome im Ostpark: Kaffee, Kuchen und Kuppelblick. Geöffnet am Wochenende und immer, wenn am Dome eine Show läuft."
+    },
+    "hero": {
+      "title": "Café am Dome",
+      "subtitle": "Kaffee, Kuchen und Kuppelblick, mitten im Ostpark."
+    },
+    "intro": {
+      "title": "Mehr als nur ein Kaffee",
+      "text": "Das Café gehört zum Dome wie die Shows. Ein offener Ort im Ostpark, an dem du einen Kaffee trinkst, dem Training in der Kuppel zuschaust oder einfach Freunde triffst. Kein Konsumzwang, keine Eile."
+    },
+    "hours": {
+      "title": "Wann wir da sind",
+      "daysLabel": "Geöffnet",
+      "days": "Freitag bis Sonntag",
+      "time": "14 bis 19 Uhr",
+      "note": "Und immer dann, wenn am Dome eine Show läuft. Schau vorher am besten kurz in den Eventkalender.",
+      "addressLabel": "So findest du uns",
+      "address": "Theatron im Ostpark, 81735 München",
+      "transport": "U-Bahn Quiddestraße (U5), wenige Minuten zu Fuß",
+      "directions": "Route in Google Maps öffnen"
+    },
+    "atmosphere": {
+      "title": "Draußen, im Grünen",
+      "text": "Liegestühle auf den Stufen des Theatrons, kühle Getränke im Schatten, manchmal Live-Musik. Zwischen Löwenzahn und Kuppel wird der Nachmittag ganz von selbst lang. Bring gern Freunde und Familie mit.",
+      "baristaNote": "Hinter dem Tresen: Chris und das Café-Team."
+    },
+    "reviews": {
+      "title": "Das sagen unsere Gäste",
+      "subtitle": "Durchweg 5 Sterne auf Google.",
+      "items": []
+    },
+    "cta": {
+      "title": "Komm einfach vorbei",
+      "text": "Am Wochenende oder rund um eine Show. Wir freuen uns auf dich.",
+      "events": "Zum Eventkalender",
+      "directions": "So findest du uns"
+    },
+    "anreise": {
+      "title": "So findest du uns",
+      "subtitle": "Der Dome steht mitten im Ostpark, etwas versteckt. Am einfachsten kommst du so hin:",
+      "navTip": {
+        "icon": "🧭",
+        "title": "Mit dem Navi (am einfachsten)",
+        "text": "Gib „Abenteuerspielplatz Maulwurfshausen“ ins Navi ein. Von dort biegst du in den Park ein und läufst immer geradeaus, dann stehst du direkt vor dem Dome."
+      },
+      "car": {
+        "icon": "🚗",
+        "title": "Mit dem Auto & Parken",
+        "text": "Am Wochenende kannst du die letzten Meter vor dem Abenteuerspielplatz Maulwurfshausen sehr gut parken. Alternativ parkst du am Michaeligarten, von dort sind es rund 15 Minuten zu Fuß durch den Park."
+      },
+      "transit": {
+        "icon": "🚇",
+        "title": "Mit der U-Bahn",
+        "text": "U5 bis Quiddestraße. Von dort in den Ostpark und dem Weg Richtung Theatron folgen, nur wenige Minuten zu Fuß."
+      }
+    }
   }
 }
