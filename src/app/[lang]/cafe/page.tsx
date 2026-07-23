@@ -11,6 +11,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
+import CafeReviewsSlider, { type SliderReview } from '@/components/custom/CafeReviewsSlider'
+import { getGoogleReviews } from '@/lib/google-reviews'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 
@@ -42,7 +44,23 @@ export default async function CafePage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
   const t = dict.cafe
-  const reviews = (t.reviews?.items ?? []) as { text: string; author: string }[]
+
+  // Bewertungen: bevorzugt live aus Google Places, sonst manuell gepflegte
+  // Reviews aus dem Dictionary. Slider erscheint nur, wenn welche da sind.
+  const google = await getGoogleReviews(lang)
+  const manualReviews = (t.reviews?.items ?? []) as { text: string; author: string }[]
+  const sliderReviews: SliderReview[] =
+    google && google.reviews.length > 0
+      ? google.reviews
+      : manualReviews.map((r) => ({ author: r.author, text: r.text, rating: 5 }))
+
+  const ratingLine =
+    google && google.rating
+      ? `${google.rating.toLocaleString(lang === 'en' ? 'en-US' : 'de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}${
+          google.total ? ` · ${google.total} ${lang === 'en' ? 'reviews on Google' : 'Bewertungen bei Google'}` : ''
+        }`
+      : undefined
+  const viaLabel = lang === 'en' ? 'via Google' : 'via Google'
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
@@ -188,30 +206,17 @@ export default async function CafePage({
         </div>
       </section>
 
-      {/* ── BEWERTUNGEN (erscheint, sobald echte Zitate im Dictionary stehen) ── */}
-      {reviews.length > 0 && (
+      {/* ── BEWERTUNGEN — Google-Review-Slider (erscheint, sobald Reviews da sind) ── */}
+      {sliderReviews.length > 0 && (
         <section className="py-16 md:py-24">
           <div className="stage-container">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-3">
-                {t.reviews.title}
-              </h2>
-              <p className="text-[var(--pepe-gold)] font-medium">★★★★★ {t.reviews.subtitle}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {reviews.map((review, index) => (
-                <blockquote
-                  key={index}
-                  className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-7 flex flex-col"
-                >
-                  <div className="text-[var(--pepe-gold)] mb-3" aria-hidden="true">★★★★★</div>
-                  <p className="text-[var(--pepe-t80)] leading-relaxed flex-1">„{review.text}“</p>
-                  <footer className="mt-4 text-sm font-semibold text-[var(--pepe-white)]">
-                    {review.author}
-                  </footer>
-                </blockquote>
-              ))}
-            </div>
+            <CafeReviewsSlider
+              reviews={sliderReviews}
+              title={t.reviews.title}
+              subtitle={t.reviews.subtitle}
+              ratingLine={ratingLine}
+              viaLabel={viaLabel}
+            />
           </div>
         </section>
       )}
