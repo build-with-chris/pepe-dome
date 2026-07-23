@@ -98,18 +98,21 @@ export default async function HomePage({
       <section className="relative min-h-[100dvh] md:min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
         <div className="absolute inset-0 pointer-events-none">
           <HeroBackgroundVideo />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/50 via-transparent to-[var(--pepe-black)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/30 via-transparent to-[var(--pepe-black)]/30" />
+          {/* Durchgehender Scrim: garantiert Kontrast, egal welcher Video-Frame läuft */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/70 via-[var(--pepe-black)]/35 to-[var(--pepe-black)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/40 via-transparent to-[var(--pepe-black)]/40" />
+          {/* Weicher radialer Schatten direkt hinter dem Titeltext (kein harter Kasten) */}
+          <div className="absolute inset-0 [background:radial-gradient(ellipse_65%_45%_at_50%_34%,rgba(0,0,0,0.55),transparent_72%)]" />
         </div>
 
         <HomeDotCloud />
 
         <div className="stage-container relative z-10 flex-shrink-0 pt-[2.31rem] md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.7)]">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
               {t.hero.title}
             </h1>
-            <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold)] font-medium max-w-2xl mx-auto [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
+            <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold-hover)] font-semibold max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
               {t.hero.subtitle}
             </p>
           </div>
