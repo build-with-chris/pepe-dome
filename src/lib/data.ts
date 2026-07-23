@@ -149,7 +149,7 @@ export function getLatestNewsletter(): Newsletter | null {
 const defaultSite = {
   name: 'Pepe Dome',
   tagline: 'Zuhause für Artistik & Kultur in München',
-  description: 'Der Pepe Dome im Ostpark München – Shows, Training und Events.',
+  description: 'Der Pepe Dome im Ostpark München mit Shows, Training und Events.',
   email: '',
   phone: '',
   emergencyPhone: '',

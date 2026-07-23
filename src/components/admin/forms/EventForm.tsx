@@ -169,7 +169,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
         price: newEn.price || '',
         highlights: (newEn.highlights || []).join('\n'),
       })
-      setTranslateMessage('Übersetzt und gespeichert — bei Bedarf unten anpassen und "Speichern" klicken.')
+      setTranslateMessage('Übersetzt und gespeichert. Bei Bedarf unten anpassen und "Speichern" klicken.')
     } catch (err) {
       setTranslateMessage(err instanceof Error ? err.message : 'Übersetzung fehlgeschlagen')
     } finally {

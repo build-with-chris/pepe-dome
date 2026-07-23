@@ -21,14 +21,14 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'luftakrobatik-aircrobatics-mo-1715',
-        time: '17:15 – 18:15',
+        time: '17:15 bis 18:15',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
         day: 'Montag',
         description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch. Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
           'Trapez-Grundlagen',
           'Aerial Hoop & Vertikaltuch',
@@ -38,18 +38,18 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
-        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht, nicht über Eversports.',
       },
       {
         slug: 'luftakrobatik-aircrobatics-mo-1815',
-        time: '18:15 – 19:15',
+        time: '18:15 bis 19:15',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
         day: 'Montag',
         description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch. Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
           'Trapez-Grundlagen',
           'Aerial Hoop & Vertikaltuch',
@@ -59,7 +59,7 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
-        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht, nicht über Eversports.',
       },
     ],
   },
@@ -69,9 +69,9 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'capoeira-kinder-di',
-        time: '16:15 – 17:15',
+        time: '16:15 bis 17:15',
         title: 'Kinder-Capoeira',
-        sub: '3–6 Jahre · Schnupperkurs + 4er-Kurs · mit Dayela',
+        sub: '3 bis 6 Jahre · Schnupperkurs + 4er-Kurs · mit Dayela',
         target: 'kinder',
         trainer: 'Dayela',
         day: 'Dienstag',
@@ -85,11 +85,11 @@ export const WOCHE: Tag[] = [
           'Bitte mitbringen: Turnschlappen oder Stoppersocken, turnbare Klamotten (keine Jeans, Röcke, Kleider) und etwas zu trinken',
         ],
         fuerWen:
-          'Kinder 3–6 Jahre · Einstieg jederzeit möglich — Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
+          'Kinder 3 bis 6 Jahre · Einstieg jederzeit möglich. Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
       {
         slug: 'capoeira-erwachsene-di',
-        time: '17:30 – 19:00',
+        time: '17:30 bis 19:00',
         title: 'Capoeira Workout',
         sub: 'Erwachsene · Schnupperkurs + 4er-Kurs · mit Dayela',
         target: 'erwachsene',
@@ -104,7 +104,7 @@ export const WOCHE: Tag[] = [
           'Capoeira-Spielflow am Ende der Stunde',
         ],
         fuerWen:
-          'Erwachsene, alle Levels · Einstieg jederzeit möglich — Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
+          'Erwachsene, alle Levels · Einstieg jederzeit möglich. Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
     ],
   },
@@ -114,14 +114,14 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'kinder-akrobatik-mi',
-        time: '16:30 – 18:00',
+        time: '16:30 bis 18:00',
         title: 'Kinder Akrobatik',
-        sub: '5–12 Jahre · mit Michael Heiduk',
+        sub: '5 bis 12 Jahre · mit Michael Heiduk',
         target: 'kinder',
         trainer: 'Michael Heiduk',
         day: 'Mittwoch',
         description:
-          'Spielerische Akrobatik für Kinder mit Michael Heiduk. Luftakrobatik, Tellerdrehen, Jonglieren — und alles, worauf die Kids gerade Lust haben. Eine Stunde voller Bewegung, Kreativität und Spaß.',
+          'Spielerische Akrobatik für Kinder mit Michael Heiduk. Luftakrobatik, Tellerdrehen, Jonglieren und alles, worauf die Kids gerade Lust haben. Eine Stunde voller Bewegung, Kreativität und Spaß.',
         inhalte: [
           'Luftakrobatik (kindgerecht)',
           'Tellerdrehen',
@@ -129,18 +129,18 @@ export const WOCHE: Tag[] = [
           'Spielerische Bodenakrobatik',
           'Freie Wahl je nach Lust der Gruppe',
         ],
-        fuerWen: 'Kinder 5–12 Jahre',
+        fuerWen: 'Kinder 5 bis 12 Jahre',
       },
       {
         slug: 'luftakrobatik-aircrobatics-mi-1700',
-        time: '17:00 – 18:00',
+        time: '17:00 bis 18:00',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
         day: 'Mittwoch',
         description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch. Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
           'Trapez-Grundlagen',
           'Aerial Hoop & Vertikaltuch',
@@ -150,18 +150,18 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
-        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht, nicht über Eversports.',
       },
       {
         slug: 'luftakrobatik-aircrobatics-mi-1800',
-        time: '18:00 – 19:00',
+        time: '18:00 bis 19:00',
         title: 'Luftakrobatik',
         sub: 'Jugendliche · mit Aircrobatics',
         target: 'teens',
         trainer: 'Aircrobatics',
         day: 'Mittwoch',
         description:
-          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch — Technik, Kraftaufbau und erste Choreografien in der Höhe.',
+          'Luftakrobatik-Training für Jugendliche, geführt von Aircrobatics. Trapez, Aerial Hoop und Vertikaltuch. Technik, Kraftaufbau und erste Choreografien in der Höhe.',
         inhalte: [
           'Trapez-Grundlagen',
           'Aerial Hoop & Vertikaltuch',
@@ -171,7 +171,7 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
-        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht — nicht über Eversports.',
+        bookingNote: 'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht, nicht über Eversports.',
       },
     ],
   },
@@ -179,7 +179,7 @@ export const WOCHE: Tag[] = [
     day: 'Donnerstag',
     trainer: '',
     kurse: [],
-    note: 'Tricking & Breaking in Planung — Termine folgen.',
+    note: 'Tricking & Breaking in Planung, Termine folgen.',
   },
   {
     day: 'Freitag',
@@ -187,27 +187,27 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'urban-acrobatics-fr',
-        time: '15:30 – 17:00',
+        time: '15:30 bis 17:00',
         title: 'Urban Acrobatics',
         sub: 'Breaking meets Akrobatik · Jugendliche & Erwachsene',
         target: 'erwachsene',
         trainer: 'Dani',
         day: 'Freitag',
         description:
-          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik — mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
+          'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik, mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
         inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
         fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
       },
       {
         slug: 'cyr-wheel-fr',
-        time: '17:00 – 18:30',
+        time: '17:00 bis 18:30',
         title: 'Cyr Wheel',
         sub: 'Jugendliche & Erwachsene · an showfreien Freitagen',
         target: 'erwachsene',
         trainer: 'Dani',
         day: 'Freitag',
         description:
-          'Das Cyr Wheel — auch Deutsches Rad genannt — gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt — aktuelle Termine immer auf der Startseite.',
+          'Das Cyr Wheel, auch Deutsches Rad genannt, gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt, aktuelle Termine immer auf der Startseite.',
         inhalte: [
           'Cyr Wheel Grundtechniken (Wave, Pirouette, Coin)',
           'Körperspannung & Balance im Rad',
@@ -217,13 +217,13 @@ export const WOCHE: Tag[] = [
         fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
       },
     ],
-    note: 'Cyr Wheel findet an showfreien Freitagen statt — Termine immer auf der Startseite.',
+    note: 'Cyr Wheel findet an showfreien Freitagen statt, Termine immer auf der Startseite.',
   },
   {
     day: 'Samstag',
     trainer: '',
     kurse: [],
-    note: 'In Planung — Workshops & Vermietung folgen',
+    note: 'In Planung, Workshops & Vermietung folgen',
   },
   {
     day: 'Sonntag',
@@ -231,14 +231,14 @@ export const WOCHE: Tag[] = [
     kurse: [
       {
         slug: 'flow-arts-basics-so',
-        time: '17:00 – 18:00',
+        time: '17:00 bis 18:00',
         title: 'Flow Arts Basics',
         sub: 'Buugeng & Doppelstäbe · Tina & Oskar (Feuerinsel)',
         target: 'erwachsene',
         trainer: 'Tina & Oskar (Feuerinsel München)',
         day: 'Sonntag',
         description:
-          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München — mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
+          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München, mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
         inhalte: [
           'Buugeng: Grundlagen & Bewegungsprinzipien',
           'Drehen mit Händen & Fingern, Ebenen & Symmetrie',
@@ -247,18 +247,18 @@ export const WOCHE: Tag[] = [
           'Koordination, Kontrolle & Körperwahrnehmung',
           'Fokus auf Flow, Timing & Illusionseffekte',
         ],
-        fuerWen: 'Anfänger:innen willkommen — mehr Erfahrung kein Problem, individuelle Begleitung möglich',
+        fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
       {
         slug: 'dynamic-flow-so',
-        time: '18:00 – 19:00',
+        time: '18:00 bis 19:00',
         title: 'Dynamic Flow',
         sub: 'Levistick (Long String) & Rope Dart · Tina & Oskar (Feuerinsel)',
         target: 'erwachsene',
         trainer: 'Tina & Oskar (Feuerinsel München)',
         day: 'Sonntag',
         description:
-          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge — und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
+          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
         inhalte: [
           'Levistick mit Long String: Setups & Schnurkonfigurationen',
           'Übergänge zwischen Tricks, Illusionen & visuelle Täuschungen',
@@ -267,7 +267,7 @@ export const WOCHE: Tag[] = [
           'Richtungswechsel, Footwork & Körperposition',
           'Erste einfache Tricks & Kombos',
         ],
-        fuerWen: 'Anfänger:innen willkommen — mehr Erfahrung kein Problem, individuelle Begleitung möglich',
+        fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
     ],
   },

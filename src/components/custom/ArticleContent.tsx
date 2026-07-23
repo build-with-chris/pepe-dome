@@ -154,7 +154,7 @@ export default function ArticleContent({ content }: ArticleContentProps) {
       bullets.push(
         <BulletItem key={key}>
           <strong className="font-semibold text-[var(--pepe-white)]">{text.slice(0, dashIdx)}</strong>
-          {' — '}
+          {' · '}
           {parseInline(text.slice(dashIdx + 3), key)}
         </BulletItem>
       )

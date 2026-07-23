@@ -28,6 +28,41 @@ export const courseInterestSchema = z.object({
   }),
 })
 
+// Contact request validation schema (Kontaktformular)
+export const contactRequestSchema = z
+  .object({
+    name: z.string().min(2, 'Name muss mindestens 2 Zeichen enthalten').max(100),
+    message: z.string().min(10, 'Bitte beschreibe dein Anliegen (mind. 10 Zeichen)').max(5000),
+    channel: z.enum(['callback', 'whatsapp', 'email']),
+    phone: z
+      .string()
+      .max(30)
+      .regex(/^[0-9+\s\-()/]*$/, 'Nur Ziffern und + - ( ) / erlaubt')
+      .optional()
+      .or(z.literal('')),
+    email: z.string().email('Ungültige E-Mail-Adresse').max(200).optional().or(z.literal('')),
+    reachability: z.string().max(200).optional().or(z.literal('')),
+    gdprConsent: z.boolean().refine((val) => val === true, {
+      message: 'DSGVO-Einwilligung ist erforderlich',
+    }),
+  })
+  .superRefine((data, ctx) => {
+    if ((data.channel === 'callback' || data.channel === 'whatsapp') && !data.phone?.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['phone'],
+        message: 'Telefonnummer ist für Rückruf/WhatsApp erforderlich',
+      })
+    }
+    if (data.channel === 'email' && !data.email?.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['email'],
+        message: 'E-Mail-Adresse ist erforderlich',
+      })
+    }
+  })
+
 export const subscriberConfirmSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 })

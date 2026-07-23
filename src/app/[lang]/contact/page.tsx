@@ -41,7 +41,7 @@ export default async function ContactPage({
       lang={lang}
       dict={dict}
       email={site.email}
-      phone={site.phone}
+      whatsapp={site.whatsapp}
       social={site.social}
     />
   )

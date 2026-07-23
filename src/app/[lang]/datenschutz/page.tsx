@@ -151,7 +151,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Auf dieser Website werden Google Fonts von Google-Servern geladen (nicht lokal eingebunden). Dabei kann u.a. deine IP-Adresse an Google übermittelt werden.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) – sofern über das Cookie-Banner gesteuert.<br />
+                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), sofern über das Cookie-Banner gesteuert.<br />
                   Wenn keine Einwilligung eingeholt wird, muss die Einbindung technisch zwingend erforderlich sein – das ist bei Webfonts in der Regel nicht der Fall.
                 </p>
                 <p className="text-[var(--pepe-t64)] italic">

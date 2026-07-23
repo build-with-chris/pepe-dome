@@ -439,7 +439,7 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <ol className="list-decimal pl-6 space-y-4">
                   <li>Es gilt deutsches Recht.</li>
-                  <li>Gerichtsstand ist – soweit gesetzlich zulässig – München.</li>
+                  <li>Gerichtsstand ist München, soweit gesetzlich zulässig.</li>
                   <li>
                     Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.
                   </li>

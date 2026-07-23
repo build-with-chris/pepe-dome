@@ -23,19 +23,19 @@
   "home": {
     "hero": {
       "title": "Erlebe Artistik hautnah",
-      "subtitle": "Außergewöhnliche Shows, offenes Training und Café — unter der Kuppel im Münchner Ostpark.",
+      "subtitle": "Außergewöhnliche Shows, offenes Training und ein Café unter der Kuppel im Münchner Ostpark.",
       "ctaPrimary": "Events & Tickets",
       "ctaSecondary": "Training entdecken"
     },
     "cafe": {
       "eyebrow": "Neu im Pepe Dome",
-      "titleA": "Unser Café — ",
+      "titleA": "Unser Café, ",
       "titleB": "offen für alle",
       "text": "Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel oder triff Freunde. Mitten im Ostpark.",
       "imageAlt": "Café im Pepe Dome",
       "hoursLabel": "Öffnungszeiten",
-      "days": "Freitag – Sonntag",
-      "time": "14:00 – 19:00 Uhr",
+      "days": "Freitag bis Sonntag",
+      "time": "14 bis 19 Uhr",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -60,11 +60,11 @@
       "items": {
         "show": {
           "title": "Spektakuläre Shows",
-          "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen — erlebe Artistik auf höchstem Niveau."
+          "description": "Von zeitgenössischem Zirkus bis zu innovativen Produktionen. Artistik, die dich mitnimmt."
         },
         "training": {
           "title": "Professionelles Training",
-          "description": "Kurse und Workshops für alle Levels — von Einsteiger:innen bis Profis."
+          "description": "Kurse und Workshops für alle Levels, von Einsteiger:innen bis Profis."
         },
         "dome": {
           "title": "Einzigartige Location",
@@ -106,7 +106,7 @@
     },
     "hero": {
       "title": "News & Magazin",
-      "subtitle": "Aktuelles aus dem Pepe Dome — Shows, Events, Hintergründe und mehr"
+      "subtitle": "Shows, Events, Hintergründe und mehr aus dem Pepe Dome"
     },
     "filter": {
       "all": "Alle"
@@ -139,7 +139,7 @@
     },
     "intro": {
       "title": "Unvergessliche Erlebnisse für Ihr Team",
-      "text": "Der Pepe Dome bietet eine einzigartige Location für Ihre Corporate Events. Die geodätische Kuppel im Münchner Ostpark kombiniert spektakuläre Architektur mit professioneller Event-Infrastruktur — für Veranstaltungen, die in Erinnerung bleiben.",
+      "text": "Der Pepe Dome ist eine besondere Location für Ihre Firmen-Events. Die geodätische Kuppel im Münchner Ostpark verbindet ungewöhnliche Architektur mit professioneller Event-Technik. So bleibt Ihre Veranstaltung in Erinnerung.",
       "cta": "Anfrage senden",
       "videoAlt": "Pepe Dome für Business Events",
       "features": [
@@ -163,7 +163,7 @@
     },
     "services": {
       "title": "Unsere Services",
-      "subtitle": "Von der Firmenfeier bis zum Teambuilding — wir bieten maßgeschneiderte Lösungen für jeden Anlass.",
+      "subtitle": "Ob Firmenfeier oder Teambuilding: Für jeden Anlass finden wir die passende Lösung.",
       "items": [
         {
           "title": "Corporate Events",
@@ -189,7 +189,7 @@
         },
         {
           "title": "PepeShows",
-          "description": "Maßgeschneiderte Performances mit professionellen Artist:innen — unvergessliche Erlebnisse für Ihre Gäste.",
+          "description": "Performances mit professionellen Artist:innen, abgestimmt auf Ihren Anlass. Ein Erlebnis, das Ihren Gästen bleibt.",
           "icon": "🎭",
           "features": [
             "Professionelle Artist:innen",
@@ -202,7 +202,7 @@
     },
     "packages": {
       "title": "Event-Pakete",
-      "subtitle": "Wählen Sie das passende Paket für Ihre Veranstaltung — oder lassen Sie sich ein individuelles Angebot erstellen.",
+      "subtitle": "Wählen Sie das passende Paket für Ihre Veranstaltung, oder lassen Sie sich ein individuelles Angebot erstellen.",
       "popularBadge": "Beliebt",
       "ctaInquire": "Anfrage senden",
       "bespokeText": "Benötigen Sie ein individuelles Angebot?",
@@ -292,34 +292,51 @@
       "email": {
         "title": "E-Mail"
       },
-      "phone": {
-        "title": "WhatsApp"
+      "callback": {
+        "title": "Lieber telefonieren?",
+        "content": "Schick uns über das Formular kurz dein Anliegen und deine Nummer. Wir rufen zurück, sobald wir Zeit haben."
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "content": "Schreib uns direkt, wir antworten so schnell wie möglich.",
+        "cta": "Chat öffnen"
       },
       "hours": {
         "title": "Öffnungszeiten",
-        "content": "Café: Freitag – Sonntag, 14:00 – 19:00 Uhr\nEvents & Training: siehe Programm"
+        "content": "Café: Freitag bis Sonntag, 14 bis 19 Uhr\nEvents & Training: siehe Programm"
       },
       "follow": "Folge uns"
     },
     "form": {
-      "title": "Nachricht senden",
+      "title": "Schreib uns dein Anliegen",
+      "intro": "Beschreib kurz, worum es geht, und sag uns, wie wir dich erreichen sollen. Deine Anfrage landet direkt bei uns, wir melden uns, sobald wir Zeit haben.",
       "fields": {
         "name": "Name",
         "namePlaceholder": "Dein Name",
+        "message": "Dein Anliegen",
+        "messagePlaceholder": "Worum geht es? Z. B. Frage zu einer Show, zum Training, zur Vermietung …",
+        "channel": "Wie sollen wir dich kontaktieren?",
+        "channelCallback": "Rückruf",
+        "channelWhatsapp": "WhatsApp",
+        "channelEmail": "E-Mail",
+        "phone": "Telefonnummer",
+        "phonePlaceholder": "+49 …",
         "email": "E-Mail",
         "emailPlaceholder": "deine@email.de",
-        "subject": "Betreff",
-        "subjectPlaceholder": "Worum geht es?",
-        "message": "Nachricht",
-        "messagePlaceholder": "Deine Nachricht…",
+        "reachability": "Wann bist du am besten erreichbar? (optional)",
+        "reachabilityPlaceholder": "z. B. werktags ab 17 Uhr",
         "privacy": "Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Daten zu."
       },
-      "submit": "Absenden",
+      "submit": "Anfrage senden",
       "submitting": "Wird gesendet…",
-      "successTitle": "Nachricht gesendet!",
-      "successText": "Vielen Dank für deine Nachricht. Wir melden uns bald bei dir.",
+      "successTitle": "Anfrage gesendet!",
+      "successText": "Danke! Wir melden uns bei dir, sobald wir Zeit haben, meistens innerhalb von ein bis zwei Tagen.",
+      "successWhatsapp": "Soll es schneller gehen? Schick uns deine Anfrage zusätzlich direkt per WhatsApp.",
+      "whatsappButton": "Per WhatsApp senden",
       "errors": {
         "missing": "Bitte fülle alle Pflichtfelder aus.",
+        "phone": "Bitte gib eine Telefonnummer an, damit wir dich erreichen können.",
+        "email": "Bitte gib eine E-Mail-Adresse an.",
         "privacy": "Bitte stimme der Datenschutzerklärung zu.",
         "generic": "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
       }
@@ -336,7 +353,7 @@
     },
     "hero": {
       "title": "Über den Pepe Dome",
-      "subtitle": "Der Pepe Dome ist ein Treffpunkt, an dem sich Artistik und Kultur kreuzen — ein Ort, der Performance für Menschen jeden Alters und jeder Herkunft zugänglich macht."
+      "subtitle": "Der Pepe Dome ist ein Treffpunkt, an dem sich Artistik und Kultur kreuzen. Ein Ort, der Performance für Menschen jeden Alters und jeder Herkunft zugänglich macht."
     },
     "story": {
       "title": "Unsere Geschichte",
@@ -385,19 +402,19 @@
     },
     "ecosystem": {
       "title": "Das PEPE Ökosystem",
-      "subtitle": "Drei Säulen — ein gemeinsames Ziel: Artistik als zeitgenössische Kunstform zu fördern und erlebbar zu machen.",
+      "subtitle": "Drei Säulen, ein gemeinsames Ziel: Artistik als zeitgenössische Kunstform zu fördern und erlebbar zu machen.",
       "items": {
         "dome": {
           "name": "PEPE Dome",
-          "description": "Die geodätische Kuppel im Ostpark — Hauptbühne für spektakuläre Shows, Festivals und Events."
+          "description": "Die geodätische Kuppel im Ostpark ist unsere Hauptbühne für Shows, Festivals und Events."
         },
         "shows": {
           "name": "PEPE Shows",
-          "description": "Zeitgenössischer Zirkus auf höchstem Niveau — von intimen Cabarets bis zu großen Produktionen."
+          "description": "Zeitgenössischer Zirkus auf höchstem Niveau, von intimen Cabarets bis zu großen Produktionen."
         },
         "arts": {
           "name": "pepe Arts",
-          "description": "Künstlerische Entwicklung und Produktion — Residenzen, Workshops und kreative Zusammenarbeit."
+          "description": "Künstlerische Entwicklung und Produktion mit Residenzen, Workshops und kreativer Zusammenarbeit."
         }
       }
     },
@@ -423,11 +440,11 @@
         },
         {
           "title": "Inklusion & Community",
-          "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung — Kultur für alle."
+          "description": "Wir heißen jeden willkommen, unabhängig von Hintergrund oder Erfahrung. Kultur für alle."
         },
         {
           "title": "Nachhaltigkeit",
-          "description": "Kreative Wiederverwendung von Materialien statt Neuanschaffung — ökologische Verantwortung ist uns wichtig."
+          "description": "Wir verwenden Materialien wieder, statt neu zu kaufen. Ökologische Verantwortung ist uns wichtig."
         },
         {
           "title": "Innovation",
@@ -437,12 +454,12 @@
     },
     "team": {
       "title": "Das Team",
-      "description": "Hinter dem Pepe Dome steht das PepeCollective — ein engagiertes Netzwerk aus Artist:innen, Kulturschaffenden und Organisator:innen mit über 15 Jahren Erfahrung.",
+      "description": "Hinter dem Pepe Dome steht das PepeCollective, ein engagiertes Netzwerk aus Artist:innen, Kulturschaffenden und Organisator:innen mit über 15 Jahren Erfahrung.",
       "cta": "Lerne uns kennen"
     },
     "location": {
       "title": "Besuche uns im Dome",
-      "text": "Der PEPE Dome befindet sich im wunderschönen Ostpark in München — leicht erreichbar mit öffentlichen Verkehrsmitteln und mit Parkmöglichkeiten in der Nähe.",
+      "text": "Der PEPE Dome liegt im schönen Ostpark in München. Du erreichst ihn gut mit öffentlichen Verkehrsmitteln, Parkplätze gibt es in der Nähe.",
       "contact": "Kontakt",
       "upcomingEvents": "Kommende Events"
     },
@@ -618,16 +635,16 @@
     },
     "hero": {
       "title": "Workshops & Training",
-      "subtitle": "Zeitgenössischer Zirkus und Artistik im Pepe Dome — für alle Levels"
+      "subtitle": "Zeitgenössischer Zirkus und Artistik im Pepe Dome, für alle Levels"
     },
     "booking": {
       "pill": "🎟 Buchung",
-      "title": "Kurs buchen — so geht's",
-      "text": "Unsere Kurse laufen über zwei Anbieter — je nachdem, welchen Kurs du besuchen möchtest.",
+      "title": "So buchst du einen Kurs",
+      "text": "Unsere Kurse laufen über zwei Anbieter, je nachdem, welchen Kurs du besuchen möchtest.",
       "eversportsTitle": "Pepe-Dome-Kurse",
-      "eversportsText": "Capoeira, Kinder-Akrobatik, Urban Acrobatics, Cyr Wheel und Flow Arts buchst du über Eversports — Schnupperstunde, Einzelstunde oder Karte, mit Live-Verfügbarkeit im Kalender unten. Spontan vorbeikommen geht auch: einfach bar vor Ort zahlen.",
+      "eversportsText": "Capoeira, Kinder-Akrobatik, Urban Acrobatics, Cyr Wheel und Flow Arts buchst du über Eversports. Ob Schnupperstunde, Einzelstunde oder Karte: die Live-Verfügbarkeit siehst du im Kalender unten. Spontan vorbeikommen geht auch, dann zahlst du einfach bar vor Ort.",
       "aircroTitle": "Luftakrobatik (Aircrobatics)",
-      "aircroText": "Die Luftakrobatik-Kurse montags und mittwochs veranstaltet unser Partner Aircrobatic Studios — Buchung direkt dort, nicht über Eversports.",
+      "aircroText": "Die Luftakrobatik-Kurse montags und mittwochs veranstaltet unser Partner Aircrobatic Studios. Gebucht wird direkt dort, nicht über Eversports.",
       "aircroCta": "Bei Aircrobatic Studios buchen ↗",
       "partnerPill": "In Vorbereitung",
       "partnerText": "Wir arbeiten daran, dass du bald auch mit Wellpass oder Urban Sports Club an unseren Kursen teilnehmen kannst.",
@@ -637,14 +654,14 @@
     },
     "intro": {
       "title": "Professionelles Training in einzigartiger Atmosphäre",
-      "text": "Strukturierte Wochenkurse für Kinder, Teens und Erwachsene — von den ersten Handständen bis zur fortgeschrittenen Luftakrobatik. Die geodätische Kuppel mit 8,5 Metern Deckenhöhe bietet optimale Bedingungen.",
+      "text": "Strukturierte Wochenkurse für Kinder, Teens und Erwachsene, von den ersten Handständen bis zur fortgeschrittenen Luftakrobatik. Die geodätische Kuppel mit 8,5 Metern Deckenhöhe bietet dafür beste Bedingungen.",
       "ctaBook": "Jetzt buchen",
       "ctaSchedule": "Kursplan ansehen",
       "imageAlt": "Training im Pepe Dome"
     },
     "facts": {
       "courseStart": "Einstieg",
-      "courseStartValue": "Jederzeit — Schnupperstunde möglich",
+      "courseStartValue": "Jederzeit, Schnupperstunde möglich",
       "audience": "Zielgruppen",
       "audienceValue": "Kinder · Teens · Erwachsene",
       "trial": "Schnupperstunde",
@@ -665,24 +682,24 @@
       "aircrobaticsNoteC": "",
       "aircrobaticsNoteD": "(nicht über Eversports).",
       "trickingNoteA": "Donnerstag:",
-      "trickingNoteB": "Tricking & Breaking in Planung — Termine folgen.",
+      "trickingNoteB": "Tricking & Breaking in Planung, Termine folgen.",
       "dropInNoteA": "Drop-in möglich:",
-      "dropInNoteB": "Du kannst zurzeit zu jedem Kurs spontan dazukommen und bar vor Ort bezahlen. Wir bevorzugen aber die Buchung über Eversports — so wissen wir vorab, wer kommt."
+      "dropInNoteB": "Du kannst zurzeit zu jedem Kurs spontan dazukommen und bar vor Ort bezahlen. Am liebsten ist uns aber die Buchung über Eversports, so wissen wir vorab, wer kommt."
     },
     "specials": {
       "title": "Spezielle Angebote",
-      "subtitle": "Außerhalb des Wochenkurses — offenes Profi-Training.",
+      "subtitle": "Offenes Profi-Training außerhalb des Wochenkurses.",
       "pro": {
         "pill": "💬 Für Profis",
         "title": "Profitraining",
         "subtitle": "Untertags · offenes Training für Münchens Profi-Artist:innen",
-        "text": "Gefördert vom Kulturreferat. Aktuelle Zeiten & Änderungen laufen über eine WhatsApp-Gruppe — Zugang auf Anfrage über das Kontaktformular, Betreff „Profitraining\".",
+        "text": "Gefördert vom Kulturreferat. Aktuelle Zeiten und Änderungen laufen über eine WhatsApp-Gruppe. Den Zugang bekommst du auf Anfrage über das Kontaktformular, Betreff „Profitraining\".",
         "request": "Zugang anfragen"
       }
     },
     "disciplines": {
       "title": "Unsere Disziplinen",
-      "subtitle": "Von Luftakrobatik bis Bodenarbeit — die Vielfalt zeitgenössischer Zirkuskunst.",
+      "subtitle": "Die Vielfalt zeitgenössischer Zirkuskunst, von Luftakrobatik bis Bodenarbeit.",
       "items": [
         {
           "name": "Aerial Arts",
@@ -713,7 +730,7 @@
       "acoustics": "Perfekte Akustik",
       "acousticsText": "Die geodätische Kuppelform sorgt für optimale Klangverteilung.",
       "park": "Grüne Oase",
-      "parkText": "Im Ostpark München — Training im Grünen.",
+      "parkText": "Training im Grünen, mitten im Ostpark München.",
       "access": "Barrierearmer Zugang",
       "accessText": "Vollständig zugänglich (mit Begleitperson empfohlen)."
     },

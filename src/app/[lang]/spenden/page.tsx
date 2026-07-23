@@ -36,7 +36,7 @@ type Content = {
 const content: Record<Locale, Content> = {
   de: {
     meta: {
-      title: 'Unterstützen — Circus Akademie München e.V.',
+      title: 'Unterstützen · Circus Akademie München e.V.',
       description:
         'Unterstütze den Pepe Dome und den Trägerverein Circus Akademie München e.V. per Überweisung oder PayPal. Hinweis: keine Spendenquittung möglich.',
     },
@@ -65,11 +65,11 @@ const content: Record<Locale, Content> = {
     disclaimerTitle: 'Hinweis',
     disclaimer:
       'Die Circus Akademie München e.V. ist derzeit nicht als gemeinnützig anerkannt. Wir können daher keine Spendenquittungen (Zuwendungsbestätigungen) ausstellen. Zuwendungen sind steuerlich nicht absetzbar.',
-    thanks: 'Herzlichen Dank — jeder Beitrag hilft, den Dome offen zu halten.',
+    thanks: 'Herzlichen Dank! Jeder Beitrag hilft, den Dome offen zu halten.',
   },
   en: {
     meta: {
-      title: 'Support us — Circus Akademie München e.V.',
+      title: 'Support us · Circus Akademie München e.V.',
       description:
         'Support the Pepe Dome and its operator Circus Akademie München e.V. via bank transfer or PayPal. Note: contributions are not tax-deductible.',
     },
@@ -98,7 +98,7 @@ const content: Record<Locale, Content> = {
     disclaimerTitle: 'Please note',
     disclaimer:
       'Circus Akademie München e.V. is currently not registered as a tax-exempt non-profit organisation. We therefore cannot issue German donation receipts (Zuwendungsbestätigungen), and contributions are not tax-deductible.',
-    thanks: 'Thank you — every contribution helps keep the Dome open.',
+    thanks: 'Thank you! Every contribution helps keep the Dome open.',
   },
 }
 

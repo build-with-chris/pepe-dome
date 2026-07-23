@@ -1,6 +1,6 @@
 {
   "legal": {
-    "enDisclaimer": "Note: This document is legally binding in German only. The text below is the original German version — please contact us at info@pepe-dome.de if you need help understanding any section.",
+    "enDisclaimer": "Note: This document is legally binding in German only. The text below is the original German version. Please contact us at info@pepe-dome.de if you need help understanding any section.",
     "agb": {
       "meta": {
         "title": "Terms & Conditions",
@@ -23,19 +23,19 @@
   "home": {
     "hero": {
       "title": "Experience breathtaking acrobatics",
-      "subtitle": "Extraordinary shows, open training and a café — under the dome in Munich's Ostpark.",
+      "subtitle": "Extraordinary shows, open training and a café under the dome in Munich's Ostpark.",
       "ctaPrimary": "Events & tickets",
       "ctaSecondary": "Discover training"
     },
     "cafe": {
       "eyebrow": "New at Pepe Dome",
-      "titleA": "Our Café — ",
+      "titleA": "Our Café, ",
       "titleB": "open to everyone",
       "text": "Come by for a coffee, watch the training inside the dome or meet friends. Right in the middle of Ostpark.",
       "imageAlt": "Café at Pepe Dome",
       "hoursLabel": "Opening hours",
-      "days": "Friday – Sunday",
-      "time": "2:00 PM – 7:00 PM",
+      "days": "Friday to Sunday",
+      "time": "2 to 7 pm",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -60,11 +60,11 @@
       "items": {
         "show": {
           "title": "Spectacular Shows",
-          "description": "From contemporary circus to innovative productions — experience artistry at the highest level."
+          "description": "From contemporary circus to innovative productions. Artistry that stays with you."
         },
         "training": {
           "title": "Professional Training",
-          "description": "Courses and workshops for every level — from beginners to professionals."
+          "description": "Courses and workshops for every level, from beginners to professionals."
         },
         "dome": {
           "title": "Unique Location",
@@ -106,7 +106,7 @@
     },
     "hero": {
       "title": "News & Magazine",
-      "subtitle": "What's new at Pepe Dome — shows, events, behind the scenes and more"
+      "subtitle": "Shows, events, behind the scenes and more from Pepe Dome"
     },
     "filter": {
       "all": "All"
@@ -139,7 +139,7 @@
     },
     "intro": {
       "title": "Unforgettable experiences for your team",
-      "text": "Pepe Dome offers a unique venue for your corporate events. The geodesic dome in Munich's Ostpark combines spectacular architecture with professional event infrastructure — for events people remember.",
+      "text": "Pepe Dome is a special venue for your corporate events. The geodesic dome in Munich's Ostpark pairs unusual architecture with professional event infrastructure, so your event stays in people's minds.",
       "cta": "Send enquiry",
       "videoAlt": "Pepe Dome for business events",
       "features": [
@@ -163,7 +163,7 @@
     },
     "services": {
       "title": "Our services",
-      "subtitle": "From the company celebration to team building — tailored solutions for any occasion.",
+      "subtitle": "From company celebrations to team building: the right solution for any occasion.",
       "items": [
         {
           "title": "Corporate Events",
@@ -189,7 +189,7 @@
         },
         {
           "title": "PepeShows",
-          "description": "Tailor-made performances with professional artists — unforgettable experiences for your guests.",
+          "description": "Performances with professional artists, tuned to your occasion. An experience your guests will remember.",
           "icon": "🎭",
           "features": [
             "Professional artists",
@@ -202,7 +202,7 @@
     },
     "packages": {
       "title": "Event packages",
-      "subtitle": "Choose the right package for your event — or let us put together a custom proposal.",
+      "subtitle": "Choose the right package for your event, or let us put together a custom proposal.",
       "popularBadge": "Popular",
       "ctaInquire": "Send enquiry",
       "bespokeText": "Need a custom proposal?",
@@ -292,34 +292,51 @@
       "email": {
         "title": "E-mail"
       },
-      "phone": {
-        "title": "WhatsApp"
+      "callback": {
+        "title": "Prefer a phone call?",
+        "content": "Send us your request and your number via the form. We'll call you back as soon as we have time."
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "content": "Message us directly, we'll reply as soon as possible.",
+        "cta": "Open chat"
       },
       "hours": {
         "title": "Opening hours",
-        "content": "Café: Friday – Sunday, 2 – 7 pm\nEvents & training: see programme"
+        "content": "Café: Friday to Sunday, 2 to 7 pm\nEvents & training: see programme"
       },
       "follow": "Follow us"
     },
     "form": {
-      "title": "Send a message",
+      "title": "Tell us what you need",
+      "intro": "Briefly describe what it's about and how you'd like to be contacted. Your request goes straight to us, and we'll get back to you as soon as we can.",
       "fields": {
         "name": "Name",
         "namePlaceholder": "Your name",
+        "message": "Your request",
+        "messagePlaceholder": "What's it about? E.g. a question about a show, training or venue rental …",
+        "channel": "How should we contact you?",
+        "channelCallback": "Call back",
+        "channelWhatsapp": "WhatsApp",
+        "channelEmail": "E-mail",
+        "phone": "Phone number",
+        "phonePlaceholder": "+49 …",
         "email": "E-mail",
         "emailPlaceholder": "you@email.com",
-        "subject": "Subject",
-        "subjectPlaceholder": "What's it about?",
-        "message": "Message",
-        "messagePlaceholder": "Your message…",
+        "reachability": "When are you easiest to reach? (optional)",
+        "reachabilityPlaceholder": "e.g. weekdays after 5 pm",
         "privacy": "I have read the privacy policy and agree to the processing of my data."
       },
-      "submit": "Send",
+      "submit": "Send request",
       "submitting": "Sending…",
-      "successTitle": "Message sent!",
-      "successText": "Thanks for your message — we'll get back to you soon.",
+      "successTitle": "Request sent!",
+      "successText": "Thanks! We'll get back to you as soon as we can, usually within one to two days.",
+      "successWhatsapp": "In a hurry? Send us your request directly via WhatsApp as well.",
+      "whatsappButton": "Send via WhatsApp",
       "errors": {
         "missing": "Please fill in all required fields.",
+        "phone": "Please provide a phone number so we can reach you.",
+        "email": "Please provide an e-mail address.",
         "privacy": "Please accept the privacy policy.",
         "generic": "Something went wrong. Please try again later."
       }
@@ -336,7 +353,7 @@
     },
     "hero": {
       "title": "About Pepe Dome",
-      "subtitle": "Pepe Dome is where circus arts and culture intersect — a place making performance accessible to people of every age and background."
+      "subtitle": "Pepe Dome is where circus arts and culture intersect. A place that makes performance accessible to people of every age and background."
     },
     "story": {
       "title": "Our story",
@@ -348,7 +365,7 @@
       "title": "Background & project idea",
       "p1": "Pepe Dome is a geodesic dome with around 200 seats. Since August 2025 it serves as a stage, training space and cultural venue in Munich's Ostpark.",
       "p2": "Before that, the Lunatico Theatre tent stood temporarily on the same spot. As part of the Nebourhoods project and the wind-down of Festspielhaus GmbH, the dome was handed over to us.",
-      "p3": "We reactivated it as a venue for contemporary circus and cultural formats — with the goal of creating a permanent cultural home in the Neuperlach neighbourhood. Talks are ongoing to integrate the dome into local urban development plans.",
+      "p3": "We reactivated it as a venue for contemporary circus and cultural formats, with the goal of creating a permanent cultural home in the Neuperlach neighbourhood. Talks are ongoing to integrate the dome into local urban development plans.",
       "p4": "From 2026 the non-profit Circus Akademie München e.V. takes over operations to pursue artistic, educational and social goals."
     },
     "areas": {
@@ -385,19 +402,19 @@
     },
     "ecosystem": {
       "title": "The PEPE ecosystem",
-      "subtitle": "Three pillars — one shared goal: to support and showcase circus arts as a contemporary art form.",
+      "subtitle": "Three pillars, one shared goal: to support and showcase circus arts as a contemporary art form.",
       "items": {
         "dome": {
           "name": "PEPE Dome",
-          "description": "The geodesic dome in Ostpark — main stage for spectacular shows, festivals and events."
+          "description": "The geodesic dome in Ostpark is our main stage for shows, festivals and events."
         },
         "shows": {
           "name": "PEPE Shows",
-          "description": "Contemporary circus at the highest level — from intimate cabarets to large productions."
+          "description": "Contemporary circus at the highest level, from intimate cabarets to large productions."
         },
         "arts": {
           "name": "pepe Arts",
-          "description": "Artistic development and production — residencies, workshops and creative collaboration."
+          "description": "Artistic development and production with residencies, workshops and creative collaboration."
         }
       }
     },
@@ -423,11 +440,11 @@
         },
         {
           "title": "Inclusion & community",
-          "description": "Everyone is welcome — regardless of background or experience. Culture for all."
+          "description": "Everyone is welcome, whatever their background or experience. Culture for all."
         },
         {
           "title": "Sustainability",
-          "description": "Creative reuse of materials over buying new — ecological responsibility matters to us."
+          "description": "We reuse materials rather than buying new. Ecological responsibility matters to us."
         },
         {
           "title": "Innovation",
@@ -437,12 +454,12 @@
     },
     "team": {
       "title": "The team",
-      "description": "Behind Pepe Dome stands the PepeCollective — a committed network of artists, cultural workers and organisers with 15+ years of experience.",
+      "description": "Behind Pepe Dome stands the PepeCollective, a committed network of artists, cultural workers and organisers with more than 15 years of experience.",
       "cta": "Meet the team"
     },
     "location": {
       "title": "Visit us at the Dome",
-      "text": "Pepe Dome sits in the beautiful Ostpark in Munich — easy to reach by public transport and with parking nearby.",
+      "text": "Pepe Dome sits in the lovely Ostpark in Munich. It's easy to reach by public transport, with parking nearby.",
       "contact": "Contact",
       "upcomingEvents": "Upcoming events"
     },
@@ -452,7 +469,7 @@
     },
     "mission": {
       "title": "Mission",
-      "text": "Promoting contemporary circus and cultural participation in Munich — paired with inclusive training and education. Cultural focus: Ostpark."
+      "text": "Promoting contemporary circus and cultural participation in Munich, paired with inclusive training and education. Cultural focus: Ostpark."
     }
   },
   "newsletter": {
@@ -567,7 +584,7 @@
     },
     "planned": {
       "title": "Planned for 2026",
-      "text": "Construction is still ongoing — but we're highly motivated for the new season.",
+      "text": "Construction is still ongoing, but we're really looking forward to the new season.",
       "items": {
         "tornadosEye": {
           "title": "David Eisele - Tornados Eye",
@@ -591,7 +608,7 @@
       "highlight": "Highlight event",
       "highlights": "Highlights",
       "stayInformed": "Stay in the loop",
-      "stayInformedText": "Get updates about similar events — never miss a highlight.",
+      "stayInformedText": "Get updates about similar events and never miss a highlight.",
       "infoTitle": "Event info",
       "infoDate": "Date",
       "infoTime": "Time",
@@ -618,16 +635,16 @@
     },
     "hero": {
       "title": "Workshops & Training",
-      "subtitle": "Contemporary circus and artistry at Pepe Dome — for every level"
+      "subtitle": "Contemporary circus and artistry at Pepe Dome, for every level"
     },
     "booking": {
       "pill": "🎟 Booking",
       "title": "How to book a class",
-      "text": "Our classes run on two platforms — depending on which class you want to join.",
+      "text": "Our classes run on two platforms, depending on which class you want to join.",
       "eversportsTitle": "Pepe Dome classes",
-      "eversportsText": "Capoeira, kids' acrobatics, Urban Acrobatics, Cyr Wheel and Flow Arts are booked via Eversports — trial class, single session or pass, with live availability in the calendar below. Dropping in spontaneously works too: just pay cash on site.",
+      "eversportsText": "Capoeira, kids' acrobatics, Urban Acrobatics, Cyr Wheel and Flow Arts are booked via Eversports. Trial class, single session or pass: you'll see live availability in the calendar below. Dropping in works too, just pay cash on site.",
       "aircroTitle": "Aerial acrobatics (Aircrobatics)",
-      "aircroText": "The aerial classes on Mondays and Wednesdays are run by our partner Aircrobatic Studios — book directly with them, not via Eversports.",
+      "aircroText": "The aerial classes on Mondays and Wednesdays are run by our partner Aircrobatic Studios. Book directly with them, not via Eversports.",
       "aircroCta": "Book at Aircrobatic Studios ↗",
       "partnerPill": "Coming soon",
       "partnerText": "We are working on letting you join our classes with a Wellpass or Urban Sports Club membership soon.",
@@ -637,14 +654,14 @@
     },
     "intro": {
       "title": "Professional training in a unique atmosphere",
-      "text": "Structured weekly classes for kids, teens and adults — from first handstands to advanced aerial work. Our geodesic dome with 8.5 m ceiling height offers ideal conditions.",
+      "text": "Structured weekly classes for kids, teens and adults, from first handstands to advanced aerial work. Our geodesic dome with its 8.5 m ceiling gives you plenty of room.",
       "ctaBook": "Book now",
       "ctaSchedule": "View schedule",
       "imageAlt": "Training at Pepe Dome"
     },
     "facts": {
       "courseStart": "Getting started",
-      "courseStartValue": "Any time — trial class available",
+      "courseStartValue": "Any time, trial class available",
       "audience": "For",
       "audienceValue": "Kids · Teens · Adults",
       "trial": "Trial class",
@@ -665,24 +682,24 @@
       "aircrobaticsNoteC": "",
       "aircrobaticsNoteD": "(not via Eversports).",
       "trickingNoteA": "Thursday:",
-      "trickingNoteB": "Tricking & breaking planned — dates to follow.",
+      "trickingNoteB": "Tricking & breaking planned, dates to follow.",
       "dropInNoteA": "Drop-in welcome:",
-      "dropInNoteB": "You can currently join any class spontaneously and pay in cash on site. We prefer bookings via Eversports though — so we know in advance who's coming."
+      "dropInNoteB": "You can currently join any class spontaneously and pay in cash on site. We prefer bookings via Eversports though, so we know in advance who's coming."
     },
     "specials": {
       "title": "Special offers",
-      "subtitle": "Outside the weekly schedule — open pro training.",
+      "subtitle": "Open pro training, outside the weekly schedule.",
       "pro": {
         "pill": "💬 For pros",
         "title": "Professional Training",
         "subtitle": "Daytime · open training for Munich's pro artists",
-        "text": "Supported by the Munich Department of Arts and Culture. Current times and updates are shared in a WhatsApp group — request access via the contact form, subject \"Profitraining\".",
+        "text": "Supported by the Munich Department of Arts and Culture. Current times and updates are shared in a WhatsApp group. Request access via the contact form, subject \"Profitraining\".",
         "request": "Request access"
       }
     },
     "disciplines": {
       "title": "Our disciplines",
-      "subtitle": "From aerial work to floor — the breadth of contemporary circus arts.",
+      "subtitle": "The breadth of contemporary circus arts, from aerial work to floor.",
       "items": [
         {
           "name": "Aerial Arts",
@@ -713,7 +730,7 @@
       "acoustics": "Perfect acoustics",
       "acousticsText": "The geodesic dome shape provides excellent sound distribution.",
       "park": "Green oasis",
-      "parkText": "Inside Munich's Ostpark — training in the green.",
+      "parkText": "Training in the green, right inside Munich's Ostpark.",
       "access": "Step-free access",
       "accessText": "Fully accessible (companion recommended)."
     },
