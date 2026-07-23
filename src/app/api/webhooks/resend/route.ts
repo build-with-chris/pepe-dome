@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
 
 /**
@@ -42,29 +43,57 @@ interface ResendWebhookPayload {
 }
 
 /**
- * Verify webhook signature (if configured)
- * Note: Resend uses webhook secrets for verification
+ * Verify webhook signature.
+ *
+ * Resend signiert Webhooks über Svix. Header: `svix-id`, `svix-timestamp`,
+ * `svix-signature`. Signatur = base64(HMAC-SHA256(secret, "id.timestamp.body")),
+ * wobei das Secret der base64-Teil hinter `whsec_` ist. Der Header kann mehrere
+ * space-getrennte "v1,<sig>"-Einträge enthalten; einer muss passen.
+ *
+ * Wichtig: Es muss der ROH-Body signiert/geprüft werden (nicht neu serialisiert).
  */
-function verifyWebhookSignature(request: NextRequest): boolean {
-  const signature = request.headers.get('resend-signature')
-  const webhookSecret = process.env.RESEND_WEBHOOK_SECRET
+function verifyWebhookSignature(request: NextRequest, rawBody: string): boolean {
+  const secret = process.env.RESEND_WEBHOOK_SECRET
 
-  // If no secret configured, skip verification (dev mode)
-  if (!webhookSecret) {
+  // Ohne Secret: Verifizierung überspringen (nur Dev/lokal)
+  if (!secret) {
     console.warn('RESEND_WEBHOOK_SECRET not configured - skipping signature verification')
     return true
   }
 
-  // If secret is configured but no signature provided, reject
-  if (!signature) {
-    console.error('Webhook signature missing')
+  const svixId = request.headers.get('svix-id')
+  const svixTimestamp = request.headers.get('svix-timestamp')
+  const svixSignature = request.headers.get('svix-signature')
+
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    console.error('[resend-webhook] Svix-Header fehlen', {
+      hasId: Boolean(svixId),
+      hasTimestamp: Boolean(svixTimestamp),
+      hasSignature: Boolean(svixSignature),
+    })
     return false
   }
 
-  // TODO: Implement proper signature verification
-  // Resend uses HMAC-SHA256 for webhook signatures
-  // For now, we do basic comparison
-  return signature === webhookSecret
+  // Replay-Schutz: Timestamp darf max. 5 Minuten abweichen
+  const now = Math.floor(Date.now() / 1000)
+  const ts = parseInt(svixTimestamp, 10)
+  if (!Number.isFinite(ts) || Math.abs(now - ts) > 300) {
+    console.error('[resend-webhook] Timestamp außerhalb der Toleranz')
+    return false
+  }
+
+  const secretBytes = Buffer.from(secret.replace(/^whsec_/, ''), 'base64')
+  const signedContent = `${svixId}.${svixTimestamp}.${rawBody}`
+  const expected = crypto.createHmac('sha256', secretBytes).update(signedContent).digest('base64')
+  const expectedBuf = Buffer.from(expected)
+
+  // Header: "v1,<sig> v1,<sig2> ..." — einer muss timing-safe passen
+  return svixSignature.split(' ').some((part) => {
+    const comma = part.indexOf(',')
+    const sig = comma === -1 ? part : part.slice(comma + 1)
+    const sigBuf = Buffer.from(sig)
+    return sigBuf.length === expectedBuf.length && crypto.timingSafeEqual(sigBuf, expectedBuf)
+  })
 }
 
 /**
@@ -92,20 +121,26 @@ function getNewsletterIdFromTags(tags?: Array<{ name: string; value: string }>):
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify webhook signature
-    if (!verifyWebhookSignature(request)) {
+    // Roh-Body lesen (für die Signaturprüfung nötig) und erst danach parsen
+    const rawBody = await request.text()
+
+    if (!verifyWebhookSignature(request, rawBody)) {
       return NextResponse.json(
         { error: 'Invalid webhook signature' },
         { status: 401 }
       )
     }
 
-    // Parse webhook payload
-    const payload: ResendWebhookPayload = await request.json()
+    const payload: ResendWebhookPayload = JSON.parse(rawBody)
     const { type, data } = payload
 
     const subscriberId = getSubscriberIdFromTags(data.tags)
     const newsletterId = getNewsletterIdFromTags(data.tags)
+
+    // Ohne Tags lässt sich das Event keiner Kampagne/Person zuordnen — sichtbar loggen
+    if (!subscriberId && !newsletterId && (type === 'email.opened' || type === 'email.clicked' || type === 'email.delivered')) {
+      console.warn('[resend-webhook] Event ohne subscriber_id/newsletter_id Tags', { type, emailId: data.email_id })
+    }
 
     console.log('Resend webhook received:', {
       type,
