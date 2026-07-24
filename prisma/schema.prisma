@@ -109,6 +109,8 @@ model NewsletterEvent {
   @@index([subscriberId])
   @@index([eventType])
   @@index([createdAt])
+  /// Webhook-Zuordnung über die Resend-email_id (Fallback ohne Tags)
+  @@index([resendEventId])
   @@map("newsletter_events")
 }
 

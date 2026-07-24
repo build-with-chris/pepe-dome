@@ -531,21 +531,23 @@ export async function sendNewsletter(
   if (!options?.dryRun && !options?.testRecipients) {
     // Record SENT NewsletterEvents for every successful send so future resume-missing calls know who's done.
     // recipients[i] corresponds to allResults[i] (pushed in order).
-    const successfulSubscriberIds: string[] = []
-    for (let k = 0; k < allResults.length; k++) {
-      if (allResults[k]?.success && recipients[k]) {
-        successfulSubscriberIds.push(recipients[k].id)
-      }
-    }
+    // resendEventId = Resend email_id: nötig, damit der Webhook Opens/Clicks
+    // auch dann zuordnen kann, wenn Resend keine Tags im Payload mitschickt.
+    const sentRows = allResults
+      .map((result, k) =>
+        result?.success && recipients[k]
+          ? {
+              newsletterId: newsletter.id,
+              subscriberId: recipients[k].id,
+              eventType: 'SENT' as const,
+              resendEventId: result.id ?? null,
+            }
+          : null
+      )
+      .filter((row): row is NonNullable<typeof row> => row !== null)
 
-    if (successfulSubscriberIds.length > 0) {
-      await prisma.newsletterEvent.createMany({
-        data: successfulSubscriberIds.map((subscriberId) => ({
-          newsletterId: newsletter.id,
-          subscriberId,
-          eventType: 'SENT' as const,
-        })),
-      })
+    if (sentRows.length > 0) {
+      await prisma.newsletterEvent.createMany({ data: sentRows })
     }
 
     await prisma.newsletter.update({

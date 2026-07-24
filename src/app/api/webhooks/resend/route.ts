@@ -134,12 +134,25 @@ export async function POST(request: NextRequest) {
     const payload: ResendWebhookPayload = JSON.parse(rawBody)
     const { type, data } = payload
 
-    const subscriberId = getSubscriberIdFromTags(data.tags)
-    const newsletterId = getNewsletterIdFromTags(data.tags)
+    let subscriberId = getSubscriberIdFromTags(data.tags)
+    let newsletterId = getNewsletterIdFromTags(data.tags)
 
-    // Ohne Tags lässt sich das Event keiner Kampagne/Person zuordnen — sichtbar loggen
-    if (!subscriberId && !newsletterId && (type === 'email.opened' || type === 'email.clicked' || type === 'email.delivered')) {
-      console.warn('[resend-webhook] Event ohne subscriber_id/newsletter_id Tags', { type, emailId: data.email_id })
+    // Fallback: Wenn Resend keine Tags mitschickt, über die beim Versand
+    // gespeicherte Resend-email_id zuordnen (SENT-Event → subscriber/newsletter).
+    if ((!subscriberId || !newsletterId) && data.email_id) {
+      const sentEvent = await prisma.newsletterEvent.findFirst({
+        where: { resendEventId: data.email_id, eventType: 'SENT' },
+        select: { subscriberId: true, newsletterId: true },
+      })
+      if (sentEvent) {
+        subscriberId = subscriberId || sentEvent.subscriberId
+        newsletterId = newsletterId || sentEvent.newsletterId
+      } else if (type === 'email.opened' || type === 'email.clicked' || type === 'email.delivered') {
+        console.warn('[resend-webhook] Event nicht zuordenbar (keine Tags, kein SENT-Event)', {
+          type,
+          emailId: data.email_id,
+        })
+      }
     }
 
     console.log('Resend webhook received:', {
