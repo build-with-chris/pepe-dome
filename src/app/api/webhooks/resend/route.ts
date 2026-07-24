@@ -193,11 +193,11 @@ export async function POST(request: NextRequest) {
         break
 
       case 'email.bounced':
-        await handleEmailBounced(subscriberId, data.email_id, data.bounce?.bounceType)
+        await handleEmailBounced(subscriberId, newsletterId, data.email_id, data.bounce?.bounceType)
         break
 
       case 'email.complained':
-        await handleEmailComplained(subscriberId, data.email_id)
+        await handleEmailComplained(subscriberId, newsletterId, data.email_id)
         break
 
       case 'email.delivered':
@@ -325,61 +325,104 @@ async function handleEmailClicked(
  */
 async function handleEmailBounced(
   subscriberId: string | null,
+  newsletterId: string | null,
   emailId: string,
   bounceType?: 'Hard' | 'Soft'
 ) {
-  if (!subscriberId) return
-
-  // Hard bounces should unsubscribe the user
-  if (bounceType === 'Hard') {
-    await prisma.subscriber.update({
-      where: { id: subscriberId },
-      data: {
-        status: 'UNSUBSCRIBED',
-        unsubscribedAt: new Date(),
-        metadata: {
-          unsubscribeReason: 'hard_bounce',
-          emailId,
-        } as any,
-      },
-    })
-
-    console.log(`Subscriber ${subscriberId} unsubscribed due to hard bounce`)
+  // Statistik auch dann führen, wenn die Person nicht auflösbar ist
+  if (newsletterId) {
+    await incrementNewsletterStat(newsletterId, 'bounceCount')
   }
 
-  // Log bounce in metadata
+  if (!subscriberId) return
+
+  const isHard = bounceType === 'Hard'
+  const timestamp = new Date()
+
+  // Metadaten zusammenführen statt überschreiben — der frühere Code setzte
+  // das Objekt zweimal neu und löschte damit u.a. den Austragungsgrund.
+  const existing = await prisma.subscriber.findUnique({
+    where: { id: subscriberId },
+    select: { metadata: true },
+  })
+  const meta = mergeableMetadata(existing?.metadata)
+
   await prisma.subscriber.update({
     where: { id: subscriberId },
     data: {
+      // Nur Hard Bounces austragen; Soft Bounces sind oft temporär
+      ...(isHard ? { status: 'UNSUBSCRIBED' as const, unsubscribedAt: timestamp } : {}),
       metadata: {
-        lastBounce: {
-          type: bounceType,
-          emailId,
-          timestamp: new Date().toISOString(),
-        },
-      } as any,
+        ...meta,
+        ...(isHard ? { unsubscribeReason: 'hard_bounce' } : {}),
+        lastBounce: { type: bounceType ?? 'unknown', emailId, timestamp: timestamp.toISOString() },
+      },
     },
   })
+
+  if (newsletterId) {
+    await prisma.newsletterEvent.create({
+      data: {
+        newsletterId,
+        subscriberId,
+        eventType: 'BOUNCED',
+        eventData: { emailId, bounceType: bounceType ?? 'unknown' },
+        resendEventId: emailId,
+      },
+    })
+  }
+
+  if (isHard) {
+    console.log(`Subscriber ${subscriberId} unsubscribed due to hard bounce`)
+  }
 }
 
 /**
  * Handle email complained event (spam report)
  */
-async function handleEmailComplained(subscriberId: string | null, emailId: string) {
+async function handleEmailComplained(
+  subscriberId: string | null,
+  newsletterId: string | null,
+  emailId: string
+) {
+  if (newsletterId) {
+    await incrementNewsletterStat(newsletterId, 'complaintCount')
+  }
+
   if (!subscriberId) return
 
-  // Automatically unsubscribe on spam complaint
+  const timestamp = new Date()
+  const existing = await prisma.subscriber.findUnique({
+    where: { id: subscriberId },
+    select: { metadata: true },
+  })
+  const meta = mergeableMetadata(existing?.metadata)
+
+  // Beschwerde führt immer zum Austrag
   await prisma.subscriber.update({
     where: { id: subscriberId },
     data: {
       status: 'UNSUBSCRIBED',
-      unsubscribedAt: new Date(),
+      unsubscribedAt: timestamp,
       metadata: {
+        ...meta,
         unsubscribeReason: 'spam_complaint',
-        emailId,
-      } as any,
+        lastComplaint: { emailId, timestamp: timestamp.toISOString() },
+      },
     },
   })
+
+  if (newsletterId) {
+    await prisma.newsletterEvent.create({
+      data: {
+        newsletterId,
+        subscriberId,
+        eventType: 'COMPLAINED',
+        eventData: { emailId },
+        resendEventId: emailId,
+      },
+    })
+  }
 
   console.log(`Subscriber ${subscriberId} unsubscribed due to spam complaint`)
 }
@@ -387,9 +430,23 @@ async function handleEmailComplained(subscriberId: string | null, emailId: strin
 /**
  * Increment newsletter stat counter
  */
+/** Vorhandene Metadaten als mergefähiges Objekt zurückgeben */
+function mergeableMetadata(metadata: unknown): Record<string, unknown> {
+  return metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+    ? (metadata as Record<string, unknown>)
+    : {}
+}
+
 async function incrementNewsletterStat(
   newsletterId: string,
-  field: 'openCount' | 'clickCount' | 'deliveredCount' | 'uniqueOpenCount' | 'uniqueClickCount'
+  field:
+    | 'openCount'
+    | 'clickCount'
+    | 'deliveredCount'
+    | 'uniqueOpenCount'
+    | 'uniqueClickCount'
+    | 'bounceCount'
+    | 'complaintCount'
 ) {
   try {
     // Check if newsletter exists first
@@ -414,6 +471,8 @@ async function incrementNewsletterStat(
         clickCount: field === 'clickCount' ? 1 : 0,
         uniqueOpenCount: field === 'uniqueOpenCount' ? 1 : 0,
         uniqueClickCount: field === 'uniqueClickCount' ? 1 : 0,
+        bounceCount: field === 'bounceCount' ? 1 : 0,
+        complaintCount: field === 'complaintCount' ? 1 : 0,
       },
       update: {
         [field]: { increment: 1 },
