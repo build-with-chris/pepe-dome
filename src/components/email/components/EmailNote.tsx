@@ -9,6 +9,7 @@ import 'server-only'
 
 import { Section, Text } from '@react-email/components'
 import { emailTheme, emailText } from '../theme'
+import { EmailMarkdown } from './EmailMarkdown'
 import type { NewsletterNoteItem } from '@/lib/newsletter-content'
 
 export function EmailNote({ note }: { note: NewsletterNoteItem }) {
@@ -27,18 +28,8 @@ export function EmailNote({ note }: { note: NewsletterNoteItem }) {
           {note.title}
         </Text>
       )}
-      {note.text && (
-        <Text
-          style={{
-            ...emailText.body,
-            fontSize: '15px',
-            margin: '0',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {note.text}
-        </Text>
-      )}
+      {/* Freitext eines redaktionellen Blocks als Markdown. */}
+      {note.text && <EmailMarkdown source={note.text} />}
     </Section>
   )
 }

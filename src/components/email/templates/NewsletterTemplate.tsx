@@ -37,6 +37,7 @@ import { EmailButton } from '../components/EmailButton'
 import { EmailLeadEvent, EmailFeatureEvent, EmailEventRow } from '../components/EmailEventCard'
 import { EmailNewsCard } from '../components/EmailNewsCard'
 import { EmailNote } from '../components/EmailNote'
+import { EmailMarkdown } from '../components/EmailMarkdown'
 import { emailTheme, emailText } from '../theme'
 import type {
   NewsletterViewModel,
@@ -194,9 +195,9 @@ export default function NewsletterTemplate({
               {greeting && (
                 <Text style={{ ...emailText.body, margin: '0 0 10px 0' }}>{greeting}</Text>
               )}
-              <Text style={{ ...emailText.body, margin: '0', whiteSpace: 'pre-wrap' }}>
-                {vm.introText}
-              </Text>
+              {/* Einstiegstext als Markdown: Überschriften, Absätze, Listen
+                  statt einer Fließtextwand. Reiner Text bleibt reiner Text. */}
+              <EmailMarkdown source={vm.introText!} />
             </Section>
           )}
 

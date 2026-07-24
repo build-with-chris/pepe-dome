@@ -24,6 +24,7 @@ import {
   type NewsletterNoteItem,
 } from '@/lib/newsletter-content'
 import SignupForm from '@/components/custom/SignupForm'
+import NewsletterMarkdown from '@/components/custom/NewsletterMarkdown'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 
@@ -155,7 +156,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
 
         {vm.introText && (
           <div className="mb-14 max-w-2xl mx-auto">
-            <p className="text-lg text-pepe-t80 whitespace-pre-wrap leading-relaxed">{vm.introText}</p>
+            <NewsletterMarkdown source={vm.introText} />
           </div>
         )}
 
@@ -309,7 +310,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
                 return (
                   <div key={note.position} className="card p-6">
                     {note.title && <h3 className="h3 mb-2">{note.title}</h3>}
-                    {note.text && <p className="text-pepe-t80 whitespace-pre-wrap">{note.text}</p>}
+                    {note.text && <NewsletterMarkdown source={note.text} />}
                   </div>
                 )
               })}
