@@ -21,6 +21,12 @@ type ResendWebhookEvent =
   | 'email.opened'
   | 'email.clicked'
 
+/**
+ * Tags kommen je nach Kontext in zwei Formen: als Array (so werden sie beim
+ * Versand gesetzt) oder als Objekt-Map (so liefert Resend sie im Webhook).
+ */
+type ResendTags = Array<{ name?: string; value?: string }> | Record<string, unknown> | null | undefined
+
 interface ResendWebhookPayload {
   type: ResendWebhookEvent
   created_at: string
@@ -30,7 +36,7 @@ interface ResendWebhookPayload {
     to: string[]
     subject: string
     created_at: string
-    tags?: Array<{ name: string; value: string }>
+    tags?: ResendTags
     // Event-specific fields
     click?: {
       link: string
@@ -97,21 +103,35 @@ function verifyWebhookSignature(request: NextRequest, rawBody: string): boolean 
 }
 
 /**
- * Extract subscriber ID from email tags
+ * Tag-Wert aus dem Webhook-Payload lesen.
+ *
+ * Achtung: Beim Versand werden Tags als Array [{ name, value }] gesetzt,
+ * im Webhook-Payload liefert Resend sie aber als Objekt { name: value }.
+ * Beide Formen werden unterstützt — alles andere wird ignoriert statt zu
+ * crashen (ein Fehler hier kostete zuvor jedes einzelne Event).
  */
-function getSubscriberIdFromTags(tags?: Array<{ name: string; value: string }>): string | null {
+function getTagValue(tags: ResendTags, key: string): string | null {
   if (!tags) return null
-  const subscriberTag = tags.find(tag => tag.name === 'subscriber_id')
-  return subscriberTag?.value || null
+
+  if (Array.isArray(tags)) {
+    const tag = tags.find((t) => t && typeof t === 'object' && t.name === key)
+    return typeof tag?.value === 'string' ? tag.value : null
+  }
+
+  if (typeof tags === 'object') {
+    const value = (tags as Record<string, unknown>)[key]
+    return typeof value === 'string' ? value : null
+  }
+
+  return null
 }
 
-/**
- * Extract newsletter ID from email tags
- */
-function getNewsletterIdFromTags(tags?: Array<{ name: string; value: string }>): string | null {
-  if (!tags) return null
-  const newsletterTag = tags.find(tag => tag.name === 'newsletter_id')
-  return newsletterTag?.value || null
+function getSubscriberIdFromTags(tags: ResendTags): string | null {
+  return getTagValue(tags, 'subscriber_id')
+}
+
+function getNewsletterIdFromTags(tags: ResendTags): string | null {
+  return getTagValue(tags, 'newsletter_id')
 }
 
 /**
