@@ -1,17 +1,28 @@
 /**
- * Newsletter Issue Page — localized (DE / EN)
+ * Newsletter-Ausgabe als Webseite (DE / EN)
  *
- * UI-Chrome (Back-Link, Datum, Buttons, Closing-CTA, Signup) ist lokalisiert.
- * Der gespeicherte Newsletter-Content selbst bleibt wie in der DB
- * abgelegt (typischerweise Deutsch) — Übersetzungen pro Issue können
- * später analog zu Event/Article über zusätzliche EN-Spalten kommen.
+ * Diese Seite ist der Rückfallweg für alles, was in E-Mail-Clients schief
+ * gehen kann, und gleichzeitig das Archiv. Sie nutzt deshalb dasselbe
+ * Viewmodel wie der Versand.
+ *
+ * Vorher las sie Events und Artikel aus statischen JSON-Dateien, während
+ * Versand und Admin längst aus der Datenbank kamen. Jede Ausgabe mit
+ * Events aus der Datenbank erschien hier deshalb ohne Inhalt.
+ *
+ * Die gespeicherten Inhalte selbst bleiben, wie sie in der Datenbank
+ * liegen (in der Regel Deutsch). Lokalisiert ist die Seitenhülle.
  */
 
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getNewsletterBySlug } from '@/lib/newsletters'
-import { getEventById, getNewsBySlug } from '@/lib/data'
+import {
+  buildViewModelFromNewsletter,
+  type NewsletterEventItem,
+  type NewsletterArticleItem,
+  type NewsletterNoteItem,
+} from '@/lib/newsletter-content'
 import SignupForm from '@/components/custom/SignupForm'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
@@ -86,97 +97,29 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
   }
   if (!newsletter) notFound()
 
-  type EventDataT = {
-    imageUrl?: string | null
-    title: string
-    subtitle?: string | null
-    description: string
-    date: string
-    time?: string | null
-    location: string
-    ticketUrl?: string | null
-  }
-  type ArticleDataT = {
-    imageUrl?: string | null
-    title: string
-    excerpt: string
-    slug: string
-  }
-  type ContentItemData = EventDataT | ArticleDataT | Record<string, never>
-
-  const contentSections: {
-    heading?: string
-    description?: string
-    items: Array<{ type: string; data: ContentItemData }>
-  }[] = []
-
-  let currentSection: typeof contentSections[0] | null = null
-
-  for (const item of newsletter.content) {
-    if (item.sectionHeading) {
-      if (currentSection && currentSection.items.length > 0) {
-        contentSections.push(currentSection)
-      }
-      currentSection = {
-        heading: item.sectionHeading,
-        description: item.sectionDescription || undefined,
-        items: [],
-      }
-    }
-    if (!currentSection) currentSection = { items: [] }
-
-    let contentData: ContentItemData | null = null
-    if (item.contentId) {
-      try {
-        if (item.contentType === 'EVENT') {
-          const event = getEventById(item.contentId)
-          if (event) {
-            contentData = {
-              imageUrl: event.imageUrl || null,
-              title: event.title,
-              subtitle: event.subtitle || null,
-              description: event.description,
-              date: event.date,
-              time: event.time || null,
-              location: event.location,
-              ticketUrl: event.ticketUrl,
-            } as EventDataT
-          }
-        } else if (item.contentType === 'ARTICLE') {
-          const article = getNewsBySlug(item.contentId)
-          if (article) {
-            contentData = {
-              imageUrl: article.imageUrl || null,
-              title: article.title,
-              excerpt: article.excerpt,
-              slug: article.slug,
-            } as ArticleDataT
-          }
-        }
-      } catch (error) {
-        console.error(`Failed to fetch content ${item.contentId}:`, error)
-      }
-    }
-
-    if (contentData || item.contentType === 'CUSTOM_SECTION') {
-      currentSection.items.push({
-        type: item.contentType.toLowerCase(),
-        data: contentData || ({} as ContentItemData),
-      })
-    }
-  }
-
-  if (currentSection && currentSection.items.length > 0) {
-    contentSections.push(currentSection)
-  }
+  const vm = await buildViewModelFromNewsletter(newsletter, { dateLocale, target: 'web' })
 
   const newsletterBase = localizedHref(lang, '/newsletter')
-  const newsHref = localizedHref(lang, '/news')
+  const eventsBase = localizedHref(lang, '/events')
+  const newsBase = localizedHref(lang, '/news')
+
+  /** Interne Ziele ohne UTM: Auf der Website wäre das Selbstzuordnung. */
+  const eventHref = (event: NewsletterEventItem) => localizedHref(lang, `/events/${event.slug}`)
+  const articleHref = (article: NewsletterArticleItem) => `${newsBase}/${article.slug}`
+
+  const ctaLabelFor = (event: NewsletterEventItem) =>
+    event.isMailCta ? t.ticketMail : t.ticketBuy
+
+  /**
+   * Auf der Website ohne Kampagnenparameter verlinken. Wer hier klickt,
+   * kommt nicht aus einer E-Mail; utm_source=newsletter wäre schlicht falsch.
+   */
+  const ctaHrefFor = (event: NewsletterEventItem) => event.ctaUrlPlain
 
   return (
     <div className="section">
       <div className="stage-container max-w-4xl">
-        <header className="mb-12 text-center">
+        <header className="mb-10 text-center">
           <div className="mb-4">
             <Link href={newsletterBase} className="text-sm text-pepe-gold hover:text-pepe-gold/80 transition-colors">
               {t.backToArchive}
@@ -192,122 +135,196 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
             })}
           </p>
 
-          <h1 className="display-2 mb-4">{newsletter.subject}</h1>
+          <h1 className="display-2 mb-4">{vm.hero.title}</h1>
 
-          {newsletter.preheader && (
-            <p className="lead text-pepe-t80 max-w-2xl mx-auto">{newsletter.preheader}</p>
+          {vm.hero.subtitle && (
+            <p className="lead text-pepe-t80 max-w-2xl mx-auto">{vm.hero.subtitle}</p>
           )}
         </header>
 
-        {(newsletter.heroImageUrl || newsletter.heroTitle) && (
-          <section className="mb-12 rounded-2xl overflow-hidden bg-pepe-bg-secondary">
-            {newsletter.heroImageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={newsletter.heroImageUrl}
-                alt={newsletter.heroTitle || newsletter.subject}
-                className="w-full h-auto max-h-96 object-cover"
-              />
-            )}
-
-            {newsletter.heroTitle && (
-              <div className="p-8 md:p-12">
-                <h2 className="h1 mb-4">{newsletter.heroTitle}</h2>
-                {newsletter.heroSubtitle && (
-                  <p className="text-xl text-pepe-t80 mb-6">{newsletter.heroSubtitle}</p>
-                )}
-                {newsletter.heroCTALabel && newsletter.heroCTAUrl && (
-                  <Link href={newsletter.heroCTAUrl} className="btn-primary inline-block">
-                    {newsletter.heroCTALabel}
-                  </Link>
-                )}
-              </div>
-            )}
-          </section>
+        {vm.hero.imageUrl && (
+          <div className="mb-12 rounded-2xl overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={vm.hero.imageUrl}
+              alt={vm.hero.title}
+              className="w-full h-auto max-h-[28rem] object-cover"
+            />
+          </div>
         )}
 
-        {contentSections.map((section, sectionIndex) => (
-          <section key={sectionIndex} className="mb-16">
+        {vm.introText && (
+          <div className="mb-14 max-w-2xl mx-auto">
+            <p className="text-lg text-pepe-t80 whitespace-pre-wrap leading-relaxed">{vm.introText}</p>
+          </div>
+        )}
+
+        {vm.sections.map((section, sectionIndex) => (
+          <section key={sectionIndex} className="mb-14">
             {section.heading && (
-              <div className="mb-8">
-                <h2 className="h2 mb-2">{section.heading}</h2>
-                {section.description && <p className="text-pepe-t64">{section.description}</p>}
+              <div className="mb-8 border-b border-pepe-line pb-3">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-pepe-t64">
+                  {section.heading}
+                </h2>
+                {section.description && (
+                  <p className="text-pepe-t64 mt-2">{section.description}</p>
+                )}
               </div>
             )}
 
-            <div className="space-y-8">
-              {section.items.map((item, itemIndex) => (
-                <div key={itemIndex} className="card p-6 md:p-8">
-                  {item.type === 'event' && item.data && 'date' in item.data && (
-                    <div className="flex flex-col md:flex-row gap-6">
-                      {item.data.imageUrl && (
-                        <div className="md:w-1/3">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={item.data.imageUrl} alt={item.data.title} className="w-full h-48 object-cover rounded-lg" />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <h3 className="h3 mb-2">{item.data.title}</h3>
-                        {item.data.subtitle && <p className="text-pepe-gold mb-3">{item.data.subtitle}</p>}
-                        <p className="text-pepe-t80 mb-4">{item.data.description}</p>
-                        <div className="flex flex-wrap gap-4 text-sm text-pepe-t64 mb-4">
-                          <span>📅 {new Date(item.data.date).toLocaleDateString(dateLocale)}</span>
-                          <span>🕐 {item.data.time}</span>
-                          <span>📍 {item.data.location}</span>
-                        </div>
-                        {item.data.ticketUrl && (() => {
-                          const isEmail = item.data.ticketUrl.includes('@') && !item.data.ticketUrl.startsWith('http')
-                          const href = isEmail && !item.data.ticketUrl.startsWith('mailto:')
-                            ? `mailto:${item.data.ticketUrl}`
-                            : item.data.ticketUrl
-                          const label = isEmail ? t.ticketMail : t.ticketBuy
-                          return (
-                            <Link href={href} className="btn-secondary">
-                              {label}
-                            </Link>
-                          )
-                        })()}
-                      </div>
-                    </div>
-                  )}
+            <div className="space-y-6">
+              {section.items.map((item) => {
+                if (item.kind === 'event') {
+                  const event = item as NewsletterEventItem
 
-                  {item.type === 'article' && item.data && 'slug' in item.data && (
-                    <div className="flex flex-col md:flex-row gap-6">
-                      {item.data.imageUrl && (
-                        <div className="md:w-1/3">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={item.data.imageUrl} alt={item.data.title} className="w-full h-48 object-cover rounded-lg" />
+                  // Aufmacher: großes Bild, ausführlicher Text, primärer Button
+                  if (event.emphasis === 'lead') {
+                    return (
+                      <article key={event.id} className="card overflow-hidden">
+                        {event.imageUrl && (
+                          <Link href={eventHref(event)}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={event.imageUrl}
+                              alt={event.title}
+                              className="w-full h-64 md:h-80 object-cover"
+                            />
+                          </Link>
+                        )}
+                        <div className="p-6 md:p-8">
+                          {event.categoryLabel && (
+                            <p className="text-xs font-bold uppercase tracking-widest text-pepe-gold mb-3">
+                              {event.categoryLabel}
+                            </p>
+                          )}
+                          <h3 className="h2 mb-3">
+                            <Link href={eventHref(event)} className="hover:text-pepe-gold transition-colors">
+                              {event.title}
+                            </Link>
+                          </h3>
+                          <p className="text-pepe-gold font-semibold mb-1">
+                            {[event.dateLabel, event.time].filter(Boolean).join(' · ')}
+                          </p>
+                          {event.location && (
+                            <p className="text-sm text-pepe-t64 mb-4">{event.location}</p>
+                          )}
+                          {event.teaser && <p className="text-pepe-t80 mb-6">{event.teaser}</p>}
+                          <a href={ctaHrefFor(event)} className="btn-primary inline-block">
+                            {ctaLabelFor(event)}
+                          </a>
                         </div>
-                      )}
-                      <div className="flex-1">
-                        <h3 className="h3 mb-2">{item.data.title}</h3>
-                        <p className="text-pepe-t80 mb-4">{item.data.excerpt}</p>
-                        <Link href={`${newsHref}/${item.data.slug}`} className="text-pepe-gold hover:text-pepe-gold/80">
-                          {t.readMore}
-                        </Link>
+                      </article>
+                    )
+                  }
+
+                  // Zweite Reihe: kleinere Karte, Textlink statt Button
+                  if (event.emphasis === 'feature') {
+                    return (
+                      <article key={event.id} className="card p-5 md:p-6">
+                        <div className="flex flex-col md:flex-row gap-5">
+                          {event.imageUrl && (
+                            <Link href={eventHref(event)} className="md:w-1/3 shrink-0">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={event.imageUrl}
+                                alt={event.title}
+                                className="w-full h-40 object-cover rounded-lg"
+                              />
+                            </Link>
+                          )}
+                          <div className="flex-1">
+                            <h3 className="h3 mb-2">
+                              <Link href={eventHref(event)} className="hover:text-pepe-gold transition-colors">
+                                {event.title}
+                              </Link>
+                            </h3>
+                            <p className="text-pepe-gold text-sm font-semibold mb-1">
+                              {[event.dateLabel, event.time].filter(Boolean).join(' · ')}
+                            </p>
+                            {event.location && (
+                              <p className="text-sm text-pepe-t64 mb-3">{event.location}</p>
+                            )}
+                            {event.teaser && <p className="text-pepe-t80 mb-4">{event.teaser}</p>}
+                            <a href={ctaHrefFor(event)} className="text-pepe-gold font-semibold hover:text-pepe-gold/80">
+                              {ctaLabelFor(event)} ›
+                            </a>
+                          </div>
+                        </div>
+                      </article>
+                    )
+                  }
+
+                  // Weitere Termine: kompakte Zeile mit Datumsfeld
+                  return (
+                    <article
+                      key={event.id}
+                      className="flex gap-4 items-start border-b border-pepe-line2 pb-6 last:border-0"
+                    >
+                      <div className="w-14 shrink-0 rounded-lg bg-pepe-surface text-center py-2">
+                        <div className="text-xl font-bold leading-none">{event.dayLabel}</div>
+                        <div className="text-[11px] font-bold uppercase tracking-wide text-pepe-gold mt-1">
+                          {event.monthLabel}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                      <div className="flex-1">
+                        <h3 className="text-base font-semibold mb-1">
+                          <Link href={eventHref(event)} className="hover:text-pepe-gold transition-colors">
+                            {event.title}
+                          </Link>
+                        </h3>
+                        <p className="text-sm text-pepe-t64 mb-2">
+                          {[event.weekdayLabel, event.time, event.location].filter(Boolean).join(' · ')}
+                        </p>
+                        <a href={ctaHrefFor(event)} className="text-sm text-pepe-gold font-semibold hover:text-pepe-gold/80">
+                          {ctaLabelFor(event)} ›
+                        </a>
+                      </div>
+                    </article>
+                  )
+                }
+
+                if (item.kind === 'article') {
+                  const article = item as NewsletterArticleItem
+                  return (
+                    <article key={article.id} className="border-l-2 border-pepe-gold pl-5">
+                      {article.category && (
+                        <p className="text-xs font-bold uppercase tracking-widest text-pepe-t64 mb-2">
+                          {article.category}
+                        </p>
+                      )}
+                      <h3 className="h3 mb-2">
+                        <Link href={articleHref(article)} className="hover:text-pepe-gold transition-colors">
+                          {article.title}
+                        </Link>
+                      </h3>
+                      {article.teaser && <p className="text-pepe-t80 mb-3">{article.teaser}</p>}
+                      <Link href={articleHref(article)} className="text-pepe-gold font-semibold hover:text-pepe-gold/80">
+                        {t.readMore}
+                      </Link>
+                    </article>
+                  )
+                }
+
+                const note = item as NewsletterNoteItem
+                return (
+                  <div key={note.position} className="card p-6">
+                    {note.title && <h3 className="h3 mb-2">{note.title}</h3>}
+                    {note.text && <p className="text-pepe-t80 whitespace-pre-wrap">{note.text}</p>}
+                  </div>
+                )
+              })}
             </div>
           </section>
         ))}
 
-        <section className="mb-16 text-center py-12 bg-pepe-bg-secondary rounded-2xl">
-          <p className="text-xl text-pepe-t80 mb-4">{t.closingTitle}</p>
+        <section className="mb-14 text-center py-10 border-t border-pepe-line">
           <p className="text-pepe-t64 mb-6">{t.closingText}</p>
-          <div className="flex justify-center gap-6">
-            <a href="https://instagram.com/pepedome" target="_blank" rel="noopener noreferrer" className="text-pepe-gold hover:text-pepe-gold/80 transition-colors">
-              Instagram
-            </a>
-            <a href="https://facebook.com/pepedome" target="_blank" rel="noopener noreferrer" className="text-pepe-gold hover:text-pepe-gold/80 transition-colors">
-              Facebook
-            </a>
-          </div>
+          <Link href={eventsBase} className="btn-secondary inline-block">
+            {t.allEvents}
+          </Link>
         </section>
 
-        <section className="mb-12 py-12 bg-gradient-to-b from-pepe-bg-secondary to-pepe-bg rounded-2xl">
+        <section className="mb-12 py-12 bg-pepe-bg-secondary rounded-2xl">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="h2 text-center mb-4">{t.ctaTitle}</h2>
             <p className="text-center text-pepe-t64 mb-8">{t.ctaText}</p>
@@ -323,7 +340,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
               '@type': 'NewsArticle',
               headline: newsletter.subject,
               description: newsletter.preheader || newsletter.heroSubtitle || '',
-              image: newsletter.heroImageUrl || '',
+              image: vm.hero.imageUrl || '',
               datePublished: newsletter.sentAt?.toISOString(),
               author: { '@type': 'Organization', name: 'PEPE Dome' },
               publisher: {
@@ -331,7 +348,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
                 name: 'PEPE Dome',
                 logo: {
                   '@type': 'ImageObject',
-                  url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/PEPE_logos_dome.svg`,
+                  url: `${vm.baseUrl}/PEPE_logos_dome.svg`,
                 },
               },
             }),

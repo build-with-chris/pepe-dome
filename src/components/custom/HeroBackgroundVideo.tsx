@@ -26,18 +26,22 @@ export default function HeroBackgroundVideo() {
     return () => mql.removeEventListener('change', update)
   }, [])
 
+  // Auf Mobile ist das Video der Blickfang und darf kräftiger durchkommen;
+  // auf Desktop bleibt es dezenter Hintergrund hinter der Schrift.
+  const mediaOpacity = 'opacity-90 md:opacity-65'
+
   if (isDesktop == null) {
     // Vor der Hydration: Poster rein per CSS-Breakpoint, damit sofort das
     // richtige Format sichtbar ist (Hochkant auf Mobile, Quer auf Desktop)
     return (
       <>
         <div
-          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-65 bg-[var(--pepe-ink)] md:hidden"
+          className={`absolute inset-0 w-full h-full bg-cover bg-center bg-[var(--pepe-ink)] md:hidden ${mediaOpacity}`}
           style={{ backgroundImage: `url(${POSTER.mobile})` }}
           aria-hidden
         />
         <div
-          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-65 bg-[var(--pepe-ink)] hidden md:block"
+          className={`absolute inset-0 w-full h-full bg-cover bg-center bg-[var(--pepe-ink)] hidden md:block ${mediaOpacity}`}
           style={{ backgroundImage: `url(${POSTER.desktop})` }}
           aria-hidden
         />
@@ -50,7 +54,7 @@ export default function HeroBackgroundVideo() {
   return (
     <video
       key={src}
-      className="absolute inset-0 w-full h-full object-cover object-center opacity-65"
+      className={`absolute inset-0 w-full h-full object-cover object-center ${mediaOpacity}`}
       autoPlay
       muted
       loop

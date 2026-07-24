@@ -1,9 +1,16 @@
 import 'server-only'
 
 /**
- * Confirmation Email Template
+ * Bestätigungsmail (Double Opt-in)
  *
- * Sent for double opt-in confirmation when a user subscribes to the newsletter
+ * Die wichtigste Mail im ganzen System: Wer hier nicht klickt, bekommt nie
+ * einen Newsletter. Deshalb bewusst sehr reduziert. Genau eine Handlung,
+ * keine Navigation, keine Nebenangebote, kein Bildmaterial, das erst
+ * geladen werden muss, bevor der Button verständlich ist.
+ *
+ * Der Erwartungssatz ("etwa einmal im Monat") steht bewusst vor dem Klick.
+ * Wer weiß, worauf er sich einlässt, meldet sich später seltener wieder ab
+ * und markiert die Mail seltener als Spam.
  */
 
 import {
@@ -14,16 +21,20 @@ import {
   Container,
   Section,
   Text,
+  Link,
   Hr,
-} from '@react-email/components';
-import { EmailHeader } from '../components/EmailHeader';
-import { EmailFooter } from '../components/EmailFooter';
-import { EmailButton } from '../components/EmailButton';
+} from '@react-email/components'
+import { EmailHeader } from '../components/EmailHeader'
+import { EmailFooter } from '../components/EmailFooter'
+import { EmailButton } from '../components/EmailButton'
+import { emailTheme, emailText } from '../theme'
+
+const INSTAGRAM_URL = 'https://www.instagram.com/pepe_arts/'
 
 interface ConfirmationEmailProps {
-  confirmationUrl: string;
-  subscriberEmail: string;
-  firstName?: string;
+  confirmationUrl: string
+  subscriberEmail: string
+  firstName?: string
 }
 
 export default function ConfirmationEmail({
@@ -31,130 +42,97 @@ export default function ConfirmationEmail({
   subscriberEmail,
   firstName,
 }: ConfirmationEmailProps) {
-  const previewText = 'Bestatige deine Newsletter-Anmeldung fur PEPE Dome';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'
+  const gutter = `${emailTheme.size.gutter}px`
 
   return (
     <EmailHtml lang="de">
       <Head>
-        <title>Bestatige deine Newsletter-Anmeldung</title>
+        <title>Bestätige deine Anmeldung</title>
+        <meta name="color-scheme" content="dark" />
+        <meta name="supported-color-schemes" content="dark" />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `:root { color-scheme: dark; supported-color-schemes: dark; } a { text-decoration: none; }`,
+          }}
+        />
       </Head>
-      <Preview>{previewText}</Preview>
+
+      <Preview>Ein Klick fehlt noch, dann bist du dabei</Preview>
+
       <Body
         style={{
-          backgroundColor: '#F5F5F5',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+          backgroundColor: emailTheme.color.page,
+          fontFamily: emailTheme.font.stack,
           margin: 0,
           padding: 0,
         }}
       >
         <Container
           style={{
-            maxWidth: '600px',
+            width: '100%',
+            maxWidth: `${emailTheme.size.container}px`,
             margin: '0 auto',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: emailTheme.color.canvas,
           }}
         >
-          {/* Header */}
-          <EmailHeader />
+          <EmailHeader
+            logoUrl={`${baseUrl}/images/pepe-dome-logo-light.png`}
+            homeUrl={baseUrl}
+          />
 
-          {/* Main Content */}
-          <Section
-            style={{
-              padding: '48px 32px',
-            }}
-          >
-            {/* Greeting */}
-            <Text
-              style={{
-                fontSize: '24px',
-                fontWeight: '700',
-                lineHeight: '1.3',
-                color: '#0F0520',
-                margin: '0 0 24px 0',
-                textAlign: 'center',
-              }}
-            >
-              {firstName ? `Hallo ${firstName}!` : 'Hallo!'}
+          <Section style={{ padding: `24px ${gutter} 8px ${gutter}` }}>
+            <Text style={{ ...emailText.heroTitle, fontSize: '26px' }}>
+              {firstName ? `Hallo ${firstName}, ` : 'Fast geschafft. '}
+              ein Klick fehlt noch
             </Text>
 
-            {/* Body Text */}
-            <Text
-              style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 24px 0',
-              }}
-            >
-              Vielen Dank fur dein Interesse an unserem Newsletter! Um deine Anmeldung
-              abzuschliessen, bestatige bitte deine E-Mail-Adresse.
+            <Text style={emailText.body}>
+              Bestätige kurz deine Adresse, dann schicken wir dir etwa einmal im Monat, was
+              im Dome ansteht: Shows, Workshops und Abende, die man sonst leicht verpasst.
             </Text>
 
-            {/* CTA Button */}
-            <Section
-              style={{
-                textAlign: 'center',
-                margin: '32px 0',
-              }}
-            >
-              <EmailButton href={confirmationUrl}>
-                Jetzt bestatigen
+            <Section style={{ margin: '28px 0 24px 0' }}>
+              <EmailButton href={confirmationUrl} variant="primary" fullWidth>
+                Anmeldung bestätigen
               </EmailButton>
             </Section>
 
             <Hr
               style={{
                 border: 'none',
-                borderTop: '1px solid #E5E5E5',
-                margin: '32px 0',
+                borderTop: `1px solid ${emailTheme.color.line}`,
+                margin: '24px 0',
               }}
             />
 
-            {/* Alternative Link */}
-            <Text
-              style={{
-                fontSize: '14px',
-                lineHeight: '1.6',
-                color: '#666666',
-                margin: '0',
-              }}
-            >
-              Falls der Button nicht funktioniert, kopiere bitte diesen Link in deinen
-              Browser:
-              <br />
-              <a
+            <Text style={{ ...emailText.small, margin: '0 0 8px 0' }}>
+              Falls der Button nicht reagiert, kopiere diesen Link in deinen Browser:
+            </Text>
+            <Text style={{ ...emailText.small, margin: '0 0 20px 0' }}>
+              <Link
                 href={confirmationUrl}
-                style={{
-                  color: '#016dca',
-                  wordBreak: 'break-all',
-                }}
+                style={{ color: emailTheme.color.accentText, wordBreak: 'break-all' }}
               >
                 {confirmationUrl}
-              </a>
+              </Link>
             </Text>
 
-            {/* Info Text */}
-            <Text
-              style={{
-                fontSize: '14px',
-                lineHeight: '1.6',
-                color: '#999999',
-                margin: '24px 0 0 0',
-              }}
-            >
-              Du hast dich nicht fur unseren Newsletter angemeldet? Dann ignoriere
-              diese E-Mail einfach.
+            <Text style={{ ...emailText.small, margin: '0' }}>
+              Du hast dich nicht angemeldet? Dann ignoriere diese Mail einfach. Ohne
+              Bestätigung passiert nichts weiter.
             </Text>
           </Section>
 
-          {/* Footer */}
           <EmailFooter
-            unsubscribeUrl="#"
+            privacyUrl={`${baseUrl}/datenschutz`}
+            imprintUrl={`${baseUrl}/impressum`}
+            instagramUrl={INSTAGRAM_URL}
             subscriberEmail={subscriberEmail}
+            reasonText="Du bekommst diese Mail, weil diese Adresse für den Newsletter des PEPE Dome eingetragen wurde."
           />
         </Container>
       </Body>
     </EmailHtml>
-  );
+  )
 }

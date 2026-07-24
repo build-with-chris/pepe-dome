@@ -1,137 +1,70 @@
 import 'server-only'
 
 /**
- * Email News Card Component
+ * Artikel im Newsletter
  *
- * Displays news/article information in newsletter emails
+ * Redaktionelle Beiträge werden bewusst anders behandelt als
+ * Veranstaltungen: keine Karte, kein Button, sondern ein abgesetzter Block
+ * mit farbiger Kante. So sieht man auf einen Blick, dass hier etwas zu
+ * lesen und nichts zu buchen ist.
  */
 
-import {
-  Section,
-  Img,
-  Text,
-  Link,
-} from '@react-email/components';
+import { Section, Img, Text, Link } from '@react-email/components'
+import { EmailInlineLink } from './EmailButton'
+import { emailTheme, emailText } from '../theme'
+import type { NewsletterArticleItem } from '@/lib/newsletter-content'
 
-interface EmailNewsCardProps {
-  title: string;
-  excerpt?: string;
-  imageUrl?: string;
-  articleUrl: string;
-  category?: string;
-}
+const CONTENT_WIDTH = emailTheme.size.container - emailTheme.size.gutter * 2
 
-export function EmailNewsCard({
-  title,
-  excerpt,
-  imageUrl,
-  articleUrl,
-  category,
-}: EmailNewsCardProps) {
+export function EmailNewsCard({ article }: { article: NewsletterArticleItem }) {
+  const isFeature = article.emphasis === 'feature'
+
   return (
     <Section
       style={{
-        backgroundColor: '#1a1a1a',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        marginBottom: '24px',
-        border: '1px solid #333333',
+        borderLeft: `3px solid ${emailTheme.color.accent}`,
+        paddingLeft: '16px',
+        marginBottom: '20px',
       }}
     >
-      {/* Article Image */}
-      {imageUrl && (
-        <Link href={articleUrl}>
+      {isFeature && article.imageUrl && (
+        <Link href={article.articleUrl}>
           <Img
-            src={imageUrl}
-            alt={title}
-            width="100%"
-            height="auto"
+            src={article.imageUrl}
+            alt={article.title}
+            width={CONTENT_WIDTH - 19}
             style={{
               display: 'block',
-              maxWidth: '600px',
               width: '100%',
+              maxWidth: '100%',
+              borderRadius: '8px',
+              marginBottom: '14px',
+              border: 'none',
+              outline: 'none',
             }}
           />
         </Link>
       )}
 
-      {/* Article Content */}
-      <Section
-        style={{
-          padding: '24px',
-        }}
-      >
-        {/* Category */}
-        {category && (
-          <Text
-            style={{
-              fontSize: '12px',
-              fontWeight: '600',
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase',
-              color: '#016dca',
-              margin: '0 0 8px 0',
-            }}
-          >
-            {category}
-          </Text>
-        )}
-
-        {/* Article Title */}
-        <Text
-          style={{
-            fontSize: '20px',
-            fontWeight: '700',
-            lineHeight: '1.3',
-            color: '#FFFFFF',
-            margin: '0 0 12px 0',
-          }}
-        >
-          <Link
-            href={articleUrl}
-            style={{
-              color: '#FFFFFF',
-              textDecoration: 'none',
-            }}
-          >
-            {title}
-          </Link>
+      {article.category && (
+        <Text style={{ ...emailText.eyebrow, color: emailTheme.color.textMuted, margin: '0 0 6px 0' }}>
+          {article.category}
         </Text>
+      )}
 
-        {/* Excerpt */}
-        {excerpt && (
-          <Text
-            style={{
-              fontSize: '16px',
-              lineHeight: '1.6',
-              color: '#CCCCCC',
-              margin: '0 0 12px 0',
-            }}
-          >
-            {excerpt}
-          </Text>
-        )}
+      <Text style={{ ...emailText.cardTitle, fontSize: isFeature ? '19px' : '17px' }}>
+        <Link href={article.articleUrl} style={{ color: emailTheme.color.textStrong, textDecoration: 'none' }}>
+          {article.title}
+        </Link>
+      </Text>
 
-        {/* Read More Link */}
-        <Text
-          style={{
-            fontSize: '16px',
-            lineHeight: '1.6',
-            margin: '0',
-          }}
-        >
-          <Link
-            href={articleUrl}
-            style={{
-              color: '#016dca',
-              textDecoration: 'none',
-              fontWeight: '600',
-            }}
-          >
-            Weiterlesen →
-          </Link>
+      {article.teaser && (
+        <Text style={{ ...emailText.body, fontSize: '15px', margin: '0 0 12px 0' }}>
+          {article.teaser}
         </Text>
-      </Section>
+      )}
+
+      <EmailInlineLink href={article.articleUrl}>Weiterlesen</EmailInlineLink>
     </Section>
-  );
+  )
 }

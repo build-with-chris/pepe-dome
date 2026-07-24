@@ -1,118 +1,161 @@
 /**
- * Email Template Tests
+ * Tests für das E-Mail-Rendering
  *
- * Tests for email rendering and template generation
+ * Prüfen, dass die drei Template-Typen ohne Fehler rendern und die für
+ * Zustellbarkeit und Recht wichtigen Bestandteile enthalten sind.
  */
 
 import { describe, it, expect } from 'vitest'
-import { renderEmailToHtml, replaceTemplateVariables, generateUnsubscribeUrl, generateNewsletterUrl } from '@/lib/email-renderer'
+import {
+  renderEmailToHtml,
+  replaceTemplateVariables,
+  generateUnsubscribeUrl,
+  generateNewsletterUrl,
+} from '@/lib/email-renderer'
+import { buildViewModel } from '@/lib/newsletter-content'
 import ConfirmationEmail from '@/components/email/templates/ConfirmationEmail'
 import WelcomeEmail from '@/components/email/templates/WelcomeEmail'
 import NewsletterTemplate from '@/components/email/templates/NewsletterTemplate'
 
-describe('Email Rendering', () => {
-  it('should render ConfirmationEmail with required props', async () => {
+const BASE = 'https://pepe-dome.de'
+
+function demoViewModel(eventCount = 3) {
+  const events = new Map()
+  for (let index = 0; index < eventCount; index++) {
+    events.set(`event-${index}`, {
+      id: `event-${index}`,
+      slug: `event-${index}`,
+      title: `Comedy Night ${index}`,
+      subtitle: null,
+      description: 'Eine unvergessliche Comedy-Show mit einem sehr langen Beschreibungstext.',
+      date: new Date('2026-11-15T19:00:00.000Z'),
+      time: '20:00 Uhr',
+      location: 'PEPE Dome, München',
+      category: 'SHOW',
+      ticketUrl: 'https://tickets.example.com/comedy',
+      price: null,
+      imageUrl: '/images/comedy.jpg',
+    })
+  }
+
+  const newsletter = {
+    slug: '2026-11-newsletter',
+    subject: 'November im Dome',
+    preheader: 'Die neuesten Events im PEPE Dome',
+    introText: 'kurzer Einstieg in die Ausgabe.',
+    heroImageUrl: '/images/hero.jpg',
+    heroTitle: 'Das passiert im November',
+    heroSubtitle: 'Shows, Events und mehr',
+    heroCTALabel: 'Jetzt ansehen',
+    heroCTAUrl: 'https://pepe-dome.de/events',
+    content: Array.from({ length: eventCount }, (_, index) => ({
+      contentType: 'EVENT',
+      contentId: `event-${index}`,
+      sectionHeading: 'Shows im November',
+      sectionDescription: null,
+      orderPosition: index,
+    })),
+  }
+
+  return buildViewModel(newsletter as never, { events, articles: new Map() } as never, {
+    baseUrl: BASE,
+  })
+}
+
+describe('E-Mail-Rendering', () => {
+  it('rendert die Bestätigungsmail mit einer klaren Handlung', async () => {
     const html = await renderEmailToHtml(ConfirmationEmail, {
-      confirmationUrl: 'https://example.com/confirm?token=abc123',
+      confirmationUrl: 'https://pepe-dome.de/newsletter/confirm?token=abc123',
       subscriberEmail: 'test@example.com',
       firstName: 'Max',
     })
 
-    expect(html).toBeTruthy()
-    expect(html).toContain('Bestätige deine Newsletter-Anmeldung')
-    expect(html).toContain('Hallo Max!')
-    expect(html).toContain('https://example.com/confirm?token=abc123')
-    expect(html).toContain('test@example.com')
+    expect(html).toContain('Max')
+    expect(html).toContain('https://pepe-dome.de/newsletter/confirm?token=abc123')
+    // Bestätigungsmail hat bewusst keinen Abmeldelink
+    expect(html).not.toContain('Newsletter abbestellen')
+    // aber die gesetzliche Anbieterkennzeichnung
+    expect(html).toContain('Impressum')
   })
 
-  it('should render WelcomeEmail after confirmation', async () => {
+  it('rendert die Willkommensmail nach der Bestätigung', async () => {
     const html = await renderEmailToHtml(WelcomeEmail, {
-      subscriberId: 'test-subscriber-123',
+      subscriberId: 'sub-123',
       subscriberEmail: 'test@example.com',
       firstName: 'Anna',
-      upcomingEventsUrl: 'https://example.com/events',
-      newsletterArchiveUrl: 'https://example.com/newsletter',
+      upcomingEventsUrl: 'https://pepe-dome.de/events',
+      newsletterArchiveUrl: 'https://pepe-dome.de/newsletter',
     })
 
-    expect(html).toBeTruthy()
-    expect(html).toContain('Willkommen')
     expect(html).toContain('Anna')
-    expect(html).toContain('https://example.com/events')
-    expect(html).toContain('PEPE Dome Community')
+    expect(html).toContain('https://pepe-dome.de/events')
+    // Ab hier gibt es etwas abzubestellen
+    expect(html).toContain('Newsletter abbestellen')
   })
 
-  it('should render NewsletterTemplate with hero image and content sections', async () => {
+  it('rendert den Newsletter mit Hero und Inhalten', async () => {
     const html = await renderEmailToHtml(NewsletterTemplate, {
-      subject: 'November Newsletter',
-      preheader: 'Die neuesten Events im PEPE Dome',
-      newsletterSlug: '2025-11-newsletter',
-      heroImageUrl: 'https://example.com/hero.jpg',
-      heroTitle: 'Das passiert im November',
-      heroSubtitle: 'Shows, Events & mehr',
-      heroCTALabel: 'Jetzt ansehen',
-      heroCTAUrl: 'https://example.com/events',
-      contentSections: [
-        {
-          sectionHeading: 'Upcoming Shows',
-          sectionDescription: 'Die besten Shows diesen Monat',
-          items: [
-            {
-              type: 'event',
-              data: {
-                title: 'Comedy Night',
-                date: '15. November 2025',
-                time: '20:00 Uhr',
-                location: 'PEPE Dome, München',
-                description: 'Eine unvergessliche Comedy-Show',
-                ctaUrl: 'https://example.com/event/comedy-night',
-                ctaLabel: 'Tickets sichern',
-              },
-            },
-          ],
-        },
-      ],
-      subscriberId: 'test-subscriber-456',
+      viewModel: demoViewModel(3),
+      subscriberId: 'sub-456',
       subscriberEmail: 'subscriber@example.com',
       firstName: 'Julia',
     })
 
-    expect(html).toBeTruthy()
     expect(html).toContain('Das passiert im November')
-    expect(html).toContain('Upcoming Shows')
-    expect(html).toContain('Comedy Night')
+    expect(html).toContain('Shows im November')
+    expect(html).toContain('Comedy Night 0')
     expect(html).toContain('Julia')
   })
 
-  it('should include unsubscribe link in newsletter footer', async () => {
+  it('enthält einen personalisierten Abmeldelink im Footer', async () => {
     const html = await renderEmailToHtml(NewsletterTemplate, {
-      subject: 'Test Newsletter',
-      newsletterSlug: 'test-newsletter',
-      contentSections: [],
-      subscriberId: 'test-subscriber-789',
+      viewModel: demoViewModel(1),
+      subscriberId: 'sub-789',
+      subscriberEmail: 'test@example.com',
+      unsubscribeUrl: 'https://pepe-dome.de/newsletter/unsubscribe/sub-789',
+    })
+
+    expect(html).toContain('unsubscribe/sub-789')
+  })
+
+  it('setzt Dark-Mode-Meta, damit Clients die Farben nicht aufhellen', async () => {
+    const html = await renderEmailToHtml(NewsletterTemplate, {
+      viewModel: demoViewModel(1),
+      subscriberId: 'sub-1',
       subscriberEmail: 'test@example.com',
     })
 
-    expect(html).toContain('unsubscribe')
-    expect(html).toContain('test-subscriber-789')
+    expect(html).toContain('color-scheme')
   })
 
-  it('should replace template variables in HTML', () => {
-    const template = '<p>Hello {{name}}! Visit {{url}} to continue.</p>'
-    const result = replaceTemplateVariables(template, {
+  it('trägt UTM-Parameter in die Ticket-Links', async () => {
+    const html = await renderEmailToHtml(NewsletterTemplate, {
+      viewModel: demoViewModel(1),
+      subscriberId: 'sub-1',
+      subscriberEmail: 'test@example.com',
+    })
+
+    expect(html).toContain('utm_campaign=2026-11-newsletter')
+    expect(html).toContain('utm_content=lead_ticket')
+  })
+
+  it('ersetzt Template-Variablen im HTML', () => {
+    const result = replaceTemplateVariables('<p>Hallo {{name}}! Besuche {{url}}.</p>', {
       name: 'John',
       url: 'https://example.com',
     })
-
-    expect(result).toBe('<p>Hello John! Visit https://example.com to continue.</p>')
+    expect(result).toBe('<p>Hallo John! Besuche https://example.com.</p>')
   })
 
-  it('should generate correct unsubscribe URL', () => {
-    const url = generateUnsubscribeUrl('subscriber-123', 'https://pepedome.com')
-    expect(url).toBe('https://pepedome.com/api/subscribers/unsubscribe?id=subscriber-123')
+  it('erzeugt die korrekte Abmelde-URL', () => {
+    expect(generateUnsubscribeUrl('sub-123', 'https://pepe-dome.de')).toBe(
+      'https://pepe-dome.de/api/subscribers/unsubscribe?id=sub-123'
+    )
   })
 
-  it('should generate correct newsletter view URL', () => {
-    const url = generateNewsletterUrl('2025-11-dome-premiere', 'https://pepedome.com')
-    expect(url).toBe('https://pepedome.com/newsletter/2025-11-dome-premiere')
+  it('erzeugt die korrekte Newsletter-URL', () => {
+    expect(generateNewsletterUrl('2026-11-premiere', 'https://pepe-dome.de')).toBe(
+      'https://pepe-dome.de/newsletter/2026-11-premiere'
+    )
   })
 })

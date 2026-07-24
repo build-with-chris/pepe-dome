@@ -85,3 +85,16 @@ Woche	Feature
 	•	Wird eine Archivfunktion für alte Newsletter benötigt?
 
 ⸻
+
+## Entwicklung: Tests und Datenbank (unbedingt lesen)
+
+Die `.env` enthält die **Produktions-`DATABASE_URL`** (Supabase). Die Testsuite
+leert in `tests/setup.ts` vor und nach jedem Test alle Tabellen. Ein Testlauf
+gegen die Produktions-`DATABASE_URL` löscht daher die echten Daten.
+
+- **`npm test`** läuft absichtlich ohne DB (`DATABASE_URL=` → Prisma-Mock). Sicher.
+- Für DB-Tests eine **getrennte Wegwerf-Test-DB** nutzen: `npm run test:db` mit
+  einer `DATABASE_URL`, deren Name `test` enthält oder die auf `localhost` läuft.
+- `tests/db-guard.ts` bricht jeden Lauf ab, sobald `DATABASE_URL` auf einen
+  gehosteten Anbieter zeigt. Diesen Schutz nicht umgehen.
+- **Nie** `vitest` direkt mit der Produktions-`.env` starten. Details in `tests/README.md`.

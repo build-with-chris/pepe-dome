@@ -539,7 +539,8 @@
       "closingText": "Folge uns für tägliche Updates und Behind-the-Scenes-Momente",
       "ctaTitle": "Verpasse keine Highlights mehr",
       "ctaText": "Abonniere unseren Newsletter und erhalte monatlich Updates zu Events, Shows und Workshops.",
-      "notFound": "Newsletter nicht gefunden"
+      "notFound": "Newsletter nicht gefunden",
+      "allEvents": "Alle Termine ansehen"
     },
     "unsubscribed": {
       "title": "Du wurdest abgemeldet",
