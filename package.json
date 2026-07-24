@@ -8,12 +8,15 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
+    "test": "DATABASE_URL= vitest run",
+    "test:watch": "DATABASE_URL= vitest",
+    "test:db": "INCLUDE_DB_TESTS=1 vitest run",
     "test:ui": "vitest --ui",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "npx tsx scripts/seed-jan-feb-2026.ts",
     "db:reset": "prisma migrate reset --force",
-    "hero-poster": "node scripts/extract-hero-poster.mjs"
+    "hero-poster": "node scripts/extract-hero-poster.mjs",
+    "newsletter:preview": "tsx --tsconfig scripts/tsconfig.json scripts/preview-newsletter.ts"
   },
   "keywords": [
     "pepe-dome",

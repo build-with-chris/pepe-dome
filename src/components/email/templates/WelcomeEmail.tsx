@@ -1,9 +1,15 @@
 import 'server-only'
 
 /**
- * Welcome Email Template
+ * Willkommensmail
  *
- * Sent after successful double opt-in confirmation
+ * Wird nach bestätigter Anmeldung verschickt und ist die Mail mit der
+ * höchsten Aufmerksamkeit, die der Newsletter je bekommt: Der Empfänger
+ * hat gerade aktiv zugestimmt. Deshalb steht hier eine echte Handlung und
+ * nicht nur ein Dankeschön.
+ *
+ * Bewusst kurz gehalten: Wer noch nichts über den Dome weiß, liest keine
+ * Textwand. Die drei Punkte sagen, was kommt, dann führt ein Weg weiter.
  */
 
 import {
@@ -14,224 +20,155 @@ import {
   Container,
   Section,
   Text,
+  Link,
   Hr,
-} from '@react-email/components';
-import { EmailHeader } from '../components/EmailHeader';
-import { EmailFooter } from '../components/EmailFooter';
-import { EmailButton } from '../components/EmailButton';
+} from '@react-email/components'
+import { EmailHeader } from '../components/EmailHeader'
+import { EmailFooter } from '../components/EmailFooter'
+import { EmailButton } from '../components/EmailButton'
+import { emailTheme, emailText } from '../theme'
+
+const INSTAGRAM_URL = 'https://www.instagram.com/pepe_arts/'
 
 interface WelcomeEmailProps {
-  subscriberId: string;
-  subscriberEmail: string;
-  firstName?: string;
-  upcomingEventsUrl?: string;
-  newsletterArchiveUrl?: string;
+  subscriberId: string
+  subscriberEmail: string
+  firstName?: string
+  upcomingEventsUrl?: string
+  newsletterArchiveUrl?: string
+}
+
+/** Ein Punkt aus "Was dich erwartet" */
+function Promise_({ title, text }: { title: string; text: string }) {
+  return (
+    <Section style={{ marginBottom: '16px' }}>
+      <Text
+        style={{
+          fontSize: '15px',
+          fontWeight: '700',
+          lineHeight: '1.4',
+          color: emailTheme.color.accentText,
+          margin: '0 0 2px 0',
+        }}
+      >
+        {title}
+      </Text>
+      <Text style={{ ...emailText.body, fontSize: '15px', margin: '0' }}>{text}</Text>
+    </Section>
+  )
 }
 
 export default function WelcomeEmail({
   subscriberId,
   subscriberEmail,
   firstName,
-  upcomingEventsUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/events`,
-  newsletterArchiveUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/newsletter`,
+  upcomingEventsUrl,
+  newsletterArchiveUrl,
 }: WelcomeEmailProps) {
-  const previewText = 'Willkommen beim PEPE Dome Newsletter!';
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004';
-  const unsubscribeUrl = `${baseUrl}/api/subscribers/unsubscribe?id=${subscriberId}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'
+  const gutter = `${emailTheme.size.gutter}px`
+  const eventsUrl = upcomingEventsUrl || `${baseUrl}/events`
+  const archiveUrl = newsletterArchiveUrl || `${baseUrl}/newsletter`
+  const unsubscribeUrl = `${baseUrl}/newsletter/unsubscribe/${subscriberId}`
 
   return (
     <EmailHtml lang="de">
       <Head>
-        <title>Willkommen beim PEPE Dome Newsletter</title>
+        <title>Willkommen beim PEPE Dome</title>
+        <meta name="color-scheme" content="dark" />
+        <meta name="supported-color-schemes" content="dark" />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `:root { color-scheme: dark; supported-color-schemes: dark; } a { text-decoration: none; }`,
+          }}
+        />
       </Head>
-      <Preview>{previewText}</Preview>
+
+      <Preview>Du bist dabei. Das erwartet dich im PEPE Dome</Preview>
+
       <Body
         style={{
-          backgroundColor: '#F5F5F5',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+          backgroundColor: emailTheme.color.page,
+          fontFamily: emailTheme.font.stack,
           margin: 0,
           padding: 0,
         }}
       >
         <Container
           style={{
-            maxWidth: '600px',
+            width: '100%',
+            maxWidth: `${emailTheme.size.container}px`,
             margin: '0 auto',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: emailTheme.color.canvas,
           }}
         >
-          {/* Header */}
-          <EmailHeader />
+          <EmailHeader
+            logoUrl={`${baseUrl}/images/pepe-dome-logo-light.png`}
+            homeUrl={baseUrl}
+          />
 
-          {/* Main Content */}
-          <Section
-            style={{
-              padding: '48px 32px',
-            }}
-          >
-            {/* Greeting */}
-            <Text
-              style={{
-                fontSize: '28px',
-                fontWeight: '700',
-                lineHeight: '1.3',
-                color: '#0F0520',
-                margin: '0 0 24px 0',
-                textAlign: 'center',
-              }}
-            >
-              Willkommen{firstName ? `, ${firstName}` : ''}!
+          <Section style={{ padding: `24px ${gutter} 4px ${gutter}` }}>
+            <Text style={{ ...emailText.heroTitle, fontSize: '26px' }}>
+              {firstName ? `Willkommen, ${firstName}` : 'Willkommen im Dome'}
             </Text>
 
-            {/* Welcome Message */}
-            <Text
-              style={{
-                fontSize: '18px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 24px 0',
-                textAlign: 'center',
-              }}
-            >
-              Du bist jetzt Teil der PEPE Dome Community!
-            </Text>
-
-            <Text
-              style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 24px 0',
-              }}
-            >
-              Vielen Dank fur deine Anmeldung. Ab sofort erhaltst du regelmassig Updates
-              zu unseren Shows, Events, Workshops und allem, was im PEPE Dome passiert.
-            </Text>
-
-            <Hr
-              style={{
-                border: 'none',
-                borderTop: '1px solid #E5E5E5',
-                margin: '32px 0',
-              }}
-            />
-
-            {/* What to Expect */}
-            <Text
-              style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                lineHeight: '1.3',
-                color: '#0F0520',
-                margin: '0 0 16px 0',
-              }}
-            >
-              Was dich erwartet
-            </Text>
-
-            <Text
-              style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 12px 0',
-              }}
-            >
-              <strong style={{ color: '#016dca' }}>Exklusive Ankundigungen</strong>
-              <br />
-              Sei der Erste, der von neuen Shows und Events erfahrt.
-            </Text>
-
-            <Text
-              style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 12px 0',
-              }}
-            >
-              <strong style={{ color: '#016dca' }}>Backstage-Einblicke</strong>
-              <br />
-              Erfahre mehr uber die Kunstler und das Team hinter den Kulissen.
-            </Text>
-
-            <Text
-              style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0 0 24px 0',
-              }}
-            >
-              <strong style={{ color: '#016dca' }}>Special Offers</strong>
-              <br />
-              Erhalte gelegentlich besondere Angebote und Early-Bird-Tickets.
-            </Text>
-
-            <Hr
-              style={{
-                border: 'none',
-                borderTop: '1px solid #E5E5E5',
-                margin: '32px 0',
-              }}
-            />
-
-            {/* Call to Action */}
-            <Text
-              style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                lineHeight: '1.3',
-                color: '#0F0520',
-                margin: '0 0 16px 0',
-                textAlign: 'center',
-              }}
-            >
-              Entdecke, was gerade lauft
-            </Text>
-
-            <Section
-              style={{
-                textAlign: 'center',
-                margin: '24px 0',
-              }}
-            >
-              <EmailButton href={upcomingEventsUrl}>
-                Aktuelle Events ansehen
-              </EmailButton>
-            </Section>
-
-            <Text
-              style={{
-                fontSize: '14px',
-                lineHeight: '1.6',
-                color: '#666666',
-                margin: '24px 0 0 0',
-                textAlign: 'center',
-              }}
-            >
-              Du kannst auch unsere{' '}
-              <a
-                href={newsletterArchiveUrl}
-                style={{
-                  color: '#016dca',
-                  textDecoration: 'none',
-                }}
-              >
-                vergangenen Newsletter
-              </a>{' '}
-              durchstobern.
+            <Text style={emailText.body}>
+              Schön, dass du dabei bist. Der PEPE Dome ist eine geodätische Kuppel im
+              Münchner Ostpark: 200 Plätze, kurze Wege zur Bühne und ein Programm aus
+              zeitgenössischem Zirkus, Shows und Workshops.
             </Text>
           </Section>
 
-          {/* Footer */}
+          <Section style={{ padding: `12px ${gutter} 0 ${gutter}` }}>
+            <Hr
+              style={{
+                border: 'none',
+                borderTop: `1px solid ${emailTheme.color.line}`,
+                margin: '0 0 22px 0',
+              }}
+            />
+
+            <Text style={{ ...emailText.sectionTitle, margin: '0 0 16px 0' }}>
+              Was dich erwartet
+            </Text>
+
+            <Promise_
+              title="Das Programm, bevor es ausverkauft ist"
+              text="Etwa einmal im Monat schicken wir dir, was ansteht."
+            />
+            <Promise_
+              title="Blicke hinter den Vorhang"
+              text="Wer bei uns auftritt, wie ein Abend entsteht, was gerade gebaut wird."
+            />
+            <Promise_
+              title="Gelegentlich etwas vorab"
+              text="Karten für besondere Abende, bevor sie öffentlich zu haben sind."
+            />
+          </Section>
+
+          <Section style={{ padding: `20px ${gutter} 32px ${gutter}` }}>
+            <EmailButton href={eventsUrl} variant="primary">
+              Programm ansehen
+            </EmailButton>
+
+            <Text style={{ ...emailText.small, margin: '20px 0 0 0' }}>
+              Neugierig, wie unsere Newsletter aussehen? Im{' '}
+              <Link href={archiveUrl} style={{ color: emailTheme.color.accentText }}>
+                Archiv
+              </Link>{' '}
+              stehen die vergangenen Ausgaben.
+            </Text>
+          </Section>
+
           <EmailFooter
             unsubscribeUrl={unsubscribeUrl}
+            privacyUrl={`${baseUrl}/datenschutz`}
+            imprintUrl={`${baseUrl}/impressum`}
+            instagramUrl={INSTAGRAM_URL}
             subscriberEmail={subscriberEmail}
           />
         </Container>
       </Body>
     </EmailHtml>
-  );
+  )
 }

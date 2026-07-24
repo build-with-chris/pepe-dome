@@ -1,47 +1,58 @@
 import 'server-only'
 
 /**
- * Email Header Component
+ * Kopfbereich der E-Mail
  *
- * Contains the PEPE Dome logo and branding
+ * Logo links, Browser-Ansicht rechts. Der Browser-Link stand vorher ganz
+ * unten im Footer, wo er niemandem hilft: Gebraucht wird er genau dann,
+ * wenn oben etwas nicht richtig dargestellt wird.
  */
 
-import {
-  Section,
-  Img,
-  Link,
-} from '@react-email/components';
+import { Section, Row, Column, Img, Link } from '@react-email/components'
+import { emailTheme } from '../theme'
 
 interface EmailHeaderProps {
-  logoUrl?: string;
-  homeUrl?: string;
+  logoUrl: string
+  homeUrl: string
+  webViewUrl?: string
 }
 
-export function EmailHeader({
-  // Use PNG logo with clean filename (no spaces)
-  logoUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/images/pepe-dome-logo.png`,
-  homeUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004',
-}: EmailHeaderProps) {
+export function EmailHeader({ logoUrl, homeUrl, webViewUrl }: EmailHeaderProps) {
   return (
     <Section
       style={{
-        backgroundColor: '#FFFFFF',
-        padding: '16px 20px',
-        textAlign: 'center',
+        backgroundColor: emailTheme.color.canvas,
+        padding: `20px ${emailTheme.size.gutter}px 16px ${emailTheme.size.gutter}px`,
       }}
     >
-      <Link href={homeUrl}>
-        <Img
-          src={logoUrl}
-          alt="PEPE Dome"
-          width="150"
-          height="auto"
-          style={{
-            margin: '0 auto',
-            display: 'block',
-          }}
-        />
-      </Link>
+      <Row>
+        <Column style={{ verticalAlign: 'middle' }}>
+          <Link href={homeUrl}>
+            <Img
+              src={logoUrl}
+              alt="PEPE Dome"
+              width="132"
+              height="78"
+              style={{ display: 'block', border: 'none', outline: 'none' }}
+            />
+          </Link>
+        </Column>
+        {webViewUrl && (
+          <Column style={{ verticalAlign: 'middle', textAlign: 'right' }}>
+            <Link
+              href={webViewUrl}
+              style={{
+                color: emailTheme.color.textFaint,
+                fontFamily: emailTheme.font.stack,
+                fontSize: '12px',
+                textDecoration: 'underline',
+              }}
+            >
+              Im Browser ansehen
+            </Link>
+          </Column>
+        )}
+      </Row>
     </Section>
-  );
+  )
 }

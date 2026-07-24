@@ -1,145 +1,130 @@
 import 'server-only'
 
 /**
- * Email Footer Component
+ * Fußbereich
  *
- * Legal information, address, unsubscribe link, social links
+ * Abmelden steht sichtbar und ohne Suchen erreichbar da. Ein versteckter
+ * Abmeldelink erzeugt keine Treue, sondern Spam-Meldungen, und die kosten
+ * Zustellbarkeit für alle anderen Empfänger.
+ *
+ * Anschrift und Impressum-Link stehen hier, weil Werbemail in Deutschland
+ * eine Anbieterkennzeichnung braucht. Die Angaben stammen aus dem
+ * Website-Footer und sind bewusst nicht frei formuliert.
  */
 
-import {
-  Section,
-  Text,
-  Link,
-  Hr,
-} from '@react-email/components';
+import { Section, Text, Link, Hr } from '@react-email/components'
+import { emailTheme, emailText } from '../theme'
 
 interface EmailFooterProps {
-  unsubscribeUrl: string;
-  viewInBrowserUrl?: string;
-  subscriberEmail?: string;
+  /**
+   * Ohne Abmelde-Link bei der Bestätigungsmail: Dort gibt es noch nichts
+   * abzubestellen, ein Link ins Leere wirkt nur unseriös.
+   */
+  unsubscribeUrl?: string
+  privacyUrl: string
+  imprintUrl: string
+  instagramUrl: string
+  subscriberEmail?: string
+  /** Erklärtext, warum die Mail ankommt. Je nach Mailart unterschiedlich. */
+  reasonText?: string
 }
 
 export function EmailFooter({
   unsubscribeUrl,
-  viewInBrowserUrl,
+  privacyUrl,
+  imprintUrl,
+  instagramUrl,
   subscriberEmail,
+  reasonText = 'Du bekommst diese Mail, weil du dich für den Newsletter des PEPE Dome angemeldet hast.',
 }: EmailFooterProps) {
+  const linkStyle = {
+    color: emailTheme.color.textMuted,
+    fontFamily: emailTheme.font.stack,
+    textDecoration: 'underline',
+  }
+
   return (
     <Section
       style={{
-        backgroundColor: '#FFFFFF',
-        padding: '40px 20px',
+        backgroundColor: emailTheme.color.page,
+        padding: `28px ${emailTheme.size.gutter}px 36px ${emailTheme.size.gutter}px`,
       }}
     >
-      {/* View in Browser Link */}
-      {viewInBrowserUrl && (
-        <Text
-          style={{
-            fontSize: '14px',
-            lineHeight: '1.6',
-            color: '#666666',
-            textAlign: 'center',
-            margin: '0 0 20px 0',
-          }}
+      <Text
+        style={{
+          ...emailText.meta,
+          color: emailTheme.color.textBody,
+          textAlign: 'center',
+          margin: '0 0 6px 0',
+        }}
+      >
+        <strong style={{ color: emailTheme.color.textStrong }}>PEPE Dome</strong>
+      </Text>
+
+      <Text style={{ ...emailText.small, textAlign: 'center', margin: '0 0 16px 0' }}>
+        PEPE Arts, Ostpark, 81735 München
+        <br />
+        <Link href="mailto:info@pepe-dome.de" style={{ ...linkStyle, textDecoration: 'none' }}>
+          info@pepe-dome.de
+        </Link>
+      </Text>
+
+      <Text style={{ ...emailText.small, textAlign: 'center', margin: '0 0 18px 0' }}>
+        <Link
+          href={instagramUrl}
+          style={{ ...linkStyle, textDecoration: 'none', color: emailTheme.color.accentText, fontWeight: '600' }}
         >
-          <Link
-            href={viewInBrowserUrl}
-            style={{
-              color: '#016dca',
-              textDecoration: 'none',
-            }}
-          >
-            Im Browser ansehen
-          </Link>
-        </Text>
-      )}
+          Instagram
+        </Link>
+      </Text>
 
       <Hr
         style={{
           border: 'none',
-          borderTop: '1px solid #E5E5E5',
-          margin: '20px 0',
+          borderTop: `1px solid ${emailTheme.color.lineSoft}`,
+          margin: '0 0 18px 0',
         }}
       />
 
-      {/* Legal Footer */}
-      <Text
-        style={{
-          fontSize: '14px',
-          lineHeight: '1.6',
-          color: '#333333',
-          textAlign: 'center',
-          margin: '0 0 12px 0',
-        }}
-      >
-        <strong style={{ color: '#000000' }}>PEPE Dome</strong>
-        <br />
-        Ein einzigartiger Veranstaltungsort in München
-        <br />
-        München, Germany
-      </Text>
-
-      {/* Privacy & Unsubscribe */}
-      <Text
-        style={{
-          fontSize: '12px',
-          lineHeight: '1.6',
-          color: '#666666',
-          textAlign: 'center',
-          margin: '0 0 12px 0',
-        }}
-      >
-        Du erhältst diese E-Mail, weil du dich für unseren Newsletter angemeldet hast.
+      <Text style={{ ...emailText.small, fontSize: '12px', textAlign: 'center', margin: '0 0 10px 0' }}>
+        {reasonText}
         {subscriberEmail && (
           <>
             <br />
-            Gesendet an: {subscriberEmail}
+            Gesendet an {subscriberEmail}
           </>
         )}
       </Text>
 
-      <Text
-        style={{
-          fontSize: '12px',
-          lineHeight: '1.6',
-          color: '#666666',
-          textAlign: 'center',
-          margin: '0',
-        }}
-      >
-        <Link
-          href={unsubscribeUrl}
-          style={{
-            color: '#016dca',
-            textDecoration: 'underline',
-          }}
-        >
-          Vom Newsletter abmelden
-        </Link>
-        {' · '}
-        <Link
-          href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'}/privacy`}
-          style={{
-            color: '#016dca',
-            textDecoration: 'underline',
-          }}
-        >
+      <Text style={{ ...emailText.small, fontSize: '12px', textAlign: 'center', margin: '0' }}>
+        {unsubscribeUrl && (
+          <>
+            <Link href={unsubscribeUrl} style={linkStyle}>
+              Newsletter abbestellen
+            </Link>
+            {'   ·   '}
+          </>
+        )}
+        <Link href={privacyUrl} style={linkStyle}>
           Datenschutz
+        </Link>
+        {'   ·   '}
+        <Link href={imprintUrl} style={linkStyle}>
+          Impressum
         </Link>
       </Text>
 
-      {/* GDPR Compliance Notice */}
       <Text
         style={{
+          ...emailText.small,
           fontSize: '11px',
-          lineHeight: '1.5',
-          color: '#666666',
+          color: emailTheme.color.textFaint,
           textAlign: 'center',
-          margin: '20px 0 0 0',
+          margin: '18px 0 0 0',
         }}
       >
-        © {new Date().getFullYear()} PEPE Dome. Alle Rechte vorbehalten.
+        © {new Date().getFullYear()} PEPE Dome
       </Text>
     </Section>
-  );
+  )
 }

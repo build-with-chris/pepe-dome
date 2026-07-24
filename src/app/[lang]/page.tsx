@@ -98,11 +98,19 @@ export default async function HomePage({
       <section className="relative min-h-[100dvh] md:min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
         <div className="absolute inset-0 pointer-events-none">
           <HeroBackgroundVideo />
-          {/* Durchgehender Scrim: garantiert Kontrast, egal welcher Video-Frame läuft */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/70 via-[var(--pepe-black)]/35 to-[var(--pepe-black)]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pepe-black)]/40 via-transparent to-[var(--pepe-black)]/40" />
+          {/*
+            Scrim mobil bewusst leichter als auf Desktop: Auf dem Smartphone
+            füllt das Hochkant-Video die ganze Fläche und ist der eigentliche
+            Blickfang, ein zu starker Schleier ließ es dunkel und kraftlos
+            wirken. Den Textkontrast übernimmt hier vor allem der radiale
+            Schatten hinter dem Titel plus die text-shadow der Schrift.
+            Auf Desktop bleibt der kräftigere Scrim, weil das Querformat-Video
+            heller ist und die Schrift über die volle Breite lesbar sein muss.
+          */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/45 via-transparent to-[var(--pepe-black)] md:from-[var(--pepe-black)]/70 md:via-[var(--pepe-black)]/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent md:from-[var(--pepe-black)]/40 md:to-[var(--pepe-black)]/40" />
           {/* Weicher radialer Schatten direkt hinter dem Titeltext (kein harter Kasten) */}
-          <div className="absolute inset-0 [background:radial-gradient(ellipse_65%_45%_at_50%_34%,rgba(0,0,0,0.55),transparent_72%)]" />
+          <div className="absolute inset-0 [background:radial-gradient(ellipse_75%_38%_at_50%_30%,rgba(0,0,0,0.5),transparent_70%)] md:[background:radial-gradient(ellipse_65%_45%_at_50%_34%,rgba(0,0,0,0.55),transparent_72%)]" />
         </div>
 
         <HomeDotCloud />

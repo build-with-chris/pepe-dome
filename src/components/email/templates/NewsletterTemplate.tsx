@@ -1,9 +1,22 @@
 import 'server-only'
 
 /**
- * Newsletter Template
+ * Newsletter-Template
  *
- * Main newsletter template with hero section, content sections, and footer
+ * Aufbau nach Wichtigkeit statt nach Datenbankreihenfolge:
+ *
+ *   1. Kopf mit Logo und Browser-Link
+ *   2. Hero: worum es in dieser Ausgabe geht
+ *   3. Persönliche Anrede und redaktioneller Einstieg, bewusst kurz
+ *   4. Aufmacher-Veranstaltung mit dem einzigen primären Button
+ *   5. Zweite Reihe als kleinere Karten mit Textlink
+ *   6. Weitere Termine als kompakte Liste mit Datumsfeld
+ *   7. Artikel als abgesetzter Lesebereich
+ *   8. Ein abschließender Verweis auf den vollständigen Kalender
+ *   9. Footer mit Abmeldung, Anschrift und Impressum
+ *
+ * Die Gewichtung der Veranstaltungen entsteht im Viewmodel aus der
+ * Reihenfolge, die im Admin per Drag-and-drop festgelegt wird.
  */
 
 import {
@@ -17,434 +30,297 @@ import {
   Img,
   Hr,
   Link,
-} from '@react-email/components';
-import { EmailHeader } from '../components/EmailHeader';
-import { EmailFooter } from '../components/EmailFooter';
-import { EmailButton } from '../components/EmailButton';
-import { EmailEventCard } from '../components/EmailEventCard';
-import { EmailNewsCard } from '../components/EmailNewsCard';
+} from '@react-email/components'
+import { EmailHeader } from '../components/EmailHeader'
+import { EmailFooter } from '../components/EmailFooter'
+import { EmailButton } from '../components/EmailButton'
+import { EmailLeadEvent, EmailFeatureEvent, EmailEventRow } from '../components/EmailEventCard'
+import { EmailNewsCard } from '../components/EmailNewsCard'
+import { EmailNote } from '../components/EmailNote'
+import { emailTheme, emailText } from '../theme'
+import type {
+  NewsletterViewModel,
+  NewsletterItem,
+  NewsletterEventItem,
+} from '@/lib/newsletter-content'
 
-type EventDataForEmail = {
-  title: string
-  description?: string
-  date?: string
-  time?: string
-  location?: string
-  category?: string
-  imageUrl?: string
-  eventUrl?: string
-  ctaUrl?: string
-  ctaLabel?: string
+const INSTAGRAM_URL = 'https://www.instagram.com/pepe_arts/'
+
+export interface NewsletterTemplateProps {
+  viewModel: NewsletterViewModel
+  subscriberId: string
+  subscriberEmail: string
+  firstName?: string
+  /** Abmelde-Link; wird vom Versand gesetzt, damit er zum Empfänger passt */
+  unsubscribeUrl?: string
 }
 
-type ArticleDataForEmail = {
-  title: string
-  excerpt?: string
-  imageUrl?: string
-  articleUrl?: string
-  category?: string
+const gutter = `${emailTheme.size.gutter}px`
+
+function isCompactEvent(item: NewsletterItem): item is NewsletterEventItem {
+  return item.kind === 'event' && item.emphasis === 'compact'
 }
 
-type CustomDataForEmail = {
-  title?: string
-  text?: string
-  imageUrl?: string
-  ctaUrl?: string
-  ctaLabel?: string
-}
+/**
+ * Aufeinanderfolgende Kompakt-Termine werden zu einem Block zusammengefasst,
+ * statt jeden einzeln zu rahmen. Das ist der eigentliche Hebel gegen den
+ * Katalog-Effekt: eine Liste liest sich als eine Einheit, sieben Karten
+ * lesen sich als sieben Forderungen.
+ */
+function groupItems(items: NewsletterItem[]): Array<NewsletterItem | NewsletterEventItem[]> {
+  const groups: Array<NewsletterItem | NewsletterEventItem[]> = []
+  let buffer: NewsletterEventItem[] = []
 
-type ContentItemDataForEmail = EventDataForEmail | ArticleDataForEmail | CustomDataForEmail | Record<string, never>
+  for (const item of items) {
+    if (isCompactEvent(item)) {
+      buffer.push(item)
+      continue
+    }
+    if (buffer.length > 0) {
+      groups.push(buffer)
+      buffer = []
+    }
+    groups.push(item)
+  }
+  if (buffer.length > 0) groups.push(buffer)
 
-interface NewsletterContentSection {
-  sectionHeading?: string;
-  sectionDescription?: string;
-  items: Array<{
-    type: 'event' | 'article' | 'custom';
-    data: ContentItemDataForEmail;
-  }>;
-}
-
-interface NewsletterTemplateProps {
-  // Newsletter metadata
-  subject: string;
-  preheader?: string;
-  newsletterSlug: string;
-
-  // Hero section
-  heroImageUrl?: string;
-  heroTitle?: string;
-  heroSubtitle?: string;
-  heroCTALabel?: string;
-  heroCTAUrl?: string;
-
-  // Intro text (shown after hero, before content)
-  introText?: string;
-
-  // Content sections
-  contentSections: NewsletterContentSection[];
-
-  // Subscriber info
-  subscriberId: string;
-  subscriberEmail: string;
-  firstName?: string;
+  return groups
 }
 
 export default function NewsletterTemplate({
-  subject,
-  preheader,
-  newsletterSlug,
-  heroImageUrl,
-  heroTitle,
-  heroSubtitle,
-  heroCTALabel,
-  heroCTAUrl,
-  introText,
-  contentSections,
+  viewModel,
   subscriberId,
   subscriberEmail,
   firstName,
+  unsubscribeUrl,
 }: NewsletterTemplateProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004';
-  const unsubscribeUrl = `${baseUrl}/api/subscribers/unsubscribe?id=${subscriberId}`;
-  const viewInBrowserUrl = `${baseUrl}/newsletter/${newsletterSlug}`;
+  const vm = viewModel
+  const resolvedUnsubscribeUrl =
+    unsubscribeUrl || `${vm.baseUrl}/newsletter/unsubscribe/${subscriberId}`
+
+  // Anrede nur bei echtem Vornamen. Ohne Namen würde ein generisches "Hallo,"
+  // oft mit der Begrüßung im redaktionellen Einstieg kollidieren (z. B.
+  // "Hallo," direkt über "Hi zusammen,"). Der Einstiegstext trägt die Ansprache
+  // dann selbst.
+  const greeting = firstName ? `Hallo ${firstName},` : null
+  const hasIntro = Boolean(vm.introText)
 
   return (
     <EmailHtml lang="de">
       <Head>
-        <title>{subject}</title>
+        <title>{vm.subject}</title>
+        {/*
+          Ohne diese Angaben hellen Apple Mail und Outlook.com dunkle Mails
+          eigenmächtig auf und zerlegen dabei den Kontrast. Mit ihnen
+          respektieren sie die gesetzten Farben.
+        */}
+        <meta name="color-scheme" content="dark" />
+        <meta name="supported-color-schemes" content="dark" />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              :root { color-scheme: dark; supported-color-schemes: dark; }
+              a { text-decoration: none; }
+              img { -ms-interpolation-mode: bicubic; }
+              @media only screen and (max-width: 600px) {
+                .pd-gutter { padding-left: 16px !important; padding-right: 16px !important; }
+                .pd-hero-title { font-size: 26px !important; }
+              }
+            `,
+          }}
+        />
       </Head>
-      <Preview>{preheader || subject}</Preview>
+
+      <Preview>{vm.preheader || vm.subject}</Preview>
+
       <Body
         style={{
-          backgroundColor: '#FFFFFF',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+          backgroundColor: emailTheme.color.page,
+          fontFamily: emailTheme.font.stack,
           margin: 0,
           padding: 0,
+          WebkitTextSizeAdjust: '100%',
         }}
       >
         <Container
           style={{
-            maxWidth: '100%',
             width: '100%',
+            maxWidth: `${emailTheme.size.container}px`,
             margin: '0 auto',
-            backgroundColor: '#1a1a1a',
+            backgroundColor: emailTheme.color.canvas,
           }}
         >
-          {/* Header */}
-          <EmailHeader />
+          <EmailHeader logoUrl={`${vm.baseUrl}/images/pepe-dome-logo-light.png`} homeUrl={vm.homeUrl} webViewUrl={vm.webViewUrl} />
 
-          {/* Hero Section - Always show with subject as fallback title */}
-          <Section
-            style={{
-              backgroundColor: '#2a2a2a',
-            }}
-          >
-            {/* Hero Image - using actual Img tag for email client compatibility */}
-            {heroImageUrl && (
-              <Img
-                src={heroImageUrl}
-                alt={heroTitle || subject}
-                width="100%"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  maxHeight: '300px',
-                  objectFit: 'cover',
-                }}
-              />
+          {/* Hero */}
+          {vm.hero.imageUrl && (
+            <Img
+              src={vm.hero.imageUrl}
+              alt={vm.hero.title}
+              width={emailTheme.size.container}
+              style={{
+                display: 'block',
+                width: '100%',
+                maxWidth: '100%',
+                border: 'none',
+                outline: 'none',
+              }}
+            />
+          )}
+
+          <Section className="pd-gutter" style={{ padding: `28px ${gutter} 4px ${gutter}` }}>
+            <Text className="pd-hero-title" style={emailText.heroTitle}>
+              {vm.hero.title}
+            </Text>
+
+            {vm.hero.subtitle && (
+              <Text style={{ ...emailText.body, color: emailTheme.color.textMuted, margin: '0 0 18px 0' }}>
+                {vm.hero.subtitle}
+              </Text>
             )}
 
-            {/* Hero Text Content */}
-            <Section
-              style={{
-                padding: '32px',
-                backgroundColor: '#2a2a2a',
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: '28px',
-                  fontWeight: '700',
-                  lineHeight: '1.2',
-                  color: '#FFFFFF',
-                  margin: '0 0 12px 0',
-                  textAlign: 'center',
-                }}
-              >
-                {heroTitle || subject}
-              </Text>
-
-              {heroSubtitle && (
-                <Text
-                  style={{
-                    fontSize: '16px',
-                    lineHeight: '1.5',
-                    color: '#7dd3fc',
-                    margin: '0 0 20px 0',
-                    textAlign: 'center',
-                  }}
-                >
-                  {heroSubtitle}
-                </Text>
-              )}
-
-              {heroCTALabel && heroCTAUrl && (
-                <Section
-                  style={{
-                    textAlign: 'center',
-                  }}
-                >
-                  <EmailButton href={heroCTAUrl}>
-                    {heroCTALabel}
-                  </EmailButton>
-                </Section>
-              )}
-            </Section>
+            {vm.hero.ctaLabel && vm.hero.ctaUrl && (
+              <Section style={{ margin: '0 0 8px 0' }}>
+                <EmailButton href={vm.hero.ctaUrl} variant="secondary">
+                  {vm.hero.ctaLabel}
+                </EmailButton>
+              </Section>
+            )}
           </Section>
 
-          {/* Intro Text */}
-          {introText && (
-            <Section
-              style={{
-                padding: '16px 32px 0 32px',
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: '16px',
-                  lineHeight: '1.7',
-                  color: '#CCCCCC',
-                  margin: '0',
-                  whiteSpace: 'pre-wrap',
-                }}
-              >
-                {introText}
+          {/* Redaktioneller Einstieg */}
+          {hasIntro && (
+            <Section className="pd-gutter" style={{ padding: `16px ${gutter} 4px ${gutter}` }}>
+              {greeting && (
+                <Text style={{ ...emailText.body, margin: '0 0 10px 0' }}>{greeting}</Text>
+              )}
+              <Text style={{ ...emailText.body, margin: '0', whiteSpace: 'pre-wrap' }}>
+                {vm.introText}
               </Text>
             </Section>
           )}
 
-          {/* Content Sections */}
-          {contentSections.map((section, sectionIndex) => (
+          {/* Inhalt */}
+          {vm.sections.map((section, sectionIndex) => (
             <Section
               key={sectionIndex}
-              style={{
-                padding: '24px 16px',
-              }}
+              className="pd-gutter"
+              style={{ padding: `28px ${gutter} 0 ${gutter}` }}
             >
-              {/* Section Heading */}
-              {section.sectionHeading && (
+              {section.heading && (
                 <>
-                  <Text
-                    style={{
-                      fontSize: '24px',
-                      fontWeight: '700',
-                      lineHeight: '1.3',
-                      color: '#FFFFFF',
-                      margin: '0 0 12px 0',
-                    }}
-                  >
-                    {section.sectionHeading}
-                  </Text>
-
-                  {section.sectionDescription && (
-                    <Text
-                      style={{
-                        fontSize: '16px',
-                        lineHeight: '1.6',
-                        color: '#AAAAAA',
-                        margin: '0 0 24px 0',
-                      }}
-                    >
-                      {section.sectionDescription}
-                    </Text>
+                  <Text style={emailText.sectionTitle}>{section.heading}</Text>
+                  {section.description && (
+                    <Text style={{ ...emailText.meta, margin: '0 0 4px 0' }}>{section.description}</Text>
                   )}
+                  <Hr
+                    style={{
+                      border: 'none',
+                      borderTop: `1px solid ${emailTheme.color.line}`,
+                      margin: '12px 0 20px 0',
+                    }}
+                  />
                 </>
               )}
 
-              {/* Section Items */}
-              {section.items.map((item, itemIndex) => {
-                if (item.type === 'event') {
-                  const itemData = item.data as EventDataForEmail;
-                  return (
-                    <EmailEventCard
-                      key={itemIndex}
-                      title={itemData.title || ''}
-                      description={itemData.description}
-                      date={itemData.date || ''}
-                      time={itemData.time}
-                      location={itemData.location}
-                      ctaUrl={itemData.eventUrl || itemData.ctaUrl || '#'}
-                      imageUrl={itemData.imageUrl}
-                    />
-                  );
-                } else if (item.type === 'article') {
-                  const itemData = item.data as ArticleDataForEmail;
-                  return (
-                    <EmailNewsCard
-                      key={itemIndex}
-                      title={itemData.title || ''}
-                      excerpt={itemData.excerpt}
-                      articleUrl={itemData.articleUrl || '#'}
-                      imageUrl={itemData.imageUrl}
-                      category={itemData.category}
-                    />
-                  );
-                } else if (item.type === 'custom') {
-                  // Custom section with text and optional image
-                  const itemData = item.data as CustomDataForEmail;
-                  const customImageUrl = itemData.imageUrl;
-                  const customTitle = itemData.title;
-                  const customText = itemData.text;
-                  const customCtaUrl = itemData.ctaUrl;
-                  const customCtaLabel = itemData.ctaLabel;
-
+              {groupItems(section.items).map((group, groupIndex) => {
+                // Zusammengefasste Terminliste
+                if (Array.isArray(group)) {
                   return (
                     <Section
-                      key={itemIndex}
+                      key={groupIndex}
                       style={{
-                        backgroundColor: '#1a1a1a',
+                        backgroundColor: emailTheme.color.surface,
                         borderRadius: '12px',
-                        padding: '24px',
-                        marginBottom: '24px',
+                        padding: '2px 18px',
+                        marginBottom: '14px',
                       }}
                     >
-                      {customImageUrl && (
-                        <Img
-                          src={customImageUrl}
-                          alt={customTitle || 'Custom content'}
-                          width="100%"
-                          height="auto"
-                          style={{
-                            display: 'block',
-                            borderRadius: '8px',
-                            marginBottom: '16px',
-                          }}
+                      {group.map((event, rowIndex) => (
+                        <EmailEventRow
+                          key={event.id}
+                          event={event}
+                          isLast={rowIndex === group.length - 1}
                         />
-                      )}
-
-                      {customTitle && (
-                        <Text
-                          style={{
-                            fontSize: '20px',
-                            fontWeight: '700',
-                            lineHeight: '1.3',
-                            color: '#FFFFFF',
-                            margin: '0 0 12px 0',
-                          }}
-                        >
-                          {customTitle}
-                        </Text>
-                      )}
-
-                      {customText && (
-                        <Text
-                          style={{
-                            fontSize: '16px',
-                            lineHeight: '1.6',
-                            color: '#CCCCCC',
-                            margin: '0 0 16px 0',
-                          }}
-                        >
-                          {customText}
-                        </Text>
-                      )}
-
-                      {customCtaUrl && customCtaLabel && (
-                        <EmailButton href={customCtaUrl} variant="secondary">
-                          {customCtaLabel}
-                        </EmailButton>
-                      )}
+                      ))}
                     </Section>
-                  );
+                  )
                 }
-                return null;
-              })}
 
-              {/* Section Divider (except for last section) */}
-              {sectionIndex < contentSections.length - 1 && (
-                <Hr
-                  style={{
-                    border: 'none',
-                    borderTop: '2px solid #333333',
-                    margin: '32px 0 0 0',
-                  }}
-                />
-              )}
+                if (group.kind === 'event') {
+                  return group.emphasis === 'lead' ? (
+                    <Section key={group.id} style={{ marginBottom: '18px' }}>
+                      <EmailLeadEvent event={group} />
+                    </Section>
+                  ) : (
+                    <EmailFeatureEvent key={group.id} event={group} />
+                  )
+                }
+
+                if (group.kind === 'article') {
+                  return <EmailNewsCard key={group.id} article={group} />
+                }
+
+                return (
+                  <Section key={groupIndex} style={{ marginBottom: '14px' }}>
+                    <EmailNote note={group} />
+                  </Section>
+                )
+              })}
             </Section>
           ))}
 
-          {/* Closing Section */}
-          <Section
-            style={{
-              padding: '32px',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
+          {/* Abschluss: eine einzige weiterführende Handlung */}
+          <Section className="pd-gutter" style={{ padding: `32px ${gutter} 36px ${gutter}`, textAlign: 'center' }}>
+            <Hr
+              style={{
+                border: 'none',
+                borderTop: `1px solid ${emailTheme.color.line}`,
+                margin: '0 0 26px 0',
+              }}
+            />
             <Text
               style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#000000',
-                margin: '0 0 16px 0',
+                ...emailText.body,
+                color: emailTheme.color.textMuted,
                 textAlign: 'center',
+                margin: '0 0 18px 0',
               }}
             >
-              Bis bald im PEPE Dome!
+              {vm.eventCount > 0
+                ? 'Das war die Auswahl. Der vollständige Kalender steht auf der Website.'
+                : 'Den vollständigen Kalender findest du auf der Website.'}
             </Text>
-
+            <EmailButton href={vm.eventsUrl} variant="secondary">
+              Alle Termine ansehen
+            </EmailButton>
             <Text
               style={{
-                fontSize: '14px',
-                lineHeight: '1.6',
-                color: '#333333',
-                margin: '0',
+                ...emailText.small,
                 textAlign: 'center',
+                margin: '24px 0 0 0',
               }}
             >
-              Folge uns für tägliche Updates und Behind-the-Scenes-Momente
+              Bis bald im Dome
+              <br />
+              <Link
+                href={vm.homeUrl}
+                style={{ color: emailTheme.color.textMuted, textDecoration: 'none' }}
+              >
+                das Team vom PEPE Dome
+              </Link>
             </Text>
-
-            {/* Social Links Placeholder */}
-            <Section
-              style={{
-                textAlign: 'center',
-                margin: '20px 0 0 0',
-              }}
-            >
-              <Link
-                href="https://instagram.com/pepedome"
-                style={{
-                  color: '#016dca',
-                  textDecoration: 'none',
-                  margin: '0 12px',
-                  fontSize: '14px',
-                }}
-              >
-                Instagram
-              </Link>
-              <Link
-                href="https://facebook.com/pepedome"
-                style={{
-                  color: '#016dca',
-                  textDecoration: 'none',
-                  margin: '0 12px',
-                  fontSize: '14px',
-                }}
-              >
-                Facebook
-              </Link>
-            </Section>
           </Section>
 
-          {/* Footer */}
           <EmailFooter
-            unsubscribeUrl={unsubscribeUrl}
-            viewInBrowserUrl={viewInBrowserUrl}
+            unsubscribeUrl={resolvedUnsubscribeUrl}
+            privacyUrl={`${vm.baseUrl}/datenschutz`}
+            imprintUrl={`${vm.baseUrl}/impressum`}
+            instagramUrl={INSTAGRAM_URL}
             subscriberEmail={subscriberEmail}
           />
         </Container>
       </Body>
     </EmailHtml>
-  );
+  )
 }

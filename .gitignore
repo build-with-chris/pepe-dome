@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Agent-Worktrees (temporär, nicht versionieren)
 .claude/worktrees/
+
+# Lokale Layout-Vorschau (scripts/preview-newsletter.ts)
+.preview/
