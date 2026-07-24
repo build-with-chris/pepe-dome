@@ -11,6 +11,7 @@
  */
 
 import type { NewsletterViewModel, NewsletterEventItem } from './newsletter-content'
+import { markdownToPlainText } from './markdown'
 
 function eventBlock(event: NewsletterEventItem, compact: boolean): string {
   const lines: string[] = []
@@ -53,7 +54,8 @@ export function renderNewsletterText(
     // Anrede nur mit echtem Vornamen, sonst trägt der Einstiegstext sie selbst
     // (siehe NewsletterTemplate).
     if (options.firstName) blocks.push(`Hallo ${options.firstName},`)
-    blocks.push(vm.introText)
+    // Markdown-Syntax für den Text-Teil entfernen
+    blocks.push(markdownToPlainText(vm.introText))
   }
 
   for (const section of vm.sections) {
@@ -73,7 +75,10 @@ export function renderNewsletterText(
         lines.push(`Weiterlesen: ${item.articleUrl}`)
         blocks.push(lines.join('\n'))
       } else if (item.title || item.text) {
-        blocks.push([item.title, item.text].filter(Boolean).join('\n'))
+        const noteParts: string[] = []
+        if (item.title) noteParts.push(item.title.toUpperCase())
+        if (item.text) noteParts.push(markdownToPlainText(item.text))
+        blocks.push(noteParts.join('\n\n'))
       }
     }
   }
