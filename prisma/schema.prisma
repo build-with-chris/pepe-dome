@@ -26,16 +26,19 @@ model Subscriber {
   /// Stelle, die einen Abonnenten anlegt, an das Feld denken — ein vergessener
   /// Aufruf bricht erst zur Laufzeit, und in Tests und Skripten fällt das lange
   /// nicht auf. Die regulären Wege setzen weiterhin ein eigenes 256-Bit-Token
-  /// über generateUnsubscribeToken(); uuid liefert 122 Bit und ist damit
-  /// ebenfalls nicht zu erraten.
-  unsubscribeToken  String            @unique @default(uuid()) @map("unsubscribe_token")
+  /// über generateUnsubscribeToken(); gen_random_uuid() liefert 122 Bit und ist
+  /// damit ebenfalls nicht zu erraten.
+  ///
+  /// Der Default sitzt bewusst in der Datenbank und nicht nur im Prisma-Client:
+  /// so greift er auch bei rohem SQL, etwa in einem Seed-Skript.
+  unsubscribeToken  String            @unique @default(dbgenerated("(gen_random_uuid())::text")) @map("unsubscribe_token")
   confirmedAt       DateTime?         @map("confirmed_at")
   unsubscribedAt    DateTime?         @map("unsubscribed_at")
   lastOpenAt        DateTime?         @map("last_open_at")
   lastClickAt       DateTime?         @map("last_click_at")
   metadata          Json              @default("{}")
   createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("updated_at")
+  updatedAt         DateTime          @default(now()) @updatedAt @map("updated_at")
   newsletterEvents  NewsletterEvent[]
 
   @@index([email])
@@ -61,7 +64,7 @@ model Newsletter {
   createdBy      String?             @map("created_by")
   metadata       Json                @default("{}")
   createdAt      DateTime            @default(now()) @map("created_at")
-  updatedAt      DateTime            @updatedAt @map("updated_at")
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at")
   introText      String?             @map("intro_text")
   content        NewsletterContent[]
   events         NewsletterEvent[]
@@ -101,7 +104,7 @@ model NewsletterStats {
   bounceCount      Int        @default(0) @map("bounce_count")
   complaintCount   Int        @default(0) @map("complaint_count")
   unsubscribeCount Int        @default(0) @map("unsubscribe_count")
-  updatedAt        DateTime   @updatedAt @map("updated_at")
+  updatedAt        DateTime   @default(now()) @updatedAt @map("updated_at")
   newsletter       Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
 
   @@map("newsletter_stats")
@@ -133,7 +136,7 @@ model TestRecipient {
   name      String?
   isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("test_recipients")
 }
@@ -156,34 +159,39 @@ model CourseInterest {
 }
 
 model Event {
-  id            String             @id @default(uuid())
-  slug          String             @unique
+  id            String              @id @default(uuid())
+  slug          String              @unique
   title         String
   subtitle      String?
   description   String
   date          DateTime
-  endDate       DateTime?          @map("end_date")
+  endDate       DateTime?           @map("end_date")
+  /// Beginn als "HH:MM". Das Format setzt die API durch (src/lib/event-time.ts),
+  /// die Ausgabe läuft überall über formatTimeShort/formatTimeRange.
   time          String?
+  /// Ende als "HH:MM", optional. Ergibt auf der Detailseite "20:00 bis 22:00 Uhr".
+  endTime       String?             @map("end_time")
   location      String
   category      EventCategory
-  ticketUrl     String?            @map("ticket_url")
+  ticketUrl     String?             @map("ticket_url")
   price         String?
-  imageUrl      String?            @map("image_url")
-  featured      Boolean            @default(false)
-  highlights    Json               @default("[]")
+  imageUrl      String?             @map("image_url")
+  featured      Boolean             @default(false)
+  highlights    Json                @default("[]")
   /// Übersetzungen pro Locale, z.B. { "en": { "title": …, "description": … } }.
   /// Deutsch bleibt die Quelle in den Hauptspalten; fehlende Felder fallen auf DE zurück.
-  translations  Json               @default("{}")
-  status        ContentStatus      @default(DRAFT)
-  createdBy     String?            @map("created_by")
-  createdAt     DateTime           @default(now()) @map("created_at")
-  updatedAt     DateTime           @updatedAt @map("updated_at")
-  recurrence    RecurrencePattern? @map("recurrence")
-  recurrenceEnd DateTime?          @map("recurrence_end")
-  parentEventId String?            @map("parent_event_id")
+  translations  Json                @default("{}")
+  status        ContentStatus       @default(DRAFT)
+  createdBy     String?             @map("created_by")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @default(now()) @updatedAt @map("updated_at")
+  recurrence    RecurrencePattern?  @map("recurrence")
+  recurrenceEnd DateTime?           @map("recurrence_end")
+  parentEventId String?             @map("parent_event_id")
   articles      ArticleEvent[]
-  parentEvent   Event?             @relation("EventRecurrence", fields: [parentEventId], references: [id])
-  childEvents   Event[]            @relation("EventRecurrence")
+  parentEvent   Event?              @relation("EventRecurrence", fields: [parentEventId], references: [id])
+  childEvents   Event[]             @relation("EventRecurrence")
+  distributions EventDistribution[]
 
   @@index([slug])
   @@index([date])
@@ -191,6 +199,31 @@ model Event {
   @@index([status])
   @@index([featured])
   @@map("events")
+}
+
+/// Verteilung eines Events an externe Kanäle.
+///
+/// Die Tabelle liegt seit dem ersten Aufbau in der Datenbank, ist leer und wird
+/// von keiner Stelle im Code angesprochen: ein angefangenes Feature, das nie
+/// fertig wurde. Sie steht hier trotzdem, weil Prisma sonst bei jeder Migration
+/// vorschlägt, sie samt ihrer beiden Enums zu löschen. Über ihr Ende soll
+/// bewusst entschieden werden, nicht als Nebenwirkung eines `migrate dev`.
+model EventDistribution {
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  eventId      String              @map("event_id")
+  channel      DistributionChannel
+  status       DistributionStatus  @default(pending)
+  externalId   String?             @map("external_id")
+  externalUrl  String?             @map("external_url")
+  errorMessage String?             @map("error_message")
+  attemptedAt  DateTime            @default(now()) @map("attempted_at") @db.Timestamptz(6)
+  completedAt  DateTime?           @map("completed_at") @db.Timestamptz(6)
+  event        Event               @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([eventId, channel])
+  @@index([eventId], map: "event_distributions_event_idx")
+  @@index([status])
+  @@map("event_distributions")
 }
 
 model Article {
@@ -208,7 +241,7 @@ model Article {
   publishedAt DateTime?      @map("published_at")
   createdBy   String?        @map("created_by")
   createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  updatedAt   DateTime       @default(now()) @updatedAt @map("updated_at")
   events      ArticleEvent[]
 
   @@index([slug])
@@ -233,7 +266,6 @@ model ArticleEvent {
 
 /**
  * Zugriffsanfrage für das Admin-Panel.
- *
  * Wer sich neu anmeldet, hat zunächst keine Rechte. Beim ersten Aufruf des
  * Panels entsteht hier ein Eintrag und eine Freigabe-Mail geht raus. Die
  * verbindliche Rolle liegt danach in den Clerk-publicMetadata; diese Tabelle
@@ -315,6 +347,27 @@ enum ContentStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+/// Gehören zu EventDistribution, siehe Kommentar dort.
+enum DistributionChannel {
+  eventbrite
+  facebook_page
+  instagram_business
+  google_business_profile
+  rausgegangen_feed
+  jsonld_website
+
+  @@map("distribution_channel")
+}
+
+enum DistributionStatus {
+  pending
+  success
+  failed
+  skipped
+
+  @@map("distribution_status")
 }
 
 enum RecurrencePattern {
