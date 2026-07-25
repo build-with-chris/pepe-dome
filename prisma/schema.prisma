@@ -16,6 +16,19 @@ model Subscriber {
   interests         Json              @default("[]")
   doubleOptInToken  String?           @unique @map("double_opt_in_token")
   doubleOptInSentAt DateTime?         @map("double_opt_in_sent_at")
+  /// Dauerhaftes Geheimnis für den Abmeldelink in jeder Mail.
+  /// Ohne dieses Token genügte die bloße E-Mail-Adresse zum Austragen — damit
+  /// konnte jeder Fremde eine beliebige Adresse aus dem Verteiler entfernen.
+  /// Bleibt über die gesamte Lebensdauer gültig, weil Mails jahrelang im
+  /// Postfach liegen und der Abmeldelink darin funktionieren muss.
+  ///
+  /// Der @default ist ein Sicherheitsnetz, kein Ersatz: Ohne ihn müsste jede
+  /// Stelle, die einen Abonnenten anlegt, an das Feld denken — ein vergessener
+  /// Aufruf bricht erst zur Laufzeit, und in Tests und Skripten fällt das lange
+  /// nicht auf. Die regulären Wege setzen weiterhin ein eigenes 256-Bit-Token
+  /// über generateUnsubscribeToken(); uuid liefert 122 Bit und ist damit
+  /// ebenfalls nicht zu erraten.
+  unsubscribeToken  String            @unique @default(uuid()) @map("unsubscribe_token")
   confirmedAt       DateTime?         @map("confirmed_at")
   unsubscribedAt    DateTime?         @map("unsubscribed_at")
   lastOpenAt        DateTime?         @map("last_open_at")
@@ -216,6 +229,43 @@ model ArticleEvent {
 
   @@unique([articleId, eventId])
   @@map("article_events")
+}
+
+/**
+ * Zugriffsanfrage für das Admin-Panel.
+ *
+ * Wer sich neu anmeldet, hat zunächst keine Rechte. Beim ersten Aufruf des
+ * Panels entsteht hier ein Eintrag und eine Freigabe-Mail geht raus. Die
+ * verbindliche Rolle liegt danach in den Clerk-publicMetadata; diese Tabelle
+ * ist der Antrag samt Protokoll, wer wann was freigegeben hat.
+ */
+model AdminAccessRequest {
+  id           String                   @id @default(uuid())
+  clerkUserId  String                   @unique @map("clerk_user_id")
+  email        String
+  name         String?
+  status       AdminAccessRequestStatus @default(PENDING)
+  /// Einmal-Token für den Freigabe-Link in der Mail
+  token        String                   @unique
+  tokenExpires DateTime                 @map("token_expires")
+  /// Welche Rolle wurde am Ende vergeben (nur bei APPROVED gesetzt)
+  grantedRole  String?                  @map("granted_role")
+  decidedAt    DateTime?                @map("decided_at")
+  /// Clerk-User-ID des Super Admins, der entschieden hat
+  decidedBy    String?                  @map("decided_by")
+  notifiedAt   DateTime?                @map("notified_at")
+  createdAt    DateTime                 @default(now()) @map("created_at")
+  updatedAt    DateTime                 @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([email])
+  @@map("admin_access_requests")
+}
+
+enum AdminAccessRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum SubscriberStatus {

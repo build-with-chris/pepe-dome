@@ -61,10 +61,16 @@ export function replaceTemplateVariables(
  * @returns Complete unsubscribe URL
  */
 export function generateUnsubscribeUrl(
-  subscriberId: string,
+  unsubscribeToken: string,
   baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 ): string {
-  return `${baseUrl}/api/subscribers/unsubscribe?id=${subscriberId}`;
+  // Token statt Subscriber-ID.
+  //
+  // Der frühere Link `?id=<subscriberId>` funktioniert nicht mehr und sollte
+  // es auch nie: Die ID ist kein Geheimnis, sie steht in jedem Export und in
+  // jeder Admin-Ansicht. Damit hätte jeder, der eine ID kennt, die zugehörige
+  // Person austragen können.
+  return `${baseUrl}/api/subscribers/unsubscribe?token=${unsubscribeToken}`;
 }
 
 /**

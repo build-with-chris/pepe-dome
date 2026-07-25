@@ -18,6 +18,9 @@ import {
   deleteNewsletter,
 } from '@/lib/newsletters'
 import { NewsletterStatus } from '@prisma/client'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
+import { guardNewsletterMutation } from '@/lib/newsletter-guard'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -27,6 +30,9 @@ export async function GET(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 
@@ -52,10 +58,20 @@ export async function PUT(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 
     const { id } = await params
+
+    // Terminierte und laufende Ausgaben sind für Editoren gesperrt. Ohne das
+    // könnte ein Editor eine bereits geplante Ausgabe umschreiben und den Cron
+    // den neuen Inhalt an alle Abonnenten verschicken lassen — also genau das
+    // auslösen, was ihm als Rolle verwehrt ist.
+    const locked = await guardNewsletterMutation(id, guard.role)
+    if (locked) return locked
 
     // Check if newsletter exists and is editable
     const existing = await getNewsletterWithContent(id)
@@ -98,6 +114,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 

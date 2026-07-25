@@ -96,8 +96,11 @@ export default function NewsletterTemplate({
   unsubscribeUrl,
 }: NewsletterTemplateProps) {
   const vm = viewModel
-  const resolvedUnsubscribeUrl =
-    unsubscribeUrl || `${vm.baseUrl}/newsletter/unsubscribe/${subscriberId}`
+  // Fällt bewusst auf die Newsletter-Seite zurück statt auf einen aus der
+  // subscriberId gebauten Pfad. Die Abmeldung braucht das persönliche Token;
+  // ein Link aus der ID führte früher auf eine Route, die es nie gab, und
+  // sähe im Fussbereich aus wie ein funktionierender Abmeldelink.
+  const resolvedUnsubscribeUrl = unsubscribeUrl || `${vm.baseUrl}/newsletter`
 
   // Anrede nur bei echtem Vornamen. Ohne Namen würde ein generisches "Hallo,"
   // oft mit der Begrüßung im redaktionellen Einstieg kollidieren (z. B.

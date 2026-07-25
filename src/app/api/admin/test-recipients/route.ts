@@ -12,6 +12,8 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '@/lib/api-response'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 const createTestRecipientSchema = z.object({
   email: z.string().email('Ungültige E-Mail-Adresse'),
@@ -20,6 +22,9 @@ const createTestRecipientSchema = z.object({
 })
 
 export async function GET() {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     const testRecipients = await prisma.testRecipient.findMany({
       orderBy: { createdAt: 'desc' },
@@ -37,6 +42,9 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     const body = await request.json()
     const validation = createTestRecipientSchema.safeParse(body)

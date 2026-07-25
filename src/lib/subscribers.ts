@@ -14,6 +14,17 @@ export function generateOptInToken(): string {
 }
 
 /**
+ * Dauerhaftes Geheimnis für den Abmeldelink.
+ *
+ * Getrennt vom Opt-in-Token, weil dieses hier nicht verfällt und nach der
+ * Bestätigung nicht gelöscht wird: Der Abmeldelink muss auch in einer zwei
+ * Jahre alten Mail noch funktionieren.
+ */
+export function generateUnsubscribeToken(): string {
+  return crypto.randomBytes(32).toString('hex')
+}
+
+/**
  * Validate email format
  */
 export function validateEmail(email: string): boolean {
@@ -68,6 +79,7 @@ export async function createSubscriber(data: {
       status: SubscriberStatus.PENDING,
       doubleOptInToken: token,
       doubleOptInSentAt: new Date(),
+      unsubscribeToken: generateUnsubscribeToken(),
     },
   })
 }
@@ -108,12 +120,17 @@ export async function confirmSubscriber(token: string) {
 /**
  * Unsubscribe a subscriber
  */
-export async function unsubscribeSubscriber(emailOrId: string) {
-  // Try to find by email first, then by ID
-  const subscriber = await prisma.subscriber.findFirst({
-    where: {
-      OR: [{ email: emailOrId }, { id: emailOrId }],
-    },
+export async function unsubscribeSubscriber(token: string) {
+  // Ausschliesslich über das Token. Vorher suchte diese Funktion per
+  // OR: [{ email }, { id }] — damit genügte die bloße Kenntnis einer fremden
+  // Adresse, um sie auszutragen, und der komplette Verteiler war mit einer
+  // Adressliste leerräumbar.
+  if (!token) {
+    throw new Error('Missing unsubscribe token')
+  }
+
+  const subscriber = await prisma.subscriber.findUnique({
+    where: { unsubscribeToken: token },
   })
 
   if (!subscriber) {

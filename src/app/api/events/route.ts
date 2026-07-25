@@ -37,14 +37,13 @@ export async function GET(request: NextRequest) {
       month,
       hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
     })
-    return NextResponse.json(
-      {
-        error: 'Failed to fetch events',
-        code: code ?? null,
-        message,
-        hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
-      },
-      { status: 500 },
-    )
+    // Die Einzelheiten stehen oben im Log. Nach draussen geht nur, dass es
+    // schiefging.
+    //
+    // Vorher enthielt die Antwort die rohe Prisma-Meldung und obendrein
+    // hasDatabaseUrl. Prisma-Fehlertexte nennen Host, Port, Datenbank- und
+    // Benutzernamen — an einem unangemeldeten Aufrufer, der nur /api/events
+    // aufrufen muss. Das ist eine fertige Landkarte der Infrastruktur.
+    return NextResponse.json({ error: 'Failed to fetch events' }, { status: 500 })
   }
 }

@@ -85,12 +85,18 @@ describe('E-Mail-Rendering', () => {
       firstName: 'Anna',
       upcomingEventsUrl: 'https://pepe-dome.de/events',
       newsletterArchiveUrl: 'https://pepe-dome.de/newsletter',
+      // Muss von aussen kommen: Die Abmeldung braucht das persönliche Token
+      // des Abonnenten, nicht seine ID.
+      unsubscribeUrl: 'https://pepe-dome.de/newsletter/unsubscribe/tok-abc',
     })
 
     expect(html).toContain('Anna')
     expect(html).toContain('https://pepe-dome.de/events')
     // Ab hier gibt es etwas abzubestellen
     expect(html).toContain('Newsletter abbestellen')
+    // Und zwar über das Token, nicht über die Subscriber-ID
+    expect(html).toContain('/newsletter/unsubscribe/tok-abc')
+    expect(html).not.toContain('/newsletter/unsubscribe/sub-123')
   })
 
   it('rendert den Newsletter mit Hero und Inhalten', async () => {
@@ -147,10 +153,17 @@ describe('E-Mail-Rendering', () => {
     expect(result).toBe('<p>Hallo John! Besuche https://example.com.</p>')
   })
 
-  it('erzeugt die korrekte Abmelde-URL', () => {
-    expect(generateUnsubscribeUrl('sub-123', 'https://pepe-dome.de')).toBe(
-      'https://pepe-dome.de/api/subscribers/unsubscribe?id=sub-123'
-    )
+  /**
+   * Der Abmeldelink trägt das persönliche Token, nicht die Subscriber-ID.
+   * Die ID ist kein Geheimnis — sie steht in jedem Export und in jeder
+   * Admin-Ansicht. Mit ihr als Parameter hätte jeder, der eine ID kennt, die
+   * zugehörige Person austragen können.
+   */
+  it('erzeugt die Abmelde-URL über das Token, nicht über die ID', () => {
+    const url = generateUnsubscribeUrl('tok-abc123', 'https://pepe-dome.de')
+
+    expect(url).toBe('https://pepe-dome.de/api/subscribers/unsubscribe?token=tok-abc123')
+    expect(url).not.toContain('?id=')
   })
 
   it('erzeugt die korrekte Newsletter-URL', () => {

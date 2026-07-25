@@ -10,7 +10,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import NewsletterPage from '@/app/newsletter/page'
+import NewsletterPage from '@/app/[lang]/newsletter/page'
 import { getPublishedNewsletters } from '@/lib/newsletters'
 
 // Mock the newsletters library
@@ -38,6 +38,16 @@ vi.mock('next/link', () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) => (
     <a href={href}>{children}</a>
   ),
+}))
+
+// SignupForm liegt unter custom/, nicht unter newsletter/ — die lokalisierte
+// Seite importiert diesen Pfad.
+vi.mock('@/components/custom/SignupForm', () => ({
+  default: () => <div data-testid="signup-form">Newsletter Signup Form</div>,
+}))
+
+vi.mock('@/components/custom/HeroSection', () => ({
+  default: ({ title }: { title: string }) => <div data-testid="dotcloud">{title}</div>,
 }))
 
 // Mock the SignupForm component
@@ -93,11 +103,11 @@ describe('Newsletter Archive - Public Pages', () => {
 
     vi.mocked(getPublishedNewsletters).mockResolvedValue(mockNewsletters)
 
-    const page = await NewsletterPage()
+    const page = await NewsletterPage({ params: Promise.resolve({ lang: 'de' }) })
     render(page)
 
     // Archive section should be present (when newsletters exist, different heading is used)
-    expect(screen.getByText('Newsletter Archiv')).toBeInTheDocument()
+    expect(screen.getByText('Newsletter-Archiv')).toBeInTheDocument()
 
     // Verify newsletter titles are rendered
     expect(screen.getByText('Fall Events')).toBeInTheDocument()
@@ -144,7 +154,7 @@ describe('Newsletter Archive - Public Pages', () => {
   it('includes signup form on newsletter archive page', async () => {
     vi.mocked(getPublishedNewsletters).mockResolvedValue([])
 
-    const page = await NewsletterPage()
+    const page = await NewsletterPage({ params: Promise.resolve({ lang: 'de' }) })
     render(page)
 
     expect(screen.getByTestId('signup-form')).toBeInTheDocument()
@@ -153,7 +163,7 @@ describe('Newsletter Archive - Public Pages', () => {
   it('includes DotCloud visual element', async () => {
     vi.mocked(getPublishedNewsletters).mockResolvedValue([])
 
-    const page = await NewsletterPage()
+    const page = await NewsletterPage({ params: Promise.resolve({ lang: 'de' }) })
     render(page)
 
     expect(screen.getByTestId('dotcloud')).toBeInTheDocument()

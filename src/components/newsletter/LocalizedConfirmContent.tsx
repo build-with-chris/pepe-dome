@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import type { Dictionary } from '@/i18n/get-dictionary'
 import { localizedHref, type Locale } from '@/i18n/config'
+import { trackCompleteRegistration } from '@/lib/tracking'
 
 export default function LocalizedConfirmContent({
   lang,
@@ -43,6 +44,14 @@ export default function LocalizedConfirmContent({
         if (typeof window !== 'undefined') {
           localStorage.setItem('newsletter_subscribed', 'true')
         }
+
+        // Die bestätigte Anmeldung ist die Conversion, die zählt. Zwischen
+        // Formular und Bestätigung gehen regelmäßig 25 bis 40 Prozent
+        // verloren, wer nur den rohen Lead misst, hält die Kampagne für
+        // doppelt so gut, wie sie ist.
+        // Keine E-Mail-Adresse zur Hand: Der Bestätigungslink enthält nur
+        // den Token, und den schicken wir nicht an Meta.
+        trackCompleteRegistration({ source: 'newsletter-double-optin' })
 
         setStatus('success')
       } catch (error: unknown) {

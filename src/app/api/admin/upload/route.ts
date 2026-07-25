@@ -3,6 +3,8 @@ import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { existsSync } from 'fs'
 import { getSupabaseAdmin, UPLOAD_BUCKET } from '@/lib/supabase-server'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 // Maximum file size: 10MB
 const MAX_FILE_SIZE = 10 * 1024 * 1024
@@ -24,6 +26,9 @@ function generateFilename(originalName: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File | null
@@ -137,6 +142,9 @@ export async function POST(request: NextRequest) {
 
 // Optional: Handle DELETE to remove images (Supabase Storage oder lokale Datei)
 export async function DELETE(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     const { searchParams } = new URL(request.url)
     const filename = searchParams.get('filename')

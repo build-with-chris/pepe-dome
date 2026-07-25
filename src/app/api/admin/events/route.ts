@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
 
@@ -35,10 +36,8 @@ function generateSlug(title: string): string {
 
 // GET - List all events
 export async function GET(request: NextRequest) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
 
   const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
@@ -85,10 +84,8 @@ export async function GET(request: NextRequest) {
 
 // POST - Create new event
 export async function POST(request: NextRequest) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
 
   try {
     const body = await request.json()
@@ -120,7 +117,7 @@ export async function POST(request: NextRequest) {
         status: data.status,
         recurrence: data.recurrence || null,
         recurrenceEnd: data.recurrenceEnd || null,
-        createdBy: userId,
+        createdBy: guard.userId,
       },
     })
 

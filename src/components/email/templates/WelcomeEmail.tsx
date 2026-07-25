@@ -36,6 +36,15 @@ interface WelcomeEmailProps {
   firstName?: string
   upcomingEventsUrl?: string
   newsletterArchiveUrl?: string
+  /**
+   * Fertiger Abmeldelink.
+   *
+   * Muss von aussen kommen und darf nicht hier aus der subscriberId gebaut
+   * werden: Die Abmeldung braucht das persönliche Token des Abonnenten. Die
+   * ID ist kein Geheimnis, und der frühere Pfad aus der ID zeigte auf eine
+   * Route, die es nie gab.
+   */
+  unsubscribeUrl: string
 }
 
 /** Ein Punkt aus "Was dich erwartet" */
@@ -64,12 +73,12 @@ export default function WelcomeEmail({
   firstName,
   upcomingEventsUrl,
   newsletterArchiveUrl,
+  unsubscribeUrl,
 }: WelcomeEmailProps) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3004'
   const gutter = `${emailTheme.size.gutter}px`
   const eventsUrl = upcomingEventsUrl || `${baseUrl}/events`
   const archiveUrl = newsletterArchiveUrl || `${baseUrl}/newsletter`
-  const unsubscribeUrl = `${baseUrl}/newsletter/unsubscribe/${subscriberId}`
 
   return (
     <EmailHtml lang="de">

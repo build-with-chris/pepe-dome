@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
 
@@ -30,10 +31,8 @@ function generateSlug(title: string): string {
 // GET - List all articles
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const guard = await requireApiRole(ROLES.VIEWER)
+    if (guard.response) return guard.response
 
     const searchParams = request.nextUrl.searchParams
     const status = searchParams.get('status')
@@ -80,10 +79,8 @@ export async function GET(request: NextRequest) {
 
 // POST - Create new article
 export async function POST(request: NextRequest) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
 
   try {
     const body = await request.json()
@@ -109,7 +106,7 @@ export async function POST(request: NextRequest) {
         featured: data.featured,
         status: data.status,
         publishedAt: data.status === 'PUBLISHED' ? new Date() : null,
-        createdBy: userId,
+        createdBy: guard.userId,
         events: data.eventIds?.length ? {
           create: data.eventIds.map(eventId => ({ eventId }))
         } : undefined,

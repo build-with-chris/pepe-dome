@@ -12,8 +12,13 @@ import {
   validationErrorResponse,
 } from '@/lib/api-response'
 import { createNewsletter, getNewsletters } from '@/lib/newsletters'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 export async function GET(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 
@@ -45,6 +50,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 

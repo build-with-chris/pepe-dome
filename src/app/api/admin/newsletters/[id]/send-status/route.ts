@@ -12,6 +12,8 @@
 import { NextRequest } from 'next/server'
 import { successResponse, errorResponse } from '@/lib/api-response'
 import { prisma } from '@/lib/prisma'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -21,6 +23,9 @@ export async function GET(
   _request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
+
   try {
     const { id: newsletterId } = await params
 

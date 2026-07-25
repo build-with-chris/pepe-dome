@@ -1,0 +1,59 @@
+# Automatische Abhängigkeits-Updates
+#
+# Warum das hier steht: Beim Audit im Juli 2026 lagen 29 offene Schwachstellen
+# im Projekt, darunter eine kritische in @clerk/nextjs, die genau das umgehen
+# liess, was die Middleware absichern soll. Solche Lücken entstehen nicht durch
+# eigenen Code, sondern durch Stillstand. Dependabot öffnet dafür von selbst
+# Pull Requests.
+#
+# Zusammengefasste PRs statt einzelner: Zwanzig offene PRs pro Woche liest
+# niemand mehr, und ungelesene PRs sind kein Sicherheitsgewinn.
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      # Sicherheitsupdates zuerst und einzeln sichtbar
+      production-patches:
+        applies-to: version-updates
+        dependency-type: production
+        update-types:
+          - patch
+          - minor
+      development:
+        applies-to: version-updates
+        dependency-type: development
+        update-types:
+          - patch
+          - minor
+    ignore:
+      # Major-Sprünge bei diesen dreien brauchen eine Migration und sollen
+      # bewusst geplant werden, nicht als PR nebenbei hereinschneien.
+      - dependency-name: next
+        update-types: ["version-update:semver-major"]
+      - dependency-name: react
+        update-types: ["version-update:semver-major"]
+      - dependency-name: react-dom
+        update-types: ["version-update:semver-major"]
+
+  # Die Actions in den Workflows unten altern genauso.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(ci)"

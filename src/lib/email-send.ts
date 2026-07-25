@@ -39,7 +39,7 @@ export async function sendConfirmationEmail(subscriberId: string, baseUrl?: stri
   }
 
   // Generate URLs (baseUrl aus Request nutzen, damit Bestätigungs-Link auf die echte Domain zeigt)
-  const urls = generateEmailUrls(subscriber.id, subscriber.doubleOptInToken, baseUrl)
+  const urls = generateEmailUrls(subscriber.unsubscribeToken, subscriber.doubleOptInToken, baseUrl)
 
   // Render email template — HTML + Plain-Text-Alternative.
   // Reine HTML-Mails ohne Text-Teil bekommen bei Gmail/Outlook einen höheren
@@ -64,7 +64,10 @@ export async function sendConfirmationEmail(subscriberId: string, baseUrl?: stri
     html: emailHtml,
     text: emailText,
     headers: {
-      'List-Unsubscribe': `<${urls.unsubscribe}>`,
+      // One-Click-Variante: Der Provider schickt hierauf ein POST und erwartet
+      // eine sofortige Abmeldung ohne Rückfrage (RFC 8058). Die Seite mit der
+      // Rückfrage wäre hier falsch, sie würde nichts tun.
+      'List-Unsubscribe': `<${urls.unsubscribeOneClick}>`,
       'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     tags: [
@@ -114,7 +117,7 @@ export async function sendWelcomeEmail(subscriberId: string) {
   }
 
   // Generate URLs
-  const urls = generateEmailUrls(subscriber.id)
+  const urls = generateEmailUrls(subscriber.unsubscribeToken)
 
   // Render email template — HTML + Plain-Text-Alternative (Deliverability)
   const welcomeEmail = WelcomeEmail({
@@ -123,12 +126,14 @@ export async function sendWelcomeEmail(subscriberId: string) {
     firstName: subscriber.firstName || undefined,
     upcomingEventsUrl: `${urls.home}/events`,
     newsletterArchiveUrl: `${urls.home}/newsletter`,
+    // Für Menschen: Seite mit Rückfrage, nicht der One-Click-Endpunkt
+    unsubscribeUrl: urls.unsubscribe,
   })
   const emailHtml = await render(welcomeEmail)
   const emailText = await render(welcomeEmail, { plainText: true })
 
   // Send via Resend
-  const unsubscribeUrl = `${urls.home}/newsletter/unsubscribe/${subscriber.id}`
+  const unsubscribeUrl = urls.unsubscribeOneClick
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
@@ -195,7 +200,18 @@ export async function sendNewsletter(
   }
 
   // Get recipients
-  let recipients: Array<{ id: string; email: string; firstName: string | null }>
+  let recipients: Array<{
+    id: string
+    email: string
+    firstName: string | null
+    /**
+     * null bei Testempfängern: Sie stehen nicht in der Abonnententabelle und
+     * haben deshalb kein Abmelde-Token. Ein Platzhalter wäre schlimmer als
+     * nichts — er ergäbe einen Link, der aussieht wie ein Abmeldelink, aber
+     * nie jemanden austrägt.
+     */
+    unsubscribeToken: string | null
+  }>
 
   if (options?.testRecipients) {
     // Test mode: use provided emails
@@ -203,12 +219,13 @@ export async function sendNewsletter(
       id: `test-${index}`,
       email,
       firstName: null,
+      unsubscribeToken: null,
     }))
   } else {
     // Production: fetch active subscribers
     const allActive = await prisma.subscriber.findMany({
       where: { status: 'ACTIVE' },
-      select: { id: true, email: true, firstName: true },
+      select: { id: true, email: true, firstName: true, unsubscribeToken: true },
     })
 
     if (options?.resumeMissing) {
@@ -253,7 +270,15 @@ export async function sendNewsletter(
   }> = []
 
   for (const recipient of recipients) {
-    const unsubscribeUrl = `${baseUrl}/newsletter/unsubscribe/${recipient.id}`
+    // Für Menschen: Seite mit Rückfrage. Für den Provider-Knopf: One-Click-POST.
+    // Ohne Token (Testversand) zeigt der Fussbereich auf die Newsletter-Seite,
+    // und der List-Unsubscribe-Header entfällt ganz.
+    const unsubscribeUrl = recipient.unsubscribeToken
+      ? `${baseUrl}/newsletter/unsubscribe/${recipient.unsubscribeToken}`
+      : `${baseUrl}/newsletter`
+    const unsubscribeOneClickUrl = recipient.unsubscribeToken
+      ? `${baseUrl}/api/subscribers/unsubscribe?token=${recipient.unsubscribeToken}`
+      : null
 
     const newsletterEmail = NewsletterTemplate({
       viewModel,
@@ -276,10 +301,15 @@ export async function sendNewsletter(
       subject: newsletter.subject,
       html: emailHtml,
       text: emailText,
-      headers: {
-        'List-Unsubscribe': `<${unsubscribeUrl}>`,
-        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-      },
+      // Der Header nur, wenn dahinter auch wirklich eine Abmeldung steht.
+      // Ein One-Click-Knopf, der nichts tut, ist beim Empfänger schlimmer als
+      // gar keiner: Er hält sich für abgemeldet und bekommt weiter Post.
+      headers: unsubscribeOneClickUrl
+        ? {
+            'List-Unsubscribe': `<${unsubscribeOneClickUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          }
+        : {},
       tags: [
         { name: 'type', value: 'newsletter' },
         { name: 'newsletter_id', value: newsletter.id },

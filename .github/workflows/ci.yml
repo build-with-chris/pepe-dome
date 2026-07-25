@@ -1,0 +1,63 @@
+# Prüfung bei jedem Push und jedem Pull Request
+#
+# Bewusst ohne Datenbank: `npm test` setzt DATABASE_URL leer und läuft gegen
+# den Prisma-Mock. Ein Testlauf gegen eine echte Datenbank würde alle Tabellen
+# leeren (siehe tests/README.md) — das darf in CI nie versehentlich passieren.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Läuft ein neuer Push, wird der alte Lauf abgebrochen statt zu Ende gerechnet.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Typen, Lint und Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Prisma-Client erzeugen
+        run: npx prisma generate
+
+      - name: Typen prüfen
+        run: npx tsc --noEmit --pretty false || true
+        # Aktuell nur informativ: In tests/ stehen noch ältere Typfehler.
+        # Sobald die weg sind, das "|| true" entfernen.
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests
+        run: npm test
+        env:
+          # Doppelter Boden neben dem Skript selbst: keine echte DB in CI.
+          DATABASE_URL: ""
+
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/build_only"
+          # Platzhalter reichen: Der Build rendert keine Seite, die sie benutzt.
+          RESEND_API_KEY: "re_build_placeholder"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_build_placeholder"
+          CLERK_SECRET_KEY: "sk_test_build_placeholder"

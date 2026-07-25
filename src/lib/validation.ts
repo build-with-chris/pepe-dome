@@ -4,9 +4,28 @@
 
 import { z } from 'zod'
 
+/**
+ * E-Mail-Adresse vereinheitlichen: Leerraum weg, klein geschrieben.
+ *
+ * Die Unique-Bedingung auf subscribers.email ist in PostgreSQL
+ * gross-klein-empfindlich. Ohne Normalisierung sind `Chris@example.de` und
+ * `chris@example.de` zwei getrennte Zeilen mit denselben Folgen für dieselbe
+ * Person: Sie bekommt jeden Newsletter doppelt, und eine Abmeldung wirkt nur
+ * für die Schreibweise, mit der sie sich damals eingetragen hat.
+ *
+ * Der lokale Teil einer Adresse ist laut Norm zwar unterscheidungsfähig, aber
+ * kein Anbieter von Rang nutzt das noch. Kleinschreibung ist der Umgang, den
+ * Nutzer erwarten.
+ */
+const normalizedEmail = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .pipe(z.string().email('Invalid email format'))
+
 // Subscriber validation schemas
 export const subscriberSignupSchema = z.object({
-  email: z.string().email('Invalid email format'),
+  email: normalizedEmail,
   firstName: z.string().optional(),
   interests: z.array(z.string()).optional(),
 })
@@ -67,11 +86,15 @@ export const subscriberConfirmSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 })
 
+/**
+ * Abmeldung — ausschliesslich über das Token aus der Mail.
+ *
+ * Vorher standen hier `email` und `id` als Alternativen. Beides ist kein
+ * Geheimnis: Mit einer fremden Adresse liess sich jede Person aus dem
+ * Verteiler austragen. Wer abmelden will, muss die Mail in der Hand haben.
+ */
 export const subscriberUnsubscribeSchema = z.object({
-  email: z.string().email('Invalid email format').optional(),
-  id: z.string().uuid().optional(),
-}).refine((data) => data.email || data.id, {
-  message: 'Either email or id must be provided',
+  token: z.string().min(1, 'Token is required'),
 })
 
 // Helper for URL or path validation (allows /path or https://...)
@@ -142,7 +165,11 @@ export const subscriberListSchema = paginationSchema.extend({
 
 // Admin subscriber management
 export const adminCreateSubscriberSchema = z.object({
-  email: z.string().email('Invalid email format'),
+  // Dieselbe Vereinheitlichung wie im öffentlichen Formular. Sonst legt das
+  // Panel `Chris@Example.de` als zweiten Datensatz neben `chris@example.de` an:
+  // dieselbe Person bekommt jede Mail doppelt, und eine Abmeldung wirkt nur
+  // für eine der beiden Schreibweisen.
+  email: normalizedEmail,
   firstName: z.string().optional(),
   interests: z.array(z.string()).optional(),
   status: z.enum(['PENDING', 'ACTIVE']).default('ACTIVE'),

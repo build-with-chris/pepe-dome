@@ -33,14 +33,40 @@ export const runtime = 'nodejs'
 // fragt dasselbe Bild sonst 1700 mal neu an.
 export const revalidate = 31536000
 
+/**
+ * Obergrenze für das entfernt geladene Bild.
+ *
+ * Ohne sie bestimmt die Gegenstelle, wie viel Speicher die Function belegt:
+ * arrayBuffer() liest, was kommt, notfalls gigabyteweise.
+ */
+const MAX_REMOTE_BYTES = 15 * 1024 * 1024
+
 async function loadSource(src: string): Promise<Buffer | null> {
   if (src.startsWith('http://') || src.startsWith('https://')) {
     // Allowlist liegt als reine, getestete Funktion in email-image.ts.
     if (!isAllowedImageUrl(src)) return null
 
-    const response = await fetch(src, { signal: AbortSignal.timeout(8000) })
+    const response = await fetch(src, {
+      signal: AbortSignal.timeout(8000),
+      // Weiterleitungen NICHT folgen.
+      //
+      // Sonst hebelt die Gegenstelle die Allowlist aus: Eine erlaubte
+      // Storage-URL antwortet mit 302 auf http://169.254.169.254/ (die
+      // Metadaten-Adresse der Cloud) oder auf eine interne Adresse, und der
+      // Server holt das brav ab. Die Allowlist prüft nur die erste URL.
+      redirect: 'manual',
+    })
     if (!response.ok) return null
-    return Buffer.from(await response.arrayBuffer())
+
+    // Erst der angekündigten Länge glauben, dann der tatsächlichen.
+    // Ein Content-Length-Header ist optional und kann lügen.
+    const announced = Number(response.headers.get('content-length'))
+    if (Number.isFinite(announced) && announced > MAX_REMOTE_BYTES) return null
+
+    const buffer = Buffer.from(await response.arrayBuffer())
+    if (buffer.byteLength > MAX_REMOTE_BYTES) return null
+
+    return buffer
   }
 
   // Lokaler Pfad unterhalb von /public. path.normalize plus Präfixprüfung

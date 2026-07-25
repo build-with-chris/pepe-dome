@@ -98,63 +98,77 @@ describe('Rate Limiting', () => {
     })
   })
 
+  /**
+   * Woher die Kennung für das Rate-Limit stammt
+   *
+   * Vorher wurde der ERSTE Eintrag aus x-forwarded-for genommen. Der Header ist
+   * eine Kette 'client, proxy1, proxy2', bei der jeder Proxy hinten anhängt —
+   * was vorne steht, hat der Aufrufer selbst geschickt. Ein Angreifer setzte
+   * also pro Request ein anderes X-Forwarded-For, bekam jedes Mal einen frischen
+   * Zähler und das Limit griff nie. Diese Tests halten die neue Reihenfolge fest.
+   */
   describe('getClientIdentifier', () => {
-    it('should return x-forwarded-for header first IP', () => {
+    it('nimmt x-vercel-forwarded-for zuerst — die einzige Quelle, die der Aufrufer nicht setzen kann', () => {
       const request = new Request('http://localhost', {
-        headers: { 'x-forwarded-for': '192.168.1.1, 10.0.0.1' },
+        headers: {
+          'x-vercel-forwarded-for': '203.0.113.9',
+          'x-forwarded-for': 'erfunden.vom.angreifer, 203.0.113.9',
+          'x-real-ip': '10.0.0.5',
+        },
       })
-      expect(getClientIdentifier(request)).toBe('192.168.1.1')
+      expect(getClientIdentifier(request)).toBe('203.0.113.9')
     })
 
-    it('should return x-real-ip when no forwarded-for', () => {
+    it('nimmt x-real-ip, wenn Vercel-Header fehlt', () => {
       const request = new Request('http://localhost', {
         headers: { 'x-real-ip': '10.0.0.5' },
       })
       expect(getClientIdentifier(request)).toBe('10.0.0.5')
     })
 
-    it('should prefer x-forwarded-for over x-real-ip', () => {
+    it('nimmt aus x-forwarded-for den LETZTEN Eintrag, nicht den ersten', () => {
       const request = new Request('http://localhost', {
-        headers: {
-          'x-forwarded-for': '192.168.1.1',
-          'x-real-ip': '10.0.0.5',
-        },
+        headers: { 'x-forwarded-for': '192.168.1.1, 10.0.0.1' },
       })
-      expect(getClientIdentifier(request)).toBe('192.168.1.1')
+      // 10.0.0.1 hat der vertrauenswürdige Proxy angehängt
+      expect(getClientIdentifier(request)).toBe('10.0.0.1')
     })
 
-    it('should fallback to user-agent + accept-language', () => {
-      const request = new Request('http://localhost', {
-        headers: {
-          'user-agent': 'Mozilla/5.0',
-          'accept-language': 'en-US',
-        },
-      })
-      expect(getClientIdentifier(request)).toBe('Mozilla/5.0-en-US')
+    it('lässt sich nicht durch einen selbst gesetzten Vorspann austricksen', () => {
+      const echteIp = '198.51.100.7'
+      const kennungen = new Set<string>()
+
+      // Der Angreifer variiert bei jedem Request den vorderen Teil
+      for (const erfunden of ['1.1.1.1', '2.2.2.2', '3.3.3.3', 'nicht-mal-eine-ip']) {
+        const request = new Request('http://localhost', {
+          headers: { 'x-forwarded-for': `${erfunden}, ${echteIp}` },
+        })
+        kennungen.add(getClientIdentifier(request))
+      }
+
+      // Trotzdem landet alles im selben Eimer — sonst wäre das Limit wirkungslos
+      expect(kennungen.size).toBe(1)
+      expect([...kennungen][0]).toBe(echteIp)
     })
 
-    it('should handle missing all headers', () => {
-      const request = new Request('http://localhost')
-      const identifier = getClientIdentifier(request)
-      expect(identifier).toBe('-')
+    it('entfernt Leerraum um die Adresse', () => {
+      const request = new Request('http://localhost', {
+        headers: { 'x-forwarded-for': '  192.168.1.1  ,   10.0.0.1  ' },
+      })
+      expect(getClientIdentifier(request)).toBe('10.0.0.1')
     })
 
-    it('should truncate fallback identifier to 100 chars', () => {
+    it('nutzt ohne verlässliche Quelle einen festen Eimer statt User-Agent', () => {
+      // User-Agent und Sprache kommen auch vom Aufrufer. Würden sie als Kennung
+      // dienen, ergäbe jede Variation einen neuen Zähler.
       const request = new Request('http://localhost', {
-        headers: {
-          'user-agent': 'a'.repeat(100),
-          'accept-language': 'b'.repeat(50),
-        },
+        headers: { 'user-agent': 'Mozilla/5.0', 'accept-language': 'en-US' },
       })
-      const identifier = getClientIdentifier(request)
-      expect(identifier.length).toBeLessThanOrEqual(100)
+      expect(getClientIdentifier(request)).toBe('unknown-client')
     })
 
-    it('should trim whitespace from forwarded-for IP', () => {
-      const request = new Request('http://localhost', {
-        headers: { 'x-forwarded-for': '  192.168.1.1  , 10.0.0.1' },
-      })
-      expect(getClientIdentifier(request)).toBe('192.168.1.1')
+    it('kommt ganz ohne Header zurecht', () => {
+      expect(getClientIdentifier(new Request('http://localhost'))).toBe('unknown-client')
     })
   })
 })

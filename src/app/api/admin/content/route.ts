@@ -8,8 +8,13 @@ import { contentFilterSchema } from '@/lib/validation'
 import { successResponse, errorResponse, validationErrorResponse } from '@/lib/api-response'
 import { prisma } from '@/lib/prisma'
 import { EventCategory, Prisma } from '@prisma/client'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 export async function GET(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 

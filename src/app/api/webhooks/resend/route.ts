@@ -61,9 +61,26 @@ interface ResendWebhookPayload {
 function verifyWebhookSignature(request: NextRequest, rawBody: string): boolean {
   const secret = process.env.RESEND_WEBHOOK_SECRET
 
-  // Ohne Secret: Verifizierung überspringen (nur Dev/lokal)
+  // Ohne Secret: nur lokal durchwinken, in Produktion abweisen.
+  //
+  // Vorher galt das Durchwinken überall. Fehlt die Variable in Vercel — sei es
+  // durch einen Tippfehler, ein neues Preview-Deployment oder eine gelöschte
+  // Einstellung —, akzeptiert der Endpunkt unsignierte Requests von jedem.
+  // Wer das ausnutzt, meldet fremde Adressen als "bounced" oder "complained"
+  // und löscht sie damit still aus dem Verteiler.
+  //
+  // Fail-open ist bei einem Sicherheitscheck die falsche Richtung: Ein
+  // Konfigurationsfehler soll auffallen, nicht die Prüfung abschalten.
   if (!secret) {
-    console.warn('RESEND_WEBHOOK_SECRET not configured - skipping signature verification')
+    if (process.env.NODE_ENV === 'production') {
+      console.error(
+        '[resend-webhook] RESEND_WEBHOOK_SECRET fehlt — Request abgewiesen. ' +
+          'Ohne Secret ist keine Prüfung möglich und der Endpunkt stünde jedem offen.'
+      )
+      return false
+    }
+
+    console.warn('RESEND_WEBHOOK_SECRET not configured - skipping signature verification (nur lokal)')
     return true
   }
 

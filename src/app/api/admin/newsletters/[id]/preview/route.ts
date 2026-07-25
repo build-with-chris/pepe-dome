@@ -13,12 +13,17 @@ export const dynamic = 'force-dynamic'
 import { errorResponse } from '@/lib/api-response'
 import { getNewsletterViewModel } from '@/lib/newsletter-content'
 import { renderEmailToHtml } from '@/lib/email-renderer'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 interface RouteParams {
   params: Promise<{ id: string }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
+  const guard = await requireApiRole(ROLES.VIEWER)
+  if (guard.response) return guard.response
+
   try {
     const { id } = await params
 

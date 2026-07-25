@@ -12,11 +12,16 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '@/lib/api-response'
-import { generateOptInToken } from '@/lib/subscribers'
+import { generateOptInToken, generateUnsubscribeToken } from '@/lib/subscribers'
 import { sendConfirmationEmail } from '@/lib/email-send'
 import { getBaseUrlFromRequest } from '@/lib/resend'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 export async function GET(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
     // For now, this endpoint is unprotected
@@ -92,6 +97,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     const body = await request.json()
     const validation = adminCreateSubscriberSchema.safeParse(body)
@@ -124,11 +132,17 @@ export async function POST(request: NextRequest) {
       confirmedAt?: Date
       doubleOptInToken?: string
       doubleOptInSentAt?: Date
+      unsubscribeToken: string
     } = {
       email,
       firstName: firstName || undefined,
       interests: interests || [],
       status: skipConfirmation ? 'ACTIVE' : 'PENDING',
+      // Pflichtfeld ohne Datenbank-Default. Ohne diese Zeile wirft Prisma
+      // "Argument unsubscribeToken is missing" und das Anlegen über das Panel
+      // schlägt fehl. Jeder neue Abonnent braucht sein eigenes Abmelde-Token,
+      // egal über welchen Weg er entsteht.
+      unsubscribeToken: generateUnsubscribeToken(),
     }
 
     if (skipConfirmation && status === 'ACTIVE') {

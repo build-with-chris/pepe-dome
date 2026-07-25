@@ -142,51 +142,83 @@ describe('Subscriber Management', () => {
     })
   })
 
+  /**
+   * Abmeldung ausschliesslich ueber das persoenliche Token.
+   *
+   * Vorher suchte unsubscribeSubscriber per OR: [{ email }, { id }]. Beides ist
+   * kein Geheimnis — mit einer Adressliste liess sich der komplette Verteiler
+   * leeren, und die Betroffenen konnten sich nicht einmal neu anmelden.
+   */
   describe('unsubscribeSubscriber', () => {
-    it('should unsubscribe by email', async () => {
+    it('meldet ueber das Token ab', async () => {
+      const subscriber = await prisma.subscriber.create({
+        data: {
+          email: 'unsub-token@example.com',
+          status: SubscriberStatus.ACTIVE,
+          confirmedAt: new Date(),
+          unsubscribeToken: 'tok-' + 'a'.repeat(60),
+        },
+      })
+
+      const result = await unsubscribeSubscriber(subscriber.unsubscribeToken)
+      expect(result.status).toBe(SubscriberStatus.UNSUBSCRIBED)
+      expect(result.unsubscribedAt).toBeDefined()
+    })
+
+    it('meldet NICHT ueber die E-Mail-Adresse ab', async () => {
       await prisma.subscriber.create({
         data: {
           email: 'unsub-email@example.com',
           status: SubscriberStatus.ACTIVE,
           confirmedAt: new Date(),
+          unsubscribeToken: 'tok-' + 'b'.repeat(60),
         },
       })
 
-      const result = await unsubscribeSubscriber('unsub-email@example.com')
-      expect(result.status).toBe(SubscriberStatus.UNSUBSCRIBED)
-      expect(result.unsubscribedAt).toBeDefined()
+      await expect(
+        unsubscribeSubscriber('unsub-email@example.com')
+      ).rejects.toThrow('Subscriber not found')
+
+      // Und die Person ist wirklich noch aktiv
+      const unveraendert = await prisma.subscriber.findUnique({
+        where: { email: 'unsub-email@example.com' },
+      })
+      expect(unveraendert?.status).toBe(SubscriberStatus.ACTIVE)
     })
 
-    it('should unsubscribe by ID', async () => {
+    it('meldet NICHT ueber die Subscriber-ID ab', async () => {
       const subscriber = await prisma.subscriber.create({
         data: {
           email: 'unsub-id@example.com',
           status: SubscriberStatus.ACTIVE,
           confirmedAt: new Date(),
+          unsubscribeToken: 'tok-' + 'c'.repeat(60),
         },
       })
 
-      const result = await unsubscribeSubscriber(subscriber.id)
-      expect(result.status).toBe(SubscriberStatus.UNSUBSCRIBED)
+      await expect(unsubscribeSubscriber(subscriber.id)).rejects.toThrow('Subscriber not found')
     })
 
-    it('should return already unsubscribed subscriber', async () => {
-      await prisma.subscriber.create({
+    it('gibt einen bereits Abgemeldeten unveraendert zurueck', async () => {
+      const subscriber = await prisma.subscriber.create({
         data: {
           email: 'already-unsub@example.com',
           status: SubscriberStatus.UNSUBSCRIBED,
           unsubscribedAt: new Date(),
+          unsubscribeToken: 'tok-' + 'd'.repeat(60),
         },
       })
 
-      const result = await unsubscribeSubscriber('already-unsub@example.com')
+      const result = await unsubscribeSubscriber(subscriber.unsubscribeToken)
       expect(result.status).toBe(SubscriberStatus.UNSUBSCRIBED)
     })
 
-    it('should throw error for non-existent subscriber', async () => {
-      await expect(
-        unsubscribeSubscriber('nonexistent@example.com')
-      ).rejects.toThrow('Subscriber not found')
+    it('wirft bei unbekanntem Token', async () => {
+      await expect(unsubscribeSubscriber('gibt-es-nicht')).rejects.toThrow('Subscriber not found')
+    })
+
+    it('wirft bei leerem Token', async () => {
+      await expect(unsubscribeSubscriber('')).rejects.toThrow('Missing unsubscribe token')
     })
   })
 

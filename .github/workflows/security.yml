@@ -1,0 +1,72 @@
+# Wöchentliche Sicherheitsprüfung
+#
+# Zwei getrennte Aufgaben:
+#   audit    schaut nach bekannten Schwachstellen in den Abhängigkeiten
+#   codeql   sucht Schwachstellen im eigenen Code (Injection, XSS, offene Pfade)
+#
+# Der Zeitplan ist der eigentliche Punkt. Ein Audit, das nur läuft, wenn jemand
+# daran denkt, läuft nicht. Beim ersten Audit dieses Projekts lagen 29 offene
+# Schwachstellen bereit, sechs davon kritisch — keine davon hatte jemand
+# absichtlich übersehen, es hatte nur nie jemand nachgesehen.
+
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Montags 05:30 UTC. Der Bericht liegt vor dem Wochenanfang bereit.
+    - cron: "30 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Schwachstellen in Produktions-Abhängigkeiten
+        # Nur --omit=dev: Lücken in Lint- und Testwerkzeugen laufen nie auf dem
+        # Server und sollen den Build nicht rot färben. Sie tauchen im Bericht
+        # des nächsten Schritts trotzdem auf.
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Vollständiger Bericht (nur zur Ansicht)
+        if: always()
+        run: npm audit || true
+
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # security-and-quality findet mehr als der Standard, dafür auch
+          # Stilfragen. Für ein Projekt dieser Grösse gut auszuhalten.
+          queries: security-and-quality
+
+      - uses: github/codeql-action/analyze@v3

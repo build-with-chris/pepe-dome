@@ -8,6 +8,8 @@ import { formatDate, getCategoryClasses } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 import EventCard from './EventCard'
+import TicketLink from './TicketLink'
+import EventViewTracker from './EventViewTracker'
 import { MarkdownText } from '@/components/ui/MarkdownText'
 import SignupForm from '@/components/newsletter/SignupForm'
 
@@ -41,6 +43,9 @@ export default function EventDetail({ event }: EventDetailProps) {
 
   return (
     <div className="section">
+      {/* Baut die Retargeting-Zielgruppe auf, siehe src/lib/tracking.ts */}
+      <EventViewTracker title={event.title} slug={event.slug} category={event.category} />
+
       <div className="stage-container">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm text-pepe-t64 mb-8">
@@ -156,24 +161,15 @@ export default function EventDetail({ event }: EventDetailProps) {
                 </div>
               </div>
 
-              {event.ticketUrl ? (() => {
-                const isEmail = event.ticketUrl.includes('@') && !event.ticketUrl.startsWith('http');
-                const href = isEmail && !event.ticketUrl.startsWith('mailto:') 
-                  ? `mailto:${event.ticketUrl}` 
-                  : event.ticketUrl;
-                const buttonText = isEmail ? 'Anmelden via Mail' : 'Tickets kaufen';
-
-                return (
-                  <a
-                    href={href}
-                    target={isEmail ? undefined : "_blank"}
-                    rel={isEmail ? undefined : "noopener noreferrer"}
-                    className="btn btn-primary w-full text-center"
-                  >
-                    {buttonText}
-                  </a>
-                );
-              })() : (
+              {event.ticketUrl ? (
+                <TicketLink
+                  ticketUrl={event.ticketUrl}
+                  eventTitle={event.title}
+                  eventSlug={event.slug}
+                  price={event.price}
+                  className="btn btn-primary w-full text-center"
+                />
+              ) : (
                 <Button variant="secondary" className="w-full" disabled>
                   {event.price === 'Eintritt frei' ? 'Eintritt frei' : 'Auf Anfrage'}
                 </Button>

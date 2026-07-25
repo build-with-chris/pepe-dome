@@ -1,95 +1,92 @@
 /**
- * Subscriber unsubscribe endpoint
- * POST /api/subscribers/unsubscribe
+ * Abmeldung vom Newsletter
+ *
+ * POST /api/subscribers/unsubscribe?token=...
+ *
+ * Zwei Dinge waren hier vorher falsch:
+ *
+ * 1. Es genügte `?email=fremde@adresse.de`, um eine beliebige Person
+ *    auszutragen. Ohne Token, ohne Login, ohne Rate-Limit. Mit einer
+ *    Adressliste ließ sich der gesamte Verteiler leeren, und die Betroffenen
+ *    konnten sich nicht einmal neu anmelden, weil abgemeldete Adressen
+ *    abgewiesen werden.
+ *
+ * 2. GET hat den Status verändert. Mailprogramme, Virenscanner und
+ *    Link-Vorschauen rufen Links in Mails ungefragt auf — das allein meldet
+ *    Leute ab, die nie geklickt haben.
+ *
+ * Jetzt: GET verändert nichts und leitet auf die Bestätigungsseite. Die
+ * Änderung passiert nur per POST mit dem Token aus der jeweiligen Mail.
+ * Das POST erfüllt zugleich RFC 8058 (List-Unsubscribe-Post: One-Click),
+ * damit Gmail und Outlook ihren eigenen Abmelde-Knopf anbieten können.
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { unsubscribeSubscriber } from '@/lib/subscribers'
-import { subscriberUnsubscribeSchema } from '@/lib/validation'
-import { errorResponse, validationErrorResponse } from '@/lib/api-response'
+import { EMAIL_CONFIG } from '@/lib/resend'
 
-export async function POST(request: NextRequest) {
+/** Token aus Query oder JSON-Body lesen. Provider schicken es als Query mit. */
+async function readToken(request: NextRequest): Promise<string | null> {
+  const fromQuery = request.nextUrl.searchParams.get('token')
+  if (fromQuery) return fromQuery
+
   try {
-    // Parse request body
     const body = await request.json()
-    const validation = subscriberUnsubscribeSchema.safeParse(body)
-
-    if (!validation.success) {
-      return validationErrorResponse(validation.error)
-    }
-
-    const { email, id } = validation.data
-
-    // Unsubscribe by email or ID
-    const subscriber = await unsubscribeSubscriber(email || id!)
-
-    console.log('Subscriber unsubscribed:', subscriber.email)
-
-    // Redirect to unsubscribed confirmation page
-    const redirectUrl = new URL(
-      '/newsletter/unsubscribed',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    )
-    redirectUrl.searchParams.set('success', 'true')
-
-    return Response.redirect(redirectUrl.toString(), 302)
-  } catch (error: unknown) {
-    console.error('Unsubscribe error:', error)
-
-    // Redirect to error page
-    const redirectUrl = new URL(
-      '/newsletter/unsubscribed',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    )
-    redirectUrl.searchParams.set('success', 'false')
-    redirectUrl.searchParams.set(
-      'error',
-      error instanceof Error ? error.message : 'Failed to unsubscribe'
-    )
-
-    return Response.redirect(redirectUrl.toString(), 302)
+    const token = body?.token
+    return typeof token === 'string' && token ? token : null
+  } catch {
+    return null
   }
 }
 
-// Also support GET for one-click unsubscribe links
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams
-    const email = searchParams.get('email')
-    const id = searchParams.get('id')
+export async function POST(request: NextRequest) {
+  const token = await readToken(request)
 
-    const validation = subscriberUnsubscribeSchema.safeParse({ email, id })
-
-    if (!validation.success) {
-      throw new Error('Invalid unsubscribe parameters')
-    }
-
-    const subscriber = await unsubscribeSubscriber(email || id!)
-
-    console.log('Subscriber unsubscribed:', subscriber.email)
-
-    // Redirect to unsubscribed confirmation page
-    const redirectUrl = new URL(
-      '/newsletter/unsubscribed',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+  if (!token) {
+    return NextResponse.json(
+      { error: 'Bad Request', message: 'Abmelde-Token fehlt.' },
+      { status: 400 }
     )
-    redirectUrl.searchParams.set('success', 'true')
-
-    return Response.redirect(redirectUrl.toString(), 302)
-  } catch (error: unknown) {
-    console.error('Unsubscribe error:', error)
-
-    // Redirect to error page
-    const redirectUrl = new URL(
-      '/newsletter/unsubscribed',
-      process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    )
-    redirectUrl.searchParams.set('success', 'false')
-    redirectUrl.searchParams.set(
-      'error',
-      error instanceof Error ? error.message : 'Failed to unsubscribe'
-    )
-
-    return Response.redirect(redirectUrl.toString(), 302)
   }
+
+  let unsubscribed = false
+
+  try {
+    await unsubscribeSubscriber(token)
+    unsubscribed = true
+  } catch (error) {
+    console.error('[UNSUBSCRIBE] fehlgeschlagen:', error)
+  }
+
+  /**
+   * Immer HTTP 200, aber der tatsächliche Ausgang steht im Body.
+   *
+   * Der Statuscode darf nicht abweichen: Für den Mailprovider ist 200 bei
+   * One-Click die einzige erwartete Antwort — ein Fehlerstatus brächte Gmail
+   * dazu, den Abmelde-Knopf künftig auszublenden. Und ein abweichender Status
+   * würde verraten, ob ein Token gültig ist.
+   *
+   * Das Feld `unsubscribed` sagt der Bestätigungsseite trotzdem die Wahrheit.
+   * Ohne diese Trennung meldete die Seite auch dann Erfolg, wenn gar nichts
+   * passiert ist — jemand mit einem alten Link hätte sich für abgemeldet
+   * gehalten und weiter Post bekommen.
+   */
+  return NextResponse.json({ success: true, unsubscribed })
+}
+
+/**
+ * GET verändert nichts.
+ *
+ * Der Link in der Mail zeigt auf die Seite /newsletter/unsubscribe/<token>,
+ * die eine Rückfrage anzeigt. Wer hier direkt landet, wird dorthin geschickt.
+ */
+export async function GET(request: NextRequest) {
+  const token = request.nextUrl.searchParams.get('token')
+  const base = EMAIL_CONFIG.BASE_URL
+
+  if (token) {
+    return NextResponse.redirect(new URL(`/newsletter/unsubscribe/${token}`, base), 302)
+  }
+
+  return NextResponse.redirect(new URL('/newsletter/unsubscribed?success=false', base), 302)
 }

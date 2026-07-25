@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Outfit, Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-import Script from 'next/script'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import I18nProvider from '@/components/layout/I18nProvider'
+import ConsentBanner from '@/components/consent/ConsentBanner'
+import ConsentScripts from '@/components/consent/ConsentScripts'
 import { getSiteContent } from '@/lib/data'
 import { OrganizationJsonLd } from '@/components/seo/JsonLd'
 
@@ -89,20 +90,6 @@ function LayoutContent({
 }>) {
   return (
     <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-CGE01LR2LC"
-          strategy="lazyOnload"
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-CGE01LR2LC');
-            `}
-        </Script>
-      </head>
       <body className="antialiased">
         <OrganizationJsonLd />
         <I18nProvider>
@@ -110,6 +97,9 @@ function LayoutContent({
             {children}
           </ConditionalLayout>
         </I18nProvider>
+        {/* Analytics und Pixel laden erst nach Einwilligung, siehe src/lib/consent.ts */}
+        <ConsentScripts />
+        <ConsentBanner />
       </body>
     </html>
   )

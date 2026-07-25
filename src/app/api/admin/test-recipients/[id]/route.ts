@@ -13,6 +13,8 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '@/lib/api-response'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -28,6 +30,9 @@ export async function GET(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
+
   try {
     const { id } = await params
 
@@ -54,6 +59,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     const { id } = await params
     const body = await request.json()
@@ -106,6 +114,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     const { id } = await params
 

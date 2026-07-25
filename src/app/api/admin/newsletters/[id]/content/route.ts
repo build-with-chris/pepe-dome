@@ -12,6 +12,9 @@ import {
 } from '@/lib/api-response'
 import { addNewsletterContent, replaceNewsletterContent } from '@/lib/newsletters'
 import { addContentSchema, reorderContentSchema } from '@/lib/validation'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
+import { guardNewsletterMutation } from '@/lib/newsletter-guard'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -21,10 +24,17 @@ export async function POST(
   request: NextRequest,
   { params }: RouteParams
 ) {
-  try {
-    // TODO: Add authentication check (Phase 5)
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
 
+  try {
     const { id: newsletterId } = await params
+
+    // Terminierte und laufende Ausgaben sind fuer Editoren gesperrt: Sonst
+    // koennte ein Editor den Text einer geplanten Ausgabe umschreiben und den
+    // Cron damit den neuen Inhalt an alle Abonnenten schicken lassen.
+    const locked = await guardNewsletterMutation(newsletterId, guard.role)
+    if (locked) return locked
     const body = await request.json()
 
     // Validate request body
@@ -52,10 +62,17 @@ export async function PUT(
   request: NextRequest,
   { params }: RouteParams
 ) {
-  try {
-    // TODO: Add authentication check (Phase 5)
+  const guard = await requireApiRole(ROLES.EDITOR)
+  if (guard.response) return guard.response
 
+  try {
     const { id: newsletterId } = await params
+
+    // Terminierte und laufende Ausgaben sind fuer Editoren gesperrt: Sonst
+    // koennte ein Editor den Text einer geplanten Ausgabe umschreiben und den
+    // Cron damit den neuen Inhalt an alle Abonnenten schicken lassen.
+    const locked = await guardNewsletterMutation(newsletterId, guard.role)
+    if (locked) return locked
     const body = await request.json()
 
     // Validate request body

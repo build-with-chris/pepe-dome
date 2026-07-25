@@ -80,34 +80,38 @@ describe('Validation Schemas', () => {
     })
   })
 
+  /**
+   * Abmeldung nur noch per Token.
+   *
+   * Vorher liess das Schema `email` und `id` zu. Eine fremde Adresse genügte
+   * damit, um jemanden auszutragen — mit einer Adressliste war der ganze
+   * Verteiler leerräumbar. Die Tests halten fest, dass beides nicht mehr greift.
+   */
   describe('subscriberUnsubscribeSchema', () => {
-    it('should accept valid email', () => {
-      const result = subscriberUnsubscribeSchema.safeParse({ email: 'test@example.com' })
+    it('akzeptiert ein Token', () => {
+      const result = subscriberUnsubscribeSchema.safeParse({ token: 'a'.repeat(64) })
       expect(result.success).toBe(true)
     })
 
-    it('should accept valid UUID id', () => {
+    it('lehnt eine reine E-Mail-Adresse ab', () => {
+      const result = subscriberUnsubscribeSchema.safeParse({ email: 'opfer@example.com' })
+      expect(result.success).toBe(false)
+    })
+
+    it('lehnt eine reine Subscriber-ID ab', () => {
       const result = subscriberUnsubscribeSchema.safeParse({
         id: '550e8400-e29b-41d4-a716-446655440000',
       })
-      expect(result.success).toBe(true)
+      expect(result.success).toBe(false)
     })
 
-    it('should reject when neither email nor id provided', () => {
+    it('lehnt einen leeren Body ab', () => {
       const result = subscriberUnsubscribeSchema.safeParse({})
       expect(result.success).toBe(false)
     })
 
-    it('should accept both email and id', () => {
-      const result = subscriberUnsubscribeSchema.safeParse({
-        email: 'test@example.com',
-        id: '550e8400-e29b-41d4-a716-446655440000',
-      })
-      expect(result.success).toBe(true)
-    })
-
-    it('should reject invalid UUID format', () => {
-      const result = subscriberUnsubscribeSchema.safeParse({ id: 'not-a-uuid' })
+    it('lehnt ein leeres Token ab', () => {
+      const result = subscriberUnsubscribeSchema.safeParse({ token: '' })
       expect(result.success).toBe(false)
     })
   })

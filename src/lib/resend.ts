@@ -48,12 +48,19 @@ export const EMAIL_CONFIG = {
 
 /**
  * Generate URLs for email links.
- * @param subscriberId - Subscriber ID
+ *
+ * @param unsubscribeToken - Dauerhaftes Abmelde-Token des Abonnenten
  * @param token - Double opt-in token (for confirm link)
  * @param baseUrlOverride - Optional base URL (z. B. aus Request); überschreibt Env, damit Bestätigungsmail immer die richtige Domain nutzt
+ *
+ * Der Abmeldelink zeigte früher auf /newsletter/unsubscribe/<subscriberId>.
+ * Diese Route existierte nie — jeder Abmeldelink in jeder versendeten Mail lief
+ * in einen 404, es gab also faktisch keinen funktionierenden Opt-out. Und die
+ * Subscriber-ID war kein Geheimnis, sie taucht in Admin-Ansichten und Exporten
+ * auf. Jetzt: eigene Seite plus eigenes Token.
  */
 export function generateEmailUrls(
-  subscriberId: string,
+  unsubscribeToken: string,
   token?: string,
   baseUrlOverride?: string
 ) {
@@ -61,9 +68,16 @@ export function generateEmailUrls(
 
   return {
     confirm: `${base}/newsletter/confirm?token=${token || 'MISSING_TOKEN'}`,
-    unsubscribe: `${base}/newsletter/unsubscribe/${subscriberId}`,
+    /** Für Menschen: Seite mit Rückfrage */
+    unsubscribe: `${base}/newsletter/unsubscribe/${unsubscribeToken}`,
+    /**
+     * Für den List-Unsubscribe-Header: Endpunkt, auf den Gmail und Outlook
+     * direkt ein POST schicken (RFC 8058). Muss ohne weitere Interaktion
+     * abmelden, deshalb nicht die Seite mit der Rückfrage.
+     */
+    unsubscribeOneClick: `${base}/api/subscribers/unsubscribe?token=${unsubscribeToken}`,
     webView: (newsletterId: string) => `${base}/newsletter/${newsletterId}`,
-    privacy: `${base}/privacy`,
+    privacy: `${base}/datenschutz`,
     home: base,
   }
 }

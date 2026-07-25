@@ -1,22 +1,29 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
-import { useUser, UserButton } from '@clerk/nextjs'
+import { UserButton } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { getRoleFromMetadata, getRoleDisplayName, ROLES, type UserRole } from '@/lib/roles'
+import { getRoleDisplayName, ROLES, type UserRole } from '@/lib/roles'
 
 /**
- * Admin Layout
+ * Admin Shell — Sidebar, Topbar und Content-Bereich des Panels.
  *
  * Uses flexbox for sidebar + content layout
  * Sidebar: 240px fixed, Content: flexible
+ *
+ * Rolle und Name kommen als Props vom Server-Layout, nicht aus useUser().
+ * Damit steht die Navigation sofort richtig da (kein Aufblitzen von Menüs,
+ * die der User gar nicht öffnen darf) und die Rolle stammt aus derselben
+ * Quelle, die auch das Gate ausgewertet hat.
  */
 
-interface AdminLayoutProps {
+interface AdminShellProps {
   children: ReactNode
+  role: UserRole
+  userName: string
 }
 
 interface NavItem {
@@ -85,21 +92,13 @@ const navItems: NavItem[] = [
   },
 ]
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminShell({ children, role, userName }: AdminShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, isLoaded } = useUser()
   const pathname = usePathname()
-
-  // Don't show admin layout for auth pages
-  if (pathname.includes('/sign-in') || pathname.includes('/sign-up')) {
-    return <>{children}</>
-  }
-
-  const userRole = getRoleFromMetadata(user?.publicMetadata as Record<string, unknown> | undefined)
 
   const filteredNavItems = navItems.filter((item) => {
     if (!item.roles) return true
-    return item.roles.includes(userRole)
+    return item.roles.includes(role)
   })
 
   const isActive = (href: string) => {
@@ -170,22 +169,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </nav>
 
         {/* User Section */}
-        {isLoaded && user && (
-          <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors">
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{ elements: { avatarBox: 'w-8 h-8' } }}
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-medium text-white/90 truncate">
-                  {user.firstName || user.emailAddresses[0]?.emailAddress?.split('@')[0]}
-                </p>
-                <p className="text-[11px] text-white/40">{getRoleDisplayName(userRole)}</p>
-              </div>
+        <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors">
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{ elements: { avatarBox: 'w-8 h-8' } }}
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-medium text-white/90 truncate">{userName}</p>
+              <p className="text-[11px] text-white/40">{getRoleDisplayName(role)}</p>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Back to Website */}
         <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
@@ -218,17 +213,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="flex-1" />
 
           {/* Desktop User */}
-          {isLoaded && user && (
-            <div className="hidden lg:flex items-center gap-3">
-              <span className="text-[13px] text-white/50">
-                {user.firstName || user.emailAddresses[0]?.emailAddress?.split('@')[0]}
-              </span>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{ elements: { avatarBox: 'w-7 h-7' } }}
-              />
-            </div>
-          )}
+          <div className="hidden lg:flex items-center gap-3">
+            <span className="text-[13px] text-white/50">{userName}</span>
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{ elements: { avatarBox: 'w-7 h-7' } }}
+            />
+          </div>
         </header>
 
         {/* Page Content */}

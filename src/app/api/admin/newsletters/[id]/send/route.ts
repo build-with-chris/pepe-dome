@@ -10,6 +10,8 @@ import {
 } from '@/lib/api-response'
 import { getNewsletterWithContent } from '@/lib/newsletters'
 import { sendNewsletter } from '@/lib/email-send'
+import { requireApiRole } from '@/lib/roles.server'
+import { ROLES } from '@/lib/roles'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -19,6 +21,9 @@ export async function POST(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  const guard = await requireApiRole(ROLES.SUPER_ADMIN)
+  if (guard.response) return guard.response
+
   try {
     // TODO: Add authentication check (Phase 5)
 

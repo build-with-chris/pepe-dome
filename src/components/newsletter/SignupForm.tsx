@@ -9,6 +9,7 @@
 import { useState, FormEvent, useEffect } from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
+import { trackLead } from '@/lib/tracking'
 
 interface SignupFormProps {
   /** Form variant - simple (email only) or extended (with name and interests) */
@@ -99,6 +100,15 @@ export default function SignupForm({
       if (!response.ok) {
         throw new Error(result.error?.message || 'Ein Fehler ist aufgetreten.')
       }
+
+      // Conversion melden, bevor die Felder geleert werden.
+      // Das ist der rohe Lead. Bestätigt wird er erst mit dem Double Opt-in,
+      // dort feuert CompleteRegistration.
+      trackLead({
+        leadType: 'newsletter',
+        email,
+        source: variant === 'extended' ? 'newsletter-page' : 'inline-form',
+      })
 
       // Success
       setStatus('success')
