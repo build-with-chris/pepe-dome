@@ -7,7 +7,7 @@
     },
     {
       "path": "/api/cron/send-scheduled-newsletters",
-      "schedule": "0 * * * *"
+      "schedule": "0 7 * * *"
     }
   ]
 }
