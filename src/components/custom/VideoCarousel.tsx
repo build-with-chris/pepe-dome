@@ -143,7 +143,9 @@ export default function VideoCarousel({
     </svg>
   )
 
-  const controlBtnClass = "flex h-10 w-10 items-center justify-center rounded-full bg-[var(--pepe-black)]/60 text-[var(--pepe-white)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:text-[var(--pepe-gold)]"
+  // h-11 = 44px, die kleinste zuverlässig treffbare Fläche. Ton- und
+  // Vollbildknopf lagen mit 40px knapp darunter.
+  const controlBtnClass = "flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-black)]/60 text-[var(--pepe-white)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:text-[var(--pepe-accent-text)]"
 
   const CloseIcon = () => (
     <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -217,9 +219,19 @@ export default function VideoCarousel({
               </div>
 
               {/* Videoauswahl über dem unteren Bereich des Videos */}
+              {/* Unter jedem Thumbnail stand vorher der Videotitel in 9px, auf
+                  70px abgeschnitten. In der Größe war er nicht lesbar und durch
+                  die Kürzung ohnehin unvollständig ("TwoGether - lokale Künst…").
+                  Jetzt steht nur noch der Titel des laufenden Videos da, dafür
+                  in normaler Schriftgröße. Die übrigen Titel gehen nicht
+                  verloren: sie sitzen als aria-label am jeweiligen Knopf, sind
+                  also für Screenreader und als Tooltip verfügbar. */}
               <div className="absolute bottom-0 left-0 right-0 z-10 pt-8 pb-3 px-2 bg-gradient-to-t from-[var(--pepe-black)]/95 via-[var(--pepe-black)]/70 to-transparent rounded-b-2xl">
-                <p className="text-center text-xs font-medium text-[var(--pepe-t64)] mb-2">
-                  Weitere Videos
+                <p
+                  className="text-center text-sm font-semibold text-[var(--pepe-white)] mb-2 px-4 truncate"
+                  aria-live="polite"
+                >
+                  {videos[activeIndex]?.title}
                 </p>
                 <div className="flex justify-center gap-2 overflow-x-auto">
                   {videos.map((video, index) => (
@@ -227,15 +239,21 @@ export default function VideoCarousel({
                       key={index}
                       type="button"
                       onClick={() => goToVideo(index)}
-                      className={`relative flex shrink-0 flex-col items-center rounded-xl overflow-hidden border-2 transition-all ${
+                      // Titel + Position als Beschriftung, weil sichtbar nur
+                      // noch das Bild steht
+                      aria-label={`Video ${index + 1} von ${videos.length}: ${video.title}`}
+                      aria-current={index === activeIndex ? 'true' : undefined}
+                      title={video.title}
+                      className={`relative flex shrink-0 items-center justify-center rounded-xl overflow-hidden border-2 transition-all ${
                         index === activeIndex
                           ? 'border-[var(--pepe-gold)] ring-2 ring-[var(--pepe-gold)]/30'
-                          : 'border-white/30 opacity-80'
+                          : 'border-white/30 opacity-80 hover:opacity-100'
                       }`}
                     >
-                      <div className="relative h-14 w-[2.625rem] overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
+                      {/* 44px breit statt 42, damit der Knopf sicher zu treffen ist */}
+                      <div className="relative h-16 w-11 overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
                         {video.poster ? (
-                          <img src={video.poster} alt={video.title} className="h-full w-full object-cover object-top" loading="lazy" />
+                          <img src={video.poster} alt="" className="h-full w-full object-cover object-top" loading="lazy" />
                         ) : (
                           <video
                             src={video.src}
@@ -243,6 +261,7 @@ export default function VideoCarousel({
                             muted
                             playsInline
                             preload="metadata"
+                            aria-hidden
                             onLoadedData={(e) => {
                               const v = e.currentTarget
                               const t = Number.isFinite(v.duration) && v.duration >= THUMBNAIL_TIME
@@ -253,9 +272,6 @@ export default function VideoCarousel({
                           />
                         )}
                       </div>
-                      <span className="mt-1 max-w-[70px] truncate text-[9px] font-medium text-[var(--pepe-t80)]">
-                        {video.title}
-                      </span>
                     </button>
                   ))}
                 </div>
@@ -270,7 +286,7 @@ export default function VideoCarousel({
               <button
                 type="button"
                 onClick={togglePlay}
-                className="mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)]"
+                className="mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)]"
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 {isPlaying ? (
@@ -361,7 +377,7 @@ export default function VideoCarousel({
               <button
                 type="button"
                 onClick={togglePlay}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:scale-110"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] backdrop-blur-md transition-all hover:bg-[var(--pepe-gold)]/30 hover:scale-110"
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 {isPlaying ? (

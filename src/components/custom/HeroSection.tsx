@@ -55,10 +55,17 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
     },
     ref
   ) => {
+    // Auf Mobile deutlich flacher als auf Desktop. Die Werte galten vorher für
+    // beide Breiten gleich: py-24 sind 96px oben und unten, dazu die 80px
+    // Abstand für die feste Navbar. Für zwei Zeilen Text bedeutete das rund
+    // 400px Bildschirm, bevor der erste Inhalt kam — auf einem Telefon
+    // eineinhalb Wischer bis zum eigentlichen Programm.
+    // Auf Desktop bleibt die großzügige Fläche, dort ist sie Gestaltung und
+    // kostet keinen Weg.
     const sizeClasses = {
-      sm: 'py-24 md:py-32',
-      md: 'py-32 md:py-40 min-h-[50vh]',
-      lg: 'py-40 md:py-52 min-h-[70vh]',
+      sm: 'py-12 md:py-32',
+      md: 'py-16 md:py-40 md:min-h-[50vh]',
+      lg: 'py-20 md:py-52 md:min-h-[70vh]',
     }
 
     return (

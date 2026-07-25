@@ -174,7 +174,7 @@ export default async function EventDetailPage({
                 Entscheidungsinformation und gehört über die erste Bildschirmkante,
                 nicht nur in die Sidebar weiter unten. */}
             <div className="mb-4 flex flex-wrap items-center gap-3">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40">
                 {event.category}
               </span>
               {isFree && <FreeEntryBadge label={dict.events.freeBadge} size="lg" />}
@@ -195,7 +195,7 @@ export default async function EventDetailPage({
           <div>
             {event.featured && (
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--pepe-gold)]/10 border border-[var(--pepe-gold)]/30 rounded-full mb-6">
-                <span className="text-[var(--pepe-gold)] font-semibold">{t.highlight}</span>
+                <span className="text-[var(--pepe-accent-text)] font-semibold">{t.highlight}</span>
               </div>
             )}
 
@@ -209,7 +209,7 @@ export default async function EventDetailPage({
                 <ul className="space-y-3">
                   {event.highlights.map((highlight, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <span className="text-[var(--pepe-gold)] mt-1">&#10003;</span>
+                      <span className="text-[var(--pepe-accent-text)] mt-1">&#10003;</span>
                       <span className="text-[var(--pepe-t80)]">{highlight}</span>
                     </li>
                   ))}
@@ -233,7 +233,7 @@ export default async function EventDetailPage({
               <div className="space-y-5 mb-6">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">📅</span>
+                    <span className="text-[var(--pepe-accent-text)]">📅</span>
                   </div>
                   <div>
                     <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoDate}</div>
@@ -250,7 +250,7 @@ export default async function EventDetailPage({
                 {event.time && (
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[var(--pepe-gold)]">&#128336;</span>
+                      <span className="text-[var(--pepe-accent-text)]">&#128336;</span>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoTime}</div>
@@ -260,7 +260,7 @@ export default async function EventDetailPage({
                 )}
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[var(--pepe-gold)]">📍</span>
+                    <span className="text-[var(--pepe-accent-text)]">📍</span>
                   </div>
                   <div>
                     <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoLocation}</div>
@@ -275,7 +275,7 @@ export default async function EventDetailPage({
                         isFree ? 'bg-[var(--pepe-success-bg)]' : 'bg-[var(--pepe-gold)]/10'
                       )}
                     >
-                      <span className={isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-gold)]'}>
+                      <span className={isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-accent-text)]'}>
                         &#128176;
                       </span>
                     </div>
@@ -284,7 +284,7 @@ export default async function EventDetailPage({
                       <div
                         className={cn(
                           'font-bold text-lg',
-                          isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-gold)]'
+                          isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-accent-text)]'
                         )}
                       >
                         {event.price}

@@ -11,6 +11,8 @@ import { notFound } from 'next/navigation'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
+import { getUpcomingEvents } from '@/lib/db-data'
+import { ItemListJsonLd } from '@/components/seo/JsonLd'
 import EventsListingClient from '@/components/custom/EventsListingClient'
 
 export async function generateMetadata({
@@ -29,6 +31,13 @@ export async function generateMetadata({
   })
 }
 
+/**
+ * Die Liste kommt aus der Datenbank und ändert sich täglich, deshalb bei jedem
+ * Aufruf neu rendern. Ohne das würde die Seite beim Build eingefroren und neue
+ * Termine tauchten erst beim nächsten Deploy im JSON-LD auf.
+ */
+export const dynamic = 'force-dynamic'
+
 export default async function EventsPage({
   params,
 }: {
@@ -39,5 +48,29 @@ export default async function EventsPage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
 
-  return <EventsListingClient lang={lang} dict={dict} />
+  // Nur für das JSON-LD. Die sichtbare Liste holt sich EventsListingClient
+  // weiterhin selbst, weil sie nach Monat blättert. Der Termin-Index muss aber
+  // im ausgelieferten HTML stehen: ein Crawler soll die Veranstaltungen sehen,
+  // ohne auf die Monatsnavigation zu klicken.
+  let upcoming: Awaited<ReturnType<typeof getUpcomingEvents>> = []
+  try {
+    upcoming = await getUpcomingEvents(lang)
+  } catch (error) {
+    // Die Seite funktioniert ohne JSON-LD weiter; ein Datenbankausfall darf
+    // sie nicht komplett aus dem Netz nehmen.
+    console.error('EventsPage: JSON-LD-Liste konnte nicht geladen werden', error)
+  }
+
+  return (
+    <>
+      <ItemListJsonLd
+        name={dict.events.meta.title}
+        items={upcoming.map((event) => ({
+          name: event.title,
+          url: `/${lang}/events/${event.slug}`,
+        }))}
+      />
+      <EventsListingClient lang={lang} dict={dict} />
+    </>
+  )
 }

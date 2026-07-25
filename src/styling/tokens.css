@@ -29,6 +29,17 @@
   --pepe-gold: #016dca;          /* Primary DOME blue accent */
   --pepe-gold-hover: #0180e8;    /* Hover state - brighter blue */
   --pepe-gold-active: #015ab0;   /* Active/pressed state - deeper blue */
+
+  /* Akzentfarbe für TEXT.
+     --pepe-gold ist die Markenfarbe und für Flächen, Rahmen und große Schrift
+     richtig. Als Textfarbe erreicht sie auf Schwarz aber nur 4.04:1 und auf
+     --pepe-ink 3.48:1 — beides unter den 4.5:1, die WCAG AA für Fließtext
+     verlangt. Betroffen war genau das Kleingedruckte: Datumsangaben in den
+     Event-Karten, "Mehr erfahren", Meta-Zeilen.
+     Dieser Ton liegt bei 6.47:1 auf Schwarz und 5.57:1 auf --pepe-ink und ist
+     erkennbar dasselbe Blau. Flächen weiterhin mit --pepe-gold füllen, für
+     Schrift auf dunklem Grund diese Variable nehmen. */
+  --pepe-accent-text: #2a92f0;
   --pepe-gold-glow: rgba(1, 109, 202, 0.25);  /* Blue glow effect */
   --pepe-gold-glow-strong: rgba(1, 109, 202, 0.4);  /* Strong glow */
 
@@ -57,12 +68,27 @@
   --font-body: var(--font-inter), 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', 'Monaco', monospace;
 
-  /* Font Sizes - Fluid Typography */
-  --text-xs: 0.75rem;                              /* 12px */
-  --text-sm: 0.875rem;                             /* 14px */
-  --text-base: 1rem;                               /* 16px */
-  --text-lg: 1.125rem;                             /* 18px */
-  --text-xl: 1.25rem;                              /* 20px */
+  /* Font Sizes - Fluid Typography
+     ──────────────────────────────────────────────────────────────────────
+     Diese Werte steuern doppelt: die hauseigenen Klassen in typography.css
+     UND die Tailwind-Utilities text-xs bis text-xl. Letztere lesen var(--text-*),
+     und weil dieser :root-Block ungelayert ist, gewinnt er gegen alles, was
+     Tailwind selbst in @layer theme mitbringt. Eine Änderung hier wirkt also
+     überall — das ist gewollt, macht sie aber wirksamer als sie aussieht.
+
+     Gemessener Anlass: auf der Startseite lagen bei 375px Breite 51% aller
+     Textknoten unter 16px, Kartentexte auf 14px, Datums- und Kategorie-Label
+     auf 12px. 16px gilt als die Grenze, ab der Fließtext ohne Anstrengung
+     lesbar ist, und wer eine Lesebrille braucht, merkt jeden Punkt darunter.
+
+     Die Skala rückt deshalb ein bis zwei Punkte nach oben. Bewusst maßvoll:
+     eine drastische Anhebung sprengt Kartenhöhen und Menü-Umbrüche, und ein
+     gebrochenes Layout liest sich schlechter als eine kleine Schrift. */
+  --text-xs: 0.8125rem;                            /* 13px, vorher 12 — nur Label */
+  --text-sm: 1rem;                                 /* 16px, vorher 14 */
+  --text-base: 1.0625rem;                          /* 17px, vorher 16 */
+  --text-lg: 1.1875rem;                            /* 19px, vorher 18 */
+  --text-xl: 1.3125rem;                            /* 21px, vorher 20 */
   --text-2xl: clamp(1.5rem, 2.5vw, 1.75rem);      /* 24-28px */
   --text-3xl: clamp(1.75rem, 3vw, 2.25rem);       /* 28-36px */
   --text-4xl: clamp(2rem, 4vw, 3rem);             /* 32-48px */

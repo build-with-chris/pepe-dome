@@ -246,7 +246,7 @@ export default function SignupForm({
           <div className="mb-4">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
               <svg
-                className="w-8 h-8 text-[var(--pepe-gold)]"
+                className="w-8 h-8 text-[var(--pepe-accent-text)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -285,7 +285,7 @@ export default function SignupForm({
         <CardContent className="pt-6">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
             <svg
-              className="w-8 h-8 text-[var(--pepe-gold)]"
+              className="w-8 h-8 text-[var(--pepe-accent-text)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -446,7 +446,7 @@ export default function SignupForm({
                 {t.gdprPrefix}
                 <a
                   href={t.privacyHref}
-                  className="text-[var(--pepe-gold)] hover:underline"
+                  className="text-[var(--pepe-accent-text)] hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

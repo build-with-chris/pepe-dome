@@ -136,7 +136,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
           {/* Date Badge - Top Left */}
           {!compact && (
             <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm">
-              <span className="text-xs font-semibold text-[var(--pepe-gold)] tracking-wide">
+              <span className="text-xs font-semibold text-[var(--pepe-accent-text)] tracking-wide">
                 {date}
                 {timeLabel && <span className="text-white/90"> · {timeLabel}</span>}
               </span>
@@ -165,7 +165,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
           {/* Meta Row */}
           <div className="flex items-center gap-3 flex-wrap">
             {compact && (
-              <span className="text-sm font-medium text-[var(--pepe-gold)] tracking-wide">
+              <span className="text-sm font-medium text-[var(--pepe-accent-text)] tracking-wide">
                 {date}
                 {timeLabel && <span className="text-[var(--pepe-t80)]"> · {timeLabel}</span>}
               </span>

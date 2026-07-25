@@ -101,6 +101,50 @@ export function OrganizationJsonLd({
 }
 
 /**
+ * ItemList für Listenseiten.
+ *
+ * Ohne das sieht eine Suchmaschine auf /events oder /news nur eine Seite mit
+ * viel Text. Mit der Liste erkennt sie, dass es sich um eine geordnete Menge
+ * einzelner Einträge handelt, und kann sie als Karussell oder als
+ * Sitelinks-Block ausspielen statt nur den Seitentitel.
+ *
+ * `url` zeigt jeweils auf die Detailseite. Absichtlich keine Inhalte doppeln:
+ * Beschreibung, Datum und Preis stehen im Event- bzw. Article-Schema der
+ * Detailseite, und zwei Quellen für dieselbe Angabe laufen früher oder später
+ * auseinander.
+ */
+export function ItemListJsonLd({
+  name,
+  items,
+}: {
+  name: string
+  items: Array<{ name: string; url: string }>
+}) {
+  if (items.length === 0) return null
+
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    numberOfItems: items.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: `${BASE_URL}${item.url}`,
+    })),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
+    />
+  )
+}
+
+/**
  * ImageGallery für die Galerieseite.
  *
  * Damit kann Google die Seite als Bildsammlung erkennen und die Einzelbilder in

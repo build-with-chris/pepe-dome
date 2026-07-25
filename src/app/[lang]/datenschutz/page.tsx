@@ -63,7 +63,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                 <div className="bg-[var(--pepe-black)]/50 border border-[var(--pepe-line)] rounded-lg p-6">
                   <p className="text-[var(--pepe-white)] font-semibold mb-2">Circus Akademie München e.V. (Zirkusakademie München e.V.)</p>
                   <p>Ranhazweg 18, 85521 Ottobrunn, Deutschland</p>
-                  <p>E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-gold)] hover:underline">info@pepe-dome.de</a></p>
+                  <p>E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-accent-text)] hover:underline">info@pepe-dome.de</a></p>
                 </div>
                 <p>
                   Einen Datenschutzbeauftragten haben wir nicht bestellt, da keine gesetzliche Pflicht besteht.
@@ -112,8 +112,8 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   <li>Statuscodes / Datenmenge</li>
                 </ul>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Zweck:</strong> Auslieferung der Website, Stabilität, Sicherheit, Fehleranalyse.<br />
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an sicherem Betrieb).
+                  <strong className="text-[var(--pepe-accent-text)]">Zweck:</strong> Auslieferung der Website, Stabilität, Sicherheit, Fehleranalyse.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an sicherem Betrieb).
                 </p>
                 <p>
                   Dabei kann es zu Datenübermittlungen in Drittstaaten (insb. USA) kommen. Details dazu siehe Abschnitt „Drittlandübermittlung".
@@ -133,7 +133,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                 </p>
                 <p>
                   Für nicht notwendige Cookies/Tools holen wir deine Einwilligung über unser eigenes Cookie-Banner ein. Wir setzen dafür keinen externen Consent-Anbieter ein: Deine Entscheidung wird ausschließlich lokal in deinem Browser gespeichert und an keinen Dritten übermittelt. Ohne deine Einwilligung werden Google Analytics und das Meta Pixel gar nicht erst geladen.<br />
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), § 25 Abs. 1 TDDDG (Einwilligung für Speicherung/Auslesen von Informationen).<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), § 25 Abs. 1 TDDDG (Einwilligung für Speicherung/Auslesen von Informationen).<br />
                   Technisch notwendige Cookies: Art. 6 Abs. 1 lit. f DSGVO und § 25 Abs. 2 TDDDG.
                 </p>
                 <p>
@@ -153,7 +153,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Auf dieser Website werden Google Fonts von Google-Servern geladen (nicht lokal eingebunden). Dabei kann u.a. deine IP-Adresse an Google übermittelt werden.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), sofern über das Cookie-Banner gesteuert.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), sofern über das Cookie-Banner gesteuert.<br />
                   Wenn keine Einwilligung eingeholt wird, muss die Einbindung technisch zwingend erforderlich sein – das ist bei Webfonts in der Regel nicht der Fall.
                 </p>
                 <p className="text-[var(--pepe-t64)] italic">
@@ -182,9 +182,9 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Die Übermittlung erfolgt per E-Mail. Zum Spam-Schutz nutzen wir einen Honeypot.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Zweck:</strong> Bearbeitung deiner Anfrage.<br />
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich/vertraglich) oder Art. 6 Abs. 1 lit. f DSGVO (allgemeine Anfragen).<br />
-                  <strong className="text-[var(--pepe-gold)]">Speicherdauer:</strong> 6 Monate (danach Löschung, sofern keine gesetzlichen Pflichten entgegenstehen).
+                  <strong className="text-[var(--pepe-accent-text)]">Zweck:</strong> Bearbeitung deiner Anfrage.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich/vertraglich) oder Art. 6 Abs. 1 lit. f DSGVO (allgemeine Anfragen).<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Speicherdauer:</strong> 6 Monate (danach Löschung, sofern keine gesetzlichen Pflichten entgegenstehen).
                 </p>
               </div>
             </div>
@@ -203,7 +203,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Außerdem werden Öffnungen und Klicks getrackt (Erfolgsmessung).
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br />
                   Du kannst den Newsletter jederzeit über den Abmeldelink in jeder Ausgabe abbestellen.<br />
                   Eine Segmentierung findet nicht statt.
                 </p>
@@ -221,8 +221,8 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Für Ticketkäufe/Buchungen nutzen wir aktuell den Dienstleister rausgegangen. Dabei werden die für die Buchung erforderlichen Daten (z.B. Kontaktdaten, Ticketdaten, ggf. Zahlungsabwicklung über deren Systeme) verarbeitet.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).<br />
-                  <strong className="text-[var(--pepe-gold)]">Speicherdauer:</strong> Buchungs- und Rechnungsdaten 10 Jahre (gesetzliche Aufbewahrung).
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Speicherdauer:</strong> Buchungs- und Rechnungsdaten 10 Jahre (gesetzliche Aufbewahrung).
                 </p>
                 <p className="text-[var(--pepe-t64)] italic">
                   Wenn ihr später einen eigenen Shop ergänzt, wird die Datenschutzerklärung entsprechend erweitert.
@@ -245,7 +245,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   </ul>
                   <p className="mt-3">
                     Bei einer Zahlung werden die für die Zahlungsabwicklung erforderlichen Daten an den jeweiligen Zahlungsdienstleister übermittelt.<br />
-                    <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO.
+                    <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO.
                   </p>
                 </div>
                 <div>
@@ -255,7 +255,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   </ul>
                   <p className="mt-3">
                     Auch hier werden Zahlungsdaten zur Abwicklung verarbeitet.<br />
-                    <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO.
+                    <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO.
                   </p>
                 </div>
               </div>
@@ -273,7 +273,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                 </p>
                 <p>
                   Dabei kann es zu Drittlandübermittlungen (USA) kommen.<br />
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlagen:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertrag), Art. 6 Abs. 1 lit. c DSGVO (Aufbewahrung), Art. 6 Abs. 1 lit. f DSGVO (Organisation).
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlagen:</strong> Art. 6 Abs. 1 lit. b DSGVO (Vertrag), Art. 6 Abs. 1 lit. c DSGVO (Aufbewahrung), Art. 6 Abs. 1 lit. f DSGVO (Organisation).
                 </p>
               </div>
             </div>
@@ -289,7 +289,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Wir nutzen Google Analytics zur statistischen Auswertung der Website-Nutzung (z.B. Seitenaufrufe, Verweildauer, Interaktionen). Dabei werden u.a. Cookies/IDs eingesetzt, die eine Wiedererkennung ermöglichen können.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung über Cookie-Banner) und § 25 Abs. 1 TDDDG.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung über Cookie-Banner) und § 25 Abs. 1 TDDDG.<br />
                   Daten können in die USA übertragen werden. Details dazu siehe „Drittlandübermittlung".
                 </p>
               </div>
@@ -306,7 +306,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Wir verwenden das Meta Pixel, um die Wirksamkeit von Werbemaßnahmen zu messen und Zielgruppen zu bilden (z.B. Conversion-Tracking, Remarketing).
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung über Cookie-Banner) und § 25 Abs. 1 TDDDG.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung über Cookie-Banner) und § 25 Abs. 1 TDDDG.<br />
                   Dabei kann eine Datenübermittlung in die USA stattfinden.
                 </p>
               </div>
@@ -333,7 +333,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   </div>
                 </div>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), sofern die Einbettung über das Consent-Tool gesteuert wird.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), sofern die Einbettung über das Consent-Tool gesteuert wird.<br />
                   Wenn die Einbettung ohne Einwilligung direkt lädt, kann es bereits beim Seitenaufruf zu Datenübertragungen kommen.
                 </p>
               </div>
@@ -363,9 +363,9 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Bei Veranstaltungen/Workshops werden Fotos/Videos nur erstellt, wenn wir vorher um Einverständnis bitten. Personen, die nicht aufgenommen werden möchten, werden nicht abgelichtet. Für eine Veröffentlichung (Website/Social Media) fragen wir zusätzlich gesondert.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br />
-                  <strong className="text-[var(--pepe-gold)]">Speicherung:</strong> Google Drive.<br />
-                  <strong className="text-[var(--pepe-gold)]">Zugriff:</strong> Team sowie der jeweilige Fotograf; Fotografen erhalten Zugriff nur auf den jeweiligen Ordner.
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Speicherung:</strong> Google Drive.<br />
+                  <strong className="text-[var(--pepe-accent-text)]">Zugriff:</strong> Team sowie der jeweilige Fotograf; Fotografen erhalten Zugriff nur auf den jeweiligen Ordner.
                 </p>
               </div>
             </div>
@@ -381,7 +381,7 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Es gibt einen internen Admin-Bereich zur Pflege von Artikeln und Newsletter-Inhalten. Dabei werden Zugangsdaten und Nutzungsdaten im Rahmen der Administration verarbeitet.
                 </p>
                 <p>
-                  <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (sicherer Betrieb/Administration) sowie ggf. Art. 6 Abs. 1 lit. b DSGVO (vertragliche/organisatorische Erfordernisse).
+                  <strong className="text-[var(--pepe-accent-text)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (sicherer Betrieb/Administration) sowie ggf. Art. 6 Abs. 1 lit. b DSGVO (vertragliche/organisatorische Erfordernisse).
                 </p>
               </div>
             </div>
@@ -410,9 +410,9 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
               
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <ul className="list-disc pl-6 space-y-3">
-                  <li><strong className="text-[var(--pepe-gold)]">Kontaktanfragen:</strong> 6 Monate</li>
-                  <li><strong className="text-[var(--pepe-gold)]">Buchungs- und Rechnungsdaten:</strong> 10 Jahre (gesetzliche Aufbewahrung)</li>
-                  <li><strong className="text-[var(--pepe-gold)]">Newsletterdaten:</strong> bis zum Widerruf der Einwilligung / Abmeldung (Nachweisdaten können länger gespeichert werden, soweit erforderlich)</li>
+                  <li><strong className="text-[var(--pepe-accent-text)]">Kontaktanfragen:</strong> 6 Monate</li>
+                  <li><strong className="text-[var(--pepe-accent-text)]">Buchungs- und Rechnungsdaten:</strong> 10 Jahre (gesetzliche Aufbewahrung)</li>
+                  <li><strong className="text-[var(--pepe-accent-text)]">Newsletterdaten:</strong> bis zum Widerruf der Einwilligung / Abmeldung (Nachweisdaten können länger gespeichert werden, soweit erforderlich)</li>
                 </ul>
               </div>
             </div>

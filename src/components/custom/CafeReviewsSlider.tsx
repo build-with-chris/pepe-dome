@@ -88,7 +88,7 @@ export default function CafeReviewsSlider({
   return (
     <div>
       <h3 className="text-xl md:text-2xl font-bold text-[var(--pepe-white)] mb-1">{title}</h3>
-      {ratingLine && <p className="text-[var(--pepe-gold)] font-medium text-sm mb-5">★★★★★ {ratingLine}</p>}
+      {ratingLine && <p className="text-[var(--pepe-accent-text)] font-medium text-sm mb-5">★★★★★ {ratingLine}</p>}
 
       <div
         className="relative"
@@ -110,7 +110,7 @@ export default function CafeReviewsSlider({
                 key={i}
                 className={
                   i < Math.round(active.rating)
-                    ? 'w-4 h-4 fill-[var(--pepe-gold)] text-[var(--pepe-gold)]'
+                    ? 'w-4 h-4 fill-[var(--pepe-gold)] text-[var(--pepe-accent-text)]'
                     : 'w-4 h-4 text-[var(--pepe-line)]'
                 }
               />
@@ -164,7 +164,7 @@ export default function CafeReviewsSlider({
                 type="button"
                 onClick={() => go(index - 1)}
                 aria-label="Vorherige Bewertung"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-accent-text)] transition-all"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -172,7 +172,7 @@ export default function CafeReviewsSlider({
                 type="button"
                 onClick={() => go(index + 1)}
                 aria-label="Nächste Bewertung"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-accent-text)] transition-all"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

@@ -60,7 +60,7 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
               
               <div className="space-y-8 text-[var(--pepe-t80)] leading-relaxed">
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Betreiber
                   </h3>
                   <p className="text-[var(--pepe-white)] font-semibold mb-4">
@@ -69,7 +69,7 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Anschrift
                   </h3>
                   <p className="leading-relaxed">
@@ -80,18 +80,18 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Kontakt
                   </h3>
                   <p className="leading-relaxed">
-                    Telefon: <a href={`tel:${site.phone}`} className="text-[var(--pepe-gold)] hover:underline">{site.phone}</a><br />
-                    E-Mail: <a href={`mailto:${site.email}`} className="text-[var(--pepe-gold)] hover:underline">{site.email}</a><br />
+                    Telefon: <a href={`tel:${site.phone}`} className="text-[var(--pepe-accent-text)] hover:underline">{site.phone}</a><br />
+                    E-Mail: <a href={`mailto:${site.email}`} className="text-[var(--pepe-accent-text)] hover:underline">{site.email}</a><br />
                     <span className="text-[var(--pepe-t64)]">Kontaktformular: Nachrichten über das Kontaktformular werden an die genannte E-Mail-Adresse weitergeleitet.</span>
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Vereinsregister
                   </h3>
                   <p className="leading-relaxed">
@@ -102,7 +102,7 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Vertretungsberechtigung
                   </h3>
                   <p className="leading-relaxed mb-3">
@@ -114,7 +114,7 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-3">
+                  <h3 className="text-lg font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-3">
                     Umsatzsteuer-ID
                   </h3>
                   <p className="leading-relaxed">
@@ -140,7 +140,7 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
                   Deutschland
                 </p>
                 <p>
-                  E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-gold)] hover:underline">info@pepe-dome.de</a>
+                  E-Mail: <a href="mailto:info@pepe-dome.de" className="text-[var(--pepe-accent-text)] hover:underline">info@pepe-dome.de</a>
                 </p>
               </div>
             </div>

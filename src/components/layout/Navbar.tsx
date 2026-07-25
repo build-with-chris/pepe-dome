@@ -147,7 +147,7 @@ function NavbarContent({
                       onClick={() => setIsMoreOpen(false)}
                       className={`block px-5 py-2.5 text-sm transition-colors ${
                         pathname === link.href
-                          ? 'text-[var(--pepe-gold)] font-semibold'
+                          ? 'text-[var(--pepe-accent-text)] font-semibold'
                           : 'text-white/80 hover:text-white hover:bg-white/5'
                       }`}
                     >

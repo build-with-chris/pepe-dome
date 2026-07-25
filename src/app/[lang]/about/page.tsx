@@ -113,7 +113,7 @@ export default async function AboutPage({
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
               <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-accent-text)] mb-6">
                   {t.vision.title}
                 </h2>
                 <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
@@ -121,7 +121,7 @@ export default async function AboutPage({
                 </p>
               </div>
               <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-10 shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-gold)] mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-accent-text)] mb-6">
                   {t.mission.title}
                 </h2>
                 <p className="text-[var(--pepe-t80)] leading-relaxed text-lg">
@@ -175,7 +175,7 @@ export default async function AboutPage({
                 className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 hover:border-[var(--pepe-gold)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
               >
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-[var(--pepe-gold)] text-3xl">{area.icon}</span>
+                  <span className="text-[var(--pepe-accent-text)] text-3xl">{area.icon}</span>
                 </div>
                 <h3 className="text-2xl font-bold text-[var(--pepe-white)] mb-6 text-center">
                   {area.title}
@@ -183,7 +183,7 @@ export default async function AboutPage({
                 <ul className="space-y-3 text-[var(--pepe-t80)] leading-relaxed">
                   {area.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-[var(--pepe-gold)] mt-1">•</span>
+                      <span className="text-[var(--pepe-accent-text)] mt-1">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -224,7 +224,7 @@ export default async function AboutPage({
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-gold)] transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-accent-text)] transition-colors duration-300">
                       {property.name}
                     </h3>
                     <p className="text-[var(--pepe-t64)] leading-relaxed">
@@ -253,12 +253,12 @@ export default async function AboutPage({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {t.network.items.map((item, i) => (
                   <div key={i} className="p-4 rounded-xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] flex items-center gap-3">
-                    <span className="text-[var(--pepe-gold)]">•</span> {item}
+                    <span className="text-[var(--pepe-accent-text)]">•</span> {item}
                   </div>
                 ))}
               </div>
               <div className="mt-8">
-                <span className="text-[var(--pepe-gold)] font-bold">#münchenistkultur</span>
+                <span className="text-[var(--pepe-accent-text)] font-bold">#münchenistkultur</span>
               </div>
             </div>
 
@@ -272,7 +272,7 @@ export default async function AboutPage({
                 />
               </div>
               <p className="text-2xl font-bold text-[var(--pepe-white)] mt-6 mb-2">{t.network.imageCaption}</p>
-              <p className="text-[var(--pepe-gold)]">{t.network.imageSubcaption}</p>
+              <p className="text-[var(--pepe-accent-text)]">{t.network.imageSubcaption}</p>
             </div>
           </div>
         </div>
@@ -297,7 +297,7 @@ export default async function AboutPage({
                 className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8 text-center hover:border-[var(--pepe-gold)] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out"
               >
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-[var(--pepe-gold)] text-3xl">
+                  <span className="text-[var(--pepe-accent-text)] text-3xl">
                     {valueEmojis[index] ?? '✨'}
                   </span>
                 </div>
@@ -358,15 +358,15 @@ export default async function AboutPage({
 
               <div className="space-y-5 mb-12">
                 <div className="flex items-start gap-4">
-                  <span className="text-[var(--pepe-gold)] text-xl">📍</span>
+                  <span className="text-[var(--pepe-accent-text)] text-xl">📍</span>
                   <div>
                     <p className="text-[var(--pepe-white)] font-medium">{site.address.street}</p>
                     <p className="text-[var(--pepe-t64)] mt-2">{site.address.zip} {site.address.city}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <span className="text-[var(--pepe-gold)] text-xl">&#128231;</span>
-                  <a href={`mailto:${site.email}`} className="text-[var(--pepe-gold)] hover:underline">
+                  <span className="text-[var(--pepe-accent-text)] text-xl">&#128231;</span>
+                  <a href={`mailto:${site.email}`} className="text-[var(--pepe-accent-text)] hover:underline">
                     {site.email}
                   </a>
                 </div>

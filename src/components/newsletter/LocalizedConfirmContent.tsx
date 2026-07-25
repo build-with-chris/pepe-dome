@@ -120,7 +120,7 @@ export default function LocalizedConfirmContent({
       <div className="stage-container text-center">
         <div className="max-w-2xl mx-auto">
           <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-            <span className="text-[var(--pepe-gold)] text-5xl">&#10003;</span>
+            <span className="text-[var(--pepe-accent-text)] text-5xl">&#10003;</span>
           </div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
@@ -138,7 +138,7 @@ export default function LocalizedConfirmContent({
             <ul className="space-y-4">
               {t.nextSteps.map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="text-[var(--pepe-gold)] mt-1 flex-shrink-0">&#10003;</span>
+                  <span className="text-[var(--pepe-accent-text)] mt-1 flex-shrink-0">&#10003;</span>
                   <span className="text-[var(--pepe-t80)]">{step}</span>
                 </li>
               ))}

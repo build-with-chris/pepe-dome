@@ -110,7 +110,7 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
         >
           {/* Category */}
           {category && (
-            <span className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)]">
               {category}
             </span>
           )}

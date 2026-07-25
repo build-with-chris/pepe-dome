@@ -121,7 +121,7 @@ export default async function BusinessPage({
                 <ul className="space-y-4">
                   {service.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-3 text-[var(--pepe-t80)]">
-                      <span className="text-[var(--pepe-gold)]">✓</span>
+                      <span className="text-[var(--pepe-accent-text)]">✓</span>
                       {feature}
                     </li>
                   ))}
@@ -170,7 +170,7 @@ export default async function BusinessPage({
                   <ul className="space-y-4 mb-12">
                     {pkg.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3 text-[var(--pepe-t80)]">
-                        <span className="text-[var(--pepe-gold)] mt-0.5">✓</span>
+                        <span className="text-[var(--pepe-accent-text)] mt-0.5">✓</span>
                         {feature}
                       </li>
                     ))}
@@ -218,10 +218,10 @@ export default async function BusinessPage({
                 {t.venue.items.map((item, i) => (
                   <div key={i} className="flex items-start gap-5">
                     <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[var(--pepe-gold)] text-xl">{item.icon}</span>
+                      <span className="text-[var(--pepe-accent-text)] text-xl">{item.icon}</span>
                     </div>
                     <div>
-                      <h4 className="text-[var(--pepe-white)] font-semibold mb-4">{item.title}</h4>
+                      <h3 className="text-[var(--pepe-white)] font-semibold mb-4">{item.title}</h3>
                       <p className="text-[var(--pepe-t64)] leading-relaxed">{item.text}</p>
                     </div>
                   </div>
@@ -237,7 +237,7 @@ export default async function BusinessPage({
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#127881;</span>
+              <span className="text-[var(--pepe-accent-text)] text-3xl leading-none">&#127881;</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               {t.cta.title}

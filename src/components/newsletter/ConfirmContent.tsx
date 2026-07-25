@@ -100,7 +100,7 @@ export default function ConfirmContent() {
         <div className="max-w-2xl mx-auto">
           {/* Success Icon */}
           <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-            <span className="text-[var(--pepe-gold)] text-5xl">&#10003;</span>
+            <span className="text-[var(--pepe-accent-text)] text-5xl">&#10003;</span>
           </div>
 
           {/* Title */}
@@ -121,19 +121,19 @@ export default function ConfirmContent() {
             </h2>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <span className="text-[var(--pepe-gold)] mt-1 flex-shrink-0">&#10003;</span>
+                <span className="text-[var(--pepe-accent-text)] mt-1 flex-shrink-0">&#10003;</span>
                 <span className="text-[var(--pepe-t80)]">
                   Du erhältst eine Willkommens-E-Mail mit allen wichtigen Informationen
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[var(--pepe-gold)] mt-1 flex-shrink-0">&#10003;</span>
+                <span className="text-[var(--pepe-accent-text)] mt-1 flex-shrink-0">&#10003;</span>
                 <span className="text-[var(--pepe-t80)]">
                   Der nächste Newsletter wird automatisch an dich versendet
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[var(--pepe-gold)] mt-1 flex-shrink-0">&#10003;</span>
+                <span className="text-[var(--pepe-accent-text)] mt-1 flex-shrink-0">&#10003;</span>
                 <span className="text-[var(--pepe-t80)]">
                   Du kannst dich jederzeit mit einem Klick wieder abmelden
                 </span>

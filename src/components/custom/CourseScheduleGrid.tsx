@@ -84,7 +84,7 @@ function KursKarte({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
 
         {/* Titel + optionaler Sub */}
         <div className="flex-1 min-w-0">
-          <p className="text-[var(--pepe-white)] font-semibold text-sm leading-snug truncate group-hover:text-[var(--pepe-gold)] transition-colors">
+          <p className="text-[var(--pepe-white)] font-semibold text-sm leading-snug truncate group-hover:text-[var(--pepe-accent-text)] transition-colors">
             {kurs.title}
           </p>
           {kurs.sub && (
@@ -96,7 +96,7 @@ function KursKarte({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
 
         {/* Chevron */}
         <span
-          className="text-[var(--pepe-t48)] text-sm flex-shrink-0 group-hover:text-[var(--pepe-gold)] group-hover:translate-x-0.5 transition-all"
+          className="text-[var(--pepe-t48)] text-sm flex-shrink-0 group-hover:text-[var(--pepe-accent-text)] group-hover:translate-x-0.5 transition-all"
           aria-hidden="true"
         >
           ›
@@ -151,7 +151,7 @@ function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => vo
                     }}
                   >
                     <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                      <span className="text-[var(--pepe-gold)] font-bold tabular-nums">
+                      <span className="text-[var(--pepe-accent-text)] font-bold tabular-nums">
                         {t.date}
                       </span>
                       {t.badge && (
@@ -173,7 +173,7 @@ function TagKarte({ tag, onKursClick }: { tag: Tag; onKursClick: (k: Kurs) => vo
                       )}
                     </p>
                     {t.sub && (
-                      <p className="text-[var(--pepe-gold)] text-xs font-medium mt-1 leading-snug">
+                      <p className="text-[var(--pepe-accent-text)] text-xs font-medium mt-1 leading-snug">
                         {t.sub}
                       </p>
                     )}
@@ -281,7 +281,7 @@ export default function CourseScheduleGrid({ woche }: { woche: Tag[] }) {
             <button
               type="button"
               onClick={scrollToBuchung}
-              className="text-[var(--pepe-gold)] font-bold underline-offset-2 hover:underline"
+              className="text-[var(--pepe-accent-text)] font-bold underline-offset-2 hover:underline"
             >
               Eversports-Widget oben
             </button>

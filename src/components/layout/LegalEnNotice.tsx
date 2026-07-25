@@ -18,7 +18,7 @@ export default function LegalEnNotice({
     <div className="stage-container">
       <div className="max-w-3xl mx-auto mb-8 p-4 rounded-xl border border-[var(--pepe-gold)]/30 bg-[var(--pepe-gold)]/5">
         <p className="text-sm text-[var(--pepe-t80)] leading-relaxed">
-          <span className="text-[var(--pepe-gold)] font-bold mr-2">ℹ️</span>
+          <span className="text-[var(--pepe-accent-text)] font-bold mr-2">ℹ️</span>
           {message}
         </p>
       </div>

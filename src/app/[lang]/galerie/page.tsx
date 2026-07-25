@@ -92,7 +92,7 @@ export default async function GalleryPage({
       {/* ── Kopf ─────────────────────────────────────────────────────────── */}
       <header className="stage-container pt-12 pb-8 md:pt-20 md:pb-10">
         <div className="max-w-3xl">
-          <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-5">
+          <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 mb-5">
             {t.hero.eyebrow}
           </span>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] leading-tight mb-4">

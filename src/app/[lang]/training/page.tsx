@@ -145,7 +145,7 @@ export default async function TrainingPage({
                 className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] px-4 py-5 md:px-5 md:py-6"
               >
                 <div className="text-2xl mb-2 leading-none">{f.icon}</div>
-                <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)] mb-1">
+                <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)] mb-1">
                   {f.label}
                 </div>
                 <div className="text-sm md:text-base font-bold text-[var(--pepe-white)] leading-snug">
@@ -161,7 +161,7 @@ export default async function TrainingPage({
       <section id="kursprogramm" className="py-20 md:py-28 bg-[var(--pepe-ink)]/40">
         <div className="stage-container">
           <div className="text-center mb-10">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-6">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 mb-6">
               {t.schedule.pill}
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-[var(--pepe-white)] mb-4">
@@ -203,7 +203,7 @@ export default async function TrainingPage({
                       href="https://www.aircrobatic-studios.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--pepe-gold)] font-semibold hover:underline"
+                      className="text-[var(--pepe-accent-text)] font-semibold hover:underline"
                     >
                       aircrobatic-studios.com ↗
                     </a>{' '}
@@ -214,7 +214,7 @@ export default async function TrainingPage({
                     {t.schedule.trickingNoteB}
                   </p>
                   <p className="text-[var(--pepe-t80)]">
-                    <span className="font-bold text-[var(--pepe-gold)]">{t.schedule.dropInNoteA}</span>{' '}
+                    <span className="font-bold text-[var(--pepe-accent-text)]">{t.schedule.dropInNoteA}</span>{' '}
                     {t.schedule.dropInNoteB}
                   </p>
                 </div>
@@ -248,7 +248,7 @@ export default async function TrainingPage({
               <p className="text-[var(--pepe-t80)] text-sm leading-relaxed flex-1">
                 {t.booking.eversportsText}
               </p>
-              <p className="mt-5 text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)]">
+              <p className="mt-5 text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)]">
                 ↓ {t.booking.widgetLabel}
               </p>
             </div>
@@ -280,7 +280,7 @@ export default async function TrainingPage({
           {/* Wellpass / USC in Vorbereitung */}
           <div className="max-w-5xl mx-auto mt-8">
             <div className="rounded-xl border border-[var(--pepe-gold)]/30 bg-[var(--pepe-gold)]/5 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
-              <span className="inline-block self-start sm:self-auto flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
+              <span className="inline-block self-start sm:self-auto flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40">
                 {t.booking.partnerPill}
               </span>
               <p className="text-[var(--pepe-t80)] text-sm">
@@ -291,7 +291,7 @@ export default async function TrainingPage({
 
           <p className="text-center text-sm text-[var(--pepe-t64)] mt-6">
             {t.booking.viewSchedule}{' '}
-            <Link href="#kursprogramm" className="text-[var(--pepe-gold)] hover:underline font-semibold">
+            <Link href="#kursprogramm" className="text-[var(--pepe-accent-text)] hover:underline font-semibold">
               {t.booking.viewScheduleLink}
             </Link>
           </p>
@@ -352,10 +352,10 @@ export default async function TrainingPage({
                 ].map((f, i) => (
                   <div key={i} className="flex items-start gap-5">
                     <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[var(--pepe-gold)] text-xl">{f.icon}</span>
+                      <span className="text-[var(--pepe-accent-text)] text-xl">{f.icon}</span>
                     </div>
                     <div>
-                      <h4 className="text-[var(--pepe-white)] font-semibold mb-4">{f.title}</h4>
+                      <h3 className="text-[var(--pepe-white)] font-semibold mb-4">{f.title}</h3>
                       <p className="text-[var(--pepe-t64)] leading-relaxed">{f.text}</p>
                     </div>
                   </div>
@@ -374,7 +374,7 @@ export default async function TrainingPage({
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#127947;</span>
+              <span className="text-[var(--pepe-accent-text)] text-3xl leading-none">&#127947;</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               {t.cta.title}

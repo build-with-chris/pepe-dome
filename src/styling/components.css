@@ -105,10 +105,17 @@
   text-decoration: none;
   position: relative;
   overflow: hidden;
+  /* 44px ist die kleinste Fläche, die sich mit dem Finger zuverlässig treffen
+     lässt; bei nachlassender Feinmotorik ist sie eher die Untergrenze als ein
+     Richtwert. Vorher ergab sich die Höhe allein aus Innenabstand plus
+     Schriftgröße, .btn-sm landete damit bei rund 37px und .btn-xs bei 30px.
+     Die Mindesthöhe greift nur, wenn das Padding kleiner ausfällt, große
+     Buttons bleiben also unverändert. */
+  min-height: 44px;
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--pepe-gold);
+  outline: 2px solid var(--pepe-accent-text);
   outline-offset: 2px;
 }
 
@@ -2279,12 +2286,20 @@
   }
 }
 
-/* Desktop Navigation - Show on medium screens and up */
-@media (min-width: 768px) {
+/* Desktop-Navigation erst ab 1024px, vorher das Vollbildmenü.
+   Bis 1024px teilten sich sechs Links, das Newsletter-Feld und der
+   Sprachumschalter eine Zeile. Bei 820px brach "Über uns" dadurch auf zwei
+   Zeilen um und das Eingabefeld lief aus dem Bild. Mit der etwas größeren
+   Schrift fiel das noch früher auf.
+   Statt die Links zu kürzen oder die Schrift wieder zu verkleinern greift
+   zwischen 768 und 1024px jetzt das Vollbildmenü. Dessen Einträge sind groß
+   und gut zu treffen, was auf einem Tablet ohnehin die bessere Bedienung ist
+   als eine gedrängte Leiste. */
+@media (min-width: 1024px) {
   .nav-links {
     display: flex;
   }
-  
+
   .nav-actions {
     display: flex;
   }
@@ -2292,6 +2307,13 @@
   .mobile-menu-btn {
     display: none;
   }
+}
+
+/* Nav-Einträge nie umbrechen lassen. Ein zweizeiliger Menüpunkt sieht nach
+   Fehler aus; ist kein Platz, soll stattdessen das Vollbildmenü greifen. */
+.nav-links a,
+.nav-link {
+  white-space: nowrap;
 }
 
 /* ===== Inline Newsletter (Navbar) ===== */
@@ -2537,20 +2559,33 @@
   font-size: var(--text-xs);
 }
 
+/* Sechs Links (Impressum, Datenschutz, AGB, Cookies, Unterstützen, Login) in
+   einer Flex-Zeile ohne Umbruch: auf einem schmalen Schirm lief die Reihe aus
+   dem Bild hinaus, die hinteren Einträge waren nicht erreichbar. */
 .footer-legal {
   display: flex;
-  gap: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
 }
 
 .footer-legal-link {
-  color: var(--pepe-t48);
+  /* Vorher --pepe-t48: auf Schwarz 4.89:1, also gerade eben über der Grenze,
+     und das bei der kleinsten Schriftgröße der Seite. Impressum und
+     Datenschutz sind Pflichtangaben und müssen auffindbar sein, nicht bloß
+     vorhanden. --pepe-t64 bringt 8.33:1. */
+  color: var(--pepe-t64);
   text-decoration: none;
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   transition: color var(--transition-base);
+  /* Genug Höhe, um den Link mit dem Finger zu treffen */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
-.footer-legal-link:hover {
-  color: var(--pepe-gold);
+.footer-legal-link:hover,
+.footer-legal-link:focus-visible {
+  color: var(--pepe-accent-text);
 }
 
 /* Responsive Footer */

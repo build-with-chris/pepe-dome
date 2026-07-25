@@ -236,7 +236,7 @@ export default async function HomePage({
           ) : (
             <div className="text-center py-10 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)]">
               <p className="text-[var(--pepe-t64)]">{t.upcomingEvents.empty}</p>
-              <Link href={localizedHref(lang, '/events')} className="text-[var(--pepe-gold)] hover:underline mt-2 inline-block">
+              <Link href={localizedHref(lang, '/events')} className="text-[var(--pepe-accent-text)] hover:underline mt-2 inline-block">
                 {t.upcomingEvents.viewAll}
               </Link>
             </div>
@@ -245,9 +245,9 @@ export default async function HomePage({
       </section>
 
       {/* ===== Features Grid ===== */}
-      <section className="py-16 md:py-24 bg-[var(--pepe-black)]">
+      <section className="py-10 md:py-24 bg-[var(--pepe-black)]">
         <div className="stage-container">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
               {t.features.title}
             </h2>
@@ -276,20 +276,20 @@ export default async function HomePage({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-ink)] to-transparent" />
                     <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/20 backdrop-blur-md flex items-center justify-center border border-[var(--pepe-gold)]/30">
-                      <span className="text-[var(--pepe-gold)] text-2xl leading-none">
+                      <span className="text-[var(--pepe-accent-text)] text-2xl leading-none">
                         {featureEmojis[key]}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-8 text-center lg:text-left">
-                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  <div className="p-6 md:p-8 text-center lg:text-left">
+                    <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4 group-hover:text-[var(--pepe-accent-text)] transition-colors">
                       {feature.title}
                     </h3>
                     <p className="text-sm text-[var(--pepe-t64)] leading-relaxed mb-4">
                       {feature.description}
                     </p>
-                    <span className="text-sm font-semibold text-[var(--pepe-gold)]">
+                    <span className="text-sm font-semibold text-[var(--pepe-accent-text)]">
                       {t.features.more} →
                     </span>
                   </div>
@@ -301,14 +301,14 @@ export default async function HomePage({
       </section>
 
       {/* ===== Café Section ===== */}
-      <section className="py-14 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-10 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-5">
+            <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 mb-5">
               {t.cafe.eyebrow}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
-              {t.cafe.titleA}<span className="text-[var(--pepe-gold)]">{t.cafe.titleB}</span>
+              {t.cafe.titleA}<span className="text-[var(--pepe-accent-text)]">{t.cafe.titleB}</span>
             </h2>
             <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed mb-10 max-w-xl mx-auto">
               {t.cafe.text}
@@ -329,7 +329,7 @@ export default async function HomePage({
 
                 <div className="flex-1 w-full">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[var(--pepe-gold)] text-base">🕐</span>
+                    <span className="text-[var(--pepe-accent-text)] text-base">🕐</span>
                     <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-xs">
                       {t.cafe.hoursLabel}
                     </h3>
@@ -349,7 +349,7 @@ export default async function HomePage({
 
       {/* ===== Pressestimmen (erscheint erst, wenn Zitate im Dictionary stehen) ===== */}
       {pressQuotes.length > 0 && (
-        <section className="py-16 md:py-24 bg-[var(--pepe-ink)]/30">
+        <section className="py-10 md:py-24 bg-[var(--pepe-ink)]/30">
           <div className="stage-container">
             <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] text-center mb-12">
               {t.press.title}
@@ -363,7 +363,7 @@ export default async function HomePage({
                   <p className="text-[var(--pepe-t80)] text-lg leading-relaxed mb-4">
                     „{quote.text}“
                   </p>
-                  <footer className="text-sm text-[var(--pepe-gold)] font-semibold">
+                  <footer className="text-sm text-[var(--pepe-accent-text)] font-semibold">
                     {quote.source}
                   </footer>
                 </blockquote>
@@ -387,9 +387,9 @@ export default async function HomePage({
       </section>
 
       {/* ===== Latest News ===== */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
+      <section className="py-12 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
         <div className="stage-container">
-          <div className="flex flex-col items-center text-center mb-16">
+          <div className="flex flex-col items-center text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
               {t.news.title}
             </h2>
@@ -432,11 +432,11 @@ export default async function HomePage({
       </section>
 
       {/* ===== Newsletter CTA ===== */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+      <section className="py-12 md:py-32 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
         <div className="stage-container">
           <div className="max-w-2xl mx-auto text-center">
             <div className="w-16 h-16 mx-auto mb-10 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <span className="text-[var(--pepe-gold)] text-3xl leading-none">&#9993;</span>
+              <span className="text-[var(--pepe-accent-text)] text-3xl leading-none">&#9993;</span>
             </div>
 
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">

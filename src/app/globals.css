@@ -62,16 +62,27 @@
 
 html {
   scroll-behavior: smooth;
+  /* Waagerechten Überlauf hier abschneiden, nicht am body.
+     Setzt man overflow-x auf dem body, rechnet der Browser overflow-y von
+     "visible" auf "auto" hoch — der body wird damit selbst zum Scroll-Container
+     statt des Dokuments. Folgen: window.scrollTo greift nicht mehr, die
+     Scroll-Wiederherstellung beim Zurücknavigieren verhält sich anders, und
+     position:sticky innerhalb des body verliert seinen Bezugsrahmen. Das
+     erklärt das unzuverlässige sticky auf der Event-Detailseite.
+     Am html-Element hat dieselbe Regel keinen dieser Nebeneffekte. */
+  overflow-x: hidden;
 }
 
 body {
   font-family: var(--font-body);
   font-size: var(--text-base);
-  line-height: var(--leading-normal);
+  /* Zeilenabstand für Fließtext von 1.5 auf 1.6. Bei längeren Absätzen
+     entscheidet der Abstand fast so viel über die Lesbarkeit wie die
+     Schriftgröße: zu eng gesetzt verrutscht das Auge beim Zeilenrücksprung. */
+  line-height: var(--leading-relaxed);
   color: var(--pepe-t80);
   background: var(--pepe-black);
-  overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 }
 
@@ -217,6 +228,8 @@ main {
   --color-pepe-gold: #016dca;
   --color-pepe-gold-hover: #0180e8;
   --color-pepe-gold-active: #015ab0;
+  /* Für Schrift auf dunklem Grund, siehe Begründung in tokens.css */
+  --color-pepe-accent-text: #2a92f0;
 
   /* Primary Button Blue */
   --color-pepe-bronze: #016dca;
@@ -235,4 +248,11 @@ main {
   --font-family-display: 'Outfit', system-ui, sans-serif;
   --font-family-body: 'Inter', system-ui, sans-serif;
   --font-family-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+
+  /* Schriftgrößen stehen bewusst NICHT hier, sondern in styling/tokens.css.
+     Grund: Tailwind gibt diesen Block als @layer theme aus, tokens.css
+     deklariert :root ungelayert — und ungelayert schlägt gelayert. Ein hier
+     gesetztes --text-sm hätte also keine Wirkung, während der Wert daneben
+     unverändert weitergilt. Das kostet beim Suchen unnötig Zeit, deshalb gibt
+     es die Größen nur an einer Stelle. */
 }

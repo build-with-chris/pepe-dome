@@ -144,7 +144,7 @@ export default async function SpendenPage({
 
             {/* Rechtlicher Hinweis: kein gemeinnütziger Verein, keine Spendenquittung */}
             <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 px-6 py-5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[var(--pepe-gold)] mb-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--pepe-accent-text)] mb-2">
                 {c.disclaimerTitle}
               </p>
               <p className="text-sm leading-relaxed text-[var(--pepe-t80)]">
@@ -160,14 +160,14 @@ export default async function SpendenPage({
 
               <dl className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <div>
-                  <dt className="text-sm font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-2">
+                  <dt className="text-sm font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-2">
                     {c.bank.holderLabel}
                   </dt>
                   <dd className="text-[var(--pepe-white)] font-semibold">{HOLDER}</dd>
                 </div>
 
                 <div>
-                  <dt className="text-sm font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-2">
+                  <dt className="text-sm font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-2">
                     {c.bank.addressLabel}
                   </dt>
                   <dd>
@@ -180,7 +180,7 @@ export default async function SpendenPage({
                 </div>
 
                 <div>
-                  <dt className="text-sm font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-2">
+                  <dt className="text-sm font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-2">
                     {c.bank.ibanLabel}
                   </dt>
                   <dd className="text-[var(--pepe-white)] font-mono text-lg tracking-wide select-all">
@@ -189,7 +189,7 @@ export default async function SpendenPage({
                 </div>
 
                 <div>
-                  <dt className="text-sm font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-2">
+                  <dt className="text-sm font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-2">
                     {c.bank.purposeLabel}
                   </dt>
                   <dd>{c.bank.purposeText}</dd>
@@ -205,14 +205,14 @@ export default async function SpendenPage({
 
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
                 <div>
-                  <p className="text-sm font-bold text-[var(--pepe-gold)] uppercase tracking-wider mb-2">
+                  <p className="text-sm font-bold text-[var(--pepe-accent-text)] uppercase tracking-wider mb-2">
                     {c.paypal.recipientLabel}
                   </p>
                   <a
                     href={PAYPAL_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[var(--pepe-white)] font-mono text-lg hover:text-[var(--pepe-gold)] hover:underline break-all"
+                    className="text-[var(--pepe-white)] font-mono text-lg hover:text-[var(--pepe-accent-text)] hover:underline break-all"
                   >
                     {PAYPAL_HANDLE}
                   </a>
@@ -224,7 +224,7 @@ export default async function SpendenPage({
                   href={PAYPAL_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-[var(--pepe-gold)] px-6 py-3 text-sm font-semibold text-[var(--pepe-gold)] hover:bg-[var(--pepe-gold)] hover:text-[var(--pepe-black)] transition-colors"
+                  className="inline-flex items-center justify-center rounded-full border border-[var(--pepe-gold)] px-6 py-3 text-sm font-semibold text-[var(--pepe-accent-text)] hover:bg-[var(--pepe-gold)] hover:text-[var(--pepe-black)] transition-colors"
                 >
                   {c.paypal.cta}
                 </a>

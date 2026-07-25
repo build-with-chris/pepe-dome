@@ -92,7 +92,7 @@ export default async function NewsletterPage({
                 className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 text-center hover:border-[var(--pepe-gold)] transition-colors duration-300"
               >
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-                  <span className="text-[var(--pepe-gold)] text-3xl">{item.icon}</span>
+                  <span className="text-[var(--pepe-accent-text)] text-3xl">{item.icon}</span>
                 </div>
                 <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2">{item.title}</h3>
                 <p className="text-[var(--pepe-t64)] text-sm">{item.text}</p>
@@ -135,7 +135,7 @@ export default async function NewsletterPage({
                 <Link key={newsletter.id} href={`${newsletterBase}/${newsletter.slug}`} className="group">
                   <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 h-full hover:border-[var(--pepe-gold)] transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40">
                         {new Date(newsletter.sentAt!).toLocaleDateString(dateLocale, {
                           month: 'long',
                           year: 'numeric',
@@ -145,7 +145,7 @@ export default async function NewsletterPage({
                       <span className="text-xs text-[var(--pepe-t48)]">{t.archive.sent}</span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-3 group-hover:text-[var(--pepe-gold)] transition-colors">
+                    <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-3 group-hover:text-[var(--pepe-accent-text)] transition-colors">
                       {newsletter.heroTitle || newsletter.subject}
                     </h3>
 

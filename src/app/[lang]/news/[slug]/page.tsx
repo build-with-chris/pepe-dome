@@ -149,7 +149,7 @@ export default async function NewsArticlePage({
           <div className="stage-container">
             <div className="max-w-4xl">
               <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 backdrop-blur-sm">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 backdrop-blur-sm">
                   {article.category}
                 </span>
                 <span className="text-sm text-white/70 [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
@@ -228,10 +228,10 @@ export default async function NewsArticlePage({
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <span className="text-xs text-[var(--pepe-gold)] uppercase tracking-wide">
+                          <span className="text-xs text-[var(--pepe-accent-text)] uppercase tracking-wide">
                             {a.category}
                           </span>
-                          <h4 className="text-sm font-medium text-[var(--pepe-white)] line-clamp-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                          <h4 className="text-sm font-medium text-[var(--pepe-white)] line-clamp-2 group-hover:text-[var(--pepe-accent-text)] transition-colors">
                             {a.title}
                           </h4>
                           <p className="text-xs text-[var(--pepe-t48)] mt-1">

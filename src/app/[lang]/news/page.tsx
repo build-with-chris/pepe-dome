@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
+import { ItemListJsonLd } from '@/components/seo/JsonLd'
 
 export async function generateMetadata({
   params,
@@ -61,6 +62,13 @@ export default async function NewsPage({
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      <ItemListJsonLd
+        name={t.meta.title}
+        items={allArticles.map((article) => ({
+          name: article.title,
+          url: `/${lang}/news/${article.slug}`,
+        }))}
+      />
       <HeroSection
         title={t.hero.title}
         subtitle={t.hero.subtitle}
@@ -87,7 +95,7 @@ export default async function NewsPage({
                 'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
                 'border backdrop-blur-sm',
                 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)]',
-                'hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
+                'hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-accent-text)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
               )}
             >
               {cat.label}

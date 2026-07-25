@@ -130,7 +130,7 @@ export default function CourseDetailModal({
         {/* Kurs-Details */}
         <div className="p-6 md:p-8 border-b border-[var(--pepe-line)]">
           <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span className="text-[var(--pepe-gold)] text-xs font-semibold uppercase tracking-widest">
+            <span className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest">
               {kurs.day} · {kurs.time}
             </span>
             <span className="text-[var(--pepe-t48)] text-xs">mit {kurs.trainer}</span>
@@ -145,20 +145,20 @@ export default function CourseDetailModal({
 
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
-              <p className="text-[var(--pepe-gold)] text-xs font-semibold uppercase tracking-widest mb-2">
+              <p className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest mb-2">
                 Inhalte
               </p>
               <ul className="space-y-1.5 text-[var(--pepe-t80)] text-sm">
                 {kurs.inhalte.map((inhalt) => (
                   <li key={inhalt} className="flex items-start gap-2">
-                    <span className="text-[var(--pepe-gold)] mt-0.5">·</span>
+                    <span className="text-[var(--pepe-accent-text)] mt-0.5">·</span>
                     <span>{inhalt}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="text-[var(--pepe-gold)] text-xs font-semibold uppercase tracking-widest mb-2">
+              <p className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest mb-2">
                 Für wen
               </p>
               <p className="text-[var(--pepe-t80)] text-sm leading-relaxed">{kurs.fuerWen}</p>
@@ -168,7 +168,7 @@ export default function CourseDetailModal({
           {/* Termine — wenn der Kurs konkrete Datums-Slots hat (z.B. Sonntags-Flow-Arts) */}
           {kurs.termine && kurs.termine.length > 0 && (
             <div className="mt-6 pt-6 border-t border-[var(--pepe-line)]">
-              <p className="text-[var(--pepe-gold)] text-xs font-semibold uppercase tracking-widest mb-3">
+              <p className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest mb-3">
                 {kurs.termineTitel ?? 'Termine'}
               </p>
               <ul className="space-y-2">
@@ -184,7 +184,7 @@ export default function CourseDetailModal({
                         }}
                       >
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="text-[var(--pepe-gold)] font-bold tabular-nums">
+                          <span className="text-[var(--pepe-accent-text)] font-bold tabular-nums">
                             {t.date}
                           </span>
                           {t.badge && (
@@ -203,7 +203,7 @@ export default function CourseDetailModal({
                           )}
                         </p>
                         {t.sub && (
-                          <p className="text-[var(--pepe-gold)] text-xs font-medium mt-1 leading-snug">
+                          <p className="text-[var(--pepe-accent-text)] text-xs font-medium mt-1 leading-snug">
                             {t.sub}
                           </p>
                         )}
@@ -248,7 +248,7 @@ export default function CourseDetailModal({
                 <p className="text-[var(--pepe-t64)] text-sm">
                   {kurs.bookingNote ?? `Dieser Kurs läuft nicht über Eversports — Buchung direkt hier:`}
                 </p>
-                <p className="text-[var(--pepe-gold)] text-sm font-mono mt-1 break-all">
+                <p className="text-[var(--pepe-accent-text)] text-sm font-mono mt-1 break-all">
                   {kurs.bookingUrl.replace(/^mailto:/, '').replace(/^https?:\/\//, '')}
                 </p>
               </div>

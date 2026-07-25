@@ -62,7 +62,7 @@ export default async function CafePage({
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--pepe-black)] via-[var(--pepe-black)]/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 z-10 pb-10 pt-24 bg-gradient-to-t from-black/85 via-black/45 to-transparent">
           <div className="stage-container">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-4 backdrop-blur-sm">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 mb-4 backdrop-blur-sm">
               Café
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.7)]">
@@ -102,10 +102,10 @@ export default async function CafePage({
             {/* Öffnungszeiten-Karte */}
             <aside className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-7 md:p-8 lg:sticky lg:top-24">
               <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-5 flex items-center gap-2">
-                <span className="text-[var(--pepe-gold)]">🕐</span> {t.hours.title}
+                <span className="text-[var(--pepe-accent-text)]">🕐</span> {t.hours.title}
               </h3>
               <div className="mb-5">
-                <div className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)] mb-1">
+                <div className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)] mb-1">
                   {t.hours.daysLabel}
                 </div>
                 <div className="text-[var(--pepe-white)] font-medium">{t.hours.days}</div>
@@ -116,7 +116,7 @@ export default async function CafePage({
               <p className="text-sm text-[var(--pepe-t80)] leading-relaxed mb-6 pb-6 border-b border-[var(--pepe-line)]">
                 {t.hours.note}
               </p>
-              <div className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-gold)] mb-2">
+              <div className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)] mb-2">
                 {t.hours.addressLabel}
               </div>
               <p className="text-sm text-[var(--pepe-t80)] leading-relaxed">

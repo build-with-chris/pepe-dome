@@ -176,7 +176,7 @@ export default function EventsListingClient({
               steht er einmal links; die Pfeile brauchen kein eigenes Label. */}
           <div className="stage-container flex items-center justify-between gap-3 py-2">
             <div className="flex min-w-0 items-center gap-2">
-              <CalendarIcon className="h-4 w-4 flex-shrink-0 text-[var(--pepe-gold)]" />
+              <CalendarIcon className="h-4 w-4 flex-shrink-0 text-[var(--pepe-accent-text)]" />
               <span className="truncate text-sm md:text-base font-bold text-[var(--pepe-white)] capitalize">
                 {monthName}
               </span>
@@ -191,7 +191,7 @@ export default function EventsListingClient({
                 type="button"
                 onClick={goToPreviousMonth}
                 aria-label={t.listing.previousMonth}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-accent-text)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -199,7 +199,7 @@ export default function EventsListingClient({
                 type="button"
                 onClick={goToNextMonth}
                 aria-label={t.listing.nextMonth}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-accent-text)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -213,7 +213,7 @@ export default function EventsListingClient({
         <div ref={monthNavRef} className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">
           <div className="text-center sm:text-left">
             <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
-              <CalendarIcon className="w-6 h-6 text-[var(--pepe-gold)]" />
+              <CalendarIcon className="w-6 h-6 text-[var(--pepe-accent-text)]" />
               <h2 className="text-2xl md:text-4xl font-bold text-[var(--pepe-white)] capitalize">
                 {monthName}
               </h2>
@@ -304,7 +304,7 @@ export default function EventsListingClient({
         ) : (
           <div className="text-center py-20 bg-[var(--pepe-ink)] rounded-2xl border border-[var(--pepe-line)]">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--pepe-gold)]/10 flex items-center justify-center">
-              <span className="text-[var(--pepe-gold)] text-4xl">&#128197;</span>
+              <span className="text-[var(--pepe-accent-text)] text-4xl">&#128197;</span>
             </div>
             <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-3">
               {t.listing.emptyTitle}
@@ -345,7 +345,7 @@ export default function EventsListingClient({
                     'px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
                     isActive
                       ? 'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_12px_var(--pepe-gold-glow)]'
-                      : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-gold)]'
+                      : 'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)] hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-accent-text)]'
                   )}
                 >
                   {label}
@@ -396,7 +396,7 @@ export default function EventsListingClient({
                   rel="noopener noreferrer"
                   className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 hover:border-[var(--pepe-gold)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] transition-all duration-300 ease-out group"
                 >
-                  <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-gold)] transition-colors">
+                  <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-2 group-hover:text-[var(--pepe-accent-text)] transition-colors">
                     {p.title}
                   </h3>
                   {p.sub && (

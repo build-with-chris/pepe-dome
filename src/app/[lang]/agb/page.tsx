@@ -70,7 +70,7 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
                     Abweichende Bedingungen von Kund:innen gelten nicht, außer wir stimmen ihnen ausdrücklich schriftlich zu.
                   </li>
                   <li>
-                    Angebote wie Artist Booking/Showvermittlung sind nicht Vertragsgegenstand dieser Website. Hierfür verweisen wir auf &quot;Pepe Shows&quot; (<a href="https://pepeshows.de" target="_blank" rel="noopener noreferrer" className="text-[var(--pepe-gold)] hover:underline">pepeshows.de</a>).
+                    Angebote wie Artist Booking/Showvermittlung sind nicht Vertragsgegenstand dieser Website. Hierfür verweisen wir auf &quot;Pepe Shows&quot; (<a href="https://pepeshows.de" target="_blank" rel="noopener noreferrer" className="text-[var(--pepe-accent-text)] hover:underline">pepeshows.de</a>).
                   </li>
                 </ol>
               </div>

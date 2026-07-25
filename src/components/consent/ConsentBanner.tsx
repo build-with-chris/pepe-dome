@@ -182,14 +182,14 @@ export default function ConsentBanner() {
             {t.revoke}{' '}
             <Link
               href={`/${lang}/datenschutz`}
-              className="underline hover:text-[var(--pepe-gold)] transition-colors"
+              className="underline hover:text-[var(--pepe-accent-text)] transition-colors"
             >
               {t.privacy}
             </Link>
             {' · '}
             <Link
               href={`/${lang}/impressum`}
-              className="underline hover:text-[var(--pepe-gold)] transition-colors"
+              className="underline hover:text-[var(--pepe-accent-text)] transition-colors"
             >
               {t.imprint}
             </Link>
