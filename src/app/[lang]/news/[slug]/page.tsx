@@ -19,6 +19,7 @@ import ShareButtons from '@/components/custom/ShareButtons'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
@@ -41,35 +42,20 @@ export async function generateMetadata({
   const dict = await getDictionary(rawLang)
 
   if (!article) {
-    return { title: `${dict.news.detail.notFound} - Pepe Dome` }
+    return { title: dict.news.detail.notFound }
   }
 
-  const title = article.title
-  const description = article.excerpt.slice(0, 160)
-  const url = `${BASE_URL}/${rawLang}/news/${article.slug}`
-
-  return {
-    title,
-    description,
+  return pageMetadata({
+    lang: rawLang,
+    path: `/news/${article.slug}`,
+    title: article.title,
+    description: article.excerpt.slice(0, 160),
     keywords: [article.category, 'Pepe Dome', 'München', ...(article.tags || [])],
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: 'Pepe Dome',
-      type: 'article',
-      publishedTime: article.publishedAt,
-      authors: [article.author],
-      ...(article.imageUrl && { images: [{ url: article.imageUrl, width: 1200, height: 630, alt: article.title }] }),
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      ...(article.imageUrl && { images: [article.imageUrl] }),
-    },
-  }
+    article: { publishedTime: article.publishedAt, authors: [article.author] },
+    images: article.imageUrl
+      ? [{ url: article.imageUrl, width: 1200, height: 630, alt: article.title }]
+      : undefined,
+  })
 }
 
 export default async function NewsArticlePage({

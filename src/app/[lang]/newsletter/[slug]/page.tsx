@@ -17,6 +17,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getNewsletterBySlug } from '@/lib/newsletters'
+import { jsonLdScriptContent } from '@/lib/json-ld'
 import {
   buildViewModelFromNewsletter,
   type NewsletterEventItem,
@@ -27,6 +28,7 @@ import SignupForm from '@/components/custom/SignupForm'
 import NewsletterMarkdown from '@/components/custom/NewsletterMarkdown'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 interface NewsletterPageProps {
   params: Promise<{ lang: string; slug: string }>
@@ -47,34 +49,30 @@ export async function generateMetadata({ params }: NewsletterPageProps): Promise
       return { title: dict.newsletter.issue.notFound }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const newsletterUrl = `${baseUrl}/${rawLang}/newsletter/${newsletter.slug}`
-
-    return {
+    // Fällt bewusst nicht mehr auf http://localhost:3000 zurück. Fehlte
+    // NEXT_PUBLIC_APP_URL in der Produktion, landeten canonical- und og:url-Tag
+    // auf localhost — für Google ein unerreichbares Ziel, und geteilte Links
+    // zeigten ins Nichts. Die Live-Domain ist eine Konstante, kein Env-Wert.
+    return pageMetadata({
+      lang: rawLang,
+      path: `/newsletter/${newsletter.slug}`,
       title: newsletter.subject,
       description:
         newsletter.preheader ||
         newsletter.heroSubtitle ||
         `${dict.newsletter.issue.sentOn} ${new Date(newsletter.sentAt!).toLocaleDateString(dateLocale)}`,
-      openGraph: {
-        title: newsletter.subject,
-        description: newsletter.preheader || newsletter.heroSubtitle || '',
-        url: newsletterUrl,
-        siteName: 'PEPE Dome',
-        images: newsletter.heroImageUrl
-          ? [{ url: newsletter.heroImageUrl, width: 1200, height: 630, alt: newsletter.heroTitle || newsletter.subject }]
-          : [],
-        type: 'article',
-        publishedTime: newsletter.sentAt?.toISOString(),
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: newsletter.subject,
-        description: newsletter.preheader || newsletter.heroSubtitle || '',
-        images: newsletter.heroImageUrl ? [newsletter.heroImageUrl] : [],
-      },
-      alternates: { canonical: newsletterUrl },
-    }
+      article: { publishedTime: newsletter.sentAt?.toISOString() },
+      images: newsletter.heroImageUrl
+        ? [
+            {
+              url: newsletter.heroImageUrl,
+              width: 1200,
+              height: 630,
+              alt: newsletter.heroTitle || newsletter.subject,
+            },
+          ]
+        : undefined,
+    })
   } catch (error) {
     console.error('Failed to generate metadata for newsletter:', error)
     return { title: 'Newsletter' }
@@ -333,10 +331,15 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
           </div>
         </section>
 
+        {/*
+          jsonLdScriptContent statt JSON.stringify: Betreff und Preheader kommen
+          aus der Redaktion. Ein schliessendes Script-Tag darin wuerde den Block
+          beenden und den Rest als JavaScript ausfuehren.
+        */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdScriptContent({
               '@context': 'https://schema.org',
               '@type': 'NewsArticle',
               headline: newsletter.subject,

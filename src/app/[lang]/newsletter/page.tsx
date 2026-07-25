@@ -14,6 +14,7 @@ import SignupForm from '@/components/custom/SignupForm'
 import HeroSection from '@/components/custom/HeroSection'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 export async function generateMetadata({
   params,
@@ -23,11 +24,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/newsletter',
     title: dict.newsletter.meta.title,
     description: dict.newsletter.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/newsletter` },
-  }
+  })
 }
 
 export const dynamic = 'force-dynamic'

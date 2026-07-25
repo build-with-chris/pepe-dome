@@ -157,35 +157,51 @@ export default function EventsListingClient({
         dotCloudIcon="events"
       />
 
-      {/* Sticky Month Navigation */}
+      {/* Sticky Month Navigation
+          top-20 = 80px = Höhe der Navbar (.nav in components.css). Stand vorher
+          auf top-16 (64px) und lag damit 16px unter der Navbar, die auf Mobile
+          genau den Monatsnamen verdeckte. */}
       <div
         className={cn(
-          'fixed top-16 left-0 right-0 z-40 transition-all duration-300',
+          'fixed top-20 left-0 right-0 z-40 transition-all duration-300',
           showStickyNav
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0 pointer-events-none'
         )}
       >
         <div className="bg-[var(--pepe-black)]/90 backdrop-blur-lg border-b border-[var(--pepe-line)]">
-          <div className="stage-container flex items-center justify-between py-3">
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="w-4 h-4 text-[var(--pepe-gold)]" />
-              <span className="text-sm md:text-base font-bold text-[var(--pepe-white)] capitalize">
+          {/* Der Monatsname stand hier zweimal: einmal als Label links, einmal
+              zwischen den Pfeilen. Auf 360px Breite passte "September 2026" plus
+              Event-Zahl plus dieselbe Angabe erneut nicht in eine Zeile. Jetzt
+              steht er einmal links; die Pfeile brauchen kein eigenes Label. */}
+          <div className="stage-container flex items-center justify-between gap-3 py-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <CalendarIcon className="h-4 w-4 flex-shrink-0 text-[var(--pepe-gold)]" />
+              <span className="truncate text-sm md:text-base font-bold text-[var(--pepe-white)] capitalize">
                 {monthName}
               </span>
-              <span className="text-xs text-[var(--pepe-t64)] ml-1">
+              <span className="flex-shrink-0 text-xs text-[var(--pepe-t64)] tabular-nums">
                 {!loading && `${filteredEvents.length} ${eventLabel(filteredEvents.length)}`}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <button onClick={goToPreviousMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
-                <ChevronLeft className="w-4 h-4" />
+            {/* h-11 w-11 = 44px, die kleinste zuverlässig treffbare Fläche auf
+                einem Touchscreen. Vorher 32px. */}
+            <div className="flex flex-shrink-0 items-center gap-1">
+              <button
+                type="button"
+                onClick={goToPreviousMonth}
+                aria-label={t.listing.previousMonth}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
+              >
+                <ChevronLeft className="h-5 w-5" />
               </button>
-              <span className="px-3 py-1 text-xs font-bold text-[var(--pepe-white)] capitalize min-w-[100px] text-center">
-                {monthName}
-              </span>
-              <button onClick={goToNextMonth} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all">
-                <ChevronRight className="w-4 h-4" />
+              <button
+                type="button"
+                onClick={goToNextMonth}
+                aria-label={t.listing.nextMonth}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
+              >
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -209,14 +225,28 @@ export default function EventsListingClient({
             </p>
           </div>
 
+          {/* Der Monatsname steht schon als Überschrift links daneben. Ihn hier
+              zwischen den Pfeilen ein zweites Mal zu wiederholen half niemandem
+              und drückte die Zeile auf kleinen Schirmen auseinander. Die Pfeile
+              tragen jetzt ihre Beschriftung als aria-label, damit klar bleibt,
+              was sie tun. */}
           <div className="flex items-center gap-4">
-            <Button variant="secondary" size="icon" onClick={goToPreviousMonth} className="rounded-full w-12 h-12">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={goToPreviousMonth}
+              aria-label={t.listing.previousMonth}
+              className="rounded-full w-12 h-12"
+            >
               <ChevronLeft className="w-6 h-6" />
             </Button>
-            <span className="text-lg font-bold text-[var(--pepe-white)] capitalize min-w-[140px] text-center">
-              {monthName}
-            </span>
-            <Button variant="secondary" size="icon" onClick={goToNextMonth} className="rounded-full w-12 h-12">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={goToNextMonth}
+              aria-label={t.listing.nextMonth}
+              className="rounded-full w-12 h-12"
+            >
               <ChevronRight className="w-6 h-6" />
             </Button>
           </div>
@@ -224,7 +254,7 @@ export default function EventsListingClient({
 
         {/* Events Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
@@ -242,7 +272,7 @@ export default function EventsListingClient({
           </div>
         ) : displayedEvents.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
               {displayedEvents.map((event) => (
                 <EventCard
                   key={event.id}
@@ -256,6 +286,8 @@ export default function EventsListingClient({
                   time={event.time}
                   category={event.category}
                   image={event.imageUrl || undefined}
+                  price={event.price}
+                  freeEntryLabel={t.freeBadge}
                   href={`${eventsBaseHref}/${event.slug}`}
                 />
               ))}

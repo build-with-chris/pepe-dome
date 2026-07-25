@@ -74,6 +74,9 @@ const NewsCard = forwardRef<HTMLDivElement, NewsCardProps>(
               src={image}
               alt={title}
               fill
+              // Siehe EventCard: ohne `sizes` liefert Next bei `fill` die
+              // 100vw-Variante, also das grösste Bild für eine Rasterkarte.
+              sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 33vw"
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (

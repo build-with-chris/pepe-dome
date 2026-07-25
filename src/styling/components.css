@@ -2045,15 +2045,22 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Mobile Menu Overlay */
+/* Mobile Menu Overlay
+   100dvh statt 100vh: In iOS Safari ist 100vh die Höhe *ohne* die Adressleiste,
+   also mehr als sichtbar ist. Das Menü ragte dadurch unter die Browserleiste,
+   und der letzte Eintrag war nicht erreichbar. 100dvh ist die tatsächlich
+   sichtbare Höhe.
+   Ebenso 100% statt 100vw: 100vw zählt die Scrollbar mit und erzeugt auf
+   Desktop einen horizontalen Überlauf, den nur das overflow-x:hidden am body
+   verdeckt. */
 .mobile-menu-overlay {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
+  height: 100dvh !important;
   z-index: 9999 !important;
   display: flex !important;
   align-items: stretch;

@@ -21,6 +21,10 @@
     }
   },
   "home": {
+    "meta": {
+      "title": "Circus Shows, Training & Café in Munich",
+      "description": "Pepe Dome in Munich's Ostpark: contemporary circus, acrobatics shows, open training and a café under the dome. Current programme and tickets."
+    },
     "hero": {
       "title": "Experience breathtaking acrobatics",
       "subtitle": "Extraordinary shows, open training and a café under the dome in Munich's Ostpark.",
@@ -46,7 +50,9 @@
       "title": "Upcoming Events",
       "subtitle": "The next shows, workshops and festivals",
       "viewAll": "View all events",
-      "empty": "No events available"
+      "empty": "No events available",
+      "prev": "Previous event",
+      "next": "Next event"
     },
     "news": {
       "title": "Latest & Highlights",
@@ -562,6 +568,7 @@
       "title": "Events & Programme",
       "description": "All events at Pepe Dome Munich: shows, workshops, festivals, premieres and training. Discover the current programme."
     },
+    "freeBadge": "Free entry",
     "hero": {
       "title": "Event Calendar",
       "subtitle": "Discover shows, workshops, festivals and more at Pepe Dome"
@@ -577,7 +584,9 @@
       "emptyText": "Nothing scheduled this month. Check another month or clear the filters.",
       "currentMonth": "Current month",
       "allCategories": "All categories",
-      "monthQuickSelect": "Pick another month"
+      "monthQuickSelect": "Pick another month",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
     },
     "programme": {
       "title": "Programme",
@@ -627,6 +636,43 @@
       "notFound": "Event not found",
       "breadcrumbHome": "Home",
       "breadcrumbEvents": "Events"
+    }
+  },
+  "gallery": {
+    "meta": {
+      "title": "Gallery: Pictures of Pepe Dome",
+      "description": "Pictures of Pepe Dome in Munich's Ostpark: the dome inside and out, shows and acrobatics, how the dome was built, and the café. See what the place looks like."
+    },
+    "hero": {
+      "eyebrow": "Gallery",
+      "title": "What the place looks like",
+      "subtitle": "The dome, the shows, the café, and how the whole thing was built. Tap any picture to see it large."
+    },
+    "filterAll": "Everything",
+    "categories": {
+      "dome": "The venue",
+      "shows": "Shows",
+      "aufbau": "How it was built",
+      "cafe": "Café"
+    },
+    "imageCountOne": "1 picture",
+    "imageCountMany": "{{count}} pictures",
+    "lightbox": {
+      "open": "View larger",
+      "close": "Close",
+      "prev": "Previous picture",
+      "next": "Next picture",
+      "position": "Picture {{current}} of {{total}}"
+    },
+    "more": {
+      "title": "More pictures are coming",
+      "text": "We keep adding to the gallery, including shots from the open training sessions. If you were at an event and took good photos, we would love to see them."
+    },
+    "cta": {
+      "title": "Rather see it yourself?",
+      "text": "Photos only tell half of it. Under the dome it sounds and feels different.",
+      "events": "See the programme",
+      "visit": "Directions & contact"
     }
   },
   "training": {

@@ -14,6 +14,7 @@ import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 export async function generateMetadata({
   params,
@@ -23,11 +24,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/about',
     title: dict.about.meta.title,
     description: dict.about.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/about` },
-  }
+  })
 }
 
 export default async function AboutPage({

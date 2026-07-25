@@ -16,8 +16,15 @@ import { MarkdownText } from '@/components/ui/MarkdownText'
 import NewsCard from '@/components/custom/NewsCard'
 import SignupForm from '@/components/custom/SignupForm'
 import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
+import FreeEntryBadge from '@/components/events/FreeEntryBadge'
+import { isFreeEntry } from '@/lib/event-price'
+import TicketLink from '@/components/events/TicketLink'
+import EventViewTracker from '@/components/events/EventViewTracker'
+import { isMailTicket } from '@/lib/ticket-url'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
+import { cn } from '@/lib/utils'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
@@ -34,7 +41,7 @@ export async function generateMetadata({
   const dict = await getDictionary(rawLang)
 
   if (!event) {
-    return { title: `${dict.events.detail.notFound} - Pepe Dome` }
+    return { title: dict.events.detail.notFound }
   }
 
   const dateLocale = rawLang === 'en' ? 'en-US' : 'de-DE'
@@ -44,30 +51,25 @@ export async function generateMetadata({
     year: 'numeric',
   })
 
-  const title = `${event.title} — ${eventDate} | Pepe Dome`
+  // Kein "| Pepe Dome" mehr im Titel: das hängt die Vorlage im Root-Layout
+  // ('%s | Pepe Dome') sowieso an. Vorher stand die Marke deshalb zweimal im
+  // Tab und im Suchergebnis ("Schmucklos — 31. Juli 2026 | Pepe Dome | Pepe
+  // Dome"), was zusätzlich Platz für den eigentlichen Titel wegnahm.
+  //
+  // Komma statt Gedankenstrich, wie in der gesamten sichtbaren Copy.
+  const title = `${event.title}, ${eventDate}`
   const description = event.description.slice(0, 160).replace(/\n/g, ' ')
-  const url = `${BASE_URL}/${rawLang}/events/${event.slug}`
 
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: `/events/${event.slug}`,
     title,
     description,
     keywords: [event.category, 'Pepe Dome', 'München', event.title, 'Event', 'Zirkus'],
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: 'Pepe Dome',
-      type: 'website',
-      ...(event.imageUrl && { images: [{ url: event.imageUrl, width: 1200, height: 630, alt: event.title }] }),
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      ...(event.imageUrl && { images: [event.imageUrl] }),
-    },
-  }
+    images: event.imageUrl
+      ? [{ url: event.imageUrl, width: 1200, height: 630, alt: event.title }]
+      : undefined,
+  })
 }
 
 export default async function EventDetailPage({
@@ -84,6 +86,8 @@ export default async function EventDetailPage({
 
   const event = await getEventBySlug(slug, lang)
   if (!event) notFound()
+
+  const isFree = isFreeEntry(event.price)
 
   const [upcomingEvents, recentArticles] = await Promise.all([
     getUpcomingEvents(lang),
@@ -109,6 +113,9 @@ export default async function EventDetailPage({
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      {/* Baut die Retargeting-Zielgruppe auf, siehe src/lib/tracking.ts */}
+      <EventViewTracker title={event.title} slug={event.slug} category={event.category} />
+
       {/* JSON-LD */}
       <EventJsonLd
         name={event.title}
@@ -163,9 +170,15 @@ export default async function EventDetailPage({
 
         <div className="absolute bottom-0 left-0 right-0 z-10 pb-8 pt-20 bg-gradient-to-t from-black/85 via-black/45 to-transparent">
           <div className="stage-container">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40 mb-4">
-              {event.category}
-            </span>
+            {/* Kategorie und Gratis-Sticker in einer Zeile: der Preis ist eine
+                Entscheidungsinformation und gehört über die erste Bildschirmkante,
+                nicht nur in die Sidebar weiter unten. */}
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[var(--pepe-gold)]/20 text-[var(--pepe-gold)] border border-[var(--pepe-gold)]/40">
+                {event.category}
+              </span>
+              {isFree && <FreeEntryBadge label={dict.events.freeBadge} size="lg" />}
+            </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--pepe-white)] mb-2 leading-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
               {event.title}
             </h1>
@@ -256,29 +269,48 @@ export default async function EventDetailPage({
                 </div>
                 {event.price && (
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-[var(--pepe-gold)]">&#128176;</span>
+                    <div
+                      className={cn(
+                        'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
+                        isFree ? 'bg-[var(--pepe-success-bg)]' : 'bg-[var(--pepe-gold)]/10'
+                      )}
+                    >
+                      <span className={isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-gold)]'}>
+                        &#128176;
+                      </span>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoPrice}</div>
-                      <div className="text-[var(--pepe-gold)] font-bold text-lg">{event.price}</div>
+                      <div
+                        className={cn(
+                          'font-bold text-lg',
+                          isFree ? 'text-[var(--pepe-success)]' : 'text-[var(--pepe-gold)]'
+                        )}
+                      >
+                        {event.price}
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
 
-              {event.ticketUrl ? (() => {
-                const isEmail = event.ticketUrl!.includes('@') && !event.ticketUrl!.startsWith('http')
-                const href = isEmail && !event.ticketUrl!.startsWith('mailto:') ? `mailto:${event.ticketUrl}` : event.ticketUrl!
-                const buttonText = isEmail ? t.registerMail : t.ticketsBuy
-                return (
-                  <a href={href} target={isEmail ? undefined : '_blank'} rel={isEmail ? undefined : 'noopener noreferrer'} className="block">
-                    <Button variant="primary" size="lg" className="w-full">{buttonText}</Button>
-                  </a>
-                )
-              })() : (
+              {event.ticketUrl ? (
+                <TicketLink
+                  ticketUrl={event.ticketUrl}
+                  eventTitle={event.title}
+                  eventSlug={event.slug}
+                  price={event.price}
+                  className="block"
+                  label={t.ticketsBuy}
+                  mailLabel={t.registerMail}
+                >
+                  <Button variant="primary" size="lg" className="w-full">
+                    {isMailTicket(event.ticketUrl) ? t.registerMail : t.ticketsBuy}
+                  </Button>
+                </TicketLink>
+              ) : (
                 <Button variant="secondary" size="lg" className="w-full" disabled>
-                  {event.price === 'Eintritt frei' || event.price === 'Free entry' ? t.ticketsFree : t.ticketsSoon}
+                  {isFree ? t.ticketsFree : t.ticketsSoon}
                 </Button>
               )}
 
@@ -305,6 +337,8 @@ export default async function EventDetailPage({
                   time={e.time}
                   category={e.category}
                   image={e.imageUrl || undefined}
+                  price={e.price}
+                  freeEntryLabel={dict.events.freeBadge}
                   href={`${eventsHref}/${e.slug}`}
                 />
               ))}

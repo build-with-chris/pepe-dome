@@ -79,6 +79,11 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
               src={backgroundImage}
               alt=""
               fill
+              // Ein Hero läuft über die volle Breite, 100vw ist hier also
+              // tatsächlich richtig. Explizit hingeschrieben, damit Next nicht
+              // mehr warnt und damit beim nächsten Umbau sichtbar ist, dass der
+              // Wert bewusst so gewählt ist und nicht bloß der Default greift.
+              sizes="100vw"
               className="object-cover"
               priority
             />

@@ -20,6 +20,7 @@ import StickyBookingButton from '@/components/custom/StickyBookingButton'
 import EversportsWidget from '@/components/custom/EversportsWidget'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 import { WOCHE } from '@/data/training-data'
 
 export async function generateMetadata({
@@ -30,10 +31,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/training',
     title: dict.training.meta.title,
     description: dict.training.meta.description,
-  }
+  })
 }
 
 // ── Day-Name- & Note-Übersetzung für die englische Variante ──────────────

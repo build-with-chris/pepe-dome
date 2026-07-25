@@ -11,6 +11,7 @@ import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 export async function generateMetadata({
   params,
@@ -20,11 +21,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/business',
     title: dict.business.meta.title,
     description: dict.business.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/business` },
-  }
+  })
 }
 
 export default async function BusinessPage({

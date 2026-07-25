@@ -21,6 +21,10 @@
     }
   },
   "home": {
+    "meta": {
+      "title": "Shows, Training & Café im Münchner Ostpark",
+      "description": "Der Pepe Dome im Münchner Ostpark: zeitgenössischer Zirkus, Artistik-Shows, offenes Training und ein Café unter der Kuppel. Aktuelles Programm und Tickets."
+    },
     "hero": {
       "title": "Erlebe Artistik hautnah",
       "subtitle": "Außergewöhnliche Shows, offenes Training und ein Café unter der Kuppel im Münchner Ostpark.",
@@ -46,7 +50,9 @@
       "title": "Kommende Events",
       "subtitle": "Die nächsten Shows, Workshops und Festivals",
       "viewAll": "Alle Events anzeigen",
-      "empty": "Keine Events verfügbar"
+      "empty": "Keine Events verfügbar",
+      "prev": "Vorheriges Event",
+      "next": "Nächstes Event"
     },
     "news": {
       "title": "Aktuelles & Highlights",
@@ -562,6 +568,7 @@
       "title": "Events & Programm",
       "description": "Alle Events im Pepe Dome München: Shows, Workshops, Festivals, Premieren und Training. Entdecke das aktuelle Programm."
     },
+    "freeBadge": "Gratis Eintritt",
     "hero": {
       "title": "Event-Kalender",
       "subtitle": "Entdecke Shows, Workshops, Festivals und mehr im Pepe Dome"
@@ -577,7 +584,9 @@
       "emptyText": "In diesem Monat sind keine Events geplant. Schau in einen anderen Monat oder entferne die Filter.",
       "currentMonth": "Aktueller Monat",
       "allCategories": "Alle Kategorien",
-      "monthQuickSelect": "Weiteren Monat anzeigen"
+      "monthQuickSelect": "Weiteren Monat anzeigen",
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat"
     },
     "programme": {
       "title": "Programm",
@@ -627,6 +636,43 @@
       "notFound": "Event nicht gefunden",
       "breadcrumbHome": "Home",
       "breadcrumbEvents": "Events"
+    }
+  },
+  "gallery": {
+    "meta": {
+      "title": "Galerie: Bilder vom Pepe Dome",
+      "description": "Bilder vom Pepe Dome im Münchner Ostpark: die Kuppel innen und außen, Shows und Artistik, der Bau der Kuppel und das Café. So sieht es bei uns aus."
+    },
+    "hero": {
+      "eyebrow": "Galerie",
+      "title": "So sieht es bei uns aus",
+      "subtitle": "Die Kuppel, die Shows, das Café und wie der Dome überhaupt entstanden ist. Tippe auf ein Bild, um es groß zu sehen."
+    },
+    "filterAll": "Alles",
+    "categories": {
+      "dome": "Der Ort",
+      "shows": "Shows",
+      "aufbau": "Entstehung",
+      "cafe": "Café"
+    },
+    "imageCountOne": "1 Bild",
+    "imageCountMany": "{{count}} Bilder",
+    "lightbox": {
+      "open": "Bild groß ansehen",
+      "close": "Schließen",
+      "prev": "Vorheriges Bild",
+      "next": "Nächstes Bild",
+      "position": "Bild {{current}} von {{total}}"
+    },
+    "more": {
+      "title": "Es kommen noch mehr Bilder",
+      "text": "Wir ergänzen die Galerie laufend, unter anderem um Aufnahmen aus dem offenen Training. Wer bei einem Event dabei war und schöne Fotos hat: immer gern an uns schicken."
+    },
+    "cta": {
+      "title": "Lieber selbst vorbeikommen?",
+      "text": "Fotos zeigen nur die Hälfte. Unter der Kuppel klingt und wirkt es anders.",
+      "events": "Programm ansehen",
+      "visit": "Anfahrt & Kontakt"
     }
   },
   "training": {

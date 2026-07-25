@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { Instagram } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
+import { openConsentSettings } from '@/lib/consent'
 import { LOCALES, localizedHref, type Locale } from '@/i18n/config'
 
 function localeFromPathname(pathname: string | null): Locale {
@@ -76,6 +77,7 @@ export default function Footer() {
               <h4 className="footer-title">{t('footer.navigation', 'Navigation')}</h4>
               <div className="footer-link-group">
                 <Link href={href('/events')} className="footer-link">{t('navigation.events', 'Events')}</Link>
+                <Link href={href('/galerie')} className="footer-link">{t('navigation.gallery', 'Galerie')}</Link>
                 <Link href={href('/news')} className="footer-link">{t('navigation.news', 'News')}</Link>
                 <Link href={href('/newsletter')} className="footer-link">{t('footer.newsletter', 'Newsletter')}</Link>
                 <Link href={href('/about')} className="footer-link">{t('navigation.about', 'Über uns')}</Link>
@@ -128,6 +130,14 @@ export default function Footer() {
             <Link href={href('/impressum')} className="footer-legal-link">{t('footer.legal.imprint', 'Impressum')}</Link>
             <Link href={href('/datenschutz')} className="footer-legal-link">{t('footer.legal.privacy', 'Datenschutz')}</Link>
             <Link href={href('/agb')} className="footer-legal-link">{t('footer.legal.terms', 'AGB')}</Link>
+            {/* Widerruf muss so leicht erreichbar sein wie die Einwilligung selbst. */}
+            <button
+              type="button"
+              onClick={openConsentSettings}
+              className="footer-legal-link"
+            >
+              {t('footer.legal.cookies', 'Cookie-Einstellungen')}
+            </button>
             <Link href={href('/spenden')} className="footer-legal-link">{t('footer.legal.donate', 'Unterstützen')}</Link>
             <Link href="/admin/sign-in" className="footer-legal-link">{t('footer.legal.login', 'Login')}</Link>
           </div>

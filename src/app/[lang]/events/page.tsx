@@ -10,6 +10,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 import EventsListingClient from '@/components/custom/EventsListingClient'
 
 export async function generateMetadata({
@@ -20,11 +21,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/events',
     title: dict.events.meta.title,
     description: dict.events.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/events` },
-  }
+  })
 }
 
 export default async function EventsPage({

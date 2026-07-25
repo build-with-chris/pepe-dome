@@ -12,16 +12,18 @@ import HeroSection from '@/components/custom/HeroSection'
 import LegalEnNotice from '@/components/layout/LegalEnNotice'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/datenschutz',
     title: dict.legal.datenschutz.meta.title,
     description: dict.legal.datenschutz.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/datenschutz` },
-  }
+  })
 }
 
 export default async function DatenschutzPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -130,12 +132,12 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                   Wir verwenden Cookies und ähnliche Technologien. Einige sind technisch notwendig, andere dienen Statistik/Marketing (z.B. Google Analytics, Meta Pixel).
                 </p>
                 <p>
-                  Für nicht notwendige Cookies/Tools holen wir deine Einwilligung über ein Cookie-Banner/Consent-Tool ein (Anbieter wird ergänzt).<br />
+                  Für nicht notwendige Cookies/Tools holen wir deine Einwilligung über unser eigenes Cookie-Banner ein. Wir setzen dafür keinen externen Consent-Anbieter ein: Deine Entscheidung wird ausschließlich lokal in deinem Browser gespeichert und an keinen Dritten übermittelt. Ohne deine Einwilligung werden Google Analytics und das Meta Pixel gar nicht erst geladen.<br />
                   <strong className="text-[var(--pepe-gold)]">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), § 25 Abs. 1 TDDDG (Einwilligung für Speicherung/Auslesen von Informationen).<br />
                   Technisch notwendige Cookies: Art. 6 Abs. 1 lit. f DSGVO und § 25 Abs. 2 TDDDG.
                 </p>
                 <p>
-                  Du kannst deine Einwilligung jederzeit über die Einstellungen im Cookie-Banner widerrufen/ändern.
+                  Du kannst deine Einwilligung jederzeit widerrufen oder ändern: über den Link „Cookie-Einstellungen“ ganz unten auf jeder Seite.
                 </p>
               </div>
             </div>

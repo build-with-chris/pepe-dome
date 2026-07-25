@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 import { getSiteContent } from '@/lib/data'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 import ContactPageClient from '@/components/custom/ContactPageClient'
 
 export async function generateMetadata({
@@ -18,11 +19,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/contact',
     title: dict.contact.meta.title,
     description: dict.contact.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/contact` },
-  }
+  })
 }
 
 export default async function ContactPage({

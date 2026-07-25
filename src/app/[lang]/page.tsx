@@ -7,12 +7,14 @@
  * Migrations-Stand: HOME (erste lokalisierte Seite).
  */
 
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import nextDynamic from 'next/dynamic'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 import {
   getFeaturedArticles,
   getRecentArticles,
@@ -30,6 +32,38 @@ import HeroBackgroundVideo from '@/components/custom/HeroBackgroundVideo'
 const VideoCarousel = nextDynamic(() => import('@/components/custom/VideoCarousel'), { ssr: true })
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Die Startseite hatte keine eigenen Metadaten und erbte deshalb komplett vom
+ * Root-Layout — inklusive `alternates.canonical: 'https://www.pepe-dome.de'`.
+ * Damit sagten /de *und* /en dem Crawler "die kanonische Fassung bin ich nicht,
+ * sondern die Startseite ohne Locale". Folge: /en wurde als Duplikat behandelt
+ * und die wichtigste Seite der Site trug auf Englisch deutschen Titel und
+ * deutsche Beschreibung.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang: rawLang } = await params
+  if (!isLocale(rawLang)) return {}
+  const dict = await getDictionary(rawLang)
+  return pageMetadata({
+    lang: rawLang,
+    path: '/',
+    title: dict.home.meta.title,
+    description: dict.home.meta.description,
+    keywords: [
+      'Pepe Dome',
+      'Zirkus München',
+      'Artistik München',
+      'Ostpark München',
+      'Shows München',
+      'Veranstaltungsort München',
+    ],
+  })
+}
 
 export default async function HomePage({
   params,
@@ -100,17 +134,24 @@ export default async function HomePage({
           <HeroBackgroundVideo />
           {/*
             Scrim mobil bewusst leichter als auf Desktop: Auf dem Smartphone
-            füllt das Hochkant-Video die ganze Fläche und ist der eigentliche
-            Blickfang, ein zu starker Schleier ließ es dunkel und kraftlos
-            wirken. Den Textkontrast übernimmt hier vor allem der radiale
+            füllt das Hochformat-Video die ganze Fläche und ist der eigentliche
+            Blickfang. Den Textkontrast übernimmt hier vor allem der radiale
             Schatten hinter dem Titel plus die text-shadow der Schrift.
             Auf Desktop bleibt der kräftigere Scrim, weil das Querformat-Video
             heller ist und die Schrift über die volle Breite lesbar sein muss.
+
+            Die mobilen Stopps sind bewusst zurückgenommen. Vorher lief der
+            Verlauf oben mit 45% Schwarz los und unten in *volles* Schwarz aus,
+            dazu kam der radiale Schatten und darunter noch eine 128px hohe
+            Blende. In Summe blieb vom Bild nur ein Band in der Bildschirmmitte
+            übrig — der Hero wirkte klein, obwohl das Medium die ganzen 100dvh
+            einnahm. Jetzt endet der Verlauf bei 80% und setzt erst bei 55% der
+            Höhe an, das Bild bleibt bis weit nach unten sichtbar.
           */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/45 via-transparent to-[var(--pepe-black)] md:from-[var(--pepe-black)]/70 md:via-[var(--pepe-black)]/35" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent md:from-[var(--pepe-black)]/40 md:to-[var(--pepe-black)]/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--pepe-black)]/25 from-0% via-transparent via-55% to-[var(--pepe-black)]/80 md:from-[var(--pepe-black)]/70 md:via-[var(--pepe-black)]/35 md:via-50% md:to-[var(--pepe-black)]" />
+          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-[var(--pepe-black)]/40 to-[var(--pepe-black)]/40" />
           {/* Weicher radialer Schatten direkt hinter dem Titeltext (kein harter Kasten) */}
-          <div className="absolute inset-0 [background:radial-gradient(ellipse_75%_38%_at_50%_30%,rgba(0,0,0,0.5),transparent_70%)] md:[background:radial-gradient(ellipse_65%_45%_at_50%_34%,rgba(0,0,0,0.55),transparent_72%)]" />
+          <div className="absolute inset-0 [background:radial-gradient(ellipse_80%_26%_at_50%_18%,rgba(0,0,0,0.55),transparent_72%)] md:[background:radial-gradient(ellipse_65%_45%_at_50%_34%,rgba(0,0,0,0.55),transparent_72%)]" />
         </div>
 
         <HomeDotCloud />
@@ -128,7 +169,12 @@ export default async function HomePage({
 
         <div className="relative z-10 flex-1 min-h-[1rem]" />
 
-        <div className="relative z-10 h-[22vh] min-h-[160px] flex flex-col items-center justify-center pt-[5vh] md:pt-0 pb-6 md:pb-8">
+        {/* dvh statt vh: der Container oben ist min-h-[100dvh]. Mit `22vh` für
+            diesen Block rechnete der Browser gegen die *large* viewport height,
+            also gegen eine grössere Zahl als die 100dvh des Elternteils — auf
+            iOS Safari passten die Teile deshalb nicht zusammen und der
+            CTA-Block wurde zu hoch. */}
+        <div className="relative z-10 h-[20dvh] min-h-[160px] flex flex-col items-center justify-center pt-[4dvh] md:pt-0 pb-6 md:pb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
             <Link href={localizedHref(lang, '/events')} className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
@@ -143,7 +189,10 @@ export default async function HomePage({
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
+        {/* Übergang in den nächsten Abschnitt. Auf Mobile flacher (h-20 statt
+            h-32), weil dieselbe Blende dort einen deutlich grösseren Anteil des
+            Bildes verdeckt als auf einem breiten Schirm. */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 md:h-32 bg-gradient-to-t from-[var(--pepe-black)] to-transparent pointer-events-none" />
       </section>
 
       {/* ===== Kommende Events ===== */}
@@ -167,14 +216,21 @@ export default async function HomePage({
 
           {displayEvents.length > 0 ? (
             <EventsCarousel
+              lang={lang}
+              eventsHref={localizedHref(lang, '/events')}
+              freeEntryLabel={dict.events.freeBadge}
+              prevLabel={t.upcomingEvents.prev}
+              nextLabel={t.upcomingEvents.next}
               events={displayEvents.map((e) => ({
                 id: e.id,
                 slug: e.slug,
                 title: e.title,
                 description: e.description,
                 date: e.date,
+                time: e.time,
                 category: e.category,
                 imageUrl: e.imageUrl,
+                price: e.price,
               }))}
             />
           ) : (

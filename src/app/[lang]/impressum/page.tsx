@@ -12,17 +12,19 @@ import HeroSection from '@/components/custom/HeroSection'
 import LegalEnNotice from '@/components/layout/LegalEnNotice'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 import { getSiteContent } from '@/lib/data'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/impressum',
     title: dict.legal.impressum.meta.title,
     description: dict.legal.impressum.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/impressum` },
-  }
+  })
 }
 
 export default async function ImpressumPage({ params }: { params: Promise<{ lang: string }> }) {

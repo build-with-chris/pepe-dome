@@ -12,16 +12,18 @@ import HeroSection from '@/components/custom/HeroSection'
 import LegalEnNotice from '@/components/layout/LegalEnNotice'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/agb',
     title: dict.legal.agb.meta.title,
     description: dict.legal.agb.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/agb` },
-  }
+  })
 }
 
 export default async function AGBPage({ params }: { params: Promise<{ lang: string }> }) {

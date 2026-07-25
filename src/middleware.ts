@@ -1,16 +1,7 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
-import { LOCALES, DEFAULT_LOCALE, type Locale } from './i18n/config'
-
-// Routes that require authentication (UI + API admin routes)
-const isProtectedRoute = createRouteMatcher([
-  '/admin',
-  '/admin/events(.*)',
-  '/admin/articles(.*)',
-  '/admin/newsletters(.*)',
-  '/admin/subscribers(.*)',
-  '/api/admin(.*)',
-])
+import { LOCALES, DEFAULT_LOCALE, matchLocalizedPath, type Locale } from './i18n/config'
+import { requiresAuth } from './lib/admin-routes'
 
 // ── i18n helpers ────────────────────────────────────────────────────────
 
@@ -26,52 +17,21 @@ function detectLocale(req: NextRequest): Locale {
 }
 
 /**
- * Welche Pfade sollen unter /[lang]/... liegen?
- * Beim Migrieren einer neuen Seite hier ergänzen.
- */
-const LOCALIZED_ROOT_PATHS: ReadonlySet<string> = new Set([
-  '/',
-  '/training',
-  '/events',
-  '/about',
-  '/contact',
-  '/business',
-  '/news',
-  '/newsletter',
-  '/agb',
-  '/impressum',
-  '/datenschutz',
-])
-
-/**
  * Wenn der User auf einen Pfad geht der bereits unter /[lang]/... liegt,
  * aber ohne Locale-Prefix — leiten wir auf die richtige Locale-URL um.
- */
-/**
- * Trifft die Pfad-Wurzel auf einen migrierten Pfad?
  *
- * Beispiele mit LOCALIZED_ROOT_PATHS = { '/', '/events', '/training' }:
- *   '/events'           → '/events'    (exact match)
- *   '/events/holi-poldini' → '/events' (prefix match — Sub-Routen mit migrieren)
- *   '/training'         → '/training'
- *   '/about'            → null         (noch nicht migriert)
+ * Welche Pfade das sind, steht ausschliesslich in LOCALIZED_PATHS
+ * (src/i18n/config.ts). Diese Datei hatte die Liste früher ein zweites Mal,
+ * und die zwei Fassungen waren nicht deckungsgleich — `/cafe` und `/spenden`
+ * fehlten hier und liefen deshalb in einen 404 statt in die Weiterleitung.
  */
-function matchedRootPath(pathname: string): string | null {
-  if (LOCALIZED_ROOT_PATHS.has(pathname)) return pathname
-  for (const root of LOCALIZED_ROOT_PATHS) {
-    if (root === '/') continue
-    if (pathname === root || pathname.startsWith(root + '/')) return root
-  }
-  return null
-}
-
 function maybeRedirectToLocale(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl
   // Skip already-localized paths
   const firstSegment = pathname.split('/')[1]
   if ((LOCALES as readonly string[]).includes(firstSegment)) return null
 
-  if (matchedRootPath(pathname) !== null) {
+  if (matchLocalizedPath(pathname) !== null) {
     const locale = detectLocale(req)
     const url = req.nextUrl.clone()
     url.pathname = pathname === '/' ? `/${locale}` : `/${locale}${pathname}`
@@ -88,36 +48,98 @@ const skipClerkInDev =
   process.env.NODE_ENV === 'development' &&
   process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
 
+/**
+ * Content-Security-Policy — bewusst ohne script-src.
+ *
+ * Eine Einschränkung von script-src wäre der stärkste Schutz, bräuchte aber
+ * Nonces für die Inline-Skripte von Next selbst plus eine vollständige Liste
+ * aller Fremdquellen (Clerk, Analytics, eingebettete Inhalte). Ein Fehler darin
+ * legt die Seite still lahm: Skripte werden blockiert, die Seite bleibt weiß.
+ * Das gehört einmal im Report-Only-Modus beobachtet, bevor es scharf geschaltet
+ * wird — Anleitung dazu in SECURITY.md.
+ *
+ * Die Direktiven hier schränken kein einziges Skript ein und können deshalb
+ * nichts kaputtmachen, blockieren aber echte Angriffswege:
+ *
+ *   base-uri     Ohne das kann ein eingeschleustes <base href="//evil.tld">
+ *                sämtliche relativen Skriptpfade der Seite umbiegen. Aus einer
+ *                kleinen HTML-Injection wird so die Übernahme der ganzen Seite.
+ *   form-action  Verhindert, dass ein eingeschleustes Formular Eingaben an
+ *                einen fremden Server schickt.
+ *   object-src   <object> und <embed> sind ein alter, immer noch funktionierender
+ *                Weg, aktive Inhalte einzubetten. Hier braucht sie niemand.
+ *   frame-ancestors  Der moderne Ersatz für X-Frame-Options gegen Clickjacking.
+ *                X-Frame-Options bleibt zusätzlich stehen, für ältere Browser.
+ */
+const CONTENT_SECURITY_POLICY = [
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  'upgrade-insecure-requests',
+].join('; ')
+
 function applySecurityHeaders(response: NextResponse) {
   response.headers.set('X-Frame-Options', 'SAMEORIGIN')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  response.headers.set('Content-Security-Policy', CONTENT_SECURITY_POLICY)
+
+  // HSTS: Der Browser merkt sich für ein Jahr, diese Domain nur noch über
+  // HTTPS aufzurufen. Das schliesst das Zeitfenster beim allerersten Aufruf
+  // über http://, in dem ein Angreifer im selben Netz die Verbindung umbiegen
+  // kann, bevor die Weiterleitung auf HTTPS greift.
+  //
+  // Bewusst ohne "preload": Ein Preload-Eintrag ist in Browsern fest verdrahtet
+  // und nur über Monate wieder loszuwerden. Diese Entscheidung soll bewusst
+  // fallen, nicht als Nebenwirkung eines Sicherheitsupdates.
+  //
+  // Nur in Produktion — sonst zwingt der Browser auch localhost auf HTTPS und
+  // die lokale Entwicklung wird unbenutzbar.
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains'
+    )
+  }
+
   return response
 }
 
+/**
+ * Jede Antwort geht durch applySecurityHeaders, auch die vorzeitigen.
+ *
+ * Vorher trugen nur die durchgereichten Antworten die Header. Locale-Redirects
+ * und der Sign-in-Redirect gingen ohne CSP und ohne HSTS hinaus — also
+ * ausgerechnet die allererste Antwort, die ein Besucher bekommt. Genau dort
+ * ist HSTS am wichtigsten, weil es das Zeitfenster vor dem Wechsel auf HTTPS
+ * schliesst.
+ */
 export default skipClerkInDev
   ? function middleware(req: NextRequest) {
       const redirect = maybeRedirectToLocale(req)
-      if (redirect) return redirect
+      if (redirect) return applySecurityHeaders(redirect)
       return applySecurityHeaders(NextResponse.next())
     }
   : clerkMiddleware(async (auth, req) => {
       // Locale-Redirect zuerst — vor Auth-Check, damit auch nicht-eingeloggte
       // User direkt auf die richtige Sprache landen
       const redirect = maybeRedirectToLocale(req)
-      if (redirect) return redirect
+      if (redirect) return applySecurityHeaders(redirect)
 
-      if (isProtectedRoute(req)) {
+      if (requiresAuth(req)) {
         const { userId } = await auth()
         if (!userId) {
           // API routes: return 401 instead of redirect
           if (req.nextUrl.pathname.startsWith('/api/')) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            return applySecurityHeaders(
+              NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            )
           }
           const signInUrl = new URL('/admin/sign-in', req.url)
           signInUrl.searchParams.set('redirect_url', req.url)
-          return NextResponse.redirect(signInUrl)
+          return applySecurityHeaders(NextResponse.redirect(signInUrl))
         }
       }
 

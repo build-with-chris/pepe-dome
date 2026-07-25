@@ -1,7 +1,16 @@
 /**
  * JSON-LD Structured Data Components for SEO
  * Implements schema.org markup for Organization, Event, Article
+ *
+ * Die Blöcke gehen durch jsonLdScriptContent statt durch JSON.stringify.
+ * Titel, Beschreibungen und Orte kommen aus der Redaktion; ohne die Escapes
+ * beendet ein `</script>` in einem dieser Felder das Skript-Tag und alles
+ * dahinter läuft als JavaScript im Browser jedes Besuchers.
  */
+
+import { jsonLdScriptContent } from '@/lib/json-ld'
+import { getSiteContent } from '@/lib/data'
+import { isFreeEntry } from '@/lib/event-price'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
@@ -20,39 +29,117 @@ type OrganizationLdProps = {
   }
 }
 
+/**
+ * PerformingArtsTheater ist ein LocalBusiness-Subtyp. Für den lokalen
+ * Suchindex ("Zirkus München", Karten-Panel, Knowledge Panel) zählen die Felder,
+ * die eine Suchmaschine nicht erraten kann:
+ *
+ *   address     Vorher stand hier "Ostpark" ohne Hausnummer und die PLZ 81671.
+ *               Die echte Anschrift liegt in src/data/content.json und lautet
+ *               Albert-Schweitzer-Straße 62, 81735. Eine unvollständige oder
+ *               falsche Adresse verhindert genau das, wofür das Schema da ist:
+ *               dass Google den Ort auf der Karte findet.
+ *   telephone   Erzeugt den Anruf-Button in der mobilen Suche.
+ *   sameAs      Verknüpft die Seite mit den Social-Profilen. Stand vorher als
+ *               leeres Array da, was denselben Effekt hat wie weglassen.
+ *   image       Ohne Bild kein Bild im Ergebnis-Panel.
+ *   hasMap      Verlinkt den Kartenausschnitt.
+ *
+ * Bewusst nicht drin: `geo`. Falsche Koordinaten sind schlechter als keine, weil
+ * sie den Kartenpin verschieben und die vollständige Adresse überstimmen. Wenn
+ * die exakten Koordinaten des Domes vorliegen, gehören sie hier hinein.
+ *
+ * Die Werte kommen aus getSiteContent(), damit Adresse und Telefonnummer nicht
+ * an zwei Orten gepflegt werden müssen.
+ */
 export function OrganizationJsonLd({
-  name = 'Pepe Dome',
-  description = 'Zuhause für Artistik & Kultur im Ostpark München. Zeitgenössischer Zirkus, Shows, Workshops, Festivals und Events.',
+  name,
+  description,
   url = BASE_URL,
   logo = `${BASE_URL}/PepeDome Logo ausgeschnitten.png`,
-  email = 'info@pepe-dome.de',
-  address = {
-    streetAddress: 'Ostpark',
-    addressLocality: 'München',
-    addressRegion: 'Bayern',
-    postalCode: '81671',
-    addressCountry: 'DE',
-  },
+  email,
+  address,
 }: OrganizationLdProps = {}) {
-  const data = {
+  const site = getSiteContent()
+
+  const socialProfiles = Object.values(site.social ?? {}).filter(
+    (profile): profile is string => typeof profile === 'string' && profile.length > 0
+  )
+
+  const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'PerformingArtsTheater',
-    name,
-    description,
+    name: name ?? site.name,
+    alternateName: 'PEPE Dome',
+    description: description ?? site.description,
     url,
     logo,
-    email,
+    email: email ?? site.email,
     address: {
       '@type': 'PostalAddress',
-      ...address,
+      streetAddress: address?.streetAddress ?? site.address?.street,
+      addressLocality: address?.addressLocality ?? site.address?.city,
+      addressRegion: address?.addressRegion ?? 'Bayern',
+      postalCode: address?.postalCode ?? site.address?.zip,
+      addressCountry: address?.addressCountry ?? 'DE',
     },
-    sameAs: [],
+    hasMap:
+      'https://www.google.com/maps/search/?api=1&query=Pepe+Dome+Theatron+im+Ostpark+M%C3%BCnchen',
+    image: [`${BASE_URL}/og-image.png`, `${BASE_URL}/images/Aufbau/dome-outdoor-hero.webp`],
+    areaServed: { '@type': 'City', name: 'München' },
+  }
+
+  if (site.phone) data.telephone = site.phone
+  if (socialProfiles.length > 0) data.sameAs = socialProfiles
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
+    />
+  )
+}
+
+/**
+ * ImageGallery für die Galerieseite.
+ *
+ * Damit kann Google die Seite als Bildsammlung erkennen und die Einzelbilder in
+ * die Bildersuche aufnehmen, statt nur den Seitentext zu lesen. Die Bildersuche
+ * ist für eine Venue der Kanal, über den Leute "wie sieht das da aus" klären.
+ */
+export function ImageGalleryJsonLd({
+  name,
+  description,
+  url,
+  images,
+}: {
+  name: string
+  description: string
+  url: string
+  images: Array<{ src: string; alt: string; caption?: string; width: number; height: number }>
+}) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name,
+    description,
+    url: `${BASE_URL}${url}`,
+    numberOfItems: images.length,
+    associatedMedia: images.map((image) => ({
+      '@type': 'ImageObject',
+      contentUrl: `${BASE_URL}${image.src}`,
+      url: `${BASE_URL}${image.src}`,
+      name: image.alt,
+      description: image.caption ?? image.alt,
+      width: image.width,
+      height: image.height,
+    })),
   }
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
     />
   )
 }
@@ -208,14 +295,18 @@ export function EventJsonLd({
   if (category) data.about = { '@type': 'Thing', name: category }
 
   if (price) {
-    // price ist ein freier Text ("ab 22 €", "20–35 €", "Eintritt frei"). Wir
+    // price ist ein freier Text ("ab 22 €", "20 bis 35 €", "Eintritt frei"). Wir
     // versuchen die niedrigste Zahl rauszuziehen für Googles `price`, behalten
     // den Original-Text aber als description, damit "ab" / "Spendenbasis" nicht
     // verloren geht.
-    const priceNumber =
-      price === 'Eintritt frei'
-        ? '0'
-        : (price.match(/\d+(?:[.,]\d+)?/)?.[0]?.replace(',', '.') ?? '')
+    //
+    // Der Gratis-Fall läuft über isFreeEntry() statt über einen Stringvergleich:
+    // sonst meldet ein Event mit price "Kostenlos" gar keinen Preis an Google
+    // (kein Treffer im Zahlen-Match), und ein kostenloses Event ohne `price: 0`
+    // fällt aus den Event-Rich-Results heraus.
+    const priceNumber = isFreeEntry(price)
+      ? '0'
+      : (price.match(/\d+(?:[.,]\d+)?/)?.[0]?.replace(',', '.') ?? '')
 
     data.offers = {
       '@type': 'Offer',
@@ -229,7 +320,7 @@ export function EventJsonLd({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
     />
   )
 }
@@ -283,7 +374,7 @@ export function ArticleJsonLd({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
     />
   )
 }
@@ -305,7 +396,7 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
     />
   )
 }

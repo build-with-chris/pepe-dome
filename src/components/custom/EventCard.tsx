@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils'
 import { HTMLAttributes, forwardRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { isFreeEntry } from '@/lib/event-price'
+import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 
 /**
  * EventCard component following PEPE Dome design system
@@ -25,6 +27,10 @@ export interface EventCardProps extends HTMLAttributes<HTMLDivElement> {
   category?: string
   image?: string
   href?: string
+  /** Freitext-Preis aus der DB, z.B. "ab 22 €" oder "Eintritt frei" */
+  price?: string | null
+  /** Lokalisiertes Sticker-Label für kostenlose Events */
+  freeEntryLabel?: string
   /** Featured variant spans 2 columns */
   featured?: boolean
   /** Compact variant for horizontal layout */
@@ -42,6 +48,8 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       category,
       image,
       href,
+      price,
+      freeEntryLabel = 'Gratis Eintritt',
       featured = false,
       compact = false,
       ...props
@@ -50,6 +58,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
   ) => {
     // DB-Zeiten sind uneinheitlich ("20:00" vs. "17:00 Uhr") — Suffix für einheitliche Badges entfernen
     const timeLabel = time ? time.replace(/\s*Uhr\s*$/i, '') : null
+    const isFree = isFreeEntry(price)
 
     const cardClasses = cn(
       // Base styles
@@ -89,6 +98,16 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               src={image}
               alt={title}
               fill
+              // Event-Karten stehen in einem Raster: eine Spalte auf dem
+              // Telefon, zwei auf dem Tablet, drei auf dem Desktop. Ohne `sizes`
+              // nimmt Next bei `fill` 100vw an und lädt für eine 380px breite
+              // Karte das 1920px-Bild — dieselbe Darstellung, ein Vielfaches an
+              // Bytes, und das pro Karte im Raster.
+              sizes={
+                compact
+                  ? '160px'
+                  : '(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 33vw'
+              }
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (
@@ -123,6 +142,16 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               </span>
             </div>
           )}
+
+          {/* Gratis-Sticker oben rechts, diagonal gegenüber vom Datum. Beim
+              Überfliegen eines Rasters wandert der Blick über die obere
+              Bildkante, hier wird er also mitgenommen ohne den Titel zu
+              verdecken. */}
+          {isFree && !compact && (
+            <div className="absolute top-3 right-3 z-10">
+              <FreeEntryBadge label={freeEntryLabel} size="md" />
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
@@ -152,6 +181,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
                 {category}
               </span>
             )}
+            {/* In der compact-Variante gibt es keinen Bild-Overlay, in dem der
+                Sticker sitzen könnte — dort läuft er in der Meta-Zeile mit. */}
+            {isFree && compact && <FreeEntryBadge label={freeEntryLabel} size="sm" />}
           </div>
 
           {/* Title */}

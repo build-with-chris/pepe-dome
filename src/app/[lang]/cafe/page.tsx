@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button'
 import CafeReviewsSlider from '@/components/custom/CafeReviewsSlider'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
+import { pageMetadata } from '@/lib/seo'
 
 const MAPS_URL =
   'https://www.google.com/maps/search/?api=1&query=Pepe+Dome+Theatron+im+Ostpark+M%C3%BCnchen'
@@ -26,11 +27,12 @@ export async function generateMetadata({
   const { lang: rawLang } = await params
   if (!isLocale(rawLang)) return {}
   const dict = await getDictionary(rawLang)
-  return {
+  return pageMetadata({
+    lang: rawLang,
+    path: '/cafe',
     title: dict.cafe.meta.title,
     description: dict.cafe.meta.description,
-    alternates: { canonical: `https://www.pepe-dome.de/${rawLang}/cafe` },
-  }
+  })
 }
 
 export default async function CafePage({

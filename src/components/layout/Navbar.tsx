@@ -35,6 +35,7 @@ function useNavigation(lang: Locale) {
       { label: t('navigation.contact', 'Kontakt'),   href: localizedHref(lang, '/contact') },
     ],
     more: [
+      { label: t('navigation.gallery', 'Galerie'),   href: localizedHref(lang, '/galerie') },
       { label: t('navigation.news', 'News'),         href: localizedHref(lang, '/news') },
       { label: t('navigation.business', 'Business'), href: localizedHref(lang, '/business') },
     ],

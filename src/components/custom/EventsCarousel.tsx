@@ -9,6 +9,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import EventCard from './EventCard'
+import type { Locale } from '@/i18n/config'
 
 export type CarouselEvent = {
   id: string
@@ -16,11 +17,29 @@ export type CarouselEvent = {
   title: string
   description: string
   date: string  // ISO
+  time?: string | null
   category: string
   imageUrl: string | null
+  price?: string | null
 }
 
-export default function EventsCarousel({ events }: { events: CarouselEvent[] }) {
+export default function EventsCarousel({
+  events,
+  lang = 'de',
+  eventsHref = '/de/events',
+  freeEntryLabel = 'Gratis Eintritt',
+  prevLabel = 'Vorheriges Event',
+  nextLabel = 'Nächstes Event',
+}: {
+  events: CarouselEvent[]
+  /** Steuert die Datumsformatierung. */
+  lang?: Locale
+  /** Basis-URL der Event-Liste, damit die Karten nicht auf einen Redirect zeigen. */
+  eventsHref?: string
+  freeEntryLabel?: string
+  prevLabel?: string
+  nextLabel?: string
+}) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(false)
@@ -64,8 +83,8 @@ export default function EventsCarousel({ events }: { events: CarouselEvent[] }) 
           type="button"
           onClick={() => scrollByCard(-1)}
           disabled={!canPrev}
-          aria-label="Vorheriges Event"
-          className="w-10 h-10 rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
+          aria-label={prevLabel}
+          className="w-11 h-11 rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
@@ -75,8 +94,8 @@ export default function EventsCarousel({ events }: { events: CarouselEvent[] }) 
           type="button"
           onClick={() => scrollByCard(1)}
           disabled={!canNext}
-          aria-label="Nächstes Event"
-          className="w-10 h-10 rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
+          aria-label={nextLabel}
+          className="w-11 h-11 rounded-full bg-[var(--pepe-ink)] border border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-gold)] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
@@ -99,14 +118,19 @@ export default function EventsCarousel({ events }: { events: CarouselEvent[] }) 
             <EventCard
               title={event.title}
               description={event.description}
-              date={new Date(event.date).toLocaleDateString('de-DE', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}
+              date={new Date(event.date).toLocaleDateString(
+                lang === 'en' ? 'en-US' : 'de-DE',
+                { day: 'numeric', month: 'short', year: 'numeric' }
+              )}
+              time={event.time}
               category={event.category}
               image={event.imageUrl || undefined}
-              href={`/events/${event.slug}`}
+              price={event.price}
+              freeEntryLabel={freeEntryLabel}
+              // Absichtlich die lokalisierte URL: `/events/slug` würde erst per
+              // Middleware auf `/de/events/slug` umgeleitet. Ein Redirect bei
+              // jedem Klick kostet Zeit und verwässert interne Linksignale.
+              href={`${eventsHref}/${event.slug}`}
             />
           </div>
         ))}
