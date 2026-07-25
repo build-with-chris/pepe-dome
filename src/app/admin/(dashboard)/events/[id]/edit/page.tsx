@@ -35,6 +35,7 @@ async function getEvent(id: string) {
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
+    endTime: event.endTime,
     location: event.location,
     category: event.category,
     ticketUrl: event.ticketUrl,

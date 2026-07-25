@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
@@ -15,8 +15,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { cn } from '@/lib/utils'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
+import FieldHint from '@/components/admin/ui/FieldHint'
+import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
+import {
+  EVENT_PRICE_PRESETS,
+  detectPriceOption,
+  priceTextFor,
+  type EventPriceOption,
+} from '@/lib/event-price'
+import { isNormalizedTime, normalizeTime } from '@/lib/event-time'
 
 /**
  * EventForm component
@@ -37,6 +45,7 @@ const eventSchema = z.object({
   date: z.string().min(1, 'Datum ist erforderlich'),
   endDate: z.string().optional(),
   time: z.string().optional(),
+  endTime: z.string().optional(),
   location: z.string().min(1, 'Location ist erforderlich'),
   category: z.string().min(1, 'Kategorie ist erforderlich'),
   ticketUrl: z.string().optional().or(z.literal('')),
@@ -69,6 +78,7 @@ interface Event {
   date: string
   endDate: string | null
   time: string | null
+  endTime: string | null
   location: string
   category: string
   ticketUrl: string | null
@@ -115,11 +125,27 @@ const statusOptions = [
   { value: 'ARCHIVED', label: 'Archiviert' },
 ]
 
+/**
+ * Auswahl statt Freitext beim Preis. Der Dome kennt drei Preise, das Textfeld
+ * hatte trotzdem ein Dutzend Schreibweisen produziert. "Sonderpreis" bleibt als
+ * Ausweg für Gastspiele und für Altbestand, der sonst beim Speichern verloren
+ * ginge.
+ */
+const priceOptions: { value: EventPriceOption | 'NONE'; label: string }[] = [
+  { value: 'NONE', label: 'Noch kein Preis' },
+  ...EVENT_PRICE_PRESETS.map((preset) => ({ value: preset.option, label: preset.de })),
+  { value: 'CUSTOM', label: 'Sonderpreis (Freitext)' },
+]
+
+/** Alle englischen Preistexte, die wir selbst gesetzt haben */
+const presetEnglishPrices = EVENT_PRICE_PRESETS.map((preset) => preset.en)
+
 export default function EventForm({ event, mode }: EventFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [highlights, setHighlights] = useState<string[]>(event?.highlights || [''])
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
 
   // Englische Übersetzung (Highlights als eine Zeile pro Eintrag)
   const en = event?.translations?.en
@@ -184,7 +210,10 @@ export default function EventForm({ event, mode }: EventFormProps) {
     description: event?.description || '',
     date: event?.date ? formatDateForInput(event.date) : '',
     endDate: event?.endDate ? formatDateForInput(event.endDate) : '',
-    time: event?.time || '',
+    // Die Zeit-Picker verlangen "HH:MM". Altbestand wie "ab 20" wird geparst,
+    // damit das Feld nicht leer aussieht und die Zeit still verschwindet.
+    time: normalizeTime(event?.time) || '',
+    endTime: normalizeTime(event?.endTime) || '',
     location: event?.location || 'Pepe Dome, Ostpark Munchen',
     category: event?.category || 'SHOW',
     ticketUrl: event?.ticketUrl || '',
@@ -199,6 +228,37 @@ export default function EventForm({ event, mode }: EventFormProps) {
   function formatDateForInput(dateStr: string): string {
     return new Date(dateStr).toISOString().split('T')[0]
   }
+
+  // Preis als Auswahl. Der Freitext lebt nur noch im Sonderfall.
+  const [priceOption, setPriceOption] = useState<EventPriceOption | 'NONE'>(
+    detectPriceOption(event?.price) ?? 'NONE'
+  )
+  const [customPrice, setCustomPrice] = useState(
+    detectPriceOption(event?.price) === 'CUSTOM' ? event?.price || '' : ''
+  )
+
+  function changePriceOption(next: EventPriceOption | 'NONE') {
+    setPriceOption(next)
+
+    // Englische Fassung mitziehen, solange dort nichts von Hand steht. Sonst
+    // müsste die Redaktion den Preis zweimal pflegen und die EN-Seite zeigt
+    // weiter den alten Betrag.
+    const englishPreset = next === 'NONE' || next === 'CUSTOM' ? null : priceTextFor(next, 'en')
+    if (englishPreset && (!enFields.price || presetEnglishPrices.includes(enFields.price))) {
+      updateEnField('price', englishPreset)
+    }
+  }
+
+  /** Was am Ende im Preisfeld der Datenbank steht */
+  function resolvePrice(): string {
+    if (priceOption === 'NONE') return ''
+    if (priceOption === 'CUSTOM') return customPrice.trim()
+    return priceTextFor(priceOption) ?? ''
+  }
+
+  // Uhrzeiten, die sich nicht in "HH:MM" übersetzen lassen ("nach Vereinbarung").
+  // Beim Speichern würden sie durch den Picker-Wert ersetzt, deshalb sichtbar machen.
+  const legacyTime = event?.time && !isNormalizedTime(event.time) ? event.time : null
 
   function updateField(field: keyof EventFormData, value: unknown) {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -234,7 +294,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
     // Prepare data
     const data = {
       ...formData,
+      price: resolvePrice(),
       highlights: highlights.filter((h) => h.trim() !== ''),
+    }
+
+    if (priceOption === 'CUSTOM' && data.price === '') {
+      setErrors({ price: 'Bitte den Sonderpreis eintragen oder eine Stufe auswahlen' })
+      setLoading(false)
+      return
     }
 
     // Validate
@@ -355,8 +422,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
                 <Label htmlFor="description" hasError={!!errors.description} required>
                   Beschreibung
                 </Label>
+                <MarkdownToolbar
+                  textareaRef={descriptionRef}
+                  value={formData.description || ''}
+                  onChange={(next) => updateField('description', next)}
+                />
                 <Textarea
                   id="description"
+                  ref={descriptionRef}
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   hasError={!!errors.description}
@@ -364,8 +437,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
                   placeholder="Beschreibung des Events..."
                   className="min-h-[140px]"
                 />
-                {errors.description && (
+                {errors.description ? (
                   <p className="text-sm text-red-400">{errors.description}</p>
+                ) : (
+                  <FieldHint>
+                    Der Fliesstext auf der Event-Detailseite. Text markieren und auf
+                    einen Knopf in der Leiste klicken, dann setzt sich die Formatierung
+                    von selbst.
+                  </FieldHint>
                 )}
               </div>
             </div>
@@ -408,16 +487,42 @@ export default function EventForm({ event, mode }: EventFormProps) {
                 </div>
               </div>
 
-              <div className="space-y-2.5">
-                <Label htmlFor="time">Uhrzeit</Label>
-                <Input
-                  id="time"
-                  value={formData.time}
-                  onChange={(e) => updateField('time', e.target.value)}
-                  placeholder="z.B. 20:00 Uhr"
-                  inputSize="lg"
-                />
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2.5">
+                  <Label htmlFor="time">Beginn</Label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={formData.time}
+                    onChange={(e) => updateField('time', e.target.value)}
+                    inputSize="lg"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="endTime">Ende</Label>
+                  <Input
+                    id="endTime"
+                    type="time"
+                    value={formData.endTime}
+                    onChange={(e) => updateField('endTime', e.target.value)}
+                    inputSize="lg"
+                  />
+                </div>
               </div>
+
+              <p className="text-xs text-white/50 leading-relaxed">
+                Auf der Website steht damit &quot;20:00 bis 22:00 Uhr&quot;, ohne Ende nur
+                &quot;20:00 Uhr&quot;. Das Ende ist optional, bei Shows ohne festes Ende
+                einfach leer lassen.
+              </p>
+
+              {legacyTime && (
+                <p className="text-xs text-amber-400/90 leading-relaxed">
+                  Bisher stand hier &quot;{legacyTime}&quot;. Beim Speichern wird der Wert
+                  aus den beiden Feldern oben ubernommen.
+                </p>
+              )}
 
               <div className="grid grid-cols-2 gap-5">
                 <div className="space-y-2.5">
@@ -490,22 +595,74 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     placeholder="https://..."
                     inputSize="lg"
                   />
-                  {errors.ticketUrl && (
+                  {errors.ticketUrl ? (
                     <p className="text-sm text-red-400">{errors.ticketUrl}</p>
+                  ) : (
+                    <FieldHint>
+                      Ziel des Ticket-Knopfes. Ohne Link steht dort &quot;Tickets bald
+                      verfugbar&quot;. Eine mailto-Adresse macht daraus eine Anfrage per
+                      Mail statt eines Ticketkaufs.
+                    </FieldHint>
                   )}
                 </div>
 
                 <div className="space-y-2.5">
                   <Label htmlFor="price">Preis</Label>
-                  <Input
-                    id="price"
-                    value={formData.price}
-                    onChange={(e) => updateField('price', e.target.value)}
-                    placeholder="z.B. 25EUR"
-                    inputSize="lg"
-                  />
+                  <Select
+                    value={priceOption}
+                    onValueChange={(value) => changePriceOption(value as EventPriceOption | 'NONE')}
+                  >
+                    <SelectTrigger className="h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {priceOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {priceOption === 'FREE' && (
+                    <p className="text-[11px] text-white/40">
+                      Das Event bekommt auf der Website den Gratis-Sticker.
+                    </p>
+                  )}
                 </div>
               </div>
+
+              {priceOption === 'CUSTOM' && (
+                <div className="space-y-2.5">
+                  <Label htmlFor="customPrice" hasError={!!errors.price}>
+                    Sonderpreis
+                  </Label>
+                  <Input
+                    id="customPrice"
+                    value={customPrice}
+                    onChange={(e) => {
+                      setCustomPrice(e.target.value)
+                      if (errors.price) {
+                        setErrors((prev) => {
+                          const next = { ...prev }
+                          delete next.price
+                          return next
+                        })
+                      }
+                    }}
+                    hasError={!!errors.price}
+                    placeholder="z.B. ab 18 EUR, Gastspiel"
+                    inputSize="lg"
+                  />
+                  {errors.price ? (
+                    <p className="text-sm text-red-400">{errors.price}</p>
+                  ) : (
+                    <p className="text-[11px] text-white/40">
+                      Nur fur Gastspiele und Kooperationen. Regulare Termine laufen uber
+                      die drei Stufen, damit die Preise einheitlich bleiben.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -548,6 +705,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
               >
                 + Highlight hinzufugen
               </Button>
+
+              <div className="pt-1">
+                <FieldHint>
+                  Kurze Stichpunkte, die auf der Detailseite als Hakenliste neben der
+                  Beschreibung stehen. Drei bis funf reichen. Leere Zeilen werden beim
+                  Speichern verworfen.
+                </FieldHint>
+              </div>
             </div>
           </div>
 

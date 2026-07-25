@@ -47,6 +47,7 @@ export async function POST(
         date: original.date,
         endDate: original.endDate,
         time: original.time,
+        endTime: original.endTime,
         location: original.location,
         category: original.category,
         ticketUrl: null,        // Ticket-Link entfernen

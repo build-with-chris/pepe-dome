@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
@@ -15,6 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
+import FieldHint from '@/components/admin/ui/FieldHint'
+import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
 
 // Available pages for CTA link
 const pageOptions = [
@@ -109,6 +111,7 @@ export default function NewsletterForm({
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const introRef = useRef<HTMLTextAreaElement>(null)
 
   // Form state
   const [formData, setFormData] = useState<NewsletterFormData>({
@@ -228,11 +231,17 @@ export default function NewsletterForm({
           maxLength={200}
           inputSize="lg"
         />
-        <div className="flex justify-between mt-1.5">
-          {errors.subject && (
+        <div className="flex justify-between gap-4 mt-1.5">
+          {errors.subject ? (
             <p className="text-sm text-red-400">{errors.subject}</p>
+          ) : (
+            <FieldHint>
+              Die Zeile, die im Postfach steht und darüber entscheidet, ob die Mail
+              geöffnet wird. Konkret schlägt allgemein: &quot;Drei Premieren im
+              November&quot; wirkt besser als &quot;Newsletter November&quot;.
+            </FieldHint>
           )}
-          <p className="text-xs text-white/40 ml-auto">
+          <p className="text-xs text-white/40 ml-auto whitespace-nowrap">
             {formData.subject.length}/200
           </p>
         </div>
@@ -249,40 +258,42 @@ export default function NewsletterForm({
           maxLength={200}
           inputSize="lg"
         />
-        <p className="text-xs text-white/40 mt-1.5">Wird in E-Mail-Vorschauen angezeigt</p>
+        <div className="mt-1.5">
+          <FieldHint>
+            Die graue Zeile, die im Postfach direkt hinter dem Betreff steht. Sie ist
+            der zweite Satz deiner Einladung, keine Wiederholung des Betreffs. Bleibt
+            sie leer, zeigen die meisten Programme dort den Anfang des Intro-Texts.
+          </FieldHint>
+        </div>
       </div>
 
       <div className="space-y-2.5">
         <Label htmlFor="introText">Intro-Text</Label>
+        <MarkdownToolbar
+          textareaRef={introRef}
+          value={formData.introText || ''}
+          onChange={(next) => updateField('introText', next)}
+        />
         <Textarea
           id="introText"
+          ref={introRef}
           value={formData.introText}
           onChange={(e) => updateField('introText', e.target.value)}
           hasError={!!errors.introText}
           rows={4}
-          placeholder={
-            'Einführungstext für den Newsletter…\n\n' +
-            'Markdown wird unterstützt:\n' +
-            '## Überschrift\n' +
-            '**fett**, *kursiv*, [Link](https://…)\n' +
-            '- Aufzählungspunkt\n' +
-            '> Zitat'
-          }
+          placeholder="Ein paar Sätze zur Begrüßung…"
           className="min-h-[160px] font-mono text-sm"
         />
         <div className="flex justify-between mt-1.5 gap-4">
           {errors.introText ? (
             <p className="text-sm text-red-400">{errors.introText}</p>
           ) : (
-            <p className="text-xs text-white/40">
-              Formatierung mit Markdown:{' '}
-              <code className="text-white/60">## Überschrift</code>,{' '}
-              <code className="text-white/60">**fett**</code>,{' '}
-              <code className="text-white/60">*kursiv*</code>,{' '}
-              <code className="text-white/60">- Liste</code>,{' '}
-              <code className="text-white/60">&gt; Zitat</code>,{' '}
-              <code className="text-white/60">[Text](URL)</code>
-            </p>
+            <FieldHint>
+              Deine Begrüßung am Anfang der Mail, oberhalb der Events. Text markieren
+              und auf einen Knopf in der Leiste klicken, dann setzt sich die
+              Formatierung von selbst. Die Sternchen und Rauten sind normal und
+              verschwinden in der fertigen Mail wieder.
+            </FieldHint>
           )}
           <p className="text-xs text-white/40 ml-auto whitespace-nowrap">
             {(formData.introText || '').length}/2000
@@ -304,6 +315,12 @@ export default function NewsletterForm({
         placeholder="Bild hier ablegen oder klicken"
       />
 
+      <FieldHint>
+        Der Kopfbereich ist das Erste, was nach dem Öffnen zu sehen ist: ein großes
+        Bild mit Überschrift und einem Knopf. Alle vier Felder sind optional, leere
+        Felder werden in der Mail einfach weggelassen.
+      </FieldHint>
+
       <div className="grid grid-cols-1 gap-5">
         <div className="space-y-2.5">
           <Label htmlFor="heroTitle">Hero-Titel</Label>
@@ -316,6 +333,10 @@ export default function NewsletterForm({
             maxLength={100}
             inputSize="lg"
           />
+          <FieldHint>
+            Die große Überschrift im Kopfbereich. Nicht dasselbe wie der Betreff: den
+            hat der Empfänger an dieser Stelle schon gelesen.
+          </FieldHint>
         </div>
 
         <div className="space-y-2.5">
@@ -329,6 +350,7 @@ export default function NewsletterForm({
             maxLength={200}
             inputSize="lg"
           />
+          <FieldHint>Eine ruhigere Zeile direkt unter der Überschrift.</FieldHint>
         </div>
       </div>
 
@@ -344,6 +366,10 @@ export default function NewsletterForm({
             maxLength={50}
             inputSize="lg"
           />
+          <FieldHint>
+            Die Beschriftung des Knopfes. Bleibt das Feld leer, erscheint gar kein
+            Knopf.
+          </FieldHint>
         </div>
 
         <div className="space-y-2.5">
@@ -363,6 +389,7 @@ export default function NewsletterForm({
               ))}
             </SelectContent>
           </Select>
+          <FieldHint>Wohin der Knopf führt.</FieldHint>
         </div>
       </div>
     </div>

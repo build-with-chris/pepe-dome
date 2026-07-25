@@ -13,6 +13,7 @@
 
 import { prisma } from './prisma'
 import { buildCampaignId, contentId, withUtm, isMailLink, normalizeContactUrl } from './utm'
+import { formatTimeRange } from './event-time'
 
 /**
  * Wie prominent ein Beitrag dargestellt wird.
@@ -216,6 +217,7 @@ interface EventRecord {
   description: string
   date: Date
   time: string | null
+  endTime: string | null
   location: string
   category: string
   ticketUrl: string | null
@@ -306,7 +308,8 @@ function buildEventItem(
     dayLabel: date.toLocaleDateString(dateLocale, { day: '2-digit' }),
     monthLabel: date.toLocaleDateString(dateLocale, { month: 'short' }).replace('.', ''),
     weekdayLabel: date.toLocaleDateString(dateLocale, { weekday: 'short' }).replace('.', ''),
-    time: event.time || undefined,
+    // Ein Wortlaut für Mail, Textfassung und Web-Ansicht: "20:00 bis 22:00 Uhr"
+    time: formatTimeRange(event.time, event.endTime) || undefined,
     location: event.location || undefined,
     category: event.category,
     categoryLabel: CATEGORY_LABELS[event.category] || undefined,

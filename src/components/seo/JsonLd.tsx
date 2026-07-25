@@ -274,6 +274,8 @@ type EventLdProps = {
   // startDate kombiniert, damit Google die echte Veranstaltungszeit sieht
   // statt UTC-Mitternacht.
   time?: string | null
+  // Endzeit ("22:00"). Ohne sie muss der Endzeitpunkt geschätzt werden, siehe unten.
+  endTime?: string | null
   location?: string
   image?: string | null
   url: string
@@ -288,6 +290,7 @@ export function EventJsonLd({
   startDate,
   endDate,
   time,
+  endTime,
   location = 'Pepe Dome, Ostpark, München',
   image,
   url,
@@ -300,10 +303,18 @@ export function EventJsonLd({
   // End-Sanity: gleiche Logik wie in den Edge Functions (feed-ics, feed-jsonld).
   // Wenn end fehlt oder <= start, defaulten wir auf Start + 2h. So vermeiden
   // wir Zero-Duration-Events, die Google als "ungültig" markiert.
+  //
+  // Mit gepflegter Endzeit ist das keine Schätzung mehr: sie gilt für den
+  // Enddatum-Tag, bei eintägigen Events also für den Starttag.
   let endIso: string
+  const endClock = endTime || time
   if (endDate) {
-    const candidate = toBerlinIso(endDate, time)
+    const candidate = toBerlinIso(endDate, endClock)
     endIso = new Date(candidate) <= new Date(startIso) ? plusHoursIso(startIso, 2) : candidate
+  } else if (endTime) {
+    const candidate = toBerlinIso(startDate, endTime)
+    // Endzeit vor Startzeit heißt: es geht über Mitternacht.
+    endIso = new Date(candidate) <= new Date(startIso) ? plusHoursIso(candidate, 24) : candidate
   } else {
     endIso = plusHoursIso(startIso, 2)
   }

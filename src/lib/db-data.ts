@@ -41,7 +41,10 @@ export type EventData = {
   description: string
   date: string
   endDate: string | null
+  /** Beginn als "HH:MM" (Altbestand kann Freitext sein), siehe src/lib/event-time.ts */
   time: string | null
+  /** Ende als "HH:MM", optional */
+  endTime: string | null
   location: string
   category: string
   ticketUrl: string | null
@@ -97,6 +100,7 @@ export function transformEvent(event: Event, locale: DbLocale = 'de'): EventData
     date: event.date.toISOString(),
     endDate: event.endDate?.toISOString() || null,
     time: event.time,
+    endTime: event.endTime,
     location: event.location,
     category: event.category,
     ticketUrl: event.ticketUrl,

@@ -18,6 +18,7 @@ import SignupForm from '@/components/custom/SignupForm'
 import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 import { isFreeEntry } from '@/lib/event-price'
+import { formatTimeRange } from '@/lib/event-time'
 import TicketLink from '@/components/events/TicketLink'
 import EventViewTracker from '@/components/events/EventViewTracker'
 import { isMailTicket } from '@/lib/ticket-url'
@@ -88,6 +89,8 @@ export default async function EventDetailPage({
   if (!event) notFound()
 
   const isFree = isFreeEntry(event.price)
+  // "20:00 bis 22:00 Uhr" bzw. "20:00 Uhr" ohne Endzeit
+  const timeLabel = formatTimeRange(event.time, event.endTime, lang)
 
   const [upcomingEvents, recentArticles] = await Promise.all([
     getUpcomingEvents(lang),
@@ -123,6 +126,7 @@ export default async function EventDetailPage({
         startDate={event.date}
         endDate={event.endDate}
         time={event.time}
+        endTime={event.endTime}
         location={event.location}
         image={event.imageUrl}
         url={`/${lang}/events/${event.slug}`}
@@ -247,14 +251,14 @@ export default async function EventDetailPage({
                     </div>
                   </div>
                 </div>
-                {event.time && (
+                {timeLabel && (
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-[var(--pepe-gold)]/10 flex items-center justify-center flex-shrink-0">
                       <span className="text-[var(--pepe-accent-text)]">&#128336;</span>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoTime}</div>
-                      <div className="text-[var(--pepe-white)] font-medium">{event.time}</div>
+                      <div className="text-[var(--pepe-white)] font-medium">{timeLabel}</div>
                     </div>
                   </div>
                 )}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
+import FieldHint from '@/components/admin/ui/FieldHint'
+import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
 
 /**
  * ArticleForm component
@@ -99,6 +101,7 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [tagInput, setTagInput] = useState('')
+  const contentRef = useRef<HTMLTextAreaElement>(null)
 
   // Form state
   const [formData, setFormData] = useState<Partial<ArticleFormData>>({
@@ -246,8 +249,13 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                   placeholder="Artikel-Titel"
                   inputSize="lg"
                 />
-                {errors.title && (
+                {errors.title ? (
                   <p className="text-sm text-red-400">{errors.title}</p>
+                ) : (
+                  <FieldHint>
+                    Die Uberschrift des Artikels. Steht auf der News-Seite, auf der
+                    Vorschau-Karte und im Browser-Tab.
+                  </FieldHint>
                 )}
               </div>
 
@@ -262,9 +270,11 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                     className="font-mono text-sm"
                     inputSize="lg"
                   />
-                  <p className="text-[11px] text-white/40">
-                    Wird automatisch aus dem Titel generiert
-                  </p>
+                  <FieldHint>
+                    Der Teil der Adresse hinter /news/. Wird aus dem Titel erzeugt und
+                    ist nach dem Veroffentlichen nicht mehr anderbar, sonst laufen
+                    geteilte Links ins Leere.
+                  </FieldHint>
                 </div>
               )}
 
@@ -281,8 +291,15 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                   placeholder="Kurze Beschreibung fur Vorschauen..."
                   className="min-h-[100px]"
                 />
-                {errors.excerpt && (
+                {errors.excerpt ? (
                   <p className="text-sm text-red-400">{errors.excerpt}</p>
+                ) : (
+                  <FieldHint>
+                    Zwei bis drei Satze als Anreisser. Erscheinen auf der News-Ubersicht
+                    unter dem Titel und auf der Karte im Newsletter, nicht im Artikel
+                    selbst. Der Text sollte also nicht die erste Zeile des Artikels
+                    wiederholen.
+                  </FieldHint>
                 )}
               </div>
 
@@ -298,8 +315,13 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                   placeholder="Autor Name"
                   inputSize="lg"
                 />
-                {errors.author && (
+                {errors.author ? (
                   <p className="text-sm text-red-400">{errors.author}</p>
+                ) : (
+                  <FieldHint>
+                    Steht im Artikel unter dem Titel. Ein Name oder, wenn niemand
+                    namentlich zeichnet, &quot;Pepe Dome Team&quot;.
+                  </FieldHint>
                 )}
               </div>
             </div>
@@ -313,23 +335,33 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
 
             <div className="space-y-2.5">
               <Label htmlFor="content" hasError={!!errors.content} required>
-                Artikel-Inhalt (Markdown)
+                Artikel-Inhalt
               </Label>
+              <MarkdownToolbar
+                textareaRef={contentRef}
+                value={formData.content || ''}
+                onChange={(next) => updateField('content', next)}
+              />
               <Textarea
                 id="content"
+                ref={contentRef}
                 value={formData.content}
                 onChange={(e) => updateField('content', e.target.value)}
                 hasError={!!errors.content}
                 rows={20}
-                placeholder="Artikel-Inhalt in Markdown..."
+                placeholder="Der eigentliche Artikel..."
                 className="font-mono text-sm min-h-[400px]"
               />
-              {errors.content && (
+              {errors.content ? (
                 <p className="text-sm text-red-400">{errors.content}</p>
+              ) : (
+                <FieldHint>
+                  Der eigentliche Artikeltext. Text markieren und auf einen Knopf in der
+                  Leiste klicken, dann setzt sich die Formatierung von selbst. Die
+                  Sternchen und Rauten sind normal und verschwinden auf der Website
+                  wieder.
+                </FieldHint>
               )}
-              <p className="text-[11px] text-white/40">
-                Markdown: **fett**, *kursiv*, # Uberschriften, - Listen
-              </p>
             </div>
           </div>
 
@@ -354,6 +386,12 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                   Hinzufugen
                 </Button>
               </div>
+              <FieldHint>
+                Schlagworter, nach denen Besucher auf der News-Seite filtern konnen.
+                Enter oder &quot;Hinzufugen&quot; ubernimmt einen Tag. Zwei bis vier pro
+                Artikel reichen; je weniger verschiedene es insgesamt gibt, desto
+                brauchbarer ist der Filter.
+              </FieldHint>
               {formData.tags && formData.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {formData.tags.map((tag) => (
@@ -394,6 +432,13 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
               error={errors.imageUrl}
               placeholder="Bild hier ablegen"
             />
+            <div className="mt-3">
+              <FieldHint>
+                Erscheint gross uber dem Artikel und als Vorschau in den Listen.
+                Querformat funktioniert am besten, hochkant wird oben und unten
+                beschnitten.
+              </FieldHint>
+            </div>
           </div>
 
           {/* Settings */}
@@ -422,6 +467,10 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                     ))}
                   </SelectContent>
                 </Select>
+                <FieldHint>
+                  Steuert, unter welchem Filter der Artikel auf der News-Seite
+                  auftaucht.
+                </FieldHint>
               </div>
 
               <div className="space-y-2.5">
@@ -441,6 +490,10 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                     ))}
                   </SelectContent>
                 </Select>
+                <FieldHint>
+                  Ein Entwurf ist nur hier im Admin sichtbar. Erst
+                  &quot;Veroffentlicht&quot; stellt den Artikel online.
+                </FieldHint>
               </div>
 
               <div className="pt-3 border-t border-white/[0.08]">

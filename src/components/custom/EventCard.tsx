@@ -5,6 +5,7 @@ import { HTMLAttributes, forwardRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { isFreeEntry } from '@/lib/event-price'
+import { formatTimeShort } from '@/lib/event-time'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 
 /**
@@ -56,8 +57,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
     },
     ref
   ) => {
-    // DB-Zeiten sind uneinheitlich ("20:00" vs. "17:00 Uhr") — Suffix für einheitliche Badges entfernen
-    const timeLabel = time ? time.replace(/\s*Uhr\s*$/i, '') : null
+    // Karten zeigen nur den Beginn: im Datums-Badge ist kein Platz für eine
+    // Spanne, und die Endzeit steht auf der Detailseite.
+    const timeLabel = formatTimeShort(time)
     const isFree = isFreeEntry(price)
 
     const cardClasses = cn(

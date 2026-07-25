@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
+import { toStoredTime } from '@/lib/event-time'
 import { z } from 'zod'
 
 const eventSchema = z.object({
@@ -11,6 +12,7 @@ const eventSchema = z.object({
   date: z.string().transform((val) => new Date(val)),
   endDate: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : undefined),
   time: z.string().optional(),
+  endTime: z.string().optional(),
   location: z.string().min(1, 'Location is required'),
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']),
   ticketUrl: z.string().optional().or(z.literal('')),
@@ -106,7 +108,10 @@ export async function POST(request: NextRequest) {
         description: data.description,
         date: data.date,
         endDate: data.endDate || null,
-        time: data.time || null,
+        // Uhrzeiten laufen durch die Normalisierung, damit "ab 20" und
+        // "20:00 Uhr" nicht als zwei verschiedene Werte in der DB landen.
+        time: toStoredTime(data.time),
+        endTime: toStoredTime(data.endTime),
         location: data.location,
         category: data.category,
         ticketUrl: data.ticketUrl || null,

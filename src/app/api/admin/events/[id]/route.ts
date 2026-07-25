@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
+import { toStoredTime } from '@/lib/event-time'
 import { z } from 'zod'
 
 const translationSchema = z.object({
@@ -19,6 +20,7 @@ const eventUpdateSchema = z.object({
   date: z.string().transform((val) => val ? new Date(val) : undefined).optional(),
   endDate: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : null),
   time: z.string().optional().nullable(),
+  endTime: z.string().optional().nullable(),
   location: z.string().min(1).optional(),
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']).optional(),
   ticketUrl: z.string().optional().nullable().or(z.literal('')),
@@ -79,6 +81,13 @@ export async function PUT(
         cleanData[key] = null
       } else if (value !== undefined) {
         cleanData[key] = value
+      }
+    }
+
+    // Uhrzeiten einheitlich als "HH:MM" ablegen, egal woher der Aufruf kommt.
+    for (const key of ['time', 'endTime'] as const) {
+      if (key in cleanData) {
+        cleanData[key] = toStoredTime(cleanData[key] as string | null)
       }
     }
 
