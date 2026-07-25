@@ -260,12 +260,34 @@ export default function NewsletterForm({
           onChange={(e) => updateField('introText', e.target.value)}
           hasError={!!errors.introText}
           rows={4}
-          placeholder="Einführungstext für den Newsletter..."
-          className="min-h-[120px]"
+          placeholder={
+            'Einführungstext für den Newsletter…\n\n' +
+            'Markdown wird unterstützt:\n' +
+            '## Überschrift\n' +
+            '**fett**, *kursiv*, [Link](https://…)\n' +
+            '- Aufzählungspunkt\n' +
+            '> Zitat'
+          }
+          className="min-h-[160px] font-mono text-sm"
         />
-        {errors.introText && (
-          <p className="text-sm text-red-400 mt-1.5">{errors.introText}</p>
-        )}
+        <div className="flex justify-between mt-1.5 gap-4">
+          {errors.introText ? (
+            <p className="text-sm text-red-400">{errors.introText}</p>
+          ) : (
+            <p className="text-xs text-white/40">
+              Formatierung mit Markdown:{' '}
+              <code className="text-white/60">## Überschrift</code>,{' '}
+              <code className="text-white/60">**fett**</code>,{' '}
+              <code className="text-white/60">*kursiv*</code>,{' '}
+              <code className="text-white/60">- Liste</code>,{' '}
+              <code className="text-white/60">&gt; Zitat</code>,{' '}
+              <code className="text-white/60">[Text](URL)</code>
+            </p>
+          )}
+          <p className="text-xs text-white/40 ml-auto whitespace-nowrap">
+            {(formData.introText || '').length}/2000
+          </p>
+        </div>
       </div>
     </div>
   )
