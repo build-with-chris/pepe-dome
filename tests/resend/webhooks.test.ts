@@ -212,4 +212,117 @@ describe('Resend Webhooks - Email Events', () => {
     expect(updated?.status).toBe('UNSUBSCRIBED')
     expect(updated?.unsubscribedAt).toBeTruthy()
   })
+
+  /**
+   * Der Fall, der live im Minutentakt 500er erzeugt hat.
+   *
+   * In den Tags einer Mail steckt die newsletter_id vom Tag des Versands.
+   * Resend spielt sie bei jedem Ereignis zurück, auch wenn der Newsletter
+   * inzwischen gelöscht wurde. Ungeprüft weitergereicht verletzte sie den
+   * Fremdschlüssel newsletter_events_newsletter_id_fkey, die Route antwortete
+   * 500, und Resend stellte dasselbe Ereignis endlos erneut zu.
+   */
+  describe('verwaiste IDs in den Tags', () => {
+    const NICHT_EXISTENT = '00000000-0000-4000-8000-000000000000'
+
+    function requestWith(payload: unknown) {
+      return new NextRequest('http://localhost:3000/api/webhooks/resend', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'resend-signature': process.env.RESEND_WEBHOOK_SECRET || 'test-signature',
+        }),
+      })
+    }
+
+    it('quittiert ein Event mit gelöschtem Newsletter, statt 500 zu werfen', async () => {
+      const response = await POST(
+        requestWith({
+          type: 'email.opened',
+          created_at: new Date().toISOString(),
+          data: {
+            email_id: 'verwaist-newsletter',
+            from: 'newsletter@pepe-dome.de',
+            to: [subscriber.email],
+            subject: 'Test',
+            created_at: new Date().toISOString(),
+            tags: [
+              { name: 'subscriber_id', value: subscriber.id },
+              { name: 'newsletter_id', value: NICHT_EXISTENT },
+            ],
+          },
+        })
+      )
+
+      // 200, sonst wiederholt Resend bis in alle Ewigkeit
+      expect(response.status).toBe(200)
+
+      // Und es darf keine Zeile mit der toten Referenz entstanden sein
+      const events = await prisma.newsletterEvent.count({
+        where: { newsletterId: NICHT_EXISTENT },
+      })
+      expect(events).toBe(0)
+    })
+
+    it('quittiert ein Event mit gelöschter Abonnentin', async () => {
+      const response = await POST(
+        requestWith({
+          type: 'email.clicked',
+          created_at: new Date().toISOString(),
+          data: {
+            email_id: 'verwaist-subscriber',
+            from: 'newsletter@pepe-dome.de',
+            to: ['weg@example.com'],
+            subject: 'Test',
+            created_at: new Date().toISOString(),
+            click: { link: 'https://www.pepe-dome.de', timestamp: new Date().toISOString() },
+            tags: [
+              { name: 'subscriber_id', value: NICHT_EXISTENT },
+              { name: 'newsletter_id', value: newsletter.id },
+            ],
+          },
+        })
+      )
+
+      expect(response.status).toBe(200)
+      const events = await prisma.newsletterEvent.count({
+        where: { subscriberId: NICHT_EXISTENT },
+      })
+      expect(events).toBe(0)
+    })
+
+    it('trägt bei einem Bounce mit totem Newsletter trotzdem nicht halb aus', async () => {
+      // Der Bounce-Handler trägt zuerst die Person aus und legt dann das
+      // Ereignis an. Bräche er beim zweiten Schritt ab, wäre jemand ausgetragen
+      // ohne dokumentierten Grund. Deshalb wird vorher geprüft.
+      const response = await POST(
+        requestWith({
+          type: 'email.bounced',
+          created_at: new Date().toISOString(),
+          data: {
+            email_id: 'verwaist-bounce',
+            from: 'newsletter@pepe-dome.de',
+            to: [subscriber.email],
+            subject: 'Test',
+            created_at: new Date().toISOString(),
+            bounce: { bounceType: 'Hard' },
+            tags: [
+              { name: 'subscriber_id', value: subscriber.id },
+              { name: 'newsletter_id', value: NICHT_EXISTENT },
+            ],
+          },
+        })
+      )
+
+      expect(response.status).toBe(200)
+
+      // Austragen soll weiterhin passieren, das hängt nicht am Newsletter
+      const updated = await prisma.subscriber.findUnique({ where: { id: subscriber.id } })
+      expect(updated?.status).toBe('UNSUBSCRIBED')
+
+      const meta = (updated?.metadata ?? {}) as Record<string, unknown>
+      expect(meta.unsubscribeReason).toBe('hard_bounce')
+    })
+  })
 })

@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
+import { isPermanentlyUnprocessable } from '@/lib/webhook-errors'
 
 /**
  * Resend webhook event types
@@ -192,6 +193,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Die IDs stammen aus den Tags der Mail. Resend spielt die zurück, wie sie
+    // beim Versand gesetzt wurden — auch Monate später und auch dann, wenn der
+    // Newsletter inzwischen gelöscht wurde. Ungeprüft in newsletterEvent.create
+    // gereicht, verletzten sie den Fremdschlüssel, der Handler warf, und die
+    // Route antwortete mit 500. Resend wertet 500 als "später nochmal
+    // versuchen" und stellte dasselbe Event endlos erneut zu.
+    ;({ subscriberId, newsletterId } = await keepOnlyExistingIds(
+      subscriberId,
+      newsletterId,
+      { type, emailId: data.email_id }
+    ))
+
     console.log('Resend webhook received:', {
       type,
       emailId: data.email_id,
@@ -234,11 +247,75 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true })
   } catch (error) {
+    // Zwischen "kommt nie durch" und "gleich nochmal probieren" unterscheiden.
+    //
+    // Resend wiederholt jeden Webhook, den wir mit 5xx quittieren. Für einen
+    // Payload, der dauerhaft nicht verarbeitbar ist (verwaiste ID in den Tags),
+    // heißt das: derselbe Fehler im Minutentakt, für immer. Solche Fälle werden
+    // protokolliert und mit 200 bestätigt — verarbeitet haben wir sie nicht,
+    // aber ein erneuter Versuch würde exakt dasselbe Ergebnis liefern.
+    //
+    // Alles andere (Datenbank weg, Timeout) bleibt 5xx, denn dort ist ein
+    // späterer Versuch genau richtig.
+    if (isPermanentlyUnprocessable(error)) {
+      console.warn('[resend-webhook] Event dauerhaft nicht verarbeitbar, wird bestätigt', {
+        code: (error as { code?: string }).code,
+        message: error instanceof Error ? error.message.split('\n')[0] : String(error),
+      })
+      return NextResponse.json({ received: true, processed: false })
+    }
+
     console.error('Webhook processing error:', error)
     return NextResponse.json(
       { error: 'Webhook processing failed' },
       { status: 500 }
     )
+  }
+}
+
+/**
+ * Behält nur IDs, zu denen es die Zeile auch wirklich gibt.
+ *
+ * Die Werte kommen aus den Tags der Mail und sind damit so alt wie der Versand.
+ * Wird ein Newsletter oder eine Abonnentin danach gelöscht, zeigt der Tag ins
+ * Leere. Alles, was hier durchfällt, wird zu null — die Handler prüfen ohnehin
+ * auf null und überspringen dann den jeweiligen Schritt, statt mitten im
+ * Schreiben zu scheitern.
+ *
+ * Bewusst vor dem ersten Schreibzugriff: der Bounce-Handler trägt zuerst die
+ * Person aus und legt dann das Ereignis an. Bräche er beim zweiten Schritt ab,
+ * wäre jemand ausgetragen, ohne dass der Grund dokumentiert ist.
+ */
+async function keepOnlyExistingIds(
+  subscriberId: string | null,
+  newsletterId: string | null,
+  context: { type: string; emailId: string }
+): Promise<{ subscriberId: string | null; newsletterId: string | null }> {
+  const [subscriber, newsletter] = await Promise.all([
+    subscriberId
+      ? prisma.subscriber.findUnique({ where: { id: subscriberId }, select: { id: true } })
+      : Promise.resolve(null),
+    newsletterId
+      ? prisma.newsletter.findUnique({ where: { id: newsletterId }, select: { id: true } })
+      : Promise.resolve(null),
+  ])
+
+  if (subscriberId && !subscriber) {
+    console.warn('[resend-webhook] Abonnent:in aus den Tags existiert nicht mehr', {
+      ...context,
+      subscriberId,
+    })
+  }
+  if (newsletterId && !newsletter) {
+    console.warn('[resend-webhook] Newsletter aus den Tags existiert nicht mehr', {
+      ...context,
+      newsletterId,
+    })
+  }
+
+  return {
+    subscriberId: subscriber ? subscriberId : null,
+    newsletterId: newsletter ? newsletterId : null,
   }
 }
 

@@ -5,6 +5,12 @@
       "name": "pepe-dome-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "port": 3004,
+      "autoPort": false
+    },
+    {
+      "name": "pepe-dome-attach",
+      "url": "http://localhost:3004",
       "port": 3004
     }
   ]
