@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import EventForm from '@/components/admin/forms/EventForm'
+import ChannelKitPanel from '@/components/admin/ChannelKitPanel'
 
 export const dynamic = 'force-dynamic'
 import { canEdit } from '@/lib/roles.server'
@@ -88,6 +89,14 @@ export default async function EditEventPage({ params }: PageProps) {
 
       {/* Form */}
       <EventForm event={event} mode="edit" />
+
+      {/*
+        Kanal-Kit unterhalb des Formulars und nicht darin: die fertigen
+        Portaltexte werden nicht gespeichert, sie hätten in einem Formular mit
+        Speichern-Knopf nichts verloren. Außerdem brauchen sieben Kanäle mit je
+        fünf bis sieben Feldern die volle Breite.
+      */}
+      <ChannelKitPanel eventId={event.id} />
     </div>
   )
 }

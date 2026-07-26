@@ -67,14 +67,28 @@ export async function GET(request: NextRequest) {
       include: {
         articles: {
           include: { article: { select: { id: true, title: true } } }
-        }
+        },
+        // Für die Spalte "verteilt": auf wie vielen Kanälen steht das Event
+        // bereits. Nur erfolgreiche Einträge zählen, ein Fehlversuch ist keine
+        // Veröffentlichung.
+        distributions: {
+          where: { status: 'success' },
+          select: { channel: true },
+        },
       }
     }),
     prisma.event.count({ where }),
   ])
 
+  // Die Zeilen selbst braucht die Liste nicht, nur ihre Anzahl.
+  type EventRow = Record<string, unknown> & { distributions: unknown[] }
+  const withDistribution = (events as EventRow[]).map(({ distributions, ...event }) => ({
+    ...event,
+    distributedCount: distributions.length,
+  }))
+
   return NextResponse.json({
-    events,
+    events: withDistribution,
     pagination: {
       page,
       limit,

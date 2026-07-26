@@ -1,16 +1,21 @@
 /**
- * UTM-Kampagnenparameter für den Newsletter
+ * UTM-Kampagnenparameter für ausgehende Links
  *
- * Ziel: jeder Klick aus einer Mail soll später in der Web-Analyse einer
- * Ausgabe, einer Position und einem konkreten Element zuzuordnen sein.
- * Resend-Click-Tracking sagt nur "irgendwer hat irgendwas geklickt";
- * erst utm_content macht daraus "Position 1, Ticket-Button, Event X".
+ * Ziel: jeder Klick von außen soll später in der Web-Analyse einer Quelle,
+ * einer Kampagne und einem konkreten Element zuzuordnen sein. Resend-Click-
+ * Tracking sagt nur "irgendwer hat irgendwas geklickt"; erst utm_content macht
+ * daraus "Position 1, Ticket-Button, Event X".
  *
  * Schema:
- *   utm_source   = newsletter        (konstant)
- *   utm_medium   = email             (konstant)
+ *   utm_source   = newsletter, rausgegangen, instagram …  (Voreinstellung newsletter)
+ *   utm_medium   = email, social, referral                (Voreinstellung email)
  *   utm_campaign = <newsletter-slug>  z. B. 2026-08-sommerprogramm
  *   utm_content  = <position>_<element>  z. B. p1_ticket, lead_image, footer_events
+ *
+ * Quelle und Medium waren ursprünglich fest auf den Newsletter verdrahtet. Seit
+ * dem Kanal-Kit (src/lib/channel-kit) trägt jeder Zielkanal seine eigene Quelle,
+ * damit sich sagen lässt, welcher Kanal tatsächlich Ticketklicks bringt. Ohne
+ * Angabe bleibt es beim Newsletter, deshalb ändert sich am Versand nichts.
  */
 
 export const UTM_SOURCE = 'newsletter'

@@ -39,6 +39,17 @@ export default async function NewEventPage() {
 
       {/* Form */}
       <EventForm mode="create" />
+
+      <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+        <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-3">
+          Kanal-Kit
+        </h2>
+        <p className="text-sm leading-relaxed text-white/50">
+          Sobald das Event gespeichert ist, stehen hier die fertigen Texte für
+          Rausgegangen, IN München, Instagram, Facebook, Google, WhatsApp und Presse
+          bereit. Feldweise zum Kopieren, damit nichts zweimal getippt werden muss.
+        </p>
+      </div>
     </div>
   )
 }

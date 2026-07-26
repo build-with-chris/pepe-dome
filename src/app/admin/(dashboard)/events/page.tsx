@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { CATEGORY_LABELS } from '@/lib/admin-constants'
+import { CHANNEL_COUNT } from '@/lib/channel-kit/channels'
 
 /**
  * Events Admin Page
@@ -41,6 +42,8 @@ interface Event {
   category: string
   status: string
   featured: boolean
+  /** Auf wie vielen Kanälen steht das Event bereits, siehe Kanal-Kit. */
+  distributedCount?: number
 }
 
 interface PaginatedResponse {
@@ -176,6 +179,24 @@ export default function EventsAdminPage() {
       accessorKey: 'status',
       sortable: true,
       cell: (row) => <StatusBadge status={row.status} />,
+    },
+    {
+      // Der eigentliche Redaktionsnutzen des Kanal-Kits: sehen, was liegen blieb.
+      header: 'Verteilt',
+      accessorKey: 'distributedCount',
+      sortable: true,
+      hideOnMobile: true,
+      cell: (row) => {
+        const count = row.distributedCount ?? 0
+        return (
+          <span
+            className={count === 0 ? 'text-white/30' : 'text-white/60'}
+            title={`Auf ${count} von ${CHANNEL_COUNT} Kanälen eingetragen`}
+          >
+            {count} / {CHANNEL_COUNT}
+          </span>
+        )
+      },
     },
   ]
 
