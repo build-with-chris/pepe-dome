@@ -357,6 +357,12 @@ enum DistributionChannel {
   google_business_profile
   rausgegangen_feed
   jsonld_website
+  // Kanal-Kit: Ziele, die nur ein Formular haben und deshalb von Hand
+  // eingetragen werden. Angehängt statt einsortiert, weil ALTER TYPE ADD VALUE
+  // ohne Position schreibt und eine Umsortierung den Typ neu bauen müsste.
+  in_muenchen
+  whatsapp
+  presse
 
   @@map("distribution_channel")
 }
