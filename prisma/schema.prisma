@@ -382,3 +382,81 @@ enum RecurrencePattern {
   BIWEEKLY
   MONTHLY
 }
+
+/// Ein Reel im 12-Wochen-Contentplan.
+///
+/// Der Plan lebt von einer einzigen Zahl, die wöchentlich kontrolliert wird:
+/// wie viele Reels fertig geschnitten und noch ungepostet sind. Genau deshalb
+/// ist der Status hier eine Stufe im Produktionsweg und kein Freitext.
+model ContentReel {
+  id               String     @id @default(uuid())
+  /// Laufende Nummer im Plan, 1 bis 12. Bestimmt die Reihenfolge und legt fest,
+  /// welche Reels die Baseline bilden (die ersten fünf). Unique, damit zwei
+  /// gleichzeitig angelegte Reels nicht dieselbe Nummer bekommen und die
+  /// Baseline stillschweigend auf sechs Zeilen wächst.
+  position         Int        @unique
+  artist           String
+  discipline       String
+  status           ReelStatus @default(PLANNED)
+  /// Batch-Drehtag, an dem das Rohmaterial entstanden ist.
+  shootDate        DateTime?  @map("shoot_date")
+  /// Wann der Schnitt fertig war. Ab hier zählt das Reel in den Puffer.
+  editedAt         DateTime?  @map("edited_at")
+  /// Geplanter Slot, in aller Regel ein Donnerstag 18:00.
+  plannedFor       DateTime?  @map("planned_for")
+  publishedAt      DateTime?  @map("published_at")
+  /// Shares und Saves getrennt, weil Instagram sie getrennt ausweist und eine
+  /// vorab addierte Summe sich später nicht mehr aufteilen lässt.
+  shares48         Int?       @map("shares_48h")
+  saves48          Int?       @map("saves_48h")
+  /// Der 72-Stunden-Wert bleibt als Vergleichsgröße erhalten. Gerechnet wird
+  /// mit 48 Stunden, siehe src/lib/contentplan.ts.
+  shares72         Int?       @map("shares_72h")
+  saves72          Int?       @map("saves_72h")
+  budgetReleasedAt DateTime?  @map("budget_released_at")
+  /// Ausgaben in Cent. Als Ganzzahl, damit sich über zwölf Wochen keine
+  /// Rundungsreste summieren.
+  spendCents       Int?       @map("spend_cents")
+  /// Ergebnisse laut Ads Manager, Grundlage für die Kosten pro Ergebnis.
+  results          Int?
+  notes            String?
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([plannedFor])
+  @@map("content_reels")
+}
+
+/// Einstellungen des Contentplans, genau eine Zeile.
+///
+/// Die Schwelle steht bewusst als eigener Wert in der Datenbank und wird nicht
+/// bei jedem Aufruf aus dem Median gerechnet. Sonst wandert sie mit jedem neuen
+/// Reel, und im Oktober kann niemand mehr sagen, wogegen im September gemessen
+/// wurde. Einmal fixiert heißt einmal fixiert.
+model ContentPlanConfig {
+  /// Immer 1. Eine feste Id ist der einfachste Weg, eine zweite Zeile
+  /// auszuschließen, ohne dafür einen Trigger zu schreiben.
+  id             Int       @id @default(1)
+  /// Median Shares plus Saves der ersten fünf Reels nach 48 Stunden.
+  baselineMedian Int?      @map("baseline_median")
+  /// Ab dieser Summe gilt ein Reel als Gewinner und bekommt Budget.
+  threshold      Int?
+  fixedAt        DateTime? @map("fixed_at")
+  /// Median der sporadischen Reels von vor dem Plan. Referenzwert für den
+  /// Abbruchtest nach den ersten drei Reels. Muss vor dem Start einmal aus den
+  /// Insights gezogen werden, sonst gibt es am Stichtag nichts zu vergleichen.
+  priorMedian    Int?      @map("prior_median")
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@map("content_plan_config")
+}
+
+enum ReelStatus {
+  PLANNED
+  FILMED
+  EDITED
+  PUBLISHED
+
+  @@map("reel_status")
+}
