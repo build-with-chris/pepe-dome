@@ -175,6 +175,10 @@ model Event {
   category      EventCategory
   ticketUrl     String?             @map("ticket_url")
   price         String?
+  /// Trailer: entweder ein YouTube-/Vimeo-Link oder ein Pfad auf eine Datei im
+  /// Projekt ("/videos/showreel.mp4"). Was gültig ist, entscheidet allein
+  /// src/lib/event-trailer.ts — Admin-Formular und Website fragen dort.
+  trailerUrl    String?             @map("trailer_url")
   imageUrl      String?             @map("image_url")
   featured      Boolean             @default(false)
   highlights    Json                @default("[]")

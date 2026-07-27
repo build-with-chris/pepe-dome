@@ -9,6 +9,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import EventCard from './EventCard'
+import type { TrailerCardLabels } from '@/components/events/TrailerLauncher'
 import type { Locale } from '@/i18n/config'
 
 export type CarouselEvent = {
@@ -21,6 +22,8 @@ export type CarouselEvent = {
   category: string
   imageUrl: string | null
   price?: string | null
+  /** Roher Feldinhalt, siehe src/lib/event-trailer.ts */
+  trailerUrl?: string | null
 }
 
 export default function EventsCarousel({
@@ -28,6 +31,8 @@ export default function EventsCarousel({
   lang = 'de',
   eventsHref = '/de/events',
   freeEntryLabel = 'Gratis Eintritt',
+  trailerLabels,
+  privacyHref = '/de/datenschutz',
   prevLabel = 'Vorheriges Event',
   nextLabel = 'Nächstes Event',
 }: {
@@ -37,6 +42,14 @@ export default function EventsCarousel({
   /** Basis-URL der Event-Liste, damit die Karten nicht auf einen Redirect zeigen. */
   eventsHref?: string
   freeEntryLabel?: string
+  /**
+   * Beschriftungen für Trailer-Knopf und Einwilligungshinweis. Ohne sie bleibt
+   * der Knopf weg: ein Fenster mit englischen Platzhaltern auf einer deutschen
+   * Startseite wäre schlechter als gar kein Trailer.
+   */
+  trailerLabels?: TrailerCardLabels
+  /** Ziel des Datenschutz-Links im Hinweis, lokalisiert */
+  privacyHref?: string
   prevLabel?: string
   nextLabel?: string
 }) {
@@ -127,6 +140,11 @@ export default function EventsCarousel({
               image={event.imageUrl || undefined}
               price={event.price}
               freeEntryLabel={freeEntryLabel}
+              trailer={
+                trailerLabels
+                  ? { url: event.trailerUrl ?? null, labels: trailerLabels, privacyHref }
+                  : undefined
+              }
               // Absichtlich die lokalisierte URL: `/events/slug` würde erst per
               // Middleware auf `/de/events/slug` umgeleitet. Ein Redirect bei
               // jedem Klick kostet Zeit und verwässert interne Linksignale.

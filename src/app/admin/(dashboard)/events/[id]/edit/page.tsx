@@ -41,6 +41,7 @@ async function getEvent(id: string) {
     category: event.category,
     ticketUrl: event.ticketUrl,
     price: event.price,
+    trailerUrl: event.trailerUrl,
     imageUrl: event.imageUrl,
     featured: event.featured,
     highlights: (event.highlights as string[]) || [],

@@ -569,6 +569,14 @@
       "description": "All events at Pepe Dome Munich: shows, workshops, festivals, premieres and training. Discover the current programme."
     },
     "freeBadge": "Free entry",
+    "trailer": {
+      "badge": "Trailer",
+      "play": "Watch trailer",
+      "close": "Close trailer",
+      "consent": "The trailer is hosted on {provider}. Starting it sends data to the provider, including your IP address.",
+      "watchAt": "Watch on {provider} instead",
+      "privacy": "More in our privacy notice"
+    },
     "hero": {
       "title": "Event Calendar",
       "subtitle": "Discover shows, workshops, festivals and more at Pepe Dome"
@@ -616,6 +624,7 @@
     },
     "detail": {
       "highlight": "Highlight event",
+      "trailerTitle": "What to expect",
       "highlights": "Highlights",
       "stayInformed": "Stay in the loop",
       "stayInformedText": "Get updates about similar events and never miss a highlight.",

@@ -3,6 +3,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { toStoredTime } from '@/lib/event-time'
+import { isValidTrailerInput } from '@/lib/event-trailer'
 import { z } from 'zod'
 
 const eventSchema = z.object({
@@ -17,6 +18,13 @@ const eventSchema = z.object({
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']),
   ticketUrl: z.string().optional().or(z.literal('')),
   price: z.string().optional(),
+  // Aus dem Feld wird auf der Website ein <iframe src> bzw. <video src>. Die
+  // Prüfung gehört deshalb hierher und nicht nur ins Formular: die Route ist
+  // auch ohne unsere Oberfläche erreichbar.
+  trailerUrl: z
+    .string()
+    .optional()
+    .refine(isValidTrailerInput, 'Trailer muss ein YouTube-/Vimeo-Link oder ein Pfad wie /videos/trailer.mp4 sein'),
   imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
@@ -130,6 +138,7 @@ export async function POST(request: NextRequest) {
         category: data.category,
         ticketUrl: data.ticketUrl || null,
         price: data.price || null,
+        trailerUrl: data.trailerUrl?.trim() || null,
         imageUrl: data.imageUrl || null,
         featured: data.featured,
         highlights: data.highlights,

@@ -569,6 +569,14 @@
       "description": "Alle Events im Pepe Dome München: Shows, Workshops, Festivals, Premieren und Training. Entdecke das aktuelle Programm."
     },
     "freeBadge": "Gratis Eintritt",
+    "trailer": {
+      "badge": "Trailer",
+      "play": "Trailer ansehen",
+      "close": "Trailer schließen",
+      "consent": "Der Trailer liegt bei {provider}. Mit dem Start werden Daten an den Anbieter übertragen, darunter deine IP-Adresse.",
+      "watchAt": "Stattdessen direkt bei {provider} ansehen",
+      "privacy": "Mehr im Datenschutzhinweis"
+    },
     "hero": {
       "title": "Event-Kalender",
       "subtitle": "Entdecke Shows, Workshops, Festivals und mehr im Pepe Dome"
@@ -616,6 +624,7 @@
     },
     "detail": {
       "highlight": "Highlight Event",
+      "trailerTitle": "Das erwartet dich",
       "highlights": "Highlights",
       "stayInformed": "Bleib auf dem Laufenden",
       "stayInformedText": "Erhalte Updates zu ähnlichen Events und verpasse keine Highlights mehr.",

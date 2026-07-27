@@ -324,8 +324,8 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <p className="font-semibold text-[var(--pepe-white)] mb-2">YouTube (Videos):</p>
-                    <p>Beim Laden eingebetteter Videos können Daten (z.B. IP-Adresse, Nutzungsdaten) an YouTube/Google übertragen werden.</p>
+                    <p className="font-semibold text-[var(--pepe-white)] mb-2">YouTube und Vimeo (Event-Trailer):</p>
+                    <p>Trailer zu einzelnen Veranstaltungen liegen teilweise bei YouTube oder Vimeo. Diese Videos werden nicht automatisch geladen: Sie sehen zuerst nur ein Vorschaubild mit Startknopf. Erst wenn Sie den Trailer selbst starten, wird die Verbindung zum Anbieter aufgebaut und es können Daten (z.B. IP-Adresse, Nutzungsdaten) an YouTube/Google bzw. Vimeo übertragen werden. Videos, die auf unserem eigenen Server liegen, übertragen keine Daten an Dritte.</p>
                   </div>
                   <div>
                     <p className="font-semibold text-[var(--pepe-white)] mb-2">Google Maps:</p>

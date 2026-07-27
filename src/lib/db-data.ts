@@ -49,6 +49,8 @@ export type EventData = {
   category: string
   ticketUrl: string | null
   price: string | null
+  /** Roher Feldinhalt, siehe src/lib/event-trailer.ts */
+  trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
   highlights: string[]
@@ -105,6 +107,9 @@ export function transformEvent(event: Event, locale: DbLocale = 'de'): EventData
     category: event.category,
     ticketUrl: event.ticketUrl,
     price: t?.price?.trim() || event.price,
+    // Nicht übersetzbar: ein Trailer ist derselbe Film, egal in welcher Sprache
+    // die Seite gerade steht.
+    trailerUrl: event.trailerUrl,
     imageUrl: event.imageUrl,
     featured: event.featured,
     highlights:

@@ -3,6 +3,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { toStoredTime } from '@/lib/event-time'
+import { isValidTrailerInput } from '@/lib/event-trailer'
 import { z } from 'zod'
 
 const translationSchema = z.object({
@@ -25,6 +26,12 @@ const eventUpdateSchema = z.object({
   category: z.enum(['SHOW', 'PREMIERE', 'FESTIVAL', 'WORKSHOP', 'OPEN_TRAINING', 'KINDERTRAINING', 'BUSINESS', 'OPEN_AIR', 'EVENT']).optional(),
   ticketUrl: z.string().optional().nullable().or(z.literal('')),
   price: z.string().optional().nullable(),
+  // Siehe POST-Route: die Prüfung darf nicht nur im Formular stehen.
+  trailerUrl: z
+    .string()
+    .optional()
+    .nullable()
+    .refine(isValidTrailerInput, 'Trailer muss ein YouTube-/Vimeo-Link oder ein Pfad wie /videos/trailer.mp4 sein'),
   imageUrl: z.string().optional().nullable().or(z.literal('')),
   featured: z.boolean().optional(),
   highlights: z.array(z.string()).optional(),

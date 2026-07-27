@@ -52,6 +52,9 @@ export async function POST(
         category: original.category,
         ticketUrl: null,        // Ticket-Link entfernen
         price: original.price,
+        // Der Trailer gehört zur Produktion, nicht zum Termin: eine Kopie für
+        // den nächsten Abend zeigt denselben Film.
+        trailerUrl: original.trailerUrl,
         imageUrl: original.imageUrl,
         featured: false,        // Nicht automatisch featured
         highlights: original.highlights ?? [],

@@ -114,4 +114,104 @@ describe('EventCard', () => {
     const card = container.firstChild as HTMLElement
     expect(card.className).toContain('hover:-translate-y-1')
   })
+
+  /**
+   * Der Preis stand vorher nur auf der Detailseite. Wer beim Überfliegen der
+   * Liste wissen wollte, ob ein Abend 6 oder 20 Euro kostet, musste jede Karte
+   * einzeln öffnen.
+   */
+  describe('Preis', () => {
+    it('zeigt den Preis auf der Karte', () => {
+      render(<EventCard {...defaultProps} price="ab 12 €" />)
+      expect(screen.getByText('ab 12 €')).toBeInTheDocument()
+    })
+
+    it('zeigt bei kostenlosen Events nur den Gratis-Sticker, nicht zusätzlich den Preistext', () => {
+      render(<EventCard {...defaultProps} price="Eintritt frei" freeEntryLabel="Gratis Eintritt" />)
+      expect(screen.getByText('Gratis Eintritt')).toBeInTheDocument()
+      expect(screen.queryByText('Eintritt frei')).not.toBeInTheDocument()
+    })
+
+    it('zeigt nichts, wenn der Preis noch nicht feststeht', () => {
+      const { container } = render(<EventCard {...defaultProps} price={null} />)
+      // Ein leeres Preisfeld heisst "steht noch nicht fest", nicht "gratis".
+      expect(container.textContent).not.toMatch(/€|frei/i)
+    })
+  })
+
+  describe('Trailer', () => {
+    const trailerLabels = {
+      badge: 'Trailer',
+      play: 'Trailer ansehen',
+      close: 'Trailer schließen',
+      consent: 'Der Trailer liegt bei {provider}.',
+      watchAt: 'Bei {provider} ansehen',
+      privacy: 'Datenschutz',
+    }
+
+    it('zeigt einen Trailer-Knopf, wenn ein gültiger Trailer hinterlegt ist', () => {
+      render(
+        <EventCard
+          {...defaultProps}
+          href="/events/1"
+          trailer={{
+            url: 'https://youtu.be/dQw4w9WgXcQ',
+            labels: trailerLabels,
+            privacyHref: '/de/datenschutz',
+          }}
+        />
+      )
+      expect(screen.getByRole('button', { name: 'Trailer' })).toBeInTheDocument()
+    })
+
+    it('legt den Knopf neben den Karten-Link, nicht hinein', () => {
+      // Ein <button> in einem <a> ist ungültiges HTML: der Klick würde je nach
+      // Browser mal das Fenster öffnen und mal die Karte wegnavigieren.
+      render(
+        <EventCard
+          {...defaultProps}
+          href="/events/1"
+          trailer={{
+            url: 'https://youtu.be/dQw4w9WgXcQ',
+            labels: trailerLabels,
+            privacyHref: '/de/datenschutz',
+          }}
+        />
+      )
+      const button = screen.getByRole('button', { name: 'Trailer' })
+      expect(button.closest('a')).toBeNull()
+    })
+
+    it('zeigt keinen Knopf, wenn der Feldinhalt keine erkennbare Videoquelle ist', () => {
+      render(
+        <EventCard
+          {...defaultProps}
+          trailer={{
+            url: 'Trailer folgt',
+            labels: trailerLabels,
+            privacyHref: '/de/datenschutz',
+          }}
+        />
+      )
+      expect(screen.queryByRole('button', { name: 'Trailer' })).not.toBeInTheDocument()
+    })
+
+    it('behält die doppelte Spaltenbreite bei featured-Karten mit Trailer', () => {
+      const { container } = render(
+        <EventCard
+          {...defaultProps}
+          featured
+          trailer={{
+            url: 'https://youtu.be/dQw4w9WgXcQ',
+            labels: trailerLabels,
+            privacyHref: '/de/datenschutz',
+          }}
+        />
+      )
+      // Das Raster sieht mit Trailer nur noch den Wrapper, also muss die
+      // Spaltenbreite dort hängen.
+      const wrapper = container.firstChild as HTMLElement
+      expect(wrapper.className).toContain('md:col-span-2')
+    })
+  })
 })

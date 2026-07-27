@@ -219,6 +219,8 @@ export default async function HomePage({
               lang={lang}
               eventsHref={localizedHref(lang, '/events')}
               freeEntryLabel={dict.events.freeBadge}
+              trailerLabels={dict.events.trailer}
+              privacyHref={localizedHref(lang, '/datenschutz')}
               prevLabel={t.upcomingEvents.prev}
               nextLabel={t.upcomingEvents.next}
               events={displayEvents.map((e) => ({
@@ -231,6 +233,7 @@ export default async function HomePage({
                 category: e.category,
                 imageUrl: e.imageUrl,
                 price: e.price,
+                trailerUrl: e.trailerUrl,
               }))}
             />
           ) : (

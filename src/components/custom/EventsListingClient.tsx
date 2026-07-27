@@ -30,6 +30,7 @@ type EventData = {
   category: string
   ticketUrl: string | null
   price: string | null
+  trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
   highlights: string[]
@@ -288,6 +289,11 @@ export default function EventsListingClient({
                   image={event.imageUrl || undefined}
                   price={event.price}
                   freeEntryLabel={t.freeBadge}
+                  trailer={{
+                    url: event.trailerUrl,
+                    labels: t.trailer,
+                    privacyHref: localizedHref(lang, '/datenschutz'),
+                  }}
                   href={`${eventsBaseHref}/${event.slug}`}
                 />
               ))}

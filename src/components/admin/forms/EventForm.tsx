@@ -25,6 +25,7 @@ import {
   type EventPriceOption,
 } from '@/lib/event-price'
 import { isNormalizedTime, normalizeTime } from '@/lib/event-time'
+import { isValidTrailerInput, parseTrailer } from '@/lib/event-trailer'
 
 /**
  * EventForm component
@@ -50,6 +51,13 @@ const eventSchema = z.object({
   category: z.string().min(1, 'Kategorie ist erforderlich'),
   ticketUrl: z.string().optional().or(z.literal('')),
   price: z.string().optional(),
+  trailerUrl: z
+    .string()
+    .optional()
+    .refine(
+      isValidTrailerInput,
+      'Bitte einen YouTube- oder Vimeo-Link eintragen, oder einen Pfad wie /videos/trailer.mp4'
+    ),
   imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
@@ -83,6 +91,7 @@ interface Event {
   category: string
   ticketUrl: string | null
   price: string | null
+  trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
   highlights: string[]
@@ -218,6 +227,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
     category: event?.category || 'SHOW',
     ticketUrl: event?.ticketUrl || '',
     price: event?.price || '',
+    trailerUrl: event?.trailerUrl || '',
     imageUrl: event?.imageUrl || '',
     featured: event?.featured || false,
     status: event?.status || 'DRAFT',
@@ -255,6 +265,10 @@ export default function EventForm({ event, mode }: EventFormProps) {
     if (priceOption === 'CUSTOM') return customPrice.trim()
     return priceTextFor(priceOption) ?? ''
   }
+
+  // Rückmeldung noch beim Tippen: ein Link, den die Website später stumm
+  // ignorieren würde, soll nicht erst beim Speichern auffallen.
+  const trailerPreview = parseTrailer(formData.trailerUrl)
 
   // Uhrzeiten, die sich nicht in "HH:MM" übersetzen lassen ("nach Vereinbarung").
   // Beim Speichern würden sie durch den Picker-Wert ersetzt, deshalb sichtbar machen.
@@ -827,6 +841,44 @@ export default function EventForm({ event, mode }: EventFormProps) {
               error={errors.imageUrl}
               placeholder="Bild hier ablegen"
             />
+          </div>
+
+          {/* Trailer */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Trailer
+            </h2>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="trailerUrl" hasError={!!errors.trailerUrl}>
+                Video-Link oder Dateipfad
+              </Label>
+              <Input
+                id="trailerUrl"
+                value={formData.trailerUrl}
+                onChange={(e) => updateField('trailerUrl', e.target.value)}
+                hasError={!!errors.trailerUrl}
+                placeholder="https://youtu.be/... oder /videos/showreel.mp4"
+                inputSize="lg"
+              />
+              {errors.trailerUrl ? (
+                <p className="text-sm text-red-400">{errors.trailerUrl}</p>
+              ) : (
+                <FieldHint>
+                  Steht auf der Detailseite uber der Beschreibung und als
+                  Trailer-Knopf auf der Event-Karte. Erlaubt sind YouTube- und
+                  Vimeo-Links sowie eigene Videos aus dem Projekt, z.B.
+                  /videos/showreel.mp4. Der Film wird erst geladen, wenn jemand
+                  auf Start klickt.
+                </FieldHint>
+              )}
+              {trailerPreview && (
+                <p className="text-[11px] text-white/40">
+                  Erkannt als{' '}
+                  {trailerPreview.provider ?? 'eigenes Video aus dem Projekt'}.
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Settings */}

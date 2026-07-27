@@ -6,7 +6,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { isFreeEntry } from '@/lib/event-price'
 import { formatTimeShort } from '@/lib/event-time'
+import { parseTrailer } from '@/lib/event-trailer'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
+import TrailerLauncher, { type TrailerCardLabels } from '@/components/events/TrailerLauncher'
 
 /**
  * EventCard component following PEPE Dome design system
@@ -32,6 +34,17 @@ export interface EventCardProps extends HTMLAttributes<HTMLDivElement> {
   price?: string | null
   /** Lokalisiertes Sticker-Label für kostenlose Events */
   freeEntryLabel?: string
+  /**
+   * Trailer des Events. `url` ist der rohe Feldinhalt aus der Datenbank; was
+   * daraus wird, entscheidet src/lib/event-trailer.ts. Ohne erkennbaren
+   * Trailer bleibt die Karte unverändert.
+   */
+  trailer?: {
+    url: string | null
+    labels: TrailerCardLabels
+    /** Ziel des Datenschutz-Links im Hinweis, lokalisiert */
+    privacyHref: string
+  }
   /** Featured variant spans 2 columns */
   featured?: boolean
   /** Compact variant for horizontal layout */
@@ -51,6 +64,7 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       href,
       price,
       freeEntryLabel = 'Gratis Eintritt',
+      trailer: trailerProp,
       featured = false,
       compact = false,
       ...props
@@ -61,6 +75,17 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
     // Spanne, und die Endzeit steht auf der Detailseite.
     const timeLabel = formatTimeShort(time)
     const isFree = isFreeEntry(price)
+
+    // Kostenlose Events tragen schon den Gratis-Sticker. Ein zweites Schild mit
+    // "Eintritt frei" daneben sagt dasselbe noch einmal. Ein leeres Preisfeld
+    // heisst "steht noch nicht fest" und bekommt bewusst gar nichts: eine
+    // erfundene Angabe wäre schlimmer als eine fehlende.
+    const priceLabel = price && !isFree ? price : null
+
+    const trailer = parseTrailer(trailerProp?.url)
+    // In der compact-Variante ist das Bild ein 160px-Quadrat neben dem Text.
+    // Dort wäre der Trailer-Knopf grösser als das halbe Bild.
+    const showTrailerButton = Boolean(trailer && trailerProp && !compact)
 
     const cardClasses = cn(
       // Base styles
@@ -73,8 +98,11 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       'hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)]',
       // Layout variants
       compact ? 'flex-row items-stretch' : 'flex-col',
-      // Featured variant
-      featured && 'md:col-span-2',
+      // Featured variant. Mit Trailer-Knopf sitzt die Karte in einem Wrapper,
+      // dann gehört die Spaltenbreite dorthin: das Raster sieht nur noch den
+      // Wrapper.
+      featured && !showTrailerButton && 'md:col-span-2',
+      showTrailerButton && 'flex-1 min-w-0',
       // Link styles
       href && 'cursor-pointer',
       className
@@ -154,6 +182,19 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               <FreeEntryBadge label={freeEntryLabel} size="md" />
             </div>
           )}
+
+          {/* Preis unten rechts, diagonal gegenüber vom Datum. Bis hierher
+              stand er nur auf der Detailseite: wer wissen wollte, ob ein Abend
+              6 oder 20 Euro kostet, musste jede Karte einzeln öffnen. Beim
+              Überfliegen der Liste ist der Preis aber die zweite Frage nach dem
+              Datum. */}
+          {priceLabel && !compact && (
+            <div className="absolute bottom-3 right-3 z-10 rounded-md bg-black/70 px-2.5 py-1 backdrop-blur-sm">
+              <span className="text-xs font-semibold tracking-wide text-white">
+                {priceLabel}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
@@ -184,8 +225,14 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               </span>
             )}
             {/* In der compact-Variante gibt es keinen Bild-Overlay, in dem der
-                Sticker sitzen könnte — dort läuft er in der Meta-Zeile mit. */}
+                Sticker sitzen könnte — dort läuft er in der Meta-Zeile mit. Der
+                Preis genauso. */}
             {isFree && compact && <FreeEntryBadge label={freeEntryLabel} size="sm" />}
+            {priceLabel && compact && (
+              <span className="text-xs font-semibold text-[var(--pepe-accent-text)]">
+                {priceLabel}
+              </span>
+            )}
           </div>
 
           {/* Title */}
@@ -215,22 +262,44 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       </>
     )
 
-    if (href) {
-      return (
-        <Link
-          href={href}
-          className={cardClasses}
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-        >
-          {content}
-        </Link>
-      )
-    }
-
-    return (
+    const card = href ? (
+      <Link
+        href={href}
+        className={cardClasses}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {content}
+      </Link>
+    ) : (
       <div ref={ref} className={cardClasses} {...props}>
         {content}
+      </div>
+    )
+
+    if (!showTrailerButton || !trailer || !trailerProp) return card
+
+    return (
+      <div className={cn('relative flex', featured && 'md:col-span-2')}>
+        {card}
+        {/* Der Knopf gehört optisch ins Bild, darf aber nicht im Karten-Link
+            liegen. Diese Ebene liegt deshalb massgenau über dem Bild: dieselbe
+            Breite, dasselbe Seitenverhältnis, oben bündig. Sie lässt Klicks
+            durch (pointer-events-none), nur der Knopf selbst fängt sie ab. */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 aspect-video"
+          style={featuredAspectStyle}
+        >
+          <div className="pointer-events-auto absolute bottom-3 left-3">
+            <TrailerLauncher
+              trailer={trailer}
+              poster={image}
+              title={title}
+              labels={trailerProp.labels}
+              privacyHref={trailerProp.privacyHref}
+            />
+          </div>
+        </div>
       </div>
     )
   }

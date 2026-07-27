@@ -18,6 +18,8 @@ import SignupForm from '@/components/custom/SignupForm'
 import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 import { isFreeEntry } from '@/lib/event-price'
+import { parseTrailer } from '@/lib/event-trailer'
+import TrailerPlayer from '@/components/events/TrailerPlayer'
 import { formatTimeRange } from '@/lib/event-time'
 import TicketLink from '@/components/events/TicketLink'
 import EventViewTracker from '@/components/events/EventViewTracker'
@@ -91,6 +93,7 @@ export default async function EventDetailPage({
   const isFree = isFreeEntry(event.price)
   // "20:00 bis 22:00 Uhr" bzw. "20:00 Uhr" ohne Endzeit
   const timeLabel = formatTimeRange(event.time, event.endTime, lang)
+  const trailer = parseTrailer(event.trailerUrl)
 
   const [upcomingEvents, recentArticles] = await Promise.all([
     getUpcomingEvents(lang),
@@ -113,6 +116,7 @@ export default async function EventDetailPage({
   const eventsHref = localizedHref(lang, '/events')
   const newsHref = localizedHref(lang, '/news')
   const contactHref = localizedHref(lang, '/contact')
+  const privacyHref = localizedHref(lang, '/datenschutz')
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
@@ -201,6 +205,26 @@ export default async function EventDetailPage({
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--pepe-gold)]/10 border border-[var(--pepe-gold)]/30 rounded-full mb-6">
                 <span className="text-[var(--pepe-accent-text)] font-semibold">{t.highlight}</span>
               </div>
+            )}
+
+            {/* Der Trailer steht vor der Beschreibung. Wer auf einer
+                Eventseite landet, will zuerst wissen, was da überhaupt
+                passiert, und dreissig Sekunden Film beantworten das schneller
+                als drei Absätze Text. Wer lieber liest, scrollt daran vorbei:
+                geladen wird erst auf Klick. */}
+            {trailer && (
+              <section className="mb-10">
+                <h2 className="text-xl font-bold text-[var(--pepe-white)] mb-4">
+                  {t.trailerTitle}
+                </h2>
+                <TrailerPlayer
+                  trailer={trailer}
+                  poster={event.imageUrl}
+                  title={event.title}
+                  privacyHref={privacyHref}
+                  labels={dict.events.trailer}
+                />
+              </section>
             )}
 
             <div className="prose prose-invert prose-lg max-w-none mb-8">
@@ -343,6 +367,11 @@ export default async function EventDetailPage({
                   image={e.imageUrl || undefined}
                   price={e.price}
                   freeEntryLabel={dict.events.freeBadge}
+                  trailer={{
+                    url: e.trailerUrl,
+                    labels: dict.events.trailer,
+                    privacyHref,
+                  }}
                   href={`${eventsHref}/${e.slug}`}
                 />
               ))}
