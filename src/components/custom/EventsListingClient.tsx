@@ -390,8 +390,6 @@ export default function EventsListingClient({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                { href: 'https://www.tornadoseye.com',        host: 'tornadoseye.com',     ...t.planned.items.tornadosEye },
-                { href: 'https://taigicirkas.com/saucisson/', host: 'taigicirkas.com',     ...t.planned.items.saucisson },
                 { href: 'https://www.danimisima.de/',         host: 'danimisima.de',       ...t.planned.items.danielaJakob },
                 { href: 'https://zeitfuerzirkus.de/info',     host: 'zeitfuerzirkus.de',   ...t.planned.items.zeitFuer },
               ].map((p, i) => (
