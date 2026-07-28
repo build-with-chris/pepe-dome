@@ -174,12 +174,12 @@ export default async function TrainingPage({
                     <span className="font-bold text-[var(--pepe-white)]">{t.schedule.aircrobaticsNoteA}</span>{' '}
                     {t.schedule.aircrobaticsNoteB}{' '}
                     <a
-                      href="https://www.aircrobatic-studios.com"
+                      href="https://aircrobaticstudios.de/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[var(--pepe-accent-text)] font-semibold hover:underline"
                     >
-                      aircrobatic-studios.com ↗
+                      aircrobaticstudios.de ↗
                     </a>{' '}
                     {t.schedule.aircrobaticsNoteD}
                   </p>
@@ -236,7 +236,7 @@ export default async function TrainingPage({
               </p>
               <div className="mt-5">
                 <a
-                  href="https://www.aircrobatic-studios.com"
+                  href="https://aircrobaticstudios.de/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

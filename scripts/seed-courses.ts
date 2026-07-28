@@ -38,7 +38,8 @@ type SeedCourse = {
 }
 
 const AIRCRO_BOOKING = {
-  bookingUrl: 'https://www.aircrobatic-studios.com',
+  // Neue Adresse seit 28.07.2026, vorher aircrobatic-studios.com.
+  bookingUrl: 'https://aircrobaticstudios.de/',
   bookingLabel: 'Bei Aircrobatic Studios buchen',
   bookingNote:
     'Aircrobatics-Kurse werden direkt über Aircrobatic Studios gebucht, nicht über Eversports.',
