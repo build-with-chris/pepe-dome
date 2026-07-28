@@ -16,7 +16,20 @@ import { usePathname } from 'next/navigation'
 import { onConsentChange, readConsent, type ConsentState } from '@/lib/consent'
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-CGE01LR2LC'
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID
+
+/**
+ * Meta Pixel "Dome-Website-Pixel".
+ *
+ * Die ID steht bewusst im Code und nicht nur in einer Umgebungsvariable:
+ * Sie ist kein Geheimnis, sondern steht ohnehin im Quelltext jeder Seite,
+ * die den Pixel lädt, und lässt sich in der Meta Ad Library ablesen. Genauso
+ * verfährt das Projekt schon mit der Google-Analytics-ID.
+ *
+ * Das Zugriffstoken der Conversions API ist das Gegenteil davon und gehört
+ * ausschließlich in die Umgebungsvariable META_CAPI_ACCESS_TOKEN. Dieses
+ * Repository ist öffentlich.
+ */
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1643858583931537'
 
 export default function ConsentScripts() {
   const pathname = usePathname()
