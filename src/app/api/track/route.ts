@@ -22,6 +22,7 @@ import { z } from 'zod'
 import { successResponse, errorResponse } from '@/lib/api-response'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { TRACKED_EVENTS } from '@/lib/tracking-events'
+import { META_PIXEL_ID } from '@/lib/meta-config'
 
 const GRAPH_API_VERSION = 'v21.0'
 
@@ -52,7 +53,7 @@ const trackSchema = z.object({
 })
 
 export async function POST(request: NextRequest) {
-  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+  const pixelId = META_PIXEL_ID
   const accessToken = process.env.META_CAPI_ACCESS_TOKEN
 
   try {

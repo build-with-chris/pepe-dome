@@ -14,26 +14,9 @@ import { useEffect, useState } from 'react'
 import Script from 'next/script'
 import { usePathname } from 'next/navigation'
 import { onConsentChange, readConsent, type ConsentState } from '@/lib/consent'
+import { META_PIXEL_ID } from '@/lib/meta-config'
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-CGE01LR2LC'
-
-/**
- * Meta Pixel "Pepe Dome Website", Portfolio Pepe Arts.
- *
- * Die ID steht bewusst im Code und nicht nur in einer Umgebungsvariable:
- * Sie ist kein Geheimnis, sondern steht ohnehin im Quelltext jeder Seite,
- * die den Pixel lädt, und lässt sich in der Meta Ad Library ablesen. Genauso
- * verfährt das Projekt schon mit der Google-Analytics-ID.
- *
- * Das Zugriffstoken der Conversions API ist das Gegenteil davon und gehört
- * ausschließlich in die Umgebungsvariable META_CAPI_ACCESS_TOKEN. Dieses
- * Repository ist öffentlich.
- *
- * Vorgänger war 1643858583931537 im Portfolio "Pepe". Der lag getrennt vom
- * Werbekonto und der Facebook-Seite, und Meta zieht Datensätze nicht zwischen
- * Portfolios um. Deshalb neu angelegt statt verschoben.
- */
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1027053273442986'
 
 export default function ConsentScripts() {
   const pathname = usePathname()
