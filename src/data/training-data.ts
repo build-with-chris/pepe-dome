@@ -35,6 +35,7 @@ export const WOCHE: Tag[] = [
           'Kraft, Beweglichkeit & Körperspannung',
           'Erste Figuren und Sequenzen',
         ],
+        alter: 'Für Jugendliche',
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
@@ -56,6 +57,7 @@ export const WOCHE: Tag[] = [
           'Kraft, Beweglichkeit & Körperspannung',
           'Erste Figuren und Sequenzen',
         ],
+        alter: 'Für Jugendliche',
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
@@ -84,6 +86,7 @@ export const WOCHE: Tag[] = [
           'Rhythmusgefühl mit Handtrommel, Reco-Reco & Agogô',
           'Bitte mitbringen: Turnschlappen oder Stoppersocken, turnbare Klamotten (keine Jeans, Röcke, Kleider) und etwas zu trinken',
         ],
+        alter: 'Für Kinder von 3 bis 6',
         fuerWen:
           'Kinder 3 bis 6 Jahre · Einstieg jederzeit möglich. Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
@@ -103,6 +106,7 @@ export const WOCHE: Tag[] = [
           '„Animal Flow"-artige Sequenzen zu grooviger Musik',
           'Capoeira-Spielflow am Ende der Stunde',
         ],
+        alter: 'Für Erwachsene, alle Level',
         fuerWen:
           'Erwachsene, alle Levels · Einstieg jederzeit möglich. Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
       },
@@ -129,6 +133,7 @@ export const WOCHE: Tag[] = [
           'Spielerische Bodenakrobatik',
           'Freie Wahl je nach Lust der Gruppe',
         ],
+        alter: 'Für Kinder von 5 bis 12',
         fuerWen: 'Kinder 5 bis 12 Jahre',
       },
       {
@@ -147,6 +152,7 @@ export const WOCHE: Tag[] = [
           'Kraft, Beweglichkeit & Körperspannung',
           'Erste Figuren und Sequenzen',
         ],
+        alter: 'Für Jugendliche',
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
@@ -168,6 +174,7 @@ export const WOCHE: Tag[] = [
           'Kraft, Beweglichkeit & Körperspannung',
           'Erste Figuren und Sequenzen',
         ],
+        alter: 'Für Jugendliche',
         fuerWen: 'Jugendliche, alle Levels',
         bookingUrl: 'https://www.aircrobatic-studios.com',
         bookingLabel: 'Bei Aircrobatic Studios buchen',
@@ -196,6 +203,7 @@ export const WOCHE: Tag[] = [
         description:
           'Ein dynamischer Kurs an der Schnittstelle von Breaking und Akrobatik, mit Fokus auf Körperkontrolle, Kraft und fließende Bewegungsabläufe. Breaking-Elemente werden neu interpretiert und in einen rein akrobatischen Kontext übertragen.',
         inhalte: ['Balance', 'Kraft', 'Dynamik', 'Körperkontrolle', 'Flows'],
+        alter: 'Für Jugendliche und Erwachsene',
         fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
       },
       {
@@ -214,6 +222,7 @@ export const WOCHE: Tag[] = [
           'Kraft- und Konditionsaufbau',
           'Erste Sequenzen und Übergänge',
         ],
+        alter: 'Für Jugendliche und Erwachsene',
         fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
       },
     ],
@@ -247,6 +256,7 @@ export const WOCHE: Tag[] = [
           'Koordination, Kontrolle & Körperwahrnehmung',
           'Fokus auf Flow, Timing & Illusionseffekte',
         ],
+        alter: 'Für Erwachsene, Anfänger:innen willkommen',
         fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
       {
@@ -267,6 +277,7 @@ export const WOCHE: Tag[] = [
           'Richtungswechsel, Footwork & Körperposition',
           'Erste einfache Tricks & Kombos',
         ],
+        alter: 'Für Erwachsene, Anfänger:innen willkommen',
         fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
       },
     ],

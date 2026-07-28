@@ -44,6 +44,10 @@ export type Kurs = {
   day: string
   description: string
   inhalte: string[]
+  /** Kurze, freundliche Altersangabe für die Kurskarte, z.B. „Für Kinder von
+   *  5 bis 12". Steht bewusst ganz oben auf der Karte: Eltern suchen zuerst
+   *  danach. Ohne Angabe fällt die Karte auf die Zielgruppe zurück. */
+  alter?: string
   fuerWen: string
   termine?: Termin[]       // optional: konkrete Datums-Liste (Sonntags-Flow-Arts)
   termineTitel?: string    // Überschrift für die Termin-Liste im Modal
@@ -98,9 +102,8 @@ type Labels = {
   filterKinder: string
   filterTeens: string
   filterErwachsene: string
-  termineEiner: string
-  termineMehrere: string
   details: string
+  mit: string
   kursEiner: string
   kursMehrere: string
   leer: string
@@ -119,18 +122,19 @@ const LABELS: Record<'de' | 'en', Labels> = {
     viewWoche: 'Wochenplan',
     filterAlle: 'Alle',
     filterKinder: 'Kinder',
-    filterTeens: 'Teens',
+    // „Jugendliche" statt „Teens": die Kursdaten sprechen so, und es klingt
+    // für Eltern weniger nach Marketing.
+    filterTeens: 'Jugendliche',
     filterErwachsene: 'Erwachsene',
-    termineEiner: 'Termin pro Woche',
-    termineMehrere: 'Termine pro Woche',
-    details: 'Details ansehen',
+    details: 'Mehr über den Kurs',
+    mit: 'mit',
     kursEiner: 'Kurs',
     kursMehrere: 'Kurse',
-    leer: 'Für diese Auswahl läuft gerade kein Kurs. Schau bei einer anderen Gruppe vorbei.',
+    leer: 'Für diese Auswahl läuft gerade kein Kurs. Schau gern bei einer anderen Gruppe vorbei.',
     leerReset: 'Alle Kurse zeigen',
-    hinweisA: 'Gebucht wird über das',
-    hinweisLink: 'Eversports-Widget weiter unten',
-    hinweisB: 'Klick auf einen Kurs für alle Details.',
+    hinweisA: 'Klick auf einen Kurs, dann siehst du alles dazu. Gebucht wird weiter unten über das',
+    hinweisLink: 'Eversports-Widget',
+    hinweisB: 'Schnuppern geht jederzeit.',
     detailsZu: (t: string) => `Details zu ${t} anzeigen`,
     gruppeFilter: 'Nach Zielgruppe filtern',
     ansichtWechseln: 'Ansicht wechseln',
@@ -142,45 +146,81 @@ const LABELS: Record<'de' | 'en', Labels> = {
     filterKinder: 'Kids',
     filterTeens: 'Teens',
     filterErwachsene: 'Adults',
-    termineEiner: 'session per week',
-    termineMehrere: 'sessions per week',
-    details: 'View details',
+    details: 'More about this class',
+    mit: 'with',
     kursEiner: 'class',
     kursMehrere: 'classes',
-    leer: 'No class runs for this selection right now. Have a look at another group.',
+    leer: 'No class runs for this selection right now. Feel free to look at another group.',
     leerReset: 'Show all classes',
-    hinweisA: 'Booking runs through the',
-    hinweisLink: 'Eversports widget below',
-    hinweisB: 'Click a class for all the details.',
+    hinweisA: 'Click a class to see everything about it. Booking happens below through the',
+    hinweisLink: 'Eversports widget',
+    hinweisB: 'You can always come try a session first.',
     detailsZu: (t: string) => `Show details for ${t}`,
     gruppeFilter: 'Filter by age group',
     ansichtWechseln: 'Switch view',
   },
 }
 
-/** Lange Tagesnamen auf Kürzel, für die Termin-Zeilen in den Kurs-Karten. */
-const SHORT_DAY: Record<string, string> = {
-  Montag: 'Mo', Dienstag: 'Di', Mittwoch: 'Mi', Donnerstag: 'Do',
-  Freitag: 'Fr', Samstag: 'Sa', Sonntag: 'So',
-  Monday: 'Mon', Tuesday: 'Tue', Wednesday: 'Wed', Thursday: 'Thu',
-  Friday: 'Fri', Saturday: 'Sat', Sunday: 'Sun',
+/** „Montag" wird zu „montags". Eine Kurskarte soll sprechen, nicht tabellieren. */
+const ADVERB_DAY: Record<string, string> = {
+  Montag: 'montags', Dienstag: 'dienstags', Mittwoch: 'mittwochs',
+  Donnerstag: 'donnerstags', Freitag: 'freitags', Samstag: 'samstags',
+  Sonntag: 'sonntags',
+  Monday: 'Mondays', Tuesday: 'Tuesdays', Wednesday: 'Wednesdays',
+  Thursday: 'Thursdays', Friday: 'Fridays', Saturday: 'Saturdays',
+  Sunday: 'Sundays',
 }
 
-const shortDay = (day: string) => SHORT_DAY[day] ?? day.slice(0, 2)
+/** „17:15 bis 18:15" wird zu „17:15". */
+const startzeit = (time: string) => time.split(/\s+bis\s+/)[0].trim()
 
-// ── Zielgruppen-Badge ────────────────────────────────────────────────────
+/**
+ * Macht aus den Wochenterminen lesbare Zeilen, eine pro Tag:
+ *   ein Termin  → „Dienstags, 16:15 bis 17:15 Uhr"
+ *   mehrere     → „Montags, 17:15 und 18:15 Uhr"
+ *
+ * Bei mehreren Terminen am selben Tag stehen nur die Startzeiten, sonst wird
+ * die Zeile unlesbar lang. Die vollständigen Zeitfenster stehen im Modal.
+ */
+function zeitenProTag(slots: Slot[], lang: 'de' | 'en'): string[] {
+  const proTag = new Map<string, string[]>()
+  for (const s of slots) {
+    const liste = proTag.get(s.day)
+    if (liste) liste.push(s.time)
+    else proTag.set(s.day, [s.time])
+  }
 
-function TargetBadge({ target, label }: { target: Target; label: string }) {
-  const c = COLORS[target]
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap"
-      style={{ backgroundColor: c.bg, color: c.dot, border: `1px solid ${c.border}` }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: c.dot }} aria-hidden="true" />
-      {label}
-    </span>
-  )
+  return [...proTag.entries()].map(([day, zeiten]) => {
+    const adverb = ADVERB_DAY[day] ?? day
+    const label = lang === 'de' ? adverb.charAt(0).toUpperCase() + adverb.slice(1) : adverb
+    if (zeiten.length === 1) {
+      return lang === 'de' ? `${label}, ${zeiten[0]} Uhr` : `${label}, ${zeiten[0]}`
+    }
+    const starts = zeiten.map(startzeit)
+    const letzte = starts[starts.length - 1]
+    const davor = starts.slice(0, -1).join(', ')
+    const verbunden = lang === 'de' ? `${davor} und ${letzte}` : `${davor} and ${letzte}`
+    return lang === 'de' ? `${label}, ${verbunden} Uhr` : `${label}, ${verbunden}`
+  })
+}
+
+/**
+ * Erster Satz der Kursbeschreibung, als Vorgeschmack auf der Karte.
+ * Die Beschreibungen sind bereits menschlich geschrieben, deshalb reicht der
+ * Anfang, um zu vermitteln, was in der Stunde passiert.
+ */
+function ersterSatz(text: string): string {
+  // Doppelpunkt zählt als Ende: mehrere Beschreibungen führen erst lang ein
+  // und zählen dann nach einem „:" auf. Der Teil davor ist genau der Satz,
+  // der auf die Karte gehört.
+  const match = text.match(/^[\s\S]*?[.!?:](?=\s|$)/)
+  const satz = (match ? match[0] : text).trim().replace(/:$/, '.')
+  // Auf der Karte reicht ein Vorgeschmack. Kuerzer als das Zeilenlimit der
+  // Karte, damit der Text an einer Wortgrenze endet statt am CSS-Abschnitt.
+  if (satz.length <= 130) return satz
+  const hart = satz.slice(0, 128)
+  const grenze = hart.lastIndexOf(' ')
+  return (grenze > 90 ? hart.slice(0, grenze) : hart).trimEnd() + '…'
 }
 
 // ── Kurs-Karte für die Katalog-Ansicht ───────────────────────────────────
@@ -191,58 +231,59 @@ function KursKarte({
   onClick,
   t,
   targetLabel,
+  lang,
 }: {
   gruppe: KursGruppe
   onClick: () => void
   t: Labels
   targetLabel: string
+  lang: 'de' | 'en'
 }) {
   const { kurs, slots } = gruppe
   const c = COLORS[kurs.target]
+  const zeilen = zeitenProTag(slots, lang)
 
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={t.detailsZu(kurs.title)}
-      className="group h-full w-full text-left rounded-2xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)] p-5 md:p-6 flex flex-col gap-4 transition-all duration-200 hover:border-[var(--pepe-line-light)] hover:bg-[var(--pepe-surface)]/70 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
-      style={{ borderTop: `3px solid ${c.dot}` }}
+      className="group h-full w-full text-left rounded-3xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)] p-6 md:p-7 flex flex-col gap-4 transition-all duration-200 hover:border-[var(--pepe-line-light)] hover:bg-[var(--pepe-surface)]/60 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
     >
-      {/* Kopf: Zielgruppe + Titel */}
+      {/* Für wen. Steht ganz oben, weil das die erste Frage ist. */}
+      <p className="flex items-center gap-2 text-sm font-semibold" style={{ color: c.dot }}>
+        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: c.dot }} aria-hidden="true" />
+        {kurs.alter ?? targetLabel}
+      </p>
+
       <div>
-        <TargetBadge target={kurs.target} label={targetLabel} />
-        <h4 className="text-[var(--pepe-white)] font-bold text-lg md:text-xl leading-tight mt-3 group-hover:text-[var(--pepe-accent-text)] transition-colors">
+        <h4 className="text-[var(--pepe-white)] font-bold text-xl md:text-2xl leading-tight group-hover:text-[var(--pepe-accent-text)] transition-colors">
           {kurs.title}
         </h4>
-        {kurs.sub && (
-          <p className="text-[var(--pepe-t64)] text-sm leading-snug mt-1">{kurs.sub}</p>
-        )}
-      </div>
-
-      {/* Termine — untereinander, Zeiten in einer Spalte ausgerichtet */}
-      <div className="mt-auto">
-        <p className="text-[var(--pepe-t48)] text-[10px] font-bold uppercase tracking-widest mb-2">
-          {slots.length} {slots.length === 1 ? t.termineEiner : t.termineMehrere}
+        {/* Erster Satz der Beschreibung statt Stichwort-Zeile: sagt in normaler
+            Sprache, was in der Stunde passiert. */}
+        {/* line-clamp haelt die Karten in einer Reihe gleich hoch, auch wenn
+            eine Beschreibung mal laenger ausfaellt. */}
+        <p className="text-[var(--pepe-t80)] text-[15px] leading-relaxed mt-2 line-clamp-4">
+          {ersterSatz(kurs.description)}
         </p>
-        <ul className="space-y-1">
-          {slots.map((s, i) => (
-            <li key={i} className="flex items-baseline gap-3 text-sm">
-              <span
-                className="font-bold tabular-nums w-8 flex-shrink-0"
-                style={{ color: c.dot }}
-              >
-                {shortDay(s.day)}
-              </span>
-              <span className="text-[var(--pepe-t80)] tabular-nums">{s.time}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      {/* Fuß */}
-      <span className="text-[var(--pepe-t48)] text-xs font-semibold group-hover:text-[var(--pepe-accent-text)] transition-colors">
+      {/* Wann, als Satz statt als Tabelle */}
+      <div className="mt-auto pt-1 space-y-1">
+        {zeilen.map((zeile, i) => (
+          <p key={i} className="text-[var(--pepe-white)] text-[15px] font-medium">
+            {zeile}
+          </p>
+        ))}
+        <p className="text-[var(--pepe-t48)] text-sm">
+          {t.mit} {kurs.trainer}
+        </p>
+      </div>
+
+      <span className="text-[var(--pepe-accent-text)] text-sm font-semibold">
         {t.details}
-        <span className="inline-block ml-1 group-hover:translate-x-0.5 transition-transform" aria-hidden="true">
+        <span className="inline-block ml-1.5 group-hover:translate-x-1 transition-transform" aria-hidden="true">
           →
         </span>
       </span>
@@ -264,12 +305,12 @@ function KursZeile({ kurs, onClick }: { kurs: Kurs; onClick: () => void }) {
       aria-label={`Details zu ${kurs.title} anzeigen`}
     >
       <div className="flex items-center gap-3 sm:gap-5">
-        <span className="text-[var(--pepe-t80)] text-xs font-bold tabular-nums whitespace-nowrap w-[6.5rem] flex-shrink-0">
+        <span className="text-[var(--pepe-t80)] text-sm font-semibold whitespace-nowrap w-[6.5rem] flex-shrink-0">
           {kurs.time}
         </span>
 
         <div className="flex-1 min-w-0">
-          <p className="text-[var(--pepe-white)] font-semibold text-sm leading-snug group-hover:text-[var(--pepe-accent-text)] transition-colors">
+          <p className="text-[var(--pepe-white)] font-semibold text-base leading-snug group-hover:text-[var(--pepe-accent-text)] transition-colors">
             {kurs.title}
           </p>
           {/* Kein truncate: auf dem Handy wurde sonst aus „mit Aircrobatics"
@@ -381,16 +422,16 @@ function WochenTabelle({
             } ${hasKurse ? '' : 'bg-[var(--pepe-surface)]/25'}`}
           >
             {/* Tagesspalte */}
-            <div className="px-4 sm:px-5 pt-4 sm:py-5 sm:border-r sm:border-[var(--pepe-line)] flex sm:block items-baseline gap-3">
+            <div className="px-4 sm:px-6 pt-4 sm:py-6 sm:border-r sm:border-[var(--pepe-line)] flex sm:block items-baseline gap-3">
               <h4
-                className={`font-bold text-sm uppercase tracking-wider ${
+                className={`font-bold text-lg ${
                   hasKurse ? 'text-[var(--pepe-white)]' : 'text-[var(--pepe-t48)]'
                 }`}
               >
                 {tag.day}
               </h4>
               {hasKurse && (
-                <p className="text-[var(--pepe-t48)] text-[10px] font-bold uppercase tracking-widest sm:mt-1">
+                <p className="text-[var(--pepe-t48)] text-sm sm:mt-0.5">
                   {tag.kurse.length} {tag.kurse.length === 1 ? t.kursEiner : t.kursMehrere}
                 </p>
               )}
@@ -644,6 +685,7 @@ export default function CourseScheduleGrid({
               key={gruppe.key}
               gruppe={gruppe}
               t={t}
+              lang={lang}
               targetLabel={targetLabel[gruppe.kurs.target]}
               onClick={() => openKurs(gruppe.kurs, gruppe.slots)}
             />
