@@ -7,9 +7,10 @@
  *   „Kurse"      — Katalog. Ein Kurs = eine Karte, egal wie oft er in der
  *                  Woche stattfindet. Das ist die Frage, mit der Leute
  *                  ankommen: was gibt es und passt das zu mir.
- *   „Wochenplan" — Zeitliche Übersicht als eine zusammenhängende Tabelle
- *                  statt sieben einzelner Kacheln. Beantwortet: wann kann
- *                  ich kommen.
+ *   „Wochenplan" — Beantwortet: wann kann ich kommen. Pro Wochentag ein
+ *                  Abschnitt mit Kurskacheln. Bewusst keine Tabelle mehr:
+ *                  feste Zeitspalten lasen sich wie ein Fahrplan, und ein
+ *                  Kursprogramm soll Lust machen statt Auskunft geben.
  *
  * Die Zielgruppen-Legende ist kein reiner Farbschlüssel, sondern filtert
  * beide Sichten.
@@ -266,9 +267,16 @@ function KursKarte({
   )
 }
 
-// ── Kurs-Zeile für den Wochenplan ────────────────────────────────────────
+// ── Kurs-Kachel für den Wochenplan ──────────────────────────────────────
 
-function KursZeile({
+/**
+ * Ein Kurs an einem Termin.
+ *
+ * War vorher eine Tabellenzeile mit fester Zeitspalte. Das las sich wie ein
+ * Fahrplan, und ein Kursprogramm ist kein Fahrplan: es soll Lust machen. Jetzt
+ * eine Kachel mit Bild, farbiger Uhrzeit und Anfasser zum Draufklicken.
+ */
+function KursKachel({
   kurs,
   slot,
   onClick,
@@ -280,44 +288,76 @@ function KursZeile({
   lang: 'de' | 'en'
 }) {
   const c = COLORS[kurs.target]
+  const bild = kartenBild(kurs)
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-[var(--pepe-surface)]/70 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer group"
-      style={{ borderLeft: `3px solid ${c.dot}` }}
       aria-label={`Details zu ${kurs.title} anzeigen`}
+      className="group relative flex items-center gap-4 w-full text-left rounded-2xl p-3 pr-4 border transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
+      style={{ backgroundColor: c.bg, borderColor: c.border }}
     >
-      <div className="flex items-center gap-3 sm:gap-5">
-        <span className="text-[var(--pepe-t80)] text-sm font-semibold whitespace-nowrap w-[6.5rem] flex-shrink-0">
-          {zeitspanne(slot, lang)}
+      {/* Bild, sonst ein Farbfeld in der Kursfarbe. Beides gleich gross,
+          damit die Kacheln einer Reihe nicht auseinanderlaufen. */}
+      <span
+        className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-xl overflow-hidden"
+        style={{ backgroundColor: c.bg }}
+        aria-hidden="true"
+      >
+        {bild ? (
+          <Image
+            src={bild.url}
+            alt=""
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            sizes="80px"
+          />
+        ) : (
+          <span
+            className="absolute inset-0"
+            style={{ background: `linear-gradient(140deg, ${c.dot}55, transparent)` }}
+          />
+        )}
+      </span>
+
+      <span className="flex-1 min-w-0">
+        {/* Die Uhrzeit fuehrt, in Kursfarbe: im Wochenplan sucht man zuerst,
+            wann etwas laeuft. */}
+        <span className="block font-bold text-lg leading-none" style={{ color: c.dot }}>
+          {slot.startTime}
+          {/* Das Leerzeichen ist kein Schoenheitsfehler: der Abstand kommt
+              optisch von ml-2, ohne es liest ein Screenreader aber
+              „17:15bis 18:15" in einem Wort. */}{' '}
+          <span className="text-[var(--pepe-t48)] font-medium text-xs ml-2">
+            {lang === 'de' ? `bis ${slot.endTime}` : `to ${slot.endTime}`}
+          </span>
         </span>
 
-        <div className="flex-1 min-w-0">
-          <p className="text-[var(--pepe-white)] font-semibold text-base leading-snug group-hover:text-[var(--pepe-accent-text)] transition-colors">
-            {kurs.title}
-          </p>
-          {/* Kein truncate: auf dem Handy wurde sonst aus „mit Aircrobatics"
-              ein „mit Airc…". Lieber umbrechen. */}
-          {kurs.sub && (
-            <p className="text-[var(--pepe-t48)] text-xs leading-snug">{kurs.sub}</p>
-          )}
-        </div>
-
-        <span
-          className="text-[var(--pepe-t48)] text-sm flex-shrink-0 group-hover:text-[var(--pepe-accent-text)] group-hover:translate-x-0.5 transition-all"
-          aria-hidden="true"
-        >
-          ›
+        <span className="block text-[var(--pepe-white)] font-bold text-base leading-snug mt-1.5 group-hover:text-[var(--pepe-accent-text)] transition-colors">
+          {kurs.title}
         </span>
-      </div>
+
+        {kurs.sub && (
+          <span className="block text-[var(--pepe-t64)] text-xs leading-snug mt-0.5">
+            {kurs.sub}
+          </span>
+        )}
+      </span>
+
+      <span
+        className="text-[var(--pepe-t48)] flex-shrink-0 group-hover:text-[var(--pepe-accent-text)] group-hover:translate-x-1 transition-all"
+        aria-hidden="true"
+      >
+        →
+      </span>
     </button>
   )
 }
 
-// ── Wochenplan: eine durchgehende Tabelle statt sieben Kacheln ───────────
+// ── Wochenplan: Tagesabschnitte statt Tabellenzeilen ────────────────────
 
-function WochenTabelle({
+function Wochenplan({
   woche,
   onKursClick,
   t,
@@ -329,58 +369,50 @@ function WochenTabelle({
   lang: 'de' | 'en'
 }) {
   return (
-    <div className="rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] overflow-hidden">
-      {woche.map((tag, index) => {
+    <div className="space-y-8">
+      {woche.map((tag) => {
         const hatKurse = tag.eintraege.length > 0
         return (
-          <div
-            key={tag.weekday}
-            className={`sm:grid sm:grid-cols-[11rem_1fr] ${
-              index > 0 ? 'border-t border-[var(--pepe-line)]' : ''
-            } ${hatKurse ? '' : 'bg-[var(--pepe-surface)]/25'}`}
-          >
-            {/* Tagesspalte */}
-            <div className="px-4 sm:px-6 pt-4 sm:py-6 sm:border-r sm:border-[var(--pepe-line)] flex sm:block items-baseline gap-3">
+          <section key={tag.weekday}>
+            {/* Tagesueberschrift. Frueher eine Tabellenspalte, jetzt eine
+                Ueberschrift mit Luft darum. */}
+            <div className="flex items-baseline gap-3 mb-3">
               <h4
-                className={`font-bold text-lg ${
+                className={`font-bold text-xl md:text-2xl ${
                   hatKurse ? 'text-[var(--pepe-white)]' : 'text-[var(--pepe-t48)]'
                 }`}
               >
                 {weekdayName(tag.weekday, lang)}
               </h4>
               {hatKurse && (
-                <p className="text-[var(--pepe-t48)] text-sm sm:mt-0.5">
+                <span className="text-[var(--pepe-t48)] text-sm">
                   {tag.eintraege.length}{' '}
                   {tag.eintraege.length === 1 ? t.kursEiner : t.kursMehrere}
-                </p>
+                </span>
               )}
+              <span className="flex-1 h-px bg-[var(--pepe-line)]" aria-hidden="true" />
             </div>
 
-            {/* Kursspalte */}
-            <div className="px-2 sm:px-3 pb-4 pt-2 sm:py-3">
-              {hatKurse ? (
-                <div className="space-y-1">
-                  {tag.eintraege.map((eintrag, i) => (
-                    <KursZeile
-                      key={`${eintrag.kurs.id}-${i}`}
-                      kurs={eintrag.kurs}
-                      slot={eintrag.slot}
-                      lang={lang}
-                      onClick={() => onKursClick(eintrag.kurs)}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-[var(--pepe-t48)] text-sm italic px-1 sm:py-1.5">
-                  {tag.note ?? '—'}
-                </p>
-              )}
+            {hatKurse ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                {tag.eintraege.map((eintrag, i) => (
+                  <KursKachel
+                    key={`${eintrag.kurs.id}-${i}`}
+                    kurs={eintrag.kurs}
+                    slot={eintrag.slot}
+                    lang={lang}
+                    onClick={() => onKursClick(eintrag.kurs)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-[var(--pepe-t48)] text-sm italic">{tag.note ?? '—'}</p>
+            )}
 
-              {hatKurse && tag.note && (
-                <p className="text-[var(--pepe-t48)] text-xs italic px-1 mt-2.5">{tag.note}</p>
-              )}
-            </div>
-          </div>
+            {hatKurse && tag.note && (
+              <p className="text-[var(--pepe-t48)] text-xs italic mt-3">{tag.note}</p>
+            )}
+          </section>
         )
       })}
     </div>
@@ -587,7 +619,7 @@ export default function CourseScheduleGrid({
           ))}
         </div>
       ) : (
-        <WochenTabelle
+        <Wochenplan
           woche={sichtbareWoche}
           onKursClick={openKurs}
           t={t}
