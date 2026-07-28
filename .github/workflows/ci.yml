@@ -25,6 +25,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    # Wegwerf-Datenbank nur für den Build-Schritt.
+    #
+    # Seit die Trainingsseite ihr Kursprogramm aus der Datenbank liest, fragt
+    # `next build` beim Vorrendern wirklich ab. Mit einem Platzhalter-Wert
+    # ohne Server dahinter bricht der Build ab. Diese Instanz lebt nur für die
+    # Dauer des Laufs, startet leer und wird danach weggeworfen.
+    #
+    # Name und Host sind bewusst so gewählt, dass tests/db-guard.ts sie als
+    # Wegwerf-DB erkennt: localhost und "test" im Namen. Die Testsuite läuft
+    # trotzdem weiter ohne Datenbank, siehe den Test-Schritt unten.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pepe_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      CI_DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/pepe_test"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -41,13 +69,21 @@ jobs:
         env:
           # prisma.config.ts lädt dotenv und verlangt DATABASE_URL beim Parsen
           # der Config. In CI gibt es keine .env, deshalb brach der Schritt ab.
-          # `generate` liest nur das Schema und schreibt den Client, es verbindet
-          # sich nie — der Platzhalter reicht also.
+          # `generate` liest nur das Schema und schreibt den Client, es
+          # verbindet sich nie.
           #
-          # Bewusst nur auf diesem Schritt und nicht auf Job-Ebene: so kann der
+          # Bewusst je Schritt gesetzt und nicht auf Job-Ebene: so kann der
           # Wert nicht in den Test-Schritt wandern, der alle Tabellen leert.
           # Niemals secrets.DATABASE_URL hier einsetzen.
-          DATABASE_URL: "postgresql://user:pass@localhost:5432/build_only"
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+
+      - name: Schema in die Wegwerf-DB spielen
+        # Ohne Tabellen scheitert das Vorrendern der Trainingsseite im Build.
+        # Die Datenbank bleibt leer, das reicht: geprüft wird, dass die
+        # Abfragen laufen, nicht was sie zurückgeben.
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
 
       - name: Typen prüfen
         run: npx tsc --noEmit --pretty false || true
@@ -66,8 +102,10 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          DATABASE_URL: "postgresql://user:pass@localhost:5432/build_only"
-          # Platzhalter reichen: Der Build rendert keine Seite, die sie benutzt.
+          # Echte Wegwerf-DB, kein Platzhalter mehr: die Trainingsseite liest
+          # ihr Kursprogramm beim Vorrendern aus der Datenbank.
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+          # Für die übrigen Dienste reichen Platzhalter, der Build ruft sie nicht.
           RESEND_API_KEY: "re_build_placeholder"
           # Clerk prüft die Struktur des Publishable Key: pk_test_ plus
           # base64 vom Frontend-Host mit "$" am Ende. Ein freier Text wie
