@@ -33,7 +33,12 @@
  *   3. alt: was auf dem Bild zu sehen ist, in einem Satz. Das lesen
  *      Screenreader vor und Google nutzt es für die Bildersuche. Nicht
  *      "Foto von ..." und nicht der Bildtitel, sondern der Inhalt.
- *   4. caption ist optional und wird in der Lightbox unter dem Bild angezeigt.
+ *   4. caption ist optional und steht *nicht* mehr in der Oberfläche. Sichtbare
+ *      Bildunterschriften gab es früher im Raster und in der Lightbox; wo eine
+ *      fehlte, sprang der Alt-Text ein und beschrieb sichtbar das
+ *      Offensichtliche. Das wirkte generisch, deshalb ist die Anzeige raus.
+ *      caption wandert weiterhin ins ImageGallery-JSON-LD und kann dort in der
+ *      Google-Bildersuche auftauchen, ist also weiter gepflegt sinnvoll.
  *   5. `featured: true` zieht das Bild an den Anfang seiner Kategorie.
  *      Sparsam nutzen: wenn alles vorne steht, steht nichts vorne.
  */

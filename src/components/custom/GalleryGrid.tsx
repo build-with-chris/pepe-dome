@@ -192,10 +192,12 @@ export default function GalleryGrid({
               loading={index === 0 ? undefined : index < 4 ? 'eager' : 'lazy'}
               className="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
-            <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span className="pointer-events-none absolute bottom-2 left-2 right-2 hidden text-left text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]">
-              {(image.caption ?? image.alt)[lang]}
-            </span>
+            {/* Bewusst ohne Text über der Kachel: die Bildunterschriften standen
+                nur bei einem Teil der Bilder, der Rest fiel auf den Alt-Text
+                zurück und beschrieb damit sichtbar das Offensichtliche. Der
+                Alt-Text bleibt im Markup, er richtet sich an Screenreader und
+                die Bildersuche, nicht an sehende Betrachter. Als Hinweis, dass
+                die Kachel anklickbar ist, bleiben Rahmenfarbe und Zoom. */}
           </button>
         ))}
       </div>
@@ -299,37 +301,34 @@ export default function GalleryGrid({
                   )}
                 </div>
 
-                {/* Bildunterschrift plus die zwei Blätter-Buttons für Mobile,
-                    wo die seitlichen Pfeile das Bild verdecken würden. */}
-                <div className="flex-shrink-0 px-4 pb-5 pt-3 md:pb-6">
-                  <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-white/75">
-                    {(current.caption ?? current.alt)[lang]}
-                  </p>
-                  {visible.length > 1 && (
-                    <div className="mt-4 flex justify-center gap-3 md:hidden">
-                      <button
-                        type="button"
-                        onClick={() => step(-1)}
-                        aria-label={texts.lightbox.prev}
-                        className="flex h-11 w-16 items-center justify-center rounded-full bg-white/10 text-white transition-colors active:bg-white/25"
-                      >
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-                          <path d="M15 18l-6-6 6-6" />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => step(1)}
-                        aria-label={texts.lightbox.next}
-                        className="flex h-11 w-16 items-center justify-center rounded-full bg-white/10 text-white transition-colors active:bg-white/25"
-                      >
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-                          <path d="M9 18l6-6-6-6" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                {/* Nur noch die zwei Blätter-Buttons für Mobile, wo die
+                    seitlichen Pfeile das Bild verdecken würden. Ohne die frühere
+                    Bildunterschrift darunter wird die Leiste auf Desktop gar
+                    nicht mehr gerendert, das Bild bekommt die Höhe. */}
+                {visible.length > 1 && (
+                  <div className="flex flex-shrink-0 justify-center gap-3 px-4 pb-5 pt-3 md:hidden">
+                    <button
+                      type="button"
+                      onClick={() => step(-1)}
+                      aria-label={texts.lightbox.prev}
+                      className="flex h-11 w-16 items-center justify-center rounded-full bg-white/10 text-white transition-colors active:bg-white/25"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => step(1)}
+                      aria-label={texts.lightbox.next}
+                      className="flex h-11 w-16 items-center justify-center rounded-full bg-white/10 text-white transition-colors active:bg-white/25"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </Dialog.Content>
