@@ -89,6 +89,7 @@
     },
     "press": {
       "title": "Das sagt die Presse",
+      "readAt": "Artikel lesen bei",
       "quotes": [
         {
           "text": "Wer selber Artist werden möchte, ist im Pepe-Dom bestens aufgehoben.",

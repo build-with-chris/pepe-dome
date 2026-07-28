@@ -89,6 +89,7 @@
     },
     "press": {
       "title": "What the press says",
+      "readAt": "Read the article at",
       "quotes": [
         {
           "text": "If you want to become a circus artist yourself, Pepe Dome is the place to be.",

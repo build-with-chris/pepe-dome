@@ -15,6 +15,7 @@ import nextDynamic from 'next/dynamic'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
+import { cn } from '@/lib/utils'
 import {
   getFeaturedArticles,
   getRecentArticles,
@@ -124,7 +125,13 @@ export default async function HomePage({
     community: '/news',
   }
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
-  const pressQuotes = (t.press?.quotes ?? []) as { text: string; source: string }[]
+  // `url` ist optional: ein Zitat ohne hinterlegten Artikel bleibt ein reines
+  // Zitat, eines mit URL wird zur anklickbaren Karte.
+  const pressQuotes = (t.press?.quotes ?? []) as {
+    text: string
+    source: string
+    url?: string
+  }[]
 
   return (
     <>
@@ -358,19 +365,57 @@ export default async function HomePage({
               {t.press.title}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {pressQuotes.map((quote, index) => (
-                <blockquote
-                  key={index}
-                  className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-6 md:p-8"
-                >
-                  <p className="text-[var(--pepe-t80)] text-lg leading-relaxed mb-4">
-                    „{quote.text}“
-                  </p>
-                  <footer className="text-sm text-[var(--pepe-accent-text)] font-semibold">
-                    {quote.source}
-                  </footer>
-                </blockquote>
-              ))}
+              {pressQuotes.map((quote, index) => {
+                const card = (
+                  <blockquote
+                    className={cn(
+                      'h-full rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] p-6 md:p-8',
+                      quote.url &&
+                        'transition-colors group-hover:border-[var(--pepe-gold)]'
+                    )}
+                  >
+                    <p className="text-[var(--pepe-t80)] text-lg leading-relaxed mb-4">
+                      „{quote.text}“
+                    </p>
+                    <footer className="flex items-center gap-1.5 text-sm font-semibold text-[var(--pepe-accent-text)]">
+                      {quote.source}
+                      {quote.url && (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          className="h-3.5 w-3.5"
+                        >
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <path d="M15 3h6v6" />
+                          <path d="M10 14 21 3" />
+                        </svg>
+                      )}
+                    </footer>
+                  </blockquote>
+                )
+
+                if (!quote.url) return <div key={index}>{card}</div>
+
+                return (
+                  <a
+                    key={index}
+                    href={quote.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    // Der Artikel liegt beim Verlag, nicht bei uns. Der Titel
+                    // sagt deshalb dazu, wohin der Klick führt.
+                    aria-label={`${t.press.readAt ?? ''} ${quote.source}`.trim()}
+                    className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--pepe-black)]"
+                  >
+                    {card}
+                  </a>
+                )
+              })}
             </div>
           </div>
         </section>
