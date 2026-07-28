@@ -128,7 +128,10 @@ describe('EventCard', () => {
 
     it('zeigt bei kostenlosen Events nur den Gratis-Sticker, nicht zusätzlich den Preistext', () => {
       render(<EventCard {...defaultProps} price="Eintritt frei" freeEntryLabel="Gratis Eintritt" />)
-      expect(screen.getByText('Gratis Eintritt')).toBeInTheDocument()
+      // Der Sticker steht zweimal im Markup: einmal fuer breite Karten oben
+      // rechts im Bild, einmal fuer schmale unten in der Preiszeile. Container
+      // Queries zeigen immer nur einen davon, jsdom rendert beide.
+      expect(screen.getAllByText('Gratis Eintritt')).toHaveLength(2)
       expect(screen.queryByText('Eintritt frei')).not.toBeInTheDocument()
     })
 

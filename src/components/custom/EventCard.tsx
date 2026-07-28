@@ -88,8 +88,10 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
     const showTrailerButton = Boolean(trailer && trailerProp && !compact)
 
     const cardClasses = cn(
-      // Base styles
-      'group flex overflow-hidden rounded-2xl',
+      // Base styles. `@container` macht die Karte selbst zum Bezugspunkt für die
+      // Overlays im Bild: im Carousel ist eine Karte auch auf dem Desktop nur
+      // 280px breit, ein Viewport-Breakpoint würde das nicht mitbekommen.
+      '@container group flex overflow-hidden rounded-2xl',
       'bg-[var(--pepe-ink)] border border-[var(--pepe-line)]',
       'transition-all duration-300 ease-out',
       // Hover effects
@@ -163,10 +165,11 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           )}
 
-          {/* Date Badge - Top Left */}
+          {/* Date Badge - Top Left. Auf schmalen Karten eine Nummer kleiner:
+              dort ist das Badge sonst halb so breit wie das ganze Bild. */}
           {!compact && (
-            <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm">
-              <span className="text-xs font-semibold text-[var(--pepe-accent-text)] tracking-wide">
+            <div className="absolute top-2 left-2 rounded-md bg-black/70 px-2 py-0.5 backdrop-blur-sm @[24rem]:top-3 @[24rem]:left-3 @[24rem]:px-2.5 @[24rem]:py-1">
+              <span className="text-[11px] font-semibold tracking-wide text-[var(--pepe-accent-text)] @[24rem]:text-xs">
                 {date}
                 {timeLabel && <span className="text-white/90"> · {timeLabel}</span>}
               </span>
@@ -176,9 +179,14 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
           {/* Gratis-Sticker oben rechts, diagonal gegenüber vom Datum. Beim
               Überfliegen eines Rasters wandert der Blick über die obere
               Bildkante, hier wird er also mitgenommen ohne den Titel zu
-              verdecken. */}
+              verdecken.
+
+              Nur ab 24rem Kartenbreite: darunter reicht der Platz neben dem
+              Datum nicht, Sticker und Datum schoben sich übereinander und
+              deckten zusammen die obere Bildhälfte zu. Auf schmalen Karten
+              läuft der Sticker stattdessen unten in der Meta-Zeile mit. */}
           {isFree && !compact && (
-            <div className="absolute top-3 right-3 z-10">
+            <div className="absolute top-3 right-3 z-10 hidden @[24rem]:block">
               <FreeEntryBadge label={freeEntryLabel} size="md" />
             </div>
           )}
@@ -189,8 +197,8 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               Überfliegen der Liste ist der Preis aber die zweite Frage nach dem
               Datum. */}
           {priceLabel && !compact && (
-            <div className="absolute bottom-3 right-3 z-10 rounded-md bg-black/70 px-2.5 py-1 backdrop-blur-sm">
-              <span className="text-xs font-semibold tracking-wide text-white">
+            <div className="absolute bottom-2 right-2 z-10 rounded-md bg-black/70 px-2 py-0.5 backdrop-blur-sm @[24rem]:bottom-3 @[24rem]:right-3 @[24rem]:px-2.5 @[24rem]:py-1">
+              <span className="text-[11px] font-semibold tracking-wide text-white @[24rem]:text-xs">
                 {priceLabel}
               </span>
             </div>
@@ -228,6 +236,11 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
                 Sticker sitzen könnte — dort läuft er in der Meta-Zeile mit. Der
                 Preis genauso. */}
             {isFree && compact && <FreeEntryBadge label={freeEntryLabel} size="sm" />}
+            {/* Gegenstück zum Sticker im Bild: auf schmalen Karten steht er
+                hier, damit das Foto frei bleibt. */}
+            {isFree && !compact && (
+              <FreeEntryBadge label={freeEntryLabel} size="sm" className="@[24rem]:hidden" />
+            )}
             {priceLabel && compact && (
               <span className="text-xs font-semibold text-[var(--pepe-accent-text)]">
                 {priceLabel}
