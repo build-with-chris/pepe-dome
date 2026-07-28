@@ -25,6 +25,19 @@ import { TRACKED_EVENTS } from '@/lib/tracking-events'
 
 const GRAPH_API_VERSION = 'v21.0'
 
+/**
+ * Vergleicht zwei Hostnamen und behandelt `www.` als bedeutungslos.
+ *
+ * Nötig, weil die Seite kanonisch auf www.pepe-dome.de ausgeliefert wird,
+ * NEXT_PUBLIC_APP_URL aber ohne www gesetzt ist. Ein exakter Vergleich hätte
+ * jedes Ereignis eines echten Besuchers als fremde Quelle abgewiesen, und
+ * zwar lautlos: der Browser-Pixel hätte weiter gemeldet, der Serverweg nie.
+ */
+function sameSite(a: string, b: string): boolean {
+  const ohneWww = (host: string) => host.replace(/^www\./i, '').toLowerCase()
+  return ohneWww(a) === ohneWww(b)
+}
+
 const trackSchema = z.object({
   event: z.enum(TRACKED_EVENTS),
   eventId: z.string().min(8).max(100),
@@ -67,7 +80,7 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL
     if (appUrl) {
       try {
-        if (new URL(sourceUrl).hostname !== new URL(appUrl).hostname) {
+        if (!sameSite(new URL(sourceUrl).hostname, new URL(appUrl).hostname)) {
           return errorResponse('INVALID_SOURCE', 'Fremde Quelle.', 400)
         }
       } catch {
