@@ -54,3 +54,14 @@ next-env.d.ts
 # Ausgeliefert werden die verkleinerten Fassungen unter public/kurse
 # (76 MB Originale gegen 4 MB Web-Groesse, und das Repo ist oeffentlich).
 /public/Kursbilder/
+
+# Kamera-Originale der Galerie-Ordner: bleiben lokal, rund 3 GB.
+# Alles unter public/ wird mit deployed und waere oeffentlich abrufbar.
+# Ausgeliefert wird nur, was scripts/optimize-gallery-images.mjs daraus
+# nach public/images/{festival,dome,cafe,circus-poetry}/ schreibt.
+/public/✺ Freeman Festival - Pepe /
+/public/dome-atmosphaere/
+/public/Pepe Dome - Circus and Poetry/
+
+# Sichtbogen aus scripts/contact-sheet.mjs und scripts/review-sheet.mjs
+.contact/

@@ -650,17 +650,18 @@
   "gallery": {
     "meta": {
       "title": "Galerie: Bilder vom Pepe Dome",
-      "description": "Bilder vom Pepe Dome im Münchner Ostpark: die Kuppel innen und außen, Shows und Artistik, der Bau der Kuppel und das Café. So sieht es bei uns aus."
+      "description": "Bilder vom Pepe Dome im Münchner Ostpark: die Kuppel innen und außen, Shows und Artistik, Festivals wie Freeman und Flower Festival, der Bau der Kuppel und das Café. So sieht es bei uns aus."
     },
     "hero": {
       "eyebrow": "Galerie",
       "title": "So sieht es bei uns aus",
-      "subtitle": "Die Kuppel, die Shows, das Café und wie der Dome überhaupt entstanden ist. Tippe auf ein Bild, um es groß zu sehen."
+      "subtitle": "Die Kuppel, die Shows, unsere Festivals, das Café und wie der Dome überhaupt entstanden ist. Tippe auf ein Bild, um es groß zu sehen."
     },
     "filterAll": "Alles",
     "categories": {
       "dome": "Der Ort",
       "shows": "Shows",
+      "festival": "Festivals",
       "aufbau": "Entstehung",
       "cafe": "Café"
     },

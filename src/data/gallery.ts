@@ -21,7 +21,11 @@
  * selbst geprüft, nicht am Dateinamen. Beim Ergänzen bitte genauso vorgehen.
  *
  * ── Ein Bild hinzufügen ────────────────────────────────────────────────────
- *   1. Datei nach public/images/... legen (webp bevorzugt, lange Kante ~1600px)
+ *   1. Datei nach public/images/... legen (webp bevorzugt, lange Kante ~1600px).
+ *      Kommt das Bild direkt aus der Kamera, gehört der Ordner mit den
+ *      Originalen in die .gitignore und die Umrechnung ins Manifest von
+ *      scripts/optimize-gallery-images.mjs. Ein 30-MB-JPEG unter public/ wird
+ *      sonst genau so ausgeliefert, wie es aus der Kamera kam.
  *   2. Breite und Höhe in Pixel eintragen. Nicht schätzen: die Zahlen
  *      reservieren im Layout den Platz, bevor das Bild geladen ist. Stimmen sie
  *      nicht, springt die Seite beim Laden (Layout Shift).
@@ -42,7 +46,7 @@
  * kein Training. Eine Kategorie mit falsch einsortierten Bildern ist schlechter
  * als eine fehlende. Sobald echte Trainingsfotos da sind, hier ergänzen.
  */
-export const GALLERY_CATEGORIES = ['dome', 'shows', 'aufbau', 'cafe'] as const
+export const GALLERY_CATEGORIES = ['dome', 'shows', 'festival', 'aufbau', 'cafe'] as const
 
 export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number]
 
@@ -124,6 +128,40 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     caption: {
       de: 'Nicht immer Bühne: der Raum lässt sich auch als Runde stellen',
       en: 'Not always a stage: the room also works as a circle',
+    },
+  },
+  {
+    src: '/images/dome/flower-partnerakrobatik.webp',
+    width: 1800,
+    height: 1200,
+    category: 'dome',
+    alt: {
+      de: 'Partnerakrobatik auf einem hellen Tanzteppich unter der Kuppel, ringsum sitzt das Publikum dicht an dicht',
+      en: 'Partner acrobatics on a pale dance floor under the dome, the audience seated close all around',
+    },
+    caption: {
+      de: 'Tagsüber reicht das Licht, das durch die Kuppelhaut fällt',
+      en: 'By day the light coming through the canopy is enough',
+    },
+  },
+  {
+    src: '/images/dome/flower-publikum-kuppel.webp',
+    width: 1800,
+    height: 1200,
+    category: 'dome',
+    alt: {
+      de: 'Volle Zuschauerreihen in der Kuppel an einem Sommertag, viele Gäste tragen Blumen im Haar',
+      en: 'Full rows of spectators inside the dome on a summer day, many guests wearing flowers in their hair',
+    },
+  },
+  {
+    src: '/images/dome/flower-cyr-wheel-buehne.webp',
+    width: 1800,
+    height: 1200,
+    category: 'dome',
+    alt: {
+      de: 'Artist steht breitbeinig im Cyr-Wheel auf der Bühne, dahinter die blaue Bespannung der Kuppel und das Publikum',
+      en: 'Artist standing wide-legged inside a Cyr wheel on stage, the blue canopy of the dome and the audience behind',
     },
   },
 
@@ -266,6 +304,435 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     },
   },
 
+  // Circus and Poetry, eine abendfüllende Show. Die Bilder stammen aus einer
+  // Vorstellung, deshalb stehen sie hier zusammen und nicht verstreut.
+  {
+    src: '/images/circus-poetry/cyr-wheel-handstand.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artist im Handstand im Cyr-Wheel, das Rad steht schräg über dem violett ausgeleuchteten Bühnenboden',
+      en: 'Artist in a handstand inside a Cyr wheel, the hoop tilted above a purple lit stage floor',
+    },
+    caption: {
+      de: 'Aus der Show Circus and Poetry',
+      en: 'From the show Circus and Poetry',
+    },
+  },
+  {
+    src: '/images/circus-poetry/luftring-kugel.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artistin hängt kopfüber in einem Luftgerät aus zwei gekreuzten Ringen, das lange Haar fällt nach unten',
+      en: 'Artist hanging upside down in an aerial apparatus of two crossed hoops, long hair falling downward',
+    },
+  },
+  {
+    src: '/images/circus-poetry/clown-hut.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Ein Clown im grauen Sakko schaut zu einer Schiebermütze hoch, die über ihm in der Luft hängt',
+      en: 'A clown in a grey jacket looking up at a flat cap hanging in the air above him',
+    },
+  },
+  {
+    src: '/images/circus-poetry/musiker-gitarre.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Musiker mit Stirnband spielt eine selbstgebaute Gitarre, deren Korpus aus einem Olivenölkanister besteht',
+      en: 'Musician wearing a headscarf playing a homemade guitar built from an olive oil tin',
+    },
+    caption: {
+      de: 'Die Musik entsteht live auf der Bühne',
+      en: 'The music is played live on stage',
+    },
+  },
+  {
+    src: '/images/circus-poetry/luftring-kopfueber.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artistin im hellen Kleid hängt kopfüber im Luftring über der dunklen Bühne',
+      en: 'Artist in a pale dress hanging upside down from an aerial hoop above the dark stage',
+    },
+  },
+  {
+    src: '/images/circus-poetry/balance-holzbohle.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artist in weißer Latzhose hält eine senkrecht aufgestellte Holzbohle im Gleichgewicht und schaut an ihr hinauf',
+      en: 'Artist in white dungarees balancing an upright wooden plank and looking up along it',
+    },
+  },
+  {
+    src: '/images/circus-poetry/cyr-wheel-einarmig.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artist stützt sich einarmig im Cyr-Wheel ab und streckt die Beine nach oben',
+      en: 'Artist supporting himself on one arm inside a Cyr wheel with his legs stretched upward',
+    },
+  },
+  {
+    src: '/images/circus-poetry/taenzerin-boden.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Tänzerin im hellen Kleid kniet auf der Bühne und beugt den Oberkörper weit nach hinten',
+      en: 'Dancer in a pale dress kneeling on stage, bending far backwards',
+    },
+  },
+  {
+    src: '/images/circus-poetry/handstand-holzgeruest.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Artist steht kopfüber auf einer schräg gestellten Holzbohle, daneben sitzt eine Person auf einem Klappstuhl',
+      en: 'Artist upside down on a tilted wooden plank, a person sitting on a folding chair beside him',
+    },
+  },
+  {
+    src: '/images/circus-poetry/kugel-portrait.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Frau im schwarzen Kleid steht in einem Gerät aus zwei gekreuzten Ringen und streckt die Arme zur Seite',
+      en: 'Woman in a black dress standing inside an apparatus of two crossed hoops, arms stretched out sideways',
+    },
+  },
+  {
+    src: '/images/circus-poetry/clown-marienkaefer.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Der Clown drückt einen roten Stoffmarienkäfer an sich und lächelt mit geschlossenen Augen',
+      en: 'The clown hugging a red fabric ladybird, smiling with his eyes closed',
+    },
+  },
+  {
+    src: '/images/circus-poetry/musiker-mikrofon.webp',
+    width: 1197,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Musiker im rot-blau gestreiften Hemd singt dicht in ein Handmikrofon',
+      en: 'Musician in a red and blue striped shirt singing close into a handheld microphone',
+    },
+  },
+  {
+    src: '/images/circus-poetry/ringelstulpen-tisch.webp',
+    width: 1200,
+    height: 1800,
+    category: 'shows',
+    alt: {
+      de: 'Zwei Beine in bunt geringelten Stulpen liegen auf einer Tischkante, der Rest der Bühne bleibt dunkel',
+      en: 'Two legs in brightly striped legwarmers resting on the edge of a table, the rest of the stage dark',
+    },
+  },
+  {
+    src: '/images/circus-poetry/schlussapplaus.webp',
+    width: 1800,
+    height: 1200,
+    category: 'shows',
+    alt: {
+      de: 'Vier Mitwirkende stehen zum Schlussapplaus nebeneinander und heben die Hände',
+      en: 'Four performers standing side by side for the final applause with their hands raised',
+    },
+    caption: {
+      de: 'Schlussapplaus, vier Menschen für einen ganzen Abend',
+      en: 'Curtain call: four people for a whole evening',
+    },
+  },
+
+  // ── Festivals ────────────────────────────────────────────────────────────
+  // Zwei Festivals in einer Kategorie: das Freeman Festival im November und
+  // das Flower Festival im Sommer. Beide zeigen dasselbe Muster, nämlich
+  // mehrere Tage Programm mit allem, was drumherum passiert.
+  {
+    src: '/images/festival/freeman-kuppel-herbst.webp',
+    width: 1800,
+    height: 1198,
+    category: 'festival',
+    featured: true,
+    alt: {
+      de: 'Die weiß-blaue Kuppel im Park hinter einem Weg voller Herbstlaub, an den Bäumen hängt eine Wimpelkette',
+      en: 'The white and blue dome in the park behind a path covered in autumn leaves, bunting strung between the trees',
+    },
+    caption: {
+      de: 'Freeman Festival im November, draußen Laub und drinnen Programm',
+      en: 'Freeman Festival in November: leaves outside, programme inside',
+    },
+  },
+  {
+    src: '/images/festival/freeman-handstand-stuhl.webp',
+    width: 1198,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Artist im Handstand auf einer Stuhllehne vor der beleuchteten Kuppel, im Gras stehen Windlichter',
+      en: 'Artist in a handstand on the back of a chair in front of the lit dome, lanterns standing in the grass',
+    },
+  },
+  {
+    src: '/images/festival/freeman-cyr-wheel-park.webp',
+    width: 1800,
+    height: 1512,
+    category: 'festival',
+    alt: {
+      de: 'Artist dreht ein Cyr-Wheel auf einem Weg im Park, dahinter geht die Sonne über der Wiese unter',
+      en: 'Artist spinning a Cyr wheel on a path in the park, the sun setting over the meadow behind',
+    },
+    caption: {
+      de: 'Geprobt wird auch draußen, solange es hell ist',
+      en: 'Rehearsals happen outdoors too, as long as there is light',
+    },
+  },
+  {
+    src: '/images/festival/freeman-sitzkreis.webp',
+    width: 1800,
+    height: 1198,
+    category: 'festival',
+    alt: {
+      de: 'Rund zwanzig Menschen sitzen im Kreis auf dem Boden der Kuppel, in der Mitte ein kleiner Tisch mit Kerzen',
+      en: 'About twenty people sitting in a circle on the floor of the dome, a small table with candles in the middle',
+    },
+    caption: {
+      de: 'Zwischen den Vorstellungen wird geredet, nicht gespielt',
+      en: 'Between the shows there is talking, not performing',
+    },
+  },
+  {
+    src: '/images/festival/freeman-publikum-lachen.webp',
+    width: 1800,
+    height: 1210,
+    category: 'festival',
+    alt: {
+      de: 'Ein Mann sitzt lachend am Boden zwischen anderen Gästen und hebt den Zeigefinger',
+      en: 'A man sitting on the floor among other guests, laughing and raising a finger',
+    },
+  },
+  {
+    src: '/images/festival/freeman-kerze.webp',
+    width: 1800,
+    height: 1198,
+    category: 'festival',
+    alt: {
+      de: 'Eine junge Frau hält eine brennende Kerze in beiden Händen, um sie herum stehen weitere Gäste',
+      en: 'A young woman holding a lit candle in both hands, other guests standing around her',
+    },
+  },
+  {
+    src: '/images/festival/freeman-popcorn.webp',
+    width: 1800,
+    height: 1202,
+    category: 'festival',
+    alt: {
+      de: 'Zwei Personen an einer beleuchteten Popcornmaschine, eine von ihnen filmt mit dem Handy',
+      en: 'Two people at a lit popcorn machine, one of them filming with a phone',
+    },
+  },
+  {
+    src: '/images/festival/freeman-buehne-getraenkekisten.webp',
+    width: 1800,
+    height: 1198,
+    category: 'festival',
+    alt: {
+      de: 'Drei Personen stehen auf einer Bühne aus Getränkekisten und sprechen ins Mikrofon, davor sitzt das Publikum im blauen Licht',
+      en: 'Three people standing on a stage built from drinks crates speaking into microphones, the audience seated in blue light',
+    },
+  },
+  {
+    src: '/images/festival/freeman-jonglage-keulen.webp',
+    width: 1201,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Jongleur wirft Keulen in die Luft, hinter ihm die blaue Bespannung und das Holztragwerk der Kuppel',
+      en: 'Juggler throwing clubs in the air, the blue canopy and wooden framework of the dome behind him',
+    },
+  },
+  {
+    src: '/images/festival/freeman-rollschuhe-gruppe.webp',
+    width: 1800,
+    height: 1246,
+    category: 'festival',
+    alt: {
+      de: 'Fünf Artistinnen und Artisten auf Rollschuhen stehen nebeneinander im rosa Nebel, davor das Publikum',
+      en: 'Five artists on roller skates standing side by side in pink haze, the audience in front',
+    },
+  },
+  {
+    src: '/images/festival/freeman-rollschuhe-solo.webp',
+    width: 1202,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Artist auf Rollschuhen gleitet mit ausgebreiteten Armen durch magentafarbenes Licht',
+      en: 'Artist on roller skates gliding through magenta light with arms spread wide',
+    },
+  },
+  {
+    src: '/images/festival/freeman-buehnenlicht-blau.webp',
+    width: 1800,
+    height: 1198,
+    category: 'festival',
+    alt: {
+      de: 'Blaue Scheinwerferstrahlen schneiden durch den Nebel über der Bühne, rechts steht ein Musiker',
+      en: 'Blue spotlight beams cutting through haze above the stage, a musician standing to the right',
+    },
+  },
+  {
+    src: '/images/festival/freeman-vertikaltuch-blau.webp',
+    width: 1800,
+    height: 1085,
+    category: 'festival',
+    alt: {
+      de: 'Artistin hoch oben im Vertikaltuch, unten hält eine zweite Person das Tuch, dahinter leuchtet blaues Licht durch das Kuppelgerüst',
+      en: 'Artist high up on an aerial silk while a second person holds the fabric below, blue light shining through the dome frame behind',
+    },
+    caption: {
+      de: 'Luftakrobatik, eingehängt an der Kuppelspitze',
+      en: 'Aerial work, rigged from the apex of the dome',
+    },
+  },
+  {
+    src: '/images/festival/freeman-vertikaltuch-gegenlicht.webp',
+    width: 1198,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Das Vertikaltuch bauscht sich im Gegenlicht zu einer großen Welle, darunter steht eine Person im Scheinwerferkegel',
+      en: 'The aerial silk billowing into a large wave in backlight, a person standing below in the beam',
+    },
+  },
+  {
+    src: '/images/festival/freeman-duo-schwebefigur.webp',
+    width: 1788,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Zwei Artistinnen im Duo: eine schwebt waagerecht am Seil, die andere hält sie an beiden Händen',
+      en: 'Two artists in a duo: one floating horizontally on a rope while the other holds both her hands',
+    },
+  },
+  {
+    src: '/images/festival/freeman-seil-wasser.webp',
+    width: 1800,
+    height: 1197,
+    category: 'festival',
+    alt: {
+      de: 'Artist hängt am Vertikalseil und schleudert Wassertropfen durch den beleuchteten Nebel',
+      en: 'Artist hanging from a vertical rope, flinging drops of water through the lit haze',
+    },
+  },
+  {
+    src: '/images/festival/freeman-chinese-pole.webp',
+    width: 1202,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Artist streckt sich an einer senkrechten Stange nach oben, hinter ihm grün beleuchteter Nebel',
+      en: 'Artist reaching up along a vertical pole, green lit haze behind him',
+    },
+  },
+  {
+    src: '/images/festival/freeman-theaterszene.webp',
+    width: 1202,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Ein Darsteller in ockerfarbener Jacke und Schiebermütze steht breitbeinig über einer am Boden liegenden Person',
+      en: 'A performer in an ochre jacket and flat cap standing astride a person lying on the floor',
+    },
+    caption: {
+      de: 'Nicht nur Artistik: es wird auch gespielt',
+      en: 'Not only acrobatics: there is acting too',
+    },
+  },
+  {
+    src: '/images/festival/freeman-artistin-am-seil.webp',
+    width: 1202,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Artistin sitzt im Klettergurt am Seil vor dem Kuppelgerüst, darunter die leeren Sitzreihen',
+      en: 'Artist sitting in a harness on a rope in front of the dome frame, the empty rows of seats below',
+    },
+  },
+  {
+    src: '/images/festival/freeman-rigging.webp',
+    width: 1196,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Zwei Personen hängen im Gegenlicht ein Seil in die Spitze der Kuppel ein',
+      en: 'Two people rigging a rope into the apex of the dome, seen against the light',
+    },
+    caption: {
+      de: 'Bevor jemand fliegt, hängt jemand anderes das Seil ein',
+      en: 'Before anyone flies, someone else rigs the rope',
+    },
+  },
+  {
+    src: '/images/festival/freeman-portrait-artistin.webp',
+    width: 1139,
+    height: 1800,
+    category: 'festival',
+    alt: {
+      de: 'Artistin in schwarzem Gewand steht neben einem herabhängenden Seil und blickt nach oben',
+      en: 'Artist in a black robe standing beside a hanging rope, looking upward',
+    },
+  },
+  {
+    src: '/images/festival/flower-garten-blumen.webp',
+    width: 1800,
+    height: 1200,
+    category: 'festival',
+    alt: {
+      de: 'Gäste in Sommerkleidung sitzen im Garten unter einer Wimpelkette, links steht eine überlebensgroße Papierblume',
+      en: 'Guests in summer clothes sitting in the garden under bunting, an oversized paper flower standing to the left',
+    },
+    caption: {
+      de: 'Flower Festival, dasselbe Gelände im Sommer',
+      en: 'Flower Festival: the same grounds in summer',
+    },
+  },
+  {
+    src: '/images/festival/flower-kartentrick.webp',
+    width: 1800,
+    height: 1200,
+    category: 'festival',
+    alt: {
+      de: 'Ein Zauberer hält einer Besucherin im Publikum drei Spielkarten zur Auswahl hin',
+      en: 'A magician offering three playing cards to a visitor in the audience',
+    },
+  },
+  {
+    src: '/images/festival/flower-basteltisch.webp',
+    width: 1800,
+    height: 1200,
+    category: 'festival',
+    alt: {
+      de: 'Mehrere Gäste basteln an einem langen Tisch mit Papier, Stiften und Weingläsern',
+      en: 'Several guests making things at a long table with paper, pens and wine glasses',
+    },
+  },
+
   // ── Entstehung ───────────────────────────────────────────────────────────
   {
     src: '/images/Aufbau/dome-aerial-01.webp',
@@ -389,6 +856,20 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     alt: {
       de: 'Gedeckter Cafétisch mit Flasche und Glas, dahinter ein roter Sonnenschirm und die Wiese im Ostpark',
       en: 'A café table with a bottle and glass, a red parasol and the Ostpark lawn behind',
+    },
+  },
+  {
+    src: '/images/cafe/flower-kueche.webp',
+    width: 1800,
+    height: 1200,
+    category: 'cafe',
+    alt: {
+      de: 'Ein Koch richtet in der offenen Küche einen Teller an, davor wartet eine Besucherin am Tresen',
+      en: 'A cook plating a dish in the open kitchen while a visitor waits at the counter',
+    },
+    caption: {
+      de: 'Bei Festivals wird warm gekocht, nicht nur Kaffee gemacht',
+      en: 'During festivals there is hot food, not just coffee',
     },
   },
 ]

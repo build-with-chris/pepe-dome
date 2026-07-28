@@ -650,17 +650,18 @@
   "gallery": {
     "meta": {
       "title": "Gallery: Pictures of Pepe Dome",
-      "description": "Pictures of Pepe Dome in Munich's Ostpark: the dome inside and out, shows and acrobatics, how the dome was built, and the café. See what the place looks like."
+      "description": "Pictures of Pepe Dome in Munich's Ostpark: the dome inside and out, shows and acrobatics, festivals like Freeman and Flower Festival, how the dome was built, and the café. See what the place looks like."
     },
     "hero": {
       "eyebrow": "Gallery",
       "title": "What the place looks like",
-      "subtitle": "The dome, the shows, the café, and how the whole thing was built. Tap any picture to see it large."
+      "subtitle": "The dome, the shows, our festivals, the café, and how the whole thing was built. Tap any picture to see it large."
     },
     "filterAll": "Everything",
     "categories": {
       "dome": "The venue",
       "shows": "Shows",
+      "festival": "Festivals",
       "aufbau": "How it was built",
       "cafe": "Café"
     },
