@@ -55,8 +55,8 @@ const NOTE_DE_TO_EN: Record<string, string> = {
     'In planning, workshops & rentals to follow',
   'Tricking & Breaking in Planung, Termine folgen.':
     'Tricking & breaking planned, dates to follow.',
-  'Cyr Wheel findet an showfreien Freitagen statt, Termine immer auf der Startseite.':
-    'Cyr Wheel takes place on show-free Fridays, dates always on the homepage.',
+  'Aktuell keine Kurse, neue Termine folgen.':
+    'No classes right now, new dates to follow.',
 }
 
 function localizeWoche(woche: Tag[], lang: Locale): Tag[] {

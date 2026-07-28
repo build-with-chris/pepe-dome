@@ -10,7 +10,7 @@
  * übersetzt (siehe `localizeWoche()` in src/app/[lang]/training/page.tsx).
  */
 
-import type { Tag } from '@/components/custom/CourseScheduleGrid'
+import type { Kurs, Tag } from '@/components/custom/CourseScheduleGrid'
 
 // ── Wochenplan ────────────────────────────────────────────────────────────
 
@@ -114,18 +114,18 @@ export const WOCHE: Tag[] = [
   },
   {
     day: 'Mittwoch',
-    trainer: 'Michael Heiduk · Aircrobatics',
+    trainer: 'Michael · Aircrobatics',
     kurse: [
       {
         slug: 'kinder-akrobatik-mi',
         time: '16:30 bis 18:00',
         title: 'Kinder Akrobatik',
-        sub: '5 bis 12 Jahre · mit Michael Heiduk',
+        sub: '5 bis 12 Jahre · mit Michael',
         target: 'kinder',
-        trainer: 'Michael Heiduk',
+        trainer: 'Michael',
         day: 'Mittwoch',
         description:
-          'Spielerische Akrobatik für Kinder mit Michael Heiduk. Luftakrobatik, Tellerdrehen, Jonglieren und alles, worauf die Kids gerade Lust haben. Eine Stunde voller Bewegung, Kreativität und Spaß.',
+          'Spielerische Akrobatik für Kinder mit Michael. Luftakrobatik, Tellerdrehen, Jonglieren und alles, worauf die Kids gerade Lust haben. Eine Stunde voller Bewegung, Kreativität und Spaß.',
         inhalte: [
           'Luftakrobatik (kindgerecht)',
           'Tellerdrehen',
@@ -190,7 +190,7 @@ export const WOCHE: Tag[] = [
   },
   {
     day: 'Freitag',
-    trainer: 'Dani · Cyr Wheel Coach',
+    trainer: 'Dani',
     kurse: [
       {
         slug: 'urban-acrobatics-fr',
@@ -206,27 +206,7 @@ export const WOCHE: Tag[] = [
         alter: 'Für Jugendliche und Erwachsene',
         fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
       },
-      {
-        slug: 'cyr-wheel-fr',
-        time: '17:00 bis 18:30',
-        title: 'Cyr Wheel',
-        sub: 'Jugendliche & Erwachsene · an showfreien Freitagen',
-        target: 'erwachsene',
-        trainer: 'Dani',
-        day: 'Freitag',
-        description:
-          'Das Cyr Wheel, auch Deutsches Rad genannt, gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt, aktuelle Termine immer auf der Startseite.',
-        inhalte: [
-          'Cyr Wheel Grundtechniken (Wave, Pirouette, Coin)',
-          'Körperspannung & Balance im Rad',
-          'Kraft- und Konditionsaufbau',
-          'Erste Sequenzen und Übergänge',
-        ],
-        alter: 'Für Jugendliche und Erwachsene',
-        fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
-      },
     ],
-    note: 'Cyr Wheel findet an showfreien Freitagen statt, Termine immer auf der Startseite.',
   },
   {
     day: 'Samstag',
@@ -236,51 +216,82 @@ export const WOCHE: Tag[] = [
   },
   {
     day: 'Sonntag',
-    trainer: 'Tina & Oskar (Feuerinsel)',
-    kurse: [
-      {
-        slug: 'flow-arts-basics-so',
-        time: '17:00 bis 18:00',
-        title: 'Flow Arts Basics',
-        sub: 'Buugeng & Doppelstäbe · Tina & Oskar (Feuerinsel)',
-        target: 'erwachsene',
-        trainer: 'Tina & Oskar (Feuerinsel München)',
-        day: 'Sonntag',
-        description:
-          'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München, mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
-        inhalte: [
-          'Buugeng: Grundlagen & Bewegungsprinzipien',
-          'Drehen mit Händen & Fingern, Ebenen & Symmetrie',
-          'Doppelstäbe: gleichzeitige & versetzte Bewegungen',
-          'Erste Trick-Kombinationen, Würfe & Fishtails',
-          'Koordination, Kontrolle & Körperwahrnehmung',
-          'Fokus auf Flow, Timing & Illusionseffekte',
-        ],
-        alter: 'Für Erwachsene, Anfänger:innen willkommen',
-        fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
-      },
-      {
-        slug: 'dynamic-flow-so',
-        time: '18:00 bis 19:00',
-        title: 'Dynamic Flow',
-        sub: 'Levistick (Long String) & Rope Dart · Tina & Oskar (Feuerinsel)',
-        target: 'erwachsene',
-        trainer: 'Tina & Oskar (Feuerinsel München)',
-        day: 'Sonntag',
-        description:
-          'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
-        inhalte: [
-          'Levistick mit Long String: Setups & Schnurkonfigurationen',
-          'Übergänge zwischen Tricks, Illusionen & visuelle Täuschungen',
-          'Körperhaltung, Rhythmus & Präsentation',
-          'Rope Dart: Basis-Schwünge & Wicklungen (Wraps)',
-          'Richtungswechsel, Footwork & Körperposition',
-          'Erste einfache Tricks & Kombos',
-        ],
-        alter: 'Für Erwachsene, Anfänger:innen willkommen',
-        fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
-      },
+    trainer: '',
+    kurse: [],
+    note: 'Aktuell keine Kurse, neue Termine folgen.',
+  },
+]
+
+/**
+ * Kurse, die gerade pausieren.
+ *
+ * Cyr Wheel und die beiden Sonntags-Flow-Kurse finden bis auf Weiteres nicht
+ * mehr statt (Stand 28.07.2026). Die Beschreibungen stehen hier statt gelöscht
+ * zu werden, weil „erstmal" nicht „für immer" heißt und die Texte Arbeit waren.
+ * Sie werden nirgends gerendert. Wer einen Kurs zurückholen will, verschiebt
+ * den Eintrag zurück in WOCHE.
+ */
+export const PAUSIERTE_KURSE: Kurs[] = [
+  {
+    slug: 'cyr-wheel-fr',
+    time: '17:00 bis 18:30',
+    title: 'Cyr Wheel',
+    sub: 'Jugendliche & Erwachsene · an showfreien Freitagen',
+    target: 'erwachsene',
+    trainer: 'Chris',
+    day: 'Freitag',
+    description:
+      'Das Cyr Wheel, auch Deutsches Rad genannt, gehört zu den spektakulärsten Disziplinen des zeitgenössischen Zirkus. In diesem Kurs lernst du Grundtechniken wie Wave, Pirouette und Coin, baust Körpergefühl auf und entwickelst eigene Bewegungsabläufe im Rad. Findet an Freitagen ohne Show statt, aktuelle Termine immer auf der Startseite.',
+    inhalte: [
+      'Cyr Wheel Grundtechniken (Wave, Pirouette, Coin)',
+      'Körperspannung & Balance im Rad',
+      'Kraft- und Konditionsaufbau',
+      'Erste Sequenzen und Übergänge',
     ],
+    alter: 'Für Jugendliche und Erwachsene',
+    fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
+  },
+  {
+    slug: 'flow-arts-basics-so',
+    time: '17:00 bis 18:00',
+    title: 'Flow Arts Basics',
+    sub: 'Buugeng & Doppelstäbe · Tina & Oskar (Feuerinsel)',
+    target: 'erwachsene',
+    trainer: 'Tina & Oskar (Feuerinsel München)',
+    day: 'Sonntag',
+    description:
+      'Tauche ein in die faszinierende Welt der Flow Arts. Mit Buugeng und Doppelstäben lernst du fließende Bewegungen, die Körpergefühl, Koordination und Kreativität verbinden. Die geschwungenen Formen der Buugeng erzeugen optische Illusionen, die Doppelstäbe bringen rhythmische Dynamik. Schritt für Schritt baust du dir deinen eigenen Flow. Geleitet von Oskar von der Feuerinsel München, mit dem Ziel, den FlowArts-Nachwuchs zu fördern und individuell auf alle Levels einzugehen.',
+    inhalte: [
+      'Buugeng: Grundlagen & Bewegungsprinzipien',
+      'Drehen mit Händen & Fingern, Ebenen & Symmetrie',
+      'Doppelstäbe: gleichzeitige & versetzte Bewegungen',
+      'Erste Trick-Kombinationen, Würfe & Fishtails',
+      'Koordination, Kontrolle & Körperwahrnehmung',
+      'Fokus auf Flow, Timing & Illusionseffekte',
+    ],
+    alter: 'Für Erwachsene, Anfänger:innen willkommen',
+    fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
+  },
+  {
+    slug: 'dynamic-flow-so',
+    time: '18:00 bis 19:00',
+    title: 'Dynamic Flow',
+    sub: 'Levistick (Long String) & Rope Dart · Tina & Oskar (Feuerinsel)',
+    target: 'erwachsene',
+    trainer: 'Tina & Oskar (Feuerinsel München)',
+    day: 'Sonntag',
+    description:
+      'Zwei besonders faszinierende Flow-Tools: Der Levistick, der mit langer Schnur (Long String) scheinbar schwerelos schwebt, und der Rope Dart, der durch kraftvolle, kreisende Bewegungen beeindruckt. Du lernst grundlegende Techniken, erste Tricks und Übergänge und entwickelst ein Gefühl für Timing, Kontrolle und Flow. Geleitet von Oskar von der Feuerinsel München, der den FlowArts-Nachwuchs gezielt fördert und gerne individuell auf jede:n eingeht.',
+    inhalte: [
+      'Levistick mit Long String: Setups & Schnurkonfigurationen',
+      'Übergänge zwischen Tricks, Illusionen & visuelle Täuschungen',
+      'Körperhaltung, Rhythmus & Präsentation',
+      'Rope Dart: Basis-Schwünge & Wicklungen (Wraps)',
+      'Richtungswechsel, Footwork & Körperposition',
+      'Erste einfache Tricks & Kombos',
+    ],
+    alter: 'Für Erwachsene, Anfänger:innen willkommen',
+    fuerWen: 'Anfänger:innen willkommen, mehr Erfahrung kein Problem, individuelle Begleitung möglich',
   },
 ]
 
