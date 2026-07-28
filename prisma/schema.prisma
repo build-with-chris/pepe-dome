@@ -464,3 +464,86 @@ enum ReelStatus {
 
   @@map("reel_status")
 }
+
+// ── Kursprogramm ────────────────────────────────────────────────────────────
+// Ein Kurs ist ein Angebot, kein Termin. „Luftakrobatik" läuft viermal die
+// Woche, ist aber eine Zeile mit vier Slots. Vorher standen die vier Termine
+// als vier vollständige Kopien im Code — als der Trainername korrigiert werden
+// musste, waren es drei Stellen. Genau das soll die Trennung verhindern.
+
+model Course {
+  id           String        @id @default(uuid())
+  /// Stabil ab dem Anlegen. Hängt an geteilten Links (?kurs=<slug>) und wird
+  /// beim Umbenennen des Titels bewusst NICHT neu erzeugt.
+  slug         String        @unique
+  title        String
+  /// Zeile unter dem Titel, z.B. „5 bis 12 Jahre · mit Michael".
+  sub          String?
+  description  String
+  /// Stichpunkte für das Detail-Fenster. String-Array als Json, wie
+  /// Event.highlights.
+  inhalte      Json          @default("[]")
+  /// Kurze Altersangabe, steht oben auf der Kurskarte: „Für Kinder von 5 bis 12".
+  /// Ohne Angabe fällt die Karte auf die Zielgruppe zurück.
+  alter        String?
+  fuerWen      String        @map("fuer_wen")
+  target       CourseTarget
+  trainer      String
+  /// Gesetzt heißt: Buchung läuft nicht über Eversports, sondern hier direkt
+  /// (https://… oder mailto:…). Siehe Luftakrobatik über Aircrobatic Studios.
+  bookingUrl   String?       @map("booking_url")
+  bookingLabel String?       @map("booking_label")
+  bookingNote  String?       @map("booking_note")
+  /// PUBLISHED steht auf der Website, ARCHIVED ist pausiert und bleibt im
+  /// Admin samt Texten erhalten. DRAFT ist noch nie veröffentlicht.
+  status       ContentStatus @default(DRAFT)
+  /// Reihenfolge innerhalb eines Tages. Kleiner zuerst, bei Gleichstand
+  /// entscheidet die Startzeit.
+  sortOrder    Int           @default(0) @map("sort_order")
+  createdBy    String?       @map("created_by")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  slots        CourseSlot[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([target])
+  @@map("courses")
+}
+
+model CourseSlot {
+  id        String @id @default(uuid())
+  courseId  String @map("course_id")
+  /// 1 = Montag … 7 = Sonntag (ISO-8601). Nicht 0-basiert, damit niemand
+  /// versehentlich Sonntag als 0 an den Anfang der Woche sortiert.
+  weekday   Int
+  /// „HH:MM", durchgesetzt von der API. Format wie bei Event.time.
+  startTime String @map("start_time")
+  endTime   String @map("end_time")
+  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([weekday])
+  @@map("course_slots")
+}
+
+model ScheduleNote {
+  /// Der Wochentag ist der Schlüssel: pro Tag höchstens eine Notiz.
+  weekday   Int      @id
+  /// „Tricking & Breaking in Planung, Termine folgen." Leerer Text heißt:
+  /// keine Notiz anzeigen.
+  text      String
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("schedule_notes")
+}
+
+enum CourseTarget {
+  /// Anzeigename ist „Jugendliche"; der technische Name bleibt teens, damit
+  /// aus einer Umbenennung keine Datenmigration wird.
+  kinder
+  teens
+  erwachsene
+
+  @@map("course_target")
+}
