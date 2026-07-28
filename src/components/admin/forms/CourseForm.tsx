@@ -30,6 +30,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import FieldHint from '@/components/admin/ui/FieldHint'
+import ImageDropzone from '@/components/admin/ui/ImageDropzone'
+import MultiImageUpload from '@/components/admin/ui/MultiImageUpload'
 import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
 import { normalizeTime } from '@/lib/event-time'
 import { weekdayName } from '@/lib/course-types'
@@ -125,19 +127,28 @@ export default function CourseForm({
 
   // ── Bilder ────────────────────────────────────────────────────────────────
 
-  const addBild = () => update('images', [...data.images, { url: '', alt: '' }])
+  /** Haengt ein frisch hochgeladenes Bild hinten an die Galerie. */
+  const appendBild = (url: string) =>
+    setData((prev) => ({ ...prev, images: [...prev.images, { url, alt: '' }] }))
+
+  /** Setzt oder ersetzt das Titelbild, also den ersten Eintrag. */
+  const setTitelbild = (url: string) =>
+    setData((prev) => {
+      if (!url) return { ...prev, images: prev.images.slice(1) }
+      const [erstes, ...rest] = prev.images
+      return { ...prev, images: [{ url, alt: erstes?.alt ?? '' }, ...rest] }
+    })
+
+  /** Holt ein Galeriebild nach vorn und macht es damit zum Titelbild. */
+  const zumTitelbild = (index: number) =>
+    update('images', [
+      data.images[index],
+      ...data.images.filter((_, i) => i !== index),
+    ])
   const setBild = (index: number, patch: Partial<CourseFormBild>) =>
     update('images', data.images.map((b, i) => (i === index ? { ...b, ...patch } : b)))
   const removeBild = (index: number) =>
     update('images', data.images.filter((_, i) => i !== index))
-  /** Reihenfolge zaehlt: das erste Bild steht auf der Kurskarte. */
-  const moveBild = (index: number, richtung: -1 | 1) => {
-    const ziel = index + richtung
-    if (ziel < 0 || ziel >= data.images.length) return
-    const next = [...data.images]
-    ;[next[index], next[ziel]] = [next[ziel], next[index]]
-    update('images', next)
-  }
 
   // ── Termine ───────────────────────────────────────────────────────────────
 
@@ -558,58 +569,84 @@ export default function CourseForm({
       </div>
 
       {/* ── Bilder ── */}
-      <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6 space-y-4">
+      <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6 space-y-6">
         <div>
           <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider">
             Bilder
           </h2>
           <p className="text-[11px] leading-relaxed text-white/45 mt-2">
-            Das <strong className="text-white/70">erste Bild</strong> steht auf der
-            Kurskarte, alle zusammen bilden die Galerie im Detail-Fenster. Ohne Bild
-            zeigt die Karte ein Farbfeld in der Kursfarbe, sie bleibt also
-            benutzbar.
+            Das Titelbild steht auf der Kurskarte. Titelbild und Galerie zusammen
+            sind das, was im Detail-Fenster durchgeblättert werden kann.
           </p>
         </div>
 
-        <div className="space-y-3">
-          {data.images.map((bild, index) => (
-            <div key={index} className="rounded-lg border border-white/[0.12] bg-white/[0.03] p-3 space-y-3">
-              <div className="flex items-start gap-3">
-                {/* Kleine Vorschau, damit man sieht, welches Bild gemeint ist.
-                    Bewusst ein normales img und kein next/image: die Adresse
-                    kann waehrend des Tippens noch unvollstaendig sein. */}
+        {/* Titelbild */}
+        <div className="space-y-2.5">
+          <ImageDropzone
+            label="Titelbild"
+            value={data.images[0]?.url ?? ''}
+            onChange={setTitelbild}
+            placeholder="Titelbild hierher ziehen oder klicken"
+          />
+          {data.images[0] && (
+            <Input
+              value={data.images[0].alt}
+              onChange={(e) => setBild(0, { alt: e.target.value })}
+              placeholder="Was ist auf dem Bild zu sehen?"
+              inputSize="lg"
+              aria-label="Beschreibung des Titelbilds"
+            />
+          )}
+          {errors['bild-0'] && <p className="text-sm text-red-400">{errors['bild-0']}</p>}
+          <FieldHint>
+            Ohne Titelbild zeigt die Kurskarte ein Farbfeld in der Kursfarbe. Sie
+            bleibt also benutzbar, wirkt aber neben bebilderten Kursen leer.
+          </FieldHint>
+        </div>
+
+        {/* Galerie */}
+        <div className="space-y-3 pt-2 border-t border-white/[0.08]">
+          <div>
+            <h3 className="text-sm font-semibold text-white">Weitere Bilder</h3>
+            <p className="text-[11px] leading-relaxed text-white/45 mt-1">
+              Erscheinen im Detail-Fenster als Vorschaustreifen unter dem großen Bild.
+            </p>
+          </div>
+
+          {data.images.slice(1).map((bild, i) => {
+            // i zaehlt ab der Galerie, index ab dem Gesamtarray.
+            const index = i + 1
+            return (
+              <div
+                key={index}
+                className="rounded-lg border border-white/[0.12] bg-white/[0.03] p-3 flex items-start gap-3"
+              >
                 <div className="w-24 h-16 flex-shrink-0 rounded-md bg-black/40 overflow-hidden flex items-center justify-center">
-                  {bild.url.trim() ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={bild.url}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.visibility = 'hidden'
-                      }}
-                    />
-                  ) : (
-                    <span className="text-[10px] text-white/30">Vorschau</span>
-                  )}
+                  {/* Bewusst ein normales img: die Adresse kann eine frisch
+                      hochgeladene Supabase-URL sein, und next/image braucht
+                      hier keine Optimierung fuer eine 96px-Vorschau. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={bild.url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.visibility = 'hidden'
+                    }}
+                  />
                 </div>
 
                 <div className="flex-1 space-y-2">
-                  <Input
-                    value={bild.url}
-                    onChange={(e) => setBild(index, { url: e.target.value })}
-                    placeholder="/kurse/mein-kurs/01.jpg"
-                    hasError={!!errors[`bild-${index}`]}
-                    inputSize="lg"
-                    aria-label={`Bildadresse ${index + 1}`}
-                  />
                   <Input
                     value={bild.alt}
                     onChange={(e) => setBild(index, { alt: e.target.value })}
                     placeholder="Was ist auf dem Bild zu sehen?"
                     inputSize="lg"
-                    aria-label={`Bildbeschreibung ${index + 1}`}
+                    aria-label={`Beschreibung von Bild ${index + 1}`}
                   />
+                  {errors[`bild-${index}`] && (
+                    <p className="text-sm text-red-400">{errors[`bild-${index}`]}</p>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -617,23 +654,10 @@ export default function CourseForm({
                     type="button"
                     variant="ghost"
                     size="xs"
-                    onClick={() => moveBild(index, -1)}
-                    disabled={index === 0}
-                    aria-label={`Bild ${index + 1} nach vorne`}
-                    className="disabled:opacity-25"
+                    onClick={() => zumTitelbild(index)}
+                    className="text-[#016dca] hover:text-[#016dca] hover:bg-[#016dca]/10 whitespace-nowrap"
                   >
-                    ↑
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="xs"
-                    onClick={() => moveBild(index, 1)}
-                    disabled={index === data.images.length - 1}
-                    aria-label={`Bild ${index + 1} nach hinten`}
-                    className="disabled:opacity-25"
-                  >
-                    ↓
+                    Als Titelbild
                   </Button>
                   <Button
                     type="button"
@@ -643,33 +667,16 @@ export default function CourseForm({
                     aria-label={`Bild ${index + 1} entfernen`}
                     className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                   >
-                    ×
+                    Entfernen
                   </Button>
                 </div>
               </div>
+            )
+          })}
 
-              {index === 0 && (
-                <p className="text-[11px] text-[#016dca]">Steht auf der Kurskarte</p>
-              )}
-              {errors[`bild-${index}`] && (
-                <p className="text-sm text-red-400">{errors[`bild-${index}`]}</p>
-              )}
-            </div>
-          ))}
-
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={addBild}
-            className="text-[#016dca] hover:text-[#016dca] hover:bg-[#016dca]/10"
-          >
-            + Bild hinzufügen
-          </Button>
+          <MultiImageUpload onUploaded={appendBild} />
 
           <FieldHint>
-            Bilder liegen unter <code className="text-white/60">public/kurse/</code> im
-            Projekt, die Adresse beginnt dann mit <code className="text-white/60">/kurse/</code>.
             Die Beschreibung lesen Screenreader vor und sie erscheint, wenn ein Bild
             nicht lädt. Ein Satz reicht.
           </FieldHint>
