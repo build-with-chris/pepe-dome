@@ -7,15 +7,20 @@
  */
 
 import { useEffect, useState } from 'react'
-import type { Kurs } from './CourseScheduleGrid'
+import type { Kurs, Slot } from './CourseScheduleGrid'
 
 type CopyState = 'idle' | 'copied'
 
 export default function CourseDetailModal({
   kurs,
+  slots,
   onClose,
 }: {
   kurs: Kurs | null
+  /** Alle Wochentermine dieses Kurses. Kommt aus der Katalog-Ansicht, in der
+   *  gleiche Kurse zusammengefasst sind. Ohne slots zeigt der Kopf nur den
+   *  einen Termin, mit dem das Modal geöffnet wurde. */
+  slots?: Slot[]
   onClose: () => void
 }) {
   const [copyState, setCopyState] = useState<CopyState>('idle')
@@ -129,18 +134,30 @@ export default function CourseDetailModal({
 
         {/* Kurs-Details */}
         <div className="p-6 md:p-8 border-b border-[var(--pepe-line)]">
-          <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest">
-              {kurs.day} · {kurs.time}
-            </span>
-            <span className="text-[var(--pepe-t48)] text-xs">mit {kurs.trainer}</span>
-          </div>
+          <span className="text-[var(--pepe-t48)] text-xs">mit {kurs.trainer}</span>
           <h2
             id="course-modal-title"
-            className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-4"
+            className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mt-2 mb-4"
           >
             {kurs.title}
           </h2>
+
+          {/* Termine dieses Kurses. Läuft er mehrmals pro Woche, stehen hier
+              alle Slots, nicht nur der angeklickte. */}
+          <div className="flex flex-wrap gap-2 mb-5">
+            {(slots && slots.length > 0 ? slots : [{ day: kurs.day, time: kurs.time }]).map(
+              (s, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-baseline gap-2 px-3 py-1.5 rounded-lg bg-[var(--pepe-surface)] border border-[var(--pepe-line)] text-sm"
+                >
+                  <span className="text-[var(--pepe-accent-text)] font-bold">{s.day}</span>
+                  <span className="text-[var(--pepe-t80)] tabular-nums">{s.time}</span>
+                </span>
+              )
+            )}
+          </div>
+
           <p className="text-[var(--pepe-t80)] leading-relaxed mb-6">{kurs.description}</p>
 
           <div className="grid sm:grid-cols-2 gap-5">
@@ -246,7 +263,7 @@ export default function CourseDetailModal({
                   {kurs.bookingUrl.startsWith('mailto:') ? 'Per E-Mail anmelden' : 'Direkt beim Anbieter buchen'}
                 </h3>
                 <p className="text-[var(--pepe-t64)] text-sm">
-                  {kurs.bookingNote ?? `Dieser Kurs läuft nicht über Eversports — Buchung direkt hier:`}
+                  {kurs.bookingNote ?? `Dieser Kurs läuft nicht über Eversports. Buchung direkt hier:`}
                 </p>
                 <p className="text-[var(--pepe-accent-text)] text-sm font-mono mt-1 break-all">
                   {kurs.bookingUrl.replace(/^mailto:/, '').replace(/^https?:\/\//, '')}
@@ -270,7 +287,7 @@ export default function CourseDetailModal({
                   Bereit zum Mitmachen?
                 </h3>
                 <p className="text-[var(--pepe-t64)] text-sm">
-                  Buche diesen Kurs direkt über Eversports — Schnupperstunde, Einzelstunde oder Karte.
+                  Buche diesen Kurs direkt über Eversports: Schnupperstunde, Einzelstunde oder Karte.
                 </p>
               </div>
               <button

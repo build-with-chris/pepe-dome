@@ -172,26 +172,14 @@ export default async function TrainingPage({
             </p>
           </div>
 
-          {/* Legende */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-10">
-            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
-              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#c4a767' }} />
-              {t.schedule.legendKids}
-            </div>
-            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
-              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#f59e0b' }} />
-              {t.schedule.legendTeens}
-            </div>
-            <div className="flex items-center gap-2.5 text-sm text-[var(--pepe-t80)]">
-              <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: '#38bdf8' }} />
-              {t.schedule.legendAdults}
-            </div>
-          </div>
+          {/* Zielgruppen dienen als Filter und leben deshalb in der Komponente,
+              nicht mehr als eigene Legende darüber. */}
+          <CourseScheduleGrid woche={woche} lang={lang} />
 
-          <CourseScheduleGrid woche={woche} />
-
-          {/* Hinweis-Box */}
-          <div className="max-w-3xl mx-auto mt-8">
+          {/* Hinweis-Box.
+              Achtung: max-w-3xl greift hier nicht, tokens.css setzt
+              --container-3xl auf 1920px. Deshalb feste Breite. */}
+          <div className="max-w-[52rem] mx-auto mt-8">
             <div className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/60 px-5 py-4">
               <div className="flex items-start gap-3">
                 <span className="text-lg leading-none flex-shrink-0 mt-0.5" aria-hidden="true">ℹ️</span>
