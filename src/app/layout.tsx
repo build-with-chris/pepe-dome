@@ -76,6 +76,12 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: BASE_URL },
   robots: { index: true, follow: true },
+  // Domain-Verifizierung fuer Meta. Bestaetigt, dass pepe-dome.de uns gehoert,
+  // und ist Voraussetzung dafuer, Conversion-Ereignisse dieser Domain zu
+  // priorisieren. Kein Geheimnis: der Wert ist oeffentlich im Quelltext lesbar.
+  other: {
+    'facebook-domain-verification': 'nksu2wj60j5gnrbydbmrt2a8oblq5o',
+  },
 }
 
 // Only skip Clerk in development and when the dev flag is explicitly set.
