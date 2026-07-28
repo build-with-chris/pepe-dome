@@ -30,6 +30,18 @@ export type Slot = {
 }
 
 /**
+ * Ein Bild eines Kurses.
+ *
+ * `alt` beschreibt, was zu sehen ist, für Screenreader und für den Fall, dass
+ * das Bild nicht lädt. Leer lassen wäre bequem und für blinde Besucher:innen
+ * das Gleiche wie kein Bild.
+ */
+export type KursBild = {
+  url: string
+  alt: string
+}
+
+/**
  * Ein Kurs als Angebot, mit allen seinen Wochenterminen.
  * Luftakrobatik läuft viermal pro Woche und ist trotzdem ein Kurs.
  */
@@ -47,7 +59,14 @@ export type Kurs = {
   bookingUrl: string | null
   bookingLabel: string | null
   bookingNote: string | null
+  /** Erstes Bild steht auf der Karte, alle zusammen sind die Galerie. */
+  bilder: KursBild[]
   slots: Slot[]
+}
+
+/** Das Bild für die Kurskarte, oder nichts, wenn der Kurs keins hat. */
+export function kartenBild(kurs: Kurs): KursBild | null {
+  return kurs.bilder[0] ?? null
 }
 
 /** Eine Zeile im Wochenplan: ein Kurs zu einem bestimmten Termin. */

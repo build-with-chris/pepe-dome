@@ -49,3 +49,8 @@ next-env.d.ts
 
 # Lokale Layout-Vorschau (scripts/preview-newsletter.ts)
 .preview/
+
+# Kamera-Originale der Kursbilder: bleiben lokal.
+# Ausgeliefert werden die verkleinerten Fassungen unter public/kurse
+# (76 MB Originale gegen 4 MB Web-Groesse, und das Repo ist oeffentlich).
+/public/Kursbilder/

@@ -35,6 +35,7 @@ import { normalizeTime } from '@/lib/event-time'
 import { weekdayName } from '@/lib/course-types'
 
 export type CourseFormSlot = { weekday: number; startTime: string; endTime: string }
+export type CourseFormBild = { url: string; alt: string }
 
 export type CourseFormData = {
   id?: string
@@ -50,6 +51,7 @@ export type CourseFormData = {
   bookingUrl: string
   bookingLabel: string
   bookingNote: string
+  images: CourseFormBild[]
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
   sortOrder: number
   slots: CourseFormSlot[]
@@ -67,6 +69,7 @@ const LEERER_KURS: CourseFormData = {
   bookingUrl: '',
   bookingLabel: '',
   bookingNote: '',
+  images: [],
   status: 'DRAFT',
   sortOrder: 0,
   slots: [{ weekday: 1, startTime: '17:00', endTime: '18:00' }],
@@ -120,6 +123,22 @@ export default function CourseForm({
   const removeInhalt = (index: number) =>
     update('inhalte', data.inhalte.filter((_, i) => i !== index))
 
+  // ── Bilder ────────────────────────────────────────────────────────────────
+
+  const addBild = () => update('images', [...data.images, { url: '', alt: '' }])
+  const setBild = (index: number, patch: Partial<CourseFormBild>) =>
+    update('images', data.images.map((b, i) => (i === index ? { ...b, ...patch } : b)))
+  const removeBild = (index: number) =>
+    update('images', data.images.filter((_, i) => i !== index))
+  /** Reihenfolge zaehlt: das erste Bild steht auf der Kurskarte. */
+  const moveBild = (index: number, richtung: -1 | 1) => {
+    const ziel = index + richtung
+    if (ziel < 0 || ziel >= data.images.length) return
+    const next = [...data.images]
+    ;[next[index], next[ziel]] = [next[ziel], next[index]]
+    update('images', next)
+  }
+
   // ── Termine ───────────────────────────────────────────────────────────────
 
   const addSlot = () => {
@@ -163,6 +182,15 @@ export default function CourseForm({
       })
     }
 
+    data.images.forEach((bild, index) => {
+      const url = bild.url.trim()
+      if (!url) {
+        next[`bild-${index}`] = 'Bildadresse fehlt'
+      } else if (!url.startsWith('/') && !/^https:\/\//i.test(url)) {
+        next[`bild-${index}`] = 'Muss ein Pfad wie /kurse/… oder eine https-Adresse sein'
+      }
+    })
+
     if (data.bookingUrl.trim() && !/^(https?:\/\/|mailto:)/i.test(data.bookingUrl.trim())) {
       next.bookingUrl = 'Muss mit http://, https:// oder mailto: beginnen'
     }
@@ -195,6 +223,9 @@ export default function CourseForm({
         bookingUrl: data.bookingUrl.trim() || null,
         bookingLabel: data.bookingLabel.trim() || null,
         bookingNote: data.bookingNote.trim() || null,
+        images: data.images
+          .map((b) => ({ url: b.url.trim(), alt: b.alt.trim() }))
+          .filter((b) => b.url),
         status: data.status,
         sortOrder: data.sortOrder,
         slots: data.slots.map((slot) => ({
@@ -524,6 +555,125 @@ export default function CourseForm({
           Stichpunkte für das Detail-Fenster, drei bis sechs reichen. Leere Zeilen
           werden beim Speichern verworfen.
         </FieldHint>
+      </div>
+
+      {/* ── Bilder ── */}
+      <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6 space-y-4">
+        <div>
+          <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider">
+            Bilder
+          </h2>
+          <p className="text-[11px] leading-relaxed text-white/45 mt-2">
+            Das <strong className="text-white/70">erste Bild</strong> steht auf der
+            Kurskarte, alle zusammen bilden die Galerie im Detail-Fenster. Ohne Bild
+            zeigt die Karte ein Farbfeld in der Kursfarbe, sie bleibt also
+            benutzbar.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {data.images.map((bild, index) => (
+            <div key={index} className="rounded-lg border border-white/[0.12] bg-white/[0.03] p-3 space-y-3">
+              <div className="flex items-start gap-3">
+                {/* Kleine Vorschau, damit man sieht, welches Bild gemeint ist.
+                    Bewusst ein normales img und kein next/image: die Adresse
+                    kann waehrend des Tippens noch unvollstaendig sein. */}
+                <div className="w-24 h-16 flex-shrink-0 rounded-md bg-black/40 overflow-hidden flex items-center justify-center">
+                  {bild.url.trim() ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={bild.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.visibility = 'hidden'
+                      }}
+                    />
+                  ) : (
+                    <span className="text-[10px] text-white/30">Vorschau</span>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-2">
+                  <Input
+                    value={bild.url}
+                    onChange={(e) => setBild(index, { url: e.target.value })}
+                    placeholder="/kurse/mein-kurs/01.jpg"
+                    hasError={!!errors[`bild-${index}`]}
+                    inputSize="lg"
+                    aria-label={`Bildadresse ${index + 1}`}
+                  />
+                  <Input
+                    value={bild.alt}
+                    onChange={(e) => setBild(index, { alt: e.target.value })}
+                    placeholder="Was ist auf dem Bild zu sehen?"
+                    inputSize="lg"
+                    aria-label={`Bildbeschreibung ${index + 1}`}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => moveBild(index, -1)}
+                    disabled={index === 0}
+                    aria-label={`Bild ${index + 1} nach vorne`}
+                    className="disabled:opacity-25"
+                  >
+                    ↑
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => moveBild(index, 1)}
+                    disabled={index === data.images.length - 1}
+                    aria-label={`Bild ${index + 1} nach hinten`}
+                    className="disabled:opacity-25"
+                  >
+                    ↓
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => removeBild(index)}
+                    aria-label={`Bild ${index + 1} entfernen`}
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                  >
+                    ×
+                  </Button>
+                </div>
+              </div>
+
+              {index === 0 && (
+                <p className="text-[11px] text-[#016dca]">Steht auf der Kurskarte</p>
+              )}
+              {errors[`bild-${index}`] && (
+                <p className="text-sm text-red-400">{errors[`bild-${index}`]}</p>
+              )}
+            </div>
+          ))}
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={addBild}
+            className="text-[#016dca] hover:text-[#016dca] hover:bg-[#016dca]/10"
+          >
+            + Bild hinzufügen
+          </Button>
+
+          <FieldHint>
+            Bilder liegen unter <code className="text-white/60">public/kurse/</code> im
+            Projekt, die Adresse beginnt dann mit <code className="text-white/60">/kurse/</code>.
+            Die Beschreibung lesen Screenreader vor und sie erscheint, wenn ein Bild
+            nicht lädt. Ein Satz reicht.
+          </FieldHint>
+        </div>
       </div>
 
       {/* ── Buchung ── */}

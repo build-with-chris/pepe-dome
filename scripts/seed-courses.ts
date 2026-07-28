@@ -18,6 +18,7 @@ import { PrismaClient, ContentStatus, CourseTarget } from '@prisma/client'
 const prisma = new PrismaClient()
 
 type SeedSlot = { weekday: number; startTime: string; endTime: string }
+type SeedBild = { url: string; alt: string }
 
 type SeedCourse = {
   slug: string
@@ -32,6 +33,7 @@ type SeedCourse = {
   bookingUrl?: string
   bookingLabel?: string
   bookingNote?: string
+  images?: SeedBild[]
   status: ContentStatus
   sortOrder: number
   slots: SeedSlot[]
@@ -65,6 +67,10 @@ const COURSES: SeedCourse[] = [
     target: CourseTarget.teens,
     trainer: 'Aircrobatics',
     ...AIRCRO_BOOKING,
+    images: [
+      { url: '/kurse/luftakrobatik-aircrobatics/01-aerial-hoop.jpg', alt: 'Artistin hängt am Aerial Hoop und streckt ein Bein zur Seite' },
+      { url: '/kurse/luftakrobatik-aircrobatics/02-vertikaltuch.jpg', alt: 'Artistin im Spagat am Vertikaltuch vor einer Hauswand' },
+    ],
     status: ContentStatus.PUBLISHED,
     sortOrder: 10,
     slots: [
@@ -113,6 +119,11 @@ const COURSES: SeedCourse[] = [
       'Erwachsene, alle Levels · Einstieg jederzeit möglich. Schnupperstunde unverbindlich, aktuelle Termine und Anmeldung über Eversports.',
     target: CourseTarget.erwachsene,
     trainer: 'Dayela',
+    images: [
+      { url: '/kurse/capoeira-erwachsene/01-handstand.jpg', alt: 'Frau im einarmigen Handstand vor einer Graffitiwand' },
+      { url: '/kurse/capoeira-erwachsene/02-duo.jpg', alt: 'Zwei Personen im Capoeira-Spiel vor hellem Himmel' },
+      { url: '/kurse/capoeira-erwachsene/03-strand.jpg', alt: 'Zwei Personen beim Rad am Strand in der Abendsonne' },
+    ],
     status: ContentStatus.PUBLISHED,
     sortOrder: 30,
     slots: [{ weekday: 2, startTime: '17:30', endTime: '19:00' }],
@@ -134,6 +145,11 @@ const COURSES: SeedCourse[] = [
     fuerWen: 'Kinder 5 bis 12 Jahre',
     target: CourseTarget.kinder,
     trainer: 'Michael',
+    images: [
+      { url: '/kurse/kinder-akrobatik/01-michael-mit-kind.jpg', alt: 'Michael im roten Kostüm reicht einem Kind die Hand' },
+      { url: '/kurse/kinder-akrobatik/02-michael.jpg', alt: 'Michael im roten Kostüm neben einem Koffer' },
+      { url: '/kurse/kinder-akrobatik/03-walking-act.jpg', alt: 'Michael als Walking Act unter Publikum' },
+    ],
     status: ContentStatus.PUBLISHED,
     sortOrder: 40,
     slots: [{ weekday: 3, startTime: '16:30', endTime: '18:00' }],
@@ -149,6 +165,11 @@ const COURSES: SeedCourse[] = [
     fuerWen: 'Jugendliche und Erwachsene, Anfänger bis Fortgeschrittene',
     target: CourseTarget.erwachsene,
     trainer: 'Dani',
+    images: [
+      { url: '/kurse/urban-acrobatics/01-freeze.jpg', alt: 'Breaker im Freeze auf dem Kopf vor Publikum' },
+      { url: '/kurse/urban-acrobatics/02-battle.jpg', alt: 'Breaking-Battle in einer vollen Halle' },
+      { url: '/kurse/urban-acrobatics/03-headstand.jpg', alt: 'Breaker im Kopfstand, Schwarzweißaufnahme' },
+    ],
     status: ContentStatus.PUBLISHED,
     sortOrder: 50,
     slots: [{ weekday: 5, startTime: '15:30', endTime: '17:00' }],
@@ -173,6 +194,11 @@ const COURSES: SeedCourse[] = [
     fuerWen: 'Jugendliche & Erwachsene · Einsteiger:innen willkommen',
     target: CourseTarget.erwachsene,
     trainer: 'Chris',
+    images: [
+      { url: '/kurse/cyr-wheel/01-rad.jpg', alt: 'Artist im Cyr Wheel in Bewegung' },
+      { url: '/kurse/cyr-wheel/02-rad.jpg', alt: 'Cyr Wheel im Dome' },
+      { url: '/kurse/cyr-wheel/03-chris.jpg', alt: 'Chris mit dem Cyr Wheel' },
+    ],
     status: ContentStatus.ARCHIVED,
     sortOrder: 60,
     slots: [{ weekday: 5, startTime: '17:00', endTime: '18:30' }],

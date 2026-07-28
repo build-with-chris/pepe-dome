@@ -24,8 +24,10 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
 import CourseDetailModal from './CourseDetailModal'
 import {
+  kartenBild,
   resolveSlug,
   weekdayAdverb,
   weekdayName,
@@ -185,14 +187,45 @@ function KursKarte({
 }) {
   const c = COLORS[kurs.target]
   const zeilen = zeitenProTag(kurs.slots, lang)
+  const bild = kartenBild(kurs)
 
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={t.detailsZu(kurs.title)}
-      className="group h-full w-full text-left rounded-3xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)] p-6 md:p-7 flex flex-col gap-4 transition-all duration-200 hover:border-[var(--pepe-line-light)] hover:bg-[var(--pepe-surface)]/60 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
+      className="group h-full w-full text-left rounded-3xl bg-[var(--pepe-ink)] border border-[var(--pepe-line)] overflow-hidden flex flex-col transition-all duration-200 hover:border-[var(--pepe-line-light)] hover:bg-[var(--pepe-surface)]/60 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer"
     >
+      {/* Bildbereich. Kurse ohne Foto bekommen ein ruhiges Farbband in der
+          Kursfarbe statt eines fremden Fotos: die Karten behalten dieselbe
+          Höhe, und niemand sieht ein Bild, das den Kurs nicht zeigt. */}
+      <div className="relative w-full aspect-[4/3] bg-[var(--pepe-surface)] overflow-hidden">
+        {bild ? (
+          <Image
+            src={bild.url}
+            alt={bild.alt}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          />
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(120% 90% at 50% 0%, ${c.bg}, transparent 70%), linear-gradient(160deg, ${c.bg}, transparent)`,
+            }}
+            aria-hidden="true"
+          />
+        )}
+        {/* Verlauf nach unten, damit der Kartenrand nicht hart abschneidet */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, var(--pepe-ink), transparent)' }}
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="p-6 md:p-7 flex flex-col gap-4 flex-1">
       {/* Für wen. Steht ganz oben, weil das die erste Frage ist. */}
       <p className="flex items-center gap-2 text-sm font-semibold" style={{ color: c.dot }}>
         <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: c.dot }} aria-hidden="true" />
@@ -228,6 +261,7 @@ function KursKarte({
           →
         </span>
       </span>
+      </div>
     </button>
   )
 }

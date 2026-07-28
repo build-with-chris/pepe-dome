@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { weekdayName, zeitspanne, type Kurs } from '@/lib/course-types'
 
 type CopyState = 'idle' | 'copied'
@@ -22,6 +23,8 @@ export default function CourseDetailModal({
   onClose: () => void
 }) {
   const [copyState, setCopyState] = useState<CopyState>('idle')
+  /** Index des groß gezeigten Bildes in der Galerie. */
+  const [bildIndex, setBildIndex] = useState(0)
 
   // ESC schließt das Modal
   useEffect(() => {
@@ -45,6 +48,8 @@ export default function CourseDetailModal({
   useEffect(() => {
     if (kurs) {
       setCopyState('idle')
+      // Sonst zeigt der naechste Kurs das dritte Bild des vorherigen.
+      setBildIndex(0)
     }
   }, [kurs])
 
@@ -88,7 +93,10 @@ export default function CourseDetailModal({
       onClick={onClose}
     >
       <div
-        className="relative bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        // Feste Breite statt max-w-2xl: tokens.css setzt --container-2xl auf
+        // 1536px, die Tailwind-Klasse begrenzt hier also praktisch nichts. Ohne
+        // Bild fiel das kaum auf, mit Galerie wurde das Fenster bildschirmbreit.
+        className="relative bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl max-w-[42rem] w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top-Right Buttons: Link teilen + Schließen */}
@@ -129,6 +137,56 @@ export default function CourseDetailModal({
             <span className="text-xl leading-none" aria-hidden="true">×</span>
           </button>
         </div>
+
+        {/* Galerie. Ein Bild wird gross gezeigt, die uebrigen als Streifen
+            darunter zum Wechseln. Bei nur einem Bild entfaellt der Streifen,
+            bei keinem die ganze Galerie. */}
+        {kurs.bilder.length > 0 && (
+          <div>
+            {/* 16:9 statt 16:10: bei 16:10 stand der Kurstitel auf dem Handy
+                erst unterhalb des sichtbaren Bereichs. */}
+            <div className="relative w-full aspect-[16/9] bg-[var(--pepe-surface)]">
+              <Image
+                src={kurs.bilder[bildIndex]?.url ?? kurs.bilder[0].url}
+                alt={kurs.bilder[bildIndex]?.alt ?? kurs.bilder[0].alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 672px"
+                priority
+              />
+            </div>
+
+            {kurs.bilder.length > 1 && (
+              <div className="flex gap-2 p-3 bg-[var(--pepe-ink)]">
+                {kurs.bilder.map((bild, i) => (
+                  <button
+                    key={bild.url}
+                    type="button"
+                    onClick={() => setBildIndex(i)}
+                    aria-label={`Bild ${i + 1} von ${kurs.bilder.length} anzeigen`}
+                    aria-current={i === bildIndex}
+                    // Nicht gewaehlte Bilder brauchen genug Deckkraft und einen
+                    // eigenen Rand: bei 55 Prozent auf dunklen Fotos war nicht
+                    // zu erkennen, dass da ueberhaupt weitere Bilder stehen.
+                    className={`relative h-16 w-24 flex-shrink-0 rounded-lg overflow-hidden transition-all focus:outline-none focus:ring-2 focus:ring-[var(--pepe-gold)] cursor-pointer ${
+                      i === bildIndex
+                        ? 'ring-2 ring-[var(--pepe-gold)] opacity-100'
+                        : 'ring-1 ring-[var(--pepe-line-light)] opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    <Image
+                      src={bild.url}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="96px"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Kurs-Details */}
         <div className="p-6 md:p-8 border-b border-[var(--pepe-line)]">

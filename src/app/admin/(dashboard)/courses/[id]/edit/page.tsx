@@ -47,6 +47,15 @@ export default async function EditCoursePage({
     bookingUrl: course.bookingUrl ?? '',
     bookingLabel: course.bookingLabel ?? '',
     bookingNote: course.bookingNote ?? '',
+    images: Array.isArray(course.images)
+      ? (course.images as unknown[]).flatMap((entry) => {
+          if (!entry || typeof entry !== 'object') return []
+          const bild = entry as Record<string, unknown>
+          const url = typeof bild.url === 'string' ? bild.url : ''
+          if (!url) return []
+          return [{ url, alt: typeof bild.alt === 'string' ? bild.alt : '' }]
+        })
+      : [],
     status: course.status as CourseFormData['status'],
     sortOrder: course.sortOrder,
     slots: [...course.slots]

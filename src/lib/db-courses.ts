@@ -25,6 +25,7 @@ import {
   isTarget,
   sortSlots,
   type Kurs,
+  type KursBild,
   type Kursprogramm,
   type Slot,
   type Tag,
@@ -35,6 +36,23 @@ import {
 function toStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return []
   return value.filter((entry): entry is string => typeof entry === 'string')
+}
+
+/**
+ * Bilder liegen als Json in der DB. Ein Eintrag ohne url ist unbrauchbar und
+ * wuerde als kaputtes Bild auf der Seite landen, also fliegt er raus. Ein
+ * fehlender alt-Text wird zu einem leeren String statt undefined, damit das
+ * Attribut immer gesetzt ist.
+ */
+function toBilder(value: unknown): KursBild[] {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((entry) => {
+    if (!entry || typeof entry !== 'object') return []
+    const bild = entry as Record<string, unknown>
+    const url = typeof bild.url === 'string' ? bild.url.trim() : ''
+    if (!url) return []
+    return [{ url, alt: typeof bild.alt === 'string' ? bild.alt : '' }]
+  })
 }
 
 /**
@@ -76,6 +94,7 @@ export async function getKursprogramm(): Promise<Kursprogramm> {
       bookingUrl: row.bookingUrl,
       bookingLabel: row.bookingLabel,
       bookingNote: row.bookingNote,
+      bilder: toBilder(row.images),
       slots: sortSlots(
         row.slots.map(
           (slot): Slot => ({

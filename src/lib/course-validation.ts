@@ -47,6 +47,26 @@ export const slotSchema = z
     path: ['endTime'],
   })
 
+/**
+ * Ein Kursbild.
+ *
+ * Erlaubt sind nur projekteigene Pfade („/kurse/…") und https-Adressen.
+ * Kein `javascript:` und kein `data:` — der Wert landet in einem src-Attribut.
+ * Fremde http-Adressen fliegen raus, weil sie auf einer https-Seite ohnehin
+ * blockiert würden und dann als kaputtes Bild dastehen.
+ */
+export const bildSchema = z.object({
+  url: z
+    .string()
+    .trim()
+    .min(1, 'Bildadresse fehlt')
+    .refine(
+      (value) => value.startsWith('/') || /^https:\/\//i.test(value),
+      'Bild muss ein Pfad wie /kurse/… oder eine https-Adresse sein'
+    ),
+  alt: z.string().trim().default(''),
+})
+
 export const courseBaseSchema = z.object({
   title: z.string().trim().min(1, 'Titel ist Pflicht'),
   sub: z.string().trim().optional().nullable(),
@@ -59,6 +79,7 @@ export const courseBaseSchema = z.object({
   bookingUrl: z.string().trim().optional().nullable(),
   bookingLabel: z.string().trim().optional().nullable(),
   bookingNote: z.string().trim().optional().nullable(),
+  images: z.array(bildSchema).default([]),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
   sortOrder: z.number().int().default(0),
 })

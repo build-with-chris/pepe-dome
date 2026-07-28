@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  bildSchema,
   courseCreateSchema,
   courseUpdateSchema,
   generateCourseSlug,
@@ -48,6 +49,42 @@ describe('slotSchema', () => {
     // Anders als bei Events, wo Freitext wie "ab 20 Uhr" im Altbestand steht.
     const result = slotSchema.safeParse({ weekday: 1, startTime: 'abends', endTime: '20:00' })
     expect(result.success).toBe(false)
+  })
+})
+
+describe('bildSchema', () => {
+  it('nimmt projekteigene Pfade an', () => {
+    const result = bildSchema.safeParse({ url: '/kurse/luftakrobatik/01.jpg', alt: 'Am Tuch' })
+    expect(result.success).toBe(true)
+  })
+
+  it('nimmt https-Adressen an', () => {
+    expect(bildSchema.safeParse({ url: 'https://example.com/a.jpg', alt: '' }).success).toBe(true)
+  })
+
+  it('lehnt javascript: ab', () => {
+    // Der Wert landet in einem src-Attribut.
+    expect(bildSchema.safeParse({ url: 'javascript:alert(1)', alt: '' }).success).toBe(false)
+  })
+
+  it('lehnt data: ab', () => {
+    expect(
+      bildSchema.safeParse({ url: 'data:image/svg+xml,<svg onload=alert(1)>', alt: '' }).success
+    ).toBe(false)
+  })
+
+  it('lehnt einfaches http ab, weil es auf einer https-Seite blockiert wuerde', () => {
+    expect(bildSchema.safeParse({ url: 'http://example.com/a.jpg', alt: '' }).success).toBe(false)
+  })
+
+  it('lehnt eine leere Adresse ab', () => {
+    expect(bildSchema.safeParse({ url: '   ', alt: 'x' }).success).toBe(false)
+  })
+
+  it('setzt einen fehlenden alt-Text auf leer statt undefined', () => {
+    const result = bildSchema.safeParse({ url: '/kurse/a.jpg' })
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.alt).toBe('')
   })
 })
 

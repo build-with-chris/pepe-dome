@@ -494,6 +494,11 @@ model Course {
   bookingUrl   String?       @map("booking_url")
   bookingLabel String?       @map("booking_label")
   bookingNote  String?       @map("booking_note")
+  /// Bilder des Kurses als [{ "url": "/kurse/…", "alt": "…" }, …].
+  /// Das erste Bild steht auf der Kurskarte, alle zusammen bilden die
+  /// Galerie im Detail-Fenster. Leer ist zulaessig: die Karte rendert dann
+  /// ohne Bild, so wie vor dieser Erweiterung.
+  images       Json          @default("[]")
   /// PUBLISHED steht auf der Website, ARCHIVED ist pausiert und bleibt im
   /// Admin samt Texten erhalten. DRAFT ist noch nie veröffentlicht.
   status       ContentStatus @default(DRAFT)
