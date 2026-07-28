@@ -84,6 +84,10 @@ jobs:
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+          # Das Schema deklariert zusätzlich eine directUrl, weil Supabase in
+          # Produktion über einen Pooler läuft und Migrationen daran vorbei
+          # müssen. Lokal gibt es keinen Pooler, also zeigt sie auf dieselbe DB.
+          DIRECT_DATABASE_URL: ${{ env.CI_DATABASE_URL }}
 
       - name: Typen prüfen
         run: npx tsc --noEmit --pretty false || true
@@ -105,6 +109,7 @@ jobs:
           # Echte Wegwerf-DB, kein Platzhalter mehr: die Trainingsseite liest
           # ihr Kursprogramm beim Vorrendern aus der Datenbank.
           DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ env.CI_DATABASE_URL }}
           # Für die übrigen Dienste reichen Platzhalter, der Build ruft sie nicht.
           RESEND_API_KEY: "re_build_placeholder"
           # Clerk prüft die Struktur des Publishable Key: pk_test_ plus
