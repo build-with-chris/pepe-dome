@@ -18,7 +18,7 @@ import { onConsentChange, readConsent, type ConsentState } from '@/lib/consent'
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-CGE01LR2LC'
 
 /**
- * Meta Pixel "Dome-Website-Pixel".
+ * Meta Pixel "Pepe Dome Website", Portfolio Pepe Arts.
  *
  * Die ID steht bewusst im Code und nicht nur in einer Umgebungsvariable:
  * Sie ist kein Geheimnis, sondern steht ohnehin im Quelltext jeder Seite,
@@ -28,8 +28,12 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-CGE01L
  * Das Zugriffstoken der Conversions API ist das Gegenteil davon und gehört
  * ausschließlich in die Umgebungsvariable META_CAPI_ACCESS_TOKEN. Dieses
  * Repository ist öffentlich.
+ *
+ * Vorgänger war 1643858583931537 im Portfolio "Pepe". Der lag getrennt vom
+ * Werbekonto und der Facebook-Seite, und Meta zieht Datensätze nicht zwischen
+ * Portfolios um. Deshalb neu angelegt statt verschoben.
  */
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1643858583931537'
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1027053273442986'
 
 export default function ConsentScripts() {
   const pathname = usePathname()
