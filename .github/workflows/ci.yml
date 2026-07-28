@@ -69,5 +69,10 @@ jobs:
           DATABASE_URL: "postgresql://user:pass@localhost:5432/build_only"
           # Platzhalter reichen: Der Build rendert keine Seite, die sie benutzt.
           RESEND_API_KEY: "re_build_placeholder"
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_build_placeholder"
+          # Clerk prüft die Struktur des Publishable Key: pk_test_ plus
+          # base64 vom Frontend-Host mit "$" am Ende. Ein freier Text wie
+          # "pk_test_build_placeholder" lässt das Prerendering von /impressum
+          # abbrechen. Der Wert hier decodiert zu "clerk.example.com$" und ist
+          # ein reiner Formplatzhalter, kein Konto.
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsuZXhhbXBsZS5jb20k"
           CLERK_SECRET_KEY: "sk_test_build_placeholder"
