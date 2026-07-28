@@ -38,6 +38,16 @@ jobs:
 
       - name: Prisma-Client erzeugen
         run: npx prisma generate
+        env:
+          # prisma.config.ts lädt dotenv und verlangt DATABASE_URL beim Parsen
+          # der Config. In CI gibt es keine .env, deshalb brach der Schritt ab.
+          # `generate` liest nur das Schema und schreibt den Client, es verbindet
+          # sich nie — der Platzhalter reicht also.
+          #
+          # Bewusst nur auf diesem Schritt und nicht auf Job-Ebene: so kann der
+          # Wert nicht in den Test-Schritt wandern, der alle Tabellen leert.
+          # Niemals secrets.DATABASE_URL hier einsetzen.
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/build_only"
 
       - name: Typen prüfen
         run: npx tsc --noEmit --pretty false || true
