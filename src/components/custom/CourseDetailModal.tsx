@@ -7,20 +7,18 @@
  */
 
 import { useEffect, useState } from 'react'
-import type { Kurs, Slot } from './CourseScheduleGrid'
+import { weekdayName, zeitspanne, type Kurs } from '@/lib/course-types'
 
 type CopyState = 'idle' | 'copied'
 
 export default function CourseDetailModal({
   kurs,
-  slots,
+  lang = 'de',
   onClose,
 }: {
+  /** Trägt seine Wochentermine selbst, siehe src/lib/course-types.ts. */
   kurs: Kurs | null
-  /** Alle Wochentermine dieses Kurses. Kommt aus der Katalog-Ansicht, in der
-   *  gleiche Kurse zusammengefasst sind. Ohne slots zeigt der Kopf nur den
-   *  einen Termin, mit dem das Modal geöffnet wurde. */
-  slots?: Slot[]
+  lang?: 'de' | 'en'
   onClose: () => void
 }) {
   const [copyState, setCopyState] = useState<CopyState>('idle')
@@ -145,17 +143,19 @@ export default function CourseDetailModal({
           {/* Termine dieses Kurses. Läuft er mehrmals pro Woche, stehen hier
               alle Slots, nicht nur der angeklickte. */}
           <div className="flex flex-wrap gap-2 mb-5">
-            {(slots && slots.length > 0 ? slots : [{ day: kurs.day, time: kurs.time }]).map(
-              (s, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-baseline gap-2 px-3 py-1.5 rounded-lg bg-[var(--pepe-surface)] border border-[var(--pepe-line)] text-sm"
-                >
-                  <span className="text-[var(--pepe-accent-text)] font-bold">{s.day}</span>
-                  <span className="text-[var(--pepe-t80)] tabular-nums">{s.time}</span>
+            {kurs.slots.map((slot, i) => (
+              <span
+                key={i}
+                className="inline-flex items-baseline gap-2 px-3 py-1.5 rounded-lg bg-[var(--pepe-surface)] border border-[var(--pepe-line)] text-sm"
+              >
+                <span className="text-[var(--pepe-accent-text)] font-bold">
+                  {weekdayName(slot.weekday, lang)}
                 </span>
-              )
-            )}
+                <span className="text-[var(--pepe-t80)] tabular-nums">
+                  {zeitspanne(slot, lang)}
+                </span>
+              </span>
+            ))}
           </div>
 
           <p className="text-[var(--pepe-t80)] leading-relaxed mb-6">{kurs.description}</p>
@@ -182,74 +182,6 @@ export default function CourseDetailModal({
             </div>
           </div>
 
-          {/* Termine — wenn der Kurs konkrete Datums-Slots hat (z.B. Sonntags-Flow-Arts) */}
-          {kurs.termine && kurs.termine.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-[var(--pepe-line)]">
-              <p className="text-[var(--pepe-accent-text)] text-xs font-semibold uppercase tracking-widest mb-3">
-                {kurs.termineTitel ?? 'Termine'}
-              </p>
-              <ul className="space-y-2">
-                {kurs.termine.map((t, i) =>
-                  t.highlight ? (
-                    <li key={i}>
-                      <div
-                        className="rounded-lg p-3"
-                        style={{
-                          background:
-                            'linear-gradient(135deg, rgba(196,167,103,0.18), rgba(196,167,103,0.06))',
-                          border: '1px solid rgba(196,167,103,0.45)',
-                        }}
-                      >
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="text-[var(--pepe-accent-text)] font-bold tabular-nums">
-                            {t.date}
-                          </span>
-                          {t.badge && (
-                            <span
-                              className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest"
-                              style={{ backgroundColor: 'var(--pepe-gold)', color: 'var(--pepe-black)' }}
-                            >
-                              {t.badge}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-[var(--pepe-white)] font-semibold leading-snug text-sm">
-                          {t.title}
-                          {t.trainer && (
-                            <span className="text-[var(--pepe-t64)] font-normal"> · {t.trainer}</span>
-                          )}
-                        </p>
-                        {t.sub && (
-                          <p className="text-[var(--pepe-accent-text)] text-xs font-medium mt-1 leading-snug">
-                            {t.sub}
-                          </p>
-                        )}
-                      </div>
-                    </li>
-                  ) : (
-                    <li key={i} className="flex items-baseline gap-3 text-sm py-1">
-                      <span className="text-[var(--pepe-t80)] font-bold tabular-nums whitespace-nowrap min-w-[3.5rem]">
-                        {t.date}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[var(--pepe-white)] leading-snug">
-                          {t.title}
-                          {t.trainer && (
-                            <span className="text-[var(--pepe-t48)]"> · {t.trainer}</span>
-                          )}
-                        </p>
-                        {t.sub && (
-                          <p className="text-[var(--pepe-t48)] text-xs mt-0.5 italic leading-snug">
-                            {t.sub}
-                          </p>
-                        )}
-                      </div>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          )}
         </div>
 
         {/* Buchungs-CTA — entweder externer Buchungs-Link (mailto/https)

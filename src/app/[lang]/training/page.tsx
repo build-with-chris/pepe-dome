@@ -2,10 +2,22 @@
  * Training Page — localized (DE / EN)
  *
  * UI-Chrome (Hero, Booking, Specials, Disciplines, Location, CTA) wird
- * vollständig aus dem Dictionary geladen. Die Wochenplan-Daten (woche)
- * sowie die Kurs-Detailtexte stammen aus src/data/training-data.ts und
- * sind im MVP nur auf Deutsch — Day-Namen + `note` werden für EN
- * on-the-fly übersetzt.
+ * vollständig aus dem Dictionary geladen. Das Kursprogramm kommt aus der
+ * Datenbank und wird im Admin unter /admin/courses gepflegt.
+ *
+ * Die Kurstexte selbst sind weiterhin nur auf Deutsch gepflegt; Tagesnamen
+ * und Oberfläche sind zweisprachig.
+ *
+ * ISR statt statischem Build: die Seite wird zwischengespeichert und bei
+ * einer Kursänderung gezielt neu erzeugt (siehe src/lib/revalidate-training.ts).
+ * Der Zeittakt darunter ist nur das Sicherheitsnetz, falls eine gezielte
+ * Neuerzeugung mal nicht durchgeht.
+ *
+ * Bewusst kein try/catch um getKursprogramm: schlägt die Datenbank fehl,
+ * bricht die Neuerzeugung ab und Next liefert weiter die zuletzt erfolgreich
+ * erzeugte Seite aus. Genau das ist die Zusage „bei DB-Ausfall den letzten
+ * guten Stand zeigen". Ein Fallback auf leere Daten würde stattdessen einen
+ * leeren Kursplan zwischenspeichern.
  */
 
 import type { Metadata } from 'next'
@@ -15,13 +27,20 @@ import Image from 'next/image'
 import HeroSection from '@/components/custom/HeroSection'
 import TrainingsortOverlapImages from '@/components/custom/TrainingsortOverlapImages'
 import { Button } from '@/components/ui/Button'
-import CourseScheduleGrid, { type Tag } from '@/components/custom/CourseScheduleGrid'
+import CourseScheduleGrid from '@/components/custom/CourseScheduleGrid'
 import StickyBookingButton from '@/components/custom/StickyBookingButton'
 import EversportsWidget from '@/components/custom/EversportsWidget'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
-import { WOCHE } from '@/data/training-data'
+import { getKursprogramm } from '@/lib/db-courses'
+
+/**
+ * Sicherheitsnetz unter der gezielten Neuerzeugung: einmal pro Stunde zieht
+ * die Seite ohnehin nach. Im Normalfall greift das nie, weil beim Speichern
+ * im Admin sofort neu erzeugt wird.
+ */
+export const revalidate = 3600
 
 export async function generateMetadata({
   params,
@@ -39,39 +58,6 @@ export async function generateMetadata({
   })
 }
 
-// ── Day-Name- & Note-Übersetzung für die englische Variante ──────────────
-const DAY_DE_TO_EN: Record<string, string> = {
-  Montag: 'Monday',
-  Dienstag: 'Tuesday',
-  Mittwoch: 'Wednesday',
-  Donnerstag: 'Thursday',
-  Freitag: 'Friday',
-  Samstag: 'Saturday',
-  Sonntag: 'Sunday',
-}
-
-const NOTE_DE_TO_EN: Record<string, string> = {
-  'In Planung, Workshops & Vermietung folgen':
-    'In planning, workshops & rentals to follow',
-  'Tricking & Breaking in Planung, Termine folgen.':
-    'Tricking & breaking planned, dates to follow.',
-  'Aktuell keine Kurse, neue Termine folgen.':
-    'No classes right now, new dates to follow.',
-}
-
-function localizeWoche(woche: Tag[], lang: Locale): Tag[] {
-  if (lang === 'de') return woche
-  return woche.map((tag) => ({
-    ...tag,
-    day: DAY_DE_TO_EN[tag.day] ?? tag.day,
-    note: tag.note ? NOTE_DE_TO_EN[tag.note] ?? tag.note : undefined,
-    kurse: tag.kurse.map((k) => ({
-      ...k,
-      day: DAY_DE_TO_EN[k.day] ?? k.day,
-    })),
-  }))
-}
-
 export default async function TrainingPage({
   params,
 }: {
@@ -82,7 +68,7 @@ export default async function TrainingPage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
   const t = dict.training
-  const woche = localizeWoche(WOCHE, lang)
+  const programm = await getKursprogramm()
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
@@ -174,7 +160,7 @@ export default async function TrainingPage({
 
           {/* Zielgruppen dienen als Filter und leben deshalb in der Komponente,
               nicht mehr als eigene Legende darüber. */}
-          <CourseScheduleGrid woche={woche} lang={lang} />
+          <CourseScheduleGrid programm={programm} lang={lang} />
 
           {/* Hinweis-Box.
               Achtung: max-w-3xl greift hier nicht, tokens.css setzt
