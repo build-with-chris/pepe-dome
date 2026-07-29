@@ -93,7 +93,7 @@ export default async function HomePage({
       : recentArticles
     displayNews = merged
       .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-      .slice(0, 1)
+      .slice(0, 3)
   } catch (err) {
     console.error('HomePage data error:', err)
   }
@@ -312,47 +312,54 @@ export default async function HomePage({
 
       {/* ===== Café Section ===== */}
       <section className="py-10 md:py-20 bg-gradient-to-b from-[var(--pepe-black)] to-[var(--pepe-ink)]">
+        {/* Breiten hier bewusst als feste Werte: die max-w-Skala ist im
+            Token-Satz auf Breakpoint-Groessen umgebogen (max-w-2xl = 1536px),
+            eine Karte mit max-w-2xl wird dadurch fast bildschirmbreit. */}
         <div className="stage-container">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="mx-auto max-w-[52rem] text-center">
             <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-[var(--pepe-gold)]/20 text-[var(--pepe-accent-text)] border border-[var(--pepe-gold)]/40 mb-5">
               {t.cafe.eyebrow}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4 leading-tight">
               {t.cafe.titleA}<span className="text-[var(--pepe-accent-text)]">{t.cafe.titleB}</span>
             </h2>
-            <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed mb-10 max-w-xl mx-auto">
+            <p className="mx-auto mb-8 max-w-[36rem] text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed">
               {t.cafe.text}
             </p>
 
-            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-4 md:p-5 max-w-2xl mx-auto">
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-left">
-                <div className="relative w-full sm:w-44 sm:h-32 aspect-[4/3] sm:aspect-auto flex-shrink-0 rounded-xl overflow-hidden bg-[var(--pepe-surface)]">
-                  <Image
-                    src="/Coffee.png"
-                    alt={t.cafe.imageAlt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 90vw, 176px"
-                    unoptimized
-                  />
-                </div>
-
-                <div className="flex-1 w-full">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[var(--pepe-accent-text)] text-base">🕐</span>
-                    <h3 className="text-[var(--pepe-white)] font-bold uppercase tracking-wide text-xs">
-                      {t.cafe.hoursLabel}
-                    </h3>
-                  </div>
-                  <p className="text-[var(--pepe-t80)] text-sm mb-1">{t.cafe.days}</p>
-                  <p className="text-[var(--pepe-white)] font-bold tabular-nums text-xl md:text-2xl">
-                    {t.cafe.time}
-                  </p>
-                </div>
+            {/* Das Bild traegt die Einladung, deshalb bekommt es hier eine
+                echte Flaeche statt eines Briefmarken-Formats. Rechts steht
+                nur, was man vor dem Losgehen wissen muss: wann offen ist und
+                wo es liegt. */}
+            <Link
+              href={localizedHref(lang, '/cafe')}
+              className="group mx-auto flex max-w-[45rem] flex-col overflow-hidden rounded-2xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[var(--pepe-gold)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.35),0_0_8px_var(--pepe-gold-glow)] sm:flex-row"
+            >
+              <div className="relative aspect-[16/10] w-full flex-shrink-0 overflow-hidden bg-[var(--pepe-surface)] sm:aspect-auto sm:w-[42%] sm:self-stretch">
+                <Image
+                  src="/Coffee.png"
+                  alt={t.cafe.imageAlt}
+                  fill
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  sizes="(max-width: 639px) 92vw, 300px"
+                  unoptimized
+                />
               </div>
-            </div>
 
-            <p className="text-[var(--pepe-t64)] text-sm mt-6">{t.cafe.address}</p>
+              <div className="flex flex-1 flex-col justify-center gap-1 p-6">
+                <span className="text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)]">
+                  {t.cafe.hoursLabel}
+                </span>
+                <p className="text-[var(--pepe-t80)]">{t.cafe.days}</p>
+                <p className="text-2xl font-bold tabular-nums text-[var(--pepe-white)] md:text-3xl">
+                  {t.cafe.time}
+                </p>
+                <p className="mt-4 text-sm text-[var(--pepe-t64)]">{t.cafe.address}</p>
+                <span className="mt-3 text-sm font-semibold text-[var(--pepe-accent-text)]">
+                  {t.features.more} →
+                </span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -450,29 +457,39 @@ export default async function HomePage({
           </div>
 
           {displayNews.length > 0 ? (
-            <div className="mx-auto max-w-2xl">
-              <div className="grid grid-cols-1 gap-5">
-                {displayNews.map((article) => (
-                  <NewsCard
-                    key={article.id}
-                    title={article.title}
-                    excerpt={article.excerpt}
-                    date={new Date(article.publishedAt).toLocaleDateString(dateLocale, {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                    author={article.author}
-                    category={article.category}
-                    image={article.imageUrl || undefined}
-                    href={`${localizedHref(lang, '/news')}/${article.slug}`}
-                    featured={false}
-                  />
-                ))}
-              </div>
+            // Ein einzelner Artikel stand bisher allein in einer Spalte, die
+            // ueber max-w-2xl fast bildschirmbreit war: das Aufmacherbild
+            // wurde dadurch hoeher als der halbe Bildschirm. Jetzt stehen bis
+            // zu drei Artikel im selben Raster wie die Events darueber, und
+            // bei weniger Artikeln bleibt die Spalte auf Lesebreite.
+            <div
+              className={cn(
+                'grid gap-5',
+                displayNews.length === 1 && 'mx-auto max-w-[34rem]',
+                displayNews.length === 2 && 'sm:grid-cols-2',
+                displayNews.length >= 3 && 'sm:grid-cols-2 lg:grid-cols-3'
+              )}
+            >
+              {displayNews.map((article) => (
+                <NewsCard
+                  key={article.id}
+                  title={article.title}
+                  excerpt={article.excerpt}
+                  date={new Date(article.publishedAt).toLocaleDateString(dateLocale, {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                  author={article.author}
+                  category={article.category}
+                  image={article.imageUrl || undefined}
+                  href={`${localizedHref(lang, '/news')}/${article.slug}`}
+                  featured={false}
+                />
+              ))}
             </div>
           ) : (
-            <div className="text-center py-12 bg-[var(--pepe-ink)] rounded-xl border border-[var(--pepe-line)] max-w-2xl mx-auto">
+            <div className="mx-auto max-w-[34rem] rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] py-12 text-center">
               <p className="text-[var(--pepe-t64)]">{t.news.empty}</p>
             </div>
           )}
