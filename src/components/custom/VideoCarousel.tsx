@@ -16,7 +16,7 @@ interface VideoCarouselProps {
 }
 
 const defaultVideos: VideoItem[] = [
-  { src: '/videos/showreel.mp4', title: 'TwoGether - lokale Künstler', poster: '/images/posters/showreel.jpg' },
+  { src: '/videos/showreel.mp4', title: 'TwoGather - lokale Künstler', poster: '/images/posters/showreel.jpg' },
   { src: '/videos/vertical-01.mp4', title: 'Einblicke Shows und Workshop', poster: '/images/posters/vertical-01.jpg' },
   { src: '/videos/vertical-02.mp4', title: 'Freeman Festival 2025', poster: '/images/posters/vertical-02.jpg' },
   { src: '/videos/vertical-03.mp4', title: 'Abendstimmung', poster: '/images/posters/vertical-03.jpg' },
@@ -221,7 +221,7 @@ export default function VideoCarousel({
               {/* Videoauswahl über dem unteren Bereich des Videos */}
               {/* Unter jedem Thumbnail stand vorher der Videotitel in 9px, auf
                   70px abgeschnitten. In der Größe war er nicht lesbar und durch
-                  die Kürzung ohnehin unvollständig ("TwoGether - lokale Künst…").
+                  die Kürzung ohnehin unvollständig ("TwoGather - lokale Künst…").
                   Jetzt steht nur noch der Titel des laufenden Videos da, dafür
                   in normaler Schriftgröße. Die übrigen Titel gehen nicht
                   verloren: sie sitzen als aria-label am jeweiligen Knopf, sind
