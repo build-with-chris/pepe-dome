@@ -65,3 +65,7 @@ next-env.d.ts
 
 # Sichtbogen aus scripts/contact-sheet.mjs und scripts/review-sheet.mjs
 .contact/
+
+# Sicherungen, die Datenskripte vor dem Schreiben anlegen.
+# Enthalten echte Inhalte aus der Produktionsdatenbank, bleiben lokal.
+.backup-*.json

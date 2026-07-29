@@ -48,9 +48,40 @@ const AIRCRO_BOOKING = {
 }
 
 const COURSES: SeedCourse[] = [
+  // ── Luftakrobatik: zwei Kurse, nicht einer ────────────────────────────────
+  // Lief zuerst als vier getrennte Eintraege im Code, einer pro Termin, dann
+  // als ein Kurs mit vier Slots. Beides war falsch: an beiden Tagen ist der
+  // fruehe Termin fuer die Bambinis und der spaete fuer Jugendliche. Zwei
+  // Altersgruppen sind zwei Angebote, und nur so greift auch der Filter auf
+  // der Trainingsseite, der pro Kurs arbeitet und nicht pro Termin.
   {
-    // Lief vorher als vier getrennte Eintraege im Code, einer pro Termin.
-    // Jetzt ein Kurs mit vier Slots — der Grund fuer die ganze Umstellung.
+    slug: 'luftakrobatik-aircrobatics-bambinis',
+    title: 'Luftakrobatik Bambinis',
+    sub: '4 bis 7 Jahre · mit Aircrobatics',
+    description:
+      'Luftakrobatik für die Kleinen, geführt von Aircrobatics. An Trapez, Reifen und Vertikaltuch klettern, hängen und schaukeln, spielerisch und in kleinen Schritten.',
+    inhalte: [
+      'Erste Figuren am Trapez',
+      'Klettern und Hängen am Vertikaltuch',
+      'Schaukeln und Drehen im Reifen',
+      'Körpergefühl, Kraft und Mut in der Höhe',
+    ],
+    alter: 'Für Kinder von 4 bis 7',
+    fuerWen: 'Kinder von 4 bis 7 Jahren',
+    target: CourseTarget.kinder,
+    trainer: 'Aircrobatics',
+    ...AIRCRO_BOOKING,
+    // Bewusst ohne Bild: die beiden vorhandenen Fotos zeigen erwachsene
+    // Artistinnen. Ein Foto, das den Kurs nicht zeigt, waere schlechter als
+    // gar keins; die Karte faellt dann auf das Farbband zurueck.
+    status: ContentStatus.PUBLISHED,
+    sortOrder: 10,
+    slots: [
+      { weekday: 1, startTime: '17:15', endTime: '18:15' },
+      { weekday: 3, startTime: '17:00', endTime: '18:00' },
+    ],
+  },
+  {
     slug: 'luftakrobatik-aircrobatics',
     title: 'Luftakrobatik',
     sub: 'Jugendliche · mit Aircrobatics',
@@ -72,11 +103,9 @@ const COURSES: SeedCourse[] = [
       { url: '/kurse/luftakrobatik-aircrobatics/02-vertikaltuch.jpg', alt: 'Artistin im Spagat am Vertikaltuch vor einer Hauswand' },
     ],
     status: ContentStatus.PUBLISHED,
-    sortOrder: 10,
+    sortOrder: 11,
     slots: [
-      { weekday: 1, startTime: '17:15', endTime: '18:15' },
       { weekday: 1, startTime: '18:15', endTime: '19:15' },
-      { weekday: 3, startTime: '17:00', endTime: '18:00' },
       { weekday: 3, startTime: '18:00', endTime: '19:00' },
     ],
   },

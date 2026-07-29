@@ -78,17 +78,27 @@ describe('sortSlots', () => {
 })
 
 describe('resolveSlug', () => {
-  it('führt die vier alten Luftakrobatik-Links auf den zusammengefassten Kurs', () => {
+  it('führt die alten Luftakrobatik-Links auf den Kurs der jeweiligen Altersgruppe', () => {
     // Vor der Umstellung war jeder Wochentermin ein eigener Kurs mit eigenem
     // Slug. Wer so einen Link geteilt hat, soll weiter beim Kurs landen.
-    for (const alt of [
-      'luftakrobatik-aircrobatics-mo-1715',
-      'luftakrobatik-aircrobatics-mo-1815',
-      'luftakrobatik-aircrobatics-mi-1700',
-      'luftakrobatik-aircrobatics-mi-1800',
-    ]) {
-      expect(resolveSlug(alt)).toBe('luftakrobatik-aircrobatics')
-    }
+    //
+    // Die vier zeigen bewusst nicht auf denselben Kurs: an beiden Tagen ist der
+    // frühe Termin der Bambini-Kurs (4 bis 7 Jahre), der späte der für
+    // Jugendliche. Ein Link auf „montags 17:15" muss deshalb bei den Bambinis
+    // landen. Genau das ging vorher schief, als beide Altersgruppen noch in
+    // einem Kurs steckten.
+    expect(resolveSlug('luftakrobatik-aircrobatics-mo-1715')).toBe(
+      'luftakrobatik-aircrobatics-bambinis'
+    )
+    expect(resolveSlug('luftakrobatik-aircrobatics-mi-1700')).toBe(
+      'luftakrobatik-aircrobatics-bambinis'
+    )
+    expect(resolveSlug('luftakrobatik-aircrobatics-mo-1815')).toBe(
+      'luftakrobatik-aircrobatics'
+    )
+    expect(resolveSlug('luftakrobatik-aircrobatics-mi-1800')).toBe(
+      'luftakrobatik-aircrobatics'
+    )
   })
 
   it('lässt unbekannte Slugs unverändert', () => {

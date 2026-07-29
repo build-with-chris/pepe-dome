@@ -93,17 +93,21 @@ export const LEERES_PROGRAMM: Kursprogramm = { kurse: [], woche: [] }
  * Alte Kurs-Slugs auf ihren heutigen Kurs.
  *
  * Luftakrobatik stand früher als vier getrennte Einträge im Code, einer pro
- * Wochentermin, jeder mit eigenem Slug. Für Besucher war das immer ein Kurs,
- * und in der Datenbank ist es jetzt auch einer. Wer noch einen der vier alten
- * Links geteilt hat, soll trotzdem beim richtigen Kurs landen.
+ * Wochentermin, jeder mit eigenem Slug. Wer noch einen der vier alten Links
+ * geteilt hat, soll trotzdem beim richtigen Kurs landen.
+ *
+ * Die vier zeigen nicht alle auf denselben Kurs: an beiden Tagen ist der frühe
+ * Termin der Bambini-Kurs (4 bis 7 Jahre), der späte der für Jugendliche. Ein
+ * geteilter Link auf „montags 17:15" muss deshalb beim Bambini-Kurs landen und
+ * nicht bei den Jugendlichen.
  *
  * Einmaliger Altbestand aus der Umstellung, wächst nicht mit. Neue Kurse
  * behalten ihren Slug beim Umbenennen, deshalb entsteht hier nichts Neues.
  */
 export const LEGACY_SLUGS: Readonly<Record<string, string>> = {
-  'luftakrobatik-aircrobatics-mo-1715': 'luftakrobatik-aircrobatics',
+  'luftakrobatik-aircrobatics-mo-1715': 'luftakrobatik-aircrobatics-bambinis',
   'luftakrobatik-aircrobatics-mo-1815': 'luftakrobatik-aircrobatics',
-  'luftakrobatik-aircrobatics-mi-1700': 'luftakrobatik-aircrobatics',
+  'luftakrobatik-aircrobatics-mi-1700': 'luftakrobatik-aircrobatics-bambinis',
   'luftakrobatik-aircrobatics-mi-1800': 'luftakrobatik-aircrobatics',
 }
 
