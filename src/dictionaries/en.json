@@ -93,15 +93,18 @@
       "quotes": [
         {
           "text": "If you want to become a circus artist yourself, Pepe Dome is the place to be.",
-          "source": "Süddeutsche Zeitung"
+          "source": "Süddeutsche Zeitung",
+          "url": "https://www.sueddeutsche.de/muenchen/zirkus-cirque-du-fleur-pepe-dom-muenchen-shows-li.3471709"
         },
         {
           "text": "A home for modern circus in Ostpark.",
-          "source": "tz"
+          "source": "tz",
+          "url": "https://www.tz.de/muenchen/stadt/muenchen-perlach-ostpark-pepe-dome-kulturhaus-projekt-heimat-kuenstler-zirkus-artisten-93987038.html"
         },
         {
           "text": "A stage seating 200, a training space, a place of learning and a neighbourhood hub.",
-          "source": "Süddeutsche Zeitung"
+          "source": "Süddeutsche Zeitung",
+          "url": "https://www.sueddeutsche.de/muenchen/zirkus-cirque-du-fleur-pepe-dom-muenchen-shows-li.3471709"
         }
       ]
     }

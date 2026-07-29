@@ -93,15 +93,18 @@
       "quotes": [
         {
           "text": "Wer selber Artist werden möchte, ist im Pepe-Dom bestens aufgehoben.",
-          "source": "Süddeutsche Zeitung"
+          "source": "Süddeutsche Zeitung",
+          "url": "https://www.sueddeutsche.de/muenchen/zirkus-cirque-du-fleur-pepe-dom-muenchen-shows-li.3471709"
         },
         {
           "text": "Heimat für modernen Zirkus im Ostpark.",
-          "source": "tz"
+          "source": "tz",
+          "url": "https://www.tz.de/muenchen/stadt/muenchen-perlach-ostpark-pepe-dome-kulturhaus-projekt-heimat-kuenstler-zirkus-artisten-93987038.html"
         },
         {
           "text": "Bühne mit 200 Plätzen, Trainingsort, Bildungsstätte und Stadtteiltreff.",
-          "source": "Süddeutsche Zeitung"
+          "source": "Süddeutsche Zeitung",
+          "url": "https://www.sueddeutsche.de/muenchen/zirkus-cirque-du-fleur-pepe-dom-muenchen-shows-li.3471709"
         }
       ]
     }
