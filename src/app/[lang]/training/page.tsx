@@ -34,6 +34,7 @@ import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
 import { getKursprogramm } from '@/lib/db-courses'
+import { CoursesJsonLd } from '@/components/seo/JsonLd'
 
 /**
  * Sicherheitsnetz unter der gezielten Neuerzeugung: einmal pro Stunde zieht
@@ -72,6 +73,7 @@ export default async function TrainingPage({
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      <CoursesJsonLd programm={programm} />
       <StickyBookingButton targetId="buchung" />
 
       {/* ── HERO ── */}

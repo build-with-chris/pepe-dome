@@ -14,20 +14,35 @@
 import { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo'
 
+// Gilt für alle Bots und wird für die KI-Crawler wörtlich wiederholt.
+const DISALLOW = [
+  '/admin/',
+  '/api/',
+  '/*/newsletter/confirm',
+  '/*/newsletter/unsubscribe',
+  '/*/newsletter/unsubscribed',
+]
+
+// Grosse KI-Crawler ausdrücklich benennen. Über `*` sind sie ohnehin erlaubt;
+// der eigene Eintrag macht die Absicht sichtbar und verhindert, dass ein später
+// ergänztes generelles Verbot sie versehentlich mit aussperrt.
+const AI_CRAWLERS = [
+  'GPTBot',
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  'ClaudeBot',
+  'Claude-Web',
+  'Google-Extended',
+  'PerplexityBot',
+  'CCBot',
+  'Applebot-Extended',
+]
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: [
-          '/admin/',
-          '/api/',
-          '/*/newsletter/confirm',
-          '/*/newsletter/unsubscribe',
-          '/*/newsletter/unsubscribed',
-        ],
-      },
+      { userAgent: '*', allow: '/', disallow: DISALLOW },
+      ...AI_CRAWLERS.map((userAgent) => ({ userAgent, allow: '/', disallow: DISALLOW })),
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

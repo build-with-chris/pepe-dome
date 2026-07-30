@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
-import { ItemListJsonLd } from '@/components/seo/JsonLd'
+import { ItemListJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 
 export async function generateMetadata({
   params,
@@ -62,6 +62,12 @@ export default async function NewsPage({
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Pepe Dome', url: `/${lang}` },
+          { name: t.meta.title, url: `/${lang}/news` },
+        ]}
+      />
       <ItemListJsonLd
         name={t.meta.title}
         items={allArticles.map((article) => ({

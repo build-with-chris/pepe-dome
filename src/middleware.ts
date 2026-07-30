@@ -40,6 +40,25 @@ function maybeRedirectToLocale(req: NextRequest): NextResponse | null {
   return null
 }
 
+/**
+ * Locale aus dem URL-Prefix, für den Durchlauf ans Root-Layout.
+ *
+ * Das Root-Layout rendert <html> und kann den [lang]-Parameter nicht sehen. Damit
+ * `<html lang>` schon serverseitig stimmt (wichtig für KI-Crawler ohne JS auf
+ * /en-Seiten), reicht die Middleware die erkannte Locale als Request-Header durch.
+ */
+function localeFromPath(pathname: string): Locale {
+  const first = pathname.split('/')[1]
+  return (LOCALES as readonly string[]).includes(first) ? (first as Locale) : DEFAULT_LOCALE
+}
+
+/** Durchgereichte Antwort mit x-locale-Header für das Root-Layout. */
+function passThrough(req: NextRequest): NextResponse {
+  const headers = new Headers(req.headers)
+  headers.set('x-locale', localeFromPath(req.nextUrl.pathname))
+  return NextResponse.next({ request: { headers } })
+}
+
 // ── Setup ───────────────────────────────────────────────────────────────
 
 // Set NEXT_PUBLIC_DISABLE_CLERK_IN_DEV=true in .env to browse the frontend without login (avoids JWKS errors)
@@ -120,7 +139,7 @@ export default skipClerkInDev
   ? function middleware(req: NextRequest) {
       const redirect = maybeRedirectToLocale(req)
       if (redirect) return applySecurityHeaders(redirect)
-      return applySecurityHeaders(NextResponse.next())
+      return applySecurityHeaders(passThrough(req))
     }
   : clerkMiddleware(async (auth, req) => {
       // Locale-Redirect zuerst — vor Auth-Check, damit auch nicht-eingeloggte
@@ -143,7 +162,7 @@ export default skipClerkInDev
         }
       }
 
-      return applySecurityHeaders(NextResponse.next())
+      return applySecurityHeaders(passThrough(req))
     })
 
 export const config = {

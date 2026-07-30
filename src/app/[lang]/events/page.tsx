@@ -12,7 +12,7 @@ import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
 import { getUpcomingEvents } from '@/lib/db-data'
-import { ItemListJsonLd } from '@/components/seo/JsonLd'
+import { ItemListJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import EventsListingClient from '@/components/custom/EventsListingClient'
 
 export async function generateMetadata({
@@ -63,6 +63,12 @@ export default async function EventsPage({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Pepe Dome', url: `/${lang}` },
+          { name: dict.events.meta.title, url: `/${lang}/events` },
+        ]}
+      />
       <ItemListJsonLd
         name={dict.events.meta.title}
         items={upcoming.map((event) => ({

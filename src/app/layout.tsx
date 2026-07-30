@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Outfit, Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
@@ -7,7 +8,8 @@ import I18nProvider from '@/components/layout/I18nProvider'
 import ConsentBanner from '@/components/consent/ConsentBanner'
 import ConsentScripts from '@/components/consent/ConsentScripts'
 import { getSiteContent } from '@/lib/data'
-import { OrganizationJsonLd } from '@/components/seo/JsonLd'
+import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd'
+import { isLocale, DEFAULT_LOCALE, type Locale } from '@/i18n/config'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -91,13 +93,16 @@ const skipClerkInDev =
 
 function LayoutContent({
   children,
+  lang,
 }: Readonly<{
   children: React.ReactNode
+  lang: Locale
 }>) {
   return (
-    <html lang="de" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang={lang} className={`${outfit.variable} ${inter.variable}`}>
       <body className="antialiased">
         <OrganizationJsonLd />
+        <WebSiteJsonLd />
         <I18nProvider>
           <ConditionalLayout>
             {children}
@@ -111,17 +116,22 @@ function LayoutContent({
   )
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Locale kommt aus dem von der Middleware gesetzten x-locale-Header, damit
+  // <html lang> serverseitig stimmt (auch für JS-lose Crawler auf /en-Seiten).
+  const headerLocale = (await headers()).get('x-locale')
+  const lang: Locale = isLocale(headerLocale ?? '') ? (headerLocale as Locale) : DEFAULT_LOCALE
+
   if (skipClerkInDev) {
-    return <LayoutContent>{children}</LayoutContent>
+    return <LayoutContent lang={lang}>{children}</LayoutContent>
   }
   return (
     <ClerkProvider>
-      <LayoutContent>{children}</LayoutContent>
+      <LayoutContent lang={lang}>{children}</LayoutContent>
     </ClerkProvider>
   )
 }

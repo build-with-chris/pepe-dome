@@ -11,6 +11,7 @@
 import { jsonLdScriptContent } from '@/lib/json-ld'
 import { getSiteContent } from '@/lib/data'
 import { isFreeEntry } from '@/lib/event-price'
+import type { Kursprogramm } from '@/lib/course-types'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
@@ -44,14 +45,37 @@ type OrganizationLdProps = {
  *               leeres Array da, was denselben Effekt hat wie weglassen.
  *   image       Ohne Bild kein Bild im Ergebnis-Panel.
  *   hasMap      Verlinkt den Kartenausschnitt.
- *
- * Bewusst nicht drin: `geo`. Falsche Koordinaten sind schlechter als keine, weil
- * sie den Kartenpin verschieben und die vollständige Adresse überstimmen. Wenn
- * die exakten Koordinaten des Domes vorliegen, gehören sie hier hinein.
+ *   geo         Koordinaten der Anschrift (OpenStreetMap-Geocode von
+ *               Albert-Schweitzer-Straße 62, 81735 München). Setzt den Kartenpin
+ *               exakt; falsche Koordinaten wären schlechter als keine, deshalb
+ *               stammen sie aus einem Geocode der echten Adresse, nicht geschätzt.
+ *   openingHoursSpecification  Die Werktags-Öffnungszeiten aus getSiteContent().
+ *               Das Wochenende ist „Nach Veranstaltungsplan" und lässt sich nicht
+ *               schema-konform ausdrücken — es bleibt deshalb weg.
  *
  * Die Werte kommen aus getSiteContent(), damit Adresse und Telefonnummer nicht
  * an zwei Orten gepflegt werden müssen.
  */
+
+/** GeoCoordinates des Domes — Geocode der Anschrift via OpenStreetMap/Nominatim. */
+const GEO_COORDINATES = { latitude: 48.107266, longitude: 11.644669 } as const
+
+/**
+ * Baut aus einem Freitext wie „12:00 - 21:00" eine OpeningHoursSpecification für
+ * Mo–Fr. Passt der Text nicht ins Muster, gibt es lieber keine Angabe als eine
+ * falsche — dann greift die schema-Auslassung.
+ */
+function weekdayOpeningHours(weekdays?: string): Record<string, unknown> | null {
+  if (!weekdays) return null
+  const match = weekdays.match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/)
+  if (!match) return null
+  return {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: match[1],
+    closes: match[2],
+  }
+}
 export function OrganizationJsonLd({
   name,
   description,
@@ -87,8 +111,11 @@ export function OrganizationJsonLd({
       'https://www.google.com/maps/search/?api=1&query=Pepe+Dome+Theatron+im+Ostpark+M%C3%BCnchen',
     image: [`${BASE_URL}/og-image.png`, `${BASE_URL}/images/Aufbau/dome-outdoor-hero.webp`],
     areaServed: { '@type': 'City', name: 'München' },
+    geo: { '@type': 'GeoCoordinates', ...GEO_COORDINATES },
   }
 
+  const openingHours = weekdayOpeningHours(site.hours?.weekdays)
+  if (openingHours) data.openingHoursSpecification = openingHours
   if (site.phone) data.telephone = site.phone
   if (socialProfiles.length > 0) data.sameAs = socialProfiles
 
@@ -425,6 +452,116 @@ export function ArticleJsonLd({
 
   if (image) data.image = image
   if (tags && tags.length > 0) data.keywords = tags.join(', ')
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
+    />
+  )
+}
+
+/**
+ * WebSite als eigenes Objekt.
+ *
+ * Suchmaschinen und KI-Crawler behandeln „die Organisation" und „die Website"
+ * als zwei verschiedene Dinge. Ohne WebSite-Knoten fehlt die Klammer, die Name,
+ * Sprachen und Herausgeber der Domain benennt. Bewusst keine SearchAction: es
+ * gibt keine seiteninterne Suche, und eine erfundene Such-URL würde ins Leere
+ * zeigen.
+ */
+export function WebSiteJsonLd() {
+  const site = getSiteContent()
+
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: BASE_URL,
+    inLanguage: ['de', 'en'],
+    publisher: { '@type': 'Organization', name: site.name, url: BASE_URL },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: jsonLdScriptContent(data) }}
+    />
+  )
+}
+
+// Wochentag (1 = Montag … 7 = Sonntag, ISO-8601) auf den schema.org-Tagesnamen.
+// Index 0 bleibt leer, damit der Wochentag direkt als Index dient.
+const SCHEMA_WEEKDAYS = [
+  '', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+] as const
+
+/**
+ * Course-JSON-LD für das Kursprogramm.
+ *
+ * Die Kursdaten (Trainer, Wochentermine, Buchungslink) liegen in der Datenbank,
+ * tauchten aber bisher in keinem strukturierten Datum auf — eine Suchmaschine
+ * sah nur eine Seite mit einem Wochenraster. Als Course versteht sie jedes
+ * Angebot als eigenständiges Kursformat mit Zeitplan und Anbieter.
+ *
+ * Ein `@graph` bündelt alle Kurse in ein Script. Bewusst kein `price`: in den
+ * Kursdaten steht kein Preis, und ein erfundener wäre schlechter als keiner.
+ * `inLanguage: 'de'`, weil die Kurstexte nur auf Deutsch gepflegt sind.
+ */
+export function CoursesJsonLd({ programm }: { programm: Kursprogramm }) {
+  if (programm.kurse.length === 0) return null
+
+  const site = getSiteContent()
+  const address = {
+    '@type': 'PostalAddress',
+    streetAddress: site.address?.street,
+    addressLocality: site.address?.city,
+    addressRegion: 'Bayern',
+    postalCode: site.address?.zip,
+    addressCountry: 'DE',
+  }
+
+  const courses = programm.kurse.map((kurs) => {
+    const image = kurs.bilder[0]?.url
+    const courseSchedule = kurs.slots
+      .filter((slot) => SCHEMA_WEEKDAYS[slot.weekday])
+      .map((slot) => ({
+        '@type': 'Schedule',
+        repeatFrequency: 'P1W',
+        byDay: SCHEMA_WEEKDAYS[slot.weekday],
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+      }))
+
+    const instance: Record<string, unknown> = {
+      '@type': 'CourseInstance',
+      courseMode: 'onsite',
+      location: { '@type': 'Place', name: site.name, address },
+    }
+    if (kurs.trainer) instance.instructor = { '@type': 'Person', name: kurs.trainer }
+    if (courseSchedule.length > 0) instance.courseSchedule = courseSchedule
+
+    const course: Record<string, unknown> = {
+      '@type': 'Course',
+      name: kurs.title,
+      description: kurs.description,
+      inLanguage: 'de',
+      provider: { '@type': 'Organization', name: site.name, url: BASE_URL },
+      hasCourseInstance: instance,
+    }
+    if (image) course.image = image.startsWith('http') ? image : `${BASE_URL}${image}`
+    if (kurs.bookingUrl) {
+      course.offers = {
+        '@type': 'Offer',
+        url: kurs.bookingUrl,
+        availability: 'https://schema.org/InStock',
+        category: 'Kurs',
+      }
+    }
+    return course
+  })
+
+  const data = { '@context': 'https://schema.org', '@graph': courses }
 
   return (
     <script
