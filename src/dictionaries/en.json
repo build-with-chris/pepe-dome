@@ -467,6 +467,10 @@
       "description": "Behind Pepe Dome stands the PepeCollective, a committed network of artists, cultural workers and organisers with more than 15 years of experience.",
       "cta": "Meet the team"
     },
+    "supporters": {
+      "title": "Supported by",
+      "text": "Pepe Dome is funded by the cultural department of the City of Munich and by Kreativ München, and through urban development funding from the federal government, the Free State of Bavaria and the City of Munich."
+    },
     "location": {
       "title": "Visit us at the Dome",
       "text": "Pepe Dome sits in the lovely Ostpark in Munich. It's easy to reach by public transport, with parking nearby.",

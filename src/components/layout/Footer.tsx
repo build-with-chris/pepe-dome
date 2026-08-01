@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { Instagram } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
+import SupporterLogos from '@/components/custom/SupporterLogos'
 import { openConsentSettings } from '@/lib/consent'
 import { LOCALES, localizedHref, type Locale } from '@/i18n/config'
 
@@ -119,6 +120,15 @@ export default function Footer() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Förderer. Stehen auf jeder Seite, nicht nur unter „Über uns“: wer
+            wissen will, wer hinter dem Dome steht, schaut zuerst nach unten. */}
+        <div className="border-t border-[var(--pepe-line)] pt-8 pb-2 mt-4">
+          <p className="mb-5 text-center text-xs font-semibold uppercase tracking-widest text-[var(--pepe-t64)]">
+            {t('footer.supporters', 'Unterstützt von')}
+          </p>
+          <SupporterLogos variant="footer" />
         </div>
 
         {/* Footer Bottom */}

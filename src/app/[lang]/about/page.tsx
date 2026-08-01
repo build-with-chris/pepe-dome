@@ -11,6 +11,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getSiteContent } from '@/lib/data'
 import HeroSection from '@/components/custom/HeroSection'
+import SupporterLogos from '@/components/custom/SupporterLogos'
 import { Button } from '@/components/ui/Button'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
@@ -326,6 +327,21 @@ export default async function AboutPage({
             <Link href={localizedHref(lang, '/contact')}>
               <Button variant="secondary" size="lg">{t.team.cta}</Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Förderer */}
+      <section className="py-20 md:py-32">
+        <div className="stage-container">
+          <div className="mx-auto max-w-[52rem] text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-6">
+              {t.supporters.title}
+            </h2>
+            <p className="mx-auto mb-12 max-w-[40rem] text-lg text-[var(--pepe-t80)] leading-relaxed">
+              {t.supporters.text}
+            </p>
+            <SupporterLogos />
           </div>
         </div>
       </section>

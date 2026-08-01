@@ -467,6 +467,10 @@
       "description": "Hinter dem Pepe Dome steht das PepeCollective, ein engagiertes Netzwerk aus Artist:innen, Kulturschaffenden und Organisator:innen mit über 15 Jahren Erfahrung.",
       "cta": "Lerne uns kennen"
     },
+    "supporters": {
+      "title": "Unterstützt von",
+      "text": "Der Pepe Dome wird vom Kulturreferat der Landeshauptstadt München und von Kreativ München gefördert sowie durch Städtebauförderungsmittel von Bund, Freistaat Bayern und Landeshauptstadt München."
+    },
     "location": {
       "title": "Besuche uns im Dome",
       "text": "Der PEPE Dome liegt im schönen Ostpark in München. Du erreichst ihn gut mit öffentlichen Verkehrsmitteln, Parkplätze gibt es in der Nähe.",
