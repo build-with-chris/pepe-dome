@@ -79,6 +79,11 @@ export default function Footer() {
               <h4 className="footer-title">{t('footer.navigation', 'Navigation')}</h4>
               <div className="footer-link-group">
                 <Link href={href('/events')} className="footer-link">{t('navigation.events', 'Events')}</Link>
+                {/* Training und Café fehlten hier, obwohl beide eigene Seiten
+                    haben und in der Kopfzeile stehen. Wer unten sucht, kam nicht
+                    hin. */}
+                <Link href={href('/training')} className="footer-link">{t('navigation.training', 'Training')}</Link>
+                <Link href={href('/cafe')} className="footer-link">{t('navigation.cafe', 'Café')}</Link>
                 <Link href={href('/galerie')} className="footer-link">{t('navigation.gallery', 'Galerie')}</Link>
                 <Link href={href('/news')} className="footer-link">{t('navigation.news', 'News')}</Link>
                 <Link href={href('/newsletter')} className="footer-link">{t('footer.newsletter', 'Newsletter')}</Link>

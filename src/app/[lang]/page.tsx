@@ -391,7 +391,6 @@ export default async function HomePage({
                   fill
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   sizes="(max-width: 639px) 92vw, 300px"
-                  unoptimized
                 />
               </div>
 
@@ -488,6 +487,19 @@ export default async function HomePage({
           </p>
         </div>
         <VideoCarousel />
+        {/* Weg zur Galerie.
+            70 Bilder mit Lightbox sind der stärkste Grund, länger zu bleiben,
+            und waren von der Startseite aus nur über das Klappmenü "Mehr"
+            erreichbar. Hier steht der Hinweis da, wo gerade Bewegtbild läuft. */}
+        <div className="stage-container mt-8 text-center">
+          <Link
+            href={localizedHref(lang, '/galerie')}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--pepe-accent-text)] underline-offset-4 hover:underline"
+          >
+            {t.videoCarousel.galleryLink}
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
       </section>
 
       {/* ===== Latest News ===== */}

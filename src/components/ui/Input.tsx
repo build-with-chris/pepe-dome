@@ -26,9 +26,15 @@ const inputVariants = cva(
   ].join(" "),
   {
     variants: {
+      /**
+       * Schriftgrößen ab 16px, damit iOS Safari beim Antippen nicht die ganze
+       * Seite zoomt. Alles unter 16px löst diesen Zoom aus, und danach steht
+       * das Layout verschoben da. Deshalb auf dem Handy 16px (text-base) und
+       * erst ab sm die kleinere Optik.
+       */
       inputSize: {
-        sm: "h-8 text-xs px-2",
-        md: "h-10 text-sm px-3",
+        sm: "h-8 text-base sm:text-xs px-2",
+        md: "h-10 text-base sm:text-sm px-3",
         lg: "h-12 text-base px-4",
       },
       hasError: {

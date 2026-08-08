@@ -46,7 +46,8 @@
     },
     "videoCarousel": {
       "title": "Experience the Dome live.",
-      "subtitle": "Contemporary circus at the highest level"
+      "subtitle": "Contemporary circus at the highest level",
+      "galleryLink": "See all photos"
     },
     "upcomingEvents": {
       "title": "Upcoming Events",
@@ -138,6 +139,12 @@
       "breadcrumbHome": "Home",
       "breadcrumbNews": "News",
       "notFound": "Article not found"
+    },
+    "empty": {
+      "title": "No posts yet",
+      "text": "Reports from the dome are in the making. Until the first one is online: the calendar shows what is coming up, and the gallery shows what it looks like here.",
+      "eventsCta": "See the calendar",
+      "galleryCta": "See the gallery"
     }
   },
   "business": {

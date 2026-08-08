@@ -46,7 +46,8 @@
     },
     "videoCarousel": {
       "title": "Erlebe den Dome live.",
-      "subtitle": "Zeitgenössischer Zirkus auf höchstem Niveau"
+      "subtitle": "Zeitgenössischer Zirkus auf höchstem Niveau",
+      "galleryLink": "Alle Bilder ansehen"
     },
     "upcomingEvents": {
       "title": "Kommende Events",
@@ -138,6 +139,12 @@
       "breadcrumbHome": "Home",
       "breadcrumbNews": "News",
       "notFound": "Artikel nicht gefunden"
+    },
+    "empty": {
+      "title": "Noch keine Beiträge",
+      "text": "Hier entstehen Berichte aus dem Dome. Solange noch keiner online ist: Im Kalender steht, was als Nächstes stattfindet, und in der Galerie siehst du, wie es bei uns aussieht.",
+      "eventsCta": "Zum Kalender",
+      "galleryCta": "Zur Galerie"
     }
   },
   "business": {

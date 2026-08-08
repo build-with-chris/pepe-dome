@@ -251,10 +251,13 @@ export default function SignupForm({
         onSuccess()
       }
 
-      // Reset to idle after 5 seconds
-      setTimeout(() => {
-        setStatus('idle')
-      }, 5000)
+      /**
+       * Kein Zurücksetzen nach fünf Sekunden.
+       *
+       * Vorher kam das leere Formular von selbst zurück. Wer kurz wegsah, hatte
+       * danach keinen Hinweis mehr, dass die Anmeldung durch ist, und trug sich
+       * ein zweites Mal ein. Die Bestätigung bleibt jetzt stehen.
+       */
     } catch (error: unknown) {
       setStatus('error')
       if (error instanceof Error) {
@@ -353,6 +356,11 @@ export default function SignupForm({
               required
               disabled={status === 'loading'}
               hasError={!!validationError}
+              // Ohne autoComplete tippt jeder seine Adresse von Hand, und ohne
+              // aria-label sagt ein Screenreader nur "Textfeld".
+              autoComplete="email"
+              aria-label={t.emailLabel}
+              aria-invalid={validationError ? true : undefined}
             />
             {validationError && (
               <p className="text-xs text-[var(--pepe-error)] mt-1">{validationError}</p>
@@ -409,6 +417,7 @@ export default function SignupForm({
               required
               disabled={status === 'loading'}
               hasError={!!validationError && (validationError.includes('E-Mail') || validationError.includes('e-mail'))}
+              autoComplete="email"
             />
           </div>
 

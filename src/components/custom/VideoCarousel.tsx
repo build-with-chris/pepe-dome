@@ -50,7 +50,15 @@ export default function VideoCarousel({
   }, [])
 
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(autoPlay)
+  /**
+   * Erst spielen, wenn der Abschnitt im Blick ist.
+   *
+   * Vorher startete das Video beim Mount, also weit oberhalb der Falte, und
+   * zog dabei bis zu 4 MB. Auf dem Handy kostet das die Ladezeit des ersten
+   * Bildschirms, den niemand für dieses Video ausgibt.
+   */
+  const [imBlick, setImBlick] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
@@ -78,10 +86,35 @@ export default function VideoCarousel({
     const main = mobileMainRef.current
     if (!main || !videos[activeIndex]) return
     main.muted = isMuted
+    // Nichts anfassen, solange der Abschnitt nicht im Blick war: load() würde
+    // sonst die ganze Datei holen, obwohl niemand hinsieht.
+    if (!imBlick) return
     main.currentTime = 0
     main.load()
     if (isPlaying) main.play().catch(() => {})
-  }, [activeIndex, isPlaying, videos, isMuted])
+  }, [activeIndex, isPlaying, videos, isMuted, imBlick])
+
+  /**
+   * Beobachtet den Abschnitt und startet die Wiedergabe beim Hereinscrollen.
+   * Einmal ausgelöst, bleibt es dabei: wer weiterscrollt und zurückkommt, soll
+   * nicht jedes Mal von vorn laden.
+   */
+  useEffect(() => {
+    const ziel = mobileContainerRef.current ?? desktopActiveContainerRef.current
+    if (!ziel) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        setImBlick(true)
+        if (autoPlay) setIsPlaying(true)
+        observer.disconnect()
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(ziel)
+    return () => observer.disconnect()
+  }, [autoPlay])
 
   const handleVideoEnd = () => {
     setActiveIndex((prev) => (prev + 1) % videos.length)
@@ -204,7 +237,9 @@ export default function VideoCarousel({
                 playsInline
                 loop={false}
                 onEnded={handleVideoEnd}
-                preload="auto"
+                // Nichts vorladen, bevor der Abschnitt im Blick ist. Vorher
+                // luden hier bis zu 4 MB, waehrend der Nutzer noch im Hero war.
+                preload={imBlick ? 'metadata' : 'none'}
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[var(--pepe-gold)] ring-offset-2 ring-offset-[var(--pepe-black)]" />
 
@@ -337,7 +372,7 @@ export default function VideoCarousel({
                       const v = e.currentTarget
                       if (index !== activeIndex) v.currentTime = THUMBNAIL_TIME
                     }}
-                    preload={index === activeIndex ? 'auto' : 'none'}
+                    preload={index === activeIndex && imBlick ? 'metadata' : 'none'}
                   />
                   {index === activeIndex && (
                     <>

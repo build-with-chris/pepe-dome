@@ -2,19 +2,16 @@
  * News Listing Page — localized (DE / EN)
  *
  * UI-Chrome lokalisiert, Artikel-Daten kommen weiterhin aus der DB
- * (zur Zeit nur Deutsch). Filter-Buttons ohne aktive State-Logic
+ * (zur Zeit nur Deutsch). Kategoriefilter gibt es hier nicht
  * (matching das bestehende Verhalten).
  */
 
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getCategories } from '@/lib/data'
 import { getAllArticles, getFeaturedArticles } from '@/lib/db-data'
 import NewsCard from '@/components/custom/NewsCard'
 import HeroSection from '@/components/custom/HeroSection'
-import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
@@ -54,7 +51,6 @@ export default async function NewsPage({
     getAllArticles(lang),
     getFeaturedArticles(lang),
   ])
-  const categories = getCategories().news
   const newsHref = localizedHref(lang, '/news')
 
   const featuredArticle = featuredArticles[0] || allArticles[0]
@@ -83,32 +79,6 @@ export default async function NewsPage({
       />
 
       <div className="stage-container py-20 md:py-32">
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-3 justify-center mb-16">
-          <button
-            className={cn(
-              'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
-              'border backdrop-blur-sm',
-              'bg-[var(--pepe-gold)] text-white border-[var(--pepe-gold)] shadow-[0_0_16px_var(--pepe-gold-glow),0_4px_12px_rgba(0,0,0,0.3)]'
-            )}
-          >
-            {t.filter.all}
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              className={cn(
-                'px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ease-out',
-                'border backdrop-blur-sm',
-                'bg-[var(--pepe-ink)]/80 text-[var(--pepe-t80)] border-[var(--pepe-line)]',
-                'hover:border-[var(--pepe-gold)]/60 hover:text-[var(--pepe-accent-text)] hover:shadow-[0_0_12px_var(--pepe-gold-glow)] hover:bg-[var(--pepe-gold)]/5'
-              )}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
         {featuredArticle && (
           <div className="mb-16">
             <NewsCard
@@ -149,11 +119,21 @@ export default async function NewsPage({
           </div>
         )}
 
-        {remainingArticles.length >= 9 && (
-          <div className="text-center mt-12">
-            <Button variant="secondary" size="lg" disabled>
-              {t.loadMore}
-            </Button>
+        {/* Kein Artikel da: nicht mit einer leeren Seite enden, sondern
+            weiterschicken. Vorher stand hier nur der Hero und eine Reihe
+            Filterknöpfe, die nichts taten. */}
+        {!featuredArticle && remainingArticles.length === 0 && (
+          <div className="mx-auto max-w-[36rem] text-center">
+            <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-3">{t.empty.title}</h2>
+            <p className="text-[var(--pepe-t64)] mb-8">{t.empty.text}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href={localizedHref(lang, '/events')} className="btn btn-primary btn-md">
+                {t.empty.eventsCta}
+              </Link>
+              <Link href={localizedHref(lang, '/galerie')} className="btn btn-secondary btn-md">
+                {t.empty.galleryCta}
+              </Link>
+            </div>
           </div>
         )}
       </div>

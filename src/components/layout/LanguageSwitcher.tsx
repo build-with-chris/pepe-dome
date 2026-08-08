@@ -9,9 +9,10 @@
  */
 
 import { useState, useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import i18n from '@/lib/i18n'
 import { LOCALES, type Locale } from '@/i18n/config'
+import { switchLocalePath } from '@/lib/locale-path'
 
 interface LanguageSwitcherProps {
   className?: string
@@ -31,6 +32,7 @@ function urlHasLocale(pathname: string | null): boolean {
 export default function LanguageSwitcher({ className = '', variant = 'default' }: LanguageSwitcherProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [current, setCurrent] = useState<Locale>('de')
 
   // Sprache aus URL ableiten, fallback auf i18next-Wert
@@ -51,10 +53,10 @@ export default function LanguageSwitcher({ className = '', variant = 'default' }
     setCurrent(lang)
 
     if (urlHasLocale(pathname)) {
-      // URL hat schon einen Locale-Prefix → einfach austauschen, Next.js navigiert
-      const segments = pathname!.split('/')
-      segments[1] = lang
-      const newPath = segments.join('/') || `/${lang}`
+      // URL hat schon einen Locale-Prefix → einfach austauschen, Next.js navigiert.
+      // Die Query kommt mit, sonst gehen die utm-Parameter aus der Anzeige beim
+      // ersten Sprachwechsel verloren. Siehe src/lib/locale-path.ts.
+      const newPath = switchLocalePath(pathname!, searchParams?.toString(), lang)
       i18n.changeLanguage(lang)
       router.push(newPath)
       return
