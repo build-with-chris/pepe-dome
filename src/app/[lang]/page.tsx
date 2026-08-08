@@ -178,7 +178,15 @@ export default async function HomePage({
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
               {t.hero.title}
             </h1>
-            <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold-hover)] font-semibold max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
+            {/*
+              Der Untertitel erklärt, er ruft nicht.
+              Vorher stand er fett und in Markenblau direkt unter der fetten
+              weissen Überschrift, auf dem Handy in drei Zeilen. Zwei Titel
+              nebeneinander, und der erste Bildschirm wirkte überladen. Jetzt
+              normale Schrift in gedecktem Weiss. Der Schatten bleibt, das Video
+              darunter ist stellenweise hell.
+            */}
+            <p className="mt-4 text-base md:text-xl text-[var(--pepe-t80)] max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
               {t.hero.subtitle}
             </p>
 
@@ -217,30 +225,27 @@ export default async function HomePage({
             also gegen eine grössere Zahl als die 100dvh des Elternteils — auf
             iOS Safari passten die Teile deshalb nicht zusammen und der
             CTA-Block wurde zu hoch. */}
-        <div className="relative z-10 h-[20dvh] min-h-[160px] flex flex-col items-center justify-center pt-[4dvh] md:pt-0 pb-6 md:pb-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-4 sm:gap-6 justify-center">
+        <div className="relative z-10 flex h-auto flex-col items-center justify-center pt-4 pb-6 md:h-[20dvh] md:min-h-[160px] md:pt-0 md:pb-8">
+          <div className="flex flex-col items-center gap-4 justify-center">
             <Link href={localizedHref(lang, '/events')} className="w-full sm:w-auto flex justify-center sm:block">
               <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
                 {t.hero.ctaPrimary}
               </Button>
             </Link>
-            <Link href={localizedHref(lang, '/training')} className="w-full sm:w-auto flex justify-center sm:block">
-              {/*
-                Hellerer Rahmen als sonst: .btn-secondary rahmt mit
-                --pepe-line, also #333. Über dem dunklen Hero sind das etwa
-                1,4 zu 1 Kontrast, der Button war praktisch nicht als Button zu
-                erkennen. Der Rahmen sitzt als Inline-Stil, weil components.css
-                die Farbe in der Kurzschreibweise border setzt und eine
-                Utility-Klasse daran nicht zuverlässig vorbeikommt.
-              */}
-              <Button
-                variant="secondary"
-                size="xl"
-                className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto"
-                style={{ borderColor: 'rgba(255,255,255,0.45)' }}
-              >
-                {t.hero.ctaSecondary}
-              </Button>
+            {/*
+              Ein Weg, nicht zwei gleichrangige.
+              Vorher standen hier zwei gleich grosse Buttons, auf dem Handy
+              untereinander, zusammen rund 160 Pixel. Das Training ist der
+              engere Weg und steht deshalb als Textlink darunter. Nebeneffekt:
+              der alte zweite Button war mit seinem #333-Rahmen ueber dem
+              dunklen Hero ohnehin kaum als Button zu erkennen.
+            */}
+            <Link
+              href={localizedHref(lang, '/training')}
+              className="inline-flex items-center gap-2 py-2 text-base font-semibold text-[var(--pepe-t80)] underline-offset-4 transition-colors hover:text-[var(--pepe-white)] hover:underline [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]"
+            >
+              {t.hero.ctaSecondary}
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
