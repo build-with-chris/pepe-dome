@@ -41,19 +41,39 @@ const ITEMS_PER_PAGE = 9
 export default function EventsListingClient({
   lang,
   dict,
+  initialMonth,
+  initialEvents,
 }: {
   lang: Locale
   dict: Dictionary
+  /**
+   * Monat, den der Server ausgewählt und geladen hat. Fehlt er, holt die
+   * Komponente sich alles selbst. Das ist die Rückfallebene für den Fall, dass
+   * die Datenbank beim Rendern der Seite nicht erreichbar war.
+   */
+  initialMonth?: { year: number; month: number } | null
+  initialEvents?: EventData[] | null
 }) {
   const t = dict.events
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
   const now = new Date()
-  const [events, setEvents] = useState<EventData[]>([])
-  const [loading, setLoading] = useState(true)
-  const [year, setYear] = useState(now.getFullYear())
-  const [month, setMonth] = useState(now.getMonth() + 1)
-  const [initialized, setInitialized] = useState(false)
+  const [events, setEvents] = useState<EventData[]>(initialEvents ?? [])
+  const [loading, setLoading] = useState(!initialMonth)
+  const [year, setYear] = useState(initialMonth?.year ?? now.getFullYear())
+  const [month, setMonth] = useState(initialMonth?.month ?? now.getMonth() + 1)
+  const [initialized, setInitialized] = useState(Boolean(initialMonth))
+  /**
+   * Welcher Monat schon im Zustand liegt.
+   *
+   * Der vom Server gelieferte Monat darf beim ersten Rendern nicht noch einmal
+   * abgerufen werden, sonst wäre die Ersparnis wieder weg. Beim Blättern und
+   * beim späteren Zurückblättern wird dagegen frisch geladen, Termine ändern
+   * sich.
+   */
+  const geladenerMonat = useRef<string | null>(
+    initialMonth ? `${initialMonth.year}-${initialMonth.month}` : null
+  )
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showPast] = useState(false)
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
@@ -61,6 +81,9 @@ export default function EventsListingClient({
   const monthNavRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Hat der Server den Monat schon bestimmt, ist hier nichts zu tun.
+    if (initialMonth) return
+
     async function initMonth() {
       try {
         const res = await fetch('/api/events/next-available')
@@ -76,7 +99,7 @@ export default function EventsListingClient({
       }
     }
     initMonth()
-  }, [])
+  }, [initialMonth])
 
   useEffect(() => {
     const el = monthNavRef.current
@@ -91,6 +114,10 @@ export default function EventsListingClient({
 
   useEffect(() => {
     if (!initialized) return
+
+    const schluessel = `${year}-${month}`
+    if (geladenerMonat.current === schluessel) return
+
     async function fetchEvents() {
       setLoading(true)
       try {
@@ -98,6 +125,7 @@ export default function EventsListingClient({
         if (res.ok) {
           const data = await res.json()
           setEvents(data)
+          geladenerMonat.current = schluessel
         }
       } catch (error) {
         console.error('Failed to fetch events:', error)

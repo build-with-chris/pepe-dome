@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma, type Event } from '@prisma/client'
 import { transformEvent, type DbLocale } from '@/lib/db-data'
+import { getEventsForMonth } from '@/lib/events-listing'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -10,19 +11,16 @@ export async function GET(request: NextRequest) {
   const locale: DbLocale = searchParams.get('locale') === 'en' ? 'en' : 'de'
 
   try {
-    const whereClause: Prisma.EventWhereInput = { status: 'PUBLISHED' }
-
+    // Ein Monat wird über dieselbe Funktion geladen, die die Seite /events beim
+    // Rendern benutzt. Sonst entsteht dieselbe Liste an zwei Orten und läuft
+    // irgendwann auseinander.
     if (year && month) {
-      const startDate = new Date(parseInt(year), parseInt(month) - 1, 1)
-      const endDate = new Date(parseInt(year), parseInt(month), 0, 23, 59, 59)
-      whereClause.date = {
-        gte: startDate,
-        lte: endDate,
-      }
+      const events = await getEventsForMonth(parseInt(year), parseInt(month), locale)
+      return NextResponse.json(events)
     }
 
     const events = await prisma.event.findMany({
-      where: whereClause,
+      where: { status: 'PUBLISHED' },
       orderBy: { date: 'asc' },
     })
 

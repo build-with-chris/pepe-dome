@@ -11,7 +11,12 @@ import { notFound } from 'next/navigation'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
-import { getUpcomingEvents } from '@/lib/db-data'
+import { getUpcomingEvents, type EventData } from '@/lib/db-data'
+import {
+  getEventsForMonth,
+  resolveListingMonth,
+  type ListingMonth,
+} from '@/lib/events-listing'
 import { ItemListJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import EventsListingClient from '@/components/custom/EventsListingClient'
 
@@ -48,10 +53,9 @@ export default async function EventsPage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
 
-  // Nur für das JSON-LD. Die sichtbare Liste holt sich EventsListingClient
-  // weiterhin selbst, weil sie nach Monat blättert. Der Termin-Index muss aber
-  // im ausgelieferten HTML stehen: ein Crawler soll die Veranstaltungen sehen,
-  // ohne auf die Monatsnavigation zu klicken.
+  // Für das JSON-LD: der Termin-Index muss im ausgelieferten HTML stehen, ein
+  // Crawler soll die Veranstaltungen sehen, ohne auf die Monatsnavigation zu
+  // klicken.
   let upcoming: Awaited<ReturnType<typeof getUpcomingEvents>> = []
   try {
     upcoming = await getUpcomingEvents(lang)
@@ -59,6 +63,26 @@ export default async function EventsPage({
     // Die Seite funktioniert ohne JSON-LD weiter; ein Datenbankausfall darf
     // sie nicht komplett aus dem Netz nehmen.
     console.error('EventsPage: JSON-LD-Liste konnte nicht geladen werden', error)
+  }
+
+  /**
+   * Die sichtbare Liste kommt ebenfalls von hier.
+   *
+   * Vorher lieferte diese Seite ein Skelett aus und der Browser holte erst den
+   * Monat und dann die Termine, zwei Abrufe nacheinander. Wer aus einer Anzeige
+   * kommt, sah dadurch zuerst pulsierende Platzhalter.
+   *
+   * Scheitert die Datenbank hier, bleibt initialMonth null und die Liste holt
+   * sich die Termine wie bisher selbst. Lieber ein Skelett als eine leere Seite.
+   */
+  let initialMonth: ListingMonth | null = null
+  let initialEvents: EventData[] = []
+  try {
+    initialMonth = await resolveListingMonth()
+    initialEvents = await getEventsForMonth(initialMonth.year, initialMonth.month, lang)
+  } catch (error) {
+    console.error('EventsPage: Terminliste konnte nicht geladen werden', error)
+    initialMonth = null
   }
 
   return (
@@ -76,7 +100,12 @@ export default async function EventsPage({
           url: `/${lang}/events/${event.slug}`,
         }))}
       />
-      <EventsListingClient lang={lang} dict={dict} />
+      <EventsListingClient
+        lang={lang}
+        dict={dict}
+        initialMonth={initialMonth}
+        initialEvents={initialEvents}
+      />
     </>
   )
 }
