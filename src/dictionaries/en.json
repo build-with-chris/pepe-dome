@@ -29,7 +29,9 @@
       "title": "Experience breathtaking acrobatics",
       "subtitle": "Extraordinary shows, open training and a café under the dome in Munich's Ostpark.",
       "ctaPrimary": "Events & tickets",
-      "ctaSecondary": "Discover training"
+      "ctaSecondary": "Discover training",
+      "nextLabel": "Next date:",
+      "freeEntry": "Free entry"
     },
     "cafe": {
       "eyebrow": "New at Pepe Dome",

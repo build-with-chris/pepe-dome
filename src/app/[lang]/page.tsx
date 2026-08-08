@@ -15,6 +15,7 @@ import nextDynamic from 'next/dynamic'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
+import { heroTeaser } from '@/lib/hero-teaser'
 import { cn } from '@/lib/utils'
 import {
   getFeaturedArticles,
@@ -125,6 +126,8 @@ export default async function HomePage({
     community: '/news',
   }
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
+  // Nächster Termin für die Zeile im Hero. Siehe src/lib/hero-teaser.ts.
+  const teaser = heroTeaser(displayEvents, lang)
   // `url` ist optional: ein Zitat ohne hinterlegten Artikel bleibt ein reines
   // Zitat, eines mit URL wird zur anklickbaren Karte.
   const pressQuotes = (t.press?.quotes ?? []) as {
@@ -136,7 +139,14 @@ export default async function HomePage({
   return (
     <>
       {/* ===== Hero Section ===== */}
-      <section className="relative min-h-[100dvh] md:min-h-[90vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
+      {/*
+        80dvh statt 100dvh: bei voller Bildschirmhöhe endete der erste Eindruck
+        mit zwei Buttons und darunter nichts. Kein Hinweis, dass mehr kommt, und
+        auf dem Handy verdeckte der Cookie-Banner genau die Buttons. Bei 80dvh
+        ragt die Überschrift des nächsten Abschnitts in den Schirm, das ist die
+        Einladung zum Weiterscrollen.
+      */}
+      <section className="relative min-h-[80dvh] md:min-h-[85vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
         <div className="absolute inset-0 pointer-events-none">
           <HeroBackgroundVideo />
           {/*
@@ -171,10 +181,36 @@ export default async function HomePage({
             <p className="mt-5 text-lg md:text-2xl text-[var(--pepe-gold-hover)] font-semibold max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
               {t.hero.subtitle}
             </p>
+
+            {/*
+              Die eine konkrete Angabe oben.
+              Vorher stand oberhalb der Falte kein Datum, kein Preis, keine
+              Adresse, obwohl die nächsten Termine im Server-Render bereitlagen.
+              Steht nichts an, fällt die Zeile weg statt leer zu bleiben.
+            */}
+            {teaser && (
+              <Link
+                href={localizedHref(lang, `/events/${teaser.slug}`)}
+                className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border border-white/25 bg-black/40 px-4 py-2 text-xs sm:text-sm text-[var(--pepe-white)] backdrop-blur-sm transition-colors hover:border-white/50"
+              >
+                <span className="text-[var(--pepe-t64)]">{t.hero.nextLabel}</span>
+                <span className="font-semibold">{teaser.when}</span>
+                {teaser.free && (
+                  <span className="text-[var(--pepe-accent-text)]">{t.hero.freeEntry}</span>
+                )}
+              </Link>
+            )}
           </div>
         </div>
 
-        <div className="relative z-10 flex-1 min-h-[1rem]" />
+        {/*
+          Auf dem Handy nur ein kleiner Abstand statt einer wachsenden Lücke.
+          Der Platzhalter drückte die beiden Buttons an den unteren Rand des
+          Heros, also genau dorthin, wo der Cookie-Banner sitzt. Weiter oben sind
+          sie beim ersten Blick erreichbar, und das Video bleibt darunter
+          sichtbar. Auf Desktop bleibt es beim Verteilen über die ganze Höhe.
+        */}
+        <div className="relative z-10 h-4 flex-none md:h-auto md:flex-1 md:min-h-[1rem]" />
 
         {/* dvh statt vh: der Container oben ist min-h-[100dvh]. Mit `22vh` für
             diesen Block rechnete der Browser gegen die *large* viewport height,
@@ -189,7 +225,20 @@ export default async function HomePage({
               </Button>
             </Link>
             <Link href={localizedHref(lang, '/training')} className="w-full sm:w-auto flex justify-center sm:block">
-              <Button variant="secondary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
+              {/*
+                Hellerer Rahmen als sonst: .btn-secondary rahmt mit
+                --pepe-line, also #333. Über dem dunklen Hero sind das etwa
+                1,4 zu 1 Kontrast, der Button war praktisch nicht als Button zu
+                erkennen. Der Rahmen sitzt als Inline-Stil, weil components.css
+                die Farbe in der Kurzschreibweise border setzt und eine
+                Utility-Klasse daran nicht zuverlässig vorbeikommt.
+              */}
+              <Button
+                variant="secondary"
+                size="xl"
+                className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto"
+                style={{ borderColor: 'rgba(255,255,255,0.45)' }}
+              >
                 {t.hero.ctaSecondary}
               </Button>
             </Link>

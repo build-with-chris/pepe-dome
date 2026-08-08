@@ -29,7 +29,9 @@
       "title": "Erlebe Artistik hautnah",
       "subtitle": "Außergewöhnliche Shows, offenes Training und ein Café unter der Kuppel im Münchner Ostpark.",
       "ctaPrimary": "Events & Tickets",
-      "ctaSecondary": "Training entdecken"
+      "ctaSecondary": "Training entdecken",
+      "nextLabel": "Nächster Termin:",
+      "freeEntry": "Eintritt frei"
     },
     "cafe": {
       "eyebrow": "Neu im Pepe Dome",

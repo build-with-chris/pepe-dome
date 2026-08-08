@@ -19,7 +19,7 @@ import { CONSENT_OPEN_EVENT, readConsent, writeConsent } from '@/lib/consent'
 const COPY = {
   de: {
     title: 'Kurz gefragt: Cookies?',
-    body: 'Technisch notwendige Cookies sind immer aktiv. Zusätzlich möchten wir messen, wie unsere Seite genutzt wird, und sehen, ob unsere Anzeigen jemanden erreichen. Du entscheidest.',
+    body: 'Notwendige Cookies sind immer aktiv. Alles Weitere nur, wenn du es erlaubst.',
     acceptAll: 'Alle akzeptieren',
     necessaryOnly: 'Nur notwendige',
     settings: 'Einstellungen',
@@ -37,7 +37,7 @@ const COPY = {
   },
   en: {
     title: 'Quick question: cookies?',
-    body: 'Strictly necessary cookies are always on. Beyond that we would like to measure how the site is used and whether our ads reach anyone. Your call.',
+    body: 'Necessary cookies are always on. Everything else only if you allow it.',
     acceptAll: 'Accept all',
     necessaryOnly: 'Necessary only',
     settings: 'Settings',
@@ -106,12 +106,17 @@ export default function ConsentBanner() {
       aria-labelledby="consent-title"
       className="fixed inset-x-0 bottom-0 z-[100] p-3 sm:p-4"
     >
-      <div className="mx-auto max-w-3xl rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/95 backdrop-blur-md shadow-2xl">
-        <div className="p-5 sm:p-6">
-          <h2 id="consent-title" className="text-lg font-semibold text-[var(--pepe-white)] mb-2">
+      {/*
+        Feste Breite in rem statt max-w-3xl: tokens.css setzt --container-3xl auf
+        1920px, die Klasse hat den Banner deshalb über die ganze Breite laufen
+        lassen statt auf 768 Pixel.
+      */}
+      <div className="mx-auto max-w-[42rem] rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)]/95 backdrop-blur-md shadow-2xl">
+        <div className="p-4 sm:p-6">
+          <h2 id="consent-title" className="text-base sm:text-lg font-semibold text-[var(--pepe-white)] mb-1">
             {t.title}
           </h2>
-          <p className="text-sm text-[var(--pepe-t64)] leading-relaxed">{t.body}</p>
+          <p className="text-sm text-[var(--pepe-t64)] leading-snug">{t.body}</p>
 
           {showDetails && (
             <div className="mt-5 space-y-3 border-t border-[var(--pepe-line)] pt-5">
@@ -140,7 +145,15 @@ export default function ConsentBanner() {
             </div>
           )}
 
-          <div className="mt-5 flex flex-col sm:flex-row gap-2">
+          {/*
+            Beide Wege in einer Zeile, auch auf dem Handy.
+            Untereinander gestapelt kamen drei Buttons auf gut 160 Pixel, und
+            der ganze Banner verdeckte auf 390 mal 844 beide Hero-Buttons.
+            Nebeneinander bleibt Ablehnen gleichrangig, was Pflicht ist, und der
+            Banner halbiert seine Höhe. Die Einstellungen stehen als Textlink
+            darunter: sie sind der seltenere Weg, aber sichtbar.
+          */}
+          <div className="mt-4 flex flex-row gap-2">
             {showDetails ? (
               <button
                 type="button"
@@ -166,19 +179,19 @@ export default function ConsentBanner() {
             >
               {t.necessaryOnly}
             </button>
-
-            {!showDetails && (
-              <button
-                type="button"
-                onClick={() => setShowDetails(true)}
-                className="btn btn-ghost btn-md flex-1"
-              >
-                {t.settings}
-              </button>
-            )}
           </div>
 
-          <p className="mt-4 text-xs text-[var(--pepe-t48)]">
+          {!showDetails && (
+            <button
+              type="button"
+              onClick={() => setShowDetails(true)}
+              className="mt-3 text-xs text-[var(--pepe-t64)] underline hover:text-[var(--pepe-accent-text)] transition-colors"
+            >
+              {t.settings}
+            </button>
+          )}
+
+          <p className="mt-3 text-xs text-[var(--pepe-t48)]">
             {t.revoke}{' '}
             <Link
               href={`/${lang}/datenschutz`}
