@@ -21,21 +21,9 @@ export type Supporter = {
 
 export const SUPPORTERS: readonly Supporter[] = [
   {
-    src: '/images/foerderer/landeshauptstadt-kreativ-muenchen.png',
-    width: 1200,
-    height: 300,
-    alt: 'Mit Unterstützung von Landeshauptstadt München und Kreativ München',
-  },
-  {
     src: '/images/foerderer/staedtebaufoerderung.jpg',
     width: 1400,
     height: 193,
     alt: 'Städtebauförderung von Bund, Ländern und Gemeinden, Bundesministerium für Wohnen, Stadtentwicklung und Bauwesen, Bayerisches Staatsministerium für Wohnen, Bau und Verkehr, Landeshauptstadt München',
-  },
-  {
-    src: '/images/foerderer/kuszner-stiftung.jpg',
-    width: 595,
-    height: 706,
-    alt: 'Kuszner Stiftung',
   },
 ]
