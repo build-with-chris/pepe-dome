@@ -10,7 +10,8 @@ import { SUPPORTERS, type Supporter } from '@/data/supporters'
  * gesetzt und teils mehrfarbig. Auf dem dunklen Grund waeren sie unsichtbar.
  * Sie einzufaerben oder zu invertieren ist keine Option, Foerderlogos duerfen
  * nicht veraendert werden. Eine helle Flaeche darunter ist der Weg, der die
- * Vorgaben einhaelt und trotzdem zum Rest der Seite passt.
+ * Vorgaben einhaelt und trotzdem zum Rest der Seite passt. Baender bringen
+ * diese Flaeche schon mit und bekommen deshalb keine Kachel.
  *
  * Warum nicht alle Logos gleich hoch: die Formate gehen weit auseinander. Das
  * Foerderband des Bund-Laender-Programms ist siebenmal so breit wie hoch und
@@ -96,17 +97,23 @@ export default function SupporterLogos({
       {bands.map((supporter) => (
         <div
           key={supporter.src}
-          className={cn(tileClass, 'w-full', isFooter ? 'max-w-[34rem]' : 'max-w-[44rem]')}
+          // Keine weisse Kachel darunter: das Band bringt seine helle Flaeche
+          // selbst mit, die Kachel waere nur ein zweites Weiss an derselben
+          // Stelle. Ohne sie laesst sich das Bild leicht abdunkeln, damit der
+          // Block auf der schwarzen Seite nicht knallt.
+          className="w-full overflow-hidden rounded-lg"
         >
           <Image
             src={supporter.src}
             alt={supporter.alt}
             width={supporter.width}
             height={supporter.height}
-            // Das Band traegt Pflichtangaben zum Foerderprogramm. Es bekommt
-            // die volle Kartenbreite, damit der Text darin lesbar bleibt.
-            className="h-auto w-full object-contain"
-            sizes={isFooter ? '(max-width: 639px) 92vw, 544px' : '(max-width: 639px) 92vw, 704px'}
+            // Das Band traegt Pflichtangaben zum Foerderprogramm und bekommt
+            // die volle Breite, damit der Text darin lesbar bleibt. Der
+            // Container ist hoechstens 1180px breit, die Datei 1400px: das
+            // Band wird also nie hochskaliert.
+            className="h-auto w-full object-contain opacity-[0.88]"
+            sizes="(max-width: 639px) 92vw, 1180px"
           />
         </div>
       ))}
