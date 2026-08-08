@@ -10,6 +10,7 @@ import { useState, FormEvent, useEffect } from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { trackLead } from '@/lib/tracking'
+import { hasConsent } from '@/lib/consent'
 
 interface SignupFormProps {
   /** Form variant - simple (email only) or extended (with name and interests) */
@@ -20,6 +21,11 @@ interface SignupFormProps {
   className?: string
   /** Contextual message to display above form */
   contextMessage?: string
+  /**
+   * Herkunft der Anmeldung für die Auswertung, etwa "footer". Ohne Angabe
+   * benennt die Variante die Herkunft.
+   */
+  source?: string
 }
 
 const INTEREST_OPTIONS = [
@@ -33,7 +39,9 @@ export default function SignupForm({
   onSuccess,
   className = '',
   contextMessage,
+  source,
 }: SignupFormProps) {
+  const herkunft = source ?? (variant === 'extended' ? 'newsletter-page' : 'inline-form')
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [interests, setInterests] = useState<string[]>([])
@@ -78,7 +86,14 @@ export default function SignupForm({
     setStatus('loading')
 
     try {
-      const payload: any = { email }
+      const payload: any = {
+        email,
+        source: herkunft,
+        // Die Einwilligung reist mit, weil sie beim Klick auf den
+        // Bestätigungslink nicht mehr erreichbar ist. Siehe trackingVermerk in
+        // src/app/api/subscribers/route.ts.
+        trackingConsent: hasConsent('marketing'),
+      }
 
       if (variant === 'extended') {
         if (firstName.trim()) {
@@ -104,11 +119,7 @@ export default function SignupForm({
       // Conversion melden, bevor die Felder geleert werden.
       // Das ist der rohe Lead. Bestätigt wird er erst mit dem Double Opt-in,
       // dort feuert CompleteRegistration.
-      trackLead({
-        leadType: 'newsletter',
-        email,
-        source: variant === 'extended' ? 'newsletter-page' : 'inline-form',
-      })
+      trackLead({ leadType: 'newsletter', email, source: herkunft })
 
       // Success
       setStatus('success')

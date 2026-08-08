@@ -22,9 +22,7 @@ import { z } from 'zod'
 import { successResponse, errorResponse } from '@/lib/api-response'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { TRACKED_EVENTS } from '@/lib/tracking-events'
-import { META_PIXEL_ID } from '@/lib/meta-config'
-
-const GRAPH_API_VERSION = 'v21.0'
+import { sendCapiEvent } from '@/lib/meta-capi'
 
 /**
  * Vergleicht zwei Hostnamen und behandelt `www.` als bedeutungslos.
@@ -53,9 +51,6 @@ const trackSchema = z.object({
 })
 
 export async function POST(request: NextRequest) {
-  const pixelId = META_PIXEL_ID
-  const accessToken = process.env.META_CAPI_ACCESS_TOKEN
-
   try {
     // Missbrauchsschutz: die Route ist öffentlich und schreibt in ein fremdes System.
     const identifier = getClientIdentifier(request)
@@ -89,64 +84,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Erst ab hier ist die Anfrage geprüft. Ohne Meta-Konfiguration steigen
-    // wir still aus: lokal und in Vorschau-Deployments ist das der Normalfall
-    // und kein Fehler. Die Prüfung oben läuft trotzdem, damit fehlerhafte
-    // Aufrufe auch dann auffallen, wenn noch nichts konfiguriert ist.
-    if (!pixelId || !accessToken) {
-      return successResponse({ forwarded: false, reason: 'not_configured' })
-    }
+    // Erst ab hier ist die Anfrage geprüft. Das Melden selbst liegt in
+    // src/lib/meta-capi.ts, weil die Bestätigungsroute denselben Weg nutzt.
+    // _fbp und _fbc setzt das Pixel selbst, sie sind der stärkste Hebel für die
+    // Event Match Quality und gehen deshalb mit.
+    const result = await sendCapiEvent({
+      event,
+      eventId,
+      sourceUrl,
+      emailHash,
+      fbp: request.cookies.get('_fbp')?.value,
+      fbc: request.cookies.get('_fbc')?.value,
+      clientIp: identifier !== 'unknown-client' ? identifier : undefined,
+      userAgent: request.headers.get('user-agent'),
+      customData,
+    })
 
-    // _fbp und _fbc setzt das Pixel selbst. Sie sind der stärkste Hebel für
-    // die Event Match Quality, deshalb reichen wir sie mit durch.
-    const fbp = request.cookies.get('_fbp')?.value
-    const fbc = request.cookies.get('_fbc')?.value
-
-    const userData: Record<string, unknown> = {
-      client_ip_address: identifier !== 'unknown-client' ? identifier : undefined,
-      client_user_agent: request.headers.get('user-agent') || undefined,
-      fbp,
-      fbc,
-    }
-    if (emailHash) {
-      userData.em = [emailHash]
-    }
-
-    const payload: Record<string, unknown> = {
-      data: [
-        {
-          event_name: event,
-          event_time: Math.floor(Date.now() / 1000),
-          event_id: eventId,
-          event_source_url: sourceUrl,
-          action_source: 'website',
-          user_data: Object.fromEntries(
-            Object.entries(userData).filter(([, v]) => v !== undefined)
-          ),
-          custom_data: customData ?? {},
-        },
-      ],
-    }
-
-    // Nur für die Testfunktion im Events Manager setzen, in Produktion leer lassen.
-    if (process.env.META_CAPI_TEST_EVENT_CODE) {
-      payload.test_event_code = process.env.META_CAPI_TEST_EVENT_CODE
-    }
-
-    const response = await fetch(
-      `https://graph.facebook.com/${GRAPH_API_VERSION}/${pixelId}/events?access_token=${encodeURIComponent(accessToken)}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }
-    )
-
-    if (!response.ok) {
-      // Nur den Status loggen. Der Antworttext von Meta kann das Access-Token
-      // enthalten, und die Logs sind kein sicherer Ort dafür.
-      console.error(`[capi] Meta antwortete mit ${response.status} für ${event}`)
-      return successResponse({ forwarded: false, reason: 'upstream_error' })
+    if (!result.forwarded) {
+      return successResponse({ forwarded: false, reason: result.reason })
     }
 
     return successResponse({ forwarded: true, eventId })

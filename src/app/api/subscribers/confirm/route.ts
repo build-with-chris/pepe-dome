@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { confirmSubscriber } from '@/lib/subscribers'
 import { subscriberConfirmSchema } from '@/lib/validation'
 import { validationErrorResponse } from '@/lib/api-response'
+import { getClientIdentifier } from '@/lib/rate-limit'
+import { reportConfirmedSignup } from '@/lib/tracking-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,6 +26,22 @@ export async function GET(request: NextRequest) {
     const subscriber = await confirmSubscriber(validation.data.token)
 
     console.log('Subscriber confirmed:', subscriber.email)
+
+    /**
+     * Die bestätigte Anmeldung ist die Zahl, die zählt, und sie wird von hier
+     * gemeldet statt aus dem Browser: der Bestätigungslink wird meist in der
+     * Mail-App geöffnet, wo die Einwilligung aus dem localStorage der Website
+     * nicht vorliegt.
+     *
+     * Als Quelle nur der Ursprung, niemals die aufgerufene URL. Die trägt das
+     * Bestätigungstoken, und das hat bei Meta nichts zu suchen.
+     */
+    const clientIp = getClientIdentifier(request)
+    await reportConfirmedSignup(subscriber, {
+      sourceUrl: new URL(request.url).origin,
+      userAgent: request.headers.get('user-agent'),
+      clientIp: clientIp !== 'unknown-client' ? clientIp : null,
+    })
 
     return NextResponse.json({
       success: true,

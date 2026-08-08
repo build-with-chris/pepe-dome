@@ -75,13 +75,18 @@ describe('SignupForm', () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('/api/subscribers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: 'test@example.com',
-        }),
-      })
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/api/subscribers',
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    })
+    // Auf den Inhalt prüfen, nicht auf die Reihenfolge der Schlüssel: das
+    // Formular schickt inzwischen auch Herkunft und Einwilligung mit.
+    expect(JSON.parse((global.fetch as any).mock.calls[0][1].body)).toMatchObject({
+      email: 'test@example.com',
     })
 
     await waitFor(() => {
@@ -144,17 +149,46 @@ describe('SignupForm', () => {
     fireEvent.click(eventsCheckbox)
     fireEvent.click(submitButton)
 
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('/api/subscribers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: 'test@example.com',
-          firstName: 'Max',
-          interests: ['shows-events'],
-        }),
-      })
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+    expect(JSON.parse((global.fetch as any).mock.calls[0][1].body)).toMatchObject({
+      email: 'test@example.com',
+      firstName: 'Max',
+      interests: ['shows-events'],
+      source: 'newsletter-page',
     })
+  })
+
+  it('schickt die Marketing-Einwilligung und die Herkunft an den Server mit', async () => {
+    // Ohne diesen Vermerk kann die Bestätigung später nicht gemeldet werden:
+    // der Link in der Mail wird meist in einem anderen Browser geöffnet.
+    localStorageMock.setItem(
+      'pepe_consent',
+      JSON.stringify({ analytics: false, marketing: true, version: 1, updatedAt: '2026-08-01' })
+    )
+
+    render(<SignupForm source="footer" />)
+    const emailInput = screen.getByPlaceholderText(/deine@email.com/i)
+    fireEvent.change(emailInput, { target: { value: 'anna@example.de' } })
+    fireEvent.submit(emailInput.closest('form')!)
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+    const body = JSON.parse((global.fetch as any).mock.calls[0][1].body)
+    expect(body).toMatchObject({
+      email: 'anna@example.de',
+      trackingConsent: true,
+      source: 'footer',
+    })
+  })
+
+  it('meldet ohne Einwilligung keine zu', async () => {
+    render(<SignupForm />)
+    const emailInput = screen.getByPlaceholderText(/deine@email.com/i)
+    fireEvent.change(emailInput, { target: { value: 'anna@example.de' } })
+    fireEvent.submit(emailInput.closest('form')!)
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+    const body = JSON.parse((global.fetch as any).mock.calls[0][1].body)
+    expect(body.trackingConsent).toBe(false)
   })
 
   it('validates email format and shows error message', async () => {

@@ -13,6 +13,7 @@
  */
 
 import { useState, type FormEvent } from 'react'
+import { trackLead } from '@/lib/tracking'
 import HeroSection from '@/components/custom/HeroSection'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -118,6 +119,19 @@ export default function ContactPageClient({
         setErrorMessage(json?.error?.message || t.form.errors.generic)
         return
       }
+      /**
+       * Anfragen sind Abschlüsse und werden gemeldet.
+       *
+       * Der gewählte Kanal steht als Herkunft dabei, sonst ist später nicht zu
+       * sehen, ob Rückruf, WhatsApp oder Mail überhaupt genutzt werden. Ohne
+       * Einwilligung ist der Aufruf ein No-Op.
+       */
+      trackLead({
+        leadType: 'contact',
+        email: formData.email.trim() || undefined,
+        source: `kontakt-${formData.channel}`,
+      })
+
       setWhatsappLink(buildWhatsappLink())
       setStatus('success')
       setFormData({ name: '', message: '', channel: 'callback', phone: '', email: '', reachability: '', privacy: false })

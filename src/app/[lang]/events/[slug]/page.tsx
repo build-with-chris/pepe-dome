@@ -249,7 +249,7 @@ export default async function EventDetailPage({
               <div className="max-w-xl">
                 <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4">{t.stayInformed}</h3>
                 <p className="text-[var(--pepe-t64)] mb-4">{t.stayInformedText}</p>
-                <SignupForm variant="simple" lang={lang} />
+                <SignupForm variant="simple" lang={lang} source="event-detail" />
               </div>
             </div>
           </div>

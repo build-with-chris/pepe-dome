@@ -68,6 +68,11 @@ export async function createSubscriber(data: {
   email: string
   firstName?: string
   interests?: string[]
+  /**
+   * Freie Zusatzangaben, aktuell der Tracking-Vermerk aus dem Anmeldeformular.
+   * Siehe TrackingMetadata in src/lib/tracking-server.ts.
+   */
+  metadata?: Record<string, unknown>
 }) {
   const token = generateOptInToken()
 
@@ -80,6 +85,7 @@ export async function createSubscriber(data: {
       doubleOptInToken: token,
       doubleOptInSentAt: new Date(),
       unsubscribeToken: generateUnsubscribeToken(),
+      ...(data.metadata ? { metadata: data.metadata } : {}),
     },
   })
 }

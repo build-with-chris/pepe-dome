@@ -64,6 +64,7 @@ export default function Footer() {
               <h4 className="footer-newsletter-title">{t('footer.newsletter', 'Newsletter')}</h4>
               <SignupForm
                 variant="simple"
+                source="footer"
                 contextMessage={t(
                   'footer.newsletterContext',
                   'Bleib auf dem Laufenden mit News zu Events, Shows und Workshops.'

@@ -327,7 +327,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="h2 text-center mb-4">{t.ctaTitle}</h2>
             <p className="text-center text-pepe-t64 mb-8">{t.ctaText}</p>
-            <SignupForm variant="simple" lang={lang} />
+            <SignupForm variant="simple" lang={lang} source="newsletter-archiv" />
           </div>
         </section>
 

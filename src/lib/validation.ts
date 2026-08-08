@@ -28,6 +28,16 @@ export const subscriberSignupSchema = z.object({
   email: normalizedEmail,
   firstName: z.string().optional(),
   interests: z.array(z.string()).optional(),
+  /**
+   * Lag beim Anmelden eine Marketing-Einwilligung vor?
+   *
+   * Sie steckt im localStorage des Browsers und ist beim späteren Klick auf den
+   * Bestätigungslink nicht mehr erreichbar, deshalb reist sie hier mit und wird
+   * am Abonnenten vermerkt.
+   */
+  trackingConsent: z.boolean().optional(),
+  /** Herkunft der Anmeldung, etwa "startseite". Nur zur Auswertung. */
+  source: z.string().max(60).optional(),
 })
 
 // Course interest validation schema

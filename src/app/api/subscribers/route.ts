@@ -52,6 +52,33 @@ async function trySendConfirmation(subscriberId: string, baseUrl: string) {
   }
 }
 
+/**
+ * Baut den Tracking-Vermerk für die Metadaten des Abonnenten.
+ *
+ * Ohne Einwilligung wird nichts vermerkt, auch kein _fbp. Fehlen die Cookies
+ * trotz Einwilligung, bleibt der Vermerk trotzdem: Adblocker verhindern das
+ * Pixel, nicht die Erlaubnis, und genau dafür gibt es den Serverweg.
+ */
+function trackingVermerk(
+  request: NextRequest,
+  data: { trackingConsent?: boolean; source?: string }
+): { tracking: Record<string, string | boolean> } | undefined {
+  if (data.trackingConsent !== true) return undefined
+
+  const tracking: Record<string, string | boolean> = {
+    marketingConsent: true,
+    at: new Date().toISOString(),
+  }
+
+  const fbp = request.cookies.get('_fbp')?.value
+  const fbc = request.cookies.get('_fbc')?.value
+  if (fbp) tracking.fbp = fbp
+  if (fbc) tracking.fbc = fbc
+  if (data.source) tracking.source = data.source
+
+  return { tracking }
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting: 5 signups per hour per IP
@@ -84,6 +111,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, firstName, interests } = validation.data
+    const vermerk = trackingVermerk(request, validation.data)
 
     // Additional email validation
     if (!validateEmail(email)) {
@@ -143,6 +171,19 @@ export async function POST(request: NextRequest) {
           doubleOptInToken: generateOptInToken(),
           doubleOptInSentAt: new Date(),
           unsubscribedAt: null,
+          // Frische Anmeldung, frischer Vermerk. Vorhandene Metadaten bleiben,
+          // der alte Tracking-Vermerk wird ersetzt, sonst gilt ein reportedAt
+          // von damals für die neue Bestätigung.
+          ...(vermerk
+            ? {
+                metadata: {
+                  ...(existing.metadata && typeof existing.metadata === 'object'
+                    ? (existing.metadata as Record<string, unknown>)
+                    : {}),
+                  ...vermerk,
+                },
+              }
+            : {}),
         },
       })
 
@@ -155,6 +196,7 @@ export async function POST(request: NextRequest) {
       email,
       firstName,
       interests,
+      metadata: vermerk,
     })
 
     // Send confirmation email via Resend (Basis-URL aus Request, damit Link auf echte Domain zeigt)

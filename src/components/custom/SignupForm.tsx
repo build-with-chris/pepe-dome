@@ -2,6 +2,8 @@
 
 import { useState, FormEvent, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { trackLead } from '@/lib/tracking'
+import { hasConsent } from '@/lib/consent'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { Label } from '@/components/ui/label'
@@ -31,6 +33,12 @@ interface SignupFormProps {
   contextMessage?: string
   /** Language (defaults to 'de') */
   lang?: SignupLang
+  /**
+   * Herkunft der Anmeldung für die Auswertung, etwa "startseite" oder
+   * "event-detail". Steht dasselbe Formular auf mehreren Seiten, ist das der
+   * einzige Weg zu sehen, welche Seite tatsächlich Anmeldungen bringt.
+   */
+  source?: string
 }
 
 const STRINGS: Record<SignupLang, {
@@ -130,8 +138,10 @@ export default function SignupForm({
   className = '',
   contextMessage,
   lang = 'de',
+  source,
 }: SignupFormProps) {
   const t = STRINGS[lang]
+  const herkunft = source ?? (variant === 'extended' ? 'newsletter-page' : 'inline-form')
   const INTEREST_OPTIONS = t.interests
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -184,7 +194,19 @@ export default function SignupForm({
     setStatus('loading')
 
     try {
-      const payload: Record<string, unknown> = { email }
+      const payload: Record<string, unknown> = {
+        email,
+        source: herkunft,
+        /**
+         * Die Einwilligung reist mit zum Server.
+         *
+         * Sie liegt im localStorage und ist beim späteren Klick auf den
+         * Bestätigungslink nicht mehr erreichbar, meist wird der in der
+         * Mail-App geöffnet. Ohne diesen Vermerk kann die Bestätigung, also die
+         * Zahl, die zählt, nie gemeldet werden.
+         */
+        trackingConsent: hasConsent('marketing'),
+      }
 
       if (variant === 'extended') {
         if (firstName.trim()) {
@@ -206,6 +228,11 @@ export default function SignupForm({
       if (!response.ok) {
         throw new Error(result.error?.message || t.errorGeneric)
       }
+
+      // Conversion melden, bevor die Felder geleert werden. Das ist der rohe
+      // Lead, bestätigt wird er erst mit dem Double Opt-in. Ohne Einwilligung
+      // ist der Aufruf ein No-Op, die Entscheidung liegt in trackEvent.
+      trackLead({ leadType: 'newsletter', email, source: herkunft })
 
       // Success
       setStatus('success')

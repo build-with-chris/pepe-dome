@@ -77,7 +77,7 @@ export default async function NewsletterPage({
         </div>
 
         <div className="max-w-2xl mx-auto mb-20">
-          <SignupForm variant="extended" lang={lang} />
+          <SignupForm variant="extended" lang={lang} source="newsletter-seite" />
         </div>
 
         {/* Benefits */}

@@ -10,7 +10,6 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import type { Dictionary } from '@/i18n/get-dictionary'
 import { localizedHref, type Locale } from '@/i18n/config'
-import { trackCompleteRegistration } from '@/lib/tracking'
 
 export default function LocalizedConfirmContent({
   lang,
@@ -45,14 +44,15 @@ export default function LocalizedConfirmContent({
           localStorage.setItem('newsletter_subscribed', 'true')
         }
 
-        // Die bestätigte Anmeldung ist die Conversion, die zählt. Zwischen
-        // Formular und Bestätigung gehen regelmäßig 25 bis 40 Prozent
-        // verloren, wer nur den rohen Lead misst, hält die Kampagne für
-        // doppelt so gut, wie sie ist.
-        // Keine E-Mail-Adresse zur Hand: Der Bestätigungslink enthält nur
-        // den Token, und den schicken wir nicht an Meta.
-        trackCompleteRegistration({ source: 'newsletter-double-optin' })
-
+        /**
+         * Hier wird nichts gemeldet, das macht die Bestätigungsroute.
+         *
+         * Der Link in der Mail wird meist in der Mail-App geöffnet, also in
+         * einem Browser ohne die Einwilligung im localStorage. Von hier aus
+         * lief die Meldung deshalb fast immer ins Leere. Der Server kennt die
+         * Einwilligung aus der Anmeldung und meldet einmalig, siehe
+         * reportConfirmedSignup in src/lib/tracking-server.ts.
+         */
         setStatus('success')
       } catch (error: unknown) {
         setStatus('error')
