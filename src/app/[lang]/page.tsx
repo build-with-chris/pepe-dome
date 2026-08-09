@@ -186,7 +186,25 @@ export default async function HomePage({
 
         <div className="stage-container relative z-10 flex-shrink-0 pt-[2.31rem] md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
+            {/*
+              Der erste Bildschirm baut sich nacheinander auf.
+              Vorher stand alles auf einen Schlag da: Titel, Untertitel,
+              Termin, zwei Wege. Ueber einem laufenden Video ist das viel auf
+              einmal, man weiss nicht, wo man zuerst hinsehen soll. Die fuenf
+              Elemente kommen jetzt in Schritten von 150 Millisekunden, das
+              fuehrt den Blick von oben nach unten zum Button.
+
+              Die Verzoegerung steht bewusst inline und nicht als delay-300:
+              animations.css definiert .delay-* als animation-delay, Tailwind
+              erzeugt dieselben Klassennamen als transition-delay. Beide
+              gaelten gleichzeitig, und der Farbwechsel beim Antippen haette
+              sich mitverzoegert.
+
+              Die Ueberschrift startet ohne Verzoegerung, sie ist das
+              LCP-Element und soll nicht warten. Bei reduzierter Bewegung
+              setzt animations.css alle Verzoegerungen auf null.
+            */}
+            <h1 className="animate-fadeUp text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
               {t.hero.title}
             </h1>
             {/*
@@ -197,7 +215,10 @@ export default async function HomePage({
               normale Schrift in gedecktem Weiss. Der Schatten bleibt, das Video
               darunter ist stellenweise hell.
             */}
-            <p className="mt-4 text-base md:text-xl text-[var(--pepe-t80)] max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
+            <p
+              className="animate-fadeUp mt-4 text-base md:text-xl text-[var(--pepe-t80)] max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]"
+              style={{ animationDelay: '150ms' }}
+            >
               {t.hero.subtitle}
             </p>
 
@@ -214,7 +235,7 @@ export default async function HomePage({
               rund 25 Pixel Luft an, die niemand angefordert hatte.
             */}
             {teaser && (
-              <div className="mt-5 flex justify-center">
+              <div className="animate-fadeUp mt-5 flex justify-center" style={{ animationDelay: '300ms' }}>
                 <Link
                   href={localizedHref(lang, `/events/${teaser.slug}`)}
                   className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-2xl border border-white/25 bg-black/40 px-3.5 sm:px-4 py-2 text-xs sm:text-sm text-[var(--pepe-white)] backdrop-blur-sm transition-colors hover:border-white/50"
@@ -265,7 +286,11 @@ export default async function HomePage({
               damit jede Tailwind-Utility. Responsiv ginge nur mit !important.
               Auf Desktop holt min-w die Präsenz zurück.
             */}
-            <Link href={localizedHref(lang, '/events')}>
+            <Link
+              href={localizedHref(lang, '/events')}
+              className="animate-fadeUp"
+              style={{ animationDelay: '450ms' }}
+            >
               <Button variant="primary" size="lg" className="min-w-[200px] md:min-w-[240px]">
                 {t.hero.ctaPrimary}
               </Button>
@@ -280,7 +305,8 @@ export default async function HomePage({
             */}
             <Link
               href={localizedHref(lang, '/training')}
-              className="inline-flex items-center gap-2 py-2 text-base font-semibold text-[var(--pepe-t80)] underline-offset-4 transition-colors hover:text-[var(--pepe-white)] hover:underline [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]"
+              className="animate-fadeUp inline-flex items-center gap-2 py-2 text-base font-semibold text-[var(--pepe-t80)] underline-offset-4 transition-colors hover:text-[var(--pepe-white)] hover:underline [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]"
+              style={{ animationDelay: '600ms' }}
             >
               {t.hero.ctaSecondary}
               <span aria-hidden="true">→</span>

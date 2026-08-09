@@ -755,6 +755,15 @@
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    /*
+      Ohne das Zuruecksetzen der Verzoegerung bleibt gestaffelter Inhalt
+      unsichtbar liegen: Die Einblendungen laufen mit animation-fill-mode
+      both, der Rueckwaerts-Fuellwert ist also opacity 0. Eine Verzoegerung
+      von 600ms hiesse dann 600ms leere Flaeche und danach ein Sprung, statt
+      gar keiner Bewegung. Das !important schlaegt auch inline gesetzte
+      Verzoegerungen, etwa die im Hero der Startseite.
+    */
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
