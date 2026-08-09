@@ -140,13 +140,24 @@ export default async function HomePage({
     <>
       {/* ===== Hero Section ===== */}
       {/*
-        80dvh statt 100dvh: bei voller Bildschirmhöhe endete der erste Eindruck
-        mit zwei Buttons und darunter nichts. Kein Hinweis, dass mehr kommt, und
-        auf dem Handy verdeckte der Cookie-Banner genau die Buttons. Bei 80dvh
-        ragt die Überschrift des nächsten Abschnitts in den Schirm, das ist die
-        Einladung zum Weiterscrollen.
+        Die Höhe folgt auf dem Handy dem Inhalt, nicht dem Bildschirm.
+        Bei voller Bildschirmhöhe endete der erste Eindruck mit zwei Buttons und
+        darunter nichts, und der Cookie-Banner verdeckte genau die Buttons. 80dvh
+        war der erste Schritt dagegen, hat aber nur die Lücke verkleinert: der
+        Inhalt braucht rund 490 Pixel, 80dvh sind je nach Gerät 600 bis 745. Es
+        blieben also bis zu 220 Pixel Schwarz zwischen dem letzten Link und dem
+        Sektionsende.
+
+        min(68dvh, 560px) ist deshalb als Untergrenze gemeint, nicht als
+        Vorgabe: auf den meisten Geräten gewinnt der Inhalt. Die 560 Pixel
+        deckeln den Rest, denn ein Hero muss auf einem Telefon nicht
+        mitwachsen, nur weil das Gerät gross ist. Ohne den Deckel standen auf
+        einem 932 Pixel hohen Schirm wieder gut 160 Pixel Leere unter dem
+        letzten Link. So ragt die Überschrift des nächsten Abschnitts auf jeder
+        getesteten Grösse in den Schirm, das ist die Einladung zum
+        Weiterscrollen.
       */}
-      <section className="relative min-h-[80dvh] md:min-h-[85vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
+      <section className="relative min-h-[min(68dvh,560px)] md:min-h-[85vh] flex flex-col overflow-hidden bg-[var(--pepe-black)] -mt-20 pt-20">
         <div className="absolute inset-0 pointer-events-none">
           <HeroBackgroundVideo />
           {/*
@@ -196,17 +207,33 @@ export default async function HomePage({
               Adresse, obwohl die nächsten Termine im Server-Render bereitlagen.
               Steht nichts an, fällt die Zeile weg statt leer zu bleiben.
             */}
+            {/*
+              Der Abstand sitzt am Wrapper, nicht an der Pille selbst.
+              Die Pille ist inline-flex und stand damit auf einer Zeilenbox des
+              zentrierten Textblocks. Die Grundlinien-Ausrichtung hängte darunter
+              rund 25 Pixel Luft an, die niemand angefordert hatte.
+            */}
             {teaser && (
-              <Link
-                href={localizedHref(lang, `/events/${teaser.slug}`)}
-                className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border border-white/25 bg-black/40 px-4 py-2 text-xs sm:text-sm text-[var(--pepe-white)] backdrop-blur-sm transition-colors hover:border-white/50"
-              >
-                <span className="text-[var(--pepe-t64)]">{t.hero.nextLabel}</span>
-                <span className="font-semibold">{teaser.when}</span>
-                {teaser.free && (
-                  <span className="text-[var(--pepe-accent-text)]">{t.hero.freeEntry}</span>
-                )}
-              </Link>
+              <div className="mt-5 flex justify-center">
+                <Link
+                  href={localizedHref(lang, `/events/${teaser.slug}`)}
+                  className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-2xl border border-white/25 bg-black/40 px-3.5 sm:px-4 py-2 text-xs sm:text-sm text-[var(--pepe-white)] backdrop-blur-sm transition-colors hover:border-white/50"
+                >
+                  <span className="text-[var(--pepe-t64)]">{t.hero.nextLabel}</span>
+                  {/* Kurz auf dem Handy, lang ab sm. Siehe src/lib/hero-teaser.ts. */}
+                  <span className="font-semibold whitespace-nowrap sm:hidden">
+                    {teaser.whenShort}
+                  </span>
+                  <span className="hidden font-semibold whitespace-nowrap sm:inline">
+                    {teaser.when}
+                  </span>
+                  {teaser.free && (
+                    <span className="font-semibold text-[var(--pepe-accent-text)]">
+                      {t.hero.freeEntry}
+                    </span>
+                  )}
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -227,8 +254,19 @@ export default async function HomePage({
             CTA-Block wurde zu hoch. */}
         <div className="relative z-10 flex h-auto flex-col items-center justify-center pt-4 pb-6 md:h-[20dvh] md:min-h-[160px] md:pt-0 md:pb-8">
           <div className="flex flex-col items-center gap-4 justify-center">
-            <Link href={localizedHref(lang, '/events')} className="w-full sm:w-auto flex justify-center sm:block">
-              <Button variant="primary" size="xl" className="min-w-[200px] sm:min-w-[220px] w-full sm:w-auto">
+            {/*
+              size="lg" statt "xl": auf 375 Pixel Breite war der Button mit 21er
+              Schrift und 71 Pixel Höhe ein Klotz. lg bleibt mit rund 60 Pixeln
+              deutlich über den 44 Pixeln, die .btn als Mindesthöhe hält, ist
+              also weiterhin bequem zu treffen.
+
+              Bewusst eine Größe für alle Breakpoints statt text-lg md:text-xl:
+              .btn-xl steht in components.css ausserhalb jedes @layer und schlägt
+              damit jede Tailwind-Utility. Responsiv ginge nur mit !important.
+              Auf Desktop holt min-w die Präsenz zurück.
+            */}
+            <Link href={localizedHref(lang, '/events')}>
+              <Button variant="primary" size="lg" className="min-w-[200px] md:min-w-[240px]">
                 {t.hero.ctaPrimary}
               </Button>
             </Link>

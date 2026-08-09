@@ -27,6 +27,15 @@ export interface HeroTeaser {
   title: string
   /** Fertig formatiert, etwa "Freitag, 14. August, 20:00 Uhr". */
   when: string
+  /**
+   * Dieselbe Angabe kurz, etwa "Fr., 14. Aug., 20:00 Uhr".
+   *
+   * Auf 375px Breite bleiben in der Pille rund 299px. "Nächster Termin:" und
+   * die lange Form zusammen sind breiter, also brach die Zeile mitten im Satz
+   * um und "Eintritt frei" rutschte direkt hinter die Uhrzeit. Mit der kurzen
+   * Form passt Label plus Datum in eine Zeile, der Preis steht darunter.
+   */
+  whenShort: string
   free: boolean
 }
 
@@ -52,18 +61,27 @@ export function heroTeaser(
   if (!naechster) return null
 
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
-  const tag = new Date(naechster.date).toLocaleDateString(dateLocale, {
+  const datum = new Date(naechster.date)
+  const tag = datum.toLocaleDateString(dateLocale, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     timeZone: 'UTC',
   })
+  const tagKurz = datum.toLocaleDateString(dateLocale, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  })
   const uhrzeit = formatTimeRange(naechster.time, null, lang)
+  const mitUhrzeit = (t: string) => (uhrzeit ? `${t}, ${uhrzeit}` : t)
 
   return {
     slug: naechster.slug,
     title: naechster.title,
-    when: uhrzeit ? `${tag}, ${uhrzeit}` : tag,
+    when: mitUhrzeit(tag),
+    whenShort: mitUhrzeit(tagKurz),
     free: isFreeEntry(naechster.price),
   }
 }

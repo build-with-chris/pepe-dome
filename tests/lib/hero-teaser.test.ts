@@ -31,6 +31,20 @@ describe('heroTeaser', () => {
     expect(teaser!.when).toBe('Freitag, 14. August, 20:00 Uhr')
   })
 
+  it('liefert dieselbe Angabe zusätzlich in kurz', () => {
+    // Die kurze Form trägt die Pille auf dem Handy in eine Zeile, siehe
+    // src/lib/hero-teaser.ts. Sie muss dieselbe Uhrzeit nennen wie die lange.
+    const teaser = heroTeaser([event()], 'de', JETZT)
+
+    expect(teaser!.whenShort).toBe('Fr., 14. Aug., 20:00 Uhr')
+  })
+
+  it('lässt die Uhrzeit auch in der kurzen Form weg, wenn keine hinterlegt ist', () => {
+    const teaser = heroTeaser([event({ time: null })], 'de', JETZT)
+
+    expect(teaser!.whenShort).toBe('Fr., 14. Aug.')
+  })
+
   it('überspringt Termine, die schon vorbei sind', () => {
     const teaser = heroTeaser(
       [
@@ -73,5 +87,7 @@ describe('heroTeaser', () => {
 
     expect(teaser!.when).toContain('Friday')
     expect(teaser!.when).toContain('August')
+    // formatTimeRange bleibt auch auf Englisch bei der 24-Stunden-Angabe.
+    expect(teaser!.whenShort).toBe('Fri, Aug 14, 20:00')
   })
 })
