@@ -28,6 +28,7 @@
     "hero": {
       "title": "Experience breathtaking acrobatics",
       "subtitle": "Extraordinary shows, open training and a café under the dome in Munich's Ostpark.",
+      "subtitleShort": "Extraordinary shows, open training and a café.",
       "ctaPrimary": "Events & tickets",
       "ctaSecondary": "Discover training",
       "nextLabel": "Next date:",

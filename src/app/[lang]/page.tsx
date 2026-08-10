@@ -224,7 +224,15 @@ export default async function HomePage({
               darunter ist stellenweise hell.
             */}
             <p className="mt-4 text-base md:text-xl text-[var(--pepe-t80)] max-w-2xl mx-auto [text-shadow:0_1px_3px_rgba(0,0,0,0.95),0_2px_14px_rgba(0,0,0,0.8)]">
-              {t.hero.subtitle}
+              {/*
+                Auf dem Handy ohne Ortsangabe, sonst drei Zeilen.
+                "unter der Kuppel im Muenchner Ostpark" fuellte allein eine
+                ganze Zeile und schob den Rest nach unten. Der Ort geht nicht
+                verloren, er steht im Seitentitel, im Kopf der Seite und bei
+                jedem Termin.
+              */}
+              <span className="sm:hidden">{t.hero.subtitleShort}</span>
+              <span className="hidden sm:inline">{t.hero.subtitle}</span>
             </p>
 
             {/*
@@ -265,13 +273,24 @@ export default async function HomePage({
         </div>
 
         {/*
-          Auf dem Handy nur ein kleiner Abstand statt einer wachsenden Lücke.
-          Der Platzhalter drückte die beiden Buttons an den unteren Rand des
-          Heros, also genau dorthin, wo der Cookie-Banner sitzt. Weiter oben sind
-          sie beim ersten Blick erreichbar, und das Video bleibt darunter
-          sichtbar. Auf Desktop bleibt es beim Verteilen über die ganze Höhe.
+          Der Platzhalter nimmt sich, was übrig ist, und schiebt den Button
+          nach unten.
+
+          Das war schon einmal so und wurde zurückgebaut, weil der Hero damals
+          volle Bildschirmhöhe hatte: Die Buttons landeten ganz unten, also
+          genau dort, wo der Cookie-Banner sitzt. Seit der Hero bei
+          min(68dvh, 560px) endet, ist das kein Thema mehr. Sein unterer Rand
+          liegt auf einem üblichen Telefon rund 280 Pixel über dem Banner.
+
+          Ein fester Wert wäre hier falsch, weil die übrige Luft je nach Gerät
+          zwischen 0 und 90 Pixeln schwankt. Mit basis-4 als Startwert bleibt
+          auf kleinen Telefonen der alte kleine Abstand, auf grösseren
+          verschwindet die Leere unter dem Trainings-Link im Abstand darüber.
+
+          grow statt flex-1: flex-1 würde die Basis auf 0 setzen und den
+          Startwert aus basis-4 wieder einkassieren.
         */}
-        <div className="relative z-10 h-4 flex-none md:h-auto md:flex-1 md:min-h-[1rem]" />
+        <div className="relative z-10 grow basis-4 md:basis-0 md:min-h-[1rem]" />
 
         {/* dvh statt vh: der Container oben ist min-h-[100dvh]. Mit `22vh` für
             diesen Block rechnete der Browser gegen die *large* viewport height,
