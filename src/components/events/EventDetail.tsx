@@ -124,7 +124,7 @@ export default function EventDetail({ event }: EventDetailProps) {
                 <h3 className="h3 mb-4">Bleib auf dem Laufenden</h3>
                 <SignupForm
                   variant="simple"
-                  contextMessage="Stay updated on upcoming events, workshops, and shows at PEPE Dome."
+                  contextMessage="Stay updated on upcoming events, workshops, and shows at Pepe Dome."
                 />
               </div>
             </div>

@@ -311,7 +311,7 @@ export default function NewsletterTemplate({
                 href={vm.homeUrl}
                 style={{ color: emailTheme.color.textMuted, textDecoration: 'none' }}
               >
-                das Team vom PEPE Dome
+                das Team vom Pepe Dome
               </Link>
             </Text>
           </Section>

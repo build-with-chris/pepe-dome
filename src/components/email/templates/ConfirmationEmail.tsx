@@ -129,7 +129,7 @@ export default function ConfirmationEmail({
             imprintUrl={`${baseUrl}/impressum`}
             instagramUrl={INSTAGRAM_URL}
             subscriberEmail={subscriberEmail}
-            reasonText="Du bekommst diese Mail, weil diese Adresse für den Newsletter des PEPE Dome eingetragen wurde."
+            reasonText="Du bekommst diese Mail, weil diese Adresse für den Newsletter des Pepe Dome eingetragen wurde."
           />
         </Container>
       </Body>

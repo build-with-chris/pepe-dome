@@ -33,7 +33,7 @@ export default async function NewEventPage() {
         </Link>
         <h1 className="text-xl font-semibold text-white">Neues Event erstellen</h1>
         <p className="text-white/50 mt-1">
-          Erstellen Sie ein neues Event für den PEPE Dome.
+          Erstellen Sie ein neues Event für den Pepe Dome.
         </p>
       </div>
 

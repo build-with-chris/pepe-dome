@@ -33,7 +33,7 @@ export default async function NewArticlePage() {
         </Link>
         <h1 className="text-xl font-semibold text-white">Neuen Artikel erstellen</h1>
         <p className="text-white/50 mt-1">
-          Erstellen Sie einen neuen Artikel für den PEPE Dome.
+          Erstellen Sie einen neuen Artikel für den Pepe Dome.
         </p>
       </div>
 

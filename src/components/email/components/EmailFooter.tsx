@@ -35,7 +35,7 @@ export function EmailFooter({
   imprintUrl,
   instagramUrl,
   subscriberEmail,
-  reasonText = 'Du bekommst diese Mail, weil du dich für den Newsletter des PEPE Dome angemeldet hast.',
+  reasonText = 'Du bekommst diese Mail, weil du dich für den Newsletter des Pepe Dome angemeldet hast.',
 }: EmailFooterProps) {
   const linkStyle = {
     color: emailTheme.color.textMuted,

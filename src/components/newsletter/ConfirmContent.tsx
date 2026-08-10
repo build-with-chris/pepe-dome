@@ -105,7 +105,7 @@ export default function ConfirmContent() {
 
           {/* Title */}
           <h1 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-            Willkommen beim PEPE Dome Newsletter!
+            Willkommen beim Pepe Dome Newsletter!
           </h1>
 
           {/* Description */}

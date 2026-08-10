@@ -60,7 +60,7 @@ export async function sendConfirmationEmail(subscriberId: string, baseUrl?: stri
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
-    subject: 'Bestätige deine Newsletter-Anmeldung bei PEPE Dome',
+    subject: 'Bestätige deine Newsletter-Anmeldung bei Pepe Dome',
     html: emailHtml,
     text: emailText,
     headers: {
@@ -137,7 +137,7 @@ export async function sendWelcomeEmail(subscriberId: string) {
   const result = await resend.emails.send({
     from: DEFAULT_FROM_EMAIL,
     to: subscriber.email,
-    subject: 'Willkommen beim PEPE Dome Newsletter!',
+    subject: 'Willkommen beim Pepe Dome Newsletter!',
     html: emailHtml,
     text: emailText,
     headers: {

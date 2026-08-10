@@ -83,7 +83,7 @@ export default function WelcomeEmail({
   return (
     <EmailHtml lang="de">
       <Head>
-        <title>Willkommen beim PEPE Dome</title>
+        <title>Willkommen beim Pepe Dome</title>
         <meta name="color-scheme" content="dark" />
         <meta name="supported-color-schemes" content="dark" />
         <style
@@ -93,7 +93,7 @@ export default function WelcomeEmail({
         />
       </Head>
 
-      <Preview>Du bist dabei. Das erwartet dich im PEPE Dome</Preview>
+      <Preview>Du bist dabei. Das erwartet dich im Pepe Dome</Preview>
 
       <Body
         style={{
@@ -122,7 +122,7 @@ export default function WelcomeEmail({
             </Text>
 
             <Text style={emailText.body}>
-              Schön, dass du dabei bist. Der PEPE Dome ist eine geodätische Kuppel im
+              Schön, dass du dabei bist. Der Pepe Dome ist eine geodätische Kuppel im
               Münchner Ostpark: 200 Plätze, kurze Wege zur Bühne und ein Programm aus
               zeitgenössischem Zirkus, Shows und Workshops.
             </Text>

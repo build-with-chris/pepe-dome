@@ -85,7 +85,7 @@ export function renderNewsletterText(
 
   blocks.push('-'.repeat(60))
   blocks.push(`Alle Termine ansehen: ${vm.eventsUrl}`)
-  blocks.push('Bis bald im Dome\ndas Team vom PEPE Dome')
+  blocks.push('Bis bald im Dome\ndas Team vom Pepe Dome')
 
   blocks.push('='.repeat(60))
   blocks.push(
@@ -94,8 +94,8 @@ export function renderNewsletterText(
       'info@pepe-dome.de',
       '',
       options.subscriberEmail
-        ? `Du bekommst diese Mail an ${options.subscriberEmail}, weil du dich für den Newsletter des PEPE Dome angemeldet hast.`
-        : 'Du bekommst diese Mail, weil du dich für den Newsletter des PEPE Dome angemeldet hast.',
+        ? `Du bekommst diese Mail an ${options.subscriberEmail}, weil du dich für den Newsletter des Pepe Dome angemeldet hast.`
+        : 'Du bekommst diese Mail, weil du dich für den Newsletter des Pepe Dome angemeldet hast.',
       `Abmelden: ${options.unsubscribeUrl}`,
       `Datenschutz: ${vm.baseUrl}/datenschutz`,
       `Impressum: ${vm.baseUrl}/impressum`,

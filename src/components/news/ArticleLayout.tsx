@@ -124,7 +124,7 @@ export default function ArticleLayout({ article }: ArticleLayoutProps) {
                 <h3 className="h3 mb-4">Bleib informiert</h3>
                 <SignupForm
                   variant="simple"
-                  contextMessage="Get the latest news, backstage stories, and event updates from PEPE Dome."
+                  contextMessage="Get the latest news, backstage stories, and event updates from Pepe Dome."
                 />
               </div>
             </div>
