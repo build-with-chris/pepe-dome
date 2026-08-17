@@ -65,20 +65,26 @@ describe('resolveListingMonth', () => {
     expect(result).toEqual({ year: 2026, month: 10 })
   })
 
-  it('fragt nur veröffentlichte Termine ab Heute ab', async () => {
+  it('fragt nur veröffentlichte Termine ab Heute ab, gemessen am Ende', async () => {
     vi.mocked(prisma.event.findFirst).mockResolvedValue(null as never)
 
     await resolveListingMonth(new Date(2026, 7, 8, 14, 30))
 
     const arg = vi.mocked(prisma.event.findFirst).mock.calls[0][0] as {
-      where: { status: string; date: { gte: Date } }
+      where: { status: string; OR: [{ endDate: { gte: Date } }, { date: { gte: Date } }] }
       orderBy: { date: string }
     }
     expect(arg.where.status).toBe('PUBLISHED')
     expect(arg.orderBy.date).toBe('asc')
+    // Verglichen wird das Ende, damit ein laufender mehrtägiger Termin den
+    // Startmonat bestimmt und die Seite nicht schon im Folgemonat aufschlägt.
+    const stichtag = arg.where.OR[0].endDate.gte
     // Ab Mitternacht, sonst fällt ein Termin von heute Morgen aus der Liste.
-    expect(arg.where.date.gte.getHours()).toBe(0)
-    expect(arg.where.date.gte.getDate()).toBe(8)
+    expect(stichtag.getHours()).toBe(0)
+    expect(stichtag.getDate()).toBe(8)
+    // Der zweite Zweig fängt die eintägigen Termine ab, bei denen endDate leer
+    // ist. Ohne ihn träfe das gte oben nichts und sie fielen alle weg.
+    expect(arg.where.OR[1].date.gte).toEqual(stichtag)
   })
 
   it('bleibt beim aktuellen Monat, wenn gar kein Termin ansteht', async () => {
@@ -99,13 +105,20 @@ describe('getEventsForMonth', () => {
     await getEventsForMonth(2026, 8, 'de')
 
     const arg = vi.mocked(prisma.event.findMany).mock.calls[0][0] as {
-      where: { status: string; date: { gte: Date; lte: Date } }
+      where: {
+        status: string
+        date: { lte: Date }
+        OR: [{ endDate: { gte: Date } }, { date: { gte: Date } }]
+      }
       orderBy: { date: string }
     }
     expect(arg.where.status).toBe('PUBLISHED')
     expect(arg.orderBy.date).toBe('asc')
-    expect(arg.where.date.gte.getMonth()).toBe(7)
-    expect(arg.where.date.gte.getDate()).toBe(1)
+    // Beginn vor Monatsende, Ende nach Monatsbeginn: eine Überschneidung, kein
+    // Beginn im Monat. Sonst fehlt ein Termin vom 30.8. bis 3.9. im September.
+    const monatsBeginn = arg.where.OR[0].endDate.gte
+    expect(monatsBeginn.getMonth()).toBe(7)
+    expect(monatsBeginn.getDate()).toBe(1)
     // Letzter Tag des Monats, hier der 31. August.
     expect(arg.where.date.lte.getMonth()).toBe(7)
     expect(arg.where.date.lte.getDate()).toBe(31)

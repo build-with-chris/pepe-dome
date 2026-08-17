@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
 import { localizedHref, type Locale } from '@/i18n/config'
+import { laeuftNoch, tagesbeginn } from '@/lib/event-window'
 import type { Dictionary } from '@/i18n/get-dictionary'
 
 type EventData = {
@@ -141,10 +142,12 @@ export default function EventsListingClient({
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((e) => e.category.toUpperCase() === selectedCategory)
     }
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    // Der Server liefert den Monat schon passend, dieser Filter blendet nur
+    // noch die vergangenen aus. Er muss dieselbe Regel benutzen, sonst wirft
+    // er einen laufenden mehrtägigen Termin gleich wieder raus.
+    const today = tagesbeginn()
     if (!showPast) {
-      filtered = filtered.filter((e) => new Date(e.date) >= today)
+      filtered = filtered.filter((e) => laeuftNoch(e, today))
     }
     return filtered
   }, [events, selectedCategory, showPast])
@@ -409,12 +412,9 @@ export default function EventsListingClient({
       <section className="py-16 md:py-24 bg-gradient-to-b from-[var(--pepe-black)] via-[var(--pepe-ink)]/30 to-[var(--pepe-black)]">
         <div className="stage-container">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-6 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-12 text-center">
               {t.planned.title}
             </h2>
-            <p className="text-[var(--pepe-t64)] text-center mb-12">
-              {t.planned.text}
-            </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[

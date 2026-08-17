@@ -6,6 +6,7 @@
 import { prisma } from './prisma'
 import type { Event, Article } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
+import { nichtVorbeiFilter, tagesbeginn } from './event-window'
 
 // Safe database query wrapper - returns fallback on error.
 // Verbindungsabbrüche zur Supabase-Direktverbindung treten sporadisch auf
@@ -156,13 +157,14 @@ export async function getUpcomingEvents(locale: DbLocale = 'de'): Promise<EventD
     // am Abend stattfinden (z.B. 20:00 Uhr), nicht herausgefiltert werden.
     // Das `date`-Feld speichert nur das Kalenderdatum; die genaue Uhrzeit liegt
     // im separaten String-Feld `time`.
-    const startOfToday = new Date()
-    startOfToday.setHours(0, 0, 0, 0)
+    // Mehrtägige Termine zählen bis zu ihrem Ende dazu, nicht nur am ersten
+    // Tag. Die Regel steht in src/lib/event-window.ts.
+    const startOfToday = tagesbeginn()
 
     const events = await prisma.event.findMany({
       where: {
         status: 'PUBLISHED',
-        date: { gte: startOfToday },
+        ...nichtVorbeiFilter(startOfToday),
       },
       orderBy: { date: 'asc' },
     })

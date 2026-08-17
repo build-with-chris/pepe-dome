@@ -15,6 +15,7 @@ import 'server-only'
 import type { Event } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { transformEvent, type DbLocale, type EventData } from '@/lib/db-data'
+import { imMonatFilter, nichtVorbeiFilter, tagesbeginn } from '@/lib/event-window'
 
 export interface ListingMonth {
   year: number
@@ -30,12 +31,13 @@ export interface ListingMonth {
  * Termins, und nur wenn gar keiner ansteht der aktuelle.
  */
 export async function resolveListingMonth(now: Date = new Date()): Promise<ListingMonth> {
-  const heute = new Date(now)
   // Ab Mitternacht, sonst fällt ein Termin von heute Morgen aus der Liste.
-  heute.setHours(0, 0, 0, 0)
+  const heute = tagesbeginn(now)
 
+  // Ein mehrtägiger Termin, der gerade läuft, zählt als der nächste. Sonst
+  // schlägt die Seite im Folgemonat auf, während im Dome noch etwas stattfindet.
   const nextEvent = await prisma.event.findFirst({
-    where: { status: 'PUBLISHED', date: { gte: heute } },
+    where: { status: 'PUBLISHED', ...nichtVorbeiFilter(heute) },
     orderBy: { date: 'asc' },
     select: { date: true },
   })
@@ -54,7 +56,7 @@ export async function getEventsForMonth(
   const ende = new Date(year, month, 0, 23, 59, 59)
 
   const events = await prisma.event.findMany({
-    where: { status: 'PUBLISHED', date: { gte: start, lte: ende } },
+    where: { status: 'PUBLISHED', ...imMonatFilter(start, ende) },
     orderBy: { date: 'asc' },
   })
 
