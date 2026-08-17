@@ -1,7 +1,7 @@
 import { clerkMiddleware } from '@clerk/nextjs/server'
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, type NextFetchEvent, type NextRequest } from 'next/server'
 import { LOCALES, DEFAULT_LOCALE, matchLocalizedPath, type Locale } from './i18n/config'
-import { requiresAuth } from './lib/admin-routes'
+import { isProtectedRoute, requiresAuth } from './lib/admin-routes'
 
 // ── i18n helpers ────────────────────────────────────────────────────────
 
@@ -135,35 +135,65 @@ function applySecurityHeaders(response: NextResponse) {
  * ist HSTS am wichtigsten, weil es das Zeitfenster vor dem Wechsel auf HTTPS
  * schliesst.
  */
-export default skipClerkInDev
-  ? function middleware(req: NextRequest) {
-      const redirect = maybeRedirectToLocale(req)
-      if (redirect) return applySecurityHeaders(redirect)
-      return applySecurityHeaders(passThrough(req))
-    }
-  : clerkMiddleware(async (auth, req) => {
-      // Locale-Redirect zuerst — vor Auth-Check, damit auch nicht-eingeloggte
-      // User direkt auf die richtige Sprache landen
-      const redirect = maybeRedirectToLocale(req)
-      if (redirect) return applySecurityHeaders(redirect)
+/** Der öffentliche Weg: Sprache, Sicherheitskopfzeilen, fertig. Kein Clerk. */
+function oeffentlich(req: NextRequest) {
+  const redirect = maybeRedirectToLocale(req)
+  if (redirect) return applySecurityHeaders(redirect)
+  return applySecurityHeaders(passThrough(req))
+}
 
-      if (requiresAuth(req)) {
-        const { userId } = await auth()
-        if (!userId) {
-          // API routes: return 401 instead of redirect
-          if (req.nextUrl.pathname.startsWith('/api/')) {
-            return applySecurityHeaders(
-              NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-            )
-          }
-          const signInUrl = new URL('/admin/sign-in', req.url)
-          signInUrl.searchParams.set('redirect_url', req.url)
-          return applySecurityHeaders(NextResponse.redirect(signInUrl))
-        }
+/** Der geschützte Weg: alles von oben, davor der Login-Check. */
+const geschuetzt = clerkMiddleware(async (auth, req) => {
+  // Locale-Redirect zuerst — vor Auth-Check, damit auch nicht-eingeloggte
+  // User direkt auf die richtige Sprache landen
+  const redirect = maybeRedirectToLocale(req)
+  if (redirect) return applySecurityHeaders(redirect)
+
+  if (requiresAuth(req)) {
+    const { userId } = await auth()
+    if (!userId) {
+      // API routes: return 401 instead of redirect
+      if (req.nextUrl.pathname.startsWith('/api/')) {
+        return applySecurityHeaders(
+          NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        )
       }
+      const signInUrl = new URL('/admin/sign-in', req.url)
+      signInUrl.searchParams.set('redirect_url', req.url)
+      return applySecurityHeaders(NextResponse.redirect(signInUrl))
+    }
+  }
 
-      return applySecurityHeaders(passThrough(req))
-    })
+  return applySecurityHeaders(passThrough(req))
+})
+
+/**
+ * Clerk läuft nur dort, wo es gebraucht wird.
+ *
+ * Vorher lief clerkMiddleware über den Matcher unten auf praktisch jeder
+ * Seite, auch auf der Startseite und jeder Eventseite. Gebraucht wird es aber
+ * nur unter /admin und /api/admin.
+ *
+ * Sichtbar wurde das an einem Fehler: Neun Browser tragen noch ein
+ * Sitzungscookie einer früheren Clerk-Instanz mit sich. Deren Token ist mit
+ * ins_36NOB… signiert, geprüft wird gegen ins_3BUcX…, der Handshake scheitert.
+ * Weil die Middleware überall lief, passierte das auf jeder einzelnen
+ * Unterseite: 41 Fehlerzeilen in 18 Tagen, ausgelöst von Besuchern, die mit
+ * Login nichts zu tun haben. Die Seiten kamen trotzdem an, es war Lärm — aber
+ * eben auch bei jedem Aufruf ein Umweg über einen Drittanbieter.
+ *
+ * Am Schutz ändert das nichts. Die Entscheidung trifft weiterhin
+ * isProtectedRoute in src/lib/admin-routes.ts, dieselbe Deny-by-default-Regel
+ * wie vorher. Der Schnitt liegt bewusst auf isProtectedRoute und nicht auf
+ * requiresAuth: Die Anmeldeseiten sind zwar ohne Login erreichbar, brauchen
+ * Clerk aber sehr wohl, sonst kommt niemand mehr durch den Login.
+ */
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  if (skipClerkInDev || !isProtectedRoute(req)) return oeffentlich(req)
+  // Das Event muss weitergereicht werden, nicht erfunden: Clerk hängt daran
+  // seine Hintergrundarbeit (waitUntil), etwa das Nachladen der Schlüssel.
+  return geschuetzt(req, event)
+}
 
 export const config = {
   matcher: [
