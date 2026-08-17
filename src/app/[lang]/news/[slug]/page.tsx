@@ -20,6 +20,7 @@ import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
+import { formatEventDateRange } from '@/lib/event-window'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
@@ -277,11 +278,7 @@ export default async function NewsArticlePage({
                   key={event.id}
                   title={event.title}
                   description={event.description}
-                  date={new Date(event.date).toLocaleDateString(dateLocale, {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
+                  date={formatEventDateRange(event, dateLocale)}
                   time={event.time}
                   category={event.category}
                   image={event.imageUrl || undefined}

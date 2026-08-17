@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import EventCard from './EventCard'
 import type { TrailerCardLabels } from '@/components/events/TrailerLauncher'
 import type { Locale } from '@/i18n/config'
+import { formatEventDateRange } from '@/lib/event-window'
 
 export type CarouselEvent = {
   id: string
@@ -18,6 +19,9 @@ export type CarouselEvent = {
   title: string
   description: string
   date: string  // ISO
+  /** Ende mehrtägiger Termine, ISO. Ohne dieses Feld steht auf der Karte nur
+      der erste Tag, siehe formatEventDateRange in src/lib/event-window.ts. */
+  endDate?: string | null
   time?: string | null
   category: string
   imageUrl: string | null
@@ -131,10 +135,7 @@ export default function EventsCarousel({
             <EventCard
               title={event.title}
               description={event.description}
-              date={new Date(event.date).toLocaleDateString(
-                lang === 'en' ? 'en-US' : 'de-DE',
-                { day: 'numeric', month: 'short', year: 'numeric' }
-              )}
+              date={formatEventDateRange(event, lang === 'en' ? 'en-US' : 'de-DE')}
               time={event.time}
               category={event.category}
               image={event.imageUrl || undefined}

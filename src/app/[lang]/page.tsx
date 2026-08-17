@@ -374,6 +374,7 @@ export default async function HomePage({
                 title: e.title,
                 description: e.description,
                 date: e.date,
+                endDate: e.endDate,
                 time: e.time,
                 category: e.category,
                 imageUrl: e.imageUrl,

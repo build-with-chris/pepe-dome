@@ -9,6 +9,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   endeVon,
+  formatEventDateRange,
   imMonatFilter,
   laeuftNoch,
   nichtVorbeiFilter,
@@ -68,6 +69,47 @@ describe('nichtVorbeiFilter', () => {
         { endDate: null, date: { gte: stichtag } },
       ],
     })
+  })
+})
+
+describe('formatEventDateRange', () => {
+  it('nennt den Zeitraum, nicht nur den ersten Tag', () => {
+    // Auf der Karte stand vorher bloss "15. Aug. 2026", obwohl der Termin die
+    // ganze Woche laeuft.
+    expect(formatEventDateRange(mitmachzirkus, 'de-DE')).toBe('15. bis 21. Aug. 2026')
+  })
+
+  it('nennt den Monat zweimal, wenn er wechselt', () => {
+    const ueberMonatsgrenze = { date: '2026-08-30T00:00:00.000Z', endDate: '2026-09-03T00:00:00.000Z' }
+    expect(formatEventDateRange(ueberMonatsgrenze, 'de-DE')).toBe(
+      '30. Aug. 2026 bis 3. Sept. 2026'
+    )
+  })
+
+  it('bleibt bei eintaegigen Terminen bei der alten Ausgabe', () => {
+    expect(formatEventDateRange(eintaegig, 'de-DE')).toBe('15. Aug. 2026')
+  })
+
+  it('behandelt endDate am selben Tag wie eintaegig', () => {
+    const gleicherTag = { date: '2026-08-15T00:00:00.000Z', endDate: '2026-08-15T00:00:00.000Z' }
+    expect(formatEventDateRange(gleicherTag, 'de-DE')).toBe('15. Aug. 2026')
+  })
+
+  it('schreibt auf Englisch beide Seiten voll aus', () => {
+    // Im Englischen steht der Monat vorn. Die deutsche Kurzform ergaebe hier
+    // "15 to Aug 21, 2026" und damit keinen Satz.
+    expect(formatEventDateRange(mitmachzirkus, 'en-US')).toBe('Aug 15, 2026 to Aug 21, 2026')
+  })
+
+  it('benutzt keinen Gedankenstrich', () => {
+    const text = formatEventDateRange(mitmachzirkus, 'de-DE')
+    expect(text).not.toMatch(/[—–]/)
+  })
+
+  it('rechnet in UTC, damit das Datum nicht westlich von Greenwich verrutscht', () => {
+    // Die Termine liegen als Mitternacht UTC in der Datenbank. Ohne feste
+    // Zeitzone sah ein Besucher in New York den 14. statt den 15.
+    expect(formatEventDateRange(eintaegig, 'de-DE')).toContain('15.')
   })
 })
 

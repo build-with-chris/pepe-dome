@@ -18,6 +18,7 @@ import SignupForm from '@/components/custom/SignupForm'
 import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 import { isFreeEntry } from '@/lib/event-price'
+import { formatEventDateRange } from '@/lib/event-window'
 import { parseTrailer } from '@/lib/event-trailer'
 import TrailerPlayer from '@/components/events/TrailerPlayer'
 import { formatTimeRange } from '@/lib/event-time'
@@ -361,7 +362,7 @@ export default async function EventDetailPage({
                   key={e.id}
                   title={e.title}
                   description={e.description}
-                  date={new Date(e.date).toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' })}
+                  date={formatEventDateRange(e, dateLocale)}
                   time={e.time}
                   category={e.category}
                   image={e.imageUrl || undefined}

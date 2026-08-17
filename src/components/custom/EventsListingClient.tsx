@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
 import { localizedHref, type Locale } from '@/i18n/config'
-import { laeuftNoch, tagesbeginn } from '@/lib/event-window'
+import { formatEventDateRange, laeuftNoch, tagesbeginn } from '@/lib/event-window'
 import type { Dictionary } from '@/i18n/get-dictionary'
 
 type EventData = {
@@ -310,11 +310,7 @@ export default function EventsListingClient({
                   key={event.id}
                   title={event.title}
                   description={event.description}
-                  date={new Date(event.date).toLocaleDateString(dateLocale, {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
+                  date={formatEventDateRange(event, dateLocale)}
                   time={event.time}
                   category={event.category}
                   image={event.imageUrl || undefined}
