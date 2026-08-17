@@ -233,7 +233,9 @@ export function EmailEventRow({ event, isLast = false }: { event: NewsletterEven
           </Text>
 
           <Text style={{ ...emailText.meta, fontSize: '13px', margin: '0 0 8px 0' }}>
-            {[event.weekdayLabel, event.time, event.location].filter(Boolean).join(' · ')}
+            {[event.spanLabel || event.weekdayLabel, event.time, event.location]
+              .filter(Boolean)
+              .join(' · ')}
           </Text>
 
           <EmailInlineLink href={event.ctaUrl}>{event.ctaLabel}</EmailInlineLink>

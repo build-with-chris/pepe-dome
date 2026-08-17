@@ -99,24 +99,32 @@ export function imMonatFilter(monatsBeginn: Date, monatsEnde: Date) {
  * Datenbank. Ohne die Angabe rechnet der Browser in die Zeitzone des Besuchers
  * um, und wer westlich von Greenwich sitzt, sah den Termin einen Tag zu frueh.
  */
+export const KARTEN_DATUM: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+}
+
 export function formatEventDateRange(
   event: { date: string | Date; endDate?: string | Date | null },
-  locale: string
+  locale: string,
+  optionen: Intl.DateTimeFormatOptions = KARTEN_DATUM
 ): string {
-  const optionen: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }
+  const mitZone = { ...optionen, timeZone: 'UTC' as const }
   const start = new Date(event.date)
   const ende = endeVon(event)
-  const voll = (d: Date) => d.toLocaleDateString(locale, optionen)
+  const voll = (d: Date) => d.toLocaleDateString(locale, mitZone)
 
   if (ende <= start) return voll(start)
 
   const englisch = locale.startsWith('en')
   const bis = englisch ? 'to' : 'bis'
+
+  // Bei einem Zeitraum faellt der Wochentag weg. "Samstag, 15. bis Freitag,
+  // 21. August 2026" liest sich niemand durch, und bei einer ganzen Woche
+  // sagt der Wochentag ohnehin nichts.
+  const { weekday: _weg, ...ohneWochentag } = mitZone
+  const spanne = (d: Date) => d.toLocaleDateString(locale, ohneWochentag)
 
   const gleicherMonat =
     start.getUTCFullYear() === ende.getUTCFullYear() &&
@@ -130,9 +138,9 @@ export function formatEventDateRange(
     // das ergibt keinen Satz. Dort stehen lieber beide Seiten voll da.
     if (!englisch) {
       const tag = start.toLocaleDateString(locale, { day: 'numeric', timeZone: 'UTC' })
-      return `${tag}. ${bis} ${voll(ende)}`
+      return `${tag}. ${bis} ${spanne(ende)}`
     }
   }
 
-  return `${voll(start)} ${bis} ${voll(ende)}`
+  return `${spanne(start)} ${bis} ${spanne(ende)}`
 }

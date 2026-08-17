@@ -14,6 +14,7 @@
 import { prisma } from './prisma'
 import { buildCampaignId, contentId, withUtm, isMailLink, normalizeContactUrl } from './utm'
 import { formatTimeRange } from './event-time'
+import { endeVon, formatEventDateRange } from './event-window'
 
 /**
  * Wie prominent ein Beitrag dargestellt wird.
@@ -42,6 +43,14 @@ export interface NewsletterEventItem {
   monthLabel: string
   /** "Sa" für die Kompaktzeile */
   weekdayLabel: string
+  /**
+   * "15. bis 21. August" — nur bei mehrtägigen Terminen gesetzt.
+   *
+   * In der Kompaktzeile steht sonst der Wochentag, und der stimmt bei einer
+   * ganzen Woche nicht: Das Badge zeigt den ersten Tag, daneben stand "Sa",
+   * und vom Zeitraum war nirgends etwas zu sehen.
+   */
+  spanLabel?: string
   time?: string
   location?: string
   category?: string
@@ -216,6 +225,9 @@ interface EventRecord {
   subtitle: string | null
   description: string
   date: Date
+  /** Ende mehrtaegiger Termine. Ohne dieses Feld nennt der Newsletter nur den
+      ersten Tag, siehe formatEventDateRange in src/lib/event-window.ts. */
+  endDate: Date | null
   time: string | null
   endTime: string | null
   location: string
@@ -299,7 +311,10 @@ function buildEventItem(
     title: event.title,
     subtitle: event.subtitle || undefined,
     teaser: teaserLength > 0 ? truncate(teaserSource, teaserLength) : undefined,
-    dateLabel: date.toLocaleDateString(dateLocale, {
+    // Mehrtaegige Termine als Zeitraum, sonst stand im Newsletter nur der
+    // erste Tag. Ein eintaegiger Termin behaelt genau die alte Ausgabe,
+    // Wochentag inklusive.
+    dateLabel: formatEventDateRange(event, dateLocale, {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -308,6 +323,12 @@ function buildEventItem(
     dayLabel: date.toLocaleDateString(dateLocale, { day: '2-digit' }),
     monthLabel: date.toLocaleDateString(dateLocale, { month: 'short' }).replace('.', ''),
     weekdayLabel: date.toLocaleDateString(dateLocale, { weekday: 'short' }).replace('.', ''),
+    // Nur wenn wirklich mehrere Tage. Manche Termine tragen ein endDate, das
+    // auf denselben Tag faellt; dort bliebe der Wochentag die bessere Angabe.
+    spanLabel:
+      event.endDate && endeVon(event) > date
+        ? formatEventDateRange(event, dateLocale, { day: 'numeric', month: 'long' })
+        : undefined,
     // Ein Wortlaut für Mail, Textfassung und Web-Ansicht: "20:00 bis 22:00 Uhr"
     time: formatTimeRange(event.time, event.endTime) || undefined,
     location: event.location || undefined,

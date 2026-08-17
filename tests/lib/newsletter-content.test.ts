@@ -93,6 +93,37 @@ describe('Newsletter-Viewmodel', () => {
     }
   })
 
+  it('nennt bei mehrtägigen Terminen den Zeitraum statt nur den ersten Tag', () => {
+    // Im Newsletter-Backend stand "Samstag, 15. August 2026", obwohl der
+    // Mitmachzirkus bis zum 21. lief. Der Wochentag faellt bei einer Spanne
+    // weg, "Samstag, 15. bis Freitag, 21. August" liest niemand.
+    const newsletter = makeNewsletter(1)
+    const events = new Map([
+      ['event-0', makeEvent({ endDate: new Date('2026-08-21T00:00:00.000Z') })],
+    ])
+
+    const vm = buildViewModel(newsletter as never, { events, articles: new Map() } as never, {
+      baseUrl: BASE,
+    })
+
+    expect((vm.sections[0].items[0] as { dateLabel: string }).dateLabel).toBe(
+      '15. bis 21. August 2026'
+    )
+  })
+
+  it('behält bei eintägigen Terminen den Wochentag', () => {
+    const newsletter = makeNewsletter(1)
+    const events = new Map([['event-0', makeEvent()]])
+
+    const vm = buildViewModel(newsletter as never, { events, articles: new Map() } as never, {
+      baseUrl: BASE,
+    })
+
+    expect((vm.sections[0].items[0] as { dateLabel: string }).dateLabel).toBe(
+      'Samstag, 15. August 2026'
+    )
+  })
+
   it('erkennt eine E-Mail-Anmeldung und beschriftet den CTA entsprechend', () => {
     const newsletter = makeNewsletter(1)
     const events = new Map([

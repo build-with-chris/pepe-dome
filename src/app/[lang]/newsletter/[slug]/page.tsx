@@ -272,7 +272,7 @@ export default async function NewsletterSlugPage({ params }: NewsletterPageProps
                           </Link>
                         </h3>
                         <p className="text-sm text-pepe-t64 mb-2">
-                          {[event.weekdayLabel, event.time, event.location].filter(Boolean).join(' · ')}
+                          {[event.spanLabel || event.weekdayLabel, event.time, event.location].filter(Boolean).join(' · ')}
                         </p>
                         <a href={ctaHrefFor(event)} className="text-sm text-pepe-gold font-semibold hover:text-pepe-gold/80">
                           {ctaLabelFor(event)} ›
