@@ -12,7 +12,12 @@ import {
   addRateLimitHeaders,
 } from '@/lib/api-response'
 import { checkRateLimit, getClientIdentifier, type RateLimitResult } from '@/lib/rate-limit'
-import { createSubscriber, validateEmail, generateOptInToken } from '@/lib/subscribers'
+import {
+  createSubscriber,
+  validateEmail,
+  generateOptInToken,
+  vermerkeVersandfehler,
+} from '@/lib/subscribers'
 import { prisma } from '@/lib/prisma'
 import { sendConfirmationEmail } from '@/lib/email-send'
 import { getBaseUrlFromRequest } from '@/lib/resend'
@@ -49,6 +54,11 @@ async function trySendConfirmation(subscriberId: string, baseUrl: string) {
     await sendConfirmationEmail(subscriberId, baseUrl)
   } catch (error) {
     console.error('[SIGNUP] Bestätigungsmail fehlgeschlagen:', error)
+    // Hier wird bewusst nicht zurückgerollt: Der Datensatz gehört zu einer
+    // Adresse, die schon vorher bekannt war. Ihn zu löschen träfe die falsche
+    // Person. Stattdessen bleibt ein Vermerk, sonst sieht dem Datensatz später
+    // niemand an, dass nie eine Mail rausging.
+    await vermerkeVersandfehler(subscriberId, error)
   }
 }
 
@@ -169,7 +179,9 @@ export async function POST(request: NextRequest) {
           firstName: firstName ?? existing.firstName,
           interests: interests || existing.interests,
           doubleOptInToken: generateOptInToken(),
-          doubleOptInSentAt: new Date(),
+          // Kein Zeitstempel vorab, siehe createSubscriber in
+          // src/lib/subscribers.ts. Den setzt erst der erfolgreiche Versand.
+          doubleOptInSentAt: null,
           unsubscribedAt: null,
           // Frische Anmeldung, frischer Vermerk. Vorhandene Metadaten bleiben,
           // der alte Tracking-Vermerk wird ersetzt, sonst gilt ein reportedAt

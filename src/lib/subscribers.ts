@@ -83,11 +83,62 @@ export async function createSubscriber(data: {
       interests: data.interests || [],
       status: SubscriberStatus.PENDING,
       doubleOptInToken: token,
-      doubleOptInSentAt: new Date(),
+      // doubleOptInSentAt bleibt hier bewusst leer.
+      //
+      // Frueher stand hier `new Date()`, also der Moment des Anlegens. Das Feld
+      // behauptete damit, eine Bestaetigungsmail sei raus, bevor der Versand
+      // ueberhaupt versucht wurde. Schlug er fehl, blieb die Behauptung stehen.
+      // Bei der Fehlersuche im August 2026 sah es deshalb so aus, als seien
+      // alle 139 offenen Anmeldungen beschickt worden; zehn davon waren es nie.
+      //
+      // Gesetzt wird es jetzt nur noch an einer Stelle: in sendConfirmationEmail
+      // nach einem erfolgreichen Resend-Aufruf. Ein leeres Feld heisst damit
+      // zuverlaessig "nichts rausgegangen".
       unsubscribeToken: generateUnsubscribeToken(),
       ...(data.metadata ? { metadata: data.metadata } : {}),
     },
   })
+}
+
+/**
+ * Haelt fest, dass der Versand der Bestaetigungsmail gescheitert ist.
+ *
+ * Zwei Wege legen einen Abonnenten an und rollen bei einem Fehlschlag nicht
+ * zurueck: die Wiederanmeldung einer bekannten Adresse und das Anlegen ueber
+ * das Admin-Panel. Dort blieb bisher nur eine Zeile im Server-Log, und die ist
+ * nach ein paar Tagen weg. Uebrig blieb ein Datensatz, dem man nicht ansah,
+ * dass nie jemand eine Mail bekommen hat.
+ *
+ * Der Vermerk landet in den Metadaten und ist damit im Panel sichtbar. Er wirft
+ * selbst nie: eine misslungene Notiz darf die Anmeldung nicht zusaetzlich
+ * kippen.
+ */
+export async function vermerkeVersandfehler(subscriberId: string, fehler: unknown) {
+  try {
+    const vorhanden = await prisma.subscriber.findUnique({
+      where: { id: subscriberId },
+      select: { metadata: true },
+    })
+    const meta =
+      vorhanden?.metadata && typeof vorhanden.metadata === 'object' && !Array.isArray(vorhanden.metadata)
+        ? (vorhanden.metadata as Record<string, unknown>)
+        : {}
+
+    await prisma.subscriber.update({
+      where: { id: subscriberId },
+      data: {
+        metadata: {
+          ...meta,
+          versandFehlgeschlagen: {
+            am: new Date().toISOString(),
+            fehler: fehler instanceof Error ? fehler.message : String(fehler),
+          },
+        },
+      },
+    })
+  } catch (notizFehler) {
+    console.error('[SIGNUP] Vermerk zum Versandfehler nicht speicherbar:', notizFehler)
+  }
 }
 
 /**

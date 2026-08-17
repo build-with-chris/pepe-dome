@@ -12,7 +12,11 @@ import {
   errorResponse,
   validationErrorResponse,
 } from '@/lib/api-response'
-import { generateOptInToken, generateUnsubscribeToken } from '@/lib/subscribers'
+import {
+  generateOptInToken,
+  generateUnsubscribeToken,
+  vermerkeVersandfehler,
+} from '@/lib/subscribers'
 import { sendConfirmationEmail } from '@/lib/email-send'
 import { getBaseUrlFromRequest } from '@/lib/resend'
 import { requireApiRole } from '@/lib/roles.server'
@@ -149,7 +153,8 @@ export async function POST(request: NextRequest) {
       subscriberData.confirmedAt = new Date()
     } else {
       subscriberData.doubleOptInToken = generateOptInToken()
-      subscriberData.doubleOptInSentAt = new Date()
+      // Kein Zeitstempel vorab, siehe createSubscriber in
+      // src/lib/subscribers.ts. Den setzt erst der erfolgreiche Versand.
     }
 
     const subscriber = await prisma.subscriber.create({
@@ -162,6 +167,10 @@ export async function POST(request: NextRequest) {
         await sendConfirmationEmail(subscriber.id, baseUrl)
       } catch (emailError) {
         console.error('Failed to send confirmation email:', emailError)
+        // Kein Rollback: Der Eintrag wurde bewusst von Hand angelegt und soll
+        // nicht kommentarlos verschwinden. Der Vermerk macht im Panel sichtbar,
+        // dass die Bestätigungsmail nachzuholen ist.
+        await vermerkeVersandfehler(subscriber.id, emailError)
       }
     }
 

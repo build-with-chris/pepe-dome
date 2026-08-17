@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
 import { isPermanentlyUnprocessable } from '@/lib/webhook-errors'
+import { bounceTyp, istHarterBounce, type BouncePayload } from '@/lib/bounce'
 
 /**
  * Resend webhook event types
@@ -43,8 +44,23 @@ interface ResendWebhookPayload {
       link: string
       timestamp: string
     }
+    /**
+     * Bounce-Angaben. Absichtlich weit gefasst.
+     *
+     * Der Code las frueher nur `bounceType` mit den Werten 'Hard' | 'Soft'.
+     * In allen sechs Bounces, die bis August 2026 eingingen, war dieses Feld
+     * leer, gespeichert wurde jedes Mal "unknown". Damit galt jeder Bounce als
+     * weich und es wurde nie jemand ausgetragen.
+     *
+     * Welchen Namen Resend tatsaechlich schickt, ist von aussen nicht sicher
+     * zu sagen, deshalb werden die gaengigen gelesen und der rohe Inhalt wird
+     * geloggt. Sobald der erste echte Payload im Log steht, laesst sich das
+     * hier auf das eine richtige Feld eindampfen.
+     */
     bounce?: {
-      bounceType: 'Hard' | 'Soft'
+      bounceType?: string
+      type?: string
+      subType?: string
     }
   }
 }
@@ -223,7 +239,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'email.bounced':
-        await handleEmailBounced(subscriberId, newsletterId, data.email_id, data.bounce?.bounceType)
+        await handleEmailBounced(subscriberId, newsletterId, data.email_id, data.bounce)
         break
 
       case 'email.complained':
@@ -421,16 +437,22 @@ async function handleEmailBounced(
   subscriberId: string | null,
   newsletterId: string | null,
   emailId: string,
-  bounceType?: 'Hard' | 'Soft'
+  bounce?: BouncePayload
 ) {
   // Statistik auch dann führen, wenn die Person nicht auflösbar ist
   if (newsletterId) {
     await incrementNewsletterStat(newsletterId, 'bounceCount')
   }
 
+  // Den rohen Inhalt einmal ins Log. Solange nicht feststeht, wie Resend das
+  // Feld nennt, ist das die einzige Quelle, aus der sich der echte Name lesen
+  // lässt. Die Zeile darf wieder raus, sobald der erste Payload da war.
+  console.log('[RESEND] bounce payload:', JSON.stringify(bounce ?? null))
+
   if (!subscriberId) return
 
-  const isHard = bounceType === 'Hard'
+  const roh = bounceTyp(bounce)
+  const isHard = istHarterBounce(bounce)
   const timestamp = new Date()
 
   // Metadaten zusammenführen statt überschreiben — der frühere Code setzte
@@ -449,7 +471,14 @@ async function handleEmailBounced(
       metadata: {
         ...meta,
         ...(isHard ? { unsubscribeReason: 'hard_bounce' } : {}),
-        lastBounce: { type: bounceType ?? 'unknown', emailId, timestamp: timestamp.toISOString() },
+        // Den rohen Wert speichern, nicht nur "unknown". Genau daran liess
+        // sich im August 2026 erkennen, dass das Feld nie ankam.
+        lastBounce: {
+          type: roh ?? 'unknown',
+          raw: bounce ?? null,
+          emailId,
+          timestamp: timestamp.toISOString(),
+        },
       },
     },
   })
@@ -460,7 +489,7 @@ async function handleEmailBounced(
         newsletterId,
         subscriberId,
         eventType: 'BOUNCED',
-        eventData: { emailId, bounceType: bounceType ?? 'unknown' },
+        eventData: { emailId, bounceType: roh ?? 'unknown' },
         resendEventId: emailId,
       },
     })
