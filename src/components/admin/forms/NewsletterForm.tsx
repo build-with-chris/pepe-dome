@@ -25,7 +25,6 @@ const pageOptions = [
   { value: '/events', label: 'Events' },
   { value: '/news', label: 'News' },
   { value: '/training', label: 'Training' },
-  { value: '/business', label: 'Business' },
   { value: '/about', label: 'Über uns' },
   { value: '/contact', label: 'Kontakt' },
   { value: '/newsletter', label: 'Newsletter Archiv' },

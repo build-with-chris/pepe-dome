@@ -79,7 +79,6 @@ const STRINGS: Record<SignupLang, {
     interests: [
       { id: 'shows-events', label: 'Shows & Events' },
       { id: 'workshops',    label: 'Workshops & Community' },
-      { id: 'corporate',    label: 'Corporate & Business Events' },
     ],
     gdprPrefix: 'Ich stimme zu, dass meine Daten zum Versand des Newsletters verarbeitet werden. Mehr Informationen in unserer ',
     gdprPrivacyLink: 'Datenschutzerklärung',
@@ -110,7 +109,6 @@ const STRINGS: Record<SignupLang, {
     interests: [
       { id: 'shows-events', label: 'Shows & Events' },
       { id: 'workshops',    label: 'Workshops & Community' },
-      { id: 'corporate',    label: 'Corporate & Business Events' },
     ],
     gdprPrefix: 'I agree that my data is processed to send the newsletter. More info in our ',
     gdprPrivacyLink: 'privacy policy',

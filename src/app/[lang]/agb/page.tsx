@@ -37,7 +37,7 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
       {/* Hero Section */}
       <HeroSection
         title="Allgemeine Geschäftsbedingungen (AGB)"
-        subtitle="für Veranstaltungen, Tickets, Workshops/Kurse und Raummiete im &quot;Pepe Dome&quot;"
+        subtitle="für Veranstaltungen, Tickets, Workshops und Kurse im &quot;Pepe Dome&quot;"
         size="sm"
       />
 
@@ -380,31 +380,10 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
               </div>
             </div>
 
-            {/* 16. Raummiete */}
+            {/* 16. Hinweise zum Standort und Lärmschutz */}
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
               <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
-                16. Raummiete (Pepe Dome)
-              </h2>
-              
-              <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
-                <ol className="list-decimal pl-6 space-y-4">
-                  <li>
-                    Umfang, Mietdauer, Nutzungszweck, Übergabezeiten und ggf. zusätzliche Leistungen ergeben sich aus dem jeweiligen Mietangebot/der Buchungsbestätigung.
-                  </li>
-                  <li>
-                    Die Nutzung ist nur im vereinbarten Rahmen erlaubt. Sicherheits- und Lärmschutzvorgaben sind einzuhalten.
-                  </li>
-                  <li>
-                    Der Veranstalter ist berechtigt, bei Verstößen die Nutzung zu beenden, wenn dies zur Gefahrenabwehr, zum Schutz der Anlage oder zur Einhaltung behördlicher Vorgaben erforderlich ist.
-                  </li>
-                </ol>
-              </div>
-            </div>
-
-            {/* 17. Hinweise zum Standort und Lärmschutz */}
-            <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
-                17. Hinweise zum Standort und Lärmschutz
+                16. Hinweise zum Standort und Lärmschutz
               </h2>
               
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
@@ -419,10 +398,10 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
               </div>
             </div>
 
-            {/* 18. Verbraucherstreitbeilegung */}
+            {/* 17. Verbraucherstreitbeilegung */}
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
               <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
-                18. Verbraucherstreitbeilegung
+                17. Verbraucherstreitbeilegung
               </h2>
               
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">
@@ -432,10 +411,10 @@ export default async function AGBPage({ params }: { params: Promise<{ lang: stri
               </div>
             </div>
 
-            {/* 19. Schlussbestimmungen */}
+            {/* 18. Schlussbestimmungen */}
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-8 md:p-12 shadow-xl">
               <h2 className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-8">
-                19. Schlussbestimmungen
+                18. Schlussbestimmungen
               </h2>
               
               <div className="space-y-6 text-[var(--pepe-t80)] leading-relaxed">

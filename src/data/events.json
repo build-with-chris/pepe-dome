@@ -176,26 +176,6 @@
     ]
   },
   {
-    "id": "business-teambuilding-nov",
-    "title": "Business Teambuilding Workshop",
-    "subtitle": "Artistik als Team-Erfahrung",
-    "description": "Stärken Sie Ihr Team durch gemeinsame Artistik-Erfahrungen. Individuell buchbar für Firmen.",
-    "date": "2025-11-12",
-    "time": "14:00 - 18:00 Uhr",
-    "location": "Pepe Dome, Ostpark München",
-    "category": "Business",
-    "ticketUrl": "mailto:business@pepedome.de",
-    "price": "Auf Anfrage (ab 10 Personen)",
-    "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&q=80&auto=format",
-    "featured": false,
-    "highlights": [
-      "Teambuilding Exercises",
-      "Professionelle Anleitung",
-      "Catering optional",
-      "Firmenrabatte"
-    ]
-  },
-  {
     "id": "trapez-workshop-fortgeschrittene",
     "title": "Trapez Workshop - Fortgeschrittene",
     "subtitle": "Vertiefe deine Trapez-Skills",

@@ -49,6 +49,9 @@ export const CATEGORY_LABELS: Record<string, string> = {
   WORKSHOP: 'Workshop',
   OPEN_TRAINING: 'Training',
   KINDERTRAINING: 'Kinder',
+  // Nicht mehr auswaehlbar: Firmenvermietungen sind seit der Auflage des KVR
+  // von der Website genommen. Das Label bleibt, damit Altbestaende in der
+  // Datenbank nicht ohne Beschriftung dastehen.
   BUSINESS: 'Business',
   OPEN_AIR: 'Open Air',
   EVENT: 'Event',
@@ -85,7 +88,6 @@ export const CATEGORY_OPTIONS = [
   { value: 'WORKSHOP', label: 'Workshop' },
   { value: 'OPEN_TRAINING', label: 'Training' },
   { value: 'KINDERTRAINING', label: 'Kinder' },
-  { value: 'BUSINESS', label: 'Business' },
   { value: 'OPEN_AIR', label: 'Open Air' },
   { value: 'EVENT', label: 'Event' },
 ]

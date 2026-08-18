@@ -27,7 +27,6 @@
     "main": [
       {"label": "Events", "href": "/events"},
       {"label": "Training", "href": "/training"},
-      {"label": "Business", "href": "/business"},
       {"label": "News", "href": "/news"},
       {"label": "Über uns", "href": "/about"},
       {"label": "Kontakt", "href": "/contact"}
@@ -179,8 +178,7 @@
       {"id": "news", "label": "News", "color": "gold"},
       {"id": "festival", "label": "Festival", "color": "purple"},
       {"id": "show", "label": "Show", "color": "blue"},
-      {"id": "training", "label": "Training", "color": "green"},
-      {"id": "business", "label": "Business", "color": "bronze"}
+      {"id": "training", "label": "Training", "color": "green"}
     ],
     "events": [
       {"id": "show", "label": "Show", "color": "gold"},
@@ -189,7 +187,6 @@
       {"id": "premiere", "label": "Premiere", "color": "amber"},
       {"id": "open-air", "label": "Open Air", "color": "blue"},
       {"id": "kindertraining", "label": "Kindertraining", "color": "cyan"},
-      {"id": "business", "label": "Business", "color": "bronze"},
       {"id": "open-training", "label": "Open Training", "color": "teal"},
       {"id": "event", "label": "Event", "color": "copper"}
     ]
@@ -201,7 +198,6 @@
       "links": [
         {"label": "Events", "href": "/events"},
         {"label": "Training", "href": "/training"},
-        {"label": "Business", "href": "/business"},
         {"label": "News", "href": "/news"},
         {"label": "Über uns", "href": "/about"},
         {"label": "Kontakt", "href": "/contact"}

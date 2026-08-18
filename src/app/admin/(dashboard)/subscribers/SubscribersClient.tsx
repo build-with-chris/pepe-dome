@@ -24,7 +24,6 @@ import { cn } from '@/lib/utils'
 const INTEREST_OPTIONS = [
   { id: 'shows-events', label: 'Shows & Events' },
   { id: 'workshops', label: 'Workshops & Community' },
-  { id: 'corporate', label: 'Corporate & Business Events' },
 ]
 
 /**

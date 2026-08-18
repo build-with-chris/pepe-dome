@@ -9,7 +9,12 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-06-15T10:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80&auto=format",
-    "tags": ["Festival", "Artistik", "Freeman", "Workshops"],
+    "tags": [
+      "Festival",
+      "Artistik",
+      "Freeman",
+      "Workshops"
+    ],
     "featured": true
   },
   {
@@ -22,7 +27,11 @@
     "author": "Sarah Müller",
     "publishedAt": "2025-08-20T14:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80&auto=format",
-    "tags": ["Training", "Cyr Wheel", "Kurse"],
+    "tags": [
+      "Training",
+      "Cyr Wheel",
+      "Kurse"
+    ],
     "featured": false
   },
   {
@@ -35,7 +44,11 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-07-10T09:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=1200&q=80&auto=format",
-    "tags": ["News", "Renovierung", "Dome"],
+    "tags": [
+      "News",
+      "Renovierung",
+      "Dome"
+    ],
     "featured": true
   },
   {
@@ -48,20 +61,12 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-09-01T11:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&auto=format",
-    "tags": ["Event", "Artistik", "Film", "Kultur"],
-    "featured": false
-  },
-  {
-    "id": "business-events-pepe-dome",
-    "slug": "business-events-pepe-dome",
-    "title": "Firmenevent mit Wow-Effekt: Der Pepe Dome für Ihr Business",
-    "excerpt": "Machen Sie Ihr nächstes Firmenevent unvergesslich! Der Pepe Dome bietet die perfekte Location für Teambuilding, Produktpräsentationen und Weihnachtsfeiern.",
-    "content": "Suchen Sie nach einer außergewöhnlichen Location für Ihr Firmenevent? Der Pepe Dome kombiniert spektakuläre Architektur mit flexiblen Nutzungsmöglichkeiten.\n\nUnsere Business-Pakete umfassen:\n- Exklusive Raumnutzung für bis zu 200 Personen\n- Professionelle Veranstaltungstechnik\n- Optional: Live-Artistik-Performances\n- Catering-Service mit regionalen Partnern\n- Team building Workshops mit unseren Trainer:innen\n\nKontaktieren Sie uns für ein individuelles Angebot!",
-    "category": "Business",
-    "author": "Michael Weber",
-    "publishedAt": "2025-08-15T10:00:00Z",
-    "imageUrl": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&q=80&auto=format",
-    "tags": ["Business", "Events", "Firmenevent"],
+    "tags": [
+      "Event",
+      "Artistik",
+      "Film",
+      "Kultur"
+    ],
     "featured": false
   },
   {
@@ -74,7 +79,12 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-06-25T12:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&q=80&auto=format",
-    "tags": ["Event", "Wanderzirkus", "Sommer", "Open Air"],
+    "tags": [
+      "Event",
+      "Wanderzirkus",
+      "Sommer",
+      "Open Air"
+    ],
     "featured": true
   },
   {
@@ -87,7 +97,12 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-10-01T15:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=1200&q=80&auto=format",
-    "tags": ["Show", "Premiere", "Artistik", "Tanz"],
+    "tags": [
+      "Show",
+      "Premiere",
+      "Artistik",
+      "Tanz"
+    ],
     "featured": false
   },
   {
@@ -100,7 +115,11 @@
     "author": "Lisa Schmidt",
     "publishedAt": "2025-09-15T10:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&q=80&auto=format",
-    "tags": ["Training", "Kinder", "Ferien"],
+    "tags": [
+      "Training",
+      "Kinder",
+      "Ferien"
+    ],
     "featured": false
   },
   {
@@ -113,7 +132,11 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-08-30T13:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80&auto=format",
-    "tags": ["News", "Kooperation", "Theater"],
+    "tags": [
+      "News",
+      "Kooperation",
+      "Theater"
+    ],
     "featured": false
   },
   {
@@ -126,7 +149,11 @@
     "author": "Redaktion Pepe Dome",
     "publishedAt": "2025-07-20T11:00:00Z",
     "imageUrl": "https://images.unsplash.com/photo-1519167758481-83f29da8c19f?w=1200&q=80&auto=format",
-    "tags": ["News", "Nachhaltigkeit", "Umwelt"],
+    "tags": [
+      "News",
+      "Nachhaltigkeit",
+      "Umwelt"
+    ],
     "featured": false
   }
 ]

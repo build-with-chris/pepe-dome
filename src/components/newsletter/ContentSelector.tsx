@@ -172,7 +172,6 @@ export default function ContentSelector({
               <option value="">Alle Kategorien</option>
               <option value="shows">Shows</option>
               <option value="workshops">Workshops</option>
-              <option value="corporate">Business</option>
               <option value="news">News</option>
             </select>
           </div>

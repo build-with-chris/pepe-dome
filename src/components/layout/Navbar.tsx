@@ -22,7 +22,7 @@ function localeFromPathname(pathname: string | null): Locale | null {
 /**
  * Hauptnavigation schlank halten: die Kern-Reise (Events besuchen,
  * trainieren, wer wir sind, Kontakt) bleibt oben — sekundäre Ziele
- * (News, Business) wandern ins "Mehr"-Dropdown.
+ * (News, Galerie) wandern ins "Mehr"-Dropdown.
  */
 function useNavigation(lang: Locale) {
   const { t } = useTranslation()
@@ -37,7 +37,6 @@ function useNavigation(lang: Locale) {
     more: [
       { label: t('navigation.gallery', 'Galerie'),   href: localizedHref(lang, '/galerie') },
       { label: t('navigation.news', 'News'),         href: localizedHref(lang, '/news') },
-      { label: t('navigation.business', 'Business'), href: localizedHref(lang, '/business') },
     ],
     moreLabel: t('navigation.more', 'Mehr'),
   }

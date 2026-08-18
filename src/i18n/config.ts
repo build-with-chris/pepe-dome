@@ -42,7 +42,6 @@ export const LOCALIZED_PATHS = [
   '/training',
   '/cafe',
   '/about',
-  '/business',
   '/contact',
   '/newsletter',
   '/spenden',

@@ -27,7 +27,6 @@ const PRIORITY: Record<string, number> = {
   '/training': 0.8,
   '/cafe': 0.7,
   '/about': 0.7,
-  '/business': 0.7,
   '/contact': 0.6,
   '/newsletter': 0.6,
   '/spenden': 0.5,

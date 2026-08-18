@@ -115,7 +115,6 @@ const categories = [
   { value: 'WORKSHOP', label: 'Workshop' },
   { value: 'OPEN_TRAINING', label: 'Open Training' },
   { value: 'KINDERTRAINING', label: 'Kindertraining' },
-  { value: 'BUSINESS', label: 'Business' },
   { value: 'OPEN_AIR', label: 'Open Air' },
   { value: 'EVENT', label: 'Event' },
 ]
