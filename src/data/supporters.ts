@@ -21,6 +21,12 @@ export type Supporter = {
 
 export const SUPPORTERS: readonly Supporter[] = [
   {
+    src: '/images/foerderer/kulturreferat-muenchen.png',
+    width: 800,
+    height: 208,
+    alt: 'Landeshauptstadt München Kulturreferat',
+  },
+  {
     src: '/images/foerderer/staedtebaufoerderung.jpg',
     width: 1400,
     height: 193,
