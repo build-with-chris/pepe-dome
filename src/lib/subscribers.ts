@@ -174,20 +174,37 @@ export async function confirmSubscriber(token: string) {
   })
 }
 
+/** UUID, wie sie `@default(uuid())` für die Subscriber-ID erzeugt. */
+const UUID_MUSTER = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 /**
- * Unsubscribe a subscriber
+ * Meldet einen Abonnenten ab.
+ *
+ * Angenommen wird das persönliche Abmelde-Token und, nur als Rückfalltür für
+ * alte Mails, die Subscriber-ID.
+ *
+ * Warum die ID trotz der Härtung vom Juli wieder mitzählt: Alle bis dahin
+ * versendeten Newsletter tragen einen Abmeldelink der Form
+ * /newsletter/unsubscribe/<id>. Ohne diesen Zweig lief jeder Klick darin ins
+ * Leere — die Seite kam, der Knopf meldete einen Fehler, abgemeldet wurde
+ * niemand. Über tausend Abonnenten hatten damit faktisch keinen Opt-out, und
+ * genau darüber kam eine Beschwerde.
+ *
+ * Die Lücke von damals lag nicht an der ID, sondern an der E-Mail-Adresse:
+ * `OR: [{ email }, { id }]` machte den Verteiler mit einer beliebigen
+ * Adressliste leerräumbar. Die ID ist dagegen eine zufällige UUID, steht in
+ * derselben Mail wie der Abmeldelink und ist nicht zu erraten. Die Adresse
+ * bleibt abgewiesen, dafür sorgt das Format-Muster.
  */
 export async function unsubscribeSubscriber(token: string) {
-  // Ausschliesslich über das Token. Vorher suchte diese Funktion per
-  // OR: [{ email }, { id }] — damit genügte die bloße Kenntnis einer fremden
-  // Adresse, um sie auszutragen, und der komplette Verteiler war mit einer
-  // Adressliste leerräumbar.
   if (!token) {
     throw new Error('Missing unsubscribe token')
   }
 
-  const subscriber = await prisma.subscriber.findUnique({
-    where: { unsubscribeToken: token },
+  const subscriber = await prisma.subscriber.findFirst({
+    where: UUID_MUSTER.test(token)
+      ? { OR: [{ unsubscribeToken: token }, { id: token }] }
+      : { unsubscribeToken: token },
   })
 
   if (!subscriber) {

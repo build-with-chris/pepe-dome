@@ -21,7 +21,7 @@ const COPY = {
     pending: 'Wird abgemeldet ...',
     doneTitle: 'Du bist abgemeldet',
     doneText:
-      'Wir schicken dir keine Mails mehr. Schade, dass du gehst — die Tür steht offen.',
+      'Wir schicken dir keine Mails mehr. Schade, dass du gehst, die Tür steht offen.',
     error: 'Das hat nicht geklappt. Versuche es später noch einmal oder schreib uns an info@pepe-dome.de.',
     back: 'Zur Startseite',
   },
@@ -31,7 +31,7 @@ const COPY = {
     confirm: 'Unsubscribe',
     pending: 'Unsubscribing ...',
     doneTitle: 'You are unsubscribed',
-    doneText: 'We will not send you any more emails. Sorry to see you go — you are welcome back.',
+    doneText: 'We will not send you any more emails. Sorry to see you go, you are welcome back.',
     error: 'That did not work. Please try again later or write to info@pepe-dome.de.',
     back: 'Back to the homepage',
   },

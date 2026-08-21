@@ -186,7 +186,14 @@ describe('Subscriber Management', () => {
       expect(unveraendert?.status).toBe(SubscriberStatus.ACTIVE)
     })
 
-    it('meldet NICHT ueber die Subscriber-ID ab', async () => {
+    /**
+     * Die Subscriber-ID zaehlt wieder, aber nur sie und nur im UUID-Format.
+     *
+     * Alle bis Juli 2026 versendeten Newsletter tragen einen Abmeldelink der
+     * Form /newsletter/unsubscribe/<id>. Ohne diesen Zweig meldete der Knopf
+     * darin einen Fehler und trug niemanden aus.
+     */
+    it('meldet ueber die Subscriber-ID ab (Links aus alten Mails)', async () => {
       const subscriber = await prisma.subscriber.create({
         data: {
           email: 'unsub-id@example.com',
@@ -196,7 +203,29 @@ describe('Subscriber Management', () => {
         },
       })
 
-      await expect(unsubscribeSubscriber(subscriber.id)).rejects.toThrow('Subscriber not found')
+      const result = await unsubscribeSubscriber(subscriber.id)
+      expect(result.id).toBe(subscriber.id)
+      expect(result.status).toBe(SubscriberStatus.UNSUBSCRIBED)
+    })
+
+    it('meldet NICHT ueber eine fremde UUID ab', async () => {
+      const subscriber = await prisma.subscriber.create({
+        data: {
+          email: 'unsub-fremd@example.com',
+          status: SubscriberStatus.ACTIVE,
+          confirmedAt: new Date(),
+          unsubscribeToken: 'tok-' + 'e'.repeat(60),
+        },
+      })
+
+      await expect(
+        unsubscribeSubscriber('3f8b2c1a-0000-4000-8000-000000000000')
+      ).rejects.toThrow('Subscriber not found')
+
+      const unveraendert = await prisma.subscriber.findUnique({
+        where: { id: subscriber.id },
+      })
+      expect(unveraendert?.status).toBe(SubscriberStatus.ACTIVE)
     })
 
     it('gibt einen bereits Abgemeldeten unveraendert zurueck', async () => {
