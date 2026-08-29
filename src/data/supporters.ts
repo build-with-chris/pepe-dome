@@ -21,15 +21,14 @@ export type Supporter = {
 
 export const SUPPORTERS: readonly Supporter[] = [
   {
-    src: '/images/foerderer/kulturreferat-muenchen.png',
-    width: 800,
-    height: 208,
-    alt: 'Landeshauptstadt München Kulturreferat',
-  },
-  {
-    src: '/images/foerderer/staedtebaufoerderung.jpg',
+    /**
+     * Die Leiste trug rechts das Stadtwappen mit "Landeshauptstadt München".
+     * Das Kulturreferat hat um sein eigenes Logo gebeten, es sitzt jetzt an
+     * genau dieser Stelle. Der Rest der Leiste ist unverändert.
+     */
+    src: '/images/foerderer/foerderleiste.png',
     width: 1400,
     height: 193,
-    alt: 'Städtebauförderung von Bund, Ländern und Gemeinden, Bundesministerium für Wohnen, Stadtentwicklung und Bauwesen, Bayerisches Staatsministerium für Wohnen, Bau und Verkehr, Landeshauptstadt München',
+    alt: 'Städtebauförderung von Bund, Ländern und Gemeinden, Bundesministerium für Wohnen, Stadtentwicklung und Bauwesen, Bayerisches Staatsministerium für Wohnen, Bau und Verkehr, Landeshauptstadt München Kulturreferat',
   },
 ]
