@@ -37,6 +37,8 @@ function useNavigation(lang: Locale) {
     more: [
       { label: t('navigation.gallery', 'Galerie'),   href: localizedHref(lang, '/galerie') },
       { label: t('navigation.news', 'News'),         href: localizedHref(lang, '/news') },
+      // Stand frueher nur klein in der Fusszeile und wurde kaum gefunden.
+      { label: t('navigation.donate', 'Unterstützen'), href: localizedHref(lang, '/spenden') },
     ],
     moreLabel: t('navigation.more', 'Mehr'),
   }

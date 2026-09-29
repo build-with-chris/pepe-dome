@@ -154,7 +154,6 @@ export default function Footer() {
             >
               {t('footer.legal.cookies', 'Cookie-Einstellungen')}
             </button>
-            <Link href={href('/spenden')} className="footer-legal-link">{t('footer.legal.donate', 'Unterstützen')}</Link>
             <Link href="/admin/sign-in" className="footer-legal-link">{t('footer.legal.login', 'Login')}</Link>
           </div>
         </div>
