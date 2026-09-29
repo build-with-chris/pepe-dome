@@ -336,7 +336,7 @@
     },
     "location": {
       "title": "Besuche uns im Dome",
-      "text": "Der Pepe Dome liegt im schönen Ostpark in München. Du erreichst ihn gut mit öffentlichen Verkehrsmitteln, Parkplätze gibt es in der Nähe.",
+      "text": "Der Pepe Dome liegt mitten im Ostpark in München, etwas versteckt und nicht direkt an einer Straße. Am besten kommst du mit der U5 bis Quiddestraße, mit dem Auto parkst du am Michaelibad.",
       "contact": "Kontakt",
       "upcomingEvents": "Kommende Events"
     },
@@ -696,25 +696,26 @@
       "text": "Am Wochenende oder rund um eine Show. Wir freuen uns auf dich.",
       "events": "Zum Eventkalender",
       "directions": "So findest du uns"
+    }
+  },
+  "anreise": {
+    "title": "So findest du uns",
+    "lead": "Der Dome liegt mitten im Ostpark und nicht an einer Straße. Der Weg führt erst leicht bergauf, dahinter steht der Dome in einer Senke. Du erkennst ihn an den großen Containern davor. Im Dunkeln ist er leicht zu übersehen.",
+    "linkLabel": "Wegbeschreibung",
+    "transit": {
+      "icon": "🚇",
+      "title": "Mit der U-Bahn",
+      "text": "U5 bis Quiddestraße. Geh zum Abenteuerspielplatz Maulwurfshausen, dort ist der Eingang in den Park. Ab da immer geradeaus, dann kommst du direkt vor dem Dome raus."
     },
-    "anreise": {
-      "title": "So findest du uns",
-      "subtitle": "Der Dome steht mitten im Ostpark, etwas versteckt. Am einfachsten kommst du so hin:",
-      "navTip": {
-        "icon": "🧭",
-        "title": "Mit dem Navi (am einfachsten)",
-        "text": "Gib „Abenteuerspielplatz Maulwurfshausen“ ins Navi ein. Von dort biegst du in den Park ein und läufst immer geradeaus, dann stehst du direkt vor dem Dome."
-      },
-      "car": {
-        "icon": "🚗",
-        "title": "Mit dem Auto & Parken",
-        "text": "Am Wochenende kannst du die letzten Meter vor dem Abenteuerspielplatz Maulwurfshausen sehr gut parken. Alternativ parkst du am Michaeligarten, von dort sind es rund 15 Minuten zu Fuß durch den Park."
-      },
-      "transit": {
-        "icon": "🚇",
-        "title": "Mit der U-Bahn",
-        "text": "U5 bis Quiddestraße. Von dort in den Ostpark und dem Weg Richtung Theatron folgen, nur wenige Minuten zu Fuß."
-      }
+    "car": {
+      "icon": "🚗",
+      "title": "Mit dem Auto",
+      "text": "Parken am Michaelibad, dort gibt es rund 200 Plätze. Von da sind es etwa 15 Minuten zu Fuß durch den Park."
+    },
+    "maps": {
+      "icon": "🧭",
+      "title": "Mit Google Maps",
+      "text": "Suche nach „Pepe Dome“ oder „Theatron im Ostpark“. Eine Adresse, die bis vor die Tür führt, gibt es nicht."
     }
   }
 }

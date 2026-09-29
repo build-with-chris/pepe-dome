@@ -336,7 +336,7 @@
     },
     "location": {
       "title": "Visit us at the Dome",
-      "text": "Pepe Dome sits in the lovely Ostpark in Munich. It's easy to reach by public transport, with parking nearby.",
+      "text": "Pepe Dome sits in the middle of Munich's Ostpark, a little hidden and not directly on a street. The easiest way is the U5 to Quiddestraße. If you come by car, park at Michaelibad.",
       "contact": "Contact",
       "upcomingEvents": "Upcoming events"
     },
@@ -696,25 +696,26 @@
       "text": "On the weekend or around a show. We're looking forward to seeing you.",
       "events": "See the event calendar",
       "directions": "How to find us"
+    }
+  },
+  "anreise": {
+    "title": "How to find us",
+    "lead": "The dome sits in the middle of the Ostpark, away from any street. The path first leads slightly uphill, and the dome lies behind it in a dip. Look for the large containers in front of it. After dark it is easy to miss.",
+    "linkLabel": "Directions",
+    "transit": {
+      "icon": "🚇",
+      "title": "By underground",
+      "text": "U5 to Quiddestraße. Walk to the Abenteuerspielplatz Maulwurfshausen playground, where the park entrance is. From there keep going straight and you come out right in front of the dome."
     },
-    "anreise": {
-      "title": "How to find us",
-      "subtitle": "The dome sits in the middle of the Ostpark, a little hidden. The easiest ways to get here:",
-      "navTip": {
-        "icon": "🧭",
-        "title": "By sat-nav (easiest)",
-        "text": "Enter “Abenteuerspielplatz Maulwurfshausen” into your sat-nav. From there, turn into the park and walk straight ahead — the dome is right in front of you."
-      },
-      "car": {
-        "icon": "🚗",
-        "title": "By car & parking",
-        "text": "On weekends you can park nicely along the last stretch in front of Abenteuerspielplatz Maulwurfshausen. Alternatively park at Michaeligarten, from there it's about a 15-minute walk through the park."
-      },
-      "transit": {
-        "icon": "🚇",
-        "title": "By underground",
-        "text": "U5 to Quiddestraße. From there head into the Ostpark and follow the path towards the Theatron, just a few minutes on foot."
-      }
+    "car": {
+      "icon": "🚗",
+      "title": "By car",
+      "text": "Park at Michaelibad, which has around 200 spaces. From there it is about a 15-minute walk through the park."
+    },
+    "maps": {
+      "icon": "🧭",
+      "title": "With Google Maps",
+      "text": "Search for “Pepe Dome” or “Theatron im Ostpark”. There is no street address that takes you to the door."
     }
   }
 }

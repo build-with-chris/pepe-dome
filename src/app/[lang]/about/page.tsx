@@ -386,6 +386,12 @@ export default async function AboutPage({
                     {site.email}
                   </a>
                 </div>
+                <div className="flex items-start gap-4">
+                  <span className="text-[var(--pepe-accent-text)] text-xl" aria-hidden="true">🧭</span>
+                  <Link href={`${localizedHref(lang, '/contact')}#anfahrt`} className="text-[var(--pepe-accent-text)] hover:underline">
+                    {dict.anreise.linkLabel}
+                  </Link>
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-4">

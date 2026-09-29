@@ -12,6 +12,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
 import CafeReviewsSlider from '@/components/custom/CafeReviewsSlider'
+import Directions from '@/components/custom/Directions'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
@@ -133,31 +134,12 @@ export default async function CafePage({
       </section>
 
       {/* ── ANREISE ── */}
-      <section className="py-16 md:py-24 bg-[var(--pepe-ink)]/40">
+      <section id="anfahrt" className="py-16 md:py-24 bg-[var(--pepe-ink)]/40 scroll-mt-24">
         <div className="stage-container">
-          <div className="max-w-2xl mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
-              {t.anreise.title}
-            </h2>
-            <p className="text-lg text-[var(--pepe-t80)] leading-relaxed">
-              {t.anreise.subtitle}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[t.anreise.navTip, t.anreise.car, t.anreise.transit].map((way, i) => (
-              <div
-                key={i}
-                className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-2xl p-7"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[var(--pepe-gold)]/10 flex items-center justify-center mb-5">
-                  <span className="text-2xl leading-none">{way.icon}</span>
-                </div>
-                <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-3">{way.title}</h3>
-                <p className="text-[var(--pepe-t80)] text-sm leading-relaxed">{way.text}</p>
-              </div>
-            ))}
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--pepe-white)] mb-4">
+            {dict.anreise.title}
+          </h2>
+          <Directions t={dict.anreise} />
 
           <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-block mt-8">
             <Button variant="secondary" size="md">{t.hours.directions}</Button>

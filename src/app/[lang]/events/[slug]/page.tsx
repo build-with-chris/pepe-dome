@@ -294,6 +294,15 @@ export default async function EventDetailPage({
                   <div>
                     <div className="text-xs text-[var(--pepe-t48)] mb-1 uppercase tracking-wide">{t.infoLocation}</div>
                     <div className="text-[var(--pepe-white)] font-medium">{event.location}</div>
+                    {/* Nur bei Events am Dome: der Weg durch den Park ist nicht offensichtlich. */}
+                    {/dome|ostpark|theatron/i.test(event.location ?? '') && (
+                      <Link
+                        href={`${contactHref}#anfahrt`}
+                        className="mt-1 inline-block text-sm text-[var(--pepe-accent-text)] hover:underline"
+                      >
+                        {dict.anreise.linkLabel}
+                      </Link>
+                    )}
                   </div>
                 </div>
                 {event.price && (

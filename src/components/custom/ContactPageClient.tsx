@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/textarea'
 import type { Dictionary } from '@/i18n/get-dictionary'
+import Directions from '@/components/custom/Directions'
 import type { Locale } from '@/i18n/config'
 
 type Social = { instagram?: string; facebook?: string; youtube?: string }
@@ -447,10 +448,15 @@ export default function ContactPageClient({
         </div>
 
         {/* Map */}
-        <section className="mt-32 pt-16 border-t border-[var(--pepe-line)]">
+        <section id="anfahrt" className="mt-32 pt-16 border-t border-[var(--pepe-line)] scroll-mt-24">
           <h2 className="text-2xl font-bold text-[var(--pepe-white)] mb-10 text-center">
             {t.map.title}
           </h2>
+          {/* Der Dome ist vom Weg aus schwer zu sehen und Google Maps führt
+              nicht bis vor die Tür. Darum steht der Weg hier ausgeschrieben. */}
+          <p className="max-w-2xl mx-auto mb-10 text-center text-[var(--pepe-t80)] leading-relaxed">
+            {dict.anreise.lead}
+          </p>
           <div className="relative h-96 rounded-2xl overflow-hidden border border-[var(--pepe-line)] shadow-2xl group">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.116634887349!2d11.640768!3d48.1119726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479ddfe1623e7b83%3A0x8f776b2413dcab9e!2sPepe%20Dome%20im%20Theatron%20im%20Ostpark!5e0!3m2!1sde!2sde!4v1738148400000"
@@ -463,6 +469,9 @@ export default function ContactPageClient({
               className="grayscale invert contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:invert-0 group-hover:opacity-100"
             />
             <div className="absolute inset-0 pointer-events-none border-[var(--pepe-gold)]/20 border-2 rounded-2xl"></div>
+          </div>
+          <div className="mt-8">
+            <Directions t={dict.anreise} showLead={false} />
           </div>
           <div className="text-center mt-8">
             <a
