@@ -36,18 +36,18 @@ describe('ConsentBanner', () => {
     render(<ConsentBanner />)
     await screen.findByRole('dialog')
 
-    const zustimmen = screen.getByRole('button', { name: 'Alle akzeptieren' })
-    const ablehnen = screen.getByRole('button', { name: 'Nur notwendige' })
+    const zustimmen = screen.getByRole('button', { name: 'Einverstanden' })
+    const ablehnen = screen.getByRole('button', { name: 'Nein, danke' })
 
     // Beide im selben Container, sonst ist Ablehnen die zweite Ebene.
     expect(zustimmen.parentElement).toBe(ablehnen.parentElement)
   })
 
-  it('speichert bei Nur notwendige eine Ablehnung und schliesst', async () => {
+  it('speichert bei Nein, danke eine Ablehnung und schliesst', async () => {
     render(<ConsentBanner />)
     await screen.findByRole('dialog')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Nur notwendige' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Nein, danke' }))
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
@@ -55,25 +55,25 @@ describe('ConsentBanner', () => {
     expect(gespeicherteEinwilligung()).toMatchObject({ analytics: false, marketing: false })
   })
 
-  it('speichert bei Alle akzeptieren beide Zwecke', async () => {
+  it('speichert bei Einverstanden beide Zwecke', async () => {
     render(<ConsentBanner />)
     await screen.findByRole('dialog')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Alle akzeptieren' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Einverstanden' }))
 
     await waitFor(() => {
       expect(gespeicherteEinwilligung()).toMatchObject({ analytics: true, marketing: true })
     })
   })
 
-  it('öffnet die Schalter über Einstellungen, ohne etwas zu speichern', async () => {
+  it('öffnet die Schalter über Selbst auswählen, ohne etwas zu speichern', async () => {
     render(<ConsentBanner />)
     await screen.findByRole('dialog')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Einstellungen' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Selbst auswählen' }))
 
     expect(await screen.findByText('Statistik')).toBeInTheDocument()
-    expect(screen.getByText('Marketing')).toBeInTheDocument()
+    expect(screen.getByText('Werbung')).toBeInTheDocument()
     expect(gespeicherteEinwilligung()).toBeNull()
   })
 
