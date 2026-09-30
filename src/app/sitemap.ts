@@ -78,9 +78,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticPages = LOCALIZED_PATHS.flatMap((path) => entriesForPath(path, now))
 
-  // Events und News liegen pro Sprache unter demselben Slug (Slugs sind global
-  // unique, die Übersetzung steckt im translations-Feld). Aus einer Liste
-  // lassen sich deshalb beide Sprachvarianten erzeugen.
+  // Events liegen pro Sprache unter demselben Slug (Slugs sind global unique,
+  // die Übersetzung steckt im translations-Feld). Aus einer Liste lassen sich
+  // deshalb beide Sprachvarianten erzeugen.
   let eventPages: MetadataRoute.Sitemap = []
   try {
     const events = await getAllEvents(DEFAULT_LOCALE)
@@ -97,12 +97,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let newsPages: MetadataRoute.Sitemap = []
   try {
     const articles = await getAllArticles(DEFAULT_LOCALE)
-    newsPages = articles.flatMap((article) =>
-      entriesForPath(`/news/${article.slug}`, new Date(article.publishedAt), {
-        priority: 0.7,
-        changeFrequency: 'monthly',
-      })
-    )
+    // Artikel haben keine Übersetzung: /en/news/x zeigt den deutschen Text und
+    // verweist per canonical auf /de/news/x. In die Sitemap gehört deshalb nur
+    // die deutsche URL.
+    newsPages = articles.map((article) => ({
+      url: absoluteUrl(DEFAULT_LOCALE, `/news/${article.slug}`),
+      lastModified: new Date(article.publishedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
   } catch {
     console.error('Sitemap: Failed to fetch articles')
   }

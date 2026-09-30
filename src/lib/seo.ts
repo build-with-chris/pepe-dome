@@ -48,7 +48,18 @@ export function absoluteUrl(lang: Locale, path = '/'): string {
  * `x-default` zeigt auf die deutsche Fassung: das ist die Variante, die ein
  * Besucher ohne passende Sprachpräferenz bekommen soll (Münchner Venue).
  */
-export function buildAlternates(lang: Locale, path = '/'): Metadata['alternates'] {
+export function buildAlternates(
+  lang: Locale,
+  path = '/',
+  sourceLocale?: Locale
+): Metadata['alternates'] {
+  // Inhalt nur in einer Sprache vorhanden: jede Sprachvariante zeigt als
+  // canonical auf die Quelle, und hreflang nennt nur diese eine Fassung.
+  if (sourceLocale) {
+    const source = absoluteUrl(sourceLocale, path)
+    return { canonical: source, languages: { [sourceLocale]: source, 'x-default': source } }
+  }
+
   const languages: Record<string, string> = {}
   for (const locale of LOCALES) {
     languages[locale] = absoluteUrl(locale, path)
@@ -75,6 +86,7 @@ export function pageMetadata({
   keywords,
   noindex = false,
   article,
+  sourceLocale,
 }: {
   lang: Locale
   path: string
@@ -89,6 +101,13 @@ export function pageMetadata({
    * basierend das Veröffentlichungsdatum in der Vorschau an.
    */
   article?: { publishedTime?: string; authors?: string[] }
+  /**
+   * Für Inhalte ohne Übersetzung, etwa News-Artikel: /en/news/x zeigt denselben
+   * deutschen Text wie /de/news/x. Ohne diese Angabe meldet hreflang die
+   * englische URL als englische Fassung, und Google sieht zwei Seiten mit
+   * gleichem Inhalt. Mit `sourceLocale: 'de'` gilt nur die deutsche URL.
+   */
+  sourceLocale?: Locale
 }): Metadata {
   const url = absoluteUrl(lang, path)
   const ogImages = images && images.length > 0 ? images : [DEFAULT_OG_IMAGE]
@@ -98,7 +117,7 @@ export function pageMetadata({
     title,
     description,
     ...(keywords && keywords.length > 0 ? { keywords } : {}),
-    alternates: buildAlternates(lang, path),
+    alternates: buildAlternates(lang, path, sourceLocale),
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       ...(article
@@ -125,4 +144,29 @@ export function pageMetadata({
       images: ogImages.map((image) => image.url),
     },
   }
+}
+
+/**
+ * Meta-Beschreibung aus redaktionellem Freitext.
+ *
+ * Vorher schnitten die Detailseiten mit `slice(0, 160)` mitten im Wort ab
+ * („…hinein in die Zeitlosigke") und ließen Doppel-Leerzeichen aus
+ * Absatzwechseln stehen. Google zeigt so einen Stummel oft nicht an und
+ * schreibt sich lieber selbst einen Text aus der Seite.
+ *
+ * Hier: Markdown-Zeichen und Umbrüche raus, Leerraum zusammenfassen, dann an
+ * der letzten Wortgrenze vor `max` kürzen und mit „…" enden.
+ */
+export function metaDescription(text: string, max = 160): string {
+  const plain = text
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[*_#>`~]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (plain.length <= max) return plain
+  const cut = plain.slice(0, max - 1)
+  const lastSpace = cut.lastIndexOf(' ')
+  const base = lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut
+  return `${base.replace(/[\s,;:.–-]+$/, '')}…`
 }

@@ -9,6 +9,7 @@
  */
 
 import { jsonLdScriptContent } from '@/lib/json-ld'
+import { metaDescription } from '@/lib/seo'
 import { getSiteContent } from '@/lib/data'
 import { isFreeEntry } from '@/lib/event-price'
 import type { Kursprogramm } from '@/lib/course-types'
@@ -80,7 +81,7 @@ export function OrganizationJsonLd({
   name,
   description,
   url = BASE_URL,
-  logo = `${BASE_URL}/PepeDome Logo ausgeschnitten.png`,
+  logo = `${BASE_URL}/PepeDome%20Logo%20ausgeschnitten.png`,
   email,
   address,
 }: OrganizationLdProps = {}) {
@@ -325,6 +326,7 @@ export function EventJsonLd({
   ticketUrl,
   category,
 }: EventLdProps) {
+  const site = getSiteContent()
   const startIso = toBerlinIso(startDate, time)
 
   // End-Sanity: gleiche Logik wie in den Edge Functions (feed-ics, feed-jsonld).
@@ -350,18 +352,23 @@ export function EventJsonLd({
     '@context': 'https://schema.org',
     '@type': 'Event',
     name,
-    description: description.slice(0, 300),
+    description: metaDescription(description, 300),
     startDate: startIso,
     endDate: endIso,
+    // Straße und PLZ aus getSiteContent(), wie im Organization-Schema. Nur mit
+    // Ort und Land kann Google das Event nicht sicher auf der Karte verorten.
     location: {
       '@type': 'Place',
       name: location,
       address: {
         '@type': 'PostalAddress',
-        addressLocality: 'München',
+        streetAddress: site.address?.street,
+        addressLocality: site.address?.city ?? 'München',
         addressRegion: 'Bayern',
+        postalCode: site.address?.zip,
         addressCountry: 'DE',
       },
+      geo: { '@type': 'GeoCoordinates', ...GEO_COORDINATES },
     },
     url: `${BASE_URL}${url}`,
     organizer: {
@@ -441,7 +448,7 @@ export function ArticleJsonLd({
       name: 'Pepe Dome',
       logo: {
         '@type': 'ImageObject',
-        url: `${BASE_URL}/PepeDome Logo ausgeschnitten.png`,
+        url: `${BASE_URL}/PepeDome%20Logo%20ausgeschnitten.png`,
       },
     },
     mainEntityOfPage: {

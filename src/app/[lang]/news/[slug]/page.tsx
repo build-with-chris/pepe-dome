@@ -19,7 +19,7 @@ import ShareButtons from '@/components/custom/ShareButtons'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
-import { pageMetadata } from '@/lib/seo'
+import { metaDescription, pageMetadata } from '@/lib/seo'
 import { formatEventDateRange } from '@/lib/event-window'
 
 const BASE_URL = 'https://www.pepe-dome.de'
@@ -50,7 +50,9 @@ export async function generateMetadata({
     lang: rawLang,
     path: `/news/${article.slug}`,
     title: article.title,
-    description: article.excerpt.slice(0, 160),
+    description: metaDescription(article.excerpt),
+    // Artikel gibt es nur auf Deutsch, siehe sourceLocale in pageMetadata.
+    sourceLocale: 'de',
     keywords: [article.category, 'Pepe Dome', 'München', ...(article.tags || [])],
     article: { publishedTime: article.publishedAt, authors: [article.author] },
     images: article.imageUrl

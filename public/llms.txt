@@ -11,17 +11,25 @@ Der Pepe Dome ist ein langfristiger, lebendiger Ort für zeitgenössischen Zirku
 - Festivals: Internationale und regionale Zirkusfestivals
 - Business: Corporate Events, Teambuilding, Raumvermietung
 - Training: Regelmäßige Trainings für Profis und Einsteiger
+- Café: Café am Dome im Ostpark
 
 ## Kontakt
 - Website: https://www.pepe-dome.de
 - E-Mail: info@pepe-dome.de
-- Standort: Ostpark, München, Deutschland
+- Telefon: +49 179 699 0707
+- Adresse: Albert-Schweitzer-Straße 62 (Theatron Ostpark), 81735 München, Deutschland
 
 ## Wichtige Seiten
-- Events: https://www.pepe-dome.de/events
-- News: https://www.pepe-dome.de/news
-- Über uns: https://www.pepe-dome.de/about
-- Business: https://www.pepe-dome.de/business
-- Training: https://www.pepe-dome.de/training
-- Kontakt: https://www.pepe-dome.de/contact
-- Newsletter: https://www.pepe-dome.de/newsletter
+- Events: https://www.pepe-dome.de/de/events
+- Training: https://www.pepe-dome.de/de/training
+- Café: https://www.pepe-dome.de/de/cafe
+- News: https://www.pepe-dome.de/de/news
+- Galerie: https://www.pepe-dome.de/de/galerie
+- Über uns: https://www.pepe-dome.de/de/about
+- Kontakt und Anfahrt: https://www.pepe-dome.de/de/contact
+- Newsletter: https://www.pepe-dome.de/de/newsletter
+
+## English
+- Home: https://www.pepe-dome.de/en
+- Events: https://www.pepe-dome.de/en/events
+- Training: https://www.pepe-dome.de/en/training

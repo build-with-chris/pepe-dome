@@ -27,7 +27,7 @@ import EventViewTracker from '@/components/events/EventViewTracker'
 import { isMailTicket } from '@/lib/ticket-url'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
-import { pageMetadata } from '@/lib/seo'
+import { metaDescription, pageMetadata } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 
 const BASE_URL = 'https://www.pepe-dome.de'
@@ -62,7 +62,7 @@ export async function generateMetadata({
   //
   // Komma statt Gedankenstrich, wie in der gesamten sichtbaren Copy.
   const title = `${event.title}, ${eventDate}`
-  const description = event.description.slice(0, 160).replace(/\n/g, ' ')
+  const description = metaDescription(event.description)
 
   return pageMetadata({
     lang: rawLang,
