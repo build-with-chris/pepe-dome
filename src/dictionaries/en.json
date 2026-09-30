@@ -517,9 +517,49 @@
     "hero": {
       "eyebrow": "Gallery",
       "title": "What the place looks like",
-      "subtitle": "The dome, the shows, our festivals, the café, and how the whole thing was built. Tap any picture to see it large."
+      "subtitle": "The pictures are sorted into chapters: the venue, the shows, the festivals, the café and, at the end, how the dome was built. Tap any picture to see it large."
     },
-    "filterAll": "Everything",
+    "jumpTo": "Jump to",
+    "chapters": {
+      "dome": {
+        "title": "The venue",
+        "text": "The dome is a timber frame made of triangles and stands without any supports inside. There is a stage with rows of chairs, but the room can also be set up as a circle. By day, light comes through the dome's skin; in the evening it glows from inside."
+      },
+      "shows": {
+        "title": "Shows",
+        "text": "The stage belongs to contemporary circus. The pictures are sorted by what happens in them: in the air, in the wheel, on the ground, and everything that is not acrobatics."
+      },
+      "festival": {
+        "title": "Festivals",
+        "text": "In summer the Flower Festival takes over the grounds, in November the Freeman Festival, with autumn leaves outside and a programme inside. You will see aerial silk and rope, roller skates in the haze, magic, circles of conversation and a long crafts table."
+      },
+      "cafe": {
+        "title": "Café",
+        "text": "The café sits right next to the dome, with tables and parasols on the lawn. Coffee is there without a ticket, and during festivals there is hot food too."
+      },
+      "aufbau": {
+        "title": "How it was built",
+        "text": "The dome arrived in Ostpark on a low loader. It was put up by hand in the Theatron: carrying beams, setting joints, section by section, until the first panels of the skin lay on the frame."
+      }
+    },
+    "showDisciplines": {
+      "luft": {
+        "title": "In the air",
+        "text": "Rings and other aerial apparatus hang from the top of the dome. Then there is the Chinese pole, a vertical pole artists hold themselves horizontal on."
+      },
+      "rad": {
+        "title": "Cyr wheel",
+        "text": "One wheel and one body. In the Cyr wheel the artist turns across the stage, upright, on one arm or in a handstand."
+      },
+      "akrobatik": {
+        "title": "Acrobatics, balance and juggling",
+        "text": "Human pyramids, duo figures, handstands on chair backs and on wooden planks kept in balance. Some of it happens outdoors."
+      },
+      "buehne": {
+        "title": "Dance, clowning and music",
+        "text": "Not everything is acrobatics. There is dance, a clown plays with a hat and a fabric ladybird, and the music is made live on stage, once even on a guitar built from an olive oil can."
+      }
+    },
     "categories": {
       "dome": "The venue",
       "shows": "Shows",
@@ -527,8 +567,6 @@
       "aufbau": "How it was built",
       "cafe": "Café"
     },
-    "imageCountOne": "1 picture",
-    "imageCountMany": "{{count}} pictures",
     "lightbox": {
       "open": "View larger",
       "close": "Close",

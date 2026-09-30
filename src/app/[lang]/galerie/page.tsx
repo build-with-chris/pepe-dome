@@ -2,10 +2,12 @@
  * Galerie — lokalisiert (DE / EN)
  *
  * Server Component. Die Bildliste liegt in src/data/gallery.ts, die UI-Texte im
- * Dictionary unter `gallery`. Filter und Lightbox brauchen State, deshalb liegt
- * das Raster selbst in der Client-Komponente GalleryGrid; der Rest der Seite
- * wird serverseitig gerendert und ist damit vollständig im HTML enthalten,
- * inklusive Alt-Texte und JSON-LD.
+ * Dictionary unter `gallery`. Die Bilder stehen in Kapiteln mit Überschrift und
+ * kurzem Text statt in einem Raster mit Filter-Tabs: so hat die Seite echten
+ * Text für Suchmaschinen, und wer sie durchscrollt, bekommt eine Reihenfolge
+ * statt eines Bildertopfs. Nur die Lightbox braucht State, deshalb ist jedes
+ * Kapitel-Raster eine Client-Komponente (GalleryGrid); Überschriften, Texte,
+ * Alt-Texte und JSON-LD kommen serverseitig ins HTML.
  *
  * Der Pfad heißt /galerie und nicht /gallery: Suchanfragen aus dem Zielgebiet
  * lauten "pepe dome galerie" oder "pepe dome bilder". Für die englische Fassung
@@ -19,7 +21,12 @@ import { notFound } from 'next/navigation'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
-import { GALLERY_IMAGES, usedCategories } from '@/data/gallery'
+import {
+  GALLERY_IMAGES,
+  imagesByCategory,
+  showImagesByDiscipline,
+  usedCategories,
+} from '@/data/gallery'
 import GalleryGrid from '@/components/custom/GalleryGrid'
 import { Button } from '@/components/ui/Button'
 import { ImageGalleryJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
@@ -67,6 +74,8 @@ export default async function GalleryPage({
   const t = dict.gallery
 
   const categories = usedCategories()
+  const showGroups = showImagesByDiscipline()
+  const gridTexts = { lightbox: t.lightbox }
 
   return (
     <div className="min-h-screen bg-[var(--pepe-black)]">
@@ -104,21 +113,80 @@ export default async function GalleryPage({
         </div>
       </header>
 
-      {/* ── Raster ───────────────────────────────────────────────────────── */}
-      <section className="stage-container pb-16 md:pb-24" aria-label={t.hero.eyebrow}>
-        <GalleryGrid
-          images={GALLERY_IMAGES}
-          categories={categories}
-          lang={lang}
-          texts={{
-            filterAll: t.filterAll,
-            categories: t.categories,
-            imageCountOne: t.imageCountOne,
-            imageCountMany: t.imageCountMany,
-            lightbox: t.lightbox,
-          }}
-        />
-      </section>
+      {/* ── Sprungleiste ─────────────────────────────────────────────────── */}
+      <nav aria-label={t.jumpTo} className="stage-container pb-10 md:pb-14">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--pepe-t48)]">
+          {t.jumpTo}
+        </p>
+        <ul className="flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <li key={category}>
+              <a
+                href={`#${category}`}
+                // min-h-11 = 44px: die kleinste Fläche, die sich auf einem
+                // Touchscreen zuverlässig treffen lässt.
+                className="inline-flex min-h-11 items-center rounded-full border border-[var(--pepe-line)] bg-[var(--pepe-ink)] px-4 py-2 text-sm font-semibold text-[var(--pepe-t80)] transition-colors hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-white)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)]"
+              >
+                {t.chapters[category].title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* ── Kapitel ──────────────────────────────────────────────────────── */}
+      {categories.map((category, chapterIndex) => {
+        const chapter = t.chapters[category]
+        return (
+          <section
+            key={category}
+            id={category}
+            aria-labelledby={`${category}-title`}
+            // scroll-mt hält die Überschrift beim Sprung unter der festen Navigation frei.
+            className="stage-container scroll-mt-24 pb-16 md:pb-24"
+          >
+            <div className="mb-8 max-w-2xl">
+              <h2
+                id={`${category}-title`}
+                className="text-2xl md:text-3xl font-bold text-[var(--pepe-white)] mb-3"
+              >
+                {chapter.title}
+              </h2>
+              <p className="text-base md:text-lg text-[var(--pepe-t80)] leading-relaxed">
+                {chapter.text}
+              </p>
+            </div>
+
+            {category === 'shows' ? (
+              <div className="space-y-12 md:space-y-16">
+                {showGroups.map(({ discipline, images }) => (
+                  <div key={discipline} aria-labelledby={`shows-${discipline}-title`}>
+                    <div className="mb-6 max-w-2xl">
+                      <h3
+                        id={`shows-${discipline}-title`}
+                        className="text-lg md:text-xl font-semibold text-[var(--pepe-white)] mb-2"
+                      >
+                        {t.showDisciplines[discipline].title}
+                      </h3>
+                      <p className="text-[var(--pepe-t64)] leading-relaxed">
+                        {t.showDisciplines[discipline].text}
+                      </p>
+                    </div>
+                    <GalleryGrid images={images} texts={gridTexts} lang={lang} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <GalleryGrid
+                images={imagesByCategory(category)}
+                texts={gridTexts}
+                lang={lang}
+                priority={chapterIndex === 0}
+              />
+            )}
+          </section>
+        )
+      })}
 
       {/* ── Hinweis, dass die Galerie weiter wächst ───────────────────────── */}
       <section className="border-t border-[var(--pepe-line)] bg-[var(--pepe-ink)]/40 py-12 md:py-16">

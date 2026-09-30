@@ -517,9 +517,49 @@
     "hero": {
       "eyebrow": "Galerie",
       "title": "So sieht es bei uns aus",
-      "subtitle": "Die Kuppel, die Shows, unsere Festivals, das Café und wie der Dome überhaupt entstanden ist. Tippe auf ein Bild, um es groß zu sehen."
+      "subtitle": "Die Bilder sind nach Kapiteln sortiert: der Ort, die Shows, die Festivals, das Café und zum Schluss, wie die Kuppel entstanden ist. Tippe auf ein Bild, um es groß zu sehen."
     },
-    "filterAll": "Alles",
+    "jumpTo": "Direkt zu",
+    "chapters": {
+      "dome": {
+        "title": "Der Ort",
+        "text": "Die Kuppel ist ein Holztragwerk aus Dreiecken und trägt sich ohne Stützen im Raum. Innen steht eine Bühne mit Stuhlreihen, der Raum lässt sich aber auch als Runde stellen. Tagsüber fällt Licht durch die Kuppelhaut, abends leuchtet der Dome von innen."
+      },
+      "shows": {
+        "title": "Shows",
+        "text": "Auf der Bühne steht zeitgenössischer Zirkus. Die Bilder sind nach dem sortiert, was darauf passiert: in der Luft, im Rad, am Boden und alles, was keine Artistik ist."
+      },
+      "festival": {
+        "title": "Festivals",
+        "text": "Im Sommer läuft das Flower Festival auf dem Gelände, im November das Freeman Festival, draußen Laub und drinnen Programm. Zu sehen sind Vertikaltuch und Seil, Rollschuhe im Nebel, Zauberei, Gesprächsrunden im Kreis und ein langer Basteltisch."
+      },
+      "cafe": {
+        "title": "Café",
+        "text": "Das Café steht direkt neben der Kuppel, mit Tischen und Sonnenschirmen auf der Wiese. Kaffee gibt es auch ohne Ticket, bei Festivals wird warm gekocht."
+      },
+      "aufbau": {
+        "title": "Entstehung",
+        "text": "Die Kuppel kam auf einem Tieflader in den Ostpark. Aufgebaut wurde sie im Theatron von Hand: Balken tragen, Knoten setzen, Feld für Feld, bis die ersten Bahnen der Kuppelhaut auf dem Gerüst lagen."
+      }
+    },
+    "showDisciplines": {
+      "luft": {
+        "title": "In der Luft",
+        "text": "Ringe und andere Luftgeräte hängen an der Kuppelspitze. Dazu kommt die Chinese Pole, eine senkrechte Stange, an der sich Artisten waagerecht halten."
+      },
+      "rad": {
+        "title": "Cyr-Wheel",
+        "text": "Ein Rad und ein Körper. Im Cyr-Wheel dreht sich der Artist über die Bühne, aufrecht, einarmig oder im Handstand."
+      },
+      "akrobatik": {
+        "title": "Akrobatik, Balance und Jonglage",
+        "text": "Menschenpyramiden, Duo-Figuren, Handstände auf Stuhllehnen und Holzbohlen, die im Gleichgewicht bleiben. Manches davon findet draußen statt."
+      },
+      "buehne": {
+        "title": "Tanz, Clownerie und Musik",
+        "text": "Nicht alles ist Artistik. Es wird getanzt, ein Clown spielt mit Hut und Stoffmarienkäfer, und die Musik entsteht live auf der Bühne, einmal sogar auf einer Gitarre aus einem Olivenölkanister."
+      }
+    },
     "categories": {
       "dome": "Der Ort",
       "shows": "Shows",
@@ -527,8 +567,6 @@
       "aufbau": "Entstehung",
       "cafe": "Café"
     },
-    "imageCountOne": "1 Bild",
-    "imageCountMany": "{{count}} Bilder",
     "lightbox": {
       "open": "Bild groß ansehen",
       "close": "Schließen",

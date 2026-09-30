@@ -222,7 +222,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
     // damit das Feld nicht leer aussieht und die Zeit still verschwindet.
     time: normalizeTime(event?.time) || '',
     endTime: normalizeTime(event?.endTime) || '',
-    location: event?.location || 'Pepe Dome, Ostpark Munchen',
+    location: event?.location || 'Pepe Dome, Ostpark München',
     category: event?.category || 'SHOW',
     ticketUrl: event?.ticketUrl || '',
     price: event?.price || '',

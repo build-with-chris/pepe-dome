@@ -44,22 +44,38 @@
  */
 
 /**
- * Reihenfolge der Filter-Tabs.
+ * Reihenfolge der Kapitel auf der Galerieseite.
+ *
+ * Aufgebaut nach dem Vorbild einer Hochzeitsgalerie, die den Tag in Kapiteln
+ * zeigt statt alle Bilder in einem Topf mit Filtern. Vorne steht, was ein
+ * Besucher zuerst wissen will: wie der Ort aussieht und was auf der Bühne
+ * passiert. Die Entstehung der Kuppel kommt als Geschichte zum Schluss.
  *
  * `training` gibt es bewusst *nicht*: im Repo liegt zwar ein Ordner
  * `images/Trainingsort/`, dessen Bilder zeigen aber Auftritte und Luftakrobatik,
  * kein Training. Eine Kategorie mit falsch einsortierten Bildern ist schlechter
  * als eine fehlende. Sobald echte Trainingsfotos da sind, hier ergänzen.
  */
-export const GALLERY_CATEGORIES = ['dome', 'shows', 'festival', 'aufbau', 'cafe'] as const
+export const GALLERY_CATEGORIES = ['dome', 'shows', 'festival', 'cafe', 'aufbau'] as const
 
 export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number]
+
+/**
+ * Unterkapitel der Shows. Die Show-Bilder sind mit Abstand die größte Gruppe;
+ * in einem Block wirken 26 Bilder beliebig. Zugeordnet nach dem, was auf dem
+ * Bild passiert (am Bild geprüft, nicht am Dateinamen).
+ */
+export const SHOW_DISCIPLINES = ['luft', 'rad', 'akrobatik', 'buehne'] as const
+
+export type ShowDiscipline = (typeof SHOW_DISCIPLINES)[number]
 
 export type GalleryImage = {
   src: string
   width: number
   height: number
   category: GalleryCategory
+  /** Nur für `shows`: in welchem Unterkapitel das Bild steht. */
+  discipline?: ShowDiscipline
   alt: { de: string; en: string }
   caption?: { de: string; en: string }
   /** Wird innerhalb seiner Kategorie zuerst gezeigt. */
@@ -176,6 +192,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 2886,
     category: 'shows',
+    discipline: 'akrobatik',
     featured: true,
     alt: {
       de: 'Drei Artisten in einer aufeinander gestapelten Akrobatikfigur unter der Kuppel, farbiges Bühnenlicht, davor das Publikum',
@@ -191,6 +208,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'rad',
     alt: {
       de: 'Artist steht im Cyr-Wheel und hält die Arme über dem Kopf zusammen, dunkle Bühne',
       en: 'Artist standing inside a Cyr wheel with hands joined above the head on a dark stage',
@@ -205,6 +223,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Zwei Artistinnen in Schwarz in einer Duo-Figur: eine hält den Spagat, während die andere sie trägt',
       en: 'Two artists in black in a duo figure: one holds a split while the other carries her',
@@ -215,6 +234,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Artist in orangener Hose und gestreiften Stulpen hält eine waagerechte Stützfigur auf dem Bühnenboden',
       en: 'Artist in orange trousers and striped legwarmers holding a horizontal planche on the stage floor',
@@ -225,6 +245,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'luft',
     alt: {
       de: 'Artist hält sich waagerecht an einer Chinese Pole, violett ausgeleuchteter Hintergrund',
       en: 'Artist holding a horizontal position on a Chinese pole against a purple lit backdrop',
@@ -235,6 +256,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1364,
     height: 1920,
     category: 'shows',
+    discipline: 'luft',
     alt: {
       de: 'Zwei Artistinnen an einem hängenden Luftgerät in blauem Licht über einer dunklen Bühne',
       en: 'Two artists on a hanging aerial apparatus in blue light above a dark stage',
@@ -249,6 +271,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Tänzerin im weißen Hemd im Sprung mit gestrecktem Bein auf schwarzer Bühne',
       en: 'Dancer in a white shirt mid leap with an extended leg on a black stage',
@@ -259,6 +282,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1920,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Artist im Sprung vor rotem Hintergrund, die Bewegung in rotem und türkisem Licht doppelt sichtbar',
       en: 'Artist mid jump against a red backdrop, the movement traced in red and turquoise light',
@@ -269,6 +293,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 2886,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Partnerakrobatik im Freien: ein Artist hält eine Artistin im Handstand über dem Kopf, dahinter Girlanden und Publikum',
       en: 'Partner acrobatics outdoors: an artist holds a partner overhead in a handstand, bunting and an audience behind',
@@ -283,6 +308,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1278,
     height: 1920,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Artist im Handstand auf einer Stuhllehne vor einem weiß-blauen Zelt im Freien',
       en: 'Artist in a handstand on the back of a chair in front of a blue and white marquee outdoors',
@@ -293,6 +319,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1920,
     height: 1280,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Jongleur mit fünf Bällen in der Luft an einem Flussufer, im Hintergrund eine Altstadt mit Kirchtürmen',
       en: 'Juggler with five balls in the air on a riverbank, an old town with church spires behind',
@@ -303,6 +330,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 3773,
     height: 2122,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Artist im schwarzen Shirt streckt den Arm nach oben, hart von der Seite angeleuchtet',
       en: 'Artist in a black shirt reaching upward, lit hard from the side',
@@ -316,6 +344,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'rad',
     alt: {
       de: 'Artist im Handstand im Cyr-Wheel, das Rad steht schräg über dem violett ausgeleuchteten Bühnenboden',
       en: 'Artist in a handstand inside a Cyr wheel, the hoop tilted above a purple lit stage floor',
@@ -330,6 +359,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'luft',
     alt: {
       de: 'Artistin hängt kopfüber in einem Luftgerät aus zwei gekreuzten Ringen, das lange Haar fällt nach unten',
       en: 'Artist hanging upside down in an aerial apparatus of two crossed hoops, long hair falling downward',
@@ -340,6 +370,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Ein Clown im grauen Sakko schaut zu einer Schiebermütze hoch, die über ihm in der Luft hängt',
       en: 'A clown in a grey jacket looking up at a flat cap hanging in the air above him',
@@ -350,6 +381,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Musiker mit Stirnband spielt eine selbstgebaute Gitarre, deren Korpus aus einem Olivenölkanister besteht',
       en: 'Musician wearing a headscarf playing a homemade guitar built from an olive oil tin',
@@ -364,6 +396,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'luft',
     alt: {
       de: 'Artistin im hellen Kleid hängt kopfüber im Luftring über der dunklen Bühne',
       en: 'Artist in a pale dress hanging upside down from an aerial hoop above the dark stage',
@@ -374,6 +407,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Artist in weißer Latzhose hält eine senkrecht aufgestellte Holzbohle im Gleichgewicht und schaut an ihr hinauf',
       en: 'Artist in white dungarees balancing an upright wooden plank and looking up along it',
@@ -384,6 +418,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'rad',
     alt: {
       de: 'Artist stützt sich einarmig im Cyr-Wheel ab und streckt die Beine nach oben',
       en: 'Artist supporting himself on one arm inside a Cyr wheel with his legs stretched upward',
@@ -394,6 +429,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Tänzerin im hellen Kleid kniet auf der Bühne und beugt den Oberkörper weit nach hinten',
       en: 'Dancer in a pale dress kneeling on stage, bending far backwards',
@@ -404,6 +440,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'akrobatik',
     alt: {
       de: 'Artist steht kopfüber auf einer schräg gestellten Holzbohle, daneben sitzt eine Person auf einem Klappstuhl',
       en: 'Artist upside down on a tilted wooden plank, a person sitting on a folding chair beside him',
@@ -414,6 +451,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'luft',
     alt: {
       de: 'Frau im schwarzen Kleid steht in einem Gerät aus zwei gekreuzten Ringen und streckt die Arme zur Seite',
       en: 'Woman in a black dress standing inside an apparatus of two crossed hoops, arms stretched out sideways',
@@ -424,6 +462,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Der Clown drückt einen roten Stoffmarienkäfer an sich und lächelt mit geschlossenen Augen',
       en: 'The clown hugging a red fabric ladybird, smiling with his eyes closed',
@@ -434,6 +473,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1197,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Musiker im rot-blau gestreiften Hemd singt dicht in ein Handmikrofon',
       en: 'Musician in a red and blue striped shirt singing close into a handheld microphone',
@@ -444,6 +484,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1200,
     height: 1800,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Zwei Beine in bunt geringelten Stulpen liegen auf einer Tischkante, der Rest der Bühne bleibt dunkel',
       en: 'Two legs in brightly striped legwarmers resting on the edge of a table, the rest of the stage dark',
@@ -454,6 +495,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     width: 1800,
     height: 1200,
     category: 'shows',
+    discipline: 'buehne',
     alt: {
       de: 'Vier Mitwirkende stehen zum Schlussapplaus nebeneinander und heben die Hände',
       en: 'Four performers standing side by side for the final applause with their hands raised',
@@ -884,9 +926,19 @@ export function imagesByCategory(category: GalleryCategory): GalleryImage[] {
   return GALLERY_IMAGES.filter((image) => image.category === category)
 }
 
-/** Nur Kategorien, die tatsächlich Bilder haben — verhindert leere Filter-Tabs. */
+/** Nur Kategorien, die tatsächlich Bilder haben, damit kein leeres Kapitel entsteht. */
 export function usedCategories(): GalleryCategory[] {
   return GALLERY_CATEGORIES.filter((category) =>
     GALLERY_IMAGES.some((image) => image.category === category)
   )
+}
+
+/** Show-Bilder eines Unterkapitels, ohne leere Unterkapitel. */
+export function showImagesByDiscipline(): Array<{ discipline: ShowDiscipline; images: GalleryImage[] }> {
+  return SHOW_DISCIPLINES.map((discipline) => ({
+    discipline,
+    images: GALLERY_IMAGES.filter(
+      (image) => image.category === 'shows' && image.discipline === discipline
+    ),
+  })).filter((group) => group.images.length > 0)
 }

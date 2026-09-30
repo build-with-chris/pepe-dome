@@ -1,7 +1,10 @@
 'use client'
 
 /**
- * GalleryGrid — Bildraster mit Kategorie-Filter und Lightbox
+ * GalleryGrid: Bildraster eines Galerie-Kapitels mit Lightbox
+ *
+ * Früher gab es ein einziges Raster mit Filter-Tabs. Jetzt rendert die Seite
+ * ein Raster pro Kapitel; die Lightbox blättert innerhalb dieses Kapitels.
  *
  * Aufbau als CSS-Masonry (`columns`) statt Grid: die Bilder haben sehr
  * unterschiedliche Seitenverhältnisse (Hochkant 2:3 neben Quer 16:9). Ein Grid
@@ -22,14 +25,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import * as Dialog from '@radix-ui/react-dialog'
 import { cn } from '@/lib/utils'
-import type { GalleryCategory, GalleryImage } from '@/data/gallery'
+import type { GalleryImage } from '@/data/gallery'
 import type { Locale } from '@/i18n/config'
 
 export type GalleryTexts = {
-  filterAll: string
-  categories: Record<string, string>
-  imageCountOne: string
-  imageCountMany: string
   lightbox: {
     open: string
     close: string
@@ -44,27 +43,27 @@ const SWIPE_THRESHOLD_PX = 50
 
 export default function GalleryGrid({
   images,
-  categories,
   texts,
   lang,
+  priority = false,
 }: {
   images: GalleryImage[]
-  categories: GalleryCategory[]
   texts: GalleryTexts
   lang: Locale
+  /**
+   * Nur für das erste Kapitel der Seite: dessen erste Kacheln stehen above the
+   * fold und laden sofort, die erste bekommt den Preload-Hint. In allen
+   * weiteren Kapiteln lädt alles erst beim Scrollen.
+   */
+  priority?: boolean
 }) {
-  const [activeCategory, setActiveCategory] = useState<GalleryCategory | 'all'>('all')
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   // Als Favorit markierte Bilder zuerst. In einem Masonry-Layout lässt sich ein
   // Bild nicht sauber über mehrere Spalten ziehen (Safari zerlegt die Kachel),
   // deshalb wirkt `featured` über die Position: oben, wo garantiert hingesehen
   // wird. Innerhalb der beiden Gruppen bleibt die Reihenfolge aus gallery.ts.
-  const visible = (
-    activeCategory === 'all'
-      ? images
-      : images.filter((image) => image.category === activeCategory)
-  )
+  const visible = images
     .map((image, index) => ({ image, index }))
     .sort((a, b) => Number(b.image.featured ?? false) - Number(a.image.featured ?? false) || a.index - b.index)
     .map((entry) => entry.image)
@@ -101,60 +100,8 @@ export default function GalleryGrid({
 
   const touchStartX = useRef<number | null>(null)
 
-  const countLabel =
-    visible.length === 1
-      ? texts.imageCountOne
-      : texts.imageCountMany.replace('{{count}}', String(visible.length))
-
-  const filters: Array<{ key: GalleryCategory | 'all'; label: string }> = [
-    { key: 'all', label: texts.filterAll },
-    ...categories.map((category) => ({
-      key: category,
-      label: texts.categories[category] ?? category,
-    })),
-  ]
-
   return (
     <>
-      {/* ── Filter ───────────────────────────────────────────────────────── */}
-      <div className="mb-6">
-        <div
-          role="group"
-          aria-label={texts.filterAll}
-          className="flex flex-wrap justify-center gap-2"
-        >
-          {filters.map((filter) => {
-            const isActive = activeCategory === filter.key
-            return (
-              <button
-                key={filter.key}
-                type="button"
-                onClick={() => {
-                  setActiveCategory(filter.key)
-                  setOpenIndex(null)
-                }}
-                aria-pressed={isActive}
-                className={cn(
-                  // min-h-11 = 44px: die kleinste Fläche, die sich auf einem
-                  // Touchscreen zuverlässig treffen lässt.
-                  'min-h-11 px-4 py-2 rounded-full text-sm font-semibold',
-                  'border transition-colors duration-200',
-                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pepe-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--pepe-black)]',
-                  isActive
-                    ? 'bg-[var(--pepe-gold)] border-[var(--pepe-gold)] text-white'
-                    : 'bg-[var(--pepe-ink)] border-[var(--pepe-line)] text-[var(--pepe-t80)] hover:border-[var(--pepe-gold)] hover:text-[var(--pepe-white)]'
-                )}
-              >
-                {filter.label}
-              </button>
-            )
-          })}
-        </div>
-        <p className="mt-3 text-center text-sm text-[var(--pepe-t48)] tabular-nums">
-          {countLabel}
-        </p>
-      </div>
-
       {/* ── Masonry ──────────────────────────────────────────────────────── */}
       <div className="columns-2 md:columns-3 xl:columns-4 gap-3 md:gap-4 [column-fill:balance]">
         {visible.map((image, index) => (
@@ -188,8 +135,8 @@ export default function GalleryGrid({
               // ebenfalls above the fold und laden sofort, alles darunter erst
               // beim Scrollen. priority impliziert eager, beides zusammen
               // würde Next anmeckern.
-              priority={index === 0}
-              loading={index === 0 ? undefined : index < 4 ? 'eager' : 'lazy'}
+              priority={priority && index === 0}
+              loading={priority && index === 0 ? undefined : priority && index < 4 ? 'eager' : 'lazy'}
               className="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
             {/* Bewusst ohne Text über der Kachel: die Bildunterschriften standen
