@@ -97,15 +97,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let newsPages: MetadataRoute.Sitemap = []
   try {
     const articles = await getAllArticles(DEFAULT_LOCALE)
-    // Artikel haben keine Übersetzung: /en/news/x zeigt den deutschen Text und
-    // verweist per canonical auf /de/news/x. In die Sitemap gehört deshalb nur
-    // die deutsche URL.
-    newsPages = articles.map((article) => ({
-      url: absoluteUrl(DEFAULT_LOCALE, `/news/${article.slug}`),
-      lastModified: new Date(article.publishedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
+    // Übersetzte Artikel stehen wie Events in beiden Sprachen drin. Ohne
+    // englische Fassung zeigt /en/news/x den deutschen Text und verweist per
+    // canonical auf /de/news/x; dann gehört nur die deutsche URL hierher.
+    newsPages = articles.flatMap((article) => {
+      const path = `/news/${article.slug}`
+      const lastModified = new Date(article.publishedAt)
+      if (article.availableLocales.includes('en')) {
+        return entriesForPath(path, lastModified, { priority: 0.7, changeFrequency: 'monthly' })
+      }
+      return [
+        {
+          url: absoluteUrl(DEFAULT_LOCALE, path),
+          lastModified,
+          changeFrequency: 'monthly' as const,
+          priority: 0.7,
+        },
+      ]
+    })
   } catch {
     console.error('Sitemap: Failed to fetch articles')
   }

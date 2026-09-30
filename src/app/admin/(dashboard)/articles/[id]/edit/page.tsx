@@ -38,6 +38,10 @@ async function getArticle(id: string) {
     tags: (article.tags as string[]) || [],
     featured: article.featured,
     status: article.status,
+    translations: (article.translations ?? {}) as Record<
+      string,
+      { title?: string; excerpt?: string; content?: string }
+    >,
   }
 }
 

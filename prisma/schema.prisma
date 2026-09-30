@@ -231,22 +231,25 @@ model EventDistribution {
 }
 
 model Article {
-  id          String         @id @default(uuid())
-  slug        String         @unique
-  title       String
-  excerpt     String
-  content     String
-  category    String
-  author      String
-  imageUrl    String?        @map("image_url")
-  tags        Json           @default("[]")
-  featured    Boolean        @default(false)
-  status      ContentStatus  @default(DRAFT)
-  publishedAt DateTime?      @map("published_at")
-  createdBy   String?        @map("created_by")
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @default(now()) @updatedAt @map("updated_at")
-  events      ArticleEvent[]
+  id           String         @id @default(uuid())
+  slug         String         @unique
+  title        String
+  excerpt      String
+  content      String
+  category     String
+  author       String
+  imageUrl     String?        @map("image_url")
+  tags         Json           @default("[]")
+  featured     Boolean        @default(false)
+  /// Übersetzungen pro Locale, z.B. { "en": { "title": …, "excerpt": …, "content": … } }.
+  /// Wie bei Event: Deutsch bleibt die Quelle, fehlende Felder fallen auf DE zurück.
+  translations Json           @default("{}")
+  status       ContentStatus  @default(DRAFT)
+  publishedAt  DateTime?      @map("published_at")
+  createdBy    String?        @map("created_by")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at")
+  events       ArticleEvent[]
 
   @@index([slug])
   @@index([category])

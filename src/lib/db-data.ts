@@ -69,6 +69,13 @@ export type ArticleData = {
   imageUrl: string | null
   tags: string[]
   featured: boolean
+  /**
+   * Sprachen, in denen der Artikel wirklich vorliegt. Deutsch immer, weitere
+   * nur mit gepflegtem Titel und Inhalt in `translations`. Die Detailseite
+   * entscheidet daran, ob hreflang die englische URL nennt oder ob sie per
+   * canonical auf die deutsche Fassung zeigt.
+   */
+  availableLocales: DbLocale[]
 }
 
 /**
@@ -120,20 +127,45 @@ export function transformEvent(event: Event, locale: DbLocale = 'de'): EventData
   }
 }
 
+/** Übersetzbare Artikel-Felder; Kategorie, Autor, Bild und Tags bleiben DE. */
+export type ArticleTranslation = {
+  title?: string
+  excerpt?: string
+  content?: string
+}
+
+/**
+ * Gilt ein Artikel in dieser Sprache als übersetzt? Titel und Inhalt müssen
+ * gepflegt sein. Nur ein übersetzter Titel über deutschem Text wäre für
+ * Suchmaschinen wieder dieselbe Seite zweimal.
+ */
+function isArticleTranslated(t: ArticleTranslation | undefined): boolean {
+  return Boolean(t?.title?.trim() && t?.content?.trim())
+}
+
 // Transform DB article to frontend format
-function transformArticle(article: Article, _locale: DbLocale = 'de'): ArticleData {
+// Gleicher Locale-Overlay wie transformEvent: fehlende Felder fallen auf DE zurück.
+export function transformArticle(article: Article, locale: DbLocale = 'de'): ArticleData {
+  const translations = (article.translations ?? {}) as Record<string, ArticleTranslation>
+  const t = locale !== 'de' ? translations[locale] : undefined
+  const availableLocales: DbLocale[] = [
+    'de',
+    ...(isArticleTranslated(translations.en) ? (['en'] as const) : []),
+  ]
+
   return {
     id: article.id,
     slug: article.slug,
-    title: article.title,
-    excerpt: article.excerpt,
-    content: article.content,
+    title: t?.title?.trim() || article.title,
+    excerpt: t?.excerpt?.trim() || article.excerpt,
+    content: t?.content?.trim() || article.content,
     category: article.category,
     author: article.author,
     publishedAt: article.publishedAt?.toISOString() || article.createdAt.toISOString(),
     imageUrl: article.imageUrl,
     tags: (article.tags as string[]) || [],
     featured: article.featured,
+    availableLocales,
   }
 }
 

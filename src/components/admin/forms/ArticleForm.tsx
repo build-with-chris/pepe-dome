@@ -47,6 +47,13 @@ const articleSchema = z.object({
 
 type ArticleFormData = z.infer<typeof articleSchema>
 
+/** Englische Übersetzung der übersetzbaren Artikel-Felder (wie im EventForm) */
+interface ArticleTranslation {
+  title?: string
+  excerpt?: string
+  content?: string
+}
+
 interface Article {
   id: string
   slug: string
@@ -59,6 +66,7 @@ interface Article {
   tags: string[]
   featured: boolean
   status: string
+  translations?: Record<string, ArticleTranslation>
 }
 
 interface ArticleFormProps {
@@ -102,6 +110,53 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [tagInput, setTagInput] = useState('')
   const contentRef = useRef<HTMLTextAreaElement>(null)
+
+  // Englische Übersetzung, aufgebaut wie im EventForm
+  const en = article?.translations?.en
+  const [translating, setTranslating] = useState(false)
+  const [translateMessage, setTranslateMessage] = useState<string | null>(null)
+  const [enFields, setEnFields] = useState({
+    title: en?.title || '',
+    excerpt: en?.excerpt || '',
+    content: en?.content || '',
+  })
+
+  function updateEnField(field: keyof typeof enFields, value: string) {
+    setEnFields((prev) => ({ ...prev, [field]: value }))
+  }
+
+  function buildTranslations(): Record<string, ArticleTranslation> {
+    return {
+      ...(article?.translations || {}),
+      en: {
+        title: enFields.title.trim(),
+        excerpt: enFields.excerpt.trim(),
+        content: enFields.content.trim(),
+      },
+    }
+  }
+
+  async function handleTranslate() {
+    if (!article?.id) return
+    setTranslating(true)
+    setTranslateMessage(null)
+    try {
+      const res = await fetch(`/api/admin/articles/${article.id}/translate`, { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Übersetzung fehlgeschlagen')
+      const newEn = (data.translations?.en || {}) as ArticleTranslation
+      setEnFields({
+        title: newEn.title || '',
+        excerpt: newEn.excerpt || '',
+        content: newEn.content || '',
+      })
+      setTranslateMessage('Übersetzt und gespeichert. Bei Bedarf unten anpassen und "Speichern" klicken.')
+    } catch (err) {
+      setTranslateMessage(err instanceof Error ? err.message : 'Übersetzung fehlgeschlagen')
+    } finally {
+      setTranslating(false)
+    }
+  }
 
   // Form state
   const [formData, setFormData] = useState<Partial<ArticleFormData>>({
@@ -188,10 +243,14 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
       const url = mode === 'create' ? '/api/admin/articles' : `/api/admin/articles/${article?.id}`
       const method = mode === 'create' ? 'POST' : 'PUT'
 
+      // translations läuft am zod-Schema vorbei (nur im Edit-Modus relevant)
+      const payload =
+        mode === 'edit' ? { ...result.data, translations: buildTranslations() } : result.data
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result.data),
+        body: JSON.stringify(payload),
       })
 
       if (!res.ok) {
@@ -414,6 +473,78 @@ export default function ArticleForm({ article, mode }: ArticleFormProps) {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Englische Übersetzung */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider">
+                Englische Übersetzung
+              </h2>
+              {mode === 'edit' && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleTranslate}
+                  disabled={translating}
+                >
+                  {translating ? 'Übersetze…' : 'Automatisch übersetzen (DeepL)'}
+                </Button>
+              )}
+            </div>
+
+            {mode === 'create' ? (
+              <p className="text-sm text-white/50">
+                Die englische Übersetzung ist verfügbar, sobald der Artikel erstellt wurde.
+              </p>
+            ) : (
+              <div className="space-y-5">
+                {translateMessage && (
+                  <p className="text-sm text-[#016dca]">{translateMessage}</p>
+                )}
+                <p className="text-xs text-white/50 leading-relaxed">
+                  Solange Titel und Inhalt hier leer sind, zeigt die englische Seite den
+                  deutschen Text und verweist für Suchmaschinen auf die deutsche Fassung.
+                  Sind beide gepflegt, gilt der Artikel als übersetzt und erscheint auch
+                  mit englischer Adresse in der Sitemap.
+                </p>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-title">Titel (EN)</Label>
+                  <Input
+                    id="en-title"
+                    value={enFields.title}
+                    onChange={(e) => updateEnField('title', e.target.value)}
+                    placeholder="Article title"
+                    inputSize="lg"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-excerpt">Kurzbeschreibung (EN)</Label>
+                  <Textarea
+                    id="en-excerpt"
+                    value={enFields.excerpt}
+                    onChange={(e) => updateEnField('excerpt', e.target.value)}
+                    rows={3}
+                    placeholder="Short teaser…"
+                  />
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label htmlFor="en-content">Inhalt (EN, Markdown)</Label>
+                  <Textarea
+                    id="en-content"
+                    value={enFields.content}
+                    onChange={(e) => updateEnField('content', e.target.value)}
+                    rows={12}
+                    placeholder="Article content…"
+                    className="min-h-[280px] font-mono text-sm"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

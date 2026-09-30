@@ -4,6 +4,12 @@ import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
 
+const translationSchema = z.object({
+  title: z.string().optional(),
+  excerpt: z.string().optional(),
+  content: z.string().optional(),
+})
+
 const articleUpdateSchema = z.object({
   title: z.string().min(1).optional(),
   excerpt: z.string().min(1).optional(),
@@ -15,6 +21,7 @@ const articleUpdateSchema = z.object({
   featured: z.boolean().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   eventIds: z.array(z.string()).optional(),
+  translations: z.record(z.string(), translationSchema).optional(),
 })
 
 // GET - Get single article

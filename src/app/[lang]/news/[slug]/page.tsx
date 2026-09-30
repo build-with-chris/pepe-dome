@@ -51,8 +51,9 @@ export async function generateMetadata({
     path: `/news/${article.slug}`,
     title: article.title,
     description: metaDescription(article.excerpt),
-    // Artikel gibt es nur auf Deutsch, siehe sourceLocale in pageMetadata.
-    sourceLocale: 'de',
+    // Ohne englische Fassung zeigt /en/news/x den deutschen Text. Dann gilt
+    // nur die deutsche URL, siehe sourceLocale in pageMetadata.
+    ...(article.availableLocales.includes('en') ? {} : { sourceLocale: 'de' as const }),
     keywords: [article.category, 'Pepe Dome', 'München', ...(article.tags || [])],
     article: { publishedTime: article.publishedAt, authors: [article.author] },
     images: article.imageUrl
