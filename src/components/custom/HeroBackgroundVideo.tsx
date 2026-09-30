@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { preload } from 'react-dom'
 
 /**
  * Hintergrundmedium des Hero: Hochformat auf Mobile, Querformat auf Desktop.
@@ -44,6 +45,22 @@ const POSTER = {
 const MD_BREAKPOINT = 768
 
 export default function HeroBackgroundVideo() {
+  // Das Poster ist das LCP-Element der Startseite. Als Hintergrundbild im
+  // Inline-Style entdeckt der Browser es erst beim Layout; Lighthouse maß dort
+  // 3,5 s reine Wartezeit, bevor der Download überhaupt begann. Der Preload
+  // steht im <head>, lädt pro Breakpoint nur das passende Format und mit
+  // hoher Priorität.
+  preload(POSTER.mobile, {
+    as: 'image',
+    media: `(max-width: ${MD_BREAKPOINT - 1}px)`,
+    fetchPriority: 'high',
+  })
+  preload(POSTER.desktop, {
+    as: 'image',
+    media: `(min-width: ${MD_BREAKPOINT}px)`,
+    fetchPriority: 'high',
+  })
+
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
   const [reduceMotion, setReduceMotion] = useState(false)
 

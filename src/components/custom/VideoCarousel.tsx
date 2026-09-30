@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 
 interface VideoItem {
   src: string
@@ -16,10 +17,10 @@ interface VideoCarouselProps {
 }
 
 const defaultVideos: VideoItem[] = [
-  { src: '/videos/showreel.mp4', title: 'TwoGather - lokale Künstler', poster: '/images/posters/showreel.jpg' },
-  { src: '/videos/vertical-01.mp4', title: 'Einblicke Shows und Workshop', poster: '/images/posters/vertical-01.jpg' },
-  { src: '/videos/vertical-02.mp4', title: 'Freeman Festival 2025', poster: '/images/posters/vertical-02.jpg' },
-  { src: '/videos/vertical-03.mp4', title: 'Abendstimmung', poster: '/images/posters/vertical-03.jpg' },
+  { src: '/videos/showreel.mp4', title: 'TwoGather - lokale Künstler', poster: '/images/posters/showreel.webp' },
+  { src: '/videos/vertical-01.mp4', title: 'Einblicke Shows und Workshop', poster: '/images/posters/vertical-01.webp' },
+  { src: '/videos/vertical-02.mp4', title: 'Freeman Festival 2025', poster: '/images/posters/vertical-02.webp' },
+  { src: '/videos/vertical-03.mp4', title: 'Abendstimmung', poster: '/images/posters/vertical-03.webp' },
 ]
 
 const THUMBNAIL_TIME = 3
@@ -288,7 +289,10 @@ export default function VideoCarousel({
                       {/* 44px breit statt 42, damit der Knopf sicher zu treffen ist */}
                       <div className="relative h-16 w-11 overflow-hidden rounded-lg bg-[var(--pepe-ink)]">
                         {video.poster ? (
-                          <img src={video.poster} alt="" className="h-full w-full object-cover object-top" loading="lazy" />
+                          // next/image statt <img>: der Knopf ist 44px breit, das Poster
+                          // 1080px. Ohne Skalierung lud die Startseite rund
+                          // 470 KB Vorschaubilder für vier Daumennagel-Knöpfe.
+                          <Image src={video.poster} alt="" fill sizes="44px" className="object-cover object-top" />
                         ) : (
                           <video
                             src={video.src}
