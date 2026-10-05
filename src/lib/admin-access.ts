@@ -20,6 +20,7 @@ import 'server-only'
  */
 
 import { randomBytes } from 'crypto'
+import type { AdminAccessRequest } from '@prisma/client'
 import { prisma } from './prisma'
 import { resend, DEFAULT_FROM_EMAIL, EMAIL_CONFIG } from './resend'
 import { ROLES, type UserRole } from './roles'
@@ -139,6 +140,43 @@ export async function notifyApprover(
   })
 
   return true
+}
+
+/**
+ * Alle Anfragen für die Übersicht im Panel.
+ *
+ * Bis hierher gab es nur den Weg über den Token-Link aus der Mail. Wer die Mail
+ * nicht mehr fand, kam an eine wartende Anfrage nicht heran: Die Freigabe-Seite
+ * zeigt ohne Token nichts an. Deshalb diese Liste.
+ *
+ * Die offenen Anfragen kommen vollständig zurück, inklusive Token, denn die
+ * Entscheidung braucht es. Das ist kein neues Leck: Die Seite ist ohnehin nur
+ * für Super Admins erreichbar, und im Mail-Weg steht dasselbe Token sogar in
+ * der URL, wo es in Verlauf und Server-Logs landet.
+ *
+ * Die entschiedenen Anfragen sind auf die letzten zehn begrenzt. Sie dienen dem
+ * Nachschlagen, wer wann freigegeben wurde, nicht der Archivierung.
+ * Die Rückgabe ist ausdrücklich annotiert: Ohne DATABASE_URL ist `prisma` ein
+ * Mock, der Typ wird dadurch weit, und die Seite bekäme sonst nur `any`.
+ * Siehe src/lib/prisma.ts.
+ */
+export async function listAccessRequests(): Promise<{
+  offen: AdminAccessRequest[]
+  entschieden: AdminAccessRequest[]
+}> {
+  const [offen, entschieden] = await Promise.all([
+    prisma.adminAccessRequest.findMany({
+      where: { status: 'PENDING' },
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.adminAccessRequest.findMany({
+      where: { status: { not: 'PENDING' } },
+      orderBy: { decidedAt: 'desc' },
+      take: 10,
+    }),
+  ])
+
+  return { offen, entschieden }
 }
 
 /** Offene, noch gültige Anfrage zu einem Token. */
