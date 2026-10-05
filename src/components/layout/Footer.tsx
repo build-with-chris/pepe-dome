@@ -134,7 +134,7 @@ export default function Footer() {
           <p className="mb-5 text-center text-xs font-semibold uppercase tracking-widest text-[var(--pepe-t64)]">
             {t('footer.supporters', 'Unterstützt von')}
           </p>
-          <SupporterLogos variant="footer" />
+          <SupporterLogos variant="footer" lang={lang} />
         </div>
 
         {/* Footer Bottom */}

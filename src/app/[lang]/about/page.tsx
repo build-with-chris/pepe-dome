@@ -341,7 +341,7 @@ export default async function AboutPage({
             <p className="mx-auto mb-12 max-w-[40rem] text-lg text-[var(--pepe-t80)] leading-relaxed">
               {t.supporters.text}
             </p>
-            <SupporterLogos />
+            <SupporterLogos lang={lang} />
           </div>
         </div>
       </section>
