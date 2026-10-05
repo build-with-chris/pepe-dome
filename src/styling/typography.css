@@ -327,27 +327,32 @@ a:focus-visible {
 }
 
 /* ===== Lists ===== */
+/* Nur Listen ohne eigene Klasse bekommen Punkte, Einzug und Abstand: das ist
+   Fliesstext, etwa aus Markdown. Eine Liste mit Klasse ist fast immer Layout
+   (Chips, Logoreihen, Haken-Listen mit eigenem Zeichen) und bringt ihre Form
+   selbst mit. Vorher bekam auch sie Punkte und 24px Einzug, was Chip-Leisten
+   mit Punkten zwischen den Chips und schief zentrierte Reihen ergab. */
 @layer base {
-ul, ol {
+:where(ul, ol):not([class]) {
   margin: 0 0 var(--space-4) 0;
   padding-left: var(--space-6);
   color: var(--pepe-t80);
 }
 
-ul {
+ul:not([class]) {
   list-style-type: disc;
 }
 
-ol {
+ol:not([class]) {
   list-style-type: decimal;
 }
 
-li {
+:where(ul, ol):not([class]) > li {
   margin-bottom: var(--space-2);
   line-height: var(--leading-relaxed);
 }
 
-li:last-child {
+:where(ul, ol):not([class]) > li:last-child {
   margin-bottom: 0;
 }
 }

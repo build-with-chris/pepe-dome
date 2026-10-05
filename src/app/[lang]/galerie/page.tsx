@@ -115,10 +115,10 @@ export default async function GalleryPage({
 
       {/* ── Sprungleiste ─────────────────────────────────────────────────── */}
       <nav aria-label={t.jumpTo} className="stage-container pb-10 md:pb-14">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--pepe-t48)]">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[var(--pepe-t48)]">
           {t.jumpTo}
         </p>
-        <ul className="flex flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-3">
           {categories.map((category) => (
             <li key={category}>
               <a
