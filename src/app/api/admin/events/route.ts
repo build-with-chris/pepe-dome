@@ -4,6 +4,7 @@ import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { toStoredTime } from '@/lib/event-time'
 import { isValidTrailerInput } from '@/lib/event-trailer'
+import { artistIdsSchema } from '@/lib/artist-validation'
 import { z } from 'zod'
 
 const eventSchema = z.object({
@@ -31,6 +32,8 @@ const eventSchema = z.object({
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().or(z.literal('')),
   recurrenceEnd: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : undefined),
+  // Reihenfolge = Reihenfolge auf der Eventseite
+  artistIds: artistIdsSchema.default([]),
 })
 
 function generateSlug(title: string): string {
@@ -146,6 +149,9 @@ export async function POST(request: NextRequest) {
         recurrence: data.recurrence || null,
         recurrenceEnd: data.recurrenceEnd || null,
         createdBy: guard.userId,
+        artists: {
+          create: data.artistIds.map((artistId, position) => ({ artistId, position })),
+        },
       },
     })
 

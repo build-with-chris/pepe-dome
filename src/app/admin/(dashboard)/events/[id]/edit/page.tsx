@@ -23,6 +23,7 @@ interface PageProps {
 async function getEvent(id: string) {
   const event = await prisma.event.findUnique({
     where: { id },
+    include: { artists: { orderBy: { position: 'asc' }, select: { artistId: true } } },
   })
 
   if (!event) return null
@@ -52,6 +53,7 @@ async function getEvent(id: string) {
       string,
       { title?: string; subtitle?: string | null; description?: string; highlights?: string[]; price?: string | null }
     >,
+    artistIds: (event.artists as { artistId: string }[]).map((link) => link.artistId),
   }
 }
 

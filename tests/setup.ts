@@ -38,6 +38,8 @@ async function cleanDatabase() {
     await prisma.newsletter.deleteMany({})
     await prisma.article.deleteMany({})
     await prisma.event.deleteMany({})
+    // event_artists geht per Cascade mit den Events, die Artists selbst nicht.
+    await prisma.artist.deleteMany({})
     await prisma.subscriber.deleteMany({})
     await prisma.testRecipient.deleteMany({})
   } catch (error) {

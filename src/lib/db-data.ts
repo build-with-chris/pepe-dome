@@ -4,7 +4,7 @@
  */
 
 import { prisma } from './prisma'
-import type { Event, Article } from '@prisma/client'
+import type { Event, Article, Artist } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
 import { nichtVorbeiFilter, tagesbeginn } from './event-window'
 
@@ -55,6 +55,19 @@ export type EventData = {
   imageUrl: string | null
   featured: boolean
   highlights: string[]
+  /** Nur von getEventBySlug gefüllt (Detailseite), in Listen nie gesetzt. */
+  artists?: ArtistData[]
+}
+
+/** Wer bei einem Event auftritt, Bio schon in der Sprache der Seite. */
+export type ArtistData = {
+  id: string
+  slug: string
+  name: string
+  imageUrl: string | null
+  bio: string
+  instagramUrl: string | null
+  websiteUrl: string | null
 }
 
 export type ArticleData = {
@@ -217,12 +230,35 @@ export async function getFeaturedEvents(locale: DbLocale = 'de'): Promise<EventD
   }, [])
 }
 
+/** Ohne EN-Bio zeigt die englische Seite die deutsche. */
+export function transformArtist(artist: Artist, locale: DbLocale = 'de'): ArtistData {
+  const translations = (artist.translations ?? {}) as Record<string, { bio?: string }>
+  const bio = locale !== 'de' ? translations[locale]?.bio?.trim() : undefined
+  return {
+    id: artist.id,
+    slug: artist.slug,
+    name: artist.name,
+    imageUrl: artist.imageUrl,
+    bio: bio || artist.bio,
+    instagramUrl: artist.instagramUrl,
+    websiteUrl: artist.websiteUrl,
+  }
+}
+
 export async function getEventBySlug(slug: string, locale: DbLocale = 'de'): Promise<EventData | null> {
   return safeDbQuery(async () => {
     const event = await prisma.event.findUnique({
       where: { slug },
+      include: {
+        artists: { orderBy: { position: 'asc' }, include: { artist: true } },
+      },
     })
-    return event ? transformEvent(event, locale) : null
+    if (!event) return null
+    const { artists, ...rest } = event as Event & { artists?: { artist: Artist }[] }
+    return {
+      ...transformEvent(rest, locale),
+      artists: (artists ?? []).map((link) => transformArtist(link.artist, locale)),
+    }
   }, null)
 }
 

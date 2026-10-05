@@ -193,6 +193,7 @@ model Event {
   recurrenceEnd DateTime?           @map("recurrence_end")
   parentEventId String?             @map("parent_event_id")
   articles      ArticleEvent[]
+  artists       EventArtist[]
   parentEvent   Event?              @relation("EventRecurrence", fields: [parentEventId], references: [id])
   childEvents   Event[]             @relation("EventRecurrence")
   distributions EventDistribution[]
@@ -269,6 +270,48 @@ model ArticleEvent {
 
   @@unique([articleId, eventId])
   @@map("article_events")
+}
+
+/// Wer bei Events auftritt. Eine Bio wird einmal gepflegt und hängt an jedem
+/// Termin, bei dem die Person mitmacht (über EventArtist).
+///
+/// Kein eigener Status: sichtbar ist ein Artist genau dort, wo er an einem
+/// veröffentlichten Event hängt. Der `slug` wird schon angelegt, damit eine
+/// spätere Profilseite /artists/[slug] ohne Migration auskommt.
+model Artist {
+  id           String        @id @default(uuid())
+  slug         String        @unique
+  name         String
+  imageUrl     String?       @map("image_url")
+  /// Deutsch, höchstens 600 Zeichen (src/lib/artist-validation.ts).
+  bio          String
+  /// Übersetzungen wie bei Event: { "en": { "bio": … } }. Fehlt die EN-Bio,
+  /// zeigt die englische Seite die deutsche.
+  translations Json          @default("{}")
+  /// Immer als https://www.instagram.com/<handle>/ gespeichert.
+  instagramUrl String?       @map("instagram_url")
+  websiteUrl   String?       @map("website_url")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  events       EventArtist[]
+
+  @@map("artists")
+}
+
+/// Verknüpfung Event ↔ Artist nach dem Muster von ArticleEvent. `position`
+/// ist die Reihenfolge auf der Eventseite, so wie im Formular ausgewählt.
+model EventArtist {
+  id        String   @id @default(uuid())
+  eventId   String   @map("event_id")
+  artistId  String   @map("artist_id")
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  artist    Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, artistId])
+  @@index([artistId])
+  @@map("event_artists")
 }
 
 /**

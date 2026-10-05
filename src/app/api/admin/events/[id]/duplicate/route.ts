@@ -25,7 +25,10 @@ export async function POST(
   const { id } = await params
 
   try {
-    const original = await prisma.event.findUnique({ where: { id } })
+    const original = await prisma.event.findUnique({
+      where: { id },
+      include: { artists: { orderBy: { position: 'asc' } } },
+    })
 
     if (!original) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 })
@@ -62,6 +65,16 @@ export async function POST(
         recurrence: original.recurrence,
         recurrenceEnd: original.recurrenceEnd,
         createdBy: guard.userId,
+        // Folgetermine entstehen über Duplizieren, und dort tritt meist
+        // dasselbe Ensemble auf. Reihenfolge bleibt erhalten.
+        artists: {
+          create: (original.artists ?? []).map(
+            (link: { artistId: string; position: number }) => ({
+              artistId: link.artistId,
+              position: link.position,
+            })
+          ),
+        },
       },
     })
 

@@ -4,7 +4,15 @@ import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { toStoredTime } from '@/lib/event-time'
 import { isValidTrailerInput } from '@/lib/event-trailer'
+import { artistIdsSchema } from '@/lib/artist-validation'
+import type { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
+
+/**
+ * Siehe src/lib/db-courses.ts: der exportierte prisma-Client ist als `any`
+ * typisiert, deshalb kommt auch der Transaktions-Client untypisiert an.
+ */
+type Tx = Omit<PrismaClient, '$transaction' | '$connect' | '$disconnect' | '$on' | '$use' | '$extends'>
 
 const translationSchema = z.object({
   title: z.string().optional(),
@@ -39,6 +47,8 @@ const eventUpdateSchema = z.object({
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable().or(z.literal('')),
   recurrenceEnd: z.string().optional().nullable().transform((val) => (val && val !== '') ? new Date(val) : null),
   translations: z.record(z.string(), translationSchema).optional(),
+  // Fehlt das Feld, bleiben die Artists unverändert. Ein leeres Array entfernt alle.
+  artistIds: artistIdsSchema.optional(),
 })
 
 // GET - Get single event
@@ -57,6 +67,7 @@ export async function GET(
         include: { article: { select: { id: true, title: true, slug: true } } }
       },
       childEvents: { select: { id: true, date: true, status: true } },
+      artists: { orderBy: { position: 'asc' }, select: { artistId: true } },
     },
   })
 
@@ -79,7 +90,7 @@ export async function PUT(
 
   try {
     const body = await request.json()
-    const data = eventUpdateSchema.parse(body)
+    const { artistIds, ...data } = eventUpdateSchema.parse(body)
 
     // Clean up empty strings to null
     const cleanData: Record<string, unknown> = {}
@@ -98,9 +109,19 @@ export async function PUT(
       }
     }
 
-    const event = await prisma.event.update({
-      where: { id },
-      data: cleanData,
+    // Artists komplett ersetzen statt abzugleichen, wie die Slots bei Kursen.
+    // In einer Transaktion, damit ein Fehler keine halbe Liste hinterlässt.
+    const event = await prisma.$transaction(async (tx: Tx) => {
+      if (artistIds) {
+        await tx.eventArtist.deleteMany({ where: { eventId: id } })
+        await tx.eventArtist.createMany({
+          data: artistIds.map((artistId, position) => ({ eventId: id, artistId, position })),
+        })
+      }
+      return tx.event.update({
+        where: { id },
+        data: cleanData,
+      })
     })
 
     return NextResponse.json(event)

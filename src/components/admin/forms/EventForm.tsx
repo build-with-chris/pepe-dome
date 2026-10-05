@@ -18,6 +18,7 @@ import { Switch } from '@/components/ui/switch'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
 import FieldHint from '@/components/admin/ui/FieldHint'
 import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
+import EventArtistPicker from '@/components/admin/EventArtistPicker'
 import {
   EVENT_PRICE_PRESETS,
   detectPriceOption,
@@ -99,6 +100,8 @@ interface Event {
   recurrence: string | null
   recurrenceEnd: string | null
   translations?: Record<string, EventTranslation>
+  /** Zugeordnete Artists in der Reihenfolge der Eventseite */
+  artistIds?: string[]
 }
 
 interface EventFormProps {
@@ -153,6 +156,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [highlights, setHighlights] = useState<string[]>(event?.highlights || [''])
+  const [artistIds, setArtistIds] = useState<string[]>(event?.artistIds || [])
   const descriptionRef = useRef<HTMLTextAreaElement>(null)
 
   // Englische Übersetzung (Highlights als eine Zeile pro Eintrag)
@@ -335,9 +339,12 @@ export default function EventForm({ event, mode }: EventFormProps) {
       const url = mode === 'create' ? '/api/admin/events' : `/api/admin/events/${event?.id}`
       const method = mode === 'create' ? 'POST' : 'PUT'
 
-      // translations läuft am zod-Schema vorbei (nur im Edit-Modus relevant)
+      // translations und artistIds laufen am zod-Schema vorbei
+      // (translations nur im Edit-Modus relevant)
       const payload =
-        mode === 'edit' ? { ...result.data, translations: buildTranslations() } : result.data
+        mode === 'edit'
+          ? { ...result.data, artistIds, translations: buildTranslations() }
+          : { ...result.data, artistIds }
 
       const res = await fetch(url, {
         method,
@@ -727,6 +734,14 @@ export default function EventForm({ event, mode }: EventFormProps) {
                 </FieldHint>
               </div>
             </div>
+          </div>
+
+          {/* Wer auftritt */}
+          <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
+            <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
+              Wer auftritt
+            </h2>
+            <EventArtistPicker value={artistIds} onChange={setArtistIds} />
           </div>
 
           {/* Englische Übersetzung */}

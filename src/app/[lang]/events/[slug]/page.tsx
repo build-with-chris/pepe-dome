@@ -21,6 +21,7 @@ import { isFreeEntry } from '@/lib/event-price'
 import { formatEventDateRange } from '@/lib/event-window'
 import { parseTrailer } from '@/lib/event-trailer'
 import TrailerPlayer from '@/components/events/TrailerPlayer'
+import EventArtists from '@/components/events/EventArtists'
 import { formatTimeRange } from '@/lib/event-time'
 import TicketLink from '@/components/events/TicketLink'
 import EventViewTracker from '@/components/events/EventViewTracker'
@@ -231,6 +232,10 @@ export default async function EventDetailPage({
             <div className="prose prose-invert prose-lg max-w-none mb-8">
               <MarkdownText content={event.description} className="text-lg text-[var(--pepe-t80)] leading-relaxed space-y-4" />
             </div>
+
+            {event.artists && event.artists.length > 0 && (
+              <EventArtists artists={event.artists} labels={t.artists} />
+            )}
 
             {event.highlights && event.highlights.length > 0 && (
               <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 mb-8">

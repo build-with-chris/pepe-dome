@@ -488,6 +488,11 @@
       "highlight": "Highlight event",
       "trailerTitle": "What to expect",
       "highlights": "Highlights",
+      "artists": {
+        "title": "Who's performing",
+        "instagram": "{name} on Instagram",
+        "website": "{name}'s website"
+      },
       "stayInformed": "Stay in the loop",
       "stayInformedText": "Get updates about similar events and never miss a highlight.",
       "infoTitle": "Event info",
