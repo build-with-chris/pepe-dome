@@ -18,6 +18,7 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/Input'
 import { cn } from '@/lib/utils'
+import { versandBasis, quote } from '@/lib/newsletter-rates'
 
 /**
  * Newsletter Editor - Split View
@@ -58,6 +59,8 @@ interface Newsletter {
   stats?: {
     uniqueOpenCount: number
     uniqueClickCount: number
+    sentCount?: number
+    deliveredCount?: number
   } | null
 }
 
@@ -133,11 +136,15 @@ export default function NewsletterEditClient({
     }
   }, [newsletter.id])
 
+  // SENDING heisst seit dem Umbau des Versands: begonnen, aber nicht sauber
+  // beendet. Dann gibt es Empfänger, Zahlen und vor allem fehlende Empfänger.
+  const istVersendet = newsletter.status === 'SENT' || newsletter.status === 'SENDING'
+
   useEffect(() => {
-    if (newsletter.status === 'SENT') {
+    if (istVersendet) {
       fetchSendStatus()
     }
-  }, [newsletter.status, fetchSendStatus])
+  }, [istVersendet, fetchSendStatus])
 
   const handleMarkSent = async () => {
     setIsMarkingSent(true)
@@ -221,6 +228,9 @@ export default function NewsletterEditClient({
       router.push('/admin/newsletters')
     } catch (err) {
       setSendError(err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten')
+      // Auch bei einem Fehler kann ein Teil schon draussen sein. Neu laden,
+      // damit der echte Status statt des alten Knopfes "Senden" erscheint.
+      router.refresh()
     } finally {
       setIsSending(false)
     }
@@ -579,7 +589,7 @@ export default function NewsletterEditClient({
         )}
 
         {/* Stats Card */}
-        {newsletter.status === 'SENT' && newsletter.stats && (
+        {istVersendet && newsletter.stats && (
           <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5">
             <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Statistiken</span>
             <div className="grid grid-cols-3 gap-3 mt-4">
@@ -593,9 +603,10 @@ export default function NewsletterEditClient({
               </div>
               <div className="text-center">
                 <p className="text-xl font-bold text-emerald-400">
-                  {newsletter.recipientCount > 0
-                    ? ((newsletter.stats.uniqueOpenCount / newsletter.recipientCount) * 100).toFixed(0)
-                    : '0'}%
+                  {quote(
+                    newsletter.stats.uniqueOpenCount,
+                    versandBasis(newsletter.recipientCount, newsletter.stats)
+                  ) ?? '-'}%
                 </p>
                 <p className="text-[10px] text-white/40 mt-0.5">Rate</p>
               </div>
@@ -603,8 +614,8 @@ export default function NewsletterEditClient({
           </div>
         )}
 
-        {/* Wiederversand Card (status === SENT) */}
-        {newsletter.status === 'SENT' && (
+        {/* Wiederversand Card (SENT oder abgebrochen: SENDING) */}
+        {istVersendet && (
           <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Wiederversand</span>
@@ -675,7 +686,7 @@ export default function NewsletterEditClient({
         )}
 
         {/* Delete Button */}
-        {canEdit && newsletter.status !== 'SENT' && (
+        {canEdit && !istVersendet && (
           <Button
             variant="ghost"
             size="sm"

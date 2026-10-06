@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getNewsletters } from '@/lib/newsletters'
 import { prisma } from '@/lib/prisma'
+import { versandBasis, quote } from '@/lib/newsletter-rates'
 
 export const dynamic = 'force-dynamic'
 import { Button } from '@/components/ui/Button'
@@ -11,6 +12,13 @@ import { FilterTabs } from '@/components/admin/FilterTabs'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { AdminCard } from '@/components/admin/AdminCard'
 import { cn } from '@/lib/utils'
+
+type NewsletterListStats = {
+  uniqueOpenCount: number
+  uniqueClickCount: number
+  sentCount?: number
+  deliveredCount?: number
+}
 
 /**
  * Admin Newsletter Dashboard
@@ -22,8 +30,8 @@ const EMPTY_NEWSLETTER_STATS = {
     subject: string
     sentAt: Date | null
     recipientCount: number
-    openRate: string
-    clickRate: string
+    openRate: string | null
+    clickRate: string | null
   } | null,
 }
 
@@ -32,7 +40,7 @@ async function getNewsletterStats() {
     const [totalSubscribers, recentNewsletter] = await Promise.all([
       prisma.subscriber.count({ where: { status: 'ACTIVE' } }),
       prisma.newsletter.findFirst({
-        where: { status: 'SENT' },
+        where: { status: { in: ['SENT', 'SENDING'] } },
         orderBy: { sentAt: 'desc' },
         include: { stats: true },
       }),
@@ -44,13 +52,15 @@ async function getNewsletterStats() {
         ? {
             subject: recentNewsletter.subject,
             sentAt: recentNewsletter.sentAt,
-            recipientCount: recentNewsletter.recipientCount,
-            openRate: recentNewsletter.stats
-              ? ((recentNewsletter.stats.uniqueOpenCount / recentNewsletter.recipientCount) * 100).toFixed(1)
-              : '0',
-            clickRate: recentNewsletter.stats
-              ? ((recentNewsletter.stats.uniqueClickCount / recentNewsletter.recipientCount) * 100).toFixed(1)
-              : '0',
+            recipientCount: versandBasis(recentNewsletter.recipientCount, recentNewsletter.stats),
+            openRate: quote(
+              recentNewsletter.stats?.uniqueOpenCount,
+              versandBasis(recentNewsletter.recipientCount, recentNewsletter.stats)
+            ),
+            clickRate: quote(
+              recentNewsletter.stats?.uniqueClickCount,
+              versandBasis(recentNewsletter.recipientCount, recentNewsletter.stats)
+            ),
           }
         : null,
     }
@@ -119,12 +129,12 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
         />
         <StatCard
           label="Öffnungsrate"
-          value={`${stats.lastNewsletter?.openRate || '—'}%`}
+          value={stats.lastNewsletter?.openRate ? `${stats.lastNewsletter.openRate}%` : '-'}
           variant="success"
         />
         <StatCard
           label="Klickrate"
-          value={`${stats.lastNewsletter?.clickRate || '—'}%`}
+          value={stats.lastNewsletter?.clickRate ? `${stats.lastNewsletter.clickRate}%` : '-'}
           variant="default"
         />
       </StatsGrid>
@@ -156,7 +166,7 @@ export default async function NewsletterDashboardPage({ searchParams }: PageProp
             scheduledAt: Date | null
             createdAt: Date
             recipientCount: number
-            stats?: { uniqueOpenCount: number; uniqueClickCount: number } | null
+            stats?: NewsletterListStats | null
           }) => (
             <NewsletterListItem key={newsletter.id} newsletter={newsletter} />
           ))}
@@ -202,7 +212,7 @@ function NewsletterListItem({
     scheduledAt: Date | null
     createdAt: Date
     recipientCount: number
-    stats?: { uniqueOpenCount: number; uniqueClickCount: number } | null
+    stats?: NewsletterListStats | null
   }
 }) {
   const formattedDate = newsletter.sentAt
@@ -227,9 +237,8 @@ function NewsletterListItem({
         day: 'numeric',
       })
 
-  const openRate = newsletter.stats && newsletter.recipientCount > 0
-    ? ((newsletter.stats.uniqueOpenCount / newsletter.recipientCount) * 100).toFixed(1)
-    : null
+  const basis = versandBasis(newsletter.recipientCount, newsletter.stats)
+  const openRate = newsletter.stats ? quote(newsletter.stats.uniqueOpenCount, basis) : null
 
   return (
     <Link href={`/admin/newsletters/${newsletter.id}/edit`}>
@@ -267,8 +276,8 @@ function NewsletterListItem({
 
             <div className="flex items-center gap-4 text-xs text-white/40 mt-2">
               <span>{formattedDate}</span>
-              {newsletter.recipientCount > 0 && (
-                <span>{newsletter.recipientCount.toLocaleString('de-DE')} Empfänger</span>
+              {basis > 0 && (
+                <span>{basis.toLocaleString('de-DE')} Empfänger</span>
               )}
               {openRate && (
                 <span className="text-[#016dca]">{openRate}% geöffnet</span>

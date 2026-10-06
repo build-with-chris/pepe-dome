@@ -9,6 +9,9 @@ import { prisma } from './prisma'
 import { buildViewModelFromNewsletter } from './newsletter-content'
 import { renderNewsletterText } from './newsletter-text'
 
+/** Resend nimmt höchstens 100 Mails pro Batch-Aufruf. */
+const NEWSLETTER_CHUNK_SIZE = 100
+
 /**
  * Send double opt-in confirmation email
  *
@@ -194,8 +197,14 @@ export async function sendNewsletter(
     throw new Error('Newsletter not found')
   }
 
-  // Only block real sends for already-sent newsletters (allow test sends and resume-missing)
-  if (newsletter.status === 'SENT' && !options?.testRecipients && !options?.resumeMissing) {
+  // Only block real sends for already-sent newsletters (allow test sends and resume-missing).
+  // SENDING zählt mit: Ein abgebrochener Versand steht dort, und ein zweiter
+  // voller Versand ginge an alle, die ihn schon bekommen haben.
+  if (
+    (newsletter.status === 'SENT' || newsletter.status === 'SENDING') &&
+    !options?.testRecipients &&
+    !options?.resumeMissing
+  ) {
     throw new Error('Newsletter already sent')
   }
 
@@ -258,18 +267,9 @@ export async function sendNewsletter(
   const viewModel = await buildViewModelFromNewsletter(newsletter)
   const baseUrl = viewModel.baseUrl
 
-  // Render all emails first (fast: just string generation, no network)
-  const emailPayloads: Array<{
-    from: string
-    to: string
-    subject: string
-    html: string
-    text: string
-    headers: Record<string, string>
-    tags: Array<{ name: string; value: string }>
-  }> = []
+  type Recipient = (typeof recipients)[number]
 
-  for (const recipient of recipients) {
+  const buildPayload = async (recipient: Recipient) => {
     // Für Menschen: Seite mit Rückfrage. Für den Provider-Knopf: One-Click-POST.
     // Ohne Token (Testversand) zeigt der Fussbereich auf die Newsletter-Seite,
     // und der List-Unsubscribe-Header entfällt ganz.
@@ -295,7 +295,7 @@ export async function sendNewsletter(
       subscriberEmail: recipient.email,
     })
 
-    emailPayloads.push({
+    return {
       from: DEFAULT_FROM_EMAIL,
       to: recipient.email,
       subject: newsletter.subject,
@@ -305,111 +305,151 @@ export async function sendNewsletter(
       // Ein One-Click-Knopf, der nichts tut, ist beim Empfänger schlimmer als
       // gar keiner: Er hält sich für abgemeldet und bekommt weiter Post.
       headers: unsubscribeOneClickUrl
-        ? {
+        ? ({
             'List-Unsubscribe': `<${unsubscribeOneClickUrl}>`,
             'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-          }
-        : {},
+          } as Record<string, string>)
+        : ({} as Record<string, string>),
       tags: [
         { name: 'type', value: 'newsletter' },
         { name: 'newsletter_id', value: newsletter.id },
         { name: 'subscriber_id', value: recipient.id },
       ],
-    })
-  }
-
-  if (options?.dryRun) {
-    return {
-      success: emailPayloads.length,
-      failed: 0,
-      total: emailPayloads.length,
-      results: emailPayloads.map((e) => ({ success: true, email: e.to, id: 'dry-run' })),
     }
   }
 
-  // Send via Resend Batch API (up to 100 per call, way faster than one-by-one)
+  if (options?.dryRun) {
+    for (const recipient of recipients) await buildPayload(recipient)
+    return {
+      success: recipients.length,
+      failed: 0,
+      total: recipients.length,
+      results: recipients.map((r) => ({ success: true, email: r.email, id: 'dry-run' })),
+    }
+  }
+
+  const isRealSend = !options?.testRecipients
+
+  /**
+   * Echter Versand: erst sperren, dann blockweise senden und sofort buchen.
+   *
+   * Früher wurden alle Mails zuerst gebaut, dann verschickt, und erst ganz am
+   * Ende standen Status, Empfängerzahl und SENT-Ereignisse in der Datenbank.
+   * Brach die Funktion dazwischen ab, vermutlich an der Zeitgrenze von Vercel,
+   * waren die Mails draußen, in der Datenbank stand aber nichts: Der
+   * Newsletter blieb ein Entwurf mit 0 Empfängern, die Öffnungsrate damit bei
+   * 0 %, und der Knopf "Senden" hätte alles ein zweites Mal verschickt. So
+   * geschehen im August 2026 mit "Nudeln mit Banane".
+   *
+   * Jetzt ist der Stand nach jedem Block gespeichert. Bricht der Lauf ab,
+   * steht der Newsletter auf SENDING, die bisherigen Empfänger sind gebucht,
+   * und "An fehlende senden" macht genau dort weiter.
+   */
+  const originalStatus = newsletter.status
+  if (isRealSend) {
+    if (options?.resumeMissing) {
+      await prisma.newsletter.update({
+        where: { id: newsletter.id },
+        data: { status: 'SENDING' },
+      })
+    } else {
+      // Bedingtes Update als Sperre: Zwei gleichzeitige Klicks auf "Senden"
+      // (oder Klick plus Cron) können nicht beide durchkommen.
+      const claimed = await prisma.newsletter.updateMany({
+        where: { id: newsletter.id, status: { in: ['DRAFT', 'SCHEDULED'] } },
+        data: { status: 'SENDING', sentAt: new Date(), recipientCount: 0 },
+      })
+      if (claimed.count === 0) {
+        throw new Error('Newsletter already sent')
+      }
+    }
+
+    await prisma.newsletterStats.upsert({
+      where: { newsletterId: newsletter.id },
+      create: { newsletterId: newsletter.id, sentCount: 0 },
+      // Ein neuer Versand zählt von vorn, ein Nachversand zählt weiter.
+      update: options?.resumeMissing ? {} : { sentCount: 0, updatedAt: new Date() },
+    })
+  }
+
   let successCount = 0
   let failureCount = 0
   const allResults: Array<{ success: boolean; email: string; error?: string; id?: string }> = []
 
-  // Split into chunks of 100 (Resend batch limit)
-  for (let i = 0; i < emailPayloads.length; i += 100) {
-    const chunk = emailPayloads.slice(i, i + 100)
+  // Resend Batch API: bis zu 100 Mails pro Aufruf
+  for (let i = 0; i < recipients.length; i += NEWSLETTER_CHUNK_SIZE) {
+    const chunkRecipients = recipients.slice(i, i + NEWSLETTER_CHUNK_SIZE)
+    const chunk = []
+    for (const recipient of chunkRecipients) chunk.push(await buildPayload(recipient))
+
+    const chunkResults: Array<{ success: boolean; email: string; error?: string; id?: string }> = []
     try {
       const batchResult = await resend.batch.send(chunk)
 
       if (batchResult.error) {
         console.error('[EMAIL] Batch API error:', batchResult.error)
-        // Mark all in this chunk as failed
         for (const email of chunk) {
-          failureCount++
-          allResults.push({ success: false, email: email.to, error: batchResult.error.message })
+          chunkResults.push({ success: false, email: email.to, error: batchResult.error.message })
         }
       } else {
-        // Mark all in this chunk as success
         const ids = batchResult.data?.data || []
         for (let j = 0; j < chunk.length; j++) {
-          successCount++
-          allResults.push({ success: true, email: chunk[j].to, id: ids[j]?.id })
+          chunkResults.push({ success: true, email: chunk[j].to, id: ids[j]?.id })
         }
       }
     } catch (error) {
       console.error('[EMAIL] Batch send exception:', error)
       for (const email of chunk) {
-        failureCount++
-        allResults.push({ success: false, email: email.to, error: error instanceof Error ? error.message : 'Unknown error' })
+        chunkResults.push({
+          success: false,
+          email: email.to,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        })
       }
+    }
+
+    const chunkSuccess = chunkResults.filter((r) => r.success).length
+    successCount += chunkSuccess
+    failureCount += chunkResults.length - chunkSuccess
+    allResults.push(...chunkResults)
+
+    if (isRealSend && chunkSuccess > 0) {
+      // resendEventId = Resend email_id: nötig, damit der Webhook Opens/Clicks
+      // auch dann zuordnen kann, wenn Resend keine Tags im Payload mitschickt.
+      const sentRows = chunkResults
+        .map((result, k) =>
+          result.success
+            ? {
+                newsletterId: newsletter.id,
+                subscriberId: chunkRecipients[k].id,
+                eventType: 'SENT' as const,
+                resendEventId: result.id ?? null,
+              }
+            : null
+        )
+        .filter((row): row is NonNullable<typeof row> => row !== null)
+
+      await prisma.newsletterEvent.createMany({ data: sentRows })
+      await prisma.newsletter.update({
+        where: { id: newsletter.id },
+        data: { recipientCount: { increment: chunkSuccess } },
+      })
+      await prisma.newsletterStats.update({
+        where: { newsletterId: newsletter.id },
+        data: { sentCount: { increment: chunkSuccess }, updatedAt: new Date() },
+      })
     }
   }
 
-  // Update newsletter status
-  if (!options?.dryRun && !options?.testRecipients) {
-    // Record SENT NewsletterEvents for every successful send so future resume-missing calls know who's done.
-    // recipients[i] corresponds to allResults[i] (pushed in order).
-    // resendEventId = Resend email_id: nötig, damit der Webhook Opens/Clicks
-    // auch dann zuordnen kann, wenn Resend keine Tags im Payload mitschickt.
-    const sentRows = allResults
-      .map((result, k) =>
-        result?.success && recipients[k]
-          ? {
-              newsletterId: newsletter.id,
-              subscriberId: recipients[k].id,
-              eventType: 'SENT' as const,
-              resendEventId: result.id ?? null,
-            }
-          : null
-      )
-      .filter((row): row is NonNullable<typeof row> => row !== null)
-
-    if (sentRows.length > 0) {
-      await prisma.newsletterEvent.createMany({ data: sentRows })
-    }
-
+  if (isRealSend) {
+    // Ging gar nichts raus, zurück auf den alten Stand, damit sich der Versand
+    // neu anstossen lässt. Sonst gilt der Newsletter als versendet.
+    const nothingSent = successCount === 0 && !options?.resumeMissing
     await prisma.newsletter.update({
-      where: { id: newsletterId },
-      data: {
-        status: 'SENT',
-        sentAt: new Date(),
-        // Resume mode adds to the existing count instead of overwriting it
-        recipientCount: options?.resumeMissing
-          ? { increment: successCount }
-          : successCount,
-      },
-    })
-
-    // Create or update stats record (unique on newsletter_id – z. B. bei Test-Versand oder erneutem Versand)
-    await prisma.newsletterStats.upsert({
-      where: { newsletterId: newsletter.id },
-      create: {
-        newsletterId: newsletter.id,
-        sentCount: successCount,
-      },
-      update: {
-        sentCount: options?.resumeMissing
-          ? { increment: successCount }
-          : successCount,
-        updatedAt: new Date(),
-      },
+      where: { id: newsletter.id },
+      data: nothingSent
+        ? { status: originalStatus, sentAt: null }
+        : { status: 'SENT' },
     })
   }
 

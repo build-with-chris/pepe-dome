@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+import { versandBasis, quote } from '@/lib/newsletter-rates'
 
 export const dynamic = 'force-dynamic'
 import { isSuperAdmin, canEdit } from '@/lib/roles.server'
@@ -95,7 +96,7 @@ async function getDashboardStats() {
         },
       }),
       prisma.newsletter.findFirst({
-        where: { status: 'SENT' },
+        where: { status: { in: ['SENT', 'SENDING'] } },
         orderBy: { sentAt: 'desc' },
         include: { stats: true },
       }),
@@ -122,9 +123,11 @@ export default async function AdminDashboard() {
     canEdit(),
   ])
 
-  const openRate = stats.lastNewsletter?.stats && stats.lastNewsletter.recipientCount > 0
-    ? ((stats.lastNewsletter.stats.uniqueOpenCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
-    : null
+  const lastBasis = stats.lastNewsletter
+    ? versandBasis(stats.lastNewsletter.recipientCount, stats.lastNewsletter.stats)
+    : 0
+  const openRate = quote(stats.lastNewsletter?.stats?.uniqueOpenCount, lastBasis)
+  const clickRate = quote(stats.lastNewsletter?.stats?.uniqueClickCount, lastBasis)
 
   return (
     <div className="space-y-6">
@@ -294,23 +297,19 @@ export default async function AdminDashboard() {
               <div className="flex gap-8">
                 <div>
                   <p className="text-2xl font-bold text-[#016dca]">
-                    {stats.lastNewsletter.recipientCount.toLocaleString('de-DE')}
+                    {lastBasis.toLocaleString('de-DE')}
                   </p>
                   <p className="text-xs text-white/40 mt-1">Empfänger</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-emerald-400">
-                    {stats.lastNewsletter.recipientCount > 0
-                      ? ((stats.lastNewsletter.stats.uniqueOpenCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
-                      : '0'}%
+                    {openRate !== null ? `${openRate}%` : '-'}
                   </p>
                   <p className="text-xs text-white/40 mt-1">Öffnungsrate</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-blue-400">
-                    {stats.lastNewsletter.recipientCount > 0
-                      ? ((stats.lastNewsletter.stats.uniqueClickCount / stats.lastNewsletter.recipientCount) * 100).toFixed(1)
-                      : '0'}%
+                    {clickRate !== null ? `${clickRate}%` : '-'}
                   </p>
                   <p className="text-xs text-white/40 mt-1">Klickrate</p>
                 </div>

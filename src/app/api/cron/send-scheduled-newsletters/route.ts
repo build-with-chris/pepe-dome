@@ -23,6 +23,13 @@ import { sendNewsletter } from '@/lib/email-send'
 import { Prisma } from '@prisma/client'
 
 /**
+ * Vercel-Zeitgrenze für den Versand. Bei rund 1.600 Empfängern wird die
+ * Standardgrenze knapp. Reicht auch diese nicht, ist der Stand trotzdem
+ * gespeichert, siehe sendNewsletter in src/lib/email-send.ts.
+ */
+export const maxDuration = 300
+
+/**
  * Authorization for cron jobs
  * Vercel Cron Jobs include special headers for verification
  */
@@ -121,10 +128,18 @@ export async function GET(request: NextRequest) {
           lastSendAttempt: new Date().toISOString(),
         }
 
+        // Nur auf Entwurf zurück, wenn wirklich nichts rausging. Sonst gälte
+        // ein halb verschickter Newsletter als frisch und ein neuer Versand
+        // ginge auch an alle, die ihn schon haben. Mit Ereignissen bleibt er
+        // auf SENDING und lässt sich über "An fehlende senden" fortsetzen.
+        const alreadySent = await prisma.newsletterEvent.count({
+          where: { newsletterId: newsletter.id, eventType: 'SENT' },
+        })
+
         await prisma.newsletter.update({
           where: { id: newsletter.id },
           data: {
-            status: 'DRAFT', // Reset to draft so admin can retry
+            ...(alreadySent === 0 ? { status: 'DRAFT' as const } : {}),
             metadata: errorMetadata,
           },
         })

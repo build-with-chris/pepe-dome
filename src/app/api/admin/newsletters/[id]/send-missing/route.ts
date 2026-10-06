@@ -17,6 +17,13 @@ import { sendNewsletter } from '@/lib/email-send'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 
+/**
+ * Vercel-Zeitgrenze für den Versand. Bei rund 1.600 Empfängern wird die
+ * Standardgrenze knapp. Reicht auch diese nicht, ist der Stand trotzdem
+ * gespeichert, siehe sendNewsletter in src/lib/email-send.ts.
+ */
+export const maxDuration = 300
+
 interface RouteParams {
   params: Promise<{ id: string }>
 }
