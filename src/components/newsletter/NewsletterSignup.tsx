@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import { Honeypot, useBotSchutz } from '@/components/newsletter/Honeypot'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { getNewsletterContent } from '@/lib/data'
@@ -11,6 +12,7 @@ interface NewsletterSignupProps {
 
 export default function NewsletterSignup({ compact = false }: NewsletterSignupProps) {
   const [email, setEmail] = useState('')
+  const { honeypotProps, botFelder } = useBotSchutz()
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const content = getNewsletterContent().signup
 
@@ -22,7 +24,7 @@ export default function NewsletterSignup({ compact = false }: NewsletterSignupPr
       const res = await fetch('/api/subscribers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ...botFelder() }),
       })
 
       const data = await res.json()
@@ -48,6 +50,7 @@ export default function NewsletterSignup({ compact = false }: NewsletterSignupPr
       <div className="footer-newsletter">
         <h4 className="footer-newsletter-title">{content.title}</h4>
         <form onSubmit={handleSubmit} className="newsletter-form">
+          <Honeypot {...honeypotProps} />
           <div className="newsletter-input-group">
             <Input
               type="email"
@@ -83,6 +86,7 @@ export default function NewsletterSignup({ compact = false }: NewsletterSignupPr
       <p className="body-sm text-pepe-t64 mb-6">{content.description}</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <Honeypot {...honeypotProps} />
         <Input
           type="email"
           value={email}

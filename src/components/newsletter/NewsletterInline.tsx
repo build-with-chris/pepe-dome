@@ -6,6 +6,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import { Honeypot, useBotSchutz } from '@/components/newsletter/Honeypot'
 
 interface NewsletterInlineProps {
   className?: string
@@ -13,6 +14,7 @@ interface NewsletterInlineProps {
 
 export default function NewsletterInline({ className = '' }: NewsletterInlineProps) {
   const [email, setEmail] = useState('')
+  const { honeypotProps, botFelder } = useBotSchutz()
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
@@ -31,7 +33,7 @@ export default function NewsletterInline({ className = '' }: NewsletterInlinePro
       const res = await fetch('/api/subscribers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ...botFelder() }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error?.message || 'Fehler')
@@ -53,6 +55,7 @@ export default function NewsletterInline({ className = '' }: NewsletterInlinePro
 
   return (
     <form onSubmit={handleSubmit} className={`newsletter-inline ${className}`} aria-label="Newsletter-Anmeldung">
+      <Honeypot {...honeypotProps} />
       <input
         type="email"
         value={email}

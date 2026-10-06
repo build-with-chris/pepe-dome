@@ -21,6 +21,7 @@ import {
 import { prisma } from '@/lib/prisma'
 import { sendConfirmationEmail } from '@/lib/email-send'
 import { getBaseUrlFromRequest } from '@/lib/resend'
+import { botGrund } from '@/lib/bot-schutz'
 
 const RATE_LIMIT_MAX = 5
 
@@ -118,6 +119,14 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       return validationErrorResponse(validation.error)
+    }
+
+    // Bots still abweisen: gleiche Antwort wie immer, aber kein Datensatz und
+    // vor allem keine Bestätigungsmail an ein fremdes Postfach.
+    const grund = botGrund(validation.data)
+    if (grund) {
+      console.warn('[SIGNUP] vermutlich automatisiert, verworfen:', grund)
+      return uniformSuccess(rateLimit)
     }
 
     const { email, firstName, interests } = validation.data

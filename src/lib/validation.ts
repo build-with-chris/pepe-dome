@@ -38,6 +38,10 @@ export const subscriberSignupSchema = z.object({
   trackingConsent: z.boolean().optional(),
   /** Herkunft der Anmeldung, etwa "startseite". Nur zur Auswertung. */
   source: z.string().max(60).optional(),
+  /** Bot-Schutz, siehe src/lib/bot-schutz.ts. Unsichtbares Feld. */
+  website: z.string().max(500).optional(),
+  /** Bot-Schutz: Millisekunden zwischen Anzeigen und Absenden des Formulars. */
+  fillMs: z.number().nonnegative().optional(),
 })
 
 // Course interest validation schema

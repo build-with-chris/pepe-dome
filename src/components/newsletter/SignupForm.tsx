@@ -7,6 +7,7 @@
 'use client'
 
 import { useState, FormEvent, useEffect } from 'react'
+import { Honeypot, useBotSchutz } from '@/components/newsletter/Honeypot'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { trackLead } from '@/lib/tracking'
@@ -42,6 +43,7 @@ export default function SignupForm({
 }: SignupFormProps) {
   const herkunft = source ?? (variant === 'extended' ? 'newsletter-page' : 'inline-form')
   const [email, setEmail] = useState('')
+  const { honeypotProps, botFelder } = useBotSchutz()
   const [firstName, setFirstName] = useState('')
   const [interests, setInterests] = useState<string[]>([])
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -106,7 +108,7 @@ export default function SignupForm({
       const response = await fetch('/api/subscribers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, ...botFelder() }),
       })
 
       const result = await response.json()
@@ -196,6 +198,7 @@ export default function SignupForm({
           <p className="text-pepe-t64 text-sm mb-4">{contextMessage}</p>
         )}
         <form onSubmit={handleSubmit} className="space-y-3">
+          <Honeypot {...honeypotProps} />
           <div>
             <Input
               type="email"
@@ -250,6 +253,7 @@ export default function SignupForm({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <Honeypot {...honeypotProps} />
         <div>
           <label htmlFor="email" className="form-label">
             E-Mail-Adresse *

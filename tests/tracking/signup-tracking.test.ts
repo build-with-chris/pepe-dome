@@ -49,7 +49,8 @@ function signupRequest(body: Record<string, unknown>, cookie?: string) {
 
   return new NextRequest('https://www.pepe-dome.de/api/subscribers', {
     method: 'POST',
-    body: JSON.stringify(body),
+    // fillMs wie aus dem echten Formular, sonst greift der Bot-Schutz.
+    body: JSON.stringify({ fillMs: 5000, ...body }),
     headers,
   })
 }
