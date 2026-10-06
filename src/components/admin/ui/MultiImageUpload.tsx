@@ -15,9 +15,9 @@
 
 import { useCallback, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { bildFuerUpload, UPLOAD_GRENZE_BYTES, zuGrossMeldung } from '@/lib/bild-verkleinern'
 
 const ERLAUBT = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-const MAX_BYTES = 10 * 1024 * 1024
 
 export default function MultiImageUpload({
   onUploaded,
@@ -40,24 +40,24 @@ export default function MultiImageUpload({
       const gesammelteFehler: string[] = []
 
       for (let i = 0; i < dateien.length; i += 1) {
-        const datei = dateien[i]
+        const original = dateien[i]
 
         // Vorab prüfen statt den Server ablehnen zu lassen: so steht der
         // Grund direkt an der Datei, die ihn verursacht hat.
-        if (!ERLAUBT.includes(datei.type)) {
-          gesammelteFehler.push(`${datei.name}: kein unterstütztes Bildformat`)
-          setFortschritt({ fertig: i + 1, gesamt: dateien.length })
-          continue
-        }
-        if (datei.size > MAX_BYTES) {
-          gesammelteFehler.push(
-            `${datei.name}: ${(datei.size / 1024 / 1024).toFixed(1)} MB, erlaubt sind 10 MB`
-          )
+        if (!ERLAUBT.includes(original.type)) {
+          gesammelteFehler.push(`${original.name}: kein unterstütztes Bildformat`)
           setFortschritt({ fertig: i + 1, gesamt: dateien.length })
           continue
         }
 
         try {
+          const datei = await bildFuerUpload(original)
+          if (datei.size > UPLOAD_GRENZE_BYTES) {
+            gesammelteFehler.push(zuGrossMeldung(datei))
+            setFortschritt({ fertig: i + 1, gesamt: dateien.length })
+            continue
+          }
+
           const body = new FormData()
           body.append('file', datei)
           const res = await fetch('/api/admin/upload', { method: 'POST', body })
@@ -66,7 +66,11 @@ export default function MultiImageUpload({
           try {
             daten = text ? JSON.parse(text) : {}
           } catch {
-            gesammelteFehler.push(`${datei.name}: Serverfehler ${res.status}`)
+            gesammelteFehler.push(
+              res.status === 413
+                ? `${datei.name}: zu groß für den Upload`
+                : `${datei.name}: Serverfehler ${res.status}`
+            )
             setFortschritt({ fertig: i + 1, gesamt: dateien.length })
             continue
           }
@@ -78,7 +82,7 @@ export default function MultiImageUpload({
           }
         } catch (error) {
           gesammelteFehler.push(
-            `${datei.name}: ${error instanceof Error ? error.message : 'Upload fehlgeschlagen'}`
+            `${original.name}: ${error instanceof Error ? error.message : 'Upload fehlgeschlagen'}`
           )
         }
 
@@ -130,7 +134,7 @@ export default function MultiImageUpload({
           <>
             <span className="text-sm text-white/70">{dragging ? 'Loslassen' : label}</span>
             <span className="text-[11px] text-white/40 mt-1">
-              Mehrere auf einmal möglich · JPG, PNG, GIF, WebP · bis 10 MB
+              Mehrere auf einmal möglich · JPG, PNG, GIF, WebP · große Fotos werden verkleinert
             </span>
           </>
         )}

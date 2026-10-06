@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import { bildFuerUpload, UPLOAD_GRENZE_BYTES, zuGrossMeldung } from '@/lib/bild-verkleinern'
 
 interface ImageDropzoneProps {
   /** Current image URL */
@@ -56,8 +57,14 @@ export default function ImageDropzone({
     setUploadError(null)
 
     try {
+      const verkleinert = await bildFuerUpload(file)
+      if (verkleinert.size > UPLOAD_GRENZE_BYTES) {
+        setUploadError(zuGrossMeldung(verkleinert))
+        return
+      }
+
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', verkleinert)
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
@@ -70,7 +77,11 @@ export default function ImageDropzone({
         data = text ? JSON.parse(text) : {}
       } catch {
         console.error('Upload response was not JSON:', response.status, text?.slice(0, 200))
-        setUploadError(`Serverfehler ${response.status}. Antwort war kein JSON – prüfe Vercel-Logs oder Supabase.`)
+        setUploadError(
+          response.status === 413
+            ? 'Das Bild ist zu groß für den Upload. Bitte eine kleinere Fassung verwenden.'
+            : `Serverfehler ${response.status}. Antwort war kein JSON, bitte Vercel-Logs oder Supabase prüfen.`
+        )
         return
       }
 
@@ -227,7 +238,7 @@ export default function ImageDropzone({
                 {isDragging ? 'Hier ablegen' : placeholder}
               </p>
               <p className="mt-1 text-xs text-[var(--pepe-t48)]">
-                JPG, PNG, GIF, WebP (max 10MB)
+                JPG, PNG, GIF, WebP · große Fotos werden automatisch verkleinert
               </p>
             </>
           )}

@@ -6,8 +6,9 @@ import { getSupabaseAdmin, UPLOAD_BUCKET } from '@/lib/supabase-server'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 
-// Maximum file size: 10MB
-const MAX_FILE_SIZE = 10 * 1024 * 1024
+// Vercel nimmt pro Request höchstens 4,5 MB an. Größere Bilder verkleinert
+// der Browser vorher, siehe src/lib/bild-verkleinern.ts.
+const MAX_FILE_SIZE = 4 * 1024 * 1024
 
 // Allowed file types
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: 'Datei zu groß. Maximale Größe: 10MB' },
+        { error: 'Datei zu groß. Maximale Größe: 4 MB' },
         { status: 400 }
       )
     }
