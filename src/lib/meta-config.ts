@@ -15,11 +15,16 @@
  */
 
 /**
- * Dataset "Pepe Dome Website" im Business-Portfolio Pepe Arts.
+ * Datensatz "Dome_Website", der dem Werbekonto 415388386552412 zugeordnet ist.
  *
- * Vorgänger war 1643858583931537 im versehentlich angelegten Portfolio
- * "Pepe". Der lag getrennt vom Werbekonto und der Facebook-Seite, und Meta
- * zieht Datensätze nicht zwischen Portfolios um. Deshalb neu angelegt statt
- * verschoben.
+ * Vorgänger:
+ *   - 1027053273442986 "Pepe Dome Website": tauchte im Events Manager des
+ *     Werbekontos nicht auf und ließ sich in Kampagnen nicht auswählen. Der
+ *     Datensatz des Werbekontos meldete deshalb "Pixel nicht aktiv".
+ *   - 1643858583931537 im versehentlich angelegten Portfolio "Pepe".
+ *
+ * Meta zieht Datensätze nicht zwischen Portfolios um. Deshalb wird gewechselt
+ * statt verschoben. META_CAPI_ACCESS_TOKEN muss ein Token genau dieses
+ * Datensatzes sein, sonst lehnt Meta die Server-Ereignisse ab.
  */
-export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1027053273442986'
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1621310429655828'
