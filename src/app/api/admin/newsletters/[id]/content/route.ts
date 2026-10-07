@@ -15,6 +15,7 @@ import { addContentSchema, reorderContentSchema } from '@/lib/validation'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import { guardNewsletterMutation } from '@/lib/newsletter-guard'
+import { terminReihenfolge } from '@/lib/newsletter-content'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -82,10 +83,18 @@ export async function PUT(
       return validationErrorResponse(validation.error)
     }
 
-    // Replace all content (handles both new items and reordering)
-    await replaceNewsletterContent(newsletterId, validation.data.content)
+    // Termine stehen nach Datum, so wie in der Mail. Gespeichert wird schon
+    // in dieser Reihenfolge, damit Editor, Vorschau und Mail übereinstimmen.
+    // Zurück geht die neue Reihenfolge als Liste der alten Positionen, der
+    // Editor ordnet seine Einträge danach um.
+    const content = validation.data.content
+    const reihenfolge = await terminReihenfolge(content)
+    await replaceNewsletterContent(
+      newsletterId,
+      reihenfolge.map((alt, neu) => ({ ...content[alt], orderPosition: neu }))
+    )
 
-    return successResponse({ message: 'Content updated successfully' })
+    return successResponse({ message: 'Content updated successfully', reihenfolge })
   } catch (error: unknown) {
     console.error('Update content error:', error)
     return errorResponse(

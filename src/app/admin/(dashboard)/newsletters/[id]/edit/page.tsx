@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { getNewsletterWithContent } from '@/lib/newsletters'
+import { inhalteFuerEditor } from '@/lib/newsletter-content'
 
 export const dynamic = 'force-dynamic'
 import { canEdit, canSendNewsletter, canTestSendNewsletter } from '@/lib/roles.server'
@@ -58,6 +59,11 @@ export default async function EditNewsletterPage({ params }: PageProps) {
     notFound()
   }
 
+  // Liste im Editor in derselben Reihenfolge wie die Mail, mit Titel und Datum.
+  const content = await inhalteFuerEditor(newsletter.content, newsletter.status).catch(
+    () => newsletter.content
+  )
+
   const canEditNewsletter = newsletter.status === 'DRAFT' || newsletter.status === 'SCHEDULED'
 
   return (
@@ -97,7 +103,7 @@ export default async function EditNewsletterPage({ params }: PageProps) {
 
       {/* Edit Form */}
       <NewsletterEditClient
-        newsletter={newsletter}
+        newsletter={{ ...newsletter, content }}
         canEdit={canEditNewsletter}
         canSend={canSend}
         canTestSend={canTestSend}

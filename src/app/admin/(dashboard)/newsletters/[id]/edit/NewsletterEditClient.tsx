@@ -304,7 +304,7 @@ export default function NewsletterEditClient({
   const handleContentReorder = async (newContent: ContentBlock[]) => {
     setSelectedContent(newContent)
     try {
-      await fetch(`/api/admin/newsletters/${newsletter.id}/content`, {
+      const res = await fetch(`/api/admin/newsletters/${newsletter.id}/content`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -318,6 +318,21 @@ export default function NewsletterEditClient({
           })),
         }),
       })
+
+      // Der Server stellt Termine nach Datum, so wie sie in der Mail stehen,
+      // und meldet die neue Reihenfolge als Liste der alten Positionen.
+      const data = await res.json().catch(() => null)
+      const reihenfolge: unknown = data?.data?.reihenfolge
+      if (
+        res.ok &&
+        Array.isArray(reihenfolge) &&
+        reihenfolge.length === newContent.length
+      ) {
+        setSelectedContent(
+          (reihenfolge as number[]).map((alt, neu) => ({ ...newContent[alt], orderPosition: neu }))
+        )
+        setPreviewKey((k) => k + 1)
+      }
     } catch (err) {
       console.error('Failed to save content order:', err)
     }

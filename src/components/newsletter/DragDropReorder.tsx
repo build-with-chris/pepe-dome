@@ -131,7 +131,7 @@ export default function DragDropReorder({
             </Button>
           )}
           <p className="text-sm text-pepe-t64">
-            Ziehen zum Sortieren
+            Termine ordnen sich nach Datum, Texte und Artikel per Ziehen
           </p>
         </div>
       </div>

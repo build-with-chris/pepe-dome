@@ -387,10 +387,11 @@ function buildArticleItem(
  * Überschrift, er tauscht nur den Platz mit anderen Terminen derselben
  * Sektion. Artikel und freie Textblöcke bleiben, wo sie sind.
  */
-function chronologischeReihenfolge<T extends { contentType: string; contentId: string | null; sectionHeading: string | null }>(
-  bloecke: T[],
-  events: Map<string, EventRecord>
-): T[] {
+type TerminZeit = Pick<EventRecord, 'date' | 'time'>
+
+export function chronologischeReihenfolge<
+  T extends { contentType: string; contentId: string | null; sectionHeading?: string | null },
+>(bloecke: T[], events: Map<string, TerminZeit>): T[] {
   const istTermin = (b: T) => (b.contentType === 'EVENT' || b.contentType === 'SHOW') && Boolean(b.contentId)
   const ergebnis = [...bloecke]
 
@@ -418,11 +419,100 @@ function chronologischeReihenfolge<T extends { contentType: string; contentId: s
  * Beginn eines Termins als Zeitstempel. Ohne lesbare Uhrzeit ans Tagesende,
  * ein gelöschter Termin ganz nach hinten.
  */
-function terminZeitpunkt(event: EventRecord | undefined): number {
+function terminZeitpunkt(event: TerminZeit | undefined): number {
   if (!event) return Number.MAX_SAFE_INTEGER
   const uhrzeit = /^(\d{1,2})[:.](\d{2})/.exec(event.time?.trim() ?? '')
   const minuten = uhrzeit ? Number(uhrzeit[1]) * 60 + Number(uhrzeit[2]) : 24 * 60
   return new Date(event.date).getTime() + minuten * 60_000
+}
+
+/**
+ * Dieselbe Reihenfolge für den Editor und das Speichern.
+ *
+ * Lädt die Termine selbst und gibt die Positionen der Blöcke in neuer
+ * Reihenfolge zurück: [2, 0, 1] heißt, der dritte Block steht jetzt vorn.
+ * So bleibt alles, was der Aufrufer an den Blöcken hängen hat, erhalten.
+ */
+export async function terminReihenfolge(
+  bloecke: Array<{ contentType: string; contentId?: string | null; sectionHeading?: string | null }>
+): Promise<number[]> {
+  const ids = bloecke
+    .filter((b) => (b.contentType === 'EVENT' || b.contentType === 'SHOW') && b.contentId)
+    .map((b) => b.contentId as string)
+  const events = new Map<string, TerminZeit>()
+  if (ids.length > 0) {
+    const rows = await prisma.event.findMany({
+      where: { OR: [{ id: { in: ids } }, { slug: { in: ids } }] },
+      select: { id: true, slug: true, date: true, time: true },
+    })
+    for (const row of rows) {
+      events.set(row.id, row)
+      events.set(row.slug, row)
+    }
+  }
+  const mitIndex = bloecke.map((b, index) => ({ ...b, contentId: b.contentId ?? null, index }))
+  return chronologischeReihenfolge(mitIndex, events).map((b) => b.index)
+}
+
+/**
+ * Inhalte für die Liste im Editor: in Mail-Reihenfolge und mit Titel, Bild
+ * und Datum, damit man sieht, welcher Termin wo steht.
+ *
+ * Ohne diese Angaben zeigte die Liste bei gespeicherten Inhalten nur
+ * "Abschnitt 1, 2, 3" und die Reihenfolge des Hinzufügens.
+ */
+export async function inhalteFuerEditor<
+  T extends { contentType: string; contentId: string | null; sectionHeading?: string | null; orderPosition: number },
+>(
+  bloecke: T[],
+  status: string
+): Promise<Array<T & { _metadata?: { title: string; imageUrl?: string; date?: string } }>> {
+  const nachPosition = [...bloecke].sort((a, b) => a.orderPosition - b.orderPosition)
+  const eventIds = nachPosition
+    .filter((b) => (b.contentType === 'EVENT' || b.contentType === 'SHOW') && b.contentId)
+    .map((b) => b.contentId as string)
+  const articleIds = nachPosition
+    .filter((b) => b.contentType === 'ARTICLE' && b.contentId)
+    .map((b) => b.contentId as string)
+
+  const [events, articles] = await Promise.all([
+    eventIds.length
+      ? prisma.event.findMany({
+          where: { OR: [{ id: { in: eventIds } }, { slug: { in: eventIds } }] },
+          select: { id: true, slug: true, title: true, imageUrl: true, date: true, time: true },
+        })
+      : Promise.resolve([]),
+    articleIds.length
+      ? prisma.article.findMany({
+          where: { OR: [{ id: { in: articleIds } }, { slug: { in: articleIds } }] },
+          select: { id: true, slug: true, title: true, imageUrl: true },
+        })
+      : Promise.resolve([]),
+  ])
+
+  const eventMap = new Map<string, (typeof events)[number]>()
+  for (const e of events) {
+    eventMap.set(e.id, e)
+    eventMap.set(e.slug, e)
+  }
+  const articleMap = new Map<string, (typeof articles)[number]>()
+  for (const a of articles) {
+    articleMap.set(a.id, a)
+    articleMap.set(a.slug, a)
+  }
+
+  const reihe = sortiertNachTermin(status) ? chronologischeReihenfolge(nachPosition, eventMap) : nachPosition
+
+  return reihe.map((block, index) => {
+    const event = block.contentId ? eventMap.get(block.contentId) : undefined
+    const article = block.contentId && !event ? articleMap.get(block.contentId) : undefined
+    const meta = event
+      ? { title: event.title, imageUrl: event.imageUrl ?? undefined, date: event.date.toISOString() }
+      : article
+        ? { title: article.title, imageUrl: article.imageUrl ?? undefined }
+        : undefined
+    return { ...block, orderPosition: index, ...(meta ? { _metadata: meta } : {}) }
+  })
 }
 
 /**
