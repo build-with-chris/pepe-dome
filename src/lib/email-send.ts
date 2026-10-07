@@ -267,6 +267,13 @@ export async function sendNewsletter(
   const viewModel = await buildViewModelFromNewsletter(newsletter)
   const baseUrl = viewModel.baseUrl
 
+  // Die öffentliche Webseite gibt es erst nach dem Versand. Eine Testmail
+  // eines Entwurfs verlinkt deshalb auf die Vorschau im Admin, sonst führt
+  // "Im Browser ansehen" auf einen 404.
+  if (options?.testRecipients && newsletter.status !== 'SENT') {
+    viewModel.webViewUrl = `${baseUrl}/admin/newsletters/${newsletter.id}/vorschau`
+  }
+
   type Recipient = (typeof recipients)[number]
 
   const buildPayload = async (recipient: Recipient) => {

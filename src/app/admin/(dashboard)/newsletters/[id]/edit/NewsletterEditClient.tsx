@@ -512,7 +512,15 @@ export default function NewsletterEditClient({
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Test-E-Mail</span>
               <button
-                onClick={() => newsletter.slug && window.open(`/newsletter/${newsletter.slug}`, '_blank')}
+                onClick={() =>
+                  window.open(
+                    // Öffentlich gibt es die Seite erst nach dem Versand.
+                    newsletter.status === 'SENT' && newsletter.slug
+                      ? `/newsletter/${newsletter.slug}`
+                      : `/admin/newsletters/${newsletter.id}/vorschau`,
+                    '_blank'
+                  )
+                }
                 className="text-[11px] text-[#016dca] hover:underline"
               >
                 Als Webseite

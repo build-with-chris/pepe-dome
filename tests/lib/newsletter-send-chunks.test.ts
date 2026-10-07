@@ -32,13 +32,18 @@ vi.mock('@/lib/resend', () => ({
 vi.mock('@react-email/render', () => ({ render: vi.fn().mockResolvedValue('<html></html>') }))
 vi.mock('@/components/email/templates/NewsletterTemplate', () => ({ default: () => null }))
 vi.mock('@/lib/newsletter-content', () => ({
-  buildViewModelFromNewsletter: vi.fn().mockResolvedValue({ baseUrl: 'https://www.example.com' }),
+  // Jedes Mal ein frisches Objekt, der Versand darf es verändern.
+  buildViewModelFromNewsletter: vi.fn(async () => ({
+    baseUrl: 'https://www.example.com',
+    webViewUrl: 'https://www.example.com/newsletter/nudeln',
+  })),
 }))
-vi.mock('@/lib/newsletter-text', () => ({ renderNewsletterText: () => 'text' }))
+vi.mock('@/lib/newsletter-text', () => ({ renderNewsletterText: vi.fn(() => 'text') }))
 
 const { sendNewsletter } = await import('@/lib/email-send')
 const { prisma } = await import('@/lib/prisma')
 const { resend } = await import('@/lib/resend')
+const { renderNewsletterText } = await import('@/lib/newsletter-text')
 
 const db = prisma as unknown as {
   newsletter: Record<'findUnique' | 'updateMany' | 'update', ReturnType<typeof vi.fn>>
@@ -171,5 +176,27 @@ describe('sendNewsletter, echter Versand', () => {
     expect(result.total).toBe(50)
     expect(gebuchteEmpfaenger()).toBe(50)
     expect(letzterStatus()).toBe('SENT')
+  })
+})
+
+describe('sendNewsletter, Testversand', () => {
+  const webViewUrlDerMail = () =>
+    (vi.mocked(renderNewsletterText).mock.calls[0][0] as { webViewUrl: string }).webViewUrl
+
+  it('verlinkt bei einem Entwurf auf die Vorschau im Admin statt auf einen 404', async () => {
+    await sendNewsletter('nl-1', { testRecipients: ['team@example.com'] })
+
+    expect(webViewUrlDerMail()).toBe('https://www.example.com/admin/newsletters/nl-1/vorschau')
+    // Testversand bucht nichts und sperrt nichts.
+    expect(db.newsletter.updateMany).not.toHaveBeenCalled()
+    expect(db.newsletterEvent.createMany).not.toHaveBeenCalled()
+  })
+
+  it('behält bei einem versendeten Newsletter die öffentliche Seite', async () => {
+    db.newsletter.findUnique.mockResolvedValue({ id: 'nl-1', subject: 'x', status: 'SENT', content: [] })
+
+    await sendNewsletter('nl-1', { testRecipients: ['team@example.com'] })
+
+    expect(webViewUrlDerMail()).toBe('https://www.example.com/newsletter/nudeln')
   })
 })
