@@ -160,12 +160,12 @@ export function truncate(text: string | null | undefined, maxLength: number): st
 }
 
 /**
- * Gewichtung nach redaktioneller Reihenfolge.
+ * Gewichtung nach Position.
  *
  * Der erste Termin im Newsletter ist der Aufmacher, die nächsten beiden
- * bekommen eine mittlere Karte, alles Weitere wird zur Terminzeile.
- * Die Reihenfolge kommt aus dem Drag-and-drop im Admin, ist also eine
- * bewusste redaktionelle Entscheidung und keine Datenbanksortierung.
+ * bekommen eine mittlere Karte, alles Weitere wird zur Terminzeile. Die
+ * Termine stehen in der Reihenfolge, in der sie stattfinden, siehe
+ * chronologischeReihenfolge. Der früheste ist damit der Aufmacher.
  */
 function emphasisForIndex(index: number): ItemEmphasis {
   if (index === 0) return 'lead'
@@ -248,6 +248,8 @@ interface ArticleRecord {
 
 interface NewsletterRecord {
   slug: string
+  /** Fehlt er, wird sortiert wie bei einem Entwurf. */
+  status?: string
   subject: string
   preheader: string | null
   introText: string | null
@@ -375,6 +377,63 @@ function buildArticleItem(
  * Baut das Viewmodel aus einem bereits geladenen Newsletter-Datensatz.
  * Separat von der DB-Abfrage, damit es sich ohne Datenbank testen lässt.
  */
+/**
+ * Termine stehen im Newsletter in der Reihenfolge, in der sie stattfinden.
+ *
+ * Vorher galt die Reihenfolge aus dem Drag-and-drop im Editor. Gewünscht ist
+ * aber die zeitliche Abfolge, und die soll niemand von Hand herstellen müssen.
+ *
+ * Sortiert wird nur innerhalb einer Sektion: Jeder Termin bleibt unter seiner
+ * Überschrift, er tauscht nur den Platz mit anderen Terminen derselben
+ * Sektion. Artikel und freie Textblöcke bleiben, wo sie sind.
+ */
+function chronologischeReihenfolge<T extends { contentType: string; contentId: string | null; sectionHeading: string | null }>(
+  bloecke: T[],
+  events: Map<string, EventRecord>
+): T[] {
+  const istTermin = (b: T) => (b.contentType === 'EVENT' || b.contentType === 'SHOW') && Boolean(b.contentId)
+  const ergebnis = [...bloecke]
+
+  const plaetzeJeSektion = new Map<string, number[]>()
+  bloecke.forEach((block, i) => {
+    if (!istTermin(block)) return
+    const key = block.sectionHeading || ''
+    plaetzeJeSektion.set(key, [...(plaetzeJeSektion.get(key) ?? []), i])
+  })
+
+  for (const plaetze of plaetzeJeSektion.values()) {
+    const termine = plaetze
+      .map((i) => bloecke[i])
+      // sort ist stabil: Gleichzeitige Termine behalten ihre Reihenfolge
+      .sort((a, b) => terminZeitpunkt(events.get(a.contentId!)) - terminZeitpunkt(events.get(b.contentId!)))
+    plaetze.forEach((platz, k) => {
+      ergebnis[platz] = termine[k]
+    })
+  }
+
+  return ergebnis
+}
+
+/**
+ * Beginn eines Termins als Zeitstempel. Ohne lesbare Uhrzeit ans Tagesende,
+ * ein gelöschter Termin ganz nach hinten.
+ */
+function terminZeitpunkt(event: EventRecord | undefined): number {
+  if (!event) return Number.MAX_SAFE_INTEGER
+  const uhrzeit = /^(\d{1,2})[:.](\d{2})/.exec(event.time?.trim() ?? '')
+  const minuten = uhrzeit ? Number(uhrzeit[1]) * 60 + Number(uhrzeit[2]) : 24 * 60
+  return new Date(event.date).getTime() + minuten * 60_000
+}
+
+/**
+ * Versendete Ausgaben behalten die Reihenfolge, in der sie verschickt wurden.
+ * Sonst sähe die Archivseite anders aus als die Mail, und ein laufender
+ * Nachversand bekäme eine andere Mail als die ersten Empfänger.
+ */
+function sortiertNachTermin(status: string | undefined): boolean {
+  return status !== 'SENT' && status !== 'SENDING'
+}
+
 export function buildViewModel(
   newsletter: NewsletterRecord,
   lookup: { events: Map<string, EventRecord>; articles: Map<string, ArticleRecord> },
@@ -394,7 +453,10 @@ export function buildViewModel(
   let articleIndex = 0
   let noteIndex = 0
 
-  const sorted = [...newsletter.content].sort((a, b) => a.orderPosition - b.orderPosition)
+  const nachPosition = [...newsletter.content].sort((a, b) => a.orderPosition - b.orderPosition)
+  const sorted = sortiertNachTermin(newsletter.status)
+    ? chronologischeReihenfolge(nachPosition, lookup.events)
+    : nachPosition
 
   for (const block of sorted) {
     // Ein freier Textblock ist immer seine eigene Sektion

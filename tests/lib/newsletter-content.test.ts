@@ -243,3 +243,88 @@ describe('truncate', () => {
     expect(truncate(null, 20)).toBeUndefined()
   })
 })
+
+describe('Reihenfolge der Termine', () => {
+  /** Drei Termine, im Editor absichtlich durcheinander einsortiert. */
+  function durcheinander(status?: string) {
+    const termine = [
+      { id: 'samhain', date: '2026-10-31', time: '20:00' },
+      { id: 'open-stage', date: '2026-10-16', time: '19:30' },
+      { id: 'poetry', date: '2026-10-09', time: '20:00' },
+    ]
+    const events = new Map()
+    for (const t of termine) {
+      events.set(t.id, makeEvent({ slug: t.id, title: t.id, date: new Date(`${t.date}T00:00:00.000Z`), time: t.time }))
+    }
+    const newsletter = {
+      ...makeNewsletter(0),
+      status,
+      content: [
+        ...termine.map((t, i) => ({
+          contentType: 'EVENT',
+          contentId: t.id,
+          sectionHeading: null,
+          sectionDescription: null,
+          orderPosition: i,
+        })),
+      ],
+    }
+    return { newsletter, lookup: { events, articles: new Map() } }
+  }
+
+  const titel = (vm: ReturnType<typeof buildViewModel>) =>
+    vm.sections.flatMap((s) => s.items.map((i) => (i as { title?: string }).title))
+
+  it('zeigt Termine in der Reihenfolge, in der sie stattfinden', () => {
+    const { newsletter, lookup } = durcheinander('DRAFT')
+    const vm = buildViewModel(newsletter as never, lookup as never, { baseUrl: BASE })
+
+    expect(titel(vm)).toEqual(['poetry', 'open-stage', 'samhain'])
+    // Der früheste Termin ist der Aufmacher
+    expect((vm.sections[0].items[0] as { emphasis?: string }).emphasis).toBe('lead')
+  })
+
+  it('sortiert am selben Tag nach Uhrzeit, ohne Uhrzeit ans Ende des Tages', () => {
+    const events = new Map([
+      ['spaet', makeEvent({ slug: 'spaet', title: 'spaet', date: new Date('2026-10-09T00:00:00Z'), time: '21:00' })],
+      ['ohne', makeEvent({ slug: 'ohne', title: 'ohne', date: new Date('2026-10-09T00:00:00Z'), time: null })],
+      ['frueh', makeEvent({ slug: 'frueh', title: 'frueh', date: new Date('2026-10-09T00:00:00Z'), time: '18.30 Uhr' })],
+    ])
+    const newsletter = {
+      ...makeNewsletter(0),
+      content: ['spaet', 'ohne', 'frueh'].map((id, i) => ({
+        contentType: 'EVENT', contentId: id, sectionHeading: null, sectionDescription: null, orderPosition: i,
+      })),
+    }
+    const vm = buildViewModel(newsletter as never, { events, articles: new Map() } as never, { baseUrl: BASE })
+
+    expect(titel(vm)).toEqual(['frueh', 'spaet', 'ohne'])
+  })
+
+  it('lässt jeden Termin in seiner Sektion', () => {
+    const events = new Map([
+      ['show-spaet', makeEvent({ slug: 'show-spaet', title: 'show-spaet', date: new Date('2026-11-01T00:00:00Z') })],
+      ['kurs', makeEvent({ slug: 'kurs', title: 'kurs', date: new Date('2026-10-01T00:00:00Z') })],
+      ['show-frueh', makeEvent({ slug: 'show-frueh', title: 'show-frueh', date: new Date('2026-10-10T00:00:00Z') })],
+    ])
+    const block = (id: string, sectionHeading: string, i: number) => ({
+      contentType: 'EVENT', contentId: id, sectionHeading, sectionDescription: null, orderPosition: i,
+    })
+    const newsletter = {
+      ...makeNewsletter(0),
+      content: [block('show-spaet', 'Shows', 0), block('kurs', 'Kurse', 1), block('show-frueh', 'Shows', 2)],
+    }
+    const vm = buildViewModel(newsletter as never, { events, articles: new Map() } as never, { baseUrl: BASE })
+
+    const shows = vm.sections.find((s) => s.heading === 'Shows')!
+    expect(shows.items.map((i) => (i as { title?: string }).title)).toEqual(['show-frueh', 'show-spaet'])
+    expect(vm.sections.find((s) => s.heading === 'Kurse')!.items).toHaveLength(1)
+  })
+
+  it.each(['SENT', 'SENDING'])('lässt bei Status %s die verschickte Reihenfolge stehen', (status) => {
+    const { newsletter, lookup } = durcheinander(status)
+    const vm = buildViewModel(newsletter as never, lookup as never, { baseUrl: BASE })
+
+    expect(titel(vm)).toEqual(['samhain', 'open-stage', 'poetry'])
+  })
+})
