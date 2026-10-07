@@ -414,17 +414,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     },
   },
   {
-    src: '/images/circus-poetry/cyr-wheel-einarmig.webp',
-    width: 1197,
-    height: 1800,
-    category: 'shows',
-    discipline: 'rad',
-    alt: {
-      de: 'Artist stützt sich einarmig im Cyr-Wheel ab und streckt die Beine nach oben',
-      en: 'Artist supporting himself on one arm inside a Cyr wheel with his legs stretched upward',
-    },
-  },
-  {
     src: '/images/circus-poetry/taenzerin-boden.webp',
     width: 1197,
     height: 1800,
