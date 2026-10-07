@@ -136,6 +136,15 @@ function verifyWebhookSignature(request: NextRequest, rawBody: string): boolean 
   })
 }
 
+/** Nur diese Ereignisse ändern etwas in der Datenbank. */
+const WIRKSAME_EREIGNISSE = new Set<string>([
+  'email.opened',
+  'email.clicked',
+  'email.bounced',
+  'email.complained',
+  'email.delivered',
+])
+
 /**
  * Tag-Wert aus dem Webhook-Payload lesen.
  *
@@ -187,6 +196,18 @@ export async function POST(request: NextRequest) {
 
     const payload: ResendWebhookPayload = JSON.parse(rawBody)
     const { type, data } = payload
+
+    // Ereignisse ohne Wirkung sofort bestätigen, ohne die Datenbank zu fragen.
+    //
+    // Während eines Versands schickt Resend für jede Mail mindestens zwei
+    // Webhooks, "sent" und "delivered", jeder in einer eigenen Funktion. Früher
+    // las jeder davon erst Tags, Abonnent und Newsletter aus der Datenbank,
+    // auch "sent", mit dem danach nichts passierte. Bei 100 Mails pro Block
+    // war der Verbindungspool von Supabase damit voll, und dem Versand selbst
+    // fehlte die Verbindung zum Buchen (Oktober 2026, ECHECKOUTTIMEOUT).
+    if (!WIRKSAME_EREIGNISSE.has(type)) {
+      return NextResponse.json({ received: true })
+    }
 
     let subscriberId = getSubscriberIdFromTags(data.tags)
     let newsletterId = getNewsletterIdFromTags(data.tags)

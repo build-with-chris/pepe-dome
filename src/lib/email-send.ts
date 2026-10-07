@@ -12,6 +12,28 @@ import { renderNewsletterText } from './newsletter-text'
 /** Resend nimmt höchstens 100 Mails pro Batch-Aufruf. */
 const NEWSLETTER_CHUNK_SIZE = 100
 
+/** Pausen zwischen den Versuchen, einen versendeten Block zu buchen. */
+export const BUCHUNG_PAUSEN_MS = [2000, 5000, 15000]
+
+/**
+ * Führt eine Datenbankbuchung aus und versucht es bei einem Fehler erneut.
+ *
+ * Scheitert auch der letzte Versuch, fliegt der Fehler weiter und der Versand
+ * stoppt. Das ist gewollt: Ohne Buchung wüsste "An fehlende senden" nicht,
+ * wer den Block schon hat, und würde ihn ein zweites Mal verschicken.
+ */
+async function mitWiederholung<T>(fn: () => Promise<T>): Promise<T> {
+  for (let versuch = 0; ; versuch++) {
+    try {
+      return await fn()
+    } catch (error) {
+      if (versuch >= BUCHUNG_PAUSEN_MS.length) throw error
+      console.warn(`[EMAIL] Buchung fehlgeschlagen, Versuch ${versuch + 2} folgt:`, error)
+      await new Promise((resolve) => setTimeout(resolve, BUCHUNG_PAUSEN_MS[versuch]))
+    }
+  }
+}
+
 /**
  * Send double opt-in confirmation email
  *
@@ -436,15 +458,23 @@ export async function sendNewsletter(
         )
         .filter((row): row is NonNullable<typeof row> => row !== null)
 
-      await prisma.newsletterEvent.createMany({ data: sentRows })
-      await prisma.newsletter.update({
-        where: { id: newsletter.id },
-        data: { recipientCount: { increment: chunkSuccess } },
-      })
-      await prisma.newsletterStats.update({
-        where: { newsletterId: newsletter.id },
-        data: { sentCount: { increment: chunkSuccess }, updatedAt: new Date() },
-      })
+      // Ganz oder gar nicht: Im Oktober 2026 landeten die Ereignisse eines
+      // Blocks in der Datenbank, die Erhöhung der Empfängerzahl danach nicht
+      // mehr. Und wiederholen statt abbrechen, denn die Mails sind schon raus.
+      // Ein kurzer Engpass im Verbindungspool soll den Versand nicht stoppen.
+      await mitWiederholung(() =>
+        prisma.$transaction([
+          prisma.newsletterEvent.createMany({ data: sentRows }),
+          prisma.newsletter.update({
+            where: { id: newsletter.id },
+            data: { recipientCount: { increment: chunkSuccess } },
+          }),
+          prisma.newsletterStats.update({
+            where: { newsletterId: newsletter.id },
+            data: { sentCount: { increment: chunkSuccess }, updatedAt: new Date() },
+          }),
+        ])
+      )
     }
   }
 

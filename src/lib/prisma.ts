@@ -69,10 +69,35 @@ function createPrismaClient() {
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: serverlessUrl(process.env.DATABASE_URL as string),
       },
     },
   })
+}
+
+/**
+ * Auf Vercel höchstens eine Verbindung pro Funktion.
+ *
+ * Prisma öffnet sonst mehrere Verbindungen je Instanz (Anzahl CPUs mal zwei
+ * plus eins). Jede Vercel-Funktion ist eine eigene Instanz, und während eines
+ * Newsletter-Versands laufen Hunderte Webhooks gleichzeitig. Zusammen war das
+ * mehr, als der Pooler von Supabase hergibt: Im Oktober 2026 bekam der
+ * Versand 60 Sekunden lang keine Verbindung und brach ab.
+ *
+ * Eine Verbindung ist die übliche Empfehlung für Serverless hinter einem
+ * Pooler. Steht connection_limit schon in der URL, gilt dieser Wert.
+ */
+export function serverlessUrl(url: string, istVercel = Boolean(process.env.VERCEL)): string {
+  if (!istVercel) return url
+  try {
+    const u = new URL(url)
+    if (!u.searchParams.has('connection_limit')) u.searchParams.set('connection_limit', '1')
+    // Pooler im Transaction-Modus (Port 6543) verträgt keine Prepared Statements.
+    if (u.port === '6543' && !u.searchParams.has('pgbouncer')) u.searchParams.set('pgbouncer', 'true')
+    return u.toString()
+  } catch {
+    return url
+  }
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient()

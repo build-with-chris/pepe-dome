@@ -12,12 +12,23 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
+const { gebucht } = vi.hoisted(() => ({ gebucht: [] as number[] }))
+
 vi.mock('@/lib/prisma', () => {
   const prisma = {
     newsletter: { findUnique: vi.fn(), updateMany: vi.fn(), update: vi.fn() },
     subscriber: { findMany: vi.fn() },
     newsletterEvent: { findMany: vi.fn(), createMany: vi.fn() },
     newsletterStats: { upsert: vi.fn(), update: vi.fn() },
+    // Array-Form wie in Prisma: alle Operationen gemeinsam. Gezählt wird
+    // nur, was als Ganzes durchging, so wie eine echte Transaktion.
+    $transaction: vi.fn(async (ops: Promise<unknown>[]) => {
+      const aufrufe = prisma.newsletter.update.mock.calls
+      const erhoehung = aufrufe[aufrufe.length - 1]?.[0]?.data?.recipientCount?.increment ?? 0
+      const ergebnis = await Promise.all(ops)
+      gebucht.push(erhoehung)
+      return ergebnis
+    }),
   }
   return { default: prisma, prisma }
 })
@@ -40,7 +51,9 @@ vi.mock('@/lib/newsletter-content', () => ({
 }))
 vi.mock('@/lib/newsletter-text', () => ({ renderNewsletterText: vi.fn(() => 'text') }))
 
-const { sendNewsletter } = await import('@/lib/email-send')
+const { sendNewsletter, BUCHUNG_PAUSEN_MS } = await import('@/lib/email-send')
+// Im Test ohne Wartezeit zwischen den Buchungsversuchen.
+BUCHUNG_PAUSEN_MS.splice(0, BUCHUNG_PAUSEN_MS.length, 0, 0, 0)
 const { prisma } = await import('@/lib/prisma')
 const { resend } = await import('@/lib/resend')
 const { renderNewsletterText } = await import('@/lib/newsletter-text')
@@ -62,11 +75,9 @@ function abonnenten(n: number) {
   }))
 }
 
-/** Summe aller Erhöhungen von recipientCount über die Aufrufe hinweg. */
+/** Summe der Empfänger aus erfolgreich gebuchten Blöcken. */
 function gebuchteEmpfaenger() {
-  return db.newsletter.update.mock.calls
-    .map(([arg]) => arg.data.recipientCount?.increment ?? 0)
-    .reduce((a: number, b: number) => a + b, 0)
+  return gebucht.reduce((a, b) => a + b, 0)
 }
 
 function letzterStatus() {
@@ -76,6 +87,7 @@ function letzterStatus() {
 
 beforeEach(() => {
   vi.clearAllMocks()
+  gebucht.length = 0
   db.newsletter.findUnique.mockResolvedValue({
     id: 'nl-1',
     subject: 'Nudeln mit Banane',
@@ -124,18 +136,36 @@ describe('sendNewsletter, echter Versand', () => {
       .mockImplementationOnce(async () => {
         throw new Error('Netzwerkfehler')
       })
+    // Ab dem zweiten Buchen ist die Datenbank dauerhaft weg, auch alle
+    // Wiederholungen scheitern.
     db.newsletterEvent.createMany
       .mockResolvedValueOnce({ count: 100 })
-      .mockRejectedValueOnce(new Error('Funktion beendet'))
+      .mockRejectedValue(new Error('Funktion beendet'))
 
     // Der zweite Block scheitert beim Senden und wird als Fehler gezählt, der
     // dritte reisst den Lauf beim Buchen ab.
     await expect(sendNewsletter('nl-1')).rejects.toThrow('Funktion beendet')
+    // Nach dem gescheiterten Buchen geht kein weiterer Block mehr raus.
+    expect(batchSend).toHaveBeenCalledTimes(3)
 
     expect(gebuchteEmpfaenger()).toBe(100)
     // Nie auf SENT gesetzt: Der Newsletter bleibt auf SENDING und damit für
     // "An fehlende senden" offen, für einen zweiten vollen Versand gesperrt.
     expect(letzterStatus()).toBeUndefined()
+  })
+
+  it('überbrückt einen kurzen Engpass beim Buchen, statt abzubrechen', async () => {
+    db.subscriber.findMany.mockResolvedValue(abonnenten(250))
+    // Genau so im Oktober 2026: kein freier Platz im Verbindungspool.
+    db.newsletter.update
+      .mockResolvedValueOnce({})
+      .mockRejectedValueOnce(new Error('ECHECKOUTTIMEOUT'))
+
+    const result = await sendNewsletter('nl-1')
+
+    expect(result.success).toBe(250)
+    expect(batchSend).toHaveBeenCalledTimes(3)
+    expect(letzterStatus()).toBe('SENT')
   })
 
   it('verweigert einen zweiten vollen Versand nach einem Abbruch', async () => {
