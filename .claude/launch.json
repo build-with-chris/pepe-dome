@@ -12,6 +12,13 @@
       "name": "pepe-dome-attach",
       "url": "http://localhost:3004",
       "port": 3004
+    },
+    {
+      "name": "pepe-dome-dev-admin",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["NEXT_PUBLIC_DISABLE_CLERK_IN_DEV=false", "npm", "run", "dev"],
+      "port": 3004,
+      "autoPort": false
     }
   ]
 }
