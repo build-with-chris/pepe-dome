@@ -15,16 +15,23 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import { Label } from '@/components/ui/label'
+import { Label, labelVariants } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import FieldHint from '@/components/admin/ui/FieldHint'
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
 import { BIO_MAX, normalizeInstagram } from '@/lib/artist-validation'
+import {
+  ARTIST_BILDFORMATE,
+  BILDFORMAT_INFO,
+  STANDARD_BILDFORMAT,
+  type ArtistBildformat,
+} from '@/lib/artist-bildformat'
 
 export type ArtistFormData = {
   id?: string
   name: string
   imageUrl: string
+  imageFormat: ArtistBildformat
   bio: string
   bioEn: string
   instagramUrl: string
@@ -34,6 +41,7 @@ export type ArtistFormData = {
 const LEERER_ARTIST: ArtistFormData = {
   name: '',
   imageUrl: '',
+  imageFormat: STANDARD_BILDFORMAT,
   bio: '',
   bioEn: '',
   instagramUrl: '',
@@ -56,6 +64,8 @@ export default function ArtistForm({
   const [serverError, setServerError] = useState<string | null>(null)
   const [translating, setTranslating] = useState(false)
   const [translateMessage, setTranslateMessage] = useState<string | null>(null)
+  /** Format, in dem das aktuelle Foto zugeschnitten wurde. */
+  const [fotoFormat, setFotoFormat] = useState<ArtistBildformat>(data.imageFormat)
 
   function update<K extends keyof ArtistFormData>(key: K, value: ArtistFormData[K]) {
     setData((prev) => ({ ...prev, [key]: value }))
@@ -121,6 +131,7 @@ export default function ArtistForm({
       const payload = {
         name: data.name.trim(),
         imageUrl: data.imageUrl.trim() || null,
+        imageFormat: data.imageFormat,
         bio: data.bio.trim(),
         bioEn: data.bioEn.trim() || null,
         instagramUrl: data.instagramUrl.trim() || null,
@@ -181,17 +192,71 @@ export default function ArtistForm({
           {errors.name && <p className="text-sm text-red-400">{errors.name}</p>}
         </div>
 
+        <fieldset className="space-y-2.5">
+          <legend className={`${labelVariants()} mb-2.5`}>
+            Bildformat
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {ARTIST_BILDFORMATE.map((format) => {
+              const info = BILDFORMAT_INFO[format]
+              const aktiv = data.imageFormat === format
+              return (
+                <label
+                  key={format}
+                  className={`flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
+                    aktiv
+                      ? 'border-[#016dca] bg-[#016dca]/15 text-white'
+                      : 'border-white/[0.12] text-white/70 hover:border-white/30'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="imageFormat"
+                    value={format}
+                    checked={aktiv}
+                    onChange={() => update('imageFormat', format)}
+                    className="sr-only"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className={`inline-block border-2 rounded-sm ${aktiv ? 'border-[#016dca]' : 'border-white/40'}`}
+                    style={{ height: 16, width: Math.round(16 * info.seitenverhaeltnis) }}
+                  />
+                  {info.label}
+                  <span className="text-white/40">{info.verhaeltnis}</span>
+                </label>
+              )
+            })}
+          </div>
+          <FieldHint>
+            In diesem Format erscheint das Foto auf der Eventseite. Welches Format der
+            Artist möchte, am besten vorher fragen. Beim Hochladen wählst du den
+            Ausschnitt selbst, große Fotos werden dabei automatisch verkleinert.
+          </FieldHint>
+        </fieldset>
+
         <div className="space-y-2.5">
           <ImageDropzone
             label="Foto"
             value={data.imageUrl}
-            onChange={(url) => update('imageUrl', url)}
+            onChange={(url) => {
+              update('imageUrl', url)
+              setFotoFormat(data.imageFormat)
+            }}
             placeholder="Foto hierher ziehen oder klicken"
+            zuschnitt={{
+              seitenverhaeltnis: BILDFORMAT_INFO[data.imageFormat].seitenverhaeltnis,
+              titel: `Ausschnitt wählen: ${BILDFORMAT_INFO[data.imageFormat].label}`,
+            }}
           />
-          <FieldHint>
-            Wird auf der Eventseite quadratisch zugeschnitten. Am besten ein Foto,
-            auf dem das Gesicht mittig ist.
-          </FieldHint>
+          {data.imageUrl && fotoFormat !== data.imageFormat ? (
+            <p className="text-sm text-amber-300">
+              Das Foto ist noch für {BILDFORMAT_INFO[fotoFormat].label} zugeschnitten. Mit der
+              Maus aufs Foto und &bdquo;Ausschnitt ändern&ldquo;, damit es zum neuen Format passt.
+            </p>
+          ) : (
+            <FieldHint>Am besten ein Foto, auf dem die Person gut zu erkennen ist.</FieldHint>
+          )}
         </div>
 
         <div className="space-y-2.5">

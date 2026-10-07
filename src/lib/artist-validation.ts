@@ -11,6 +11,7 @@
  */
 
 import { z } from 'zod'
+import { ARTIST_BILDFORMATE, STANDARD_BILDFORMAT } from '@/lib/artist-bildformat'
 
 export const BIO_MAX = 600
 
@@ -73,6 +74,8 @@ const bild = optionalText.refine(
 export const artistSchema = z.object({
   name: z.string().trim().min(1, 'Name ist Pflicht'),
   imageUrl: bild,
+  /** Fehlt das Feld, bleibt es quadratisch, wie bei allen Artists vor dem Feld. */
+  imageFormat: z.enum(ARTIST_BILDFORMATE).default(STANDARD_BILDFORMAT),
   bio: z
     .string()
     .trim()

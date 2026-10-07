@@ -283,6 +283,9 @@ model Artist {
   slug         String        @unique
   name         String
   imageUrl     String?       @map("image_url")
+  /// "square", "landscape" oder "portrait" (src/lib/artist-bildformat.ts).
+  /// Das Foto wird beim Upload schon in diesem Seitenverhältnis zugeschnitten.
+  imageFormat  String        @default("square") @map("image_format")
   /// Deutsch, höchstens 600 Zeichen (src/lib/artist-validation.ts).
   bio          String
   /// Übersetzungen wie bei Event: { "en": { "bio": … } }. Fehlt die EN-Bio,

@@ -4,6 +4,7 @@ import ArtistForm, { type ArtistFormData } from '@/components/admin/forms/Artist
 import DeleteArtistButton from '@/components/admin/DeleteArtistButton'
 import { canEdit } from '@/lib/roles.server'
 import prisma from '@/lib/prisma'
+import { alsBildformat } from '@/lib/artist-bildformat'
 import type { Artist } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
@@ -34,6 +35,7 @@ export default async function EditArtistPage({
     id: artist.id,
     name: artist.name,
     imageUrl: artist.imageUrl ?? '',
+    imageFormat: alsBildformat(artist.imageFormat),
     bio: artist.bio,
     bioEn: translations.en?.bio ?? '',
     instagramUrl: artist.instagramUrl ?? '',

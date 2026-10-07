@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { zielMasse, mitEndung, MAX_KANTE } from '@/lib/bild-verkleinern'
+import { zielMasse, mitEndung, ausschnittImBild, MAX_KANTE } from '@/lib/bild-verkleinern'
 
 describe('zielMasse', () => {
   it('verkleinert ein Handyfoto auf die maximale Kante, Seitenverhältnis bleibt', () => {
@@ -24,5 +24,25 @@ describe('mitEndung', () => {
   it('kommt mit Namen ohne Endung zurecht', () => {
     expect(mitEndung('hero', 'jpg')).toBe('hero.jpg')
     expect(mitEndung('.jpg', 'jpg')).toBe('bild.jpg')
+  })
+})
+
+describe('ausschnittImBild', () => {
+  it('rundet auf ganze Pixel', () => {
+    expect(ausschnittImBild({ x: 10.4, y: 20.6, width: 300.5, height: 300.2 }, 1000, 800)).toEqual({
+      x: 10,
+      y: 21,
+      width: 301,
+      height: 300,
+    })
+  })
+
+  it('ragt nicht über den Bildrand hinaus', () => {
+    expect(ausschnittImBild({ x: -1, y: 500, width: 1002, height: 400 }, 1000, 800)).toEqual({
+      x: 0,
+      y: 500,
+      width: 1000,
+      height: 300,
+    })
   })
 })

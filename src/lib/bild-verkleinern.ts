@@ -91,3 +91,58 @@ export async function bildFuerUpload(datei: File): Promise<File> {
 export function zuGrossMeldung(datei: File) {
   return `${datei.name} ist mit ${(datei.size / 1024 / 1024).toFixed(1)} MB zu groß, erlaubt sind 4 MB. Bei einem GIF hilft nur ein kleineres GIF.`
 }
+
+/** Ausschnitt in Pixeln des Originalbilds, so wie ihn der Zuschneide-Dialog liefert. */
+export type Ausschnitt = { x: number; y: number; width: number; height: number }
+
+/**
+ * Rundet den Ausschnitt auf ganze Pixel und hält ihn innerhalb des Bildes.
+ * Der Zuschneide-Dialog liefert Kommazahlen, und am Rand kann er um ein
+ * Pixel über das Bild hinausragen.
+ */
+export function ausschnittImBild(a: Ausschnitt, bildBreite: number, bildHoehe: number): Ausschnitt {
+  const x = Math.min(Math.max(0, Math.round(a.x)), bildBreite - 1)
+  const y = Math.min(Math.max(0, Math.round(a.y)), bildHoehe - 1)
+  const width = Math.max(1, Math.min(Math.round(a.width), bildBreite - x))
+  const height = Math.max(1, Math.min(Math.round(a.height), bildHoehe - y))
+  return { x, y, width, height }
+}
+
+/**
+ * Schneidet einen Ausschnitt aus dem Bild und verkleinert ihn dabei auf
+ * höchstens `maxKante`. PNG bleibt PNG wegen möglicher Transparenz, alles
+ * andere wird JPEG. Die Größengrenze prüft danach wie gewohnt bildFuerUpload.
+ */
+export async function bildZuschneiden(
+  quelle: Blob,
+  ausschnitt: Ausschnitt,
+  name: string,
+  maxKante = MAX_KANTE
+): Promise<File> {
+  const bitmap = await createImageBitmap(quelle)
+  const a = ausschnittImBild(ausschnitt, bitmap.width, bitmap.height)
+  const { breite, hoehe } = zielMasse(a.width, a.height, maxKante)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = breite
+  canvas.height = hoehe
+  const ctx = canvas.getContext('2d')
+  if (!ctx) {
+    bitmap.close()
+    throw new Error('Der Browser kann das Bild nicht zuschneiden.')
+  }
+
+  const alsPng = quelle.type === 'image/png'
+  if (!alsPng) {
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, breite, hoehe)
+  }
+  ctx.imageSmoothingQuality = 'high'
+  ctx.drawImage(bitmap, a.x, a.y, a.width, a.height, 0, 0, breite, hoehe)
+  bitmap.close()
+
+  const typ = alsPng ? 'image/png' : 'image/jpeg'
+  const blob = await alsBlob(canvas, typ, alsPng ? undefined : 0.88)
+  if (!blob) throw new Error('Das zugeschnittene Bild konnte nicht erzeugt werden.')
+  return new File([blob], mitEndung(name, alsPng ? 'png' : 'jpg'), { type: typ })
+}

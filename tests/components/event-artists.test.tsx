@@ -20,6 +20,7 @@ function artist(overrides: Partial<ArtistData> = {}): ArtistData {
     slug: 'jana',
     name: 'Jana',
     imageUrl: null,
+    imageFormat: 'square',
     bio: 'Luftakrobatin aus München.',
     instagramUrl: 'https://www.instagram.com/jana/',
     websiteUrl: 'https://jana.example',
@@ -72,6 +73,7 @@ describe('transformArtist', () => {
     slug: 'jana',
     name: 'Jana',
     imageUrl: null,
+    imageFormat: 'portrait',
     bio: 'Luftakrobatin aus München.',
     translations: { en: { bio: 'Aerialist from Munich.' } },
     instagramUrl: null,
@@ -83,6 +85,11 @@ describe('transformArtist', () => {
   it('nimmt auf Englisch die EN-Bio', () => {
     expect(transformArtist(row, 'en').bio).toBe('Aerialist from Munich.')
     expect(transformArtist(row, 'de').bio).toBe('Luftakrobatin aus München.')
+  })
+
+  it('reicht das Bildformat durch, Unbekanntes wird quadratisch', () => {
+    expect(transformArtist(row, 'de').imageFormat).toBe('portrait')
+    expect(transformArtist({ ...row, imageFormat: 'rund' }, 'de').imageFormat).toBe('square')
   })
 
   it('fällt ohne EN-Bio auf Deutsch zurück', () => {

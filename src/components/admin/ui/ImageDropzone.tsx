@@ -2,7 +2,26 @@
 
 import { useState, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
-import { bildFuerUpload, UPLOAD_GRENZE_BYTES, zuGrossMeldung } from '@/lib/bild-verkleinern'
+import {
+  bildFuerUpload,
+  bildZuschneiden,
+  UPLOAD_GRENZE_BYTES,
+  zuGrossMeldung,
+  type Ausschnitt,
+} from '@/lib/bild-verkleinern'
+import ImageCropDialog from './ImageCropDialog'
+
+/** Zugeschnittene Fotos werden klein angezeigt, 1600 px reichen auch für Retina. */
+const ZUSCHNITT_MAX_KANTE = 1600
+
+type Zuschnitt = {
+  /** Breite durch Höhe, z. B. 1 für quadratisch oder 4/3 für quer */
+  seitenverhaeltnis: number
+  /** Überschrift im Zuschneide-Dialog */
+  titel?: string
+}
+
+type ZuschnittQuelle = { url: string; datei: Blob; name: string }
 
 interface ImageDropzoneProps {
   /** Current image URL */
@@ -19,6 +38,11 @@ interface ImageDropzoneProps {
   className?: string
   /** Placeholder text */
   placeholder?: string
+  /**
+   * Fester Bildausschnitt. Ist das gesetzt, öffnet sich vor dem Upload ein
+   * Zuschneide-Dialog, und hochgeladen wird nur der gewählte Ausschnitt.
+   */
+  zuschnitt?: Zuschnitt
 }
 
 export default function ImageDropzone({
@@ -29,11 +53,19 @@ export default function ImageDropzone({
   error,
   className,
   placeholder = 'Bild hier ablegen oder klicken zum Hochladen',
+  zuschnitt,
 }: ImageDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [zuschnittQuelle, setZuschnittQuelle] = useState<ZuschnittQuelle | null>(null)
+  /**
+   * Das zuletzt gewählte Original. Wird danach das Format geändert, schneidet
+   * "Ausschnitt ändern" wieder aus dem vollen Foto zu und nicht aus dem schon
+   * beschnittenen.
+   */
+  const originalRef = useRef<File | null>(null)
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -105,6 +137,66 @@ export default function ImageDropzone({
     }
   }, [onChange])
 
+  const zuschnittSchliessen = useCallback(() => {
+    setZuschnittQuelle((quelle) => {
+      if (quelle) URL.revokeObjectURL(quelle.url)
+      return null
+    })
+  }, [])
+
+  const zuschnittOeffnen = useCallback((datei: Blob, name: string) => {
+    setUploadError(null)
+    setZuschnittQuelle({ url: URL.createObjectURL(datei), datei, name })
+  }, [])
+
+  /** Neue Datei: mit Zuschnitt erst in den Dialog, sonst direkt hochladen. */
+  const handleFile = useCallback(
+    async (file: File) => {
+      if (zuschnitt && file.type !== 'image/gif') {
+        originalRef.current = file
+        zuschnittOeffnen(file, file.name)
+        return
+      }
+      await uploadFile(file)
+    },
+    [zuschnitt, zuschnittOeffnen, uploadFile]
+  )
+
+  const zuschnittUebernehmen = useCallback(
+    async (ausschnitt: Ausschnitt) => {
+      if (!zuschnittQuelle) return
+      const { datei, name } = zuschnittQuelle
+      zuschnittSchliessen()
+      setIsUploading(true)
+      try {
+        const zugeschnitten = await bildZuschneiden(datei, ausschnitt, name, ZUSCHNITT_MAX_KANTE)
+        await uploadFile(zugeschnitten)
+      } catch (err) {
+        setUploadError(err instanceof Error ? err.message : 'Zuschneiden fehlgeschlagen')
+        setIsUploading(false)
+      }
+    },
+    [zuschnittQuelle, zuschnittSchliessen, uploadFile]
+  )
+
+  /** Vorhandenes Foto neu zuschneiden, am liebsten aus dem Original dieser Sitzung. */
+  const handleNeuZuschneiden = useCallback(async () => {
+    if (originalRef.current) {
+      zuschnittOeffnen(originalRef.current, originalRef.current.name)
+      return
+    }
+    if (!value) return
+    try {
+      const res = await fetch(value)
+      if (!res.ok) throw new Error(String(res.status))
+      const blob = await res.blob()
+      const name = value.split('/').pop()?.split('?')[0] || 'foto.jpg'
+      zuschnittOeffnen(blob, name)
+    } catch {
+      setUploadError('Das Foto lässt sich hier nicht neu zuschneiden. Bitte noch einmal hochladen.')
+    }
+  }, [value, zuschnittOeffnen])
+
   const handleDrop = useCallback(
     async (e: React.DragEvent) => {
       e.preventDefault()
@@ -115,27 +207,27 @@ export default function ImageDropzone({
       if (files && files.length > 0) {
         const file = files[0]
         if (file.type.startsWith('image/')) {
-          await uploadFile(file)
+          await handleFile(file)
         } else {
           setUploadError('Bitte nur Bilddateien hochladen')
         }
       }
     },
-    [uploadFile]
+    [handleFile]
   )
 
   const handleFileSelect = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files
       if (files && files.length > 0) {
-        await uploadFile(files[0])
+        await handleFile(files[0])
       }
       // Reset input
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
     },
-    [uploadFile]
+    [handleFile]
   )
 
   const handleClick = useCallback(() => {
@@ -143,6 +235,7 @@ export default function ImageDropzone({
   }, [])
 
   const handleRemove = useCallback(() => {
+    originalRef.current = null
     onChange('')
     setUploadError(null)
   }, [onChange])
@@ -163,18 +256,41 @@ export default function ImageDropzone({
       {value ? (
         // Preview mode
         <div className="relative group">
-          <div className="relative overflow-hidden rounded-lg border border-[var(--pepe-line)] bg-[var(--pepe-surface)]">
+          <div
+            className={cn(
+              'relative overflow-hidden rounded-lg border border-[var(--pepe-line)] bg-[var(--pepe-surface)]',
+              zuschnitt && 'w-fit'
+            )}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={value}
               alt="Vorschau"
-              className="w-full h-48 object-cover"
+              style={zuschnitt ? { aspectRatio: zuschnitt.seitenverhaeltnis } : undefined}
+              className={cn('h-48 object-cover', zuschnitt ? 'w-auto' : 'w-full')}
               onError={(e) => {
                 e.currentTarget.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect fill="%231a1a1a" width="400" height="200"/><text fill="%23666" font-family="Arial" font-size="14" x="50%" y="50%" text-anchor="middle" dy=".3em">Bild konnte nicht geladen werden</text></svg>'
               }}
             />
             {/* Overlay with actions */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+            <div
+              className={cn(
+                'absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity flex flex-wrap items-center justify-center content-center gap-2 p-2',
+                isUploading && 'opacity-100'
+              )}
+            >
+              {isUploading && (
+                <span className="text-sm text-white">Wird hochgeladen...</span>
+              )}
+              {zuschnitt && !isUploading && (
+                <button
+                  type="button"
+                  onClick={handleNeuZuschneiden}
+                  className="px-4 py-2 bg-white/15 text-white rounded-lg hover:bg-white/25 transition-colors text-sm font-medium"
+                >
+                  Ausschnitt ändern
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleClick}
@@ -253,6 +369,16 @@ export default function ImageDropzone({
         onChange={handleFileSelect}
         className="hidden"
       />
+
+      {zuschnittQuelle && zuschnitt && (
+        <ImageCropDialog
+          bildUrl={zuschnittQuelle.url}
+          seitenverhaeltnis={zuschnitt.seitenverhaeltnis}
+          titel={zuschnitt.titel ?? 'Ausschnitt wählen'}
+          onAbbrechen={zuschnittSchliessen}
+          onUebernehmen={zuschnittUebernehmen}
+        />
+      )}
 
       {displayError && (
         <p className="text-sm text-[var(--pepe-error)]">{displayError}</p>

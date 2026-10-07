@@ -7,6 +7,7 @@ import { prisma } from './prisma'
 import type { Event, Article, Artist } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
 import { nichtVorbeiFilter, tagesbeginn } from './event-window'
+import { alsBildformat, type ArtistBildformat } from './artist-bildformat'
 
 // Safe database query wrapper - returns fallback on error.
 // Verbindungsabbrüche zur Supabase-Direktverbindung treten sporadisch auf
@@ -65,6 +66,7 @@ export type ArtistData = {
   slug: string
   name: string
   imageUrl: string | null
+  imageFormat: ArtistBildformat
   bio: string
   instagramUrl: string | null
   websiteUrl: string | null
@@ -239,6 +241,7 @@ export function transformArtist(artist: Artist, locale: DbLocale = 'de'): Artist
     slug: artist.slug,
     name: artist.name,
     imageUrl: artist.imageUrl,
+    imageFormat: alsBildformat(artist.imageFormat),
     bio: bio || artist.bio,
     instagramUrl: artist.instagramUrl,
     websiteUrl: artist.websiteUrl,

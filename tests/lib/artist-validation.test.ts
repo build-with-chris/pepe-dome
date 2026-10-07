@@ -103,3 +103,18 @@ describe('artistIdsSchema', () => {
     expect(artistIdsSchema.parse(['b', 'a', 'b'])).toEqual(['b', 'a'])
   })
 })
+
+describe('artistSchema imageFormat', () => {
+  it('ist ohne Angabe quadratisch', () => {
+    expect(artistSchema.parse(gueltig).imageFormat).toBe('square')
+  })
+
+  it('nimmt quer und hoch an', () => {
+    expect(artistSchema.parse({ ...gueltig, imageFormat: 'landscape' }).imageFormat).toBe('landscape')
+    expect(artistSchema.parse({ ...gueltig, imageFormat: 'portrait' }).imageFormat).toBe('portrait')
+  })
+
+  it('lehnt unbekannte Formate ab', () => {
+    expect(artistSchema.safeParse({ ...gueltig, imageFormat: 'rund' }).success).toBe(false)
+  })
+})
