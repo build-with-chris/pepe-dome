@@ -60,7 +60,7 @@
       },
       {
         "title": "Einzigartige Location",
-        "description": "Die geodätische Kuppel bietet 200 Sitzplätze und 12m Deckenhöhe für spektakuläre Luftartistik.",
+        "description": "Die geodätische Kuppel bietet 170 Sitzplätze, 22 Meter Durchmesser und 8,5 Meter Höhe für spektakuläre Luftartistik.",
         "icon": "dome"
       },
       {
@@ -73,7 +73,7 @@
   "about": {
     "title": "Über den Pepe Dome",
     "intro": "Der Pepe Dome ist ein Treffpunkt, an dem sich Artistik und Kultur kreuzen - ein Ort, der Performance für Menschen jeden Alters und jeder Herkunft zugänglich macht.",
-    "story": "2006 begann die Suche nach einem Raum für zeitgenössischen Zirkus. Über mehrere temporäre Standorte (MUCCA, CircusHub, Sugar Mountain) entwickelte sich das Projekt bis zur offiziellen Eröffnung am 1. August 2025 im Ostpark München. Die geodätische Kuppel mit 8,5 Metern Höhe bietet optimale Akustik und barrierefreien Zugang für spektakuläre Shows und intensives Training.",
+    "story": "2006 begann die Suche nach einem Raum für zeitgenössischen Zirkus. Über mehrere temporäre Standorte (MUCCA, CircusHub, Sugar Mountain) entwickelte sich das Projekt bis zur offiziellen Eröffnung am 1. August 2025 im Ostpark München. Die geodätische Kuppel mit 22 Metern Durchmesser und 8,5 Metern Höhe bietet optimale Akustik und barrierefreien Zugang für spektakuläre Shows und intensives Training.",
     "values": [
       {
         "title": "Künstlerische Exzellenz",
@@ -113,7 +113,8 @@
     },
     "specs": {
       "height": "8,5 Meter",
-      "capacity": "200 Plätze",
+      "diameter": "22 Meter",
+      "capacity": "170 Sitzplätze",
       "features": ["Optimale Akustik", "Barrierearmer Zugang", "Luftartistik möglich"]
     }
   },

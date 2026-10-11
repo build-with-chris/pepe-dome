@@ -123,7 +123,7 @@ export default function WelcomeEmail({
 
             <Text style={emailText.body}>
               Schön, dass du dabei bist. Der Pepe Dome ist eine geodätische Kuppel im
-              Münchner Ostpark: 200 Plätze, kurze Wege zur Bühne und ein Programm aus
+              Münchner Ostpark: 170 Sitzplätze, kurze Wege zur Bühne und ein Programm aus
               zeitgenössischem Zirkus, Shows und Workshops.
             </Text>
           </Section>

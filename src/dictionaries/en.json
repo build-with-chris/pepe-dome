@@ -78,7 +78,7 @@
         },
         "dome": {
           "title": "Unique Location",
-          "description": "The geodesic dome offers 200 seats and 12 m ceiling height for spectacular aerial acts."
+          "description": "The geodesic dome offers 170 seats, a 22 m diameter and 8.5 m height for spectacular aerial acts."
         },
         "community": {
           "title": "Community & Culture",
@@ -230,13 +230,13 @@
     },
     "story": {
       "title": "Our story",
-      "text": "The search for a space for contemporary circus began in 2006. Across several temporary venues (MUCCA, CircusHub, Sugar Mountain) the project grew until its official opening on 1 August 2025 in Munich's Ostpark. The geodesic dome with 8.5 m ceiling provides excellent acoustics and step-free access for spectacular shows and rigorous training.",
+      "text": "The search for a space for contemporary circus began in 2006. Across several temporary venues (MUCCA, CircusHub, Sugar Mountain) the project grew until its official opening on 1 August 2025 in Munich's Ostpark. The geodesic dome, 22 m across and 8.5 m high, provides excellent acoustics and step-free access for spectacular shows and rigorous training.",
       "imageAlt": "PEPE Dome",
       "contact": "Get in touch"
     },
     "background": {
       "title": "Background & project idea",
-      "p1": "Pepe Dome is a geodesic dome with around 200 seats. Since August 2025 it serves as a stage, training space and cultural venue in Munich's Ostpark.",
+      "p1": "Pepe Dome is a geodesic dome with 170 seats. Since August 2025 it serves as a stage, training space and cultural venue in Munich's Ostpark.",
       "p2": "Before that, the Lunatico Theatre tent stood temporarily on the same spot. As part of the Nebourhoods project and the wind-down of Festspielhaus GmbH, the dome was handed over to us.",
       "p3": "We reactivated it as a venue for contemporary circus and cultural formats, with the goal of creating a permanent cultural home in the Neuperlach neighbourhood. Talks are ongoing to integrate the dome into local urban development plans.",
       "p4": "From 2026 the non-profit Circus Akademie München e.V. takes over operations to pursue artistic, educational and social goals."
