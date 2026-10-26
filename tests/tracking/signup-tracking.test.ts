@@ -24,6 +24,12 @@ vi.mock('@/lib/email-send', () => ({
   sendConfirmationEmail: vi.fn().mockResolvedValue({ id: 'mail-1' }),
 }))
 
+// Das echte Modul wirft beim Import ohne RESEND_API_KEY, und in CI gibt es
+// keinen. Die Route braucht daraus nur die Basis-URL.
+vi.mock('@/lib/resend', () => ({
+  getBaseUrlFromRequest: (request: Request) => new URL(request.url).origin,
+}))
+
 vi.mock('@/lib/subscribers', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/subscribers')>()
   return {
