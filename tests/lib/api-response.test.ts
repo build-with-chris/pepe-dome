@@ -91,8 +91,8 @@ describe('API Response Utilities', () => {
     it('should format Zod-style errors', async () => {
       const zodErrors = {
         issues: [
-          { path: ['email'], message: 'Invalid email format' },
-          { path: ['firstName'], message: 'Required' },
+          { code: 'custom' as const, path: ['email'], message: 'Invalid email format' },
+          { code: 'custom' as const, path: ['firstName'], message: 'Required' },
         ],
       }
 
@@ -111,7 +111,7 @@ describe('API Response Utilities', () => {
     it('should handle nested paths', async () => {
       const zodErrors = {
         issues: [
-          { path: ['address', 'city'], message: 'Required' },
+          { code: 'custom' as const, path: ['address', 'city'], message: 'Required' },
         ],
       }
 
