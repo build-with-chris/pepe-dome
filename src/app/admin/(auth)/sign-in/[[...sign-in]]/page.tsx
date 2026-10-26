@@ -1,5 +1,5 @@
 import { SignIn } from '@clerk/nextjs'
-import { dark } from '@clerk/themes'
+import { dark } from '@clerk/ui/themes'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -31,14 +31,14 @@ export default function SignInPage() {
           {/* Clerk SignIn */}
           <SignIn
             appearance={{
-              baseTheme: dark,
+              theme: dark,
               variables: {
                 colorPrimary: "#016dca",
                 colorBackground: "transparent",
-                colorInputBackground: "#0F0F0F",
-                colorInputText: "#FFFFFF",
-                colorTextOnPrimaryBackground: "#000000",
-                colorTextSecondary: "#9CA3AF",
+                colorInput: "#0F0F0F",
+                colorInputForeground: "#FFFFFF",
+                colorPrimaryForeground: "#000000",
+                colorMutedForeground: "#9CA3AF",
                 borderRadius: "0.75rem",
               },
               elements: {

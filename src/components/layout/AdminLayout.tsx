@@ -298,7 +298,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     </Badge>
                   </div>
                   <UserButton
-                    afterSignOutUrl="/"
                     appearance={{
                       elements: {
                         avatarBox: 'w-9 h-9',
