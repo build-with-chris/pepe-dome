@@ -23,10 +23,12 @@
  * Idempotent: ein zweiter Lauf findet den Zielzustand vor und ändert nichts.
  */
 
-import { PrismaClient, ContentStatus, CourseTarget } from '@prisma/client'
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
+import { ContentStatus, CourseTarget } from '@prisma/client'
 import { writeFile } from 'node:fs/promises'
 
-const prisma = new PrismaClient()
 
 const TEENS = 'luftakrobatik-aircrobatics'
 const BAMBINIS = 'luftakrobatik-aircrobatics-bambinis'

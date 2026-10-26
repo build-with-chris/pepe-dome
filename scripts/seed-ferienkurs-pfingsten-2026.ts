@@ -8,9 +8,11 @@
  *   npx tsx scripts/seed-ferienkurs-pfingsten-2026.ts
  */
 
-import { PrismaClient, EventCategory, ContentStatus } from '@prisma/client'
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
+import { EventCategory, ContentStatus } from '@prisma/client'
 
-const prisma = new PrismaClient()
 
 const ARTICLE_SLUG = 'akrobatik-ferienkurs-pfingsten-2026'
 const EVENT_SLUG = 'akrobatik-ferienkurs-pfingsten-2026'

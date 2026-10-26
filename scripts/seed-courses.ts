@@ -13,9 +13,11 @@
  *   npx tsx scripts/seed-courses.ts
  */
 
-import { PrismaClient, ContentStatus, CourseTarget } from '@prisma/client'
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
+import { ContentStatus, CourseTarget } from '@prisma/client'
 
-const prisma = new PrismaClient()
 
 type SeedSlot = { weekday: number; startTime: string; endTime: string }
 type SeedBild = { url: string; alt: string }

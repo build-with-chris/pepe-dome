@@ -27,11 +27,10 @@
   ],
   "author": "",
   "license": "ISC",
-  "//overrides": "Next pinnt intern ältere Versionen dieser beiden Pakete, für die es bereits gefixte Fassungen gibt. sharp 0.34 setzt auf libvips mit bekannten CVEs auf (CVE-2026-33327/33328/35590/35591); postcss 8.4.31 hat XSS und Pfad-Traversal über sourceMappingURL. Beide Overrides entfernen, sobald Next selbst nachzieht. deepmerge-ts 7 (über prisma → @prisma/config) läuft bei rekursiven Objekten in einen Stack-Überlauf (GHSA-ggr8-5vv4-36mx); Prisma 6 nutzt es nur zum Einlesen der prisma.config.ts, die Brüche von Version 8 (Maps, deepmergeInto) treffen das nicht. Entfernen, sobald Prisma selbst auf 8 geht.",
+  "//overrides": "Next pinnt intern ältere Versionen dieser beiden Pakete, für die es bereits gefixte Fassungen gibt. sharp 0.34 setzt auf libvips mit bekannten CVEs auf (CVE-2026-33327/33328/35590/35591); postcss 8.4.31 hat XSS und Pfad-Traversal über sourceMappingURL. Beide Overrides entfernen, sobald Next selbst nachzieht.",
   "overrides": {
     "sharp": "^0.35.3",
-    "postcss": "$postcss",
-    "deepmerge-ts": "^8.0.2"
+    "postcss": "$postcss"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.35.6",
@@ -40,7 +39,8 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.2.2",
-    "@prisma/client": "^6.19.0",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-label": "^2.1.8",
@@ -62,6 +62,7 @@
     "next": "^15.1.6",
     "next-i18next": "^15.4.2",
     "next-themes": "^0.4.6",
+    "pg": "^8.23.1",
     "react": "^19.1.1",
     "react-day-picker": "^9.12.0",
     "react-dom": "^19.1.1",
@@ -90,7 +91,7 @@
     "ffmpeg-static": "^5.3.0",
     "jsdom": "^27.2.0",
     "postcss": "^8.5.23",
-    "prisma": "^6.19.0",
+    "prisma": "^7.10.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vitest": "^4.1.12"
