@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import type { PoolConfig } from 'pg'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -65,39 +67,64 @@ function createPrismaClient() {
     } as any
   }
 
+  const { pool, schema } = poolConfig(process.env.DATABASE_URL as string)
   return new PrismaClient({
+    adapter: new PrismaPg(pool, schema ? { schema } : undefined),
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-    datasources: {
-      db: {
-        url: serverlessUrl(process.env.DATABASE_URL as string),
-      },
-    },
   })
 }
 
 /**
- * Auf Vercel höchstens eine Verbindung pro Funktion.
+ * Übersetzt die DATABASE_URL in die Pool-Einstellungen von node-postgres.
  *
- * Prisma öffnet sonst mehrere Verbindungen je Instanz (Anzahl CPUs mal zwei
- * plus eins). Jede Vercel-Funktion ist eine eigene Instanz, und während eines
- * Newsletter-Versands laufen Hunderte Webhooks gleichzeitig. Zusammen war das
- * mehr, als der Pooler von Supabase hergibt: Im Oktober 2026 bekam der
- * Versand 60 Sekunden lang keine Verbindung und brach ab.
+ * Seit Prisma 7 baut nicht mehr die Prisma-Engine die Verbindung auf, sondern
+ * der Treiber `pg`. Der kennt die Prisma-eigenen URL-Parameter nicht und würde
+ * sie stillschweigend übergehen. Deshalb werden sie hier ausgelesen und aus der
+ * URL entfernt:
  *
- * Eine Verbindung ist die übliche Empfehlung für Serverless hinter einem
- * Pooler. Steht connection_limit schon in der URL, gilt dieser Wert.
+ * - `connection_limit` wird zur Poolgröße `max`.
+ * - `schema` geht als Option an den Adapter.
+ * - `pgbouncer` entfällt. Er schaltete in der Engine benannte Prepared
+ *   Statements ab, `pg` nutzt ohnehin nur unbenannte.
+ *
+ * Auf Vercel höchstens eine Verbindung pro Funktion. Jede Vercel-Funktion ist
+ * eine eigene Instanz, und während eines Newsletter-Versands laufen Hunderte
+ * Webhooks gleichzeitig. Mit mehreren Verbindungen je Instanz war das mehr, als
+ * der Pooler von Supabase hergibt: Im Oktober 2026 bekam der Versand 60 Sekunden
+ * lang keine Verbindung und brach ab. Steht connection_limit schon in der URL,
+ * gilt dieser Wert.
+ *
+ * `sslmode=require` behandelt `pg` als `verify-full` und prüft das Zertifikat
+ * gegen die öffentlichen CAs. Supabase signiert mit einer eigenen CA, die
+ * Verbindung bräche ab. `uselibpqcompat=true` stellt die libpq-Bedeutung her:
+ * verschlüsselt, aber ohne Zertifikatsprüfung. So hat sich die Prisma-Engine
+ * vorher auch verhalten.
  */
-export function serverlessUrl(url: string, istVercel = Boolean(process.env.VERCEL)): string {
-  if (!istVercel) return url
+export function poolConfig(
+  url: string,
+  istVercel = Boolean(process.env.VERCEL),
+): { pool: PoolConfig; schema?: string } {
+  let u: URL
   try {
-    const u = new URL(url)
-    if (!u.searchParams.has('connection_limit')) u.searchParams.set('connection_limit', '1')
-    // Pooler im Transaction-Modus (Port 6543) verträgt keine Prepared Statements.
-    if (u.port === '6543' && !u.searchParams.has('pgbouncer')) u.searchParams.set('pgbouncer', 'true')
-    return u.toString()
+    u = new URL(url)
   } catch {
-    return url
+    return { pool: { connectionString: url } }
   }
+
+  const limit = Number(u.searchParams.get('connection_limit'))
+  const schema = u.searchParams.get('schema') ?? undefined
+  for (const key of ['connection_limit', 'schema', 'pgbouncer']) u.searchParams.delete(key)
+
+  const sslmode = u.searchParams.get('sslmode')
+  if ((sslmode === 'require' || sslmode === 'prefer') && !u.searchParams.has('uselibpqcompat')) {
+    u.searchParams.set('uselibpqcompat', 'true')
+  }
+
+  const pool: PoolConfig = { connectionString: u.toString() }
+  if (limit > 0) pool.max = limit
+  else if (istVercel) pool.max = 1
+
+  return { pool, schema }
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient()
