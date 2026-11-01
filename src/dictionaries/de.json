@@ -41,8 +41,8 @@
       "text": "Komm vorbei, trink einen Kaffee, beobachte das Training in der Kuppel oder triff Freunde. Mitten im Ostpark.",
       "imageAlt": "Café im Pepe Dome",
       "hoursLabel": "Öffnungszeiten",
-      "days": "Freitag bis Sonntag",
-      "time": "14 bis 19 Uhr",
+      "days": "Ab November nur an Showtagen",
+      "time": "2 bis 3 Stunden vor der Show",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -176,7 +176,7 @@
       },
       "hours": {
         "title": "Öffnungszeiten",
-        "content": "Café: Freitag bis Sonntag, 14 bis 19 Uhr\nEvents & Training: siehe Programm"
+        "content": "Café: ab November nur an Showtagen, 2 bis 3 Stunden vor der Show\nEvents & Training: siehe Programm"
       },
       "follow": "Folge uns"
     },
@@ -703,7 +703,7 @@
   "cafe": {
     "meta": {
       "title": "Café am Dome im Ostpark München",
-      "description": "Das Café am Pepe Dome im Ostpark: Kaffee, Kuchen und Kuppelblick. Geöffnet am Wochenende und immer, wenn am Dome eine Show läuft."
+      "description": "Das Café am Pepe Dome im Ostpark: Kaffee, Kuchen und Kuppelblick. Ab November nur an Showtagen geöffnet, 2 bis 3 Stunden vor der Show."
     },
     "hero": {
       "title": "Café am Dome",
@@ -715,10 +715,10 @@
     },
     "hours": {
       "title": "Wann wir da sind",
-      "daysLabel": "Geöffnet",
-      "days": "Freitag bis Sonntag",
-      "time": "14 bis 19 Uhr",
-      "note": "Und immer dann, wenn am Dome eine Show läuft. Schau vorher am besten kurz in den Eventkalender.",
+      "daysLabel": "Ab November",
+      "days": "Nur an Showtagen geöffnet",
+      "time": "2 bis 3 Stunden vor der Show",
+      "note": "Unsere Sitzplätze sind nur draußen, deshalb ist das Café ab November normalerweise geschlossen. Wenn es draußen zu kalt ist, kannst du dich an Showtagen in den Dom setzen. Die Termine stehen im Eventkalender.",
       "addressLabel": "So findest du uns",
       "address": "Theatron im Ostpark, 81735 München",
       "transport": "U-Bahn Quiddestraße (U5), wenige Minuten zu Fuß",

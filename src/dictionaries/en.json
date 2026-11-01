@@ -41,8 +41,8 @@
       "text": "Come by for a coffee, watch the training inside the dome or meet friends. Right in the middle of Ostpark.",
       "imageAlt": "Café at Pepe Dome",
       "hoursLabel": "Opening hours",
-      "days": "Friday to Sunday",
-      "time": "2 to 7 pm",
+      "days": "From November: show days only",
+      "time": "2 to 3 hours before the show",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -176,7 +176,7 @@
       },
       "hours": {
         "title": "Opening hours",
-        "content": "Café: Friday to Sunday, 2 to 7 pm\nEvents & training: see programme"
+        "content": "Café: from November on show days only, 2 to 3 hours before the show\nEvents & training: see programme"
       },
       "follow": "Follow us"
     },
@@ -703,7 +703,7 @@
   "cafe": {
     "meta": {
       "title": "Café at the Dome in Ostpark Munich",
-      "description": "The café at Pepe Dome in Ostpark: coffee, cake and a view of the dome. Open on weekends and whenever there's a show at the dome."
+      "description": "The café at Pepe Dome in Ostpark: coffee, cake and a view of the dome. From November open on show days only, 2 to 3 hours before the show."
     },
     "hero": {
       "title": "Café at the Dome",
@@ -715,10 +715,10 @@
     },
     "hours": {
       "title": "When we're here",
-      "daysLabel": "Open",
-      "days": "Friday to Sunday",
-      "time": "2 to 7 pm",
-      "note": "And whenever there's a show at the dome. Best to check the event calendar first.",
+      "daysLabel": "From November",
+      "days": "Open on show days only",
+      "time": "2 to 3 hours before the show",
+      "note": "All our seating is outdoors, so the café is normally closed from November. If it's too cold outside on a show day, you can sit inside the dome. Show dates are in the event calendar.",
       "addressLabel": "How to find us",
       "address": "Theatron im Ostpark, 81735 Munich",
       "transport": "U-Bahn Quiddestraße (U5), a few minutes on foot",
