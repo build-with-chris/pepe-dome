@@ -3,12 +3,14 @@
  * Downloads images and creates events in the database
  */
 
-import { PrismaClient, EventCategory, ContentStatus } from '@prisma/client'
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
+import { EventCategory, ContentStatus } from '@prisma/client'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
 
-const prisma = new PrismaClient()
 
 // Image download helper
 async function downloadImage(url: string, filename: string): Promise<string> {
