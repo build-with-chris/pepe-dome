@@ -45,7 +45,7 @@ function maybeRedirectToLocale(req: NextRequest): NextResponse | null {
  *
  * Das Root-Layout rendert <html> und kann den [lang]-Parameter nicht sehen. Damit
  * `<html lang>` schon serverseitig stimmt (wichtig für KI-Crawler ohne JS auf
- * /en-Seiten), reicht die Middleware die erkannte Locale als Request-Header durch.
+ * /en-Seiten), reicht der Proxy die erkannte Locale als Request-Header durch.
  */
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split('/')[1]
@@ -188,7 +188,7 @@ const geschuetzt = clerkMiddleware(async (auth, req) => {
  * requiresAuth: Die Anmeldeseiten sind zwar ohne Login erreichbar, brauchen
  * Clerk aber sehr wohl, sonst kommt niemand mehr durch den Login.
  */
-export default function middleware(req: NextRequest, event: NextFetchEvent) {
+export default function proxy(req: NextRequest, event: NextFetchEvent) {
   if (skipClerkInDev || !isProtectedRoute(req)) return oeffentlich(req)
   // Das Event muss weitergereicht werden, nicht erfunden: Clerk hängt daran
   // seine Hintergrundarbeit (waitUntil), etwa das Nachladen der Schlüssel.

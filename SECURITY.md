@@ -32,7 +32,7 @@ auffallen, nicht stillschweigend die Sicherung ausschalten.
 
 Drei Schichten, jede für sich wirksam:
 
-**1. Middleware** (`src/middleware.ts`, `src/lib/admin-routes.ts`)
+**1. Proxy, bis Next 15 Middleware** (`src/proxy.ts`, `src/lib/admin-routes.ts`)
 Alles unter `/admin` und `/api/admin` verlangt einen Login. Bewusst als
 Wildcard, nicht als Liste einzelner Pfade — in der alten Liste fehlte
 `/admin/test-recipients`, die Seite war ohne Login erreichbar. Eine neue
@@ -127,7 +127,7 @@ Vercel KV). Der Aufwand ist überschaubar, siehe Übergabedokument.
 
 ### Die CSP schränkt keine Skripte ein
 
-`Content-Security-Policy` in `src/middleware.ts` setzt `base-uri`, `form-action`,
+`Content-Security-Policy` in `src/proxy.ts` setzt `base-uri`, `form-action`,
 `object-src` und `frame-ancestors`. Diese Direktiven blockieren echte
 Angriffswege und können nichts kaputtmachen.
 

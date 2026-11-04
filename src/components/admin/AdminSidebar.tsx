@@ -273,7 +273,6 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           {isLoaded && user && (
             <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
               <UserButton
-                afterSignOutUrl="/"
                 appearance={{
                   elements: {
                     avatarBox: 'w-8 h-8',
