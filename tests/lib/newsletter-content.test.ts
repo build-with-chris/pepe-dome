@@ -58,8 +58,23 @@ function lookupFor(count: number) {
 }
 
 describe('Newsletter-Viewmodel', () => {
-  it('gewichtet nach redaktioneller Reihenfolge statt alles gleich', () => {
+  it('zeigt jeden Termin mit Haken mit Foto, den ersten als Aufmacher', () => {
     const vm = buildViewModel(makeNewsletter(6) as never, lookupFor(6) as never, { baseUrl: BASE })
+    const items = vm.sections[0].items
+
+    expect(items.map((item) => (item as { emphasis: string }).emphasis)).toEqual([
+      'lead',
+      'feature',
+      'feature',
+      'feature',
+      'feature',
+      'feature',
+    ])
+  })
+
+  it('lässt verschickte Ausgaben bei drei Fotos, wie sie rausgingen', () => {
+    const newsletter = { ...makeNewsletter(5), status: 'SENT' }
+    const vm = buildViewModel(newsletter as never, lookupFor(5) as never, { baseUrl: BASE })
     const items = vm.sections[0].items
 
     expect(items.map((item) => (item as { emphasis: string }).emphasis)).toEqual([
@@ -68,11 +83,10 @@ describe('Newsletter-Viewmodel', () => {
       'feature',
       'compact',
       'compact',
-      'compact',
     ])
   })
 
-  it('gibt den Fotoplatz eines abgewählten Termins an den nächsten weiter', () => {
+  it('macht Termine ohne Haken zur Terminzeile, die anderen behalten ihr Foto', () => {
     const newsletter = makeNewsletter(5)
     // Termin 1 ist dieselbe Show wie der Aufmacher, ihr Foto soll nicht doppelt stehen
     ;(newsletter.content[1] as { showImage?: boolean }).showImage = false
@@ -84,7 +98,7 @@ describe('Newsletter-Viewmodel', () => {
       ['Event 1', 'compact'],
       ['Event 2', 'feature'],
       ['Event 3', 'feature'],
-      ['Event 4', 'compact'],
+      ['Event 4', 'feature'],
     ])
     // Die Tracking-Positionen bleiben an der Reihenfolge in der Mail
     expect(items.map((item) => item.position)).toEqual(['lead', 'p2', 'p3', 'p4', 'p5'])
@@ -206,10 +220,13 @@ describe('Newsletter-Viewmodel', () => {
   })
 
   it('gibt Terminzeilen keinen Teaser, dem Aufmacher aber schon', () => {
-    const vm = buildViewModel(makeNewsletter(5) as never, lookupFor(5) as never, { baseUrl: BASE })
+    const newsletter = makeNewsletter(5)
+    ;(newsletter.content[4] as { showImage?: boolean }).showImage = false
+    const vm = buildViewModel(newsletter as never, lookupFor(5) as never, { baseUrl: BASE })
     const items = vm.sections[0].items as Array<{ emphasis: string; teaser?: string }>
 
     expect(items[0].teaser).toBeTruthy()
+    expect(items[4].emphasis).toBe('compact')
     expect(items[4].teaser).toBeUndefined()
   })
 

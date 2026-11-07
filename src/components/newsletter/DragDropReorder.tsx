@@ -25,7 +25,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
-import { emphasisForEvent, type ItemEmphasis } from '@/lib/newsletter-emphasis'
+import { emphasisForEvent, fotosBegrenztFuer, type ItemEmphasis } from '@/lib/newsletter-emphasis'
 
 interface ContentItem {
   id?: string
@@ -47,6 +47,8 @@ interface DragDropReorderProps {
   items: ContentItem[]
   onReorder: (items: ContentItem[]) => void
   onAddTextSnippet?: () => void
+  /** Status der Ausgabe. Verschickte zeigen wie damals nur drei Fotos. */
+  status?: string
 }
 
 // Generate a unique sortable key for each item
@@ -65,12 +67,13 @@ function isEvent(item: ContentItem): boolean {
  * buildViewModel. Termine ohne Datensatz (geloescht) zaehlen dort nicht mit,
  * hier erkennbar am fehlenden _metadata.
  */
-function emphasisPerItem(items: ContentItem[]): Array<ItemEmphasis | undefined> {
+function emphasisPerItem(items: ContentItem[], status?: string): Array<ItemEmphasis | undefined> {
+  const fotosBegrenzt = fotosBegrenztFuer(status)
   let imageIndex = 0
   return items.map((item) => {
     if (!isEvent(item) || !item._metadata) return undefined
     const showImage = item.showImage !== false
-    const emphasis = emphasisForEvent(imageIndex, showImage)
+    const emphasis = emphasisForEvent(imageIndex, showImage, fotosBegrenzt)
     if (showImage) imageIndex += 1
     return emphasis
   })
@@ -80,6 +83,7 @@ export default function DragDropReorder({
   items,
   onReorder,
   onAddTextSnippet,
+  status,
 }: DragDropReorderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -133,7 +137,7 @@ export default function DragDropReorder({
     onReorder(updatedItems)
   }
 
-  const emphases = emphasisPerItem(items)
+  const emphases = emphasisPerItem(items, status)
 
   const handleRemove = (sortableKey: string) => {
     const updatedItems = items
@@ -428,5 +432,5 @@ function emphasisHint(emphasis: ItemEmphasis, showImage: boolean): string {
   if (!showImage) return 'Terminzeile ohne Foto'
   if (emphasis === 'lead') return 'Aufmacher mit großem Foto'
   if (emphasis === 'feature') return 'Karte mit Foto'
-  return 'Terminzeile: Fotos gibt es nur für die ersten drei Termine mit Haken'
+  return 'Terminzeile: In dieser verschickten Ausgabe gab es nur drei Fotos'
 }

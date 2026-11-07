@@ -15,7 +15,7 @@ import { prisma } from './prisma'
 import { buildCampaignId, contentId, withUtm, isMailLink, normalizeContactUrl } from './utm'
 import { formatTimeRange } from './event-time'
 import { endeVon, formatEventDateRange } from './event-window'
-import { emphasisForEvent, type ItemEmphasis } from './newsletter-emphasis'
+import { emphasisForEvent, fotosBegrenztFuer, type ItemEmphasis } from './newsletter-emphasis'
 
 export type { ItemEmphasis }
 
@@ -523,6 +523,7 @@ export function buildViewModel(
   // an der Gesamtposition orientieren, nicht an der Position in der Sektion.
   let eventIndex = 0
   let eventImageIndex = 0
+  const fotosBegrenzt = fotosBegrenztFuer(newsletter.status)
   let articleIndex = 0
   let noteIndex = 0
 
@@ -556,7 +557,7 @@ export function buildViewModel(
       const event = lookup.events.get(block.contentId)
       if (event) {
         const showImage = block.showImage !== false
-        const emphasis = emphasisForEvent(eventImageIndex, showImage)
+        const emphasis = emphasisForEvent(eventImageIndex, showImage, fotosBegrenzt)
         item = buildEventItem(event, eventIndex, emphasis, campaign, baseUrl, dateLocale, target)
         eventIndex += 1
         if (showImage) eventImageIndex += 1

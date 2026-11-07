@@ -470,6 +470,7 @@ export default function NewsletterEditClient({
                   items={selectedContent}
                   onReorder={handleContentReorder}
                   onAddTextSnippet={canEdit ? handleAddTextSnippet : undefined}
+                  status={newsletter.status}
                 />
               )}
             </div>

@@ -32,13 +32,28 @@ export function emphasisForIndex(index: number): ItemEmphasis {
 /**
  * Gewichtung, wenn die Redaktion Fotos abwählen kann.
  *
- * Gezählt werden nur die Termine mit Foto. Ein Termin ohne Foto wird zur
- * Terminzeile und nimmt keinen Platz mit Bild weg, der nächste Termin rückt
- * nach. So verschwindet ein doppeltes Showfoto, ohne dass ein anderes
- * untergeht. Sind alle Fotos an, ist das Ergebnis dasselbe wie bisher.
+ * Jeder Termin mit Haken bekommt sein Foto: der erste als Aufmacher, alle
+ * weiteren als Karte. Ohne Haken wird er zur Terminzeile. So entscheidet
+ * die Redaktion selbst, welche Fotos in der Mail stehen, und ein doppeltes
+ * Showfoto lässt sich abwählen.
+ *
+ * fotosBegrenzt gilt für Ausgaben, die schon verschickt sind oder gerade
+ * rausgehen. Sie bleiben bei der alten Regel (nur die ersten drei Termine
+ * mit Foto), damit das Archiv genau die verschickte Mail zeigt.
  *
  * imageIndex ist die Zahl der Termine mit Foto davor.
  */
-export function emphasisForEvent(imageIndex: number, showImage: boolean): ItemEmphasis {
-  return showImage ? emphasisForIndex(imageIndex) : 'compact'
+export function emphasisForEvent(
+  imageIndex: number,
+  showImage: boolean,
+  fotosBegrenzt = false
+): ItemEmphasis {
+  if (!showImage) return 'compact'
+  if (fotosBegrenzt) return emphasisForIndex(imageIndex)
+  return imageIndex === 0 ? 'lead' : 'feature'
+}
+
+/** Verschickte und laufende Ausgaben behalten die alte Begrenzung auf drei Fotos. */
+export function fotosBegrenztFuer(status: string | undefined): boolean {
+  return status === 'SENT' || status === 'SENDING'
 }
