@@ -72,6 +72,33 @@ describe('Newsletter-Viewmodel', () => {
     ])
   })
 
+  it('gibt den Fotoplatz eines abgewählten Termins an den nächsten weiter', () => {
+    const newsletter = makeNewsletter(5)
+    // Termin 1 ist dieselbe Show wie der Aufmacher, ihr Foto soll nicht doppelt stehen
+    ;(newsletter.content[1] as { showImage?: boolean }).showImage = false
+    const vm = buildViewModel(newsletter as never, lookupFor(5) as never, { baseUrl: BASE })
+    const items = vm.sections[0].items as Array<{ emphasis: string; title: string; position: string }>
+
+    expect(items.map((item) => [item.title, item.emphasis])).toEqual([
+      ['Event 0', 'lead'],
+      ['Event 1', 'compact'],
+      ['Event 2', 'feature'],
+      ['Event 3', 'feature'],
+      ['Event 4', 'compact'],
+    ])
+    // Die Tracking-Positionen bleiben an der Reihenfolge in der Mail
+    expect(items.map((item) => item.position)).toEqual(['lead', 'p2', 'p3', 'p4', 'p5'])
+  })
+
+  it('macht ohne Foto am ersten Termin den nächsten zum Aufmacher', () => {
+    const newsletter = makeNewsletter(3)
+    ;(newsletter.content[0] as { showImage?: boolean }).showImage = false
+    const vm = buildViewModel(newsletter as never, lookupFor(3) as never, { baseUrl: BASE })
+    const items = vm.sections[0].items as Array<{ emphasis: string }>
+
+    expect(items.map((item) => item.emphasis)).toEqual(['compact', 'lead', 'feature'])
+  })
+
   it('vergibt für jede Position eine eigene utm_content-ID', () => {
     const vm = buildViewModel(makeNewsletter(4) as never, lookupFor(4) as never, { baseUrl: BASE })
     const contents = vm.sections[0].items.map(

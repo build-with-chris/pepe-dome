@@ -25,6 +25,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import { emphasisForEvent, type ItemEmphasis } from '@/lib/newsletter-emphasis'
 
 interface ContentItem {
   id?: string
@@ -33,6 +34,8 @@ interface ContentItem {
   sectionHeading?: string | null
   sectionDescription?: string | null
   orderPosition: number
+  /** Termin mit Foto zeigen. Fehlt der Wert, ist das Foto an. */
+  showImage?: boolean
   _metadata?: {
     title: string
     imageUrl?: string
@@ -51,6 +54,26 @@ function getSortableKey(item: ContentItem, index: number): string {
   if (item.contentId) return item.contentId
   if (item.id) return item.id
   return `item-${index}-${item.contentType}`
+}
+
+function isEvent(item: ContentItem): boolean {
+  return item.contentType === 'EVENT' || item.contentType === 'SHOW'
+}
+
+/**
+ * Wie jeder Termin in der Mail erscheint, nach derselben Regel wie
+ * buildViewModel. Termine ohne Datensatz (geloescht) zaehlen dort nicht mit,
+ * hier erkennbar am fehlenden _metadata.
+ */
+function emphasisPerItem(items: ContentItem[]): Array<ItemEmphasis | undefined> {
+  let imageIndex = 0
+  return items.map((item) => {
+    if (!isEvent(item) || !item._metadata) return undefined
+    const showImage = item.showImage !== false
+    const emphasis = emphasisForEvent(imageIndex, showImage)
+    if (showImage) imageIndex += 1
+    return emphasis
+  })
 }
 
 export default function DragDropReorder({
@@ -100,6 +123,17 @@ export default function DragDropReorder({
     )
     onReorder(updatedItems)
   }
+
+  const handleToggleImage = (sortableKey: string) => {
+    const updatedItems = items.map((item, idx) =>
+      getSortableKey(item, idx) === sortableKey
+        ? { ...item, showImage: item.showImage === false }
+        : item
+    )
+    onReorder(updatedItems)
+  }
+
+  const emphases = emphasisPerItem(items)
 
   const handleRemove = (sortableKey: string) => {
     const updatedItems = items
@@ -152,6 +186,8 @@ export default function DragDropReorder({
                 item={item}
                 index={index}
                 sortableKey={getSortableKey(item, index)}
+                emphasis={emphases[index]}
+                onToggleImage={handleToggleImage}
                 onUpdateHeading={handleUpdateHeading}
                 onUpdateDescription={handleUpdateDescription}
                 onRemove={handleRemove}
@@ -168,6 +204,8 @@ function SortableItem({
   item,
   index,
   sortableKey,
+  emphasis,
+  onToggleImage,
   onUpdateHeading,
   onUpdateDescription,
   onRemove,
@@ -175,6 +213,8 @@ function SortableItem({
   item: ContentItem
   index: number
   sortableKey: string
+  emphasis?: ItemEmphasis
+  onToggleImage: (id: string) => void
   onUpdateHeading: (id: string, heading: string) => void
   onUpdateDescription: (id: string, description: string) => void
   onRemove: (id: string) => void
@@ -195,6 +235,7 @@ function SortableItem({
   }
 
   const isTextSnippet = item.contentType === 'CUSTOM_SECTION'
+  const showImage = item.showImage !== false
   const [isEditingHeading, setIsEditingHeading] = useState(false)
   const [isEditingDescription, setIsEditingDescription] = useState(false)
   const [headingValue, setHeadingValue] = useState(
@@ -264,11 +305,29 @@ function SortableItem({
         {/* Content */}
         <div className="flex-1 space-y-3">
           {/* Type Badge */}
-          <span className={`inline-block text-xs px-2 py-0.5 rounded ${
-            isTextSnippet ? 'bg-sky-500/20 text-sky-400' : 'bg-pepe-gold/20 text-pepe-gold'
-          }`}>
-            {getTypeLabel(item.contentType)}
-          </span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className={`inline-block text-xs px-2 py-0.5 rounded ${
+              isTextSnippet ? 'bg-sky-500/20 text-sky-400' : 'bg-pepe-gold/20 text-pepe-gold'
+            }`}>
+              {getTypeLabel(item.contentType)}
+            </span>
+
+            {/* Foto an oder aus, z. B. wenn dieselbe Show mehrfach im Newsletter steht */}
+            {emphasis && (
+              <>
+                <label className="inline-flex items-center gap-2 text-sm cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={showImage}
+                    onChange={() => onToggleImage(sortableKey)}
+                    className="h-4 w-4 accent-pepe-gold"
+                  />
+                  Mit Foto
+                </label>
+                <span className="text-xs text-pepe-t64">{emphasisHint(emphasis, showImage)}</span>
+              </>
+            )}
+          </div>
 
           {/* Section Heading */}
           {isEditingHeading ? (
@@ -309,7 +368,9 @@ function SortableItem({
                 <img
                   src={item._metadata.imageUrl}
                   alt={item._metadata.title}
-                  className="w-12 h-12 object-cover rounded"
+                  className={`w-12 h-12 object-cover rounded ${
+                    emphasis === 'compact' ? 'opacity-30 grayscale' : ''
+                  }`}
                 />
               )}
               <div>
@@ -360,4 +421,12 @@ function SortableItem({
       </div>
     </div>
   )
+}
+
+/** Was der Haken in der Mail bewirkt, in einem Satz neben der Checkbox. */
+function emphasisHint(emphasis: ItemEmphasis, showImage: boolean): string {
+  if (!showImage) return 'Terminzeile ohne Foto'
+  if (emphasis === 'lead') return 'Aufmacher mit großem Foto'
+  if (emphasis === 'feature') return 'Karte mit Foto'
+  return 'Terminzeile: Fotos gibt es nur für die ersten drei Termine mit Haken'
 }

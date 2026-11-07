@@ -15,15 +15,9 @@ import { prisma } from './prisma'
 import { buildCampaignId, contentId, withUtm, isMailLink, normalizeContactUrl } from './utm'
 import { formatTimeRange } from './event-time'
 import { endeVon, formatEventDateRange } from './event-window'
+import { emphasisForEvent, type ItemEmphasis } from './newsletter-emphasis'
 
-/**
- * Wie prominent ein Beitrag dargestellt wird.
- *
- * lead    = Aufmacher: großes Bild, ausführlicher Text, primärer Button
- * feature = mittlere Karte: Bild, Kurztext, sekundärer Button
- * compact = Terminzeile: Datum, Titel, Textlink, kein Bild
- */
-export type ItemEmphasis = 'lead' | 'feature' | 'compact'
+export type { ItemEmphasis }
 
 export interface NewsletterEventItem {
   kind: 'event'
@@ -159,20 +153,6 @@ export function truncate(text: string | null | undefined, maxLength: number): st
   return `${(lastSpace > maxLength * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[,;:.]$/, '')}…`
 }
 
-/**
- * Gewichtung nach Position.
- *
- * Der erste Termin im Newsletter ist der Aufmacher, die nächsten beiden
- * bekommen eine mittlere Karte, alles Weitere wird zur Terminzeile. Die
- * Termine stehen in der Reihenfolge, in der sie stattfinden, siehe
- * chronologischeReihenfolge. Der früheste ist damit der Aufmacher.
- */
-function emphasisForIndex(index: number): ItemEmphasis {
-  if (index === 0) return 'lead'
-  if (index <= 2) return 'feature'
-  return 'compact'
-}
-
 function positionForIndex(index: number): string {
   return index === 0 ? 'lead' : `p${index + 1}`
 }
@@ -264,18 +244,20 @@ interface NewsletterRecord {
     sectionHeading: string | null
     sectionDescription: string | null
     orderPosition: number
+    /** Fehlt bei Datensaetzen aus Tests und alten Aufrufern, gilt dann als an. */
+    showImage?: boolean
   }>
 }
 
 function buildEventItem(
   event: EventRecord,
   index: number,
+  emphasis: ItemEmphasis,
   campaign: string,
   baseUrl: string,
   dateLocale: string,
   target: 'email' | 'web'
 ): NewsletterEventItem {
-  const emphasis = emphasisForIndex(index)
   const position = positionForIndex(index)
   const date = new Date(event.date)
 
@@ -540,6 +522,7 @@ export function buildViewModel(
   // Laufende Zähler über die ganze Ausgabe hinweg: die Gewichtung soll sich
   // an der Gesamtposition orientieren, nicht an der Position in der Sektion.
   let eventIndex = 0
+  let eventImageIndex = 0
   let articleIndex = 0
   let noteIndex = 0
 
@@ -572,8 +555,11 @@ export function buildViewModel(
     if (block.contentType === 'EVENT' || block.contentType === 'SHOW') {
       const event = lookup.events.get(block.contentId)
       if (event) {
-        item = buildEventItem(event, eventIndex, campaign, baseUrl, dateLocale, target)
+        const showImage = block.showImage !== false
+        const emphasis = emphasisForEvent(eventImageIndex, showImage)
+        item = buildEventItem(event, eventIndex, emphasis, campaign, baseUrl, dateLocale, target)
         eventIndex += 1
+        if (showImage) eventImageIndex += 1
       }
     } else if (block.contentType === 'ARTICLE') {
       const article = lookup.articles.get(block.contentId)

@@ -124,6 +124,7 @@ export async function addNewsletterContent(
     sectionHeading?: string
     sectionDescription?: string
     orderPosition: number
+    showImage?: boolean
   }
 ) {
   return await prisma.newsletterContent.create({
@@ -173,6 +174,7 @@ export async function replaceNewsletterContent(
     sectionHeading?: string | null
     sectionDescription?: string | null
     orderPosition: number
+    showImage?: boolean
   }[]
 ) {
   // Delete all existing content and create new ones in a transaction
@@ -192,6 +194,8 @@ export async function replaceNewsletterContent(
           sectionHeading: item.sectionHeading || null,
           sectionDescription: item.sectionDescription || null,
           orderPosition: item.orderPosition,
+          // Fehlt die Angabe, bleibt das Foto an wie bisher
+          showImage: item.showImage ?? true,
         })),
       })
     }

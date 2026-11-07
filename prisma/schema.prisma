@@ -84,6 +84,10 @@ model NewsletterContent {
   sectionHeading     String?     @map("section_heading")
   sectionDescription String?     @map("section_description")
   orderPosition      Int         @default(0) @map("order_position")
+  /// Termin mit Foto zeigen. Aus, wenn dasselbe Bild schon bei einem anderen
+  /// Termin steht. Der Platz mit Foto geht dann an den naechsten Termin,
+  /// siehe buildViewModel in src/lib/newsletter-content.ts.
+  showImage          Boolean     @default(true) @map("show_image")
   createdAt          DateTime    @default(now()) @map("created_at")
   newsletter         Newsletter  @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
 

@@ -151,6 +151,7 @@ export const addContentSchema = z.object({
   sectionHeading: z.string().max(100).optional(),
   sectionDescription: z.string().max(500).optional(),
   orderPosition: z.number().int().min(0),
+  showImage: z.boolean().optional(),
 })
 
 export const reorderContentSchema = z.object({
@@ -162,6 +163,7 @@ export const reorderContentSchema = z.object({
       sectionHeading: z.string().max(100).nullable().optional(),
       sectionDescription: z.string().max(500).nullable().optional(),
       orderPosition: z.number().int().min(0),
+      showImage: z.boolean().optional(),
     })
   ),
 })

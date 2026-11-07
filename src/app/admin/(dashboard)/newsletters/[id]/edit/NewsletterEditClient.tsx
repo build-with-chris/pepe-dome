@@ -33,6 +33,7 @@ interface ContentBlock {
   sectionHeading?: string | null
   sectionDescription?: string | null
   orderPosition: number
+  showImage?: boolean
   _metadata?: {
     title: string
     imageUrl?: string
@@ -314,6 +315,7 @@ export default function NewsletterEditClient({
             contentId: c.contentId,
             sectionHeading: c.sectionHeading,
             sectionDescription: c.sectionDescription,
+            showImage: c.showImage !== false,
             orderPosition: i,
           })),
         }),
