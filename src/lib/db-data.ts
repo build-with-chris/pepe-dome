@@ -8,6 +8,7 @@ import type { Event, Article, Artist } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
 import { nichtVorbeiFilter, tagesbeginn } from './event-window'
 import { alsBildformat, type ArtistBildformat } from './artist-bildformat'
+import { sortByEventStart } from './event-time'
 
 // Safe database query wrapper - returns fallback on error.
 // Verbindungsabbrüche zur Supabase-Direktverbindung treten sporadisch auf
@@ -194,7 +195,7 @@ export async function getAllEvents(locale: DbLocale = 'de'): Promise<EventData[]
       where: { status: 'PUBLISHED' },
       orderBy: { date: 'asc' },
     })
-    return events.map((e: Event) => transformEvent(e, locale))
+    return sortByEventStart(events.map((e: Event) => transformEvent(e, locale)))
   }, [])
 }
 
@@ -215,7 +216,7 @@ export async function getUpcomingEvents(locale: DbLocale = 'de'): Promise<EventD
       },
       orderBy: { date: 'asc' },
     })
-    return events.map((e: Event) => transformEvent(e, locale))
+    return sortByEventStart(events.map((e: Event) => transformEvent(e, locale)))
   }, [])
 }
 
@@ -228,7 +229,7 @@ export async function getFeaturedEvents(locale: DbLocale = 'de'): Promise<EventD
       },
       orderBy: { date: 'asc' },
     })
-    return events.map((e: Event) => transformEvent(e, locale))
+    return sortByEventStart(events.map((e: Event) => transformEvent(e, locale)))
   }, [])
 }
 
@@ -289,7 +290,7 @@ export async function getEventsByMonth(year: number, month: number, locale: DbLo
       },
       orderBy: { date: 'asc' },
     })
-    return events.map((e: Event) => transformEvent(e, locale))
+    return sortByEventStart(events.map((e: Event) => transformEvent(e, locale)))
   }, [])
 }
 
@@ -302,7 +303,7 @@ export async function getEventsByCategory(category: string, locale: DbLocale = '
       },
       orderBy: { date: 'asc' },
     })
-    return events.map((e: Event) => transformEvent(e, locale))
+    return sortByEventStart(events.map((e: Event) => transformEvent(e, locale)))
   }, [])
 }
 

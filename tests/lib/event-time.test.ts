@@ -4,6 +4,7 @@ import {
   formatTimeShort,
   isNormalizedTime,
   normalizeTime,
+  sortByEventStart,
   toStoredTime,
 } from '@/lib/event-time'
 
@@ -104,5 +105,46 @@ describe('formatTimeRange', () => {
   it('liefert null ohne Angabe', () => {
     expect(formatTimeRange(null, null)).toBeNull()
     expect(formatTimeRange(null, '22:00')).toBeNull()
+  })
+})
+
+describe('sortByEventStart', () => {
+  // So kommen die Termine aus der Datenbank: nach `date` sortiert, am selben
+  // Tag aber in beliebiger Reihenfolge.
+  const tag = '2026-11-20T00:00:00.000Z'
+
+  it('ordnet Termine am selben Tag nach Uhrzeit', () => {
+    const events = [
+      { slug: 'show', date: tag, time: '20:00' },
+      { slug: 'workshop', date: tag, time: '15:00' },
+    ]
+    expect(sortByEventStart(events).map((e) => e.slug)).toEqual(['workshop', 'show'])
+  })
+
+  it('der Tag geht vor der Uhrzeit', () => {
+    const events = [
+      { slug: 'samstag-frueh', date: '2026-11-21T00:00:00.000Z', time: '10:00' },
+      { slug: 'freitag-spaet', date: tag, time: '22:00' },
+    ]
+    expect(sortByEventStart(events).map((e) => e.slug)).toEqual(['freitag-spaet', 'samstag-frueh'])
+  })
+
+  it('liest Altbestand mit und stellt Termine ohne Uhrzeit ans Tagesende', () => {
+    const events = [
+      { slug: 'ohne', date: tag, time: null },
+      { slug: 'freitext', date: tag, time: 'nach Vereinbarung' },
+      { slug: 'abend', date: tag, time: 'ab 19.30 Uhr' },
+      { slug: 'mittag', date: tag, time: '12 Uhr' },
+    ]
+    expect(sortByEventStart(events).map((e) => e.slug)).toEqual(['mittag', 'abend', 'ohne', 'freitext'])
+  })
+
+  it('verändert die Eingabe nicht', () => {
+    const events = [
+      { slug: 'b', date: tag, time: '20:00' },
+      { slug: 'a', date: tag, time: '10:00' },
+    ]
+    sortByEventStart(events)
+    expect(events[0].slug).toBe('b')
   })
 })

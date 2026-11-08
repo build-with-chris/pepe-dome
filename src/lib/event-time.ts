@@ -124,3 +124,47 @@ export function formatTimeRange(
 
   return locale === 'en' ? startNormalized : `${startNormalized} Uhr`
 }
+
+/**
+ * Reihenfolge von Terminen: erst nach Tag, am selben Tag nach Uhrzeit.
+ *
+ * Die Datenbank kann nur nach `date` sortieren, und das trägt nur den
+ * Kalendertag. Zwei Termine am selben Tag kamen dadurch in beliebiger
+ * Reihenfolge zurück, die Show um 20 Uhr stand gern vor dem Workshop um 15 Uhr.
+ *
+ * Verglichen wird der Tag, nicht der rohe Zeitstempel. Ein `date`, das aus
+ * irgendeinem Grund nicht genau auf Mitternacht liegt, soll die Uhrzeit nicht
+ * aushebeln. Termine ohne lesbare Uhrzeit stehen am Ende ihres Tages, wie im
+ * Newsletter. Bei völligem Gleichstand bleibt die Reihenfolge der Eingabe.
+ */
+export function compareEventStart(
+  a: { date: string | Date; time?: string | null },
+  b: { date: string | Date; time?: string | null }
+): number {
+  const tag = tagDifferenz(a.date, b.date)
+  if (tag !== 0) return tag
+  return startMinuten(a.time) - startMinuten(b.time)
+}
+
+/** Sortiert eine Kopie, die Eingabe bleibt unverändert. */
+export function sortByEventStart<T extends { date: string | Date; time?: string | null }>(
+  events: readonly T[]
+): T[] {
+  return [...events].sort(compareEventStart)
+}
+
+function tagDifferenz(a: string | Date, b: string | Date): number {
+  const tagA = new Date(a)
+  const tagB = new Date(b)
+  tagA.setHours(0, 0, 0, 0)
+  tagB.setHours(0, 0, 0, 0)
+  return tagA.getTime() - tagB.getTime()
+}
+
+/** Minuten seit Mitternacht, ohne lesbare Uhrzeit ans Tagesende. */
+function startMinuten(time: string | null | undefined): number {
+  const normalized = normalizeTime(time)
+  if (!normalized) return 24 * 60
+  const [h, m] = normalized.split(':').map(Number)
+  return h * 60 + m
+}

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma, type Event } from '@prisma/client'
 import { transformEvent, type DbLocale } from '@/lib/db-data'
 import { getEventsForMonth } from '@/lib/events-listing'
+import { sortByEventStart } from '@/lib/event-time'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
       orderBy: { date: 'asc' },
     })
 
-    return NextResponse.json(events.map((e: Event) => transformEvent(e, locale)))
+    return NextResponse.json(sortByEventStart(events.map((e: Event) => transformEvent(e, locale))))
   } catch (error) {
     const code = error instanceof Prisma.PrismaClientKnownRequestError ? error.code : undefined
     const message = error instanceof Error ? error.message : String(error)
