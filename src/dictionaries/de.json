@@ -42,7 +42,7 @@
       "imageAlt": "Café im Pepe Dome",
       "hoursLabel": "Öffnungszeiten",
       "days": "Ab November nur an Showtagen",
-      "time": "2 bis 3 Stunden vor der Show",
+      "time": "2 Stunden vor der Show",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -176,7 +176,7 @@
       },
       "hours": {
         "title": "Öffnungszeiten",
-        "content": "Café: ab November nur an Showtagen, 2 bis 3 Stunden vor der Show\nEvents & Training: siehe Programm"
+        "content": "Café: ab November nur an Showtagen, 2 Stunden vor der Show\nEvents & Training: siehe Programm"
       },
       "follow": "Folge uns"
     },
@@ -703,7 +703,7 @@
   "cafe": {
     "meta": {
       "title": "Café am Dome im Ostpark München",
-      "description": "Das Café am Pepe Dome im Ostpark: Kaffee, Kuchen und Kuppelblick. Ab November nur an Showtagen geöffnet, 2 bis 3 Stunden vor der Show."
+      "description": "Das Café am Pepe Dome im Ostpark: Kaffee, Kuchen und Kuppelblick. Ab November nur an Showtagen geöffnet, 2 Stunden vor der Show."
     },
     "hero": {
       "title": "Café am Dome",
@@ -717,7 +717,7 @@
       "title": "Wann wir da sind",
       "daysLabel": "Ab November",
       "days": "Nur an Showtagen geöffnet",
-      "time": "2 bis 3 Stunden vor der Show",
+      "time": "2 Stunden vor der Show",
       "note": "Unsere Sitzplätze sind nur draußen, deshalb ist das Café ab November normalerweise geschlossen. Wenn es draußen zu kalt ist, kannst du dich an Showtagen in den Dom setzen. Die Termine stehen im Eventkalender.",
       "addressLabel": "So findest du uns",
       "address": "Theatron im Ostpark, 81735 München",

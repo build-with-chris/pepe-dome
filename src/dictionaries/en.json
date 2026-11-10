@@ -42,7 +42,7 @@
       "imageAlt": "Café at Pepe Dome",
       "hoursLabel": "Opening hours",
       "days": "From November: show days only",
-      "time": "2 to 3 hours before the show",
+      "time": "2 hours before the show",
       "address": "Theatron im Ostpark · U-Bahn Quiddestraße"
     },
     "videoCarousel": {
@@ -176,7 +176,7 @@
       },
       "hours": {
         "title": "Opening hours",
-        "content": "Café: from November on show days only, 2 to 3 hours before the show\nEvents & training: see programme"
+        "content": "Café: from November on show days only, 2 hours before the show\nEvents & training: see programme"
       },
       "follow": "Follow us"
     },
@@ -703,7 +703,7 @@
   "cafe": {
     "meta": {
       "title": "Café at the Dome in Ostpark Munich",
-      "description": "The café at Pepe Dome in Ostpark: coffee, cake and a view of the dome. From November open on show days only, 2 to 3 hours before the show."
+      "description": "The café at Pepe Dome in Ostpark: coffee, cake and a view of the dome. From November open on show days only, 2 hours before the show."
     },
     "hero": {
       "title": "Café at the Dome",
@@ -717,7 +717,7 @@
       "title": "When we're here",
       "daysLabel": "From November",
       "days": "Open on show days only",
-      "time": "2 to 3 hours before the show",
+      "time": "2 hours before the show",
       "note": "All our seating is outdoors, so the café is normally closed from November. If it's too cold outside on a show day, you can sit inside the dome. Show dates are in the event calendar.",
       "addressLabel": "How to find us",
       "address": "Theatron im Ostpark, 81735 Munich",
