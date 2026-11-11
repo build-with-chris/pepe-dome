@@ -211,7 +211,6 @@ export default function AdminShell({ children, role, userName }: AdminShellProps
         <div className="p-3 border-t border-white/[0.06] flex-shrink-0">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors">
             <UserButton
-              afterSignOutUrl="/"
               appearance={{ elements: { avatarBox: 'w-8 h-8' } }}
             />
             <div className="flex-1 min-w-0">
@@ -255,7 +254,6 @@ export default function AdminShell({ children, role, userName }: AdminShellProps
           <div className="hidden lg:flex items-center gap-3">
             <span className="text-[13px] text-white/50">{userName}</span>
             <UserButton
-              afterSignOutUrl="/"
               appearance={{ elements: { avatarBox: 'w-7 h-7' } }}
             />
           </div>

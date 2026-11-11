@@ -171,7 +171,6 @@ function NavbarContent({
                   Admin
                 </Link>
                 <UserButton
-                  afterSignOutUrl="/"
                   appearance={{
                     elements: {
                       avatarBox: "w-8 h-8",
