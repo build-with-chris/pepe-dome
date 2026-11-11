@@ -84,9 +84,9 @@ jobs:
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ env.CI_DATABASE_URL }}
-          # Das Schema deklariert zusätzlich eine directUrl, weil Supabase in
-          # Produktion über einen Pooler läuft und Migrationen daran vorbei
-          # müssen. Lokal gibt es keinen Pooler, also zeigt sie auf dieselbe DB.
+          # prisma.config.ts nimmt für Migrationen bevorzugt diese direkte URL,
+          # weil Supabase in Produktion über einen Pooler läuft und Migrationen
+          # daran vorbei müssen. Hier gibt es keinen Pooler, also dieselbe DB.
           DIRECT_DATABASE_URL: ${{ env.CI_DATABASE_URL }}
 
       - name: Typen prüfen

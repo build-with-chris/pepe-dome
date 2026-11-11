@@ -3,11 +3,13 @@
  * Run with: npx tsx scripts/migrate-json-to-db.ts
  */
 
-import { PrismaClient, EventCategory, ContentStatus } from '@prisma/client'
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
+import { EventCategory, ContentStatus } from '@prisma/client'
 import eventsData from '../src/data/events.json'
 import newsData from '../src/data/news.json'
 
-const prisma = new PrismaClient()
 
 // Map JSON category to EventCategory enum
 const categoryMap: Record<string, EventCategory> = {
