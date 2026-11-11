@@ -1,5 +1,5 @@
 /**
- * Ticket-Update am Mittwoch: zählt und baut die Mail.
+ * Tägliches Ticket-Update: zählt und baut die Mail.
  * Reine Funktionen, keine Netzaufrufe.
  */
 

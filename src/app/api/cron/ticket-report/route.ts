@@ -6,7 +6,7 @@ import { buildReportMail, summarizeShows } from '@/lib/ticket-report'
 /**
  * GET /api/cron/ticket-report
  *
- * Schickt mittwochs die verkauften Tickets pro kommender Show an die feste
+ * Schickt jeden Morgen die verkauften Tickets pro kommender Show an die feste
  * Adressliste aus TICKET_REPORT_RECIPIENTS. Schlägt etwas fehl, geht keine Mail
  * raus: Die ausbleibende Mail ist das Signal, die Ursache steht im Vercel-Log.
  */
