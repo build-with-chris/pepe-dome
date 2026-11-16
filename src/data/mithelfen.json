@@ -1,0 +1,316 @@
+{
+  "stand": "2026-11-16",
+  "hinweis": "Zeiten, Schritte und Voraussetzungen sind Schätzungen und vom Team zu prüfen. dauerMinuten = Dauer eines Einsatzes. ort: \"ort\" = vor Ort, \"remote\" = von zuhause.",
+  "bereiche": [
+    {
+      "id": "cafe",
+      "name": "Café & Bar",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "bau",
+      "name": "Aufbau & Umbau",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "gaeste",
+      "name": "Einlass & Gäste",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "kueche",
+      "name": "Verpflegung",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "text",
+      "name": "Schreiben",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "netz",
+      "name": "Website & Social Media",
+      "ansprechperson": "",
+      "email": ""
+    },
+    {
+      "id": "event",
+      "name": "Events organisieren",
+      "ansprechperson": "",
+      "email": ""
+    }
+  ],
+  "aufgaben": [
+    {
+      "id": "theke",
+      "bereich": "cafe",
+      "ort": "ort",
+      "dauerMinuten": 180,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Thekenschicht bei einer Vorstellung",
+      "schritte": [
+        "Getränke und Kuchen ausgeben",
+        "Kasse nach Preisliste führen",
+        "Nach der Pause Theke aufräumen"
+      ],
+      "voraussetzung": "Einweisung bekommst du vor Ort, 30 Minuten vor Einlass."
+    },
+    {
+      "id": "kuchen",
+      "bereich": "cafe",
+      "ort": "ort",
+      "dauerMinuten": 90,
+      "rhythmus": "einmalig",
+      "titel": "Kuchen backen und mitbringen",
+      "schritte": [
+        "Einen Blechkuchen oder zwei Kastenkuchen backen",
+        "Zutatenliste für Allergien dazulegen",
+        "Bis eine Stunde vor Einlass abgeben"
+      ],
+      "voraussetzung": "Eigene Küche. Zutaten werden erstattet."
+    },
+    {
+      "id": "aufbau",
+      "bereich": "bau",
+      "ort": "ort",
+      "dauerMinuten": 120,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Bühne und Bestuhlung aufbauen",
+      "schritte": [
+        "Stühle und Bänke nach Plan stellen",
+        "Bodenmatten und Absperrung auslegen",
+        "Wege für das Publikum freihalten"
+      ],
+      "voraussetzung": "Feste Schuhe. Du arbeitest zu zweit oder zu dritt."
+    },
+    {
+      "id": "abbau",
+      "bereich": "bau",
+      "ort": "ort",
+      "dauerMinuten": 60,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Abbau nach der Vorstellung",
+      "schritte": [
+        "Stühle stapeln und einlagern",
+        "Müll einsammeln",
+        "Lager abschließen und Schlüssel übergeben"
+      ],
+      "voraussetzung": "Beginn direkt nach dem Schlussapplaus."
+    },
+    {
+      "id": "umbau",
+      "bereich": "bau",
+      "ort": "ort",
+      "dauerMinuten": 240,
+      "rhythmus": "einmalig",
+      "titel": "Umbautag im Dome",
+      "schritte": [
+        "Podeste, Lager oder Zeltplanen umbauen",
+        "Material sortieren und beschriften",
+        "Kleine Reparaturen erledigen"
+      ],
+      "voraussetzung": "Arbeitskleidung. Werkzeug ist da, Mittagessen auch."
+    },
+    {
+      "id": "einlass",
+      "bereich": "gaeste",
+      "ort": "ort",
+      "dauerMinuten": 90,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Einlass: Karten prüfen und Gäste begrüßen",
+      "schritte": [
+        "Karten am Eingang scannen",
+        "Plätze zeigen, Fragen beantworten",
+        "Nach Beginn Nachzügler leise hereinlassen"
+      ],
+      "voraussetzung": "Ein Handy zum Scannen. Du kannst danach die Vorstellung sehen."
+    },
+    {
+      "id": "kasse",
+      "bereich": "gaeste",
+      "ort": "ort",
+      "dauerMinuten": 120,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Abendkasse",
+      "schritte": [
+        "Karten verkaufen, bar und mit Karte",
+        "Reservierungen abhaken",
+        "Kasse zählen und Zahlen notieren"
+      ],
+      "voraussetzung": "Sicher im Umgang mit Geld. Einweisung vor der ersten Schicht."
+    },
+    {
+      "id": "kuenstler",
+      "bereich": "gaeste",
+      "ort": "ort",
+      "dauerMinuten": 240,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Künstlerbetreuung am Vorstellungstag",
+      "schritte": [
+        "Künstlerinnen und Künstler empfangen",
+        "Garderobe, Wasser und Essen bereitstellen",
+        "Zeitplan bis zum Auftritt im Blick halten"
+      ],
+      "voraussetzung": "Englisch hilft. Du bist feste Ansprechperson für den Tag."
+    },
+    {
+      "id": "kochen",
+      "bereich": "kueche",
+      "ort": "ort",
+      "dauerMinuten": 180,
+      "rhythmus": "einmalig",
+      "titel": "Für das Helferteam kochen",
+      "schritte": [
+        "Ein warmes Gericht für 10 bis 15 Personen kochen",
+        "Vegetarisch planen",
+        "Im Dome warmhalten und ausgeben"
+      ],
+      "voraussetzung": "Große Töpfe gibt es im Dome. Einkauf wird erstattet."
+    },
+    {
+      "id": "einkauf",
+      "bereich": "kueche",
+      "ort": "ort",
+      "dauerMinuten": 60,
+      "rhythmus": "einmalig",
+      "titel": "Getränke und Snacks einkaufen",
+      "schritte": [
+        "Einkaufsliste vom Café abholen",
+        "Einkaufen und zum Dome bringen",
+        "Kassenzettel abgeben"
+      ],
+      "voraussetzung": "Auto oder Lastenrad."
+    },
+    {
+      "id": "plakate",
+      "bereich": "event",
+      "ort": "ort",
+      "dauerMinuten": 90,
+      "rhythmus": "einmalig",
+      "titel": "Plakate und Flyer im Viertel verteilen",
+      "schritte": [
+        "Material im Dome abholen",
+        "Läden und Cafés in Neuperlach und am Ostpark abgehen",
+        "Liste der Aushangorte zurückmelden"
+      ],
+      "voraussetzung": "Gut zu Fuß oder mit dem Rad."
+    },
+    {
+      "id": "foto",
+      "bereich": "netz",
+      "ort": "ort",
+      "dauerMinuten": 150,
+      "rhythmus": "pro Vorstellung",
+      "titel": "Eine Vorstellung fotografieren",
+      "schritte": [
+        "Während der Vorstellung ohne Blitz fotografieren",
+        "20 gute Bilder auswählen",
+        "Bilder innerhalb von drei Tagen hochladen"
+      ],
+      "voraussetzung": "Eigene Kamera mit lichtstarkem Objektiv."
+    },
+    {
+      "id": "newsletter",
+      "bereich": "text",
+      "ort": "remote",
+      "dauerMinuten": 120,
+      "rhythmus": "monatlich",
+      "titel": "Newsletter schreiben",
+      "schritte": [
+        "Termine des Monats aus dem Programm übernehmen",
+        "Drei kurze Texte zu Vorstellungen schreiben",
+        "Entwurf zur Freigabe schicken"
+      ],
+      "voraussetzung": "Vorlage und Programm bekommst du zugeschickt."
+    },
+    {
+      "id": "artikel",
+      "bereich": "text",
+      "ort": "remote",
+      "dauerMinuten": 180,
+      "rhythmus": "einmalig",
+      "titel": "Artikel über eine Vorstellung schreiben",
+      "schritte": [
+        "Vorstellung besuchen oder Video ansehen",
+        "Text mit 400 bis 600 Wörtern schreiben",
+        "Eine Überarbeitung nach Rückmeldung"
+      ],
+      "voraussetzung": "Freude am Schreiben. Themen schlagen wir vor."
+    },
+    {
+      "id": "lektorat",
+      "bereich": "text",
+      "ort": "remote",
+      "dauerMinuten": 30,
+      "rhythmus": "einmalig",
+      "titel": "Texte gegenlesen",
+      "schritte": [
+        "Einen Text auf Tippfehler prüfen",
+        "Unklare Sätze markieren",
+        "Am selben Tag zurückschicken"
+      ],
+      "voraussetzung": "Sicheres Deutsch."
+    },
+    {
+      "id": "social",
+      "bereich": "netz",
+      "ort": "remote",
+      "dauerMinuten": 90,
+      "rhythmus": "monatlich",
+      "titel": "Beiträge für eine Woche vorbereiten",
+      "schritte": [
+        "Drei Beiträge aus vorhandenen Fotos bauen",
+        "Texte und Termine prüfen",
+        "Zur Freigabe einstellen"
+      ],
+      "voraussetzung": "Erfahrung mit Instagram."
+    },
+    {
+      "id": "webtest",
+      "bereich": "netz",
+      "ort": "remote",
+      "dauerMinuten": 30,
+      "rhythmus": "monatlich",
+      "titel": "Website testen",
+      "schritte": [
+        "Prüfliste auf Handy und Rechner durchgehen",
+        "Kartenkauf bis zur Bezahlseite ausprobieren",
+        "Fehler mit Bildschirmfoto melden"
+      ],
+      "voraussetzung": "Handy und Rechner. Die Prüfliste bekommst du."
+    },
+    {
+      "id": "kalender",
+      "bereich": "netz",
+      "ort": "remote",
+      "dauerMinuten": 45,
+      "rhythmus": "monatlich",
+      "titel": "Termine in Veranstaltungskalender eintragen",
+      "schritte": [
+        "Neue Termine aus dem Programm übernehmen",
+        "In drei Münchner Kalenderportale eintragen",
+        "Links zurückmelden"
+      ],
+      "voraussetzung": "Zugangsdaten bekommst du."
+    },
+    {
+      "id": "mitmach",
+      "bereich": "event",
+      "ort": "remote",
+      "dauerMinuten": 360,
+      "rhythmus": "verteilt auf 3 Wochen",
+      "titel": "Einen Mitmach-Abend planen",
+      "schritte": [
+        "Termin mit dem Team abstimmen",
+        "Anleitende und Material organisieren",
+        "Ankündigung schreiben und Helfer einteilen"
+      ],
+      "voraussetzung": "Du arbeitest mit einer Person aus dem Programmteam. Am Abend selbst bist du vor Ort."
+    }
+  ]
+}
