@@ -42,6 +42,7 @@ interface Event {
   category: string
   status: string
   featured: boolean
+  soldOut: boolean
   /** Auf wie vielen Kanälen steht das Event bereits, siehe Kanal-Kit. */
   distributedCount?: number
 }
@@ -79,6 +80,7 @@ export default function EventsAdminPage() {
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [duplicating, setDuplicating] = useState<string | null>(null)
+  const [togglingSoldOut, setTogglingSoldOut] = useState<string | null>(null)
 
   const fetchEvents = useCallback(async (page = 1) => {
     setLoading(true)
@@ -139,6 +141,26 @@ export default function EventsAdminPage() {
     }
   }
 
+  // Workshops sind oft kurzfristig voll. Deshalb direkt aus der Liste
+  // umschaltbar, ohne erst das ganze Formular zu öffnen.
+  async function handleToggleSoldOut(event: Event) {
+    setTogglingSoldOut(event.id)
+    const next = !event.soldOut
+    try {
+      const res = await fetch(`/api/admin/events/${event.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ soldOut: next }),
+      })
+      if (!res.ok) throw new Error('Failed to update sold out')
+      setEvents((prev) => prev.map((e) => (e.id === event.id ? { ...e, soldOut: next } : e)))
+    } catch (error) {
+      console.error('Error toggling sold out:', error)
+    } finally {
+      setTogglingSoldOut(null)
+    }
+  }
+
   // Table columns
   const columns: Column<Event>[] = [
     {
@@ -151,6 +173,11 @@ export default function EventsAdminPage() {
           {row.featured && (
             <Badge variant="outline" className="text-[10px] bg-[#016dca]/10 text-[#016dca] border-[#016dca]/30">
               Featured
+            </Badge>
+          )}
+          {row.soldOut && (
+            <Badge variant="outline" className="text-[10px] bg-red-500/10 text-red-400 border-red-500/30">
+              Ausverkauft
             </Badge>
           )}
         </div>
@@ -203,6 +230,16 @@ export default function EventsAdminPage() {
   // Row actions
   const actions = (row: Event) => (
     <div className="flex items-center justify-end gap-2">
+      <Button
+        variant="ghost"
+        size="xs"
+        className={row.soldOut ? 'text-red-400 hover:text-red-400 hover:bg-red-500/10' : undefined}
+        onClick={(e) => { e.stopPropagation(); handleToggleSoldOut(row) }}
+        disabled={togglingSoldOut === row.id}
+        title={row.soldOut ? 'Wieder als verfügbar markieren' : 'Als ausverkauft markieren'}
+      >
+        {row.soldOut ? 'Wieder verfügbar' : 'Ausverkauft'}
+      </Button>
       <Button
         variant="ghost"
         size="xs"

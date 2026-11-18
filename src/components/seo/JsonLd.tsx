@@ -309,6 +309,7 @@ type EventLdProps = {
   url: string
   price?: string | null
   ticketUrl?: string | null
+  soldOut?: boolean
   category?: string
 }
 
@@ -324,6 +325,7 @@ export function EventJsonLd({
   url,
   price,
   ticketUrl,
+  soldOut = false,
   category,
 }: EventLdProps) {
   const site = getSiteContent()
@@ -401,7 +403,7 @@ export function EventJsonLd({
       '@type': 'Offer',
       ...(priceNumber && { price: priceNumber, priceCurrency: 'EUR' }),
       description: price,
-      availability: 'https://schema.org/InStock',
+      availability: soldOut ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
       url: ticketUrl || `${BASE_URL}${url}`,
     }
   }

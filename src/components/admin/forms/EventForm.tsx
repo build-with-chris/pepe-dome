@@ -61,6 +61,7 @@ const eventSchema = z.object({
     ),
   imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
+  soldOut: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
   status: z.string().default('DRAFT'),
   recurrence: z.string().optional(),
@@ -95,6 +96,7 @@ interface Event {
   trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
+  soldOut?: boolean
   highlights: string[]
   status: string
   recurrence: string | null
@@ -233,6 +235,7 @@ export default function EventForm({ event, mode }: EventFormProps) {
     trailerUrl: event?.trailerUrl || '',
     imageUrl: event?.imageUrl || '',
     featured: event?.featured || false,
+    soldOut: event?.soldOut || false,
     status: event?.status || 'DRAFT',
     recurrence: event?.recurrence || '',
     recurrenceEnd: event?.recurrenceEnd ? formatDateForInput(event.recurrenceEnd) : '',
@@ -405,6 +408,33 @@ export default function EventForm({ event, mode }: EventFormProps) {
                     id="featured-home"
                     checked={!!formData.featured}
                     onCheckedChange={(checked) => updateField('featured', checked)}
+                    className="shrink-0"
+                  />
+                </div>
+              </div>
+
+              {/* Ausverkauft: ersetzt auf der Website den Ticket-Knopf durch einen Hinweis */}
+              <div
+                className={
+                  formData.soldOut
+                    ? 'rounded-lg border border-red-500/40 bg-red-500/10 p-4'
+                    : 'rounded-lg border border-white/[0.12] bg-white/[0.03] p-4'
+                }
+              >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="sold-out" className="cursor-pointer text-white">
+                      Ausverkauft
+                    </Label>
+                    <p className="text-xs text-white/50 leading-relaxed max-w-xl">
+                      Wenn aktiv, steht auf der Website &quot;Ausverkauft&quot; und der Ticket-Knopf
+                      verschwindet. Das Event bleibt sichtbar.
+                    </p>
+                  </div>
+                  <Switch
+                    id="sold-out"
+                    checked={!!formData.soldOut}
+                    onCheckedChange={(checked) => updateField('soldOut', checked)}
                     className="shrink-0"
                   />
                 </div>

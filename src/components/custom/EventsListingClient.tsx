@@ -34,6 +34,7 @@ type EventData = {
   trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
+  soldOut?: boolean
   highlights: string[]
 }
 
@@ -316,6 +317,8 @@ export default function EventsListingClient({
                   image={event.imageUrl || undefined}
                   price={event.price}
                   freeEntryLabel={t.freeBadge}
+                  soldOut={event.soldOut}
+                  soldOutLabel={t.soldOutBadge}
                   trailer={{
                     url: event.trailerUrl,
                     labels: t.trailer,

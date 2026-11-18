@@ -60,6 +60,7 @@ export async function POST(
         trailerUrl: original.trailerUrl,
         imageUrl: original.imageUrl,
         featured: false,        // Nicht automatisch featured
+        soldOut: false,         // Der naechste Termin hat wieder Plaetze
         highlights: original.highlights ?? [],
         status: 'DRAFT',        // Immer als Entwurf speichern
         recurrence: original.recurrence,

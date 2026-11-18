@@ -440,6 +440,7 @@
       "description": "Alle Events im Pepe Dome München: Shows, Workshops, Festivals, Premieren und Training. Entdecke das aktuelle Programm."
     },
     "freeBadge": "Gratis Eintritt",
+    "soldOutBadge": "Ausverkauft",
     "trailer": {
       "badge": "Trailer",
       "play": "Trailer ansehen",
@@ -504,6 +505,7 @@
       "registerMail": "Anmelden via Mail",
       "ticketsFree": "Eintritt frei",
       "ticketsSoon": "Tickets folgen",
+      "ticketsSoldOut": "Ausverkauft",
       "askQuestion": "Fragen? Kontakt aufnehmen",
       "similar": "Ähnliche Events",
       "allEvents": "Alle Events",

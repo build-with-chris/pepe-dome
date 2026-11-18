@@ -185,6 +185,8 @@ model Event {
   trailerUrl    String?             @map("trailer_url")
   imageUrl      String?             @map("image_url")
   featured      Boolean             @default(false)
+  /// Ausverkauft: die Website zeigt den Hinweis statt des Ticket-Knopfs.
+  soldOut       Boolean             @default(false) @map("sold_out")
   highlights    Json                @default("[]")
   /// Übersetzungen pro Locale, z.B. { "en": { "title": …, "description": … } }.
   /// Deutsch bleibt die Quelle in den Hauptspalten; fehlende Felder fallen auf DE zurück.

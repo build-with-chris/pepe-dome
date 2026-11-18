@@ -440,6 +440,7 @@
       "description": "All events at Pepe Dome Munich: shows, workshops, festivals, premieres and training. Discover the current programme."
     },
     "freeBadge": "Free entry",
+    "soldOutBadge": "Sold out",
     "trailer": {
       "badge": "Trailer",
       "play": "Watch trailer",
@@ -504,6 +505,7 @@
       "registerMail": "Register by e-mail",
       "ticketsFree": "Free entry",
       "ticketsSoon": "Tickets to come",
+      "ticketsSoldOut": "Sold out",
       "askQuestion": "Questions? Get in touch",
       "similar": "Similar events",
       "allEvents": "All events",

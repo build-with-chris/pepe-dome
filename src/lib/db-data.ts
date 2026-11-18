@@ -56,6 +56,7 @@ export type EventData = {
   trailerUrl: string | null
   imageUrl: string | null
   featured: boolean
+  soldOut: boolean
   highlights: string[]
   /** Nur von getEventBySlug gefüllt (Detailseite), in Listen nie gesetzt. */
   artists?: ArtistData[]
@@ -136,6 +137,7 @@ export function transformEvent(event: Event, locale: DbLocale = 'de'): EventData
     trailerUrl: event.trailerUrl,
     imageUrl: event.imageUrl,
     featured: event.featured,
+    soldOut: event.soldOut ?? false,
     highlights:
       t?.highlights && t.highlights.length > 0
         ? t.highlights

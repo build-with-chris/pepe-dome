@@ -42,6 +42,7 @@ const eventUpdateSchema = z.object({
     .refine(isValidTrailerInput, 'Trailer muss ein YouTube-/Vimeo-Link oder ein Pfad wie /videos/trailer.mp4 sein'),
   imageUrl: z.string().optional().nullable().or(z.literal('')),
   featured: z.boolean().optional(),
+  soldOut: z.boolean().optional(),
   highlights: z.array(z.string()).optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable().or(z.literal('')),

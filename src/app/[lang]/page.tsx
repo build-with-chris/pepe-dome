@@ -364,6 +364,7 @@ export default async function HomePage({
               lang={lang}
               eventsHref={localizedHref(lang, '/events')}
               freeEntryLabel={dict.events.freeBadge}
+              soldOutLabel={dict.events.soldOutBadge}
               trailerLabels={dict.events.trailer}
               privacyHref={localizedHref(lang, '/datenschutz')}
               prevLabel={t.upcomingEvents.prev}
@@ -379,6 +380,7 @@ export default async function HomePage({
                 category: e.category,
                 imageUrl: e.imageUrl,
                 price: e.price,
+                soldOut: e.soldOut,
                 trailerUrl: e.trailerUrl,
               }))}
             />

@@ -138,6 +138,7 @@ export default async function EventDetailPage({
         url={`/${lang}/events/${event.slug}`}
         price={event.price}
         ticketUrl={event.ticketUrl}
+        soldOut={event.soldOut}
         category={event.category}
       />
       <BreadcrumbJsonLd
@@ -337,7 +338,11 @@ export default async function EventDetailPage({
                 )}
               </div>
 
-              {event.ticketUrl ? (
+              {event.soldOut ? (
+                <Button variant="secondary" size="lg" className="w-full" disabled>
+                  {t.ticketsSoldOut}
+                </Button>
+              ) : event.ticketUrl ? (
                 <TicketLink
                   ticketUrl={event.ticketUrl}
                   eventTitle={event.title}
@@ -382,6 +387,8 @@ export default async function EventDetailPage({
                   image={e.imageUrl || undefined}
                   price={e.price}
                   freeEntryLabel={dict.events.freeBadge}
+                  soldOut={e.soldOut}
+                  soldOutLabel={dict.events.soldOutBadge}
                   trailer={{
                     url: e.trailerUrl,
                     labels: dict.events.trailer,
