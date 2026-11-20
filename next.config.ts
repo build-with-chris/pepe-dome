@@ -25,35 +25,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Externalize react-email packages to prevent Html component conflicts during static generation
+  // react-email nur serverseitig laden, damit die Html-Komponente beim
+  // statischen Generieren nicht mit der von Next kollidiert. Bis Next 15 stand
+  // hier zusätzlich ein webpack-Block mit denselben Externals und einem
+  // Client-Alias. Next 16 baut mit Turbopack und bricht bei eigener
+  // webpack-Konfiguration ab; der Client-Alias war überflüssig, weil keine
+  // Client-Komponente react-email importiert.
   serverExternalPackages: [
     '@react-email/components',
     '@react-email/render',
   ],
-  // Configure webpack to handle react-email packages properly
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Prevent @react-email packages from being bundled on client
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@react-email/components': false,
-        '@react-email/render': false,
-      }
-    }
-
-    // Mark react-email packages as external for server builds too
-    if (isServer) {
-      config.externals = config.externals || []
-      if (Array.isArray(config.externals)) {
-        config.externals.push({
-          '@react-email/components': 'commonjs @react-email/components',
-          '@react-email/render': 'commonjs @react-email/render',
-        })
-      }
-    }
-
-    return config
-  },
 }
 
 export default nextConfig

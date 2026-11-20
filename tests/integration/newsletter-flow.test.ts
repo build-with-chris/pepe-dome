@@ -132,7 +132,7 @@ describe('Integration: Newsletter Creation and Send Flow', () => {
     )
 
     const updateResponse = await PUT(updateRequest, {
-      params: { id: newsletterId },
+      params: Promise.resolve({ id: newsletterId }),
     })
     expect(updateResponse.status).toBe(200)
 
@@ -235,7 +235,7 @@ describe('Integration: Newsletter Creation and Send Flow', () => {
     )
 
     const deleteResponse = await DELETE(deleteRequest, {
-      params: { id: newsletter.id },
+      params: Promise.resolve({ id: newsletter.id }),
     })
 
     expect(deleteResponse.status).toBe(400)
@@ -265,7 +265,7 @@ describe('Integration: Newsletter Creation and Send Flow', () => {
     )
 
     const deleteResponse = await DELETE(deleteRequest, {
-      params: { id: newsletter.id },
+      params: Promise.resolve({ id: newsletter.id }),
     })
 
     expect(deleteResponse.status).toBe(200)

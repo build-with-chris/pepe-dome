@@ -91,29 +91,14 @@ const skipClerkInDev =
   process.env.NODE_ENV === 'development' &&
   process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
 
-function LayoutContent({
-  children,
-  lang,
-}: Readonly<{
-  children: React.ReactNode
-  lang: Locale
-}>) {
-  return (
-    <html lang={lang} className={`${outfit.variable} ${inter.variable}`}>
-      <body className="antialiased">
-        <OrganizationJsonLd />
-        <WebSiteJsonLd />
-        <I18nProvider>
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-        </I18nProvider>
-        {/* Analytics und Pixel laden erst nach Einwilligung, siehe src/lib/consent.ts */}
-        <ConsentScripts />
-        <ConsentBanner />
-      </body>
-    </html>
-  )
+/**
+ * Clerk 7 verlangt den ClerkProvider innerhalb von <body>, nicht um <html>
+ * herum. Das Abmelde-Ziel steht hier statt an jedem UserButton, weil Clerk 7
+ * afterSignOutUrl am UserButton nicht mehr kennt.
+ */
+function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  if (skipClerkInDev) return <>{children}</>
+  return <ClerkProvider afterSignOutUrl="/">{children}</ClerkProvider>
 }
 
 export default async function RootLayout({
@@ -121,17 +106,35 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Locale kommt aus dem von der Middleware gesetzten x-locale-Header, damit
+  // Locale kommt aus dem vom Proxy (src/proxy.ts) gesetzten x-locale-Header, damit
   // <html lang> serverseitig stimmt (auch für JS-lose Crawler auf /en-Seiten).
   const headerLocale = (await headers()).get('x-locale')
   const lang: Locale = isLocale(headerLocale ?? '') ? (headerLocale as Locale) : DEFAULT_LOCALE
 
-  if (skipClerkInDev) {
-    return <LayoutContent lang={lang}>{children}</LayoutContent>
-  }
+  // data-scroll-behavior: globals.css setzt scroll-behavior: smooth auf <html>.
+  // Bis Next 15 schaltete Next das beim Seitenwechsel kurz ab, damit neue
+  // Seiten sofort oben stehen statt hochzuscrollen. Seit Next 16 nur noch mit
+  // diesem Attribut.
   return (
-    <ClerkProvider>
-      <LayoutContent lang={lang}>{children}</LayoutContent>
-    </ClerkProvider>
+    <html
+      lang={lang}
+      className={`${outfit.variable} ${inter.variable}`}
+      data-scroll-behavior="smooth"
+    >
+      <body className="antialiased">
+        <AuthProvider>
+          <OrganizationJsonLd />
+          <WebSiteJsonLd />
+          <I18nProvider>
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+          </I18nProvider>
+          {/* Analytics und Pixel laden erst nach Einwilligung, siehe src/lib/consent.ts */}
+          <ConsentScripts />
+          <ConsentBanner />
+        </AuthProvider>
+      </body>
+    </html>
   )
 }

@@ -1,10 +1,10 @@
 import { createRouteMatcher } from '@clerk/nextjs/server'
 
 /**
- * Welche Pfade die Middleware absichert.
+ * Welche Pfade der Proxy (src/proxy.ts, bis Next 15 middleware.ts) absichert.
  *
- * Liegt bewusst getrennt von middleware.ts, damit sich die Matcher testen
- * lassen — die Middleware selbst zieht beim Import halb Next.js mit hoch.
+ * Liegt bewusst getrennt von proxy.ts, damit sich die Matcher testen
+ * lassen — der Proxy selbst zieht beim Import halb Next.js mit hoch.
  *
  * Deny-by-default über einen Wildcard statt einer Liste einzelner Unterpfade:
  * Die frühere Liste zählte die geschützten Bereiche einzeln auf, dabei fehlte

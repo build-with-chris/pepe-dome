@@ -264,7 +264,7 @@ describe('Subscriber Management', () => {
 
       const active = await getActiveSubscribers()
       expect(active).toHaveLength(2)
-      expect(active.every((s) => s.email.includes('active'))).toBe(true)
+      expect(active.every((s: { email: string }) => s.email.includes('active'))).toBe(true)
     })
 
     it('should return selected fields only', async () => {
