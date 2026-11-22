@@ -352,8 +352,8 @@ export default function NewsletterEditClient({
   }
 
   const sections: { id: EditSection; label: string }[] = [
-    { id: 'basics', label: 'Grundlagen' },
-    { id: 'hero', label: 'Hero' },
+    { id: 'basics', label: 'Postfach & Intro' },
+    { id: 'hero', label: 'Kopfbereich (Hero)' },
     { id: 'content', label: `Inhalte (${selectedContent.length})` },
   ]
 
@@ -416,7 +416,7 @@ export default function NewsletterEditClient({
                   }}
                 />
               ) : (
-                <ReadOnlyField label="Hero" value={newsletter.heroTitle || '—'} />
+                <ReadOnlyField label="Hero-Titel" value={newsletter.heroTitle || '—'} />
               )}
             </div>
           )}
