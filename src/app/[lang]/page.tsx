@@ -218,10 +218,12 @@ export default async function HomePage({
               also springt nichts nach.
 
               Die Verzoegerung steht bewusst inline und nicht als delay-*:
-              animations.css definiert .delay-* als animation-delay, Tailwind
-              erzeugt dieselben Klassennamen als transition-delay. Beide
-              gaelten gleichzeitig, und der Farbwechsel beim Antippen haette
-              sich mitverzoegert. Bei reduzierter Bewegung setzt animations.css
+              Tailwinds delay-* setzt transition-delay, nicht animation-delay.
+              Die Einblendung kaeme also sofort, und dafuer haette sich der
+              Farbwechsel beim Antippen verzoegert. (animations.css hatte
+              frueher gleichnamige Klassen fuer animation-delay. Sie waren
+              ungenutzt und sind mit dem toten CSS entfallen.)
+              Bei reduzierter Bewegung setzt animations.css
               alle Verzoegerungen auf null, dann steht ohnehin alles sofort.
             */}
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
