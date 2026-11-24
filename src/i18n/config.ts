@@ -78,12 +78,21 @@ export function matchLocalizedPath(pathname: string): string | null {
  * falls die Seite lokalisiert existiert, sonst der Root-Pfad.
  *
  * Beispiele:
- *   localizedHref('de', '/')        → '/de'
- *   localizedHref('en', '/events')  → '/en/events'
- *   localizedHref('de', '/unknown') → '/unknown'
+ *   localizedHref('de', '/')                 → '/de'
+ *   localizedHref('en', '/events')           → '/en/events'
+ *   localizedHref('en', '/events/mein-slug') → '/en/events/mein-slug'
+ *   localizedHref('de', '/unknown')          → '/unknown'
+ *
+ * Unterseiten zählen mit, über dieselbe Prefix-Regel wie in der Middleware.
+ * Vorher traf nur der exakte Pfad. '/events/mein-slug' kam deshalb ohne
+ * Sprache zurück, und der Link lief erst durch die Weiterleitung der
+ * Middleware. Die wählt die Sprache nach dem Browser, nicht nach der Seite:
+ * Wer mit deutschem Browser auf /en las und auf "Next up" im Hero tippte,
+ * landete auf der deutschen Terminseite. Dazu kam der Umweg selbst, und das
+ * Vorladen des Links schlug fehl.
  */
 export function localizedHref(lang: Locale, path: string): string {
-  if (!LOCALIZED_PATH_SET.has(path)) return path
+  if (matchLocalizedPath(path) === null) return path
   if (path === '/') return `/${lang}`
   return `/${lang}${path}`
 }
