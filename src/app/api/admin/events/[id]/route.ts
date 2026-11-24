@@ -7,6 +7,7 @@ import { isValidTrailerInput } from '@/lib/event-trailer'
 import { artistIdsSchema } from '@/lib/artist-validation'
 import type { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 /**
  * Siehe src/lib/db-courses.ts: der exportierte prisma-Client ist als `any`
@@ -125,6 +126,7 @@ export async function PUT(
       })
     })
 
+    await revalidateInhalte()
     return NextResponse.json(event)
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -147,6 +149,7 @@ export async function DELETE(
 
   try {
     await prisma.event.delete({ where: { id } })
+    await revalidateInhalte()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting event:', error)

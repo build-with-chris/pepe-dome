@@ -3,6 +3,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { deeplTranslate } from '@/lib/deepl'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 /**
  * POST /api/admin/events/[id]/translate
@@ -64,6 +65,7 @@ export async function POST(
       data: { translations: { ...existing, en } },
     })
 
+    await revalidateInhalte()
     return NextResponse.json({ translations: updated.translations })
   } catch (error) {
     console.error('Error translating event:', error)

@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import i18n from '@/lib/i18n'
 import { LOCALES, type Locale } from '@/i18n/config'
 import { switchLocalePath } from '@/lib/locale-path'
@@ -32,7 +32,6 @@ function urlHasLocale(pathname: string | null): boolean {
 export default function LanguageSwitcher({ className = '', variant = 'default' }: LanguageSwitcherProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const [current, setCurrent] = useState<Locale>('de')
 
   // Sprache aus URL ableiten, fallback auf i18next-Wert
@@ -56,7 +55,13 @@ export default function LanguageSwitcher({ className = '', variant = 'default' }
       // URL hat schon einen Locale-Prefix → einfach austauschen, Next.js navigiert.
       // Die Query kommt mit, sonst gehen die utm-Parameter aus der Anzeige beim
       // ersten Sprachwechsel verloren. Siehe src/lib/locale-path.ts.
-      const newPath = switchLocalePath(pathname!, searchParams?.toString(), lang)
+      //
+      // Die Query wird erst hier beim Klick aus der Adresszeile gelesen, nicht
+      // über useSearchParams. Der Hook sitzt über die Navigation auf jeder
+      // Seite und hätte jede davon aus dem Vorrendern genommen: Next kann eine
+      // Seite nicht fertig ausliefern, wenn eine Komponente schon beim Rendern
+      // die Query braucht. Gebraucht wird sie aber nur im Moment des Klicks.
+      const newPath = switchLocalePath(pathname!, window.location.search, lang)
       i18n.changeLanguage(lang)
       router.push(newPath)
       return

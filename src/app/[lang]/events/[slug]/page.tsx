@@ -5,11 +5,12 @@
  * der DB (sind aktuell nur auf Deutsch); UI-Chrome ist lokalisiert.
  */
 
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getEventBySlug, getUpcomingEvents, getRecentArticles } from '@/lib/db-data'
+import { getEventBySlug, getUpcomingEvents, getRecentArticles, ohneErsatzdaten } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
 import { MarkdownText } from '@/components/ui/MarkdownText'
@@ -33,7 +34,33 @@ import { cn } from '@/lib/utils'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
-export const dynamic = 'force-dynamic'
+/**
+ * Zwischengespeichert, erzeugt beim ersten Aufruf.
+ *
+ * `generateStaticParams` gibt bewusst nichts zurück: Beim Build wird keine
+ * einzelne Seite vorgerendert. Die leere Liste ist trotzdem nötig, ohne sie
+ * rendert Next eine Route mit [slug] bei jedem Aufruf neu, egal was bei
+ * `revalidate` steht.
+ *
+ * Eine Minute als Sicherheitsnetz, beim Speichern im Admin wird sofort
+ * verworfen (src/lib/revalidate-content.ts). Das gilt auch für eine
+ * gespeicherte 404: Wer einen Link aufruft, bevor veröffentlicht ist,
+ * blockiert die Adresse höchstens für diese Minute.
+ */
+export const revalidate = 60
+
+export function generateStaticParams() {
+  return []
+}
+
+/**
+ * Der Termin wird von generateMetadata und von der Seite gebraucht. `cache`
+ * sorgt dafür, dass daraus eine Abfrage wird statt zwei. Ohne Ersatzdaten,
+ * damit ein Datenbankfehler nicht als 404 im Zwischenspeicher landet.
+ */
+const ladeEvent = cache((slug: string, lang: Locale) =>
+  ohneErsatzdaten(() => getEventBySlug(slug, lang))
+)
 
 export async function generateMetadata({
   params,
@@ -42,7 +69,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params
   if (!isLocale(rawLang)) return {}
-  const event = await getEventBySlug(slug, rawLang)
+  const event = await ladeEvent(slug, rawLang)
   const dict = await getDictionary(rawLang)
 
   if (!event) {
@@ -89,7 +116,7 @@ export default async function EventDetailPage({
   const t = dict.events.detail
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const event = await getEventBySlug(slug, lang)
+  const event = await ladeEvent(slug, lang)
   if (!event) notFound()
 
   const isFree = isFreeEntry(event.price)
@@ -97,10 +124,12 @@ export default async function EventDetailPage({
   const timeLabel = formatTimeRange(event.time, event.endTime, lang)
   const trailer = parseTrailer(event.trailerUrl)
 
-  const [upcomingEvents, recentArticles] = await Promise.all([
-    getUpcomingEvents(lang),
-    getRecentArticles(3, lang),
-  ])
+  const [upcomingEvents, recentArticles] = await ohneErsatzdaten(() =>
+    Promise.all([
+      getUpcomingEvents(lang),
+      getRecentArticles(3, lang),
+    ])
+  )
 
   const similarEvents = upcomingEvents
     .filter((e) => e.category === event.category && e.id !== event.id)

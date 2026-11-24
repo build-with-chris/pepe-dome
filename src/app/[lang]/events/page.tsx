@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation'
 import { isLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { pageMetadata } from '@/lib/seo'
-import { getUpcomingEvents, type EventData } from '@/lib/db-data'
+import { getUpcomingEvents, ohneErsatzdaten, type EventData } from '@/lib/db-data'
 import {
   getEventsForMonth,
   resolveListingMonth,
@@ -37,11 +37,16 @@ export async function generateMetadata({
 }
 
 /**
- * Die Liste kommt aus der Datenbank und ändert sich täglich, deshalb bei jedem
- * Aufruf neu rendern. Ohne das würde die Seite beim Build eingefroren und neue
- * Termine tauchten erst beim nächsten Deploy im JSON-LD auf.
+ * Die Liste kommt aus der Datenbank und ändert sich täglich. Sie wird deshalb
+ * nicht beim Build eingefroren, sondern zwischengespeichert und nach
+ * spätestens einer Minute neu erzeugt, beim Speichern im Admin sofort
+ * (src/lib/revalidate-content.ts).
+ *
+ * Vorher stand hier `force-dynamic`: jeder Aufruf lief durch eine
+ * Serverfunktion und drei Abfragen, gemessen knapp zwei Sekunden bis zum
+ * ersten Byte. Das ist die Seite, auf der die Anzeigen landen.
  */
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function EventsPage({
   params,
@@ -53,37 +58,26 @@ export default async function EventsPage({
   const lang: Locale = rawLang
   const dict = await getDictionary(lang)
 
-  // Für das JSON-LD: der Termin-Index muss im ausgelieferten HTML stehen, ein
-  // Crawler soll die Veranstaltungen sehen, ohne auf die Monatsnavigation zu
-  // klicken.
-  let upcoming: Awaited<ReturnType<typeof getUpcomingEvents>> = []
-  try {
-    upcoming = await getUpcomingEvents(lang)
-  } catch (error) {
-    // Die Seite funktioniert ohne JSON-LD weiter; ein Datenbankausfall darf
-    // sie nicht komplett aus dem Netz nehmen.
-    console.error('EventsPage: JSON-LD-Liste konnte nicht geladen werden', error)
-  }
-
   /**
-   * Die sichtbare Liste kommt ebenfalls von hier.
+   * Zwei Dinge kommen von hier: der Termin-Index für das JSON-LD (ein Crawler
+   * soll die Veranstaltungen sehen, ohne auf die Monatsnavigation zu klicken)
+   * und die sichtbare Liste des Startmonats. Vorher lieferte diese Seite ein
+   * Skelett aus und der Browser holte erst den Monat und dann die Termine. Wer
+   * aus einer Anzeige kommt, sah dadurch zuerst pulsierende Platzhalter.
    *
-   * Vorher lieferte diese Seite ein Skelett aus und der Browser holte erst den
-   * Monat und dann die Termine, zwei Abrufe nacheinander. Wer aus einer Anzeige
-   * kommt, sah dadurch zuerst pulsierende Platzhalter.
-   *
-   * Scheitert die Datenbank hier, bleibt initialMonth null und die Liste holt
-   * sich die Termine wie bisher selbst. Lieber ein Skelett als eine leere Seite.
+   * Bewusst kein try/catch mehr. Solange die Seite bei jedem Aufruf neu
+   * gerendert wurde, war ein Skelett bei Datenbankausfall die bessere Wahl.
+   * Jetzt wird sie zwischengespeichert, und ein abgefangener Fehler würde das
+   * Skelett ohne JSON-LD für alle speichern. Wirft die Abfrage, bleibt
+   * stattdessen die letzte gute Fassung stehen.
    */
-  let initialMonth: ListingMonth | null = null
-  let initialEvents: EventData[] = []
-  try {
-    initialMonth = await resolveListingMonth()
-    initialEvents = await getEventsForMonth(initialMonth.year, initialMonth.month, lang)
-  } catch (error) {
-    console.error('EventsPage: Terminliste konnte nicht geladen werden', error)
-    initialMonth = null
-  }
+  const upcoming = await ohneErsatzdaten(() => getUpcomingEvents(lang))
+  const initialMonth: ListingMonth | null = await resolveListingMonth()
+  const initialEvents: EventData[] = await getEventsForMonth(
+    initialMonth.year,
+    initialMonth.month,
+    lang
+  )
 
   return (
     <>

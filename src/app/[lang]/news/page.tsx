@@ -9,7 +9,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllArticles, getFeaturedArticles } from '@/lib/db-data'
+import { getAllArticles, getFeaturedArticles, ohneErsatzdaten } from '@/lib/db-data'
 import NewsCard from '@/components/custom/NewsCard'
 import HeroSection from '@/components/custom/HeroSection'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
@@ -33,7 +33,11 @@ export async function generateMetadata({
   })
 }
 
-export const dynamic = 'force-dynamic'
+/**
+ * Zwischengespeichert, eine Minute als Sicherheitsnetz. Beim Speichern im
+ * Admin wird sofort verworfen (src/lib/revalidate-content.ts).
+ */
+export const revalidate = 60
 
 export default async function NewsPage({
   params,
@@ -47,10 +51,12 @@ export default async function NewsPage({
   const t = dict.news
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const [allArticles, featuredArticles] = await Promise.all([
-    getAllArticles(lang),
-    getFeaturedArticles(lang),
-  ])
+  const [allArticles, featuredArticles] = await ohneErsatzdaten(() =>
+    Promise.all([
+      getAllArticles(lang),
+      getFeaturedArticles(lang),
+    ])
+  )
   const newsHref = localizedHref(lang, '/news')
 
   const featuredArticle = featuredArticles[0] || allArticles[0]

@@ -6,6 +6,7 @@ import { toStoredTime } from '@/lib/event-time'
 import { isValidTrailerInput } from '@/lib/event-trailer'
 import { artistIdsSchema } from '@/lib/artist-validation'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 const eventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -157,6 +158,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    await revalidateInhalte()
     return NextResponse.json(event, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {

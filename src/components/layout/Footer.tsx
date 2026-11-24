@@ -19,9 +19,12 @@ function localeFromPathname(pathname: string | null): Locale {
 }
 
 export default function Footer() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const pathname = usePathname()
   const lang = localeFromPathname(pathname)
+  // Sprache aus dem Pfad, nicht aus dem Browser: sonst kommt /en mit
+  // deutscher Fusszeile aus dem Server. Siehe usePageT in Navbar.tsx.
+  const t = i18n.getFixedT(lang)
   const href = (p: string) => localizedHref(lang, p)
   return (
     <footer className="footer">

@@ -3,12 +3,39 @@
  * Static content (homepage, about, etc.) still uses content.json
  */
 
+import { AsyncLocalStorage } from 'node:async_hooks'
 import { prisma } from './prisma'
 import type { Event, Article, Artist } from '@prisma/client'
 import { ContentStatus } from '@prisma/client'
 import { nichtVorbeiFilter, tagesbeginn } from './event-window'
 import { alsBildformat, type ArtistBildformat } from './artist-bildformat'
 import { sortByEventStart } from './event-time'
+
+/**
+ * Schalter für Seiten, die zwischengespeichert werden (ISR).
+ *
+ * Die Abfragen hier liefern bei einem Datenbankfehler Ersatzdaten: eine leere
+ * Liste oder null. Für eine Seite, die bei jedem Aufruf neu gerendert wird,
+ * ist das richtig, der Fehler betrifft dann genau diesen einen Aufruf.
+ *
+ * Wird die Seite zwischengespeichert, ist es falsch. Dann landet die leere
+ * Liste im Speicher, und alle Besucher sehen bis zur nächsten Neuerzeugung
+ * eine Startseite ohne Termine. Bei einer Detailseite wird aus `null` sogar
+ * eine gespeicherte 404 für einen Termin, den es gibt.
+ *
+ * Innerhalb von `ohneErsatzdaten` wirft die Abfrage stattdessen. Die
+ * Neuerzeugung bricht ab, und Next liefert weiter die zuletzt erfolgreich
+ * erzeugte Seite aus. Dieselbe Zusage wie auf der Trainingsseite.
+ *
+ * AsyncLocalStorage statt eines Parameters, damit nicht jede der Abfragen
+ * unten eine zweite Signatur braucht und die übrigen Aufrufer (Admin,
+ * Sitemap, API) unverändert bleiben.
+ */
+const strictMode = new AsyncLocalStorage<true>()
+
+export function ohneErsatzdaten<T>(queryFn: () => Promise<T>): Promise<T> {
+  return strictMode.run(true, queryFn)
+}
 
 // Safe database query wrapper - returns fallback on error.
 // Verbindungsabbrüche zur Supabase-Direktverbindung treten sporadisch auf
@@ -27,6 +54,7 @@ async function safeDbQuery<T>(
       return await queryFn()
     } catch (error) {
       console.error('Database query error:', error)
+      if (strictMode.getStore()) throw error
       return fallback
     }
   }

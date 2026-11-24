@@ -8,33 +8,40 @@
  * Die Links zeigen direkt auf /de/..., nicht auf / und /events. Die alten
  * Root-Pfade werden von der Middleware erst umgeleitet; wer schon auf einer
  * Fehlerseite steht, soll nicht noch durch zwei Weiterleitungen laufen.
+ *
+ * Die Seite bringt ihr eigenes Geruest mit (PublicDocument), weil das
+ * Root-Layout nur durchreicht und oberhalb von /[lang] sonst kein <html>
+ * entsteht.
  */
 
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
+import { PublicDocument } from '@/components/layout/SiteDocument'
 import { DEFAULT_LOCALE, localizedHref } from '@/i18n/config'
 
 export default function NotFound() {
   return (
-    <div className="section-hero flex items-center justify-center">
-      <div className="stage-container text-center">
-        <h1 className="display-1 mb-4">404</h1>
-        <p className="lead text-pepe-gold mb-6">Seite nicht gefunden</p>
-        <p className="body-lg text-pepe-t64 mb-8 max-w-lg mx-auto">
-          Die Seite, die du suchst, gibt es nicht oder sie ist umgezogen.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-          <Link href={localizedHref(DEFAULT_LOCALE, '/')} className="w-full sm:w-auto">
-            <Button variant="primary" className="w-full sm:w-auto">Zur Startseite</Button>
-          </Link>
-          <Link href={localizedHref(DEFAULT_LOCALE, '/events')} className="w-full sm:w-auto">
-            <Button variant="secondary" className="w-full sm:w-auto">Zum Programm</Button>
-          </Link>
-          <Link href={localizedHref(DEFAULT_LOCALE, '/galerie')} className="w-full sm:w-auto">
-            <Button variant="ghost" className="w-full sm:w-auto">Zur Galerie</Button>
-          </Link>
+    <PublicDocument lang={DEFAULT_LOCALE}>
+      <div className="section-hero flex items-center justify-center">
+        <div className="stage-container text-center">
+          <h1 className="display-1 mb-4">404</h1>
+          <p className="lead text-pepe-gold mb-6">Seite nicht gefunden</p>
+          <p className="body-lg text-pepe-t64 mb-8 max-w-lg mx-auto">
+            Die Seite, die du suchst, gibt es nicht oder sie ist umgezogen.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+            <Link href={localizedHref(DEFAULT_LOCALE, '/')} className="w-full sm:w-auto">
+              <Button variant="primary" className="w-full sm:w-auto">Zur Startseite</Button>
+            </Link>
+            <Link href={localizedHref(DEFAULT_LOCALE, '/events')} className="w-full sm:w-auto">
+              <Button variant="secondary" className="w-full sm:w-auto">Zum Programm</Button>
+            </Link>
+            <Link href={localizedHref(DEFAULT_LOCALE, '/galerie')} className="w-full sm:w-auto">
+              <Button variant="ghost" className="w-full sm:w-auto">Zur Galerie</Button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </PublicDocument>
   )
 }

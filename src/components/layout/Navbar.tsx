@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { useUser, UserButton } from '@clerk/nextjs'
 import NewsletterInline from '@/components/newsletter/NewsletterInline'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
 import { LOCALES, localizedHref, type Locale } from '@/i18n/config'
@@ -25,7 +24,7 @@ function localeFromPathname(pathname: string | null): Locale | null {
  * (News, Galerie) wandern ins "Mehr"-Dropdown.
  */
 function useNavigation(lang: Locale) {
-  const { t } = useTranslation()
+  const t = usePageT(lang)
   return {
     main: [
       { label: t('navigation.events', 'Events'),     href: localizedHref(lang, '/events') },
@@ -44,27 +43,69 @@ function useNavigation(lang: Locale) {
   }
 }
 
-// When true, Clerk is disabled in dev so you can browse the frontend without login
-const clerkDisabled = process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
+/**
+ * Übersetzungen in der Sprache der Seite, nicht in der des Browsers.
+ *
+ * `useTranslation().t` nimmt die Sprache, die i18next gerade hält, und die
+ * kommt beim ersten Rendern aus dem localStorage bzw. auf dem Server immer
+ * als Deutsch. Folge: /en wurde mit deutscher Navigation ausgeliefert
+ * ("Über uns", "Kontakt") und sprang erst nach dem Laden um. Ein Crawler
+ * ohne JavaScript sah die englische Seite mit deutschem Menü.
+ *
+ * Die Sprache steht im Pfad, also wird sie von dort genommen. useTranslation
+ * bleibt, damit die Komponente bei einem Sprachwechsel neu rendert.
+ */
+function usePageT(lang: Locale) {
+  const { i18n } = useTranslation()
+  return i18n.getFixedT(lang)
+}
 
-function NavbarContent({
-  isSignedIn,
-  isLoaded,
-  pathname,
-  isScrolled,
-  isMobileMenuOpen,
-  setIsMobileMenuOpen,
-}: {
-  isSignedIn: boolean
-  isLoaded: boolean
-  pathname: string | null
-  isScrolled: boolean
-  isMobileMenuOpen: boolean
-  setIsMobileMenuOpen: (v: boolean) => void
-}) {
-  const showAuth = !clerkDisabled
-  const { t } = useTranslation()
+/**
+ * Ist jemand aus der Redaktion angemeldet?
+ *
+ * Früher beantwortete das Clerk selbst (useUser). Dafür musste jede
+ * öffentliche Seite die Clerk-Bibliothek laden und bei Clerk nach einer
+ * Sitzung fragen, bei jedem Besucher, nur um einer Handvoll Leute einen
+ * Admin-Link zu zeigen.
+ *
+ * Clerk legt bei einer Anmeldung das Cookie `__client_uat` ab (je nach
+ * Instanz mit Suffix): der Zeitpunkt der letzten Anmeldung, oder 0, wenn
+ * niemand angemeldet ist. Das reicht als Hinweis, um den Link einzublenden.
+ * Es ist kein Schutz und soll keiner sein: Den Zugang prüfen weiterhin die
+ * Middleware und das Admin-Layout. Wer das Cookie von Hand setzt, sieht einen
+ * Link und landet danach auf der Anmeldeseite.
+ */
+function hasAdminSessionCookie(): boolean {
+  return document.cookie.split('; ').some((entry) => {
+    const [name, value] = entry.split('=')
+    return name.startsWith('__client_uat') && Boolean(value) && value !== '0'
+  })
+}
+const subscribeNever = () => () => {}
+function useAdminSessionHint(): boolean {
+  // Auf dem Server und beim ersten Rendern im Browser immer false, damit das
+  // vorgerenderte HTML für alle gleich ist.
+  return useSyncExternalStore(subscribeNever, hasAdminSessionCookie, () => false)
+}
+
+export default function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const isSignedIn = useAdminSessionHint()
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMobileMenuOpen])
+
   const lang: Locale = localeFromPathname(pathname) ?? 'de'
+  const t = usePageT(lang)
   const navigation = useNavigation(lang)
   const homeHref = localizedHref(lang, '/')
 
@@ -160,29 +201,13 @@ function NavbarContent({
             </div>
           </div>
           <div className="nav-actions">
-            {showAuth && isLoaded && isSignedIn ? (
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/admin"
-                  className={`nav-link text-sm ${
-                    pathname?.startsWith('/admin') ? 'active' : ''
-                  }`}
-                >
+            {isSignedIn ? (
+              <>
+                <Link href="/admin" className="nav-link text-sm">
                   Admin
                 </Link>
-                <UserButton
-                  afterSignOutUrl="/"
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-8 h-8",
-                      userButtonPopoverCard: "bg-[#1A1A1A] border border-[#333]",
-                      userButtonPopoverActionButton: "text-white hover:bg-white/10",
-                      userButtonPopoverActionButtonText: "text-white",
-                      userButtonPopoverFooter: "hidden",
-                    }
-                  }}
-                />
-              </div>
+                <LanguageSwitcher variant="compact" />
+              </>
             ) : (
               <>
                 <NewsletterInline />
@@ -249,10 +274,10 @@ function NavbarContent({
                     {link.label}
                   </Link>
                 ))}
-                {showAuth && isLoaded && isSignedIn && (
+                {isSignedIn && (
                   <Link
                     href="/admin"
-                    className={`mobile-menu-link ${pathname?.startsWith('/admin') ? 'active' : ''}`}
+                    className="mobile-menu-link"
                     style={{ color: '#016dca' }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -260,82 +285,10 @@ function NavbarContent({
                   </Link>
                 )}
               </nav>
-              {showAuth && isLoaded && isSignedIn && (
-                <div className="mobile-menu-cta">
-                  <div className="flex items-center justify-center gap-4">
-                    <UserButton
-                      appearance={{
-                        elements: {
-                          avatarBox: "w-10 h-10",
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
       )}
     </nav>
   )
-}
-
-function NavbarWithClerk() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
-  const { isSignedIn, isLoaded } = useUser()
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [isMobileMenuOpen])
-
-  return (
-    <NavbarContent
-      isSignedIn={!!isSignedIn}
-      isLoaded={!!isLoaded}
-      pathname={pathname ?? null}
-      isScrolled={isScrolled}
-      isMobileMenuOpen={isMobileMenuOpen}
-      setIsMobileMenuOpen={setIsMobileMenuOpen}
-    />
-  )
-}
-
-function NavbarWithoutClerk() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [isMobileMenuOpen])
-
-  return (
-    <NavbarContent
-      isSignedIn={false}
-      isLoaded={true}
-      pathname={pathname ?? null}
-      isScrolled={isScrolled}
-      isMobileMenuOpen={isMobileMenuOpen}
-      setIsMobileMenuOpen={setIsMobileMenuOpen}
-    />
-  )
-}
-
-export default function Navbar() {
-  return clerkDisabled ? <NavbarWithoutClerk /> : <NavbarWithClerk />
 }
