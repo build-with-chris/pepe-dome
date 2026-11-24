@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+// Prisma 7 lädt die .env nicht mehr selbst.
+import 'dotenv/config'
+import { prisma } from '../src/lib/prisma'
 
 async function main() {
   console.log('Seeding newsletters...')
