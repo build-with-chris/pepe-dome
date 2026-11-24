@@ -72,6 +72,25 @@ export default async function CafePage({
             <p className="mt-4 text-lg md:text-2xl text-[var(--pepe-gold-hover)] font-medium max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
               {t.hero.subtitle}
             </p>
+            {/*
+              Die Öffnungszeiten stehen schon hier oben, nicht erst in der
+              Karte darunter. Auf dem Handy lag die Karte einen ganzen
+              Bildschirm tiefer. Wer wissen will, ob er heute einen Kaffee
+              bekommt, sah zuerst ein Sommerbild mit Liegestühlen und musste
+              scrollen, um zu erfahren, dass im Winter nur an Showtagen offen
+              ist.
+
+              Bewusst der gepflegte Text und keine Anzeige "jetzt geöffnet":
+              Die Zeiten hängen an der Saison und an den Showtagen. Eine
+              errechnete Ampel wäre genau dann falsch, wenn sich jemand auf
+              sie verlässt.
+            */}
+            <p className="mt-5 inline-flex max-w-full flex-wrap items-baseline gap-x-2 gap-y-1 rounded-2xl border border-white/25 bg-black/50 px-4 py-2.5 text-sm md:text-base text-[var(--pepe-white)] backdrop-blur-sm">
+              <span className="text-[var(--pepe-t64)]">{t.hours.daysLabel}:</span>
+              <span className="font-semibold">
+                {t.hours.days}, {t.hours.time}
+              </span>
+            </p>
           </div>
         </div>
       </section>

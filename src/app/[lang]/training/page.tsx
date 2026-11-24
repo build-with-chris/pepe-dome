@@ -130,7 +130,9 @@ export default async function TrainingPage({
             ].map((f, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] px-4 py-5 md:px-5 md:py-6"
+                // min-w-0 und Silbentrennung: "Schnupperstunde" ist breiter als
+                // die halbe Handybreite und ragte rechts aus der Karte heraus.
+                className="min-w-0 rounded-xl border border-[var(--pepe-line)] bg-[var(--pepe-ink)] px-4 py-5 md:px-5 md:py-6 hyphens-auto break-words"
               >
                 <div className="text-2xl mb-2 leading-none">{f.icon}</div>
                 <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[var(--pepe-accent-text)] mb-1">
