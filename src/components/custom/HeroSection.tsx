@@ -36,6 +36,17 @@ export interface HeroSectionProps extends HTMLAttributes<HTMLElement> {
   dotCloudIcon?: string
   /** DotCloud size override (default: 300) */
   dotCloudSize?: number
+  /**
+   * Auf dem Handy flacher: weniger Abstand, keine Zierlinie.
+   *
+   * Für Seiten, auf denen der Kopf nur sagt, wo man ist, und die eigentliche
+   * Aufgabe darunter beginnt. In der Terminliste nahm der Kopf zusammen mit
+   * der Monatsbox den ganzen ersten Bildschirm ein, der erste Termin fing
+   * erst darunter an. Ab md bleibt die Gestaltung, nur der Abstand oben und
+   * unten ist kleiner (48 statt 128 Pixel), damit auch auf dem Desktop der
+   * erste Termin mit Bild und Titel im ersten Bildschirm steht.
+   */
+  compact?: boolean
 }
 
 const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
@@ -51,6 +62,7 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       overlay = true,
       dotCloudIcon,
       dotCloudSize,
+      compact = false,
       ...props
     },
     ref
@@ -75,6 +87,7 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
           'relative overflow-hidden',
           'bg-[var(--pepe-black)]',
           sizeClasses[size],
+          compact && 'py-8 md:py-12',
           className
         )}
         {...props}
@@ -119,7 +132,8 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
         <div
           className={cn(
             'relative z-10 stage-container',
-            'flex flex-col gap-8',
+            'flex flex-col',
+            compact ? 'gap-3 md:gap-8' : 'gap-8',
             centered && 'items-center text-center'
           )}
         >
@@ -153,7 +167,12 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
 
           {/* Decorative Gold Line */}
           {centered && (
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full" />
+            <div
+              className={cn(
+                'w-24 h-1 bg-gradient-to-r from-transparent via-[var(--pepe-gold)] to-transparent rounded-full',
+                compact && 'hidden md:block'
+              )}
+            />
           )}
 
           {/* Children (buttons, etc.) */}

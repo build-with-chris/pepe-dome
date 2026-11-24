@@ -86,13 +86,21 @@ describe('formatEventDateRange', () => {
     )
   })
 
-  it('bleibt bei eintaegigen Terminen bei der alten Ausgabe', () => {
-    expect(formatEventDateRange(eintaegig, 'de-DE')).toBe('15. Aug. 2026')
+  it('nennt bei eintaegigen Terminen den Wochentag', () => {
+    // Ob Freitag oder Dienstag, entscheidet oft mehr als das Datum selbst.
+    expect(formatEventDateRange(eintaegig, 'de-DE')).toBe('Sa., 15. Aug. 2026')
+    expect(formatEventDateRange(eintaegig, 'en-US')).toBe('Sat, Aug 15, 2026')
+  })
+
+  it('laesst den Wochentag bei einem Zeitraum weg', () => {
+    // "Sa., 15. bis Fr., 21. Aug." liest niemand, und bei einer ganzen Woche
+    // sagt der Wochentag ohnehin nichts.
+    expect(formatEventDateRange(mitmachzirkus, 'de-DE')).not.toMatch(/Sa\.|Fr\./)
   })
 
   it('behandelt endDate am selben Tag wie eintaegig', () => {
     const gleicherTag = { date: '2026-08-15T00:00:00.000Z', endDate: '2026-08-15T00:00:00.000Z' }
-    expect(formatEventDateRange(gleicherTag, 'de-DE')).toBe('15. Aug. 2026')
+    expect(formatEventDateRange(gleicherTag, 'de-DE')).toBe('Sa., 15. Aug. 2026')
   })
 
   it('schreibt auf Englisch beide Seiten voll aus', () => {

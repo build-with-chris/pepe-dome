@@ -188,6 +188,7 @@ export default function EventsListingClient({
         subtitle={t.hero.subtitle}
         size="sm"
         dotCloudIcon="events"
+        compact
       />
 
       {/* Sticky Month Navigation
@@ -242,16 +243,32 @@ export default function EventsListingClient({
       </div>
 
       {/* Events + Monatsfilter */}
-      <div className="stage-container py-10 md:py-16">
-        <div ref={monthNavRef} className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-16 p-8 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-3xl border border-[var(--pepe-line)] shadow-xl">
-          <div className="text-center sm:text-left">
-            <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
-              <CalendarIcon className="w-6 h-6 text-[var(--pepe-accent-text)]" />
-              <h2 className="text-2xl md:text-4xl font-bold text-[var(--pepe-white)] capitalize">
+      {/*
+        Auf dem Handy eine Zeile statt eines Kastens.
+
+        Vorher stapelten sich Monat, Zähler und Pfeile untereinander in einer
+        Box mit 32 Pixel Innenabstand und 64 Pixel Abstand nach unten. Zusammen
+        mit dem Seitenkopf war der erste Bildschirm damit voll, und vom ersten
+        Termin ragte nur der obere Bildrand herein. Wer die Seite öffnet, will
+        aber Termine sehen. Barbican, Muffatwerk und Chamäleon Berlin setzen
+        über den ersten Termin deshalb gar keine Einleitung.
+
+        Jetzt steht links der Monat mit Zähler, rechts die Pfeile, und der
+        erste Termin beginnt in der oberen Bildschirmhälfte. Ab sm bleibt die
+        Box, wie sie war.
+      */}
+      <div className="stage-container py-4 sm:py-10">
+        <div ref={monthNavRef} className="flex flex-row items-center justify-between gap-4 sm:gap-8 mb-6 sm:mb-8 p-4 sm:px-8 sm:py-6 bg-[var(--pepe-ink)]/40 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-[var(--pepe-line)] shadow-xl">
+          <div className="min-w-0 text-left">
+            <div className="flex items-center gap-2 sm:gap-3 sm:mb-2 justify-start">
+              {/* Das Symbol fällt auf dem Handy weg: neben den Pfeilen bleibt
+                  sonst zu wenig Platz, und "September 2026" wurde abgeschnitten. */}
+              <CalendarIcon className="hidden sm:block w-6 h-6 flex-shrink-0 text-[var(--pepe-accent-text)]" />
+              <h2 className="text-lg leading-tight sm:text-2xl md:text-4xl font-bold text-[var(--pepe-white)] capitalize">
                 {monthName}
               </h2>
             </div>
-            <p className="text-[var(--pepe-t64)] text-lg">
+            <p className="text-[var(--pepe-t64)] text-sm sm:text-lg">
               {loading
                 ? t.listing.loading
                 : `${filteredEvents.length} ${eventLabel(filteredEvents.length)} ${t.listing.inFocus}`}
@@ -263,13 +280,13 @@ export default function EventsListingClient({
               und drückte die Zeile auf kleinen Schirmen auseinander. Die Pfeile
               tragen jetzt ihre Beschriftung als aria-label, damit klar bleibt,
               was sie tun. */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-shrink-0 items-center gap-2 sm:gap-4">
             <Button
               variant="secondary"
               size="icon"
               onClick={goToPreviousMonth}
               aria-label={t.listing.previousMonth}
-              className="rounded-full w-12 h-12"
+              className="rounded-full w-11 h-11 sm:w-12 sm:h-12"
             >
               <ChevronLeft className="w-6 h-6" />
             </Button>
@@ -278,7 +295,7 @@ export default function EventsListingClient({
               size="icon"
               onClick={goToNextMonth}
               aria-label={t.listing.nextMonth}
-              className="rounded-full w-12 h-12"
+              className="rounded-full w-11 h-11 sm:w-12 sm:h-12"
             >
               <ChevronRight className="w-6 h-6" />
             </Button>
