@@ -393,4 +393,15 @@ describe('GET /api/admin/contracts/:id/pdf', () => {
     mock.contract.findUnique.mockResolvedValue(null)
     expect((await pdf.GET(anfrage('GET'), params)).status).toBe(404)
   })
+
+  it('nennt bei einem Fehler beim Zeichnen die technische Ursache', async () => {
+    mock.contract.findUnique.mockResolvedValue(zeile())
+    vi.mocked(pdfAntwort).mockRejectedValueOnce(new Error('Cannot load the standard font'))
+    const res = await pdf.GET(anfrage('GET'), params)
+    expect(res.status).toBe(500)
+    expect(await res.json()).toEqual({
+      error: 'Das PDF ließ sich nicht erzeugen.',
+      detail: 'Cannot load the standard font',
+    })
+  })
 })

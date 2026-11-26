@@ -7,6 +7,7 @@
  * Bibliothek oder Next ein Update bekommt.
  */
 
+import { NextResponse } from 'next/server'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import { fett, linie, type Dokument } from '@/lib/vertraege/dokument'
@@ -63,5 +64,17 @@ export async function GET() {
   const guard = await requireApiRole(ROLES.SUPER_ADMIN)
   if (guard.response) return guard.response
 
-  return pdfAntwort(PROBE)
+  try {
+    return await pdfAntwort(PROBE)
+  } catch (error) {
+    console.error('PDF-Probe fehlgeschlagen:', error)
+    // Der Sinn der Probe ist die Diagnose, also die Ursache im Klartext.
+    return NextResponse.json(
+      {
+        error: 'Die PDF-Probe ist fehlgeschlagen.',
+        detail: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
+    )
+  }
 }

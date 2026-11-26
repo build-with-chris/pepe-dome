@@ -31,8 +31,14 @@ export async function GET(
     return await pdfAntwort(dokument)
   } catch (error) {
     console.error('PDF für Vertrag fehlgeschlagen:', error)
+    // Die technische Ursache geht mit zurück. Hier kommt nur ein Super Admin
+    // an, und ohne sie lässt sich ein Fehler, der nur auf Vercel auftritt,
+    // von außen nicht einordnen.
     return NextResponse.json(
-      { error: 'Das PDF ließ sich nicht erzeugen. Bitte den Vertrag öffnen und speichern.' },
+      {
+        error: 'Das PDF ließ sich nicht erzeugen.',
+        detail: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     )
   }
