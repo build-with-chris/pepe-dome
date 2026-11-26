@@ -8,9 +8,10 @@
  * Formular für einen neuen Vertrag: Sie bekommen dann nur die Betragsfelder
  * des letzten Vertrags desselben Typs, oder nichts.
  *
- * Startwerte enthalten keine Beträge. Die Zeilen der Zusatzleistungen und die
+ * Startwerte enthalten keine Preise. Die Zeilen der Zusatzleistungen und die
  * Leistungen im Angebot starten mit ihren Bezeichnungen, die Preise dazu
- * bleiben leer, bis ein früherer Vertrag sie mitbringt.
+ * bleiben leer, bis ein früherer Vertrag sie mitbringt. Einzige Zahl ist der
+ * Anteil der Anzahlung, siehe ANZAHLUNG_PROZENT.
  */
 
 import { betragAlsEingabe, PREISMODELLE, type Preismodell } from './validation'
@@ -77,6 +78,28 @@ const LEISTUNGEN = [
   'Getränke: Sie können Getränke bei uns vor Ort beziehen. Abgerechnet wird nach Verbrauch.',
 ]
 
+/**
+ * Regel des Hauses: Die Hälfte ist zwei Wochen vor der Veranstaltung fällig.
+ * Ein Anteil und eine Frist, kein Preis, deshalb darf beides hier stehen.
+ */
+export const ANZAHLUNG_PROZENT = '50'
+export const ANZAHLUNG_TAGE_VORHER = 14
+
+/**
+ * Das Datum, das `tage` vor dem Tag der Veranstaltung liegt. Nimmt den Tag
+ * als JJJJ-MM-TT, so wie das Datumsfeld ihn liefert, und gibt TT.MM.JJJJ
+ * zurück. Ohne gültiges Datum kommt ein leerer String.
+ */
+export function fristVor(datum: string, tage = ANZAHLUNG_TAGE_VORHER): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) return ''
+  // In UTC rechnen, sonst rutscht der Tag je nach Zeitzone des Browsers.
+  const tag = new Date(`${datum}T00:00:00Z`)
+  if (Number.isNaN(tag.getTime())) return ''
+  tag.setUTCDate(tag.getUTCDate() - tage)
+  const zwei = (wert: number) => String(wert).padStart(2, '0')
+  return `${zwei(tag.getUTCDate())}.${zwei(tag.getUTCMonth() + 1)}.${tag.getUTCFullYear()}`
+}
+
 type Roh = Record<string, unknown>
 
 const alsObjekt = (wert: unknown): Roh =>
@@ -115,7 +138,10 @@ export function mieteFelder(daten?: unknown): MieteFelder {
     preisBezeichnung: text(d.preisBezeichnung),
     preisRegulaer: betrag(d.preisRegulaer),
     preisVereinbart: betrag(d.preisVereinbart),
-    anzahlungProzent: betrag(d.anzahlungProzent),
+    // Fehlt der Wert, gilt die Hausregel. Ein bewusst geleertes Feld ist als
+    // null gespeichert und bleibt leer: dann gibt es keine Anzahlung.
+    anzahlungProzent:
+      d.anzahlungProzent === undefined ? ANZAHLUNG_PROZENT : betrag(d.anzahlungProzent),
     anzahlungFrist: text(d.anzahlungFrist),
     einweisung: text(d.einweisung),
     minderjaehrig: schalter(d.minderjaehrig),

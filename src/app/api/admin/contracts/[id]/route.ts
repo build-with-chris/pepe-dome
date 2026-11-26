@@ -123,8 +123,16 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     }
   }
 
-  const contract = await prisma.contract.update({ where: { id }, data: update })
-  return NextResponse.json({ contract })
+  try {
+    const contract = await prisma.contract.update({ where: { id }, data: update })
+    return NextResponse.json({ contract })
+  } catch (error) {
+    console.error('Vertrag ändern fehlgeschlagen:', error)
+    return NextResponse.json(
+      { error: 'Die Änderung ließ sich nicht in der Datenbank speichern. Bitte noch einmal versuchen.' },
+      { status: 500 }
+    )
+  }
 }
 
 export async function DELETE(_request: NextRequest, { params }: Params) {

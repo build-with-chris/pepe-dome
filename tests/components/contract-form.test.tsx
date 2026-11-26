@@ -36,7 +36,8 @@ describe('ContractForm beim Anlegen', () => {
     render(<ContractForm mode="create" vorbelegung={{}} />)
     expect(screen.getByLabelText('Vereinbarter Preis')).toHaveValue('')
     expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('')
-    expect(screen.getByLabelText('Anzahlung')).toHaveValue('')
+    // Die Anzahlung ist kein Preis, sondern Hausregel: die Hälfte.
+    expect(screen.getByLabelText('Anzahlung')).toHaveValue('50')
   })
 
   it('übernimmt die Beträge des letzten Vertrags', () => {
@@ -151,8 +152,85 @@ describe('ContractForm beim Anlegen', () => {
     tippen('Vereinbarter Preis', 'viel')
     fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
 
-    await waitFor(() => expect(screen.getAllByText('Betrag als Zahl angeben')).toHaveLength(2))
+    // Am Feld selbst, oben im Formular und noch einmal direkt am Knopf.
+    await waitFor(() => expect(screen.getByText('Betrag als Zahl angeben')).toBeInTheDocument())
+    expect(screen.getAllByText('Nicht gespeichert: Betrag als Zahl angeben')).toHaveLength(2)
+    expect(screen.getByRole('alert')).toHaveTextContent('Nicht gespeichert')
+    expect(screen.getByLabelText('Vereinbarter Preis')).toHaveFocus()
     expect(push).not.toHaveBeenCalled()
+  })
+
+  it('sagt am Knopf, warum nichts gespeichert wurde, und springt zum ersten leeren Pflichtfeld', () => {
+    vi.stubGlobal('fetch', vi.fn())
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    tippen(/^Name/, 'Jana Beispiel')
+    fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Noch nicht gespeichert')
+    expect(screen.getByLabelText(/^Anlass/)).toHaveFocus()
+  })
+
+  it('meldet einen Serverfehler ohne lesbare Antwort mit dem Statuscode', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: false, status: 500, json: async () => { throw new Error('kein JSON') } })
+    )
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    tippen(/^Name/, 'Jana Beispiel')
+    tippen(/^Anlass/, 'Feier')
+    tippen(/^Termin/, 'offen')
+    fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
+
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('Nicht gespeichert: Fehler 500'))
+  })
+
+  it('berechnet die Frist der Anzahlung aus dem Datum und lässt eine eigene Eingabe stehen', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    tippen('Datum der Veranstaltung', '2031-05-17')
+    expect(screen.getByLabelText('Anzahlung bis')).toHaveValue('03.05.2031')
+
+    tippen('Datum der Veranstaltung', '2031-05-24')
+    expect(screen.getByLabelText('Anzahlung bis')).toHaveValue('10.05.2031')
+
+    tippen('Anzahlung bis', 'nach Absprache')
+    tippen('Datum der Veranstaltung', '2031-06-07')
+    expect(screen.getByLabelText('Anzahlung bis')).toHaveValue('nach Absprache')
+  })
+
+  it('setzt den regulären Preis per Klick auf halben oder ganzen Tag', () => {
+    render(
+      <ContractForm
+        mode="create"
+        vorbelegung={{ MIETE: { preisRegulaer: 111 } }}
+        standardpreise={{ halbtag: 111, ganztag: 222 }}
+      />
+    )
+    expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('111')
+    expect(screen.getByRole('button', { name: 'Halber Tag: 111 €' })).toHaveAttribute('aria-pressed', 'true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Ganzer Tag: 222 €' }))
+    expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('222')
+  })
+
+  it('zieht im Angebot die Bezeichnung mit, solange dort nichts Eigenes steht', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: 111, ganztag: 222 }} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Angebot/ }))
+
+    fireEvent.click(screen.getByRole('button', { name: 'Ganzer Tag: 222 €' }))
+    expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('222')
+    expect(screen.getByLabelText('Bezeichnung des regulären Preises')).toHaveValue('Regulärer Tagessatz')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Halber Tag: 111 €' }))
+    expect(screen.getByLabelText('Bezeichnung des regulären Preises')).toHaveValue('Regulärer Halbtagessatz')
+
+    tippen('Bezeichnung des regulären Preises', 'Eigene Bezeichnung')
+    fireEvent.click(screen.getByRole('button', { name: 'Ganzer Tag: 222 €' }))
+    expect(screen.getByLabelText('Bezeichnung des regulären Preises')).toHaveValue('Eigene Bezeichnung')
+  })
+
+  it('zeigt ohne gepflegte Standardpreise keine Knöpfe', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: null, ganztag: null }} />)
+    expect(screen.queryByRole('button', { name: /Halber Tag/ })).toBeNull()
   })
 })
 

@@ -4,7 +4,13 @@ import ContractForm from '@/components/admin/forms/ContractForm'
 import { getUserRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
-import { betraegeAus, VERTRAGSTYPEN, type Vertragstyp } from '@/lib/vertraege/validation'
+import { ladeStandardpreise } from '@/lib/vertraege/einstellungen'
+import {
+  betraegeAus,
+  mitStandardpreis,
+  VERTRAGSTYPEN,
+  type Vertragstyp,
+} from '@/lib/vertraege/validation'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +36,10 @@ export default async function NewContractPage() {
     redirect('/admin')
   }
 
-  const vorbelegung = await ladeVorbelegung()
+  // Der reguläre Preis kommt aus den Standardpreisen, alle anderen Beträge
+  // aus dem letzten Vertrag desselben Typs.
+  const standardpreise = await ladeStandardpreise()
+  const vorbelegung = mitStandardpreis(await ladeVorbelegung(), standardpreise)
 
   return (
     <div className="space-y-8">
@@ -46,12 +55,12 @@ export default async function NewContractPage() {
         </Link>
         <h1 className="text-xl font-semibold text-white">Neuen Vertrag anlegen</h1>
         <p className="text-white/50 mt-1">
-          Beträge sind aus dem letzten Vertrag desselben Typs vorbelegt. Nach dem Anlegen lässt
-          sich das PDF herunterladen.
+          Beträge sind aus dem letzten Vertrag desselben Typs vorbelegt, der reguläre Preis aus
+          den Standardpreisen. Nach dem Anlegen lässt sich das PDF herunterladen.
         </p>
       </div>
 
-      <ContractForm mode="create" vorbelegung={vorbelegung} />
+      <ContractForm mode="create" vorbelegung={vorbelegung} standardpreise={standardpreise} />
     </div>
   )
 }

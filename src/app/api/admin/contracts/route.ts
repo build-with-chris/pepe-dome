@@ -54,16 +54,26 @@ export async function POST(request: NextRequest) {
   }
 
   const { type, eventDate, data, ...gegenseite } = parsed.data
-  const contract = await prisma.contract.create({
-    data: {
-      type,
-      title: vertragstitel(parsed.data),
-      ...gegenseite,
-      eventDate: eventDate ? new Date(eventDate) : null,
-      data,
-      createdBy: guard.userId,
-    },
-  })
+  try {
+    const contract = await prisma.contract.create({
+      data: {
+        type,
+        title: vertragstitel(parsed.data),
+        ...gegenseite,
+        eventDate: eventDate ? new Date(eventDate) : null,
+        data,
+        createdBy: guard.userId,
+      },
+    })
 
-  return NextResponse.json({ contract }, { status: 201 })
+    return NextResponse.json({ contract }, { status: 201 })
+  } catch (error) {
+    // Ohne das käme eine leere 500 zurück, und das Formular könnte nur
+    // „Speichern fehlgeschlagen“ sagen.
+    console.error('Vertrag anlegen fehlgeschlagen:', error)
+    return NextResponse.json(
+      { error: 'Der Vertrag ließ sich nicht in der Datenbank speichern. Bitte noch einmal versuchen.' },
+      { status: 500 }
+    )
+  }
 }

@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import { getUserRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
+import { ladeStandardpreise } from '@/lib/vertraege/einstellungen'
 import ContractsList from './ContractsList'
+import StandardpreiseCard from './StandardpreiseCard'
 
 /**
  * Verträge im Admin: Mietvereinbarungen und Angebote.
@@ -19,5 +21,12 @@ export default async function ContractsPage() {
     redirect('/admin')
   }
 
-  return <ContractsList />
+  const standardpreise = await ladeStandardpreise()
+
+  return (
+    <div className="space-y-10">
+      <ContractsList />
+      <StandardpreiseCard initial={standardpreise} />
+    </div>
+  )
 }

@@ -7,11 +7,13 @@
 
 import { describe, it, expect } from 'vitest'
 import { dokumentAlsText, ueberschriften, type Baustein } from '@/lib/vertraege/dokument'
-import { mieteFelder } from '@/lib/vertraege/formular'
+import { fristVor, mieteFelder } from '@/lib/vertraege/formular'
 import {
   BETRAGSFELDER,
   betraegeAus,
   leseBetrag,
+  leseStandardpreise,
+  mitStandardpreis,
   vertragSchema,
   vertragstitel,
 } from '@/lib/vertraege/validation'
@@ -316,6 +318,15 @@ describe('Pflichtfelder und Beträge', () => {
     ['1.200', 1200],
     ['1.200,50', 1200.5],
     [' 99 € ', 99],
+    // Was Menschen dazuschreiben, wird überlesen.
+    ['50 %', 50],
+    ['50%', 50],
+    ['120,-', 120],
+    ['120,- €', 120],
+    ['120.-', 120],
+    ['120 Euro', 120],
+    ['120 EUR', 120],
+    ['1.200,- €', 1200],
     [77, 77],
     ['', null],
     [null, null],
@@ -353,12 +364,59 @@ describe('Vorbelegung aus dem letzten Vertrag', () => {
     expect(felder.zusatzleistungenZeilen[0]).toEqual({ leistung: 'Erste Leistung', preis: '11 €' })
   })
 
-  it('ohne früheren Vertrag sind alle Betragsfelder leer', () => {
+  it('ohne früheren Vertrag sind alle Preisfelder leer', () => {
     const felder = mieteFelder(undefined)
-    for (const feld of ['preisRegulaer', 'preisVereinbart', 'anzahlungProzent', 'ticketQuote', 'werkzeugGebuehr', 'verbrauchsmaterial', 'bierPreis', 'kautionBetrag'] as const) {
+    for (const feld of ['preisRegulaer', 'preisVereinbart', 'ticketQuote', 'werkzeugGebuehr', 'verbrauchsmaterial', 'bierPreis', 'kautionBetrag'] as const) {
       expect(felder[feld]).toBe('')
     }
     expect(felder.zusatzleistungenZeilen.length).toBeGreaterThan(0)
     expect(felder.zusatzleistungenZeilen.every((zeile) => zeile.preis === '')).toBe(true)
+  })
+})
+
+describe('Anzahlung nach Hausregel', () => {
+  it('startet mit der Hälfte', () => {
+    expect(mieteFelder(undefined).anzahlungProzent).toBe('50')
+  })
+
+  it('lässt ein bewusst geleertes Feld leer', () => {
+    expect(mieteFelder({ anzahlungProzent: null }).anzahlungProzent).toBe('')
+    expect(mieteFelder({ anzahlungProzent: 30 }).anzahlungProzent).toBe('30')
+  })
+
+  it.each([
+    ['2031-05-17', '03.05.2031'],
+    ['2031-03-10', '24.02.2031'],
+    ['2031-01-05', '22.12.2030'],
+    ['2032-03-14', '29.02.2032'],
+  ])('legt die Frist für den %s auf den %s, zwei Wochen vorher', (datum, frist) => {
+    expect(fristVor(datum)).toBe(frist)
+  })
+
+  it.each(['', '17.05.2031', '2031-13-40', 'morgen'])('ergibt für %j keine Frist', (datum) => {
+    expect(fristVor(datum)).toBe('')
+  })
+})
+
+describe('Standardpreise', () => {
+  it('liest gespeicherte Werte und lässt Fehlendes leer', () => {
+    expect(leseStandardpreise({ halbtag: 111, ganztag: '222,50' })).toEqual({ halbtag: 111, ganztag: 222.5 })
+    expect(leseStandardpreise({ halbtag: 111 })).toEqual({ halbtag: 111, ganztag: null })
+    expect(leseStandardpreise(undefined)).toEqual({ halbtag: null, ganztag: null })
+    expect(leseStandardpreise({ halbtag: 'viel' })).toEqual({ halbtag: null, ganztag: null })
+  })
+
+  it('setzt den regulären Preis eines neuen Vertrags auf den halben Tag', () => {
+    const vorbelegung = mitStandardpreis(
+      { MIETE: { preisRegulaer: 999, kautionBetrag: 444 } },
+      { halbtag: 111, ganztag: 222 }
+    )
+    expect(vorbelegung.MIETE).toEqual({ preisRegulaer: 111, kautionBetrag: 444 })
+    expect(vorbelegung.ANGEBOT).toEqual({ preisRegulaer: 111 })
+  })
+
+  it('ändert ohne gepflegten Standardpreis nichts', () => {
+    const vorher = { MIETE: { preisRegulaer: 999 } }
+    expect(mitStandardpreis(vorher, { halbtag: null, ganztag: 222 })).toBe(vorher)
   })
 })

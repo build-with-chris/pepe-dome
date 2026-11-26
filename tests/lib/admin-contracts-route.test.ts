@@ -27,6 +27,10 @@ vi.mock('@/lib/prisma', () => {
       update: vi.fn(),
       delete: vi.fn(),
     },
+    contractSetting: {
+      findUnique: vi.fn(),
+      upsert: vi.fn(),
+    },
   }
   return { default: prisma, prisma }
 })
@@ -44,9 +48,11 @@ const liste = await import('@/app/api/admin/contracts/route')
 const einzeln = await import('@/app/api/admin/contracts/[id]/route')
 const pdf = await import('@/app/api/admin/contracts/[id]/pdf/route')
 const probe = await import('@/app/api/admin/contracts/pdf-probe/route')
+const einstellungen = await import('@/app/api/admin/contracts/settings/route')
 
 const mock = prisma as unknown as {
   contract: Record<'findMany' | 'findUnique' | 'create' | 'update' | 'delete', ReturnType<typeof vi.fn>>
+  contractSetting: Record<'findUnique' | 'upsert', ReturnType<typeof vi.fn>>
 }
 
 function anmelden(role: string | null) {
@@ -117,10 +123,15 @@ const AUFRUFE: Array<[string, () => Promise<Response>]> = [
   ['DELETE /contracts/:id', () => einzeln.DELETE(anfrage('DELETE'), params)],
   ['GET /contracts/:id/pdf', () => pdf.GET(anfrage('GET'), params)],
   ['GET /contracts/pdf-probe', () => probe.GET()],
+  ['GET /contracts/settings', () => einstellungen.GET()],
+  ['PUT /contracts/settings', () => einstellungen.PUT(anfrage('PUT', { halbtag: '111', ganztag: '222' }))],
 ]
 
 beforeEach(() => {
   for (const fn of Object.values(mock.contract)) fn.mockReset()
+  for (const fn of Object.values(mock.contractSetting)) fn.mockReset()
+  mock.contractSetting.findUnique.mockResolvedValue(null)
+  mock.contractSetting.upsert.mockResolvedValue({})
   vi.mocked(pdfAntwort).mockClear()
   mock.contract.create.mockImplementation(({ data }: { data: object }) =>
     Promise.resolve({ id: 'c1', status: 'ENTWURF', ...data })
@@ -151,6 +162,7 @@ describe('Zugriff auf die Vertrags-Routen', () => {
     anmelden('editor')
     for (const [, aufruf] of AUFRUFE) await aufruf()
     for (const fn of Object.values(mock.contract)) expect(fn).not.toHaveBeenCalled()
+    for (const fn of Object.values(mock.contractSetting)) expect(fn).not.toHaveBeenCalled()
     expect(pdfAntwort).not.toHaveBeenCalled()
   })
 })
@@ -186,6 +198,59 @@ describe('POST /api/admin/contracts', () => {
     const res = await liste.POST(anfrage('POST', body))
     expect(res.status).toBe(400)
     expect(mock.contract.create).not.toHaveBeenCalled()
+  })
+})
+
+describe('Wenn die Datenbank beim Speichern ausfällt', () => {
+  it('antwortet POST mit 500 und einer lesbaren Meldung statt mit einer leeren Antwort', async () => {
+    mock.contract.create.mockRejectedValue(new Error('Verbindung weg'))
+    const res = await liste.POST(anfrage('POST', gueltig))
+    expect(res.status).toBe(500)
+    expect((await res.json()).error).toContain('nicht in der Datenbank speichern')
+  })
+
+  it('antwortet PATCH mit 500 und einer lesbaren Meldung', async () => {
+    mock.contract.findUnique.mockResolvedValue(zeile())
+    mock.contract.update.mockRejectedValue(new Error('Verbindung weg'))
+    const res = await einzeln.PATCH(anfrage('PATCH', { status: 'BEZAHLT' }), params)
+    expect(res.status).toBe(500)
+    expect((await res.json()).error).toContain('nicht in der Datenbank speichern')
+  })
+})
+
+describe('Standardpreise unter /api/admin/contracts/settings', () => {
+  it('liefert leere Werte, solange nichts gepflegt ist', async () => {
+    const res = await einstellungen.GET()
+    expect(await res.json()).toEqual({ standardpreise: { halbtag: null, ganztag: null } })
+  })
+
+  it('liefert die gespeicherten Preise', async () => {
+    mock.contractSetting.findUnique.mockResolvedValue({ key: 'standardpreise', value: { halbtag: 111, ganztag: 222 } })
+    const res = await einstellungen.GET()
+    expect(await res.json()).toEqual({ standardpreise: { halbtag: 111, ganztag: 222 } })
+  })
+
+  it('speichert die Preise als Zahlen in einer Zeile', async () => {
+    const res = await einstellungen.PUT(anfrage('PUT', { halbtag: '111 €', ganztag: '222,50' }))
+    expect(res.status).toBe(200)
+    expect(mock.contractSetting.upsert).toHaveBeenCalledWith({
+      where: { key: 'standardpreise' },
+      create: { key: 'standardpreise', value: { halbtag: 111, ganztag: 222.5 } },
+      update: { value: { halbtag: 111, ganztag: 222.5 } },
+    })
+  })
+
+  it('lässt sich leeren', async () => {
+    await einstellungen.PUT(anfrage('PUT', { halbtag: '', ganztag: '' }))
+    expect(mock.contractSetting.upsert.mock.calls[0][0].update).toEqual({
+      value: { halbtag: null, ganztag: null },
+    })
+  })
+
+  it('lehnt Text statt eines Preises mit 400 ab', async () => {
+    const res = await einstellungen.PUT(anfrage('PUT', { halbtag: 'viel', ganztag: '222' }))
+    expect(res.status).toBe(400)
+    expect(mock.contractSetting.upsert).not.toHaveBeenCalled()
   })
 })
 

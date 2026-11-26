@@ -5,6 +5,7 @@ import ContractForm from '@/components/admin/forms/ContractForm'
 import { getUserRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
+import { ladeStandardpreise } from '@/lib/vertraege/einstellungen'
 import { TYP_LABEL } from '@/lib/vertraege/validation'
 import { datumAlsEingabe } from '@/lib/vertraege/vorlage'
 import ContractActions from './ContractActions'
@@ -26,6 +27,7 @@ export default async function ContractPage({
   if (!contract) notFound()
 
   const gesperrt = contract.status !== 'ENTWURF'
+  const standardpreise = await ladeStandardpreise()
 
   return (
     <div className="space-y-8">
@@ -64,6 +66,7 @@ export default async function ContractPage({
         key={`${contract.id}-${contract.status}`}
         mode="edit"
         gesperrt={gesperrt}
+        standardpreise={standardpreise}
         vertrag={{
           id: contract.id,
           type: contract.type,

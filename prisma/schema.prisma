@@ -657,3 +657,15 @@ enum ContractStatus {
   UNTERSCHRIEBEN
   BEZAHLT
 }
+
+/// Einstellungen des Vertragstools, eine Zeile je Schlüssel.
+/// Bisher nur „standardpreise“: { "halbtag": …, "ganztag": … }. Die Preise
+/// liegen hier und nicht im Code, weil das Repo öffentlich ist. Gepflegt
+/// werden sie im Admin unter Verträge, nur von `super_admin`.
+model ContractSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("contract_settings")
+}

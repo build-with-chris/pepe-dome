@@ -10,11 +10,16 @@
  * Fast alles darf leer bleiben. Was fehlt, steht im PDF als Linie zum
  * Ausfüllen von Hand.
  *
+ * Schlägt das Speichern fehl, steht die Meldung oben und noch einmal direkt
+ * am Knopf, und das erste betroffene Feld kommt ins Bild. Das Formular ist
+ * mehrere Bildschirme lang. Eine Meldung nur am Anfang sieht niemand, der
+ * unten auf „Vertrag anlegen“ klickt.
+ *
  * Ist der Vertrag kein Entwurf mehr, ist das Formular gesperrt. Das PDF kommt
  * dann aus der eingefrorenen Fassung, eine Änderung hier hätte keine Wirkung.
  */
 
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -24,11 +29,19 @@ import { Switch } from '@/components/ui/switch'
 import FieldHint from '@/components/admin/ui/FieldHint'
 import {
   angebotFelder,
+  fristVor,
   mieteFelder,
   type AngebotFelder,
   type MieteFelder,
 } from '@/lib/vertraege/formular'
-import { TYP_LABEL, VERTRAGSTYPEN, type Vertragstyp } from '@/lib/vertraege/validation'
+import {
+  betragAlsEingabe,
+  betragAlsText,
+  TYP_LABEL,
+  VERTRAGSTYPEN,
+  type Standardpreise,
+  type Vertragstyp,
+} from '@/lib/vertraege/validation'
 
 export type ContractFormVertrag = {
   id: string
@@ -78,6 +91,7 @@ function Feld({
   type = 'text',
   inputMode,
   einheit,
+  children,
 }: {
   id: string
   label: string
@@ -91,6 +105,8 @@ function Feld({
   inputMode?: 'decimal'
   /** Steht hinter dem Feld, etwa „€“ oder „%“. */
   einheit?: string
+  /** Steht direkt unter dem Feld, etwa Knöpfe zum schnellen Ausfüllen. */
+  children?: ReactNode
 }) {
   return (
     <div className="space-y-2.5">
@@ -109,6 +125,7 @@ function Feld({
         />
         {einheit && <span className="text-sm text-white/50 shrink-0">{einheit}</span>}
       </div>
+      {children}
       {error ? <p className="text-sm text-red-400">{error}</p> : hint ? <FieldHint>{hint}</FieldHint> : null}
     </div>
   )
@@ -132,7 +149,9 @@ function Schalter({
 }) {
   return (
     <div
-      className={`rounded-lg border px-4 py-3 ${
+      // `relative`, damit das unsichtbare Feld hinter dem Schalter an dieser
+      // Zeile hängt und nicht am Dokument (siehe AdminShell).
+      className={`relative rounded-lg border px-4 py-3 ${
         checked ? 'border-[#016dca]/40 bg-[#016dca]/[0.06]' : 'border-white/[0.08]'
       }`}
     >
@@ -150,6 +169,15 @@ function Schalter({
   )
 }
 
+/**
+ * Erst wahr, wenn die Seite im Browser wirklich bedienbar ist. Auf dem Server
+ * und im ausgelieferten HTML ist der Wert falsch.
+ */
+const keinAbo = () => () => {}
+function useBedienbar(): boolean {
+  return useSyncExternalStore(keinAbo, () => true, () => false)
+}
+
 const heute = () =>
   new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
@@ -157,6 +185,7 @@ export default function ContractForm({
   mode,
   vertrag,
   vorbelegung,
+  standardpreise,
   gesperrt = false,
 }: {
   mode: 'create' | 'edit'
@@ -164,9 +193,16 @@ export default function ContractForm({
   vertrag?: ContractFormVertrag
   /** Nur beim Anlegen: Betragsfelder des letzten Vertrags je Typ. */
   vorbelegung?: Partial<Record<Vertragstyp, Record<string, unknown>>>
+  /** Reguläre Preise für halben und ganzen Tag, gepflegt unter Verträge. */
+  standardpreise?: Standardpreise
   gesperrt?: boolean
 }) {
   const router = useRouter()
+  // Solange das Skript der Seite nicht geladen ist, würde ein Klick auf den
+  // Knopf das Formular vom Browser abschicken lassen: Die Seite lädt neu, alle
+  // Eingaben sind weg, gespeichert ist nichts. Deshalb bleibt der Knopf bis
+  // dahin aus.
+  const bedienbar = useBedienbar()
 
   const [type, setType] = useState<Vertragstyp>(vertrag?.type ?? 'MIETE')
   const [gegenseite, setGegenseite] = useState<Gegenseite>({
@@ -206,6 +242,21 @@ export default function ContractForm({
     setGegenseite((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
   }
+
+  /**
+   * Das Datum der Veranstaltung bestimmt die Frist der Anzahlung: zwei Wochen
+   * vorher. Die Frist zieht nur mit, solange sie leer ist oder noch der
+   * berechnete Wert drinsteht. Eine eigene Eingabe bleibt stehen.
+   */
+  function setzeDatum(neu: string) {
+    const bisher = fristVor(gegenseite.eventDate)
+    g('eventDate', neu)
+    setMiete((prev) =>
+      prev.anzahlungFrist === '' || prev.anzahlungFrist === bisher
+        ? { ...prev, anzahlungFrist: fristVor(neu) }
+        : prev
+    )
+  }
   const m = <K extends keyof MieteFelder>(feld: K, wert: MieteFelder[K]) => {
     setMiete((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
@@ -214,6 +265,29 @@ export default function ContractForm({
     setAngebot((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
   }
+
+  /**
+   * Holt das erste Feld mit Fehler ins Bild und setzt den Cursor hinein.
+   *
+   * Das passiert erst nach dem nächsten Rendern (siehe useEffect unten):
+   * Während des Speicherns sind alle Felder gesperrt, und ein gesperrtes Feld
+   * nimmt keinen Fokus an.
+   */
+  const fehlerZumZeigen = useRef<Errors | null>(null)
+  function zeigeErstenFehler(gefunden: Errors) {
+    fehlerZumZeigen.current = gefunden
+  }
+  useEffect(() => {
+    const gefunden = fehlerZumZeigen.current
+    if (saving || !gefunden) return
+    fehlerZumZeigen.current = null
+    const feld = Object.keys(gefunden)
+      .map((id) => document.getElementById(id))
+      .find((element): element is HTMLElement => element !== null)
+    if (!feld) return
+    feld.scrollIntoView?.({ block: 'center', behavior: 'smooth' })
+    feld.focus({ preventScroll: true })
+  }, [saving, errors])
 
   function validate(): Errors {
     const next: Errors = {}
@@ -238,7 +312,8 @@ export default function ContractForm({
     const gefunden = validate()
     if (Object.keys(gefunden).length > 0) {
       setErrors(gefunden)
-      setServerError('Bitte die markierten Felder ausfüllen.')
+      setServerError('Noch nicht gespeichert: Bitte die markierten Felder ausfüllen.')
+      zeigeErstenFehler(gefunden)
       return
     }
 
@@ -270,7 +345,8 @@ export default function ContractForm({
           }
         }
         setErrors(vomServer)
-        throw new Error(body?.error ?? 'Speichern fehlgeschlagen')
+        zeigeErstenFehler(vomServer)
+        throw new Error(`Nicht gespeichert: ${body?.error ?? `Fehler ${res.status}`}`)
       }
 
       if (mode === 'create') {
@@ -282,7 +358,7 @@ export default function ContractForm({
       setGespeichert(true)
       router.refresh()
     } catch (error) {
-      setServerError(error instanceof Error ? error.message : 'Speichern fehlgeschlagen')
+      setServerError(error instanceof Error ? error.message : 'Nicht gespeichert.')
     } finally {
       setSaving(false)
     }
@@ -401,6 +477,37 @@ export default function ContractForm({
 
   const showbesuch = miete.preismodell === 'showbesuch'
 
+  // ── Standardpreise ────────────────────────────────────────────────────
+  const STANDARD = [
+    { preis: standardpreise?.halbtag ?? null, label: 'Halber Tag', bezeichnung: 'Regulärer Halbtagessatz' },
+    { preis: standardpreise?.ganztag ?? null, label: 'Ganzer Tag', bezeichnung: 'Regulärer Tagessatz' },
+  ].filter((eintrag): eintrag is { preis: number; label: string; bezeichnung: string } => eintrag.preis !== null)
+
+  /** Knöpfe, die den regulären Preis mit einem Klick setzen. */
+  const standardKnoepfe = (aktuell: string, waehle: (eintrag: (typeof STANDARD)[number]) => void) =>
+    STANDARD.length > 0 ? (
+      <div className="flex flex-wrap gap-2">
+        {STANDARD.map((eintrag) => {
+          const aktiv = aktuell.trim() === betragAlsEingabe(eintrag.preis)
+          return (
+            <button
+              key={eintrag.label}
+              type="button"
+              aria-pressed={aktiv}
+              onClick={() => waehle(eintrag)}
+              className={`rounded-md border px-2.5 py-1 text-[12px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#016dca] ${
+                aktiv
+                  ? 'border-[#016dca] bg-[#016dca]/15 text-white'
+                  : 'border-white/[0.12] text-white/60 hover:border-white/30 hover:text-white'
+              }`}
+            >
+              {eintrag.label}: {betragAlsText(eintrag.preis)} €
+            </button>
+          )
+        })}
+      </div>
+    ) : null
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {gesperrt && (
@@ -437,7 +544,7 @@ export default function ContractForm({
                   return (
                     <label
                       key={wert}
-                      className={`cursor-pointer rounded-lg border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
+                      className={`relative cursor-pointer rounded-lg border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
                         aktiv
                           ? 'border-[#016dca] bg-[#016dca]/15'
                           : 'border-white/[0.12] hover:border-white/30'
@@ -540,12 +647,12 @@ export default function ContractForm({
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 <Feld
                   id="eventDate"
-                  label="Datum für die Liste"
+                  label="Datum der Veranstaltung"
                   type="date"
                   value={gegenseite.eventDate}
-                  onChange={(wert) => g('eventDate', wert)}
+                  onChange={setzeDatum}
                   error={errors.eventDate}
-                  hint="Nur zum Sortieren, nicht im PDF."
+                  hint="Sortiert die Liste und bestimmt die Frist der Anzahlung. Steht nicht im PDF."
                 />
                 <Feld
                   id="aufbauAb"
@@ -623,7 +730,7 @@ export default function ContractForm({
                     return (
                       <label
                         key={wert}
-                        className={`cursor-pointer rounded-lg border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
+                        className={`relative cursor-pointer rounded-lg border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
                           aktiv
                             ? 'border-[#016dca] bg-[#016dca]/15'
                             : 'border-white/[0.12] hover:border-white/30'
@@ -698,7 +805,11 @@ export default function ContractForm({
                       onChange={(wert) => m('preisRegulaer', wert)}
                       error={errors.preisRegulaer}
                       hint="Liegt der vereinbarte Preis darunter, knüpft der Vertrag ihn an die Einhaltung der Regeln."
-                    />
+                    >
+                      {standardKnoepfe(miete.preisRegulaer, (eintrag) =>
+                        m('preisRegulaer', betragAlsEingabe(eintrag.preis))
+                      )}
+                    </Feld>
                     <Feld
                       id="preisVereinbart"
                       label="Vereinbarter Preis"
@@ -721,7 +832,7 @@ export default function ContractForm({
                   value={miete.anzahlungProzent}
                   onChange={(wert) => m('anzahlungProzent', wert)}
                   error={errors.anzahlungProzent}
-                  hint="Der Betrag wird im Vertrag ausgerechnet. Leer oder 0: keine Anzahlung."
+                  hint="Üblich ist die Hälfte. Der Betrag wird im Vertrag ausgerechnet. Leer oder 0: keine Anzahlung."
                 />
                 <Feld
                   id="anzahlungFrist"
@@ -730,7 +841,7 @@ export default function ContractForm({
                   onChange={(wert) => m('anzahlungFrist', wert)}
                   error={errors.anzahlungFrist}
                   placeholder="28.02.2027"
-                  hint="Im Vertrag: „zwei Wochen vorher: bis …“."
+                  hint="Wird aus dem Datum der Veranstaltung berechnet: zwei Wochen vorher. Lässt sich überschreiben."
                 />
               </div>
             </Karte>
@@ -959,7 +1070,18 @@ export default function ContractForm({
                   onChange={(wert) => a('preisRegulaer', wert)}
                   error={errors.preisRegulaer}
                   hint="Erscheint durchgestrichen, wenn der Angebotspreis davon abweicht."
-                />
+                >
+                  {standardKnoepfe(angebot.preisRegulaer, (eintrag) => {
+                    a('preisRegulaer', betragAlsEingabe(eintrag.preis))
+                    // Die Bezeichnung zieht nur mit, solange dort nichts Eigenes steht.
+                    if (
+                      angebot.preisRegulaerBezeichnung.trim() === '' ||
+                      STANDARD.some((s) => s.bezeichnung === angebot.preisRegulaerBezeichnung)
+                    ) {
+                      a('preisRegulaerBezeichnung', eintrag.bezeichnung)
+                    }
+                  })}
+                </Feld>
                 <Feld
                   id="preisAngebot"
                   label="Angebotspreis"
@@ -993,9 +1115,18 @@ export default function ContractForm({
         )}
       </fieldset>
 
+      {!gesperrt && serverError && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+        >
+          {serverError}
+        </div>
+      )}
+
       {!gesperrt && (
         <div className="flex flex-wrap items-center gap-3">
-          <Button type="submit" variant="primary" disabled={saving}>
+          <Button type="submit" variant="primary" disabled={saving || !bedienbar}>
             {saving ? 'Speichern…' : mode === 'create' ? 'Vertrag anlegen' : 'Änderungen speichern'}
           </Button>
           <Button

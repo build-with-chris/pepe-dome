@@ -63,15 +63,19 @@ const schalter = z
 
 /**
  * Liest einen Betrag aus einer Eingabe. Versteht „120“, „120,50“, „120.50“,
- * „1.200“ und „1.200,50“, mit oder ohne Eurozeichen. Leer ergibt null.
+ * „1.200“ und „1.200,50“. Was Menschen dazuschreiben, wird überlesen: „€“,
+ * „Euro“, „EUR“, „%“ und ein angehängtes „,-“. Leer ergibt null.
  * Gibt `undefined` zurück, wenn sich keine Zahl ergibt.
+ *
+ * Großzügig mit Absicht: Ein abgelehntes „50 %“ im Feld für die Anzahlung hat
+ * beim ersten echten Vertrag das Speichern verhindert.
  */
 export function leseBetrag(eingabe: unknown): number | null | undefined {
   if (eingabe === null || eingabe === undefined) return null
   if (typeof eingabe === 'number') return Number.isFinite(eingabe) && eingabe >= 0 ? eingabe : undefined
   if (typeof eingabe !== 'string') return undefined
 
-  let wert = eingabe.replace(/[€\s]/g, '')
+  let wert = eingabe.replace(/€|euro?|%|\s/gi, '').replace(/[.,][-–—]+$/, '')
   if (!wert) return null
   if (wert.includes(',')) {
     wert = wert.replace(/\./g, '').replace(',', '.')
@@ -239,6 +243,25 @@ export function vertragstitel(vertrag: VertragEingabe): string {
     : `Angebot ${vertrag.data.veranstaltung}`
 }
 
+// ── Standardpreise ──────────────────────────────────────────────────────
+
+/**
+ * Reguläre Mietpreise für einen halben und einen ganzen Tag. Sie liegen in
+ * der Tabelle `contract_settings` und werden im Admin gepflegt, nicht hier:
+ * Das Repo ist öffentlich, die Mietpreise stehen bewusst nicht auf der Website.
+ */
+export const STANDARDPREISE_SCHLUESSEL = 'standardpreise'
+
+export const standardpreiseSchema = z.object({ halbtag: betrag, ganztag: betrag })
+
+export type Standardpreise = z.infer<typeof standardpreiseSchema>
+
+/** Liest die gespeicherten Standardpreise. Fehlt etwas, bleibt der Wert leer. */
+export function leseStandardpreise(wert: unknown): Standardpreise {
+  const ergebnis = standardpreiseSchema.safeParse(wert ?? {})
+  return ergebnis.success ? ergebnis.data : { halbtag: null, ganztag: null }
+}
+
 // ── Vorbelegung ─────────────────────────────────────────────────────────
 
 /**
@@ -274,6 +297,22 @@ export function betraegeAus(type: Vertragstyp, data: unknown): Record<string, un
     if (wert !== null && wert !== undefined && wert !== '') betraege[feld] = wert
   }
   return betraege
+}
+
+/**
+ * Setzt den regulären Preis eines neuen Vertrags auf den Standardpreis für
+ * einen halben Tag. Alle anderen Beträge bleiben die des letzten Vertrags.
+ * Ohne gepflegten Standardpreis ändert sich nichts.
+ */
+export function mitStandardpreis(
+  vorbelegung: Partial<Record<Vertragstyp, Record<string, unknown>>>,
+  standardpreise: Standardpreise
+): Partial<Record<Vertragstyp, Record<string, unknown>>> {
+  if (standardpreise.halbtag === null) return vorbelegung
+  return {
+    MIETE: { ...vorbelegung.MIETE, preisRegulaer: standardpreise.halbtag },
+    ANGEBOT: { ...vorbelegung.ANGEBOT, preisRegulaer: standardpreise.halbtag },
+  }
 }
 
 // ── Darstellung von Beträgen ────────────────────────────────────────────
