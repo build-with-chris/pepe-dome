@@ -4,6 +4,12 @@ import path from 'path'
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.join(__dirname, './'),
+  // Logo und Schrift fürs Vertrags-PDF werden zur Laufzeit von der Platte
+  // gelesen (src/lib/vertraege/pdf.tsx). Solche Dateien liegen auf Vercel nicht
+  // automatisch neben der Funktion, deshalb hier ausdrücklich mitgeben.
+  outputFileTracingIncludes: {
+    '/api/admin/contracts/**': ['./public/vertraege/**', './src/lib/vertraege/fonts/*.ttf'],
+  },
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', '@dnd-kit/core', '@dnd-kit/sortable'],
   },
@@ -29,6 +35,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     '@react-email/components',
     '@react-email/render',
+    // Bringt einen eigenen React-Reconciler mit. Gebündelt läuft er gegen die
+    // React-Fassung, die Next für Route-Handler einbaut, und bricht beim Rendern ab.
+    '@react-pdf/renderer',
   ],
   // Configure webpack to handle react-email packages properly
   webpack: (config, { isServer }) => {

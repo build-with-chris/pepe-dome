@@ -69,3 +69,7 @@ next-env.d.ts
 # Sicherungen, die Datenskripte vor dem Schreiben anlegen.
 # Enthalten echte Inhalte aus der Produktionsdatenbank, bleiben lokal.
 .backup-*.json
+
+# Heruntergeladene Vertraege und Angebote aus dem Admin: enthalten Namen und
+# Anschriften und gehoeren nicht ins oeffentliche Repo.
+/*.pdf
