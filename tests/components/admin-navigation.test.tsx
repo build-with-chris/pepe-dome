@@ -79,6 +79,17 @@ describe('AdminShell Navigation', () => {
     // Abonnentendaten sind personenbezogen und bleiben super_admin vorbehalten.
     expect(ziele).not.toContain('/admin/subscribers')
     expect(ziele).not.toContain('/admin/test-recipients')
+    // Verträge enthalten Namen, Anschriften und Preise der Gegenseite.
+    expect(ziele).not.toContain('/admin/contracts')
+  })
+
+  it('zeigt einem Viewer die Verträge nicht', () => {
+    render(
+      <AdminShell role={ROLES.VIEWER} userName="Test">
+        <div />
+      </AdminShell>
+    )
+    expect(linkZiele()).not.toContain('/admin/contracts')
   })
 
   it('zeigt einem Super-Admin zusätzlich die geschützten Bereiche', () => {
@@ -91,5 +102,6 @@ describe('AdminShell Navigation', () => {
     expect(ziele).toContain('/admin/subscribers')
     expect(ziele).toContain('/admin/test-recipients')
     expect(ziele).toContain('/admin/courses')
+    expect(ziele).toContain('/admin/contracts')
   })
 })

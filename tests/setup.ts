@@ -42,6 +42,7 @@ async function cleanDatabase() {
     await prisma.artist.deleteMany({})
     await prisma.subscriber.deleteMany({})
     await prisma.testRecipient.deleteMany({})
+    await prisma.contract.deleteMany({})
   } catch (error) {
     // Ignore cleanup errors
     console.warn('Cleanup warning:', error)
