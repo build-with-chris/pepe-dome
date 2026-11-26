@@ -156,7 +156,9 @@ describe('ContractForm beim Anlegen', () => {
     await waitFor(() => expect(screen.getByText('Betrag als Zahl angeben')).toBeInTheDocument())
     expect(screen.getAllByText('Nicht gespeichert: Betrag als Zahl angeben')).toHaveLength(2)
     expect(screen.getByRole('alert')).toHaveTextContent('Nicht gespeichert')
-    expect(screen.getByLabelText('Sonderpreis')).toHaveFocus()
+    // Der Cursor springt erst, wenn das Formular nach dem Speichern wieder
+    // entsperrt ist. Das ist ein Rendern später als die Meldung, also warten.
+    await waitFor(() => expect(screen.getByLabelText('Sonderpreis')).toHaveFocus())
     expect(push).not.toHaveBeenCalled()
   })
 
