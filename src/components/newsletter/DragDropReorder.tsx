@@ -26,6 +26,7 @@ import { CSS } from '@dnd-kit/utilities'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import { emphasisForEvent, fotosBegrenztFuer, type ItemEmphasis } from '@/lib/newsletter-emphasis'
+import { SECTION_HEADING_MAX, SECTION_TEXT_MAX } from '@/lib/newsletter-limits'
 
 interface ContentItem {
   id?: string
@@ -349,7 +350,7 @@ function SortableItem({
                   }
                 }}
                 autoFocus
-                maxLength={100}
+                maxLength={SECTION_HEADING_MAX}
                 placeholder={isTextSnippet ? 'Überschrift eingeben...' : 'Abschnitt-Überschrift'}
               />
             </div>
@@ -390,16 +391,19 @@ function SortableItem({
 
           {/* Section Description / Text Content */}
           {isEditingDescription ? (
-            <div className="flex items-center gap-2">
+            <div className="space-y-1">
               <textarea
                 value={descriptionValue}
                 onChange={(e) => setDescriptionValue(e.target.value)}
                 onBlur={saveDescription}
                 className="input w-full"
-                rows={isTextSnippet ? 4 : 2}
-                maxLength={1000}
+                rows={isTextSnippet ? 6 : 2}
+                maxLength={SECTION_TEXT_MAX}
                 placeholder={isTextSnippet ? 'Text eingeben...' : 'Optionale Beschreibung...'}
               />
+              <p className="text-xs text-pepe-t64 text-right">
+                {descriptionValue.length} von {SECTION_TEXT_MAX} Zeichen
+              </p>
             </div>
           ) : (
             <button

@@ -87,6 +87,9 @@ export default function NewsletterEditClient({
   const [showContentSelector, setShowContentSelector] = useState(false)
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
   const [previewKey, setPreviewKey] = useState(0)
+  // Scheitert das Speichern der Inhalte, steht hier warum. Vorher blieb der
+  // Fehler unsichtbar: Der Editor zeigte den Text, gespeichert war er nicht.
+  const [contentSaveError, setContentSaveError] = useState<string | null>(null)
 
   // Modal states
   const [showSendModal, setShowSendModal] = useState(false)
@@ -324,6 +327,15 @@ export default function NewsletterEditClient({
       // Der Server stellt Termine nach Datum, so wie sie in der Mail stehen,
       // und meldet die neue Reihenfolge als Liste der alten Positionen.
       const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        setContentSaveError(
+          data?.error?.message
+            ? `Nicht gespeichert: ${data.error.message}`
+            : 'Nicht gespeichert. Bitte die letzte Änderung prüfen und erneut versuchen.'
+        )
+        return
+      }
+      setContentSaveError(null)
       const reihenfolge: unknown = data?.data?.reihenfolge
       if (
         res.ok &&
@@ -337,6 +349,7 @@ export default function NewsletterEditClient({
       }
     } catch (err) {
       console.error('Failed to save content order:', err)
+      setContentSaveError('Nicht gespeichert: keine Verbindung zum Server.')
     }
   }
 
@@ -466,12 +479,22 @@ export default function NewsletterEditClient({
                   </div>
                 </div>
               ) : (
-                <DragDropReorder
-                  items={selectedContent}
-                  onReorder={handleContentReorder}
-                  onAddTextSnippet={canEdit ? handleAddTextSnippet : undefined}
-                  status={newsletter.status}
-                />
+                <>
+                  {contentSaveError && (
+                    <div
+                      role="alert"
+                      className="mb-4 rounded-lg border border-pepe-error/40 bg-pepe-error/10 px-4 py-3 text-sm text-pepe-error"
+                    >
+                      {contentSaveError}
+                    </div>
+                  )}
+                  <DragDropReorder
+                    items={selectedContent}
+                    onReorder={handleContentReorder}
+                    onAddTextSnippet={canEdit ? handleAddTextSnippet : undefined}
+                    status={newsletter.status}
+                  />
+                </>
               )}
             </div>
           )}
