@@ -265,6 +265,19 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
     expect(screen.queryByRole('radio', { name: /^Feste Gage/ })).toBeNull()
   })
 
+  it('fragt bei der Aufteilung nach der Mehrwertsteuer, bei fester Gage nicht', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Künstlervertrag/ }))
+
+    const schalter = screen.getByRole('switch', { name: 'Gegenseite rechnet mit Mehrwertsteuer ab' })
+    expect(schalter).toHaveAttribute('data-state', 'unchecked')
+    expect(screen.getByText(/Netto-Ticketeinnahmen ohne Ticketgebühren/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('radio', { name: /^Feste Gage/ }))
+    expect(screen.queryByRole('switch', { name: 'Gegenseite rechnet mit Mehrwertsteuer ab' })).toBeNull()
+    expect(screen.getByText(/Die Ticketeinnahmen und die Einnahmen aus der Gastronomie gehen an den Pepe Dome/)).toBeInTheDocument()
+  })
+
   it('sagt, dass die offenen Regelungen noch Freitext sind', () => {
     render(<ContractForm mode="create" vorbelegung={{}} />)
     fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
@@ -299,6 +312,7 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
       termin: 'Samstag, 17.05.2031',
       verguetung: 'ticketanteil',
       anteilGegenseite: '55',
+      mitMwst: false,
       ausfall: 'Wird einzeln abgesprochen.',
     })
   })

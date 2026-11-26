@@ -1,9 +1,9 @@
 /**
  * Vorlage für Künstlervertrag und Veranstaltervertrag.
  *
- * Die Vorlage ist ein Grundgerüst. Fest im Vertrag stehen nur die Aufteilung
- * der Ticketeinnahmen oder die Gage und dass die Gastronomie beim Pepe Dome
- * bleibt. Alles andere ist Freitext und erscheint nur, wenn etwas eingetragen
+ * Die Vorlage ist ein Grundgerüst. Fest im Vertrag steht nur, was Chris
+ * festgelegt hat: Aufteilung der Ticketeinnahmen oder Gage, Grundlage und
+ * Mehrwertsteuer, Gastronomie, Abrechnung und Zahlung. Alles andere ist Freitext und erscheint nur, wenn etwas eingetragen
  * ist. Diese Tests halten vor allem fest, dass die Vorlage zu den offenen
  * Punkten nichts von sich aus behauptet.
  *
@@ -55,8 +55,28 @@ describe.each([
     expect(text).toContain('[Unterschrift] Ort, Datum, Duo Beispiel')
   })
 
-  it('besteht ohne Freitext nur aus Veranstaltung, Einnahmen und Unterschriften', () => {
-    expect(titel).toEqual(['1. Veranstaltung', '2. Einnahmen', 'Unterschriften'])
+  it('besteht ohne Freitext aus Veranstaltung, Einnahmen, Abrechnung und Unterschriften', () => {
+    expect(titel).toEqual([
+      '1. Veranstaltung',
+      '2. Einnahmen',
+      '3. Abrechnung und Zahlung',
+      'Unterschriften',
+    ])
+  })
+
+  it('teilt netto, ohne Ticketgebühren, und sagt, was mit der Mehrwertsteuer ist', () => {
+    expect(text).toContain('Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren.')
+    expect(text).toContain('Duo Beispiel rechnet ohne Mehrwertsteuer ab und erhält den Anteil ohne Aufschlag.')
+
+    const mitMwst = bauen(type, { mitMwst: true }).text
+    expect(mitMwst).toContain('Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren.')
+    expect(mitMwst).toContain('Duo Beispiel rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf den Anteil hinzu.')
+    expect(mitMwst).not.toContain('ohne Aufschlag')
+  })
+
+  it('rechnet in der Woche danach ab und zahlt spätestens 14 Tage nach der Veranstaltung', () => {
+    expect(text).toContain('Der Pepe Dome rechnet die Ticketeinnahmen in der Woche nach der Veranstaltung ab.')
+    expect(text).toContain('Die Zahlung erfolgt spätestens 14 Tage nach der Veranstaltung.')
   })
 
   it('nennt Termin und nur die eingetragenen Zeiten', () => {
@@ -72,14 +92,13 @@ describe.each([
   })
 
   it('behauptet nichts zu den Punkten, die noch nicht geklärt sind', () => {
-    for (const wort of ['Ausfall', 'Absage', 'höhere Gewalt', 'Höhere Gewalt', 'Hausordnung', 'Abrechnung', 'Technik', 'Gage']) {
+    for (const wort of ['Ausfall', 'Absage', 'höhere Gewalt', 'Höhere Gewalt', 'Hausordnung', 'Technik', 'Gage']) {
       expect(text).not.toContain(wort)
     }
   })
 
   it('macht aus jedem ausgefüllten Freitext einen eigenen, nummerierten Abschnitt', () => {
     const voll = bauen(type, {
-      zahlung: 'Zahlung nach Absprache.',
       ausfall: 'Erster Absatz.\n\nZweiter Absatz.',
       hoehereGewalt: 'Text zur höheren Gewalt.',
       bedingungen: 'Text zu den Bedingungen.',
@@ -104,7 +123,8 @@ describe.each([
     expect(bauen(type, { bedingungen: 'Text.' }).titel).toEqual([
       '1. Veranstaltung',
       '2. Einnahmen',
-      '3. Bedingungen vor Ort',
+      '3. Abrechnung und Zahlung',
+      '4. Bedingungen vor Ort',
       'Unterschriften',
     ])
   })
@@ -129,11 +149,25 @@ describe('Künstlervertrag mit fester Gage', () => {
   const { text, titel } = bauen('KUENSTLER', { verguetung: 'gage', gage: '777,50', foerderung: 'Beispielförderung' })
 
   it('nennt Gage und Förderung statt einer Aufteilung', () => {
-    expect(titel).toEqual(['1. Veranstaltung', '2. Gage', 'Unterschriften'])
+    expect(titel).toEqual(['1. Veranstaltung', '2. Gage', '3. Abrechnung und Zahlung', 'Unterschriften'])
     expect(text).toContain('Duo Beispiel erhält für den Auftritt eine feste Gage von 777,50 €.')
     expect(text).toContain('Die Gage wird aus der Förderung „Beispielförderung“ bezahlt.')
     expect(text).toContain('Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.')
-    expect(text).not.toContain('Ticketeinnahmen')
+    expect(text).not.toContain('werden geteilt')
+    expect(text).not.toContain('Grundlage')
+  })
+
+  it('gibt die Ticketeinnahmen an den Pepe Dome', () => {
+    expect(text).toContain('Die Ticketeinnahmen gehen an den Pepe Dome.')
+  })
+
+  it('zahlt die Gage spätestens 14 Tage nach der Veranstaltung', () => {
+    expect(text).toContain('Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.')
+    expect(text).not.toContain('rechnet die Ticketeinnahmen')
+  })
+
+  it('sagt nichts zur Mehrwertsteuer auf die Gage, das ist noch offen', () => {
+    expect(bauen('KUENSTLER', { verguetung: 'gage', gage: '777', mitMwst: true }).text).not.toContain('Mehrwertsteuer')
   })
 
   it('lässt den Satz zur Förderung weg, wenn keine eingetragen ist', () => {

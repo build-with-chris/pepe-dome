@@ -82,9 +82,9 @@ export type AuftrittFelder = {
   ende: string
   verguetung: Verguetung
   anteilGegenseite: string
+  mitMwst: boolean
   gage: string
   foerderung: string
-  zahlung: string
   ausfall: string
   hoehereGewalt: string
   bedingungen: string
@@ -221,9 +221,9 @@ export function auftrittFelder(daten?: unknown): AuftrittFelder {
       ? (d.verguetung as Verguetung)
       : 'ticketanteil',
     anteilGegenseite: betrag(d.anteilGegenseite),
+    mitMwst: schalter(d.mitMwst),
     gage: betrag(d.gage),
     foerderung: text(d.foerderung),
-    zahlung: text(d.zahlung),
     ausfall: text(d.ausfall),
     hoehereGewalt: text(d.hoehereGewalt),
     bedingungen: text(d.bedingungen),

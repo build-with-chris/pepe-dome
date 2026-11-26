@@ -4,10 +4,16 @@
  *
  * GRUNDGERÜST, Stand 26.11.2026. Der Vertrag enthält nur, was feststeht:
  *
- *   - die Aufteilung der Ticketeinnahmen zwischen Gegenseite und Pepe Dome
+ *   - die Aufteilung der Ticketeinnahmen zwischen Gegenseite und Pepe Dome.
+ *     Geteilt werden immer die Netto-Ticketeinnahmen ohne Ticketgebühren.
+ *     Rechnet die Gegenseite mit Mehrwertsteuer ab, kommt die Mehrwertsteuer
+ *     auf ihren Anteil obendrauf, sonst nicht.
  *   - bei Künstler:innen wahlweise eine feste Gage, wenn eine Förderung
- *     dahintersteht
+ *     dahintersteht. Dann gehen die Ticketeinnahmen an den Pepe Dome. Welche
+ *     der beiden Möglichkeiten gilt, steht vor dem Vertrag fest.
  *   - dass die Einnahmen aus der Gastronomie beim Pepe Dome bleiben
+ *   - Abrechnung in der Woche nach der Veranstaltung, Zahlung spätestens
+ *     14 Tage nach der Veranstaltung
  *
  * Für alles andere gibt es noch keinen abgestimmten Wortlaut, und hier wird
  * keiner erfunden. Die offenen Punkte sind Freitextfelder: Was im Formular
@@ -20,10 +26,8 @@
  *   - Bedingungen vor Ort für Künstler:innen und Veranstalter:innen
  *     (Technik, Raum, Zeiten, Personal)
  *   - was der Pepe Dome als Gastgeber verlangen kann
- *   - Grundlage der Aufteilung: brutto oder netto, mit oder ohne
- *     Ticketgebühren, welche Ticketarten zählen
- *   - bei fester Gage: wem die Ticketeinnahmen zustehen
- *   - wann und wie abgerechnet und gezahlt wird
+ *   - ob eine feste Gage mit oder ohne Mehrwertsteuer gemeint ist
+ *   - welche Ticketarten zählen (Freikarten, Ermäßigungen)
  *   - ob Hausordnung und Regeln der Mietvereinbarung hier ebenfalls gelten
  *
  * Bei neu formulierten Verträgen ist eine juristische Durchsicht sinnvoll
@@ -99,6 +103,7 @@ export function auftrittDokument(
         punkte: [
           [`${name} erhält für den Auftritt eine `, fett(`feste Gage von ${euro(d.gage)}`), '.'],
           ...(d.foerderung ? [`Die Gage wird aus der Förderung „${d.foerderung}“ bezahlt.`] : []),
+          'Die Ticketeinnahmen gehen an den Pepe Dome.',
           'Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.',
         ],
       },
@@ -115,15 +120,31 @@ export function auftrittDokument(
             fett(`${restText} % für den Pepe Dome`),
             '.',
           ],
+          'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren.',
+          d.mitMwst
+            ? `${name} rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf den Anteil hinzu.`
+            : `${name} rechnet ohne Mehrwertsteuer ab und erhält den Anteil ohne Aufschlag.`,
           'Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.',
         ],
       },
     ])
   }
 
-  // ── Zahlung und die noch offenen Regelungen: nur, wenn etwas eingetragen ist ──
+  // ── Abrechnung und Zahlung ──────────────────────────────────────────
+  abschnitt('Abrechnung und Zahlung', [
+    {
+      art: 'liste',
+      punkte: gage
+        ? ['Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.']
+        : [
+            'Der Pepe Dome rechnet die Ticketeinnahmen in der Woche nach der Veranstaltung ab.',
+            'Die Zahlung erfolgt spätestens 14 Tage nach der Veranstaltung.',
+          ],
+    },
+  ])
+
+  // ── Die noch offenen Regelungen: nur, wenn etwas eingetragen ist ────
   const freitexte: Array<[string, string]> = [
-    ['Abrechnung und Zahlung', d.zahlung],
     ['Ausfall und Absage', d.ausfall],
     ['Höhere Gewalt', d.hoehereGewalt],
     ['Bedingungen vor Ort', d.bedingungen],

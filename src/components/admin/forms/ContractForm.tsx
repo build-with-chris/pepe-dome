@@ -616,7 +616,7 @@ export default function ContractForm({
               {(
                 [
                   ['ticketanteil', 'Anteil an den Ticketeinnahmen', 'Der übliche Weg: Die Einnahmen werden geteilt.'],
-                  ['gage', 'Feste Gage', 'Wenn eine Förderung dahintersteht, aus der die Gage bezahlt wird.'],
+                  ['gage', 'Feste Gage', 'Wenn eine Förderung dahintersteht. Die Ticketeinnahmen gehen dann an den Pepe Dome.'],
                 ] as const
               ).map(([wert, label, hinweis]) => {
                 const aktiv = auftritt.verguetung === wert
@@ -670,7 +670,8 @@ export default function ContractForm({
             />
           </div>
         ) : (
-          <div className="max-w-sm">
+          <div className="space-y-4">
+            <div className="max-w-sm">
             <Feld
               id="anteilGegenseite"
               label={type === 'KUENSTLER' ? 'Anteil für die Künstler:innen' : 'Anteil für die Veranstalter:innen'}
@@ -685,20 +686,23 @@ export default function ContractForm({
                   : `Anteil an den Ticketeinnahmen. Beim Pepe Dome bleiben ${restAnteil} %.`
               }
             />
+            </div>
+            <Schalter
+              id="mitMwst"
+              label="Gegenseite rechnet mit Mehrwertsteuer ab"
+              hint="Geteilt wird immer netto. Mit Mehrwertsteuer kommt sie auf den Anteil obendrauf, ohne bleibt es beim Anteil."
+              checked={auftritt.mitMwst}
+              onChange={(wert) => u('mitMwst', wert)}
+            />
           </div>
         )}
 
-        <FieldHint>Die Einnahmen aus der Gastronomie gehen an den Pepe Dome. Das steht fest im Vertrag.</FieldHint>
-
-        <Textfeld
-          id="zahlung"
-          label="Abrechnung und Zahlung"
-          value={auftritt.zahlung}
-          onChange={(wert) => u('zahlung', wert)}
-          error={errors.zahlung}
-          rows={3}
-          hint="Wann und wie abgerechnet und gezahlt wird. Erscheint als eigener Abschnitt. Leer lassen: kein Abschnitt."
-        />
+        <FieldHint>
+          Fest im Vertrag, ohne Feld:{' '}
+          {mitGage
+            ? 'Die Ticketeinnahmen und die Einnahmen aus der Gastronomie gehen an den Pepe Dome. Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.'
+            : 'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren. Die Gastronomie geht an den Pepe Dome. Abgerechnet wird in der Woche nach der Veranstaltung, gezahlt spätestens 14 Tage danach.'}
+        </FieldHint>
       </Karte>
 
       <Karte titel="Noch offene Regelungen">

@@ -229,9 +229,10 @@ export type AngebotDaten = z.infer<typeof angebotDatenSchema>
  * Grundgerüst, Stand 26.11.2026. Beide Verträge teilen sich die Felder.
  *
  * Fest steht bisher: die Aufteilung der Ticketeinnahmen (meist 60 zu 40
- * zugunsten der Gegenseite), dass die Gastronomie immer beim Pepe Dome
- * bleibt, und bei Künstler:innen die feste Gage als zweite Möglichkeit, wenn
- * eine Förderung dahintersteht.
+ * zugunsten der Gegenseite) auf Grundlage der Netto-Ticketeinnahmen ohne
+ * Ticketgebühren, dass die Gastronomie immer beim Pepe Dome bleibt, bei
+ * Künstler:innen die feste Gage als zweite Möglichkeit, wenn eine Förderung
+ * dahintersteht, und wann abgerechnet und gezahlt wird.
  *
  * Noch nicht geklärt und deshalb ohne festen Wortlaut: Ausfall und Absage,
  * höhere Gewalt, Bedingungen vor Ort, was der Pepe Dome als Gastgeber
@@ -258,12 +259,15 @@ export const auftrittDatenSchema = z.object({
     .transform((wert) => wert ?? 'ticketanteil'),
   /** Anteil der Gegenseite an den Ticketeinnahmen. Der Rest bleibt beim Pepe Dome. */
   anteilGegenseite: prozent,
+  /**
+   * Rechnet die Gegenseite mit Mehrwertsteuer ab? Geteilt wird immer netto.
+   * Mit Mehrwertsteuer kommt sie auf den Anteil obendrauf, ohne nicht.
+   */
+  mitMwst: schalter,
   /** Nur bei fester Gage. */
   gage: betrag,
   /** Nur bei fester Gage: Name der Förderung, aus der sie bezahlt wird. */
   foerderung: text(200),
-  /** Wann und wie gezahlt wird. Freitext, bis es eine feste Regel gibt. */
-  zahlung: text(1000),
 
   // Noch offene Regelungen, siehe Kommentar oben.
   ausfall: text(4000),
