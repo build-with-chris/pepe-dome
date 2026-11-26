@@ -10,7 +10,10 @@
  *     auf ihren Anteil obendrauf, sonst nicht.
  *   - bei Künstler:innen wahlweise eine feste Gage, wenn eine Förderung
  *     dahintersteht. Dann gehen die Ticketeinnahmen an den Pepe Dome. Welche
- *     der beiden Möglichkeiten gilt, steht vor dem Vertrag fest.
+ *     der beiden Möglichkeiten gilt, steht vor dem Vertrag fest. Für die
+ *     Mehrwertsteuer gilt dasselbe wie beim Anteil: Wer mit Mehrwertsteuer
+ *     abrechnet, bekommt sie obendrauf. Wer ohne abrechnet, etwa nach
+ *     § 19 UStG, bekommt die Gage als Endbetrag.
  *   - dass die Einnahmen aus der Gastronomie beim Pepe Dome bleiben
  *   - Abrechnung in der Woche nach der Veranstaltung, Zahlung spätestens
  *     14 Tage nach der Veranstaltung
@@ -26,7 +29,6 @@
  *   - Bedingungen vor Ort für Künstler:innen und Veranstalter:innen
  *     (Technik, Raum, Zeiten, Personal)
  *   - was der Pepe Dome als Gastgeber verlangen kann
- *   - ob eine feste Gage mit oder ohne Mehrwertsteuer gemeint ist
  *   - welche Ticketarten zählen (Freikarten, Ermäßigungen)
  *   - ob Hausordnung und Regeln der Mietvereinbarung hier ebenfalls gelten
  *
@@ -102,6 +104,11 @@ export function auftrittDokument(
         art: 'liste',
         punkte: [
           [`${name} erhält für den Auftritt eine `, fett(`feste Gage von ${euro(d.gage)}`), '.'],
+          // Der Vertrag nennt keinen Paragrafen. Warum jemand ohne
+          // Mehrwertsteuer abrechnet, kann verschiedene Gründe haben.
+          d.mitMwst
+            ? `${name} rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf die Gage hinzu.`
+            : `${name} rechnet ohne Mehrwertsteuer ab. Die Gage ist der Endbetrag.`,
           ...(d.foerderung ? [`Die Gage wird aus der Förderung „${d.foerderung}“ bezahlt.`] : []),
           'Die Ticketeinnahmen gehen an den Pepe Dome.',
           'Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.',

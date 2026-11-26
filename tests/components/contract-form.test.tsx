@@ -265,7 +265,7 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
     expect(screen.queryByRole('radio', { name: /^Feste Gage/ })).toBeNull()
   })
 
-  it('fragt bei der Aufteilung nach der Mehrwertsteuer, bei fester Gage nicht', () => {
+  it('fragt bei Aufteilung und bei fester Gage nach der Mehrwertsteuer', () => {
     render(<ContractForm mode="create" vorbelegung={{}} />)
     fireEvent.click(screen.getByRole('radio', { name: /^Künstlervertrag/ }))
 
@@ -273,8 +273,13 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
     expect(schalter).toHaveAttribute('data-state', 'unchecked')
     expect(screen.getByText(/Netto-Ticketeinnahmen ohne Ticketgebühren/)).toBeInTheDocument()
 
+    expect(screen.getByText(/Es bleibt beim Anteil/)).toBeInTheDocument()
+
+    fireEvent.click(schalter)
     fireEvent.click(screen.getByRole('radio', { name: /^Feste Gage/ }))
-    expect(screen.queryByRole('switch', { name: 'Gegenseite rechnet mit Mehrwertsteuer ab' })).toBeNull()
+    // Der Schalter bleibt, wie er war, nur der Hinweis spricht jetzt von der Gage.
+    expect(screen.getByRole('switch', { name: 'Gegenseite rechnet mit Mehrwertsteuer ab' })).toHaveAttribute('data-state', 'checked')
+    expect(screen.getByText(/Die Gage ist der Endbetrag/)).toBeInTheDocument()
     expect(screen.getByText(/Die Ticketeinnahmen und die Einnahmen aus der Gastronomie gehen an den Pepe Dome/)).toBeInTheDocument()
   })
 

@@ -687,15 +687,20 @@ export default function ContractForm({
               }
             />
             </div>
-            <Schalter
-              id="mitMwst"
-              label="Gegenseite rechnet mit Mehrwertsteuer ab"
-              hint="Geteilt wird immer netto. Mit Mehrwertsteuer kommt sie auf den Anteil obendrauf, ohne bleibt es beim Anteil."
-              checked={auftritt.mitMwst}
-              onChange={(wert) => u('mitMwst', wert)}
-            />
           </div>
         )}
+
+        <Schalter
+          id="mitMwst"
+          label="Gegenseite rechnet mit Mehrwertsteuer ab"
+          hint={
+            mitGage
+              ? 'An: Die Mehrwertsteuer kommt auf die Gage obendrauf. Aus, etwa bei Abrechnung nach § 19 UStG: Die Gage ist der Endbetrag.'
+              : 'An: Die Mehrwertsteuer kommt auf den Anteil obendrauf. Aus, etwa bei Abrechnung nach § 19 UStG: Es bleibt beim Anteil. Geteilt wird immer netto.'
+          }
+          checked={auftritt.mitMwst}
+          onChange={(wert) => u('mitMwst', wert)}
+        />
 
         <FieldHint>
           Fest im Vertrag, ohne Feld:{' '}

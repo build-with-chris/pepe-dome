@@ -260,8 +260,9 @@ export const auftrittDatenSchema = z.object({
   /** Anteil der Gegenseite an den Ticketeinnahmen. Der Rest bleibt beim Pepe Dome. */
   anteilGegenseite: prozent,
   /**
-   * Rechnet die Gegenseite mit Mehrwertsteuer ab? Geteilt wird immer netto.
-   * Mit Mehrwertsteuer kommt sie auf den Anteil obendrauf, ohne nicht.
+   * Rechnet die Gegenseite mit Mehrwertsteuer ab? Dann kommt sie auf den
+   * Anteil oder die Gage obendrauf. Ohne, etwa nach § 19 UStG, ist der Anteil
+   * oder die Gage der Endbetrag. Geteilt wird in beiden Fällen netto.
    */
   mitMwst: schalter,
   /** Nur bei fester Gage. */

@@ -166,8 +166,19 @@ describe('Künstlervertrag mit fester Gage', () => {
     expect(text).not.toContain('rechnet die Ticketeinnahmen')
   })
 
-  it('sagt nichts zur Mehrwertsteuer auf die Gage, das ist noch offen', () => {
-    expect(bauen('KUENSTLER', { verguetung: 'gage', gage: '777', mitMwst: true }).text).not.toContain('Mehrwertsteuer')
+  it('nennt die Gage ohne Mehrwertsteuer als Endbetrag', () => {
+    expect(text).toContain('Duo Beispiel rechnet ohne Mehrwertsteuer ab. Die Gage ist der Endbetrag.')
+    expect(text).not.toContain('kommt auf die Gage hinzu')
+  })
+
+  it('schlägt die Mehrwertsteuer auf die Gage, wenn mit Mehrwertsteuer abgerechnet wird', () => {
+    const mitMwst = bauen('KUENSTLER', { verguetung: 'gage', gage: '777', mitMwst: true }).text
+    expect(mitMwst).toContain('Duo Beispiel rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf die Gage hinzu.')
+    expect(mitMwst).not.toContain('Endbetrag')
+  })
+
+  it('nennt im Vertrag keinen Paragrafen', () => {
+    expect(text).not.toContain('§')
   })
 
   it('lässt den Satz zur Förderung weg, wenn keine eingetragen ist', () => {
