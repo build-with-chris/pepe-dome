@@ -274,7 +274,13 @@ export default function AdminShell({ children, role, userName }: AdminShellProps
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        {/* `relative` ist hier tragend: Versteckte Eingaben (sr-only-Radios,
+            das unsichtbare Feld hinter jedem Schalter) sind absolut
+            positioniert. Ohne positionierten Vorfahren hängen sie am Dokument
+            statt an diesem Scrollbereich und machen die ganze Seite so hoch
+            wie das Formular. Dann lässt sich die Hülle selbst wegscrollen, und
+            unten bleibt ein schwarzer Streifen. */}
+        <main className="relative flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
