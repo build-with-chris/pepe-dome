@@ -100,8 +100,9 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1.2,
     borderBottomColor: BLAU,
-    paddingBottom: 8,
-    marginBottom: 12,
+    // Luft zwischen Logo und Linie und noch einmal zwischen Linie und Text.
+    paddingBottom: 16,
+    marginBottom: 16,
   },
   kopfLogoText: { flex: 1, paddingRight: 12 },
   kopfLogoTitel: { fontFamily: SCHRIFT_TITEL, fontWeight: 'bold', fontSize: 19, lineHeight: 1.2 },
