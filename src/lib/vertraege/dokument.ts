@@ -57,8 +57,10 @@ export type Baustein =
 export type Dokument = {
   /** Titel in den PDF-Eigenschaften und Grundlage für den Dateinamen. */
   titel: string
-  /** Überschriften und Kopflinie in Blau, wie im Angebot. */
+  /** Überschriften und Kopflinie im Blau des Logos. */
   akzent?: boolean
+  /** Eine Zeile, die auf jeder Seite unten steht. */
+  fuss?: string
   bausteine: Baustein[]
 }
 

@@ -4,13 +4,14 @@
  * Reine Funktion, wie vorlage-miete.ts. Das Angebot ist eine Seite mit Logo,
  * in der Sie-Form, und endet mit dem Stand statt mit Unterschriften.
  *
- * Der reguläre Preis erscheint durchgestrichen über dem Angebotspreis. Fehlt
- * er oder ist er gleich dem Angebotspreis, entfällt die Zeile samt dem Satz
- * über das Entgegenkommen.
+ * Ist kein Angebotspreis eingetragen, gilt der reguläre Preis. Weicht der
+ * Angebotspreis vom regulären ab, steht der reguläre durchgestrichen darüber,
+ * samt dem Satz über das Entgegenkommen.
  */
 
 import { fett, grau, type Baustein, type Dokument, type Inhalt } from './dokument'
 import { betragAlsText, type AngebotDaten } from './validation'
+import { FUSSZEILE } from './vorlage-miete'
 
 const VERTRETEN_DURCH = 'Christoph Hermann'
 
@@ -18,7 +19,9 @@ const euro = (betrag: number | null) => `${betrag === null ? '________' : betrag
 
 export function angebotDokument(d: AngebotDaten, titel: string): Dokument {
   const veranstaltung = `„${d.veranstaltung}“`
-  const rabatt = d.preisRegulaer !== null && d.preisRegulaer !== d.preisAngebot
+  const preis = d.preisAngebot ?? d.preisRegulaer
+  const rabatt =
+    d.preisAngebot !== null && d.preisRegulaer !== null && d.preisRegulaer !== d.preisAngebot
 
   const eckdaten: Inhalt[][] = [
     ['Veranstaltung', d.veranstaltung],
@@ -39,7 +42,7 @@ export function angebotDokument(d: AngebotDaten, titel: string): Dokument {
           ],
         ]
       : []),
-    [fett(`Ihr Preis für ${veranstaltung}`), fett(euro(d.preisAngebot))],
+    [fett(`Ihr Preis für ${veranstaltung}`), fett(euro(preis))],
     ...(d.getraenke ? [['Getränke', d.getraenke]] : []),
   ]
 
@@ -102,5 +105,5 @@ export function angebotDokument(d: AngebotDaten, titel: string): Dokument {
       : []),
   ]
 
-  return { titel, akzent: true, bausteine }
+  return { titel, akzent: true, fuss: FUSSZEILE, bausteine }
 }

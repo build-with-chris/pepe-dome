@@ -34,6 +34,7 @@ describe('Dateien für die PDF-Routen auf Vercel', () => {
     expect(existsSync(path.join(wurzel, 'public/vertraege/logo-pepe-dome.png'))).toBe(true)
     expect(existsSync(path.join(wurzel, 'src/lib/vertraege/fonts/Inter-Regular.ttf'))).toBe(true)
     expect(existsSync(path.join(wurzel, 'src/lib/vertraege/fonts/Inter-Bold.ttf'))).toBe(true)
+    expect(existsSync(path.join(wurzel, 'src/lib/vertraege/fonts/Outfit-Bold.ttf'))).toBe(true)
   })
 
   it('pdfkit hält seine Standardschrift dort bereit, wo die Liste sie erwartet', () => {

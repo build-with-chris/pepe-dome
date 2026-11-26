@@ -793,7 +793,7 @@ export default function ContractForm({
                     onChange={(wert) => m('preisBezeichnung', wert)}
                     error={errors.preisBezeichnung}
                     placeholder="Freundschaftspreis"
-                    hint="Leer lassen: Im Vertrag steht „Vereinbarter Preis“."
+                    hint="So heißt der Preis im Vertrag. Leer lassen: „Preis“, mit Sonderpreis „Vereinbarter Preis“."
                   />
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Feld
@@ -804,7 +804,7 @@ export default function ContractForm({
                       value={miete.preisRegulaer}
                       onChange={(wert) => m('preisRegulaer', wert)}
                       error={errors.preisRegulaer}
-                      hint="Liegt der vereinbarte Preis darunter, knüpft der Vertrag ihn an die Einhaltung der Regeln."
+                      hint="Gilt, solange kein Sonderpreis eingetragen ist."
                     >
                       {standardKnoepfe(miete.preisRegulaer, (eintrag) =>
                         m('preisRegulaer', betragAlsEingabe(eintrag.preis))
@@ -812,12 +812,13 @@ export default function ContractForm({
                     </Feld>
                     <Feld
                       id="preisVereinbart"
-                      label="Vereinbarter Preis"
+                      label="Sonderpreis"
                       inputMode="decimal"
                       einheit="€"
                       value={miete.preisVereinbart}
                       onChange={(wert) => m('preisVereinbart', wert)}
                       error={errors.preisVereinbart}
+                      hint="Etwa ein Freundschaftspreis. Leer lassen: Es gilt der reguläre Preis. Mit Sonderpreis nennt der Vertrag beide und knüpft ihn an die Einhaltung der Regeln."
                     />
                   </div>
                 </>
@@ -832,7 +833,7 @@ export default function ContractForm({
                   value={miete.anzahlungProzent}
                   onChange={(wert) => m('anzahlungProzent', wert)}
                   error={errors.anzahlungProzent}
-                  hint="Üblich ist die Hälfte. Der Betrag wird im Vertrag ausgerechnet. Leer oder 0: keine Anzahlung."
+                  hint="Üblich ist die Hälfte. Der Betrag wird im Vertrag aus dem geltenden Preis ausgerechnet. Leer oder 0: keine Anzahlung."
                 />
                 <Feld
                   id="anzahlungFrist"
@@ -1069,7 +1070,7 @@ export default function ContractForm({
                   value={angebot.preisRegulaer}
                   onChange={(wert) => a('preisRegulaer', wert)}
                   error={errors.preisRegulaer}
-                  hint="Erscheint durchgestrichen, wenn der Angebotspreis davon abweicht."
+                  hint="Gilt, solange kein Angebotspreis eingetragen ist. Mit Angebotspreis steht er durchgestrichen darüber."
                 >
                   {standardKnoepfe(angebot.preisRegulaer, (eintrag) => {
                     a('preisRegulaer', betragAlsEingabe(eintrag.preis))

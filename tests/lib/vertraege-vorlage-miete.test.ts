@@ -100,6 +100,12 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
     ])
   })
 
+  it('trägt Logo, Akzentfarbe und Fußzeile', () => {
+    expect(dokument.bausteine[0]).toMatchObject({ art: 'kopf', logo: true })
+    expect(dokument.akzent).toBe(true)
+    expect(dokument.fuss).toBe('Pepe Dome · Ostpark München · www.pepe-dome.de')
+  })
+
   it('nennt die eigene Seite, die Gegenseite und den Anlass', () => {
     expect(text).toContain('Vereinbarung zur Nutzung des Pepe Dome')
     expect(text).toContain('Feier zum Abschluss')
@@ -262,6 +268,28 @@ describe('Varianten der Mietvereinbarung', () => {
     expect(text).not.toContain('Anzahlung ')
     expect(text).toContain('Zahlung (222 € zuzüglich')
     expect(text).toContain('Kaution 444 €, fällig vor der Veranstaltung.')
+  })
+
+  it('ohne Sonderpreis gilt der reguläre Preis, auch für Anzahlung und Rest', () => {
+    const { text } = bauen({ preisVereinbart: '', preisBezeichnung: '' })
+    expect(text).toContain('Preis: 333 € pauschal. Enthalten sind Miete und Heizung')
+    expect(text).not.toContain('regulärer Preis')
+    expect(text).not.toContain('Dieser Preis gilt unter der Voraussetzung')
+    expect(text).toContain('Anzahlung 50 % (166,50 €) zwei Wochen vorher: bis 03.05.2031.')
+    expect(text).toContain('Rest (166,50 € zuzüglich')
+    expect(text).not.toContain('________ €')
+  })
+
+  it('mit Sonderpreis ohne eigene Bezeichnung heißt er „Vereinbarter Preis“', () => {
+    const { text } = bauen({ preisBezeichnung: '' })
+    expect(text).toContain('Vereinbarter Preis: 222 € pauschal (regulärer Preis: 333 €).')
+    expect(text).toContain('Anzahlung 50 % (111 €)')
+  })
+
+  it('beim Showbesuch zählt nur die Heizpauschale, nie der reguläre Mietpreis', () => {
+    const { text } = bauen({ preismodell: 'showbesuch', showName: 'Beispielshow', preisVereinbart: '', preisRegulaer: '333' })
+    expect(text).toContain('Heizung: ________ € pauschal')
+    expect(text).toContain('Anzahlung 50 % (________ €)')
   })
 
   it('ohne Rabatt entfällt der Verweis auf die Regeln', () => {

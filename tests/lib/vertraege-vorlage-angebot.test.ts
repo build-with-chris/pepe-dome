@@ -81,6 +81,21 @@ describe('Angebot', () => {
     expect(text).toContain('kommen Ihnen deshalb beim Preis entgegen')
   })
 
+  it('ohne Angebotspreis gilt der reguläre Preis, ohne Streichung', () => {
+    const regulaer = bauen({ preisAngebot: '' })
+    const preise = tabellen(regulaer.dokument.bausteine)[1]
+    expect(preise.zeilen[0]).toEqual([
+      { text: 'Ihr Preis für „Lesung im Frühling“', fett: true },
+      { text: '333 €', fett: true },
+    ])
+    expect(preise.betont).toEqual([0])
+    expect(regulaer.text).not.toContain('entgegen')
+  })
+
+  it('trägt die Fußzeile', () => {
+    expect(dokument.fuss).toBe('Pepe Dome · Ostpark München · www.pepe-dome.de')
+  })
+
   it('ohne regulären Preis gibt es keine durchgestrichene Zeile und kein Entgegenkommen', () => {
     const ohne = bauen({ preisRegulaer: '', getraenke: '' })
     const preise = tabellen(ohne.dokument.bausteine)[1]

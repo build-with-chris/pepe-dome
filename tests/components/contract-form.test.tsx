@@ -34,7 +34,7 @@ beforeEach(() => {
 describe('ContractForm beim Anlegen', () => {
   it('startet ohne früheren Vertrag mit leeren Betragsfeldern', () => {
     render(<ContractForm mode="create" vorbelegung={{}} />)
-    expect(screen.getByLabelText('Vereinbarter Preis')).toHaveValue('')
+    expect(screen.getByLabelText('Sonderpreis')).toHaveValue('')
     expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('')
     // Die Anzahlung ist kein Preis, sondern Hausregel: die Hälfte.
     expect(screen.getByLabelText('Anzahlung')).toHaveValue('50')
@@ -47,7 +47,7 @@ describe('ContractForm beim Anlegen', () => {
         vorbelegung={{ MIETE: { preisVereinbart: 222, preisRegulaer: 333.5, kautionBetrag: 444 } }}
       />
     )
-    expect(screen.getByLabelText('Vereinbarter Preis')).toHaveValue('222')
+    expect(screen.getByLabelText('Sonderpreis')).toHaveValue('222')
     expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('333,50')
     expect(screen.getByLabelText(/^Anlass/)).toHaveValue('')
   })
@@ -109,7 +109,7 @@ describe('ContractForm beim Anlegen', () => {
     tippen(/^Name/, 'Jana Beispiel')
     tippen(/^Anlass/, 'Feier zum Abschluss')
     tippen(/^Termin/, 'Samstag, 17.05.2031')
-    tippen('Vereinbarter Preis', '222,50')
+    tippen('Sonderpreis', '222,50')
     fireEvent.click(screen.getByRole('switch', { name: 'Offenes Feuer' }))
     fireEvent.click(screen.getByRole('switch', { name: 'Kaution' }))
     fireEvent.change(screen.getByLabelText('Kaution', { selector: 'input' }), { target: { value: '444' } })
@@ -149,14 +149,14 @@ describe('ContractForm beim Anlegen', () => {
     tippen(/^Name/, 'Jana Beispiel')
     tippen(/^Anlass/, 'Feier')
     tippen(/^Termin/, 'offen')
-    tippen('Vereinbarter Preis', 'viel')
+    tippen('Sonderpreis', 'viel')
     fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
 
     // Am Feld selbst, oben im Formular und noch einmal direkt am Knopf.
     await waitFor(() => expect(screen.getByText('Betrag als Zahl angeben')).toBeInTheDocument())
     expect(screen.getAllByText('Nicht gespeichert: Betrag als Zahl angeben')).toHaveLength(2)
     expect(screen.getByRole('alert')).toHaveTextContent('Nicht gespeichert')
-    expect(screen.getByLabelText('Vereinbarter Preis')).toHaveFocus()
+    expect(screen.getByLabelText('Sonderpreis')).toHaveFocus()
     expect(push).not.toHaveBeenCalled()
   })
 

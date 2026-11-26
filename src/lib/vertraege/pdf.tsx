@@ -6,7 +6,9 @@
  * Texte und Reihenfolge kommen aus den Vorlagen (vorlage-*.ts) oder aus einem
  * eingefrorenen Snapshot.
  *
- * Schrift ist Inter, als Datei eingebettet (fonts/, SIL Open Font License).
+ * Das Erscheinungsbild folgt der Website: Fließtext in Inter, Überschriften in
+ * Outfit, das Blau des Logos als Akzent. Beide Schriften sind als Datei
+ * eingebettet (fonts/, SIL Open Font License).
  * Die in jedem PDF eingebaute Helvetica wäre ohne Datei ausgekommen, aber die
  * Bibliothek vermisst bei ihr das Eurozeichen und die deutschen
  * Anführungszeichen falsch: „120 € pauschal“ wurde zu „120 €pauschal“. Mit
@@ -39,12 +41,15 @@ const mm = (wert: number) => wert * 2.8346
 const SCHWARZ = '#000000'
 const GRAU = '#555555'
 const LINIE = '#CCCCCC'
-const BLAU = '#1F6FD1'
+/** Das Blau aus dem Logo und der Website (--color-pepe-gold in globals.css). */
+const BLAU = '#016DCA'
 const BLAU_HELL = '#EAF2FC'
 const GELB_HELL = '#FFF4D6'
 const GELB_RAND = '#E0B84A'
 
 const SCHRIFT = 'Inter'
+/** Schrift der Überschriften auf der Website (--font-family-display). */
+const SCHRIFT_TITEL = 'Outfit'
 const schriftdatei = (name: string) =>
   path.join(process.cwd(), 'src', 'lib', 'vertraege', 'fonts', name)
 
@@ -56,6 +61,11 @@ Font.register({
   ],
 })
 
+Font.register({
+  family: SCHRIFT_TITEL,
+  fonts: [{ src: schriftdatei('Outfit-Bold.ttf'), fontWeight: 'bold' }],
+})
+
 // Die eingebaute Silbentrennung ist englisch und trennt deutsche Wörter an
 // falschen Stellen. Ohne Trennung bricht der Text nur an Leerzeichen um.
 Font.registerHyphenationCallback((wort) => [wort])
@@ -63,7 +73,7 @@ Font.registerHyphenationCallback((wort) => [wort])
 const s = StyleSheet.create({
   seite: {
     paddingTop: mm(16),
-    paddingBottom: mm(16),
+    paddingBottom: mm(19),
     paddingHorizontal: mm(22),
     fontFamily: SCHRIFT,
     fontSize: 9.5,
@@ -75,7 +85,13 @@ const s = StyleSheet.create({
   durchgestrichen: { textDecoration: 'line-through' },
 
   kopfMitte: { marginBottom: 10 },
-  kopfMitteTitel: { fontWeight: 'bold', fontSize: 16, lineHeight: 1.3, textAlign: 'center' },
+  kopfMitteTitel: {
+    fontFamily: SCHRIFT_TITEL,
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 1.3,
+    textAlign: 'center',
+  },
   kopfMitteUntertitel: { fontSize: 10.5, textAlign: 'center', color: GRAU, marginTop: 3 },
 
   kopfLogo: {
@@ -88,12 +104,18 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   kopfLogoText: { flex: 1, paddingRight: 12 },
-  kopfLogoTitel: { fontWeight: 'bold', fontSize: 20, lineHeight: 1.2 },
+  kopfLogoTitel: { fontFamily: SCHRIFT_TITEL, fontWeight: 'bold', fontSize: 19, lineHeight: 1.2 },
   kopfLogoUntertitel: { fontSize: 10.5, color: GRAU, marginTop: 3 },
 
-  h2: { fontWeight: 'bold', fontSize: 11.5, marginTop: 8, marginBottom: 2 },
-  h2Akzent: { fontSize: 11.5, color: BLAU, marginTop: 11, marginBottom: 4 },
-  h3: { fontWeight: 'bold', fontSize: 10.5, marginTop: 5, marginBottom: 2 },
+  h2: {
+    fontFamily: SCHRIFT_TITEL,
+    fontWeight: 'bold',
+    fontSize: 11.5,
+    marginTop: 8,
+    marginBottom: 2,
+  },
+  h2Akzent: { color: BLAU },
+  h3: { fontFamily: SCHRIFT_TITEL, fontWeight: 'bold', fontSize: 10.5, marginTop: 5, marginBottom: 2 },
 
   absatz: { marginBottom: 3 },
   klein: { fontSize: 8.5, color: GRAU },
@@ -132,6 +154,20 @@ const s = StyleSheet.create({
   unterschriftRaum: { height: 26 },
   unterschriftLinie: { borderTopWidth: 0.7, borderTopColor: SCHWARZ, paddingTop: 2 },
 
+  // Steht auf jeder Seite unten, im Rand unter dem Text.
+  fuss: {
+    position: 'absolute',
+    bottom: mm(9),
+    left: mm(22),
+    right: mm(22),
+    paddingTop: 4,
+    borderTopWidth: 0.4,
+    borderTopColor: LINIE,
+    textAlign: 'center',
+    fontSize: 7.5,
+    color: GRAU,
+  },
+
   ausfuellen: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: 5 },
   ausfuellLinie: {
     borderBottomWidth: 0.6,
@@ -144,7 +180,7 @@ const s = StyleSheet.create({
 
 /** Logo für den Dokumentkopf. Liegt unter public/, damit es eine einzige Quelle gibt. */
 const LOGO_PFAD = ['public', 'vertraege', 'logo-pepe-dome.png']
-const LOGO_BREITE = mm(42)
+const LOGO_BREITE = mm(36)
 
 type Logo = { daten: Buffer; breite: number; hoehe: number }
 
@@ -201,7 +237,15 @@ function Stueck({
         return (
           <View style={s.kopfLogo}>
             <View style={s.kopfLogoText}>
-              <Text style={s.kopfLogoTitel}>{baustein.titel}</Text>
+              {/* Ein langer Titel wird kleiner gesetzt, damit er neben dem Logo
+                  in einer Zeile bleibt. */}
+              <Text
+                style={
+                  baustein.titel.length > 28 ? [s.kopfLogoTitel, { fontSize: 15.5 }] : s.kopfLogoTitel
+                }
+              >
+                {baustein.titel}
+              </Text>
               {baustein.untertitel ? (
                 <Text style={s.kopfLogoUntertitel}>{baustein.untertitel}</Text>
               ) : null}
@@ -352,6 +396,11 @@ export async function dokumentAlsPdf(dokument: Dokument): Promise<Buffer> {
   return renderToBuffer(
     <Document title={dokument.titel} author="Pepe Dome" language="de">
       <Page size="A4" style={s.seite}>
+        {dokument.fuss ? (
+          <Text style={s.fuss} fixed>
+            {dokument.fuss}
+          </Text>
+        ) : null}
         {dokument.bausteine.map((baustein, index) => (
           <Stueck key={index} baustein={baustein} akzent={akzent} logo={logo} />
         ))}

@@ -29,6 +29,9 @@ export type Gegenseite = {
 /** Die eigene Seite steht in jeder Vorlage fest. */
 const VERTRETEN_DURCH = 'Christoph Hermann'
 
+/** Steht auf jeder Seite unten, auch im Angebot. */
+export const FUSSZEILE = 'Pepe Dome · Ostpark München · www.pepe-dome.de'
+
 /** Dieselbe Bankverbindung wie auf der Spendenseite (src/app/[lang]/spenden/page.tsx). */
 const BANK: Array<[string, string]> = [
   ['Kontoinhaber', 'Circus Akademie München e.V.'],
@@ -55,6 +58,16 @@ type Abschnitt = { schluessel: string; titel: string; bausteine: Baustein[] }
 export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: string): Dokument {
   const name = gegenseite.partnerName
   const showbesuch = d.preismodell === 'showbesuch'
+
+  // Welcher Preis gilt: der Sonderpreis, wenn einer eingetragen ist, sonst der
+  // reguläre. Beim Showbesuch gibt es nur die Heizpauschale. Mit diesem Betrag
+  // rechnen auch Anzahlung und Rest.
+  const preis = showbesuch ? d.preisVereinbart : (d.preisVereinbart ?? d.preisRegulaer)
+  const sonderpreis =
+    !showbesuch &&
+    d.preisVereinbart !== null &&
+    d.preisRegulaer !== null &&
+    d.preisVereinbart !== d.preisRegulaer
 
   // Welche Abschnitte es gibt, steht vor den Texten fest. So kann der
   // Preis-Abschnitt auf die Nummer der Regeln verweisen, die erst später kommen.
@@ -120,24 +133,23 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
           `Endgültige Gästezahl: ${LUECKE}, davon mindestens ${LUECKE} reguläre Tickets.`,
           [
             fett('Heizung:'),
-            ` ${euro(d.preisVereinbart)} pauschal für die Veranstaltung. Eine Miete fällt nicht an.`,
+            ` ${euro(preis)} pauschal für die Veranstaltung. Eine Miete fällt nicht an.`,
           ],
         ],
       },
     ])
   } else {
-    const rabatt = d.preisRegulaer !== null && d.preisRegulaer !== d.preisVereinbart
     abschnitt('preis', 'Preis', [
       {
         art: 'absatz',
         text: [
-          `${d.preisBezeichnung || 'Vereinbarter Preis'}: `,
-          fett(`${euro(d.preisVereinbart)} pauschal`),
-          rabatt ? ` (regulärer Preis: ${euro(d.preisRegulaer)}).` : '.',
+          `${d.preisBezeichnung || (sonderpreis ? 'Vereinbarter Preis' : 'Preis')}: `,
+          fett(`${euro(preis)} pauschal`),
+          sonderpreis ? ` (regulärer Preis: ${euro(d.preisRegulaer)}).` : '.',
           ' Enthalten sind Miete und Heizung für die Veranstaltung.',
         ],
       },
-      ...(rabatt
+      ...(sonderpreis
         ? [
             {
               art: 'absatz',
@@ -264,15 +276,15 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
   // ── Zahlung ─────────────────────────────────────────────────────────
   const mitAnzahlung = d.anzahlungProzent !== null && d.anzahlungProzent > 0
   const anzahlung =
-    mitAnzahlung && d.preisVereinbart !== null
-      ? Math.round(d.preisVereinbart * (d.anzahlungProzent as number)) / 100
+    mitAnzahlung && preis !== null
+      ? Math.round(preis * (d.anzahlungProzent as number)) / 100
       : null
   const rest =
-    d.preisVereinbart === null
+    preis === null
       ? null
       : mitAnzahlung
-        ? Math.round((d.preisVereinbart - (anzahlung as number)) * 100) / 100
-        : d.preisVereinbart
+        ? Math.round((preis - (anzahlung as number)) * 100) / 100
+        : preis
   const extras = aufzaehlung([
     ...(d.bier ? ['Bier'] : []),
     ...(d.zusatzleistungen ? ['Zusatzleistungen'] : []),
@@ -413,8 +425,15 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
 
   return {
     titel,
+    akzent: true,
+    fuss: FUSSZEILE,
     bausteine: [
-      { art: 'kopf', titel: 'Vereinbarung zur Nutzung des Pepe Dome', untertitel: d.anlass },
+      {
+        art: 'kopf',
+        titel: 'Vereinbarung zur Nutzung des Pepe Dome',
+        untertitel: d.anlass,
+        logo: true,
+      },
       ...parteien,
       ...abschnitte.flatMap((eintrag): Baustein[] => [
         { art: 'ueberschrift', text: eintrag.titel },
