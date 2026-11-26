@@ -9,7 +9,7 @@
  * Schrift ist Inter, als Datei eingebettet (fonts/, SIL Open Font License).
  * Die in jedem PDF eingebaute Helvetica wäre ohne Datei ausgekommen, aber die
  * Bibliothek vermisst bei ihr das Eurozeichen und die deutschen
- * Anführungszeichen falsch: „350 € pauschal“ wurde zu „350 €pauschal“. Mit
+ * Anführungszeichen falsch: „120 € pauschal“ wurde zu „120 €pauschal“. Mit
  * eingebetteter Schrift sieht das PDF außerdem in jedem Betrachter gleich aus.
  *
  * Schrift und Logo werden zur Laufzeit von der Platte gelesen. Damit sie auf
@@ -63,11 +63,11 @@ Font.registerHyphenationCallback((wort) => [wort])
 const s = StyleSheet.create({
   seite: {
     paddingTop: mm(16),
-    paddingBottom: mm(18),
+    paddingBottom: mm(16),
     paddingHorizontal: mm(22),
     fontFamily: SCHRIFT,
-    fontSize: 10,
-    lineHeight: 1.4,
+    fontSize: 9.5,
+    lineHeight: 1.35,
     color: SCHWARZ,
   },
   fett: { fontWeight: 'bold' },
@@ -75,8 +75,8 @@ const s = StyleSheet.create({
   durchgestrichen: { textDecoration: 'line-through' },
 
   kopfMitte: { marginBottom: 10 },
-  kopfMitteTitel: { fontWeight: 'bold', fontSize: 17, textAlign: 'center' },
-  kopfMitteUntertitel: { fontSize: 10.5, textAlign: 'center', color: GRAU, marginTop: 2 },
+  kopfMitteTitel: { fontWeight: 'bold', fontSize: 16, lineHeight: 1.3, textAlign: 'center' },
+  kopfMitteUntertitel: { fontSize: 10.5, textAlign: 'center', color: GRAU, marginTop: 3 },
 
   kopfLogo: {
     flexDirection: 'row',
@@ -91,14 +91,14 @@ const s = StyleSheet.create({
   kopfLogoTitel: { fontWeight: 'bold', fontSize: 20, lineHeight: 1.2 },
   kopfLogoUntertitel: { fontSize: 10.5, color: GRAU, marginTop: 3 },
 
-  h2: { fontWeight: 'bold', fontSize: 12, marginTop: 9, marginBottom: 3 },
+  h2: { fontWeight: 'bold', fontSize: 11.5, marginTop: 8, marginBottom: 2 },
   h2Akzent: { fontSize: 11.5, color: BLAU, marginTop: 11, marginBottom: 4 },
   h3: { fontWeight: 'bold', fontSize: 10.5, marginTop: 5, marginBottom: 2 },
 
   absatz: { marginBottom: 3 },
   klein: { fontSize: 8.5, color: GRAU },
 
-  listenpunkt: { flexDirection: 'row', marginBottom: 1.5 },
+  listenpunkt: { flexDirection: 'row', marginBottom: 1 },
   listenzeichen: { width: 12, paddingLeft: 2 },
   listentext: { flex: 1 },
 
@@ -106,7 +106,7 @@ const s = StyleSheet.create({
   zeile: { flexDirection: 'row', alignItems: 'flex-start' },
   zeileLinie: { borderBottomWidth: 0.4, borderBottomColor: LINIE },
   zeileBetont: { backgroundColor: BLAU_HELL },
-  zelle: { paddingVertical: 4, paddingHorizontal: 6 },
+  zelle: { paddingVertical: 3, paddingHorizontal: 6 },
   zelleKompakt: { paddingVertical: 1, paddingHorizontal: 6 },
   rechts: { textAlign: 'right' },
   kaestchen: {
@@ -114,7 +114,7 @@ const s = StyleSheet.create({
     height: 9,
     borderWidth: 0.8,
     borderColor: SCHWARZ,
-    marginTop: 6,
+    marginTop: 4.5,
     marginLeft: 6,
   },
 
@@ -129,7 +129,7 @@ const s = StyleSheet.create({
 
   unterschriftenZeile: { flexDirection: 'row', marginTop: 4 },
   unterschrift: { width: '50%', paddingRight: 16 },
-  unterschriftRaum: { height: 30 },
+  unterschriftRaum: { height: 26 },
   unterschriftLinie: { borderTopWidth: 0.7, borderTopColor: SCHWARZ, paddingTop: 2 },
 
   ausfuellen: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: 5 },
@@ -139,16 +139,6 @@ const s = StyleSheet.create({
     height: 11,
     marginHorizontal: 3,
     marginBottom: 2,
-  },
-
-  fuss: {
-    position: 'absolute',
-    bottom: mm(8),
-    left: mm(22),
-    right: mm(22),
-    textAlign: 'center',
-    fontSize: 8,
-    color: GRAU,
   },
 })
 
@@ -365,13 +355,6 @@ export async function dokumentAlsPdf(dokument: Dokument): Promise<Buffer> {
         {dokument.bausteine.map((baustein, index) => (
           <Stueck key={index} baustein={baustein} akzent={akzent} logo={logo} />
         ))}
-        <Text
-          style={s.fuss}
-          fixed
-          render={({ pageNumber, totalPages }) =>
-            totalPages > 1 ? `Seite ${pageNumber} von ${totalPages}` : ''
-          }
-        />
       </Page>
     </Document>
   )
