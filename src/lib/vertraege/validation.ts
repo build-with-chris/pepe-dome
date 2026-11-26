@@ -17,7 +17,7 @@
 
 import { z } from 'zod'
 
-export const VERTRAGSTYPEN = ['MIETE', 'ANGEBOT'] as const
+export const VERTRAGSTYPEN = ['MIETE', 'ANGEBOT', 'KUENSTLER', 'VERANSTALTER'] as const
 export type Vertragstyp = (typeof VERTRAGSTYPEN)[number]
 
 export const VERTRAGSSTATUS = ['ENTWURF', 'VERSCHICKT', 'UNTERSCHRIEBEN', 'BEZAHLT'] as const
@@ -26,6 +26,8 @@ export type Vertragsstatus = (typeof VERTRAGSSTATUS)[number]
 export const TYP_LABEL: Record<Vertragstyp, string> = {
   MIETE: 'Mietvereinbarung',
   ANGEBOT: 'Angebot',
+  KUENSTLER: 'Künstlervertrag',
+  VERANSTALTER: 'Veranstaltervertrag',
 }
 
 export const STATUS_LABEL: Record<Vertragsstatus, string> = {
@@ -221,6 +223,59 @@ export const angebotDatenSchema = z.object({
 
 export type AngebotDaten = z.infer<typeof angebotDatenSchema>
 
+// ── Künstlervertrag und Veranstaltervertrag ─────────────────────────────
+
+/**
+ * Grundgerüst, Stand 26.11.2026. Beide Verträge teilen sich die Felder.
+ *
+ * Fest steht bisher: die Aufteilung der Ticketeinnahmen (meist 60 zu 40
+ * zugunsten der Gegenseite), dass die Gastronomie immer beim Pepe Dome
+ * bleibt, und bei Künstler:innen die feste Gage als zweite Möglichkeit, wenn
+ * eine Förderung dahintersteht.
+ *
+ * Noch nicht geklärt und deshalb ohne festen Wortlaut: Ausfall und Absage,
+ * höhere Gewalt, Bedingungen vor Ort, was der Pepe Dome als Gastgeber
+ * erwartet. Dafür gibt es je ein Freitextfeld. Was dort steht, wird ein
+ * eigener Abschnitt, ein leeres Feld erzeugt keinen. Sobald die Regeln
+ * feststehen, werden aus den Feldern feste Klauseln mit Schaltern, wie in der
+ * Mietvereinbarung.
+ */
+export const VERGUETUNGEN = ['ticketanteil', 'gage'] as const
+export type Verguetung = (typeof VERGUETUNGEN)[number]
+
+export const auftrittDatenSchema = z.object({
+  /** Titel der Show oder Veranstaltung, Untertitel des Vertrags. */
+  titel: pflicht('Titel der Veranstaltung', 160),
+  termin: pflicht('Termin', 300),
+  aufbauAb: uhrzeit,
+  einlass: uhrzeit,
+  beginn: uhrzeit,
+  ende: uhrzeit,
+
+  verguetung: z
+    .enum(VERGUETUNGEN)
+    .nullish()
+    .transform((wert) => wert ?? 'ticketanteil'),
+  /** Anteil der Gegenseite an den Ticketeinnahmen. Der Rest bleibt beim Pepe Dome. */
+  anteilGegenseite: prozent,
+  /** Nur bei fester Gage. */
+  gage: betrag,
+  /** Nur bei fester Gage: Name der Förderung, aus der sie bezahlt wird. */
+  foerderung: text(200),
+  /** Wann und wie gezahlt wird. Freitext, bis es eine feste Regel gibt. */
+  zahlung: text(1000),
+
+  // Noch offene Regelungen, siehe Kommentar oben.
+  ausfall: text(4000),
+  hoehereGewalt: text(4000),
+  bedingungen: text(4000),
+  erwartungen: text(4000),
+
+  sonderabsprache: text(4000),
+})
+
+export type AuftrittDaten = z.infer<typeof auftrittDatenSchema>
+
 // ── Ganzer Vertrag ──────────────────────────────────────────────────────
 
 export const vertragSchema = z.discriminatedUnion(
@@ -228,6 +283,16 @@ export const vertragSchema = z.discriminatedUnion(
   [
     z.object({ type: z.literal('MIETE'), ...gegenseite, data: mieteDatenSchema }),
     z.object({ type: z.literal('ANGEBOT'), ...gegenseite, data: angebotDatenSchema }),
+    z.object({ type: z.literal('KUENSTLER'), ...gegenseite, data: auftrittDatenSchema }),
+    z.object({
+      type: z.literal('VERANSTALTER'),
+      ...gegenseite,
+      // Eine feste Gage gibt es nur im Künstlervertrag.
+      data: auftrittDatenSchema.refine((daten) => daten.verguetung === 'ticketanteil', {
+        path: ['verguetung'],
+        message: 'Im Veranstaltervertrag gibt es nur die Aufteilung der Ticketeinnahmen',
+      }),
+    }),
   ],
   { error: 'Vertragstyp fehlt oder ist unbekannt' }
 )
@@ -238,28 +303,42 @@ export const statusSchema = z.enum(VERTRAGSSTATUS, { error: 'Unbekannter Status'
 
 /** Titel für Liste, PDF-Eigenschaften und Dateiname. */
 export function vertragstitel(vertrag: VertragEingabe): string {
-  return vertrag.type === 'MIETE'
-    ? `Vereinbarung ${vertrag.data.anlass} ${vertrag.partnerName}`
-    : `Angebot ${vertrag.data.veranstaltung}`
+  switch (vertrag.type) {
+    case 'MIETE':
+      return `Vereinbarung ${vertrag.data.anlass} ${vertrag.partnerName}`
+    case 'ANGEBOT':
+      return `Angebot ${vertrag.data.veranstaltung}`
+    case 'KUENSTLER':
+      return `Künstlervertrag ${vertrag.data.titel} ${vertrag.partnerName}`
+    case 'VERANSTALTER':
+      return `Veranstaltervertrag ${vertrag.data.titel} ${vertrag.partnerName}`
+  }
 }
 
 // ── Standardpreise ──────────────────────────────────────────────────────
 
 /**
- * Reguläre Mietpreise für einen halben und einen ganzen Tag. Sie liegen in
- * der Tabelle `contract_settings` und werden im Admin gepflegt, nicht hier:
- * Das Repo ist öffentlich, die Mietpreise stehen bewusst nicht auf der Website.
+ * Standardwerte fürs Vertragsformular: reguläre Mietpreise für einen halben
+ * und einen ganzen Tag und der übliche Anteil der Gegenseite an den
+ * Ticketeinnahmen. Sie liegen in der Tabelle `contract_settings` und werden
+ * im Admin gepflegt, nicht hier: Das Repo ist öffentlich, Mietpreise und
+ * Konditionen stehen bewusst nicht auf der Website.
  */
 export const STANDARDPREISE_SCHLUESSEL = 'standardpreise'
 
-export const standardpreiseSchema = z.object({ halbtag: betrag, ganztag: betrag })
+export const standardpreiseSchema = z.object({
+  halbtag: betrag,
+  ganztag: betrag,
+  /** Anteil der Gegenseite an den Ticketeinnahmen in Prozent. */
+  ticketanteil: prozent,
+})
 
 export type Standardpreise = z.infer<typeof standardpreiseSchema>
 
 /** Liest die gespeicherten Standardpreise. Fehlt etwas, bleibt der Wert leer. */
 export function leseStandardpreise(wert: unknown): Standardpreise {
   const ergebnis = standardpreiseSchema.safeParse(wert ?? {})
-  return ergebnis.success ? ergebnis.data : { halbtag: null, ganztag: null }
+  return ergebnis.success ? ergebnis.data : { halbtag: null, ganztag: null, ticketanteil: null }
 }
 
 // ── Vorbelegung ─────────────────────────────────────────────────────────
@@ -282,6 +361,9 @@ export const BETRAGSFELDER = {
     'kautionBetrag',
   ],
   ANGEBOT: ['preisRegulaer', 'preisAngebot'],
+  // Die Gage ist jedes Mal eine andere und wird nicht übernommen.
+  KUENSTLER: ['anteilGegenseite'],
+  VERANSTALTER: ['anteilGegenseite'],
 } as const satisfies Record<Vertragstyp, readonly string[]>
 
 /**
@@ -300,18 +382,24 @@ export function betraegeAus(type: Vertragstyp, data: unknown): Record<string, un
 }
 
 /**
- * Setzt den regulären Preis eines neuen Vertrags auf den Standardpreis für
- * einen halben Tag. Alle anderen Beträge bleiben die des letzten Vertrags.
- * Ohne gepflegten Standardpreis ändert sich nichts.
+ * Setzt in einem neuen Vertrag die gepflegten Standardwerte: den regulären
+ * Preis auf den halben Tag, den Ticketanteil der Gegenseite auf den üblichen
+ * Satz. Alle anderen Beträge bleiben die des letzten Vertrags. Ein nicht
+ * gepflegter Standardwert ändert nichts.
  */
 export function mitStandardpreis(
   vorbelegung: Partial<Record<Vertragstyp, Record<string, unknown>>>,
   standardpreise: Standardpreise
 ): Partial<Record<Vertragstyp, Record<string, unknown>>> {
-  if (standardpreise.halbtag === null) return vorbelegung
+  if (standardpreise.halbtag === null && standardpreise.ticketanteil === null) return vorbelegung
+  const preis = standardpreise.halbtag === null ? {} : { preisRegulaer: standardpreise.halbtag }
+  const anteil =
+    standardpreise.ticketanteil === null ? {} : { anteilGegenseite: standardpreise.ticketanteil }
   return {
-    MIETE: { ...vorbelegung.MIETE, preisRegulaer: standardpreise.halbtag },
-    ANGEBOT: { ...vorbelegung.ANGEBOT, preisRegulaer: standardpreise.halbtag },
+    MIETE: { ...vorbelegung.MIETE, ...preis },
+    ANGEBOT: { ...vorbelegung.ANGEBOT, ...preis },
+    KUENSTLER: { ...vorbelegung.KUENSTLER, ...anteil },
+    VERANSTALTER: { ...vorbelegung.VERANSTALTER, ...anteil },
   }
 }
 

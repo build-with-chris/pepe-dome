@@ -428,23 +428,40 @@ describe('Anzahlung nach Hausregel', () => {
 
 describe('Standardpreise', () => {
   it('liest gespeicherte Werte und lässt Fehlendes leer', () => {
-    expect(leseStandardpreise({ halbtag: 111, ganztag: '222,50' })).toEqual({ halbtag: 111, ganztag: 222.5 })
-    expect(leseStandardpreise({ halbtag: 111 })).toEqual({ halbtag: 111, ganztag: null })
-    expect(leseStandardpreise(undefined)).toEqual({ halbtag: null, ganztag: null })
-    expect(leseStandardpreise({ halbtag: 'viel' })).toEqual({ halbtag: null, ganztag: null })
+    expect(leseStandardpreise({ halbtag: 111, ganztag: '222,50', ticketanteil: '55 %' })).toEqual({
+      halbtag: 111,
+      ganztag: 222.5,
+      ticketanteil: 55,
+    })
+    // Eine Zeile aus der Zeit vor dem Ticketanteil bleibt lesbar.
+    expect(leseStandardpreise({ halbtag: 111, ganztag: 222 })).toEqual({ halbtag: 111, ganztag: 222, ticketanteil: null })
+    const leer = { halbtag: null, ganztag: null, ticketanteil: null }
+    expect(leseStandardpreise(undefined)).toEqual(leer)
+    expect(leseStandardpreise({ halbtag: 'viel' })).toEqual(leer)
   })
 
   it('setzt den regulären Preis eines neuen Vertrags auf den halben Tag', () => {
     const vorbelegung = mitStandardpreis(
       { MIETE: { preisRegulaer: 999, kautionBetrag: 444 } },
-      { halbtag: 111, ganztag: 222 }
+      { halbtag: 111, ganztag: 222, ticketanteil: null }
     )
     expect(vorbelegung.MIETE).toEqual({ preisRegulaer: 111, kautionBetrag: 444 })
     expect(vorbelegung.ANGEBOT).toEqual({ preisRegulaer: 111 })
+    expect(vorbelegung.KUENSTLER).toEqual({})
+  })
+
+  it('setzt den Ticketanteil in Künstler- und Veranstaltervertrag, nicht in der Miete', () => {
+    const vorbelegung = mitStandardpreis(
+      { KUENSTLER: { anteilGegenseite: 70 } },
+      { halbtag: null, ganztag: null, ticketanteil: 55 }
+    )
+    expect(vorbelegung.KUENSTLER).toEqual({ anteilGegenseite: 55 })
+    expect(vorbelegung.VERANSTALTER).toEqual({ anteilGegenseite: 55 })
+    expect(vorbelegung.MIETE).toEqual({})
   })
 
   it('ändert ohne gepflegten Standardpreis nichts', () => {
     const vorher = { MIETE: { preisRegulaer: 999 } }
-    expect(mitStandardpreis(vorher, { halbtag: null, ganztag: 222 })).toBe(vorher)
+    expect(mitStandardpreis(vorher, { halbtag: null, ganztag: 222, ticketanteil: null })).toBe(vorher)
   })
 })

@@ -14,7 +14,13 @@
  * Anteil der Anzahlung, siehe ANZAHLUNG_PROZENT.
  */
 
-import { betragAlsEingabe, PREISMODELLE, type Preismodell } from './validation'
+import {
+  betragAlsEingabe,
+  PREISMODELLE,
+  VERGUETUNGEN,
+  type Preismodell,
+  type Verguetung,
+} from './validation'
 
 export type Zusatzzeile = { leistung: string; preis: string }
 
@@ -64,6 +70,26 @@ export type AngebotFelder = {
   preisAngebot: string
   getraenke: string
   stand: string
+}
+
+/** Künstlervertrag und Veranstaltervertrag teilen sich die Felder. */
+export type AuftrittFelder = {
+  titel: string
+  termin: string
+  aufbauAb: string
+  einlass: string
+  beginn: string
+  ende: string
+  verguetung: Verguetung
+  anteilGegenseite: string
+  gage: string
+  foerderung: string
+  zahlung: string
+  ausfall: string
+  hoehereGewalt: string
+  bedingungen: string
+  erwartungen: string
+  sonderabsprache: string
 }
 
 const ZUSATZLEISTUNGEN = [
@@ -179,5 +205,29 @@ export function angebotFelder(daten?: unknown, heute = ''): AngebotFelder {
     preisAngebot: betrag(d.preisAngebot),
     getraenke: text(d.getraenke, 'nach Verbrauch'),
     stand: text(d.stand, heute),
+  }
+}
+
+export function auftrittFelder(daten?: unknown): AuftrittFelder {
+  const d = alsObjekt(daten)
+  return {
+    titel: text(d.titel),
+    termin: text(d.termin),
+    aufbauAb: text(d.aufbauAb),
+    einlass: text(d.einlass),
+    beginn: text(d.beginn),
+    ende: text(d.ende),
+    verguetung: (VERGUETUNGEN as readonly unknown[]).includes(d.verguetung)
+      ? (d.verguetung as Verguetung)
+      : 'ticketanteil',
+    anteilGegenseite: betrag(d.anteilGegenseite),
+    gage: betrag(d.gage),
+    foerderung: text(d.foerderung),
+    zahlung: text(d.zahlung),
+    ausfall: text(d.ausfall),
+    hoehereGewalt: text(d.hoehereGewalt),
+    bedingungen: text(d.bedingungen),
+    erwartungen: text(d.erwartungen),
+    sonderabsprache: text(d.sonderabsprache),
   }
 }

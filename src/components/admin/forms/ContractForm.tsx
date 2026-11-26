@@ -29,9 +29,11 @@ import { Switch } from '@/components/ui/switch'
 import FieldHint from '@/components/admin/ui/FieldHint'
 import {
   angebotFelder,
+  auftrittFelder,
   fristVor,
   mieteFelder,
   type AngebotFelder,
+  type AuftrittFelder,
   type MieteFelder,
 } from '@/lib/vertraege/formular'
 import {
@@ -68,6 +70,10 @@ type Errors = Record<string, string>
 const TYP_HINWEIS: Record<Vertragstyp, string> = {
   MIETE: 'Vereinbarung zur Nutzung des Dome, mit Regeln, Zahlung und Unterschriften.',
   ANGEBOT: 'Eine Seite mit Logo: Eckdaten, Leistungen und Preis. Unverbindlich, ohne Unterschrift.',
+  KUENSTLER:
+    'Auftritt im Dome: Anteil an den Ticketeinnahmen oder feste Gage. Grundgerüst, einige Regelungen sind noch Freitext.',
+  VERANSTALTER:
+    'Fremde Veranstaltung im Dome: Aufteilung der Ticketeinnahmen. Grundgerüst, einige Regelungen sind noch Freitext.',
 }
 
 function Karte({ titel, children }: { titel: string; children: ReactNode }) {
@@ -126,6 +132,34 @@ function Feld({
         {einheit && <span className="text-sm text-white/50 shrink-0">{einheit}</span>}
       </div>
       {children}
+      {error ? <p className="text-sm text-red-400">{error}</p> : hint ? <FieldHint>{hint}</FieldHint> : null}
+    </div>
+  )
+}
+
+function Textfeld({
+  id,
+  label,
+  value,
+  onChange,
+  error,
+  hint,
+  rows = 4,
+}: {
+  id: string
+  label: string
+  value: string
+  onChange: (value: string) => void
+  error?: string
+  hint?: ReactNode
+  rows?: number
+}) {
+  return (
+    <div className="space-y-2.5">
+      <Label htmlFor={id} hasError={!!error}>
+        {label}
+      </Label>
+      <Textarea id={id} value={value} onChange={(event) => onChange(event.target.value)} rows={rows} />
       {error ? <p className="text-sm text-red-400">{error}</p> : hint ? <FieldHint>{hint}</FieldHint> : null}
     </div>
   )
@@ -221,6 +255,15 @@ export default function ContractForm({
     angebotFelder(vertrag?.type === 'ANGEBOT' ? vertrag.data : vorbelegung?.ANGEBOT, heute())
   )
 
+  const [kuenstler, setKuenstler] = useState<AuftrittFelder>(() =>
+    auftrittFelder(vertrag?.type === 'KUENSTLER' ? vertrag.data : vorbelegung?.KUENSTLER)
+  )
+  const [veranstalter, setVeranstalter] = useState<AuftrittFelder>(() =>
+    auftrittFelder(vertrag?.type === 'VERANSTALTER' ? vertrag.data : vorbelegung?.VERANSTALTER)
+  )
+  /** Die Felder des Vertragstyps, der gerade gewählt ist. Nur für Künstler und Veranstalter. */
+  const auftritt = type === 'VERANSTALTER' ? veranstalter : kuenstler
+
   const [errors, setErrors] = useState<Errors>({})
   const [saving, setSaving] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
@@ -265,6 +308,11 @@ export default function ContractForm({
     setAngebot((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
   }
+  const u = <K extends keyof AuftrittFelder>(feld: K, wert: AuftrittFelder[K]) => {
+    const setze = type === 'VERANSTALTER' ? setVeranstalter : setKuenstler
+    setze((prev) => ({ ...prev, [feld]: wert }))
+    beruehrt(feld)
+  }
 
   /**
    * Holt das erste Feld mit Fehler ins Bild und setzt den Cursor hinein.
@@ -298,8 +346,11 @@ export default function ContractForm({
       if (miete.preismodell === 'showbesuch' && !miete.showName.trim()) {
         next.showName = 'Beim Showbesuch gehört der Name der Show dazu'
       }
-    } else if (!angebot.veranstaltung.trim()) {
-      next.veranstaltung = 'Veranstaltung ist Pflicht'
+    } else if (type === 'ANGEBOT') {
+      if (!angebot.veranstaltung.trim()) next.veranstaltung = 'Veranstaltung ist Pflicht'
+    } else {
+      if (!auftritt.titel.trim()) next.titel = 'Titel ist Pflicht'
+      if (!auftritt.termin.trim()) next.termin = 'Termin ist Pflicht'
     }
     return next
   }
@@ -327,7 +378,7 @@ export default function ContractForm({
           body: JSON.stringify({
             type,
             ...gegenseite,
-            data: type === 'MIETE' ? miete : angebot,
+            data: type === 'MIETE' ? miete : type === 'ANGEBOT' ? angebot : auftritt,
           }),
         }
       )
@@ -477,6 +528,226 @@ export default function ContractForm({
 
   const showbesuch = miete.preismodell === 'showbesuch'
 
+  // ── Künstlervertrag und Veranstaltervertrag ───────────────────────────
+  const mitGage = type === 'KUENSTLER' && auftritt.verguetung === 'gage'
+  const anteilZahl = Number(auftritt.anteilGegenseite.replace(',', '.').replace(/[^0-9.]/g, ''))
+  const restAnteil =
+    auftritt.anteilGegenseite.trim() !== '' && Number.isFinite(anteilZahl) && anteilZahl <= 100
+      ? betragAlsText(Math.round((100 - anteilZahl) * 100) / 100)
+      : null
+
+  const auftrittKarten = (
+    <>
+      <Karte titel="Veranstaltung">
+        <Feld
+          id="titel"
+          label="Titel der Veranstaltung"
+          required
+          value={auftritt.titel}
+          onChange={(wert) => u('titel', wert)}
+          error={errors.titel}
+          placeholder={type === 'KUENSTLER' ? 'Name der Show' : 'Name der Veranstaltung'}
+          hint="Steht als Untertitel im Kopf des Vertrags."
+        />
+        <Feld
+          id="termin"
+          label="Termin"
+          required
+          value={auftritt.termin}
+          onChange={(wert) => u('termin', wert)}
+          error={errors.termin}
+          placeholder="Samstag, 14.03.2027"
+          hint="Freier Text, auch mehrere Termine."
+        />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <Feld
+            id="eventDate"
+            label="Datum der Veranstaltung"
+            type="date"
+            value={gegenseite.eventDate}
+            onChange={(wert) => g('eventDate', wert)}
+            error={errors.eventDate}
+            hint="Sortiert die Liste. Steht nicht im PDF."
+          />
+          <Feld
+            id="aufbauAb"
+            label="Aufbau ab"
+            value={auftritt.aufbauAb}
+            onChange={(wert) => u('aufbauAb', wert)}
+            error={errors.aufbauAb}
+            placeholder="15:00"
+            einheit="Uhr"
+          />
+          <Feld
+            id="einlass"
+            label="Einlass"
+            value={auftritt.einlass}
+            onChange={(wert) => u('einlass', wert)}
+            error={errors.einlass}
+            placeholder="19:00"
+            einheit="Uhr"
+          />
+          <Feld
+            id="beginn"
+            label="Beginn"
+            value={auftritt.beginn}
+            onChange={(wert) => u('beginn', wert)}
+            error={errors.beginn}
+            placeholder="20:00"
+            einheit="Uhr"
+          />
+          <Feld
+            id="ende"
+            label="Ende"
+            value={auftritt.ende}
+            onChange={(wert) => u('ende', wert)}
+            error={errors.ende}
+            placeholder="22:00"
+            einheit="Uhr"
+          />
+        </div>
+      </Karte>
+
+      <Karte titel={type === 'KUENSTLER' ? 'Vergütung' : 'Einnahmen'}>
+        {type === 'KUENSTLER' && (
+          <fieldset className="space-y-2.5">
+            <legend className={`${labelVariants()} mb-2.5`}>Art der Vergütung</legend>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {(
+                [
+                  ['ticketanteil', 'Anteil an den Ticketeinnahmen', 'Der übliche Weg: Die Einnahmen werden geteilt.'],
+                  ['gage', 'Feste Gage', 'Wenn eine Förderung dahintersteht, aus der die Gage bezahlt wird.'],
+                ] as const
+              ).map(([wert, label, hinweis]) => {
+                const aktiv = auftritt.verguetung === wert
+                return (
+                  <label
+                    key={wert}
+                    className={`relative cursor-pointer rounded-lg border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
+                      aktiv
+                        ? 'border-[#016dca] bg-[#016dca]/15'
+                        : 'border-white/[0.12] hover:border-white/30'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="verguetung"
+                      value={wert}
+                      checked={aktiv}
+                      onChange={() => u('verguetung', wert)}
+                      className="sr-only"
+                    />
+                    <span className="block text-sm font-medium text-white">{label}</span>
+                    <span className="block text-[11px] leading-relaxed text-white/45 mt-1">
+                      {hinweis}
+                    </span>
+                  </label>
+                )
+              })}
+            </div>
+          </fieldset>
+        )}
+
+        {mitGage ? (
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Feld
+              id="gage"
+              label="Gage"
+              inputMode="decimal"
+              einheit="€"
+              value={auftritt.gage}
+              onChange={(wert) => u('gage', wert)}
+              error={errors.gage}
+            />
+            <Feld
+              id="foerderung"
+              label="Förderung"
+              value={auftritt.foerderung}
+              onChange={(wert) => u('foerderung', wert)}
+              error={errors.foerderung}
+              placeholder="Name des Förderprogramms oder Projekts"
+              hint="Im Vertrag: „Die Gage wird aus der Förderung … bezahlt.“ Leer lassen: kein Satz dazu."
+            />
+          </div>
+        ) : (
+          <div className="max-w-sm">
+            <Feld
+              id="anteilGegenseite"
+              label={type === 'KUENSTLER' ? 'Anteil für die Künstler:innen' : 'Anteil für die Veranstalter:innen'}
+              inputMode="decimal"
+              einheit="%"
+              value={auftritt.anteilGegenseite}
+              onChange={(wert) => u('anteilGegenseite', wert)}
+              error={errors.anteilGegenseite}
+              hint={
+                restAnteil === null
+                  ? 'Anteil an den Ticketeinnahmen. Der Rest bleibt beim Pepe Dome.'
+                  : `Anteil an den Ticketeinnahmen. Beim Pepe Dome bleiben ${restAnteil} %.`
+              }
+            />
+          </div>
+        )}
+
+        <FieldHint>Die Einnahmen aus der Gastronomie gehen an den Pepe Dome. Das steht fest im Vertrag.</FieldHint>
+
+        <Textfeld
+          id="zahlung"
+          label="Abrechnung und Zahlung"
+          value={auftritt.zahlung}
+          onChange={(wert) => u('zahlung', wert)}
+          error={errors.zahlung}
+          rows={3}
+          hint="Wann und wie abgerechnet und gezahlt wird. Erscheint als eigener Abschnitt. Leer lassen: kein Abschnitt."
+        />
+      </Karte>
+
+      <Karte titel="Noch offene Regelungen">
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3 text-sm text-amber-200/90">
+          Für diese Punkte gibt es noch keinen festen Wortlaut. Was du hier einträgst, erscheint
+          als eigener Abschnitt im Vertrag. Ein leeres Feld erzeugt keinen Abschnitt, der Vertrag
+          sagt dann nichts dazu.
+        </div>
+        <Textfeld
+          id="ausfall"
+          label="Ausfall und Absage"
+          value={auftritt.ausfall}
+          onChange={(wert) => u('ausfall', wert)}
+          error={errors.ausfall}
+        />
+        <Textfeld
+          id="hoehereGewalt"
+          label="Höhere Gewalt"
+          value={auftritt.hoehereGewalt}
+          onChange={(wert) => u('hoehereGewalt', wert)}
+          error={errors.hoehereGewalt}
+        />
+        <Textfeld
+          id="bedingungen"
+          label="Bedingungen vor Ort"
+          value={auftritt.bedingungen}
+          onChange={(wert) => u('bedingungen', wert)}
+          error={errors.bedingungen}
+          hint="Etwa Technik, Raum, Zeiten, Personal."
+        />
+        <Textfeld
+          id="erwartungen"
+          label="Was der Pepe Dome erwartet"
+          value={auftritt.erwartungen}
+          onChange={(wert) => u('erwartungen', wert)}
+          error={errors.erwartungen}
+        />
+        <Textfeld
+          id="sonderabsprache"
+          label="Sonderabsprache"
+          value={auftritt.sonderabsprache}
+          onChange={(wert) => u('sonderabsprache', wert)}
+          error={errors.sonderabsprache}
+          hint="Alles, was sonst nirgends hinpasst. Eine Leerzeile trennt Absätze."
+        />
+      </Karte>
+    </>
+  )
+
   // ── Standardpreise ────────────────────────────────────────────────────
   const STANDARD = [
     { preis: standardpreise?.halbtag ?? null, label: 'Halber Tag', bezeichnung: 'Regulärer Halbtagessatz' },
@@ -583,9 +854,9 @@ export default function ContractForm({
             error={errors.partnerName}
             placeholder={type === 'MIETE' ? 'Vor- und Nachname' : 'Person oder Organisation'}
             hint={
-              type === 'MIETE'
-                ? 'So steht der Name im Vertrag und unter der Unterschriftslinie.'
-                : 'Erscheint nur in der Liste, nicht im Angebot.'
+              type === 'ANGEBOT'
+                ? 'Erscheint nur in der Liste, nicht im Angebot.'
+                : 'So steht der Name im Vertrag und unter der Unterschriftslinie.'
             }
           />
           <div className="grid gap-5 sm:grid-cols-2">
@@ -614,9 +885,9 @@ export default function ContractForm({
             error={errors.partnerAddress}
             placeholder="Straße, PLZ Ort"
             hint={
-              type === 'MIETE'
-                ? 'Leer lassen: Im Vertrag steht dann eine Linie zum Ausfüllen.'
-                : undefined
+              type === 'ANGEBOT'
+                ? undefined
+                : 'Leer lassen: Im Vertrag steht dann eine Linie zum Ausfüllen.'
             }
           />
         </Karte>
@@ -988,7 +1259,7 @@ export default function ContractForm({
               </div>
             </Karte>
           </>
-        ) : (
+        ) : type === 'ANGEBOT' ? (
           <>
             <Karte titel="Veranstaltung">
               <Feld
@@ -1113,6 +1384,8 @@ export default function ContractForm({
               </div>
             </Karte>
           </>
+        ) : (
+          auftrittKarten
         )}
       </fieldset>
 

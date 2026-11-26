@@ -12,13 +12,20 @@
 import type { Dokument } from './dokument'
 import { vertragSchema, vertragstitel, type VertragEingabe } from './validation'
 import { angebotDokument } from './vorlage-angebot'
+import { auftrittDokument } from './vorlage-auftritt'
 import { mieteDokument } from './vorlage-miete'
 
 export function dokumentAus(vertrag: VertragEingabe): Dokument {
   const titel = vertragstitel(vertrag)
-  return vertrag.type === 'MIETE'
-    ? mieteDokument(vertrag, vertrag.data, titel)
-    : angebotDokument(vertrag.data, titel)
+  switch (vertrag.type) {
+    case 'MIETE':
+      return mieteDokument(vertrag, vertrag.data, titel)
+    case 'ANGEBOT':
+      return angebotDokument(vertrag.data, titel)
+    case 'KUENSTLER':
+    case 'VERANSTALTER':
+      return auftrittDokument(vertrag.type, vertrag, vertrag.data, titel)
+  }
 }
 
 /** Form einer Zeile aus `contracts`, soweit die Vorlagen sie brauchen. */

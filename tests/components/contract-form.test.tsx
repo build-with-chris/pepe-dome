@@ -204,7 +204,7 @@ describe('ContractForm beim Anlegen', () => {
       <ContractForm
         mode="create"
         vorbelegung={{ MIETE: { preisRegulaer: 111 } }}
-        standardpreise={{ halbtag: 111, ganztag: 222 }}
+        standardpreise={{ halbtag: 111, ganztag: 222, ticketanteil: null }}
       />
     )
     expect(screen.getByLabelText('Regulärer Preis')).toHaveValue('111')
@@ -215,7 +215,7 @@ describe('ContractForm beim Anlegen', () => {
   })
 
   it('zieht im Angebot die Bezeichnung mit, solange dort nichts Eigenes steht', () => {
-    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: 111, ganztag: 222 }} />)
+    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: 111, ganztag: 222, ticketanteil: null }} />)
     fireEvent.click(screen.getByRole('radio', { name: /^Angebot/ }))
 
     fireEvent.click(screen.getByRole('button', { name: 'Ganzer Tag: 222 €' }))
@@ -231,8 +231,76 @@ describe('ContractForm beim Anlegen', () => {
   })
 
   it('zeigt ohne gepflegte Standardpreise keine Knöpfe', () => {
-    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: null, ganztag: null }} />)
+    render(<ContractForm mode="create" vorbelegung={{}} standardpreise={{ halbtag: null, ganztag: null, ticketanteil: null }} />)
     expect(screen.queryByRole('button', { name: /Halber Tag/ })).toBeNull()
+  })
+})
+
+describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
+  it('zeigt im Künstlervertrag den üblichen Ticketanteil und rechnet den Rest aus', () => {
+    render(<ContractForm mode="create" vorbelegung={{ KUENSTLER: { anteilGegenseite: 55 } }} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Künstlervertrag/ }))
+
+    expect(screen.getByLabelText('Anteil für die Künstler:innen')).toHaveValue('55')
+    expect(screen.getByText(/Beim Pepe Dome bleiben 45 %/)).toBeInTheDocument()
+    expect(screen.queryByLabelText('Gage')).toBeNull()
+    expect(screen.queryByLabelText(/^Anlass/)).toBeNull()
+  })
+
+  it('wechselt im Künstlervertrag auf feste Gage mit Förderung', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Künstlervertrag/ }))
+    fireEvent.click(screen.getByRole('radio', { name: /^Feste Gage/ }))
+
+    expect(screen.getByLabelText('Gage')).toBeInTheDocument()
+    expect(screen.getByLabelText('Förderung')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Anteil für die Künstler:innen')).toBeNull()
+  })
+
+  it('bietet im Veranstaltervertrag keine feste Gage an', () => {
+    render(<ContractForm mode="create" vorbelegung={{ VERANSTALTER: { anteilGegenseite: 55 } }} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
+
+    expect(screen.getByLabelText('Anteil für die Veranstalter:innen')).toHaveValue('55')
+    expect(screen.queryByRole('radio', { name: /^Feste Gage/ })).toBeNull()
+  })
+
+  it('sagt, dass die offenen Regelungen noch Freitext sind', () => {
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
+
+    expect(screen.getByText(/noch keinen festen Wortlaut/)).toBeInTheDocument()
+    for (const feld of ['Ausfall und Absage', 'Höhere Gewalt', 'Bedingungen vor Ort', 'Was der Pepe Dome erwartet']) {
+      expect(screen.getByLabelText(feld)).toHaveValue('')
+    }
+  })
+
+  it('verlangt Titel und Termin und schickt die Felder des gewählten Typs', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ contract: { id: 'c9' } }) })
+    vi.stubGlobal('fetch', fetchMock)
+    render(<ContractForm mode="create" vorbelegung={{ VERANSTALTER: { anteilGegenseite: 55 } }} />)
+    fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
+    tippen(/^Name/, 'Verein Beispiel')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
+    expect(screen.getByText('Titel ist Pflicht')).toBeInTheDocument()
+    expect(fetchMock).not.toHaveBeenCalled()
+
+    tippen(/^Titel der Veranstaltung/, 'Beispielabend')
+    tippen(/^Termin/, 'Samstag, 17.05.2031')
+    tippen('Ausfall und Absage', 'Wird einzeln abgesprochen.')
+    fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
+
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/admin/contracts/c9'))
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body.type).toBe('VERANSTALTER')
+    expect(body.data).toMatchObject({
+      titel: 'Beispielabend',
+      termin: 'Samstag, 17.05.2031',
+      verguetung: 'ticketanteil',
+      anteilGegenseite: '55',
+      ausfall: 'Wird einzeln abgesprochen.',
+    })
   })
 })
 

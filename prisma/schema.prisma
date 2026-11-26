@@ -649,6 +649,10 @@ model Contract {
 enum ContractType {
   MIETE
   ANGEBOT
+  /// Auftritt einer Künstlerin oder eines Künstlers: Ticketanteil oder feste Gage.
+  KUENSTLER
+  /// Fremde Veranstaltung im Dome: Aufteilung der Ticketeinnahmen.
+  VERANSTALTER
 }
 
 enum ContractStatus {

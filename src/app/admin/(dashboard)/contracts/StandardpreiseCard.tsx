@@ -1,11 +1,12 @@
 'use client'
 
 /**
- * Standardpreise für halben und ganzen Tag pflegen.
+ * Standardwerte pflegen: Mietpreis für halben und ganzen Tag und der übliche
+ * Ticketanteil der Gegenseite.
  *
- * Die Werte liegen in der Datenbank. Im Vertragsformular setzen sie den
- * regulären Preis mit einem Klick, und ein neuer Vertrag startet mit dem
- * Preis für den halben Tag.
+ * Die Werte liegen in der Datenbank. Im Vertragsformular setzen die Preise
+ * den regulären Preis mit einem Klick, und ein neuer Vertrag startet mit dem
+ * Preis für den halben Tag und dem üblichen Ticketanteil.
  */
 
 import { useState } from 'react'
@@ -18,6 +19,7 @@ import { betragAlsEingabe, type Standardpreise } from '@/lib/vertraege/validatio
 export default function StandardpreiseCard({ initial }: { initial: Standardpreise }) {
   const [halbtag, setHalbtag] = useState(betragAlsEingabe(initial.halbtag))
   const [ganztag, setGanztag] = useState(betragAlsEingabe(initial.ganztag))
+  const [ticketanteil, setTicketanteil] = useState(betragAlsEingabe(initial.ticketanteil))
   const [speichert, setSpeichert] = useState(false)
   const [meldung, setMeldung] = useState<{ art: 'ok' | 'fehler'; text: string } | null>(null)
 
@@ -29,12 +31,13 @@ export default function StandardpreiseCard({ initial }: { initial: Standardpreis
       const res = await fetch('/api/admin/contracts/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ halbtag, ganztag }),
+        body: JSON.stringify({ halbtag, ganztag, ticketanteil }),
       })
       const body = await res.json().catch(() => null)
       if (!res.ok) throw new Error(body?.error ?? `Fehler ${res.status}`)
       setHalbtag(betragAlsEingabe(body.standardpreise.halbtag))
       setGanztag(betragAlsEingabe(body.standardpreise.ganztag))
+      setTicketanteil(betragAlsEingabe(body.standardpreise.ticketanteil))
       setMeldung({ art: 'ok', text: 'Gespeichert.' })
     } catch (error) {
       setMeldung({
@@ -54,11 +57,13 @@ export default function StandardpreiseCard({ initial }: { initial: Standardpreis
     >
       <div>
         <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider">
-          Standardpreise
+          Standardwerte
         </h2>
         <FieldHint>
-          Reguläre Miete. Ein neuer Vertrag startet mit dem Preis für den halben Tag, im Formular
-          wechselt ein Klick auf den ganzen Tag. Bestehende Verträge ändern sich dadurch nicht.
+          Reguläre Miete: Ein neuer Vertrag startet mit dem Preis für den halben Tag, im Formular
+          wechselt ein Klick auf den ganzen Tag. Ticketanteil: So viel bekommen Künstler:innen
+          und Veranstalter:innen üblicherweise von den Ticketeinnahmen, der Rest bleibt beim Pepe
+          Dome. Bestehende Verträge ändern sich dadurch nicht.
         </FieldHint>
       </div>
 
@@ -89,8 +94,21 @@ export default function StandardpreiseCard({ initial }: { initial: Standardpreis
             <span className="text-sm text-white/50">€</span>
           </div>
         </div>
+        <div className="space-y-2.5">
+          <Label htmlFor="standard-ticketanteil">Ticketanteil Gegenseite</Label>
+          <div className="flex items-center gap-2">
+            <Input
+              id="standard-ticketanteil"
+              inputMode="decimal"
+              value={ticketanteil}
+              onChange={(event) => setTicketanteil(event.target.value)}
+              className="w-24"
+            />
+            <span className="text-sm text-white/50">%</span>
+          </div>
+        </div>
         <Button type="submit" variant="secondary" size="sm" disabled={speichert}>
-          {speichert ? 'Speichern…' : 'Preise speichern'}
+          {speichert ? 'Speichern…' : 'Werte speichern'}
         </Button>
         {meldung && (
           <span

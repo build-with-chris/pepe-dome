@@ -124,7 +124,10 @@ const AUFRUFE: Array<[string, () => Promise<Response>]> = [
   ['GET /contracts/:id/pdf', () => pdf.GET(anfrage('GET'), params)],
   ['GET /contracts/pdf-probe', () => probe.GET()],
   ['GET /contracts/settings', () => einstellungen.GET()],
-  ['PUT /contracts/settings', () => einstellungen.PUT(anfrage('PUT', { halbtag: '111', ganztag: '222' }))],
+  [
+    'PUT /contracts/settings',
+    () => einstellungen.PUT(anfrage('PUT', { halbtag: '111', ganztag: '222', ticketanteil: '55' })),
+  ],
 ]
 
 beforeEach(() => {
@@ -201,6 +204,55 @@ describe('POST /api/admin/contracts', () => {
   })
 })
 
+describe('Künstlervertrag und Veranstaltervertrag anlegen', () => {
+  const auftritt = {
+    partnerName: 'Duo Beispiel',
+    eventDate: '2031-05-17',
+    data: { titel: 'Beispielshow', termin: 'Samstag, 17.05.2031', anteilGegenseite: '55 %' },
+  }
+
+  it.each([
+    ['KUENSTLER', 'Künstlervertrag Beispielshow Duo Beispiel'],
+    ['VERANSTALTER', 'Veranstaltervertrag Beispielshow Duo Beispiel'],
+  ])('legt einen Vertrag vom Typ %s an', async (type, titel) => {
+    const res = await liste.POST(anfrage('POST', { ...auftritt, type }))
+    expect(res.status).toBe(201)
+    const { data } = mock.contract.create.mock.calls[0][0]
+    expect(data).toMatchObject({ type, title: titel })
+    expect(data.data).toMatchObject({ verguetung: 'ticketanteil', anteilGegenseite: 55, gage: null })
+  })
+
+  it('nimmt im Künstlervertrag eine feste Gage an', async () => {
+    const res = await liste.POST(
+      anfrage('POST', { ...auftritt, type: 'KUENSTLER', data: { ...auftritt.data, verguetung: 'gage', gage: '777' } })
+    )
+    expect(res.status).toBe(201)
+    expect(mock.contract.create.mock.calls[0][0].data.data).toMatchObject({ verguetung: 'gage', gage: 777 })
+  })
+
+  it('lehnt eine feste Gage im Veranstaltervertrag mit 400 ab', async () => {
+    const res = await liste.POST(
+      anfrage('POST', { ...auftritt, type: 'VERANSTALTER', data: { ...auftritt.data, verguetung: 'gage', gage: '777' } })
+    )
+    expect(res.status).toBe(400)
+    expect(mock.contract.create).not.toHaveBeenCalled()
+  })
+
+  it('friert einen Künstlervertrag beim Verschicken ein', async () => {
+    mock.contract.findUnique.mockResolvedValue(
+      zeile({
+        type: 'KUENSTLER',
+        title: 'Künstlervertrag Beispielshow Duo Beispiel',
+        partnerName: 'Duo Beispiel',
+        data: { titel: 'Beispielshow', termin: 'Samstag, 17.05.2031', anteilGegenseite: 55 },
+      })
+    )
+    await einzeln.PATCH(anfrage('PATCH', { status: 'VERSCHICKT' }), params)
+    const { data } = mock.contract.update.mock.calls[0][0]
+    expect(dokumentAlsText(data.snapshot as Dokument)).toContain('55 % für Duo Beispiel, 45 % für den Pepe Dome')
+  })
+})
+
 describe('Wenn die Datenbank beim Speichern ausfällt', () => {
   it('antwortet POST mit 500 und einer lesbaren Meldung statt mit einer leeren Antwort', async () => {
     mock.contract.create.mockRejectedValue(new Error('Verbindung weg'))
@@ -221,30 +273,44 @@ describe('Wenn die Datenbank beim Speichern ausfällt', () => {
 describe('Standardpreise unter /api/admin/contracts/settings', () => {
   it('liefert leere Werte, solange nichts gepflegt ist', async () => {
     const res = await einstellungen.GET()
-    expect(await res.json()).toEqual({ standardpreise: { halbtag: null, ganztag: null } })
+    expect(await res.json()).toEqual({
+      standardpreise: { halbtag: null, ganztag: null, ticketanteil: null },
+    })
   })
 
   it('liefert die gespeicherten Preise', async () => {
-    mock.contractSetting.findUnique.mockResolvedValue({ key: 'standardpreise', value: { halbtag: 111, ganztag: 222 } })
+    mock.contractSetting.findUnique.mockResolvedValue({
+      key: 'standardpreise',
+      value: { halbtag: 111, ganztag: 222, ticketanteil: 55 },
+    })
     const res = await einstellungen.GET()
-    expect(await res.json()).toEqual({ standardpreise: { halbtag: 111, ganztag: 222 } })
+    expect(await res.json()).toEqual({ standardpreise: { halbtag: 111, ganztag: 222, ticketanteil: 55 } })
   })
 
   it('speichert die Preise als Zahlen in einer Zeile', async () => {
-    const res = await einstellungen.PUT(anfrage('PUT', { halbtag: '111 €', ganztag: '222,50' }))
+    const res = await einstellungen.PUT(
+      anfrage('PUT', { halbtag: '111 €', ganztag: '222,50', ticketanteil: '55 %' })
+    )
     expect(res.status).toBe(200)
+    const wert = { halbtag: 111, ganztag: 222.5, ticketanteil: 55 }
     expect(mock.contractSetting.upsert).toHaveBeenCalledWith({
       where: { key: 'standardpreise' },
-      create: { key: 'standardpreise', value: { halbtag: 111, ganztag: 222.5 } },
-      update: { value: { halbtag: 111, ganztag: 222.5 } },
+      create: { key: 'standardpreise', value: wert },
+      update: { value: wert },
     })
   })
 
   it('lässt sich leeren', async () => {
-    await einstellungen.PUT(anfrage('PUT', { halbtag: '', ganztag: '' }))
+    await einstellungen.PUT(anfrage('PUT', { halbtag: '', ganztag: '', ticketanteil: '' }))
     expect(mock.contractSetting.upsert.mock.calls[0][0].update).toEqual({
-      value: { halbtag: null, ganztag: null },
+      value: { halbtag: null, ganztag: null, ticketanteil: null },
     })
+  })
+
+  it('lehnt einen Ticketanteil über 100 Prozent mit 400 ab', async () => {
+    const res = await einstellungen.PUT(anfrage('PUT', { halbtag: '111', ganztag: '222', ticketanteil: '160' }))
+    expect(res.status).toBe(400)
+    expect(mock.contractSetting.upsert).not.toHaveBeenCalled()
   })
 
   it('lehnt Text statt eines Preises mit 400 ab', async () => {
