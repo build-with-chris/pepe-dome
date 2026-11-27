@@ -52,7 +52,7 @@ describe.each([
     expect(text).toContain('Zwischen der Circus Akademie München e.V., Ranhazweg 18, 85521 Ottobrunn, Träger des Pepe Dome,')
     expect(text).toContain('vertreten durch Michael Heiduk und Christoph Hermann, jeweils einzeln vertretungsberechtigt, im Folgenden „Pepe Dome“,')
     expect(text).toContain('Duo Beispiel, E-Mail: duo@example.org')
-    expect(text).toContain('[Unterschrift] Ort, Datum, Circus Akademie München e.V., Michael Heiduk oder Christoph Hermann')
+    expect(text).toContain('[Unterschrift] Ort, Datum · Circus Akademie München e.V., Michael Heiduk oder Christoph Hermann')
     expect(text).toContain('[Unterschrift] Ort, Datum, Duo Beispiel')
     expect(text.match(/\[Unterschrift\]/g)).toHaveLength(2)
   })

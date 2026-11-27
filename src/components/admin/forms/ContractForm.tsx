@@ -1121,6 +1121,11 @@ export default function ContractForm({
                   hint="Wird aus dem Datum der Veranstaltung berechnet: zwei Wochen vorher. Lässt sich überschreiben."
                 />
               </div>
+              <FieldHint>
+                Fest im Vertrag, ohne Feld: Absage kostenfrei bis 6 Wochen vorher. Danach werden
+                25 % (6 bis 3 Wochen), 50 % (3 bis 2 Wochen) oder 100 % (ab 2 Wochen) fällig. Bei
+                Ersatz für den Termin entfällt die Zahlung.
+              </FieldHint>
             </Karte>
 
             <Karte titel="Bausteine">

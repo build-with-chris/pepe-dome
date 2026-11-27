@@ -94,6 +94,7 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
       '6. Getränke: Bier',
       '7. Regeln',
       '8. Zahlung',
+      '9. Absage',
       'Verantwortliche erwachsene Aufsichtsperson',
       'Aufsichtsperson für das offene Feuer',
       'Unterschriften',
@@ -171,7 +172,7 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
     expect(unterschriften(dokument.bausteine)).toEqual([
       'Ort, Datum, Unterschrift Aufsichtsperson',
       'Ort, Datum, Unterschrift Aufsichtsperson',
-      'Ort, Datum\nCircus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann',
+      'Ort, Datum · Circus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann',
       'Ort, Datum\nJana Beispiel',
       'Ort, Datum\nErziehungsberechtigte Person',
     ])
@@ -179,7 +180,7 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
 
   it('braucht für den Verein nur eine Unterschrift und nennt beide Vertreter gleichberechtigt', () => {
     const felder = unterschriften(dokument.bausteine).filter((feld) => feld.includes('Circus Akademie'))
-    expect(felder).toEqual(['Ort, Datum\nCircus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann'])
+    expect(felder).toEqual(['Ort, Datum · Circus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann'])
     expect(text).toContain('Michael Heiduk und Christoph Hermann, jeweils einzeln vertretungsberechtigt')
   })
 
@@ -200,6 +201,7 @@ describe('Mietvereinbarung ohne Schalter', () => {
       '3. Preis',
       '4. Regeln',
       '5. Zahlung',
+      '6. Absage',
       'Unterschriften',
     ])
     expect(text).toContain('dass die Regeln aus Punkt 4 eingehalten werden')
@@ -267,8 +269,8 @@ describe('Varianten der Mietvereinbarung', () => {
 
   it('Sonderabsprache steht als letzter Abschnitt, Leerzeilen trennen Absätze', () => {
     const { text, titel } = bauen({ sonderabsprache: 'Erster Absatz.\n\nZweiter Absatz.' })
-    expect(titel).toContain('9. Sonderabsprache')
-    expect(text).toContain('9. Sonderabsprache\nErster Absatz.\nZweiter Absatz.')
+    expect(titel).toContain('10. Sonderabsprache')
+    expect(text).toContain('10. Sonderabsprache\nErster Absatz.\nZweiter Absatz.')
   })
 
   it('ohne Anzahlung heißt der letzte Punkt „Zahlung“ und nennt den vollen Preis', () => {
@@ -321,6 +323,36 @@ describe('Varianten der Mietvereinbarung', () => {
     expect(text).toContain('höchstens ________ Personen')
     expect(text).toContain('Anzahlung 50 % (________ €)')
     expect(text).toContain('bis ________ Uhr')
+  })
+})
+
+describe('Absage nach fester Staffel', () => {
+  it('ist bis 6 Wochen vorher kostenfrei und staffelt danach 25, 50 und 100 Prozent', () => {
+    const { text } = bauen()
+    expect(text).toContain('Bis 6 Wochen vor der Veranstaltung kann Jana Beispiel kostenfrei absagen. Die Absage muss schriftlich erfolgen')
+    expect(text).toContain(
+      'Bei einer späteren Absage werden fällig: 6 bis 3 Wochen vorher 25 %, 3 bis 2 Wochen vorher 50 %, ab 2 Wochen vorher 100 % des Preises aus Punkt 3.'
+    )
+  })
+
+  it('lässt die Zahlung bei Ersatz entfallen und den Nachweis eines geringeren Schadens zu', () => {
+    const { text } = bauen()
+    expect(text).toContain('Findet sich für den Termin ein Ersatz, entfällt die Zahlung.')
+    expect(text).toContain('Weist Jana Beispiel nach, dass dem Pepe Dome ein geringerer Schaden entstanden ist, ist nur dieser zu zahlen.')
+  })
+
+  it('verlangt die Absage schriftlich', () => {
+    expect(bauen().text).toContain('Die Absage muss schriftlich erfolgen, es zählt der Tag, an dem sie beim Pepe Dome eingeht.')
+  })
+
+  it('steht in jeder Mietvereinbarung, auch ohne einen einzigen Schalter', () => {
+    const aus = Object.fromEntries(Object.keys(ALLE_SCHALTER).map((schalter) => [schalter, false]))
+    expect(bauen(aus).text).toContain('6. Absage')
+  })
+
+  it('bezieht sich beim Showbesuch auf die Heizpauschale', () => {
+    const { text } = bauen({ preismodell: 'showbesuch', showName: 'Beispielshow', preisVereinbart: '88' })
+    expect(text).toContain('100 % der Heizpauschale aus Punkt 3.')
   })
 })
 
@@ -471,5 +503,40 @@ describe('Standardpreise', () => {
   it('ändert ohne gepflegten Standardpreis nichts', () => {
     const vorher = { MIETE: { preisRegulaer: 999 } }
     expect(mitStandardpreis(vorher, { halbtag: null, ganztag: 222, ticketanteil: null })).toBe(vorher)
+  })
+})
+
+describe('Unterschriften stehen nie allein auf einer Seite', () => {
+  const letzteGruppe = (aenderung: Record<string, unknown> = {}) => {
+    const { bausteine } = bauen(aenderung).dokument
+    const letzter = bausteine[bausteine.length - 1]
+    if (letzter?.art !== 'gruppe') return null
+    return dokumentAlsText({ titel: '', bausteine: letzter.bausteine })
+  }
+  const ohneErklaerungen = { aufsichtsperson: false, feuer: false }
+
+  it('hält den Abschnitt „Absage“ mit den Unterschriften zusammen', () => {
+    const text = letzteGruppe(ohneErklaerungen)
+    // Die Erklärungen der Aufsichtspersonen zählen nicht mit, nummeriert sind nur die Abschnitte.
+    expect(text).toMatch(/^9\. Absage\n/)
+    expect(text).toContain('[Unterschrift] Ort, Datum, Jana Beispiel')
+  })
+
+  it('hält eine Erklärung der Aufsichtsperson als Ganzes bei den Unterschriften', () => {
+    const text = letzteGruppe()
+    expect(text).toMatch(/^Aufsichtsperson für das offene Feuer\n/)
+    expect(text).toContain('Unterschriften')
+  })
+
+  it('hält eine kurze Sonderabsprache bei den Unterschriften', () => {
+    expect(letzteGruppe({ ...ohneErklaerungen, sonderabsprache: 'Kurze Absprache.' })).toMatch(
+      /^10\. Sonderabsprache\nKurze Absprache\./
+    )
+  })
+
+  it('gruppiert nicht, wenn der letzte Abschnitt länger ist als eine Seite verträgt', () => {
+    const lang = 'Ein langer Satz zur Absprache. '.repeat(120)
+    const text = letzteGruppe({ ...ohneErklaerungen, sonderabsprache: lang })
+    expect(text).toMatch(/^Unterschriften\n/)
   })
 })

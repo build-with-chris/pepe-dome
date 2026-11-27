@@ -72,12 +72,14 @@ Font.registerHyphenationCallback((wort) => [wort])
 
 const s = StyleSheet.create({
   seite: {
-    paddingTop: mm(16),
-    paddingBottom: mm(19),
+    paddingTop: mm(14),
+    paddingBottom: mm(17),
     paddingHorizontal: mm(22),
     fontFamily: SCHRIFT,
     fontSize: 9.5,
-    lineHeight: 1.35,
+    // Eng genug, dass eine Mietvereinbarung mit allen Bausteinen auf zwei Seiten
+    // passt und die Unterschriften nicht allein auf einer dritten landen.
+    lineHeight: 1.3,
     color: SCHWARZ,
   },
   fett: { fontWeight: 'bold' },
@@ -112,7 +114,7 @@ const s = StyleSheet.create({
     fontFamily: SCHRIFT_TITEL,
     fontWeight: 'bold',
     fontSize: 11.5,
-    marginTop: 8,
+    marginTop: 7,
     marginBottom: 2,
   },
   h2Akzent: { color: BLAU },
@@ -152,7 +154,7 @@ const s = StyleSheet.create({
 
   unterschriftenZeile: { flexDirection: 'row', marginTop: 4 },
   unterschrift: { width: '50%', paddingRight: 16 },
-  unterschriftRaum: { height: 26 },
+  unterschriftRaum: { height: 22 },
   unterschriftLinie: { borderTopWidth: 0.7, borderTopColor: SCHWARZ, paddingTop: 2 },
 
   // Steht auf jeder Seite unten, im Rand unter dem Text.

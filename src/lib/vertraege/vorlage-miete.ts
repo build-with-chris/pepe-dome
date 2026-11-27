@@ -16,7 +16,7 @@
  * mehr: Sein Dokument liegt dann eingefroren in `contracts.snapshot`.
  */
 
-import { fett, linie, type Baustein, type Dokument, type Inhalt } from './dokument'
+import { fett, linie, mitSchluss, type Baustein, type Dokument, type Inhalt } from './dokument'
 import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
 import { betragAlsText, type MieteDaten } from './validation'
 
@@ -76,6 +76,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     ...(d.lautstaerkeHervorgehoben ? ['lautstaerke'] : []),
     'regeln',
     'zahlung',
+    'absage',
     ...(d.sonderabsprache ? ['sonderabsprache'] : []),
   ]
   const nr = (schluessel: string) => reihenfolge.indexOf(schluessel) + 1
@@ -323,6 +324,32 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     },
   ])
 
+  // ── Absage ──────────────────────────────────────────────────────────
+  // Feste Hausregel, von Chris am 27.11.2026 bestätigt. Die Staffel folgt
+  // dem, was Kulturhäuser üblicherweise ansetzen (Vorbild: Miet- und
+  // Benutzungsbedingungen der Stadtteilkultureinrichtungen Hannover ab 2026).
+  // Die beiden Sätze zu Ersatz und geringerem Schaden gehören dazu: Ohne sie
+  // wäre die Staffel eine Pauschale ohne Ausweg.
+  const grundlage = showbesuch ? 'der Heizpauschale' : 'des Preises'
+  abschnitt('absage', 'Absage', [
+    {
+      art: 'liste',
+      punkte: [
+        `Bis 6 Wochen vor der Veranstaltung kann ${name} kostenfrei absagen. Die Absage muss schriftlich erfolgen, es zählt der Tag, an dem sie beim Pepe Dome eingeht.`,
+        [
+          'Bei einer späteren Absage werden fällig: 6 bis 3 Wochen vorher ',
+          fett('25 %'),
+          ', 3 bis 2 Wochen vorher ',
+          fett('50 %'),
+          ', ab 2 Wochen vorher ',
+          fett('100 %'),
+          ` ${grundlage} aus Punkt ${nr('preis')}.`,
+        ],
+        `Findet sich für den Termin ein Ersatz, entfällt die Zahlung. Weist ${name} nach, dass dem Pepe Dome ein geringerer Schaden entstanden ist, ist nur dieser zu zahlen.`,
+      ],
+    },
+  ])
+
   // ── Sonderabsprache ─────────────────────────────────────────────────
   if (d.sonderabsprache) {
     abschnitt(
@@ -400,38 +427,42 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
           ),
         ]
       : []),
-    {
-      art: 'gruppe',
-      bausteine: [
-        { art: 'ueberschrift', text: 'Unterschriften' },
-        {
-          art: 'unterschriften',
-          felder: [
-            [unterschriftEigeneSeite(), `Ort, Datum\n${name}`],
-            ...(d.minderjaehrig ? [['Ort, Datum\nErziehungsberechtigte Person']] : []),
-          ],
-        },
-      ],
-    },
   ]
+
+  const unterschriften: Baustein = {
+    art: 'gruppe',
+    bausteine: [
+      { art: 'ueberschrift', text: 'Unterschriften' },
+      {
+        art: 'unterschriften',
+        felder: [
+          [unterschriftEigeneSeite(), `Ort, Datum\n${name}`],
+          ...(d.minderjaehrig ? [['Ort, Datum\nErziehungsberechtigte Person']] : []),
+        ],
+      },
+    ],
+  }
 
   return {
     titel,
     akzent: true,
     fuss: FUSSZEILE,
-    bausteine: [
-      {
-        art: 'kopf',
-        titel: 'Vereinbarung zur Nutzung des Pepe Dome',
-        untertitel: d.anlass,
-        logo: true,
-      },
-      ...parteien,
-      ...abschnitte.flatMap((eintrag): Baustein[] => [
-        { art: 'ueberschrift', text: eintrag.titel },
-        ...eintrag.bausteine,
-      ]),
-      ...schluss,
-    ],
+    bausteine: mitSchluss(
+      [
+        {
+          art: 'kopf',
+          titel: 'Vereinbarung zur Nutzung des Pepe Dome',
+          untertitel: d.anlass,
+          logo: true,
+        },
+        ...parteien,
+        ...abschnitte.flatMap((eintrag): Baustein[] => [
+          { art: 'ueberschrift', text: eintrag.titel },
+          ...eintrag.bausteine,
+        ]),
+        ...schluss,
+      ],
+      unterschriften
+    ),
   }
 }

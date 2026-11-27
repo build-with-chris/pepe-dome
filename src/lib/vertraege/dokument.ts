@@ -156,3 +156,33 @@ export function istDokument(wert: unknown): wert is Dokument {
       baustein && typeof baustein === 'object' && ARTEN.has((baustein as Baustein).art)
   )
 }
+
+/** Mehr Text als das passt nicht mehr sicher zusammen mit den Unterschriften auf eine Seite. */
+const SCHLUSS_HOECHSTENS = 1500
+
+/**
+ * Hängt den Schluss eines Dokuments (die Unterschriften) so an, dass er nie
+ * allein auf einer Seite steht: Der letzte Abschnitt davor, von seiner
+ * Überschrift an, wird mit dem Schluss zu einer Gruppe zusammengefasst. Eine
+ * Seite, auf der nur Unterschriften stehen, sagt nicht, was unterschrieben wird.
+ *
+ * Ist der letzte Abschnitt sehr lang, etwa eine ausführliche Sonderabsprache,
+ * bleibt es beim einfachen Anhängen. Eine Gruppe, die größer ist als eine
+ * Seite, ließe sich nicht mehr umbrechen.
+ */
+export function mitSchluss(bausteine: Baustein[], schluss: Baustein): Baustein[] {
+  // Steht davor schon eine Gruppe, etwa die Erklärung einer Aufsichtsperson,
+  // bleibt sie als Ganzes beim Schluss. Sonst zählt die letzte Überschrift.
+  let ab = bausteine.length - 1
+  if (ab < 0) return [schluss]
+  if (bausteine[ab].art !== 'gruppe') {
+    while (ab >= 0 && bausteine[ab].art !== 'ueberschrift') ab -= 1
+  }
+  if (ab < 0) return [...bausteine, schluss]
+
+  const ende = bausteine.slice(ab)
+  const laenge = ende.flatMap(bausteinAlsText).join('').length
+  if (laenge > SCHLUSS_HOECHSTENS) return [...bausteine, schluss]
+
+  return [...bausteine.slice(0, ab), { art: 'gruppe', bausteine: [...ende, schluss] }]
+}

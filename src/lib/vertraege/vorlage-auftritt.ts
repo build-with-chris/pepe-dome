@@ -38,7 +38,7 @@
  * (docs/specs/vertragstool.md, Offene Punkte).
  */
 
-import { fett, linie, type Baustein, type Dokument } from './dokument'
+import { fett, linie, mitSchluss, type Baustein, type Dokument } from './dokument'
 import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
 import { betragAlsText, type AuftrittDaten } from './validation'
 import type { Gegenseite } from './vorlage-miete'
@@ -208,13 +208,15 @@ export function auftrittDokument(
     titel,
     akzent: true,
     fuss: FUSSZEILE,
-    bausteine: [
-      { art: 'kopf', titel: TITEL[art], untertitel: d.titel, logo: true },
-      ...parteien,
-      ...abschnitte.flatMap((eintrag): Baustein[] => [
-        { art: 'ueberschrift', text: eintrag.titel },
-        ...eintrag.bausteine,
-      ]),
+    bausteine: mitSchluss(
+      [
+        { art: 'kopf', titel: TITEL[art], untertitel: d.titel, logo: true },
+        ...parteien,
+        ...abschnitte.flatMap((eintrag): Baustein[] => [
+          { art: 'ueberschrift', text: eintrag.titel },
+          ...eintrag.bausteine,
+        ]),
+      ],
       {
         art: 'gruppe',
         bausteine: [
@@ -224,7 +226,7 @@ export function auftrittDokument(
             felder: [[unterschriftEigeneSeite(), `Ort, Datum\n${name}`]],
           },
         ],
-      },
-    ],
+      }
+    ),
   }
 }

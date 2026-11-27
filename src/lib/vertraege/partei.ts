@@ -39,5 +39,5 @@ export function eigeneSeite(): Baustein {
 
 /** Das Unterschriftsfeld der eigenen Seite. Einer der beiden Vertreter unterschreibt. */
 export function unterschriftEigeneSeite(): string {
-  return `Ort, Datum\n${VEREIN}\n${VERTRETER.join(' oder ')}`
+  return `Ort, Datum · ${VEREIN}\n${VERTRETER.join(' oder ')}`
 }
