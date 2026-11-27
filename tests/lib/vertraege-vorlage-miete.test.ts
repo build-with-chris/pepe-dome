@@ -18,6 +18,9 @@ import {
   vertragstitel,
 } from '@/lib/vertraege/validation'
 import { dokumentAus } from '@/lib/vertraege/vorlage'
+import { KLAUSELN, klauselStandard, zeilenAus } from '@/lib/vertraege/klauseln'
+
+const KLAUSEL_ALLE: string[] = [...KLAUSELN]
 
 const ALLE_SCHALTER = {
   minderjaehrig: true,
@@ -144,7 +147,7 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
   })
 
   it('rechnet Anzahlung und Rest aus und nennt die Bankverbindung', () => {
-    expect(text).toContain('Anzahlung 50 % (111 €) zwei Wochen vorher: bis 03.05.2031.')
+    expect(text).toContain('Anzahlung 50 % (111 €), fällig bis 03.05.2031.')
     expect(text).toContain('Kaution 444 €, fällig mit der Anzahlung.')
     expect(text).toContain('Rest (111 € zuzüglich Bier, Zusatzleistungen und Material)')
     expect(text).toContain('Kontoinhaber | Circus Akademie München e.V.')
@@ -215,7 +218,7 @@ describe('Mietvereinbarung ohne Schalter', () => {
   })
 
   it('macht die Gegenseite ohne Aufsichtsperson zur Ansprechperson', () => {
-    expect(text).toContain('ist während der gesamten Feier vor Ort und Ansprechperson für Polizei')
+    expect(text).toContain('ist während der gesamten Veranstaltung vor Ort und Ansprechperson für Polizei')
   })
 
   it('zeigt Telefon und Anschrift, wenn sie eingetragen sind', () => {
@@ -285,7 +288,7 @@ describe('Varianten der Mietvereinbarung', () => {
     expect(text).toContain('Preis: 333 € pauschal. Enthalten sind Miete und Heizung')
     expect(text).not.toContain('regulärer Preis')
     expect(text).not.toContain('Dieser Preis gilt unter der Voraussetzung')
-    expect(text).toContain('Anzahlung 50 % (166,50 €) zwei Wochen vorher: bis 03.05.2031.')
+    expect(text).toContain('Anzahlung 50 % (166,50 €), fällig bis 03.05.2031.')
     expect(text).toContain('Rest (166,50 € zuzüglich')
     expect(text).not.toContain('________ €')
   })
@@ -538,5 +541,149 @@ describe('Unterschriften stehen nie allein auf einer Seite', () => {
     const lang = 'Ein langer Satz zur Absprache. '.repeat(120)
     const text = letzteGruppe({ ...ohneErklaerungen, sonderabsprache: lang })
     expect(text).toMatch(/^Unterschriften\n/)
+  })
+})
+
+describe('Mietvereinbarung für ein Projekt mit eigenen Klauseln', () => {
+  const klauseln = (an: string[], texte: Record<string, string> = {}) =>
+    Object.fromEntries(
+      ['ausstattung', 'publikum', 'technik', 'gastro', 'haftung', 'hoehereGewalt', 'uebergabe', 'schluss', 'anlagen'].map(
+        (k) => [k, { an: an.includes(k), text: texte[k] ?? (an.includes(k) ? `Erster Punkt ${k}.\nZweiter Punkt ${k}.` : '') }]
+      )
+    )
+
+  const projekt = {
+    ueberschrift: 'Mietvertrag',
+    vertretenDurch: 'Max Muster',
+    beginn: '',
+    ende: '',
+    ablauf: '01.06. bis 03.06.: Aufbau und Proben\n- 04.06.: Vorstellung',
+    minderjaehrig: false,
+    zusatzleistungen: false,
+    material: false,
+    bier: false,
+    aufsichtsperson: false,
+    feuer: false,
+    jugendschutz: false,
+    kaution: true,
+    kautionFrist: '20.05.2031',
+    gaesteGeplant: '',
+    preisVereinbart: '',
+    preisBezeichnung: '',
+    preisEnthalten: 'alle Nebenkosten und die vorhandene Technik',
+    umsatzsteuer: 'endbetrag',
+    anzahlungFrist: 'bei Vertragsschluss',
+    restFrist: 'bis 01.06.2031',
+    zahlungsweg: 'ueberweisung',
+    verwendungszweck: 'Projekt Beispiel',
+    klauseln: klauseln(KLAUSEL_ALLE),
+    eigeneAbschnitte: [
+      { titel: 'Zweck', text: 'Nur für das Projekt Beispiel.', oben: true },
+      { titel: 'Öffentlichkeitsarbeit', text: 'Erstens.\nZweitens.', oben: false },
+      { titel: '', text: '', oben: false },
+    ],
+  }
+
+  it('ordnet Klauseln und eigene Abschnitte an ihren Platz und nummeriert durch', () => {
+    const { titel } = bauen(projekt)
+    expect(titel).toEqual([
+      '1. Termin und Zeit',
+      '2. Mietgegenstand und Ausstattung',
+      '3. Zweck',
+      '4. Gäste',
+      '5. Preis',
+      '6. Getränke und Speisen',
+      '7. Regeln',
+      '8. Veranstaltung mit Publikum',
+      '9. Technik und Personal',
+      '10. Haftung und Versicherung',
+      '11. Zahlung',
+      '12. Absage',
+      '13. Höhere Gewalt',
+      '14. Besichtigung, Übergabe und Rückgabe',
+      '15. Öffentlichkeitsarbeit',
+      '16. Schlussbestimmungen',
+      '17. Anlagen',
+      'Unterschriften',
+    ])
+  })
+
+  it('setzt Überschrift, Vertretung, Ablauf und Gästezahl', () => {
+    const { text } = bauen(projekt)
+    expect(text).toContain('Mietvertrag')
+    expect(text).not.toContain('Vereinbarung zur Nutzung des Pepe Dome')
+    expect(text).toContain('Jana Beispiel, vertreten durch Max Muster')
+    expect(text).toContain('01.06. bis 03.06.: Aufbau und Proben')
+    expect(text).toContain('04.06.: Vorstellung')
+    expect(text).not.toContain('- 04.06.')
+    // Ablauf ohne Uhrzeiten: kein Satz mit Linien für Beginn und Ende.
+    expect(text).not.toContain('Veranstaltung von')
+    expect(text).toContain('Höchstens 90 Personen.')
+  })
+
+  it('nimmt Preis, Umsatzsteuer und Fristen aus dem Formular', () => {
+    const { text } = bauen(projekt)
+    expect(text).toContain('Preis: 333 € pauschal. Enthalten sind alle Nebenkosten und die vorhandene Technik.')
+    expect(text).toContain('Der Betrag ist ein Endbetrag. Umsatzsteuer fällt nicht zusätzlich an.')
+    expect(text).toContain('Anzahlung 50 % (166,50 €), fällig bei Vertragsschluss.')
+    expect(text).toContain('Kaution 444 €, fällig bis 20.05.2031.')
+    expect(text).toContain('Rest (166,50 €) fällig bis 01.06.2031, per Überweisung auf dieses Konto:')
+    expect(text).toContain('Verwendungszweck | Projekt Beispiel')
+  })
+
+  it('druckt den Text der Klauseln, eine Zeile je Punkt', () => {
+    const { text } = bauen(projekt)
+    expect(text).toContain('8. Veranstaltung mit Publikum\n• Erster Punkt publikum.\n• Zweiter Punkt publikum.')
+    expect(text).toContain('3. Zweck\nNur für das Projekt Beispiel.')
+  })
+
+  it('lässt eingeschaltete Klauseln ohne Text weg', () => {
+    const { titel } = bauen({ ...projekt, klauseln: klauseln(['technik'], { technik: '  \n ' }) })
+    expect(titel).not.toContain('Technik und Personal')
+    expect(titel.some((t) => t.includes('Technik'))).toBe(false)
+  })
+
+  it('zuzüglich Umsatzsteuer und ein geleertes „enthalten“', () => {
+    const { text } = bauen({ umsatzsteuer: 'zuzueglich', preisEnthalten: '' })
+    expect(text).toContain('Alle Beträge verstehen sich zuzüglich der gesetzlichen Umsatzsteuer.')
+    expect(text).not.toContain('Enthalten sind')
+  })
+
+  it('ein älterer Vertrag ohne die neuen Felder sieht aus wie bisher', () => {
+    const { text, titel } = bauen()
+    expect(text).toContain('Vereinbarung zur Nutzung des Pepe Dome')
+    expect(text).toContain('Enthalten sind Miete und Heizung für die Veranstaltung.')
+    expect(text).toContain('innerhalb von 14 Tagen nach der Veranstaltung, in bar oder als Spende auf dieses Konto:')
+    expect(text).not.toContain('Umsatzsteuer')
+    expect(text).not.toContain('Verwendungszweck')
+    expect(titel).not.toContain('Anlagen')
+  })
+})
+
+describe('Vorschläge für die Klauseln', () => {
+  it('setzt den Namen der Gegenseite ein, ohne Namen eine Linie', () => {
+    expect(klauselStandard('haftung', 'Beispiel e.V.')).toMatch(/^Beispiel e\.V\. haftet/)
+    expect(klauselStandard('haftung', ' ')).toMatch(/^________ haftet/)
+  })
+
+  it('jede Klausel hat einen Vorschlag', () => {
+    for (const k of KLAUSELN) expect(zeilenAus(klauselStandard(k, 'X')).length).toBeGreaterThan(0)
+  })
+
+  it('das Formular füllt fehlende Felder mit Startwerten', () => {
+    const felder = mieteFelder({})
+    expect(felder.preisEnthalten).toBe('Miete und Heizung für die Veranstaltung')
+    expect(felder.umsatzsteuer).toBe('keine')
+    expect(felder.zahlungsweg).toBe('barOderSpende')
+    expect(felder.klauseln.technik).toEqual({ an: false, text: '' })
+    expect(felder.eigeneAbschnitte).toEqual([])
+    // Ein bewusst geleertes Feld bleibt leer.
+    expect(mieteFelder({ preisEnthalten: '' }).preisEnthalten).toBe('')
+  })
+})
+
+describe('Vorschläge mit Vereinsnamen', () => {
+  it('ein Name auf „e.V.“ ergibt nie einen doppelten Punkt', () => {
+    for (const k of KLAUSELN) expect(klauselStandard(k, 'Beispiel e.V.')).not.toContain('..')
   })
 })

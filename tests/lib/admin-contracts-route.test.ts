@@ -365,7 +365,7 @@ describe('PATCH /api/admin/contracts/:id', () => {
       params
     )
     const { data } = mock.contract.update.mock.calls[0][0]
-    expect(dokumentAlsText(data.snapshot as Dokument)).toContain('Jana Neu veranstaltet die Feier')
+    expect(dokumentAlsText(data.snapshot as Dokument)).toContain('Jana Neu trägt die Verantwortung für die Veranstaltung')
   })
 
   it('friert auch ein, wenn „verschickt“ übersprungen wird', async () => {
@@ -441,7 +441,7 @@ describe('GET /api/admin/contracts/:id/pdf', () => {
     expect(res.headers.get('Content-Type')).toBe('application/pdf')
 
     const dokument = vi.mocked(pdfAntwort).mock.calls[0][0]
-    expect(dokumentAlsText(dokument)).toContain('Jana Beispiel veranstaltet die Feier')
+    expect(dokumentAlsText(dokument)).toContain('Jana Beispiel trägt die Verantwortung für die Veranstaltung')
   })
 
   it('zeichnet einen verschickten Vertrag aus dem Snapshot, nicht aus der Vorlage', async () => {

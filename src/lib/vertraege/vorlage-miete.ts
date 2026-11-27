@@ -9,6 +9,10 @@
  * Abschnitte werden fortlaufend nummeriert. Verweise wie „Regeln aus Punkt 7“
  * rechnen mit, wenn davor ein Abschnitt wegfällt.
  *
+ * Für Nutzungen über eine Feier hinaus, etwa mehrtägige Projekte mit eigenem
+ * Publikum, gibt es Klauseln zum Einschalten (klauseln.ts) und eigene
+ * Abschnitte. Deren Text kommt vollständig aus dem Formular.
+ *
  * Geburtsdatum, Erziehungsberechtigte und Aufsichtspersonen werden nicht
  * erfasst. Sie bleiben Linien im PDF und werden von Hand eingetragen.
  *
@@ -17,6 +21,7 @@
  */
 
 import { fett, linie, mitSchluss, type Baustein, type Dokument, type Inhalt } from './dokument'
+import { KLAUSEL, LUECKE, PREIS_ENTHALTEN, zeilenAus, type Klausel } from './klauseln'
 import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
 import { betragAlsText, type MieteDaten } from './validation'
 
@@ -35,13 +40,28 @@ const BANK: Array<[string, string]> = [
   ['Bank', 'GLS Gemeinschaftsbank eG'],
 ]
 
-const LUECKE = '________'
+const UEBERSCHRIFT = 'Vereinbarung zur Nutzung des Pepe Dome'
 
 const euro = (betrag: number | null) => `${betrag === null ? LUECKE : betragAlsText(betrag)} €`
 const oder = (wert: string, ersatz = LUECKE) => wert || ersatz
 
 /** Hängt einen Punkt an, wenn der Text nicht schon mit einem Satzzeichen endet. */
 const satz = (wert: string) => (/[.!?]$/.test(wert) ? wert : `${wert}.`)
+
+/**
+ * Wann etwas fällig ist. Ein Datum wird zu „bis 04.12.2026“, ein Zeitpunkt
+ * wie „bei Vertragsschluss“ bleibt, wie er ist.
+ */
+const faellig = (wert: string, ersatz: string) =>
+  !wert ? ersatz : /^\d/.test(wert) ? `bis ${wert}` : wert
+
+/** Text aus einem Feld: eine Zeile wird ein Absatz, mehrere werden eine Liste. */
+function ausFeld(text: string): Baustein[] {
+  const zeilen = zeilenAus(text)
+  if (zeilen.length === 0) return []
+  if (zeilen.length === 1) return [{ art: 'absatz', text: zeilen[0] }]
+  return [{ art: 'liste', punkte: zeilen }]
+}
 
 function aufzaehlung(teile: string[]): string {
   if (teile.length <= 1) return teile.join('')
@@ -66,18 +86,35 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
 
   // Welche Abschnitte es gibt, steht vor den Texten fest. So kann der
   // Preis-Abschnitt auf die Nummer der Regeln verweisen, die erst später kommen.
+  // Eingeschaltete Klauseln mit leerem Text erzeugen keinen Abschnitt.
+  const klausel = (k: Klausel) => (d.klauseln[k].an && zeilenAus(d.klauseln[k].text).length > 0 ? [k] : [])
+  const eigene = d.eigeneAbschnitte.map((eintrag, index) => ({ ...eintrag, schluessel: `eigen-${index}` }))
+  const eigeneOben = eigene.filter((eintrag) => eintrag.oben)
+  const eigeneUnten = eigene.filter((eintrag) => !eintrag.oben)
+
   const reihenfolge = [
     'termin',
+    ...klausel('ausstattung'),
+    ...eigeneOben.map((eintrag) => eintrag.schluessel),
     'gaeste',
     'preis',
     ...(d.zusatzleistungen ? ['zusatz'] : []),
     ...(d.material ? ['material'] : []),
     ...(d.bier ? ['bier'] : []),
+    ...klausel('gastro'),
     ...(d.lautstaerkeHervorgehoben ? ['lautstaerke'] : []),
     'regeln',
+    ...klausel('publikum'),
+    ...klausel('technik'),
+    ...klausel('haftung'),
     'zahlung',
     'absage',
+    ...klausel('hoehereGewalt'),
+    ...klausel('uebergabe'),
+    ...eigeneUnten.map((eintrag) => eintrag.schluessel),
     ...(d.sonderabsprache ? ['sonderabsprache'] : []),
+    ...klausel('schluss'),
+    ...klausel('anlagen'),
   ]
   const nr = (schluessel: string) => reihenfolge.indexOf(schluessel) + 1
 
@@ -92,31 +129,61 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
       punkte: [
         satz(d.termin),
         ...(d.aufbauAb ? [`Aufbau ab ${d.aufbauAb} Uhr.`] : []),
-        showbesuch
-          ? `Die Gruppe besucht die Show „${oder(d.showName)}“ und feiert im Anschluss im Dome, bis spätestens ${oder(d.ende)} Uhr.`
-          : `Veranstaltung von ${oder(d.beginn)} bis ${oder(d.ende)} Uhr. Um ${oder(d.ende)} Uhr sind alle Gäste draußen.`,
+        // Steht ein Ablauf da und keine Uhrzeit, regelt der Ablauf die Zeiten.
+        ...(showbesuch
+          ? [
+              `Die Gruppe besucht die Show „${oder(d.showName)}“ und feiert im Anschluss im Dome, bis spätestens ${oder(d.ende)} Uhr.`,
+            ]
+          : d.ablauf && !d.beginn && !d.ende
+            ? []
+            : [
+                `Veranstaltung von ${oder(d.beginn)} bis ${oder(d.ende)} Uhr. Um ${oder(d.ende)} Uhr sind alle Gäste draußen.`,
+              ]),
+        ...zeilenAus(d.ablauf),
       ],
     },
   ])
+
+  // ── Klauseln aus dem Formular und eigene Abschnitte ─────────────────
+  const ausKlausel = (k: Klausel) => {
+    if (reihenfolge.includes(k)) abschnitt(k, KLAUSEL[k].titel, ausFeld(d.klauseln[k].text))
+  }
+  const ausEigenen = (liste: typeof eigene) => {
+    for (const eintrag of liste) {
+      abschnitt(eintrag.schluessel, eintrag.titel || 'Weitere Vereinbarung', ausFeld(eintrag.text))
+    }
+  }
+
+  ausKlausel('ausstattung')
+  ausEigenen(eigeneOben)
 
   // ── Gäste ───────────────────────────────────────────────────────────
   abschnitt('gaeste', 'Gäste', [
     {
       art: 'liste',
       punkte: [
-        [
-          `Geplant sind ${oder(d.gaesteGeplant)} Personen, höchstens `,
-          fett(`${oder(d.gaesteMax)} Personen`),
-          '.',
-        ],
+        !d.gaesteGeplant && d.gaesteMax
+          ? ['Höchstens ', fett(`${d.gaesteMax} Personen`), '.']
+          : [
+              `Geplant sind ${oder(d.gaesteGeplant)} Personen, höchstens `,
+              fett(`${oder(d.gaesteMax)} Personen`),
+              '.',
+            ],
         d.aufsichtsperson
-          ? `${name} veranstaltet die Feier und ist für alle Gäste verantwortlich.`
-          : `${name} veranstaltet die Feier und ist für alle Gäste verantwortlich, ist während der gesamten Feier vor Ort und Ansprechperson für Polizei, Rettungsdienst und Notarzt.`,
+          ? `${name} trägt die Verantwortung für die Veranstaltung und alle Gäste.`
+          : `${name} trägt die Verantwortung für die Veranstaltung und alle Gäste, ist während der gesamten Veranstaltung vor Ort und Ansprechperson für Polizei, Rettungsdienst und Notarzt.`,
       ],
     },
   ])
 
   // ── Preis ───────────────────────────────────────────────────────────
+  const enthalten = d.preisEnthalten === null ? PREIS_ENTHALTEN : d.preisEnthalten
+  const umsatzsteuer =
+    d.umsatzsteuer === 'endbetrag'
+      ? 'Der Betrag ist ein Endbetrag. Umsatzsteuer fällt nicht zusätzlich an.'
+      : d.umsatzsteuer === 'zuzueglich'
+        ? 'Alle Beträge verstehen sich zuzüglich der gesetzlichen Umsatzsteuer.'
+        : null
   if (showbesuch) {
     abschnitt('preis', 'Tickets und Heizung', [
       {
@@ -131,6 +198,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
             fett('Heizung:'),
             ` ${euro(preis)} pauschal für die Veranstaltung. Eine Miete fällt nicht an.`,
           ],
+          ...(umsatzsteuer ? [umsatzsteuer] : []),
         ],
       },
     ])
@@ -142,9 +210,10 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
           `${d.preisBezeichnung || (sonderpreis ? 'Vereinbarter Preis' : 'Preis')}: `,
           fett(`${euro(preis)} pauschal`),
           sonderpreis ? ` (regulärer Preis: ${euro(d.preisRegulaer)}).` : '.',
-          ' Enthalten sind Miete und Heizung für die Veranstaltung.',
+          ...(enthalten ? [` Enthalten sind ${satz(enthalten)}`] : []),
         ],
       },
+      ...(umsatzsteuer ? [{ art: 'absatz', text: umsatzsteuer } satisfies Baustein] : []),
       ...(sonderpreis
         ? [
             {
@@ -188,7 +257,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
         punkte: [
           `Werkzeug: ${euro(d.werkzeugGebuehr)} Leihgebühr pro Werkzeug.`,
           `Verbrauchsmaterial (Tape usw.): ${satz(oder(d.verbrauchsmaterial))}`,
-          'Was genutzt wurde, wird nach der Feier gemeinsam aufgeschrieben.',
+          'Was genutzt wurde, wird nach der Veranstaltung gemeinsam aufgeschrieben.',
         ],
       },
     ])
@@ -214,12 +283,14 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     ])
   }
 
+  ausKlausel('gastro')
+
   // ── Lautstärke als eigene, hervorgehobene Regel ─────────────────────
   if (d.lautstaerkeHervorgehoben) {
     abschnitt('lautstaerke', 'Wichtigste Regel: Lautstärke', [
       {
         art: 'hinweis',
-        text: `Ab 22:00 Uhr wird es leiser. Der Pepe Dome unterliegt der Grünflächenverordnung. Erlaubt ist eine Lautstärke wie bei unseren Shows, mehr nicht. ${name} sorgt dafür, dass sich alle Gäste daran halten, auch draußen. Wird es zu laut, kann der Pepe Dome die Musik leiser stellen oder die Feier vorzeitig beenden.`,
+        text: `Ab 22:00 Uhr wird es leiser. Der Pepe Dome unterliegt der Grünflächenverordnung. Erlaubt ist eine Lautstärke wie bei unseren Shows, mehr nicht. ${name} sorgt dafür, dass sich alle Gäste daran halten, auch draußen. Wird es zu laut, kann der Pepe Dome die Musik leiser stellen oder die Veranstaltung vorzeitig beenden.`,
       },
     ])
   }
@@ -269,6 +340,10 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     { art: 'liste', punkte: regeln },
   ])
 
+  ausKlausel('publikum')
+  ausKlausel('technik')
+  ausKlausel('haftung')
+
   // ── Zahlung ─────────────────────────────────────────────────────────
   const mitAnzahlung = d.anzahlungProzent !== null && d.anzahlungProzent > 0
   const anzahlung =
@@ -298,7 +373,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
           ? [
               [
                 fett('Anzahlung'),
-                ` ${betragAlsText(d.anzahlungProzent as number)} % (${euro(anzahlung)}) zwei Wochen vorher${d.anzahlungFrist ? `: bis ${d.anzahlungFrist}` : ''}.`,
+                ` ${betragAlsText(d.anzahlungProzent as number)} % (${euro(anzahlung)}), fällig ${faellig(d.anzahlungFrist, 'zwei Wochen vor der Veranstaltung')}.`,
               ],
             ]
           : []),
@@ -306,13 +381,13 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
           ? [
               [
                 fett('Kaution'),
-                ` ${euro(d.kautionBetrag)}, fällig ${mitAnzahlung ? 'mit der Anzahlung' : 'vor der Veranstaltung'}. Sie wird nach der Abnahme des Raums zurückgezahlt oder mit Schäden und offenen Beträgen verrechnet.`,
+                ` ${euro(d.kautionBetrag)}, fällig ${faellig(d.kautionFrist, mitAnzahlung ? 'mit der Anzahlung' : 'vor der Veranstaltung')}. Sie wird nach der Abnahme des Raums zurückgezahlt oder mit Schäden und offenen Beträgen verrechnet.`,
               ],
             ]
           : []),
         [
           fett(mitAnzahlung ? 'Rest' : 'Zahlung'),
-          ` (${euro(rest)}${extras ? ` zuzüglich ${extras}` : ''}) innerhalb von 14 Tagen nach der Veranstaltung, in bar oder als Spende auf dieses Konto:`,
+          ` (${euro(rest)}${extras ? ` zuzüglich ${extras}` : ''}) ${d.restFrist ? `fällig ${faellig(d.restFrist, '')}` : 'innerhalb von 14 Tagen nach der Veranstaltung'}, ${d.zahlungsweg === 'ueberweisung' ? 'per Überweisung' : 'in bar oder als Spende'} auf dieses Konto:`,
         ],
       ],
     },
@@ -320,7 +395,10 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
       art: 'tabelle',
       kompakt: true,
       breiten: [22, 78],
-      zeilen: BANK.map(([bezeichnung, wert]) => [bezeichnung, fett(wert)]),
+      zeilen: [
+        ...BANK,
+        ...(d.verwendungszweck ? [['Verwendungszweck', d.verwendungszweck] as [string, string]] : []),
+      ].map(([bezeichnung, wert]) => [bezeichnung, fett(wert)]),
     },
   ])
 
@@ -350,6 +428,10 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     },
   ])
 
+  ausKlausel('hoehereGewalt')
+  ausKlausel('uebergabe')
+  ausEigenen(eigeneUnten)
+
   // ── Sonderabsprache ─────────────────────────────────────────────────
   if (d.sonderabsprache) {
     abschnitt(
@@ -361,6 +443,9 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     )
   }
 
+  ausKlausel('schluss')
+  ausKlausel('anlagen')
+
   // ── Parteien ────────────────────────────────────────────────────────
   const anschrift: Baustein = gegenseite.partnerAddress
     ? { art: 'absatz', text: `Anschrift: ${gegenseite.partnerAddress}` }
@@ -369,6 +454,8 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
     ...(gegenseite.partnerPhone ? [`Telefon: ${gegenseite.partnerPhone}`] : []),
     ...(gegenseite.partnerEmail ? [`E-Mail: ${gegenseite.partnerEmail}`] : []),
   ].join(', ')
+
+  const mitVertretung = d.vertretenDurch ? `${name}, vertreten durch ${d.vertretenDurch}` : name
 
   const parteien: Baustein[] = [
     eigeneSeite(),
@@ -391,8 +478,8 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
         ] satisfies Baustein[])
       : ([
           kontakt
-            ? { art: 'absatz', text: `${name}, ${kontakt}` }
-            : { art: 'ausfuellen', teile: [`${name}, Telefon:`, linie()] },
+            ? { art: 'absatz', text: `${mitVertretung}, ${kontakt}` }
+            : { art: 'ausfuellen', teile: [`${mitVertretung}, Telefon:`, linie()] },
           anschrift,
         ] satisfies Baustein[])),
   ]
@@ -451,7 +538,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
       [
         {
           art: 'kopf',
-          titel: 'Vereinbarung zur Nutzung des Pepe Dome',
+          titel: d.ueberschrift || UEBERSCHRIFT,
           untertitel: d.anlass,
           logo: true,
         },

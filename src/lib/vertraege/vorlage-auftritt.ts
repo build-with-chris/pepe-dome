@@ -41,30 +41,9 @@
 
 import { fett, linie, mitSchluss, type Baustein, type Dokument } from './dokument'
 import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
+import { GASTRO, HOEHERE_GEWALT, LUECKE } from './klauseln'
 import { betragAlsText, type AuftrittDaten } from './validation'
 import type { Gegenseite } from './vorlage-miete'
-
-const LUECKE = '________'
-
-/**
- * Gastronomie, entschieden am 27.11.2026: Grundsatz ist, dass alles über den
- * Pepe Dome läuft. Ausnahmen gibt es nur nach schriftlicher Absprache vorab.
- */
-const GASTRO = [
-  'Getränke und Speisen werden vom Pepe Dome angeboten. Die Einnahmen daraus gehen an den Pepe Dome.',
-  'Ausnahmen sind möglich, wenn sie vorher schriftlich vereinbart werden.',
-]
-
-/**
- * Höhere Gewalt, entschieden am 27.11.2026: erst Ersatztermin, dann dürfen
- * beide Seiten zurücktreten. Die drei Beispiele sind die, die Chris so
- * bestätigt hat. Ob ein Ausfall der Technik rechtlich als höhere Gewalt
- * trägt, gehört in die juristische Durchsicht.
- */
-const HOEHERE_GEWALT = [
-  'Kann die Veranstaltung wegen höherer Gewalt nicht stattfinden, etwa wegen Sturm, einer behördlichen Anordnung oder eines Ausfalls der Technik, suchen beide Seiten zuerst einen Ersatztermin.',
-  'Findet sich kein Ersatztermin, können beide Seiten vom Vertrag zurücktreten. Bereits Gezahltes wird erstattet. Weitergehende Ansprüche sind ausgeschlossen, soweit gesetzlich zulässig.',
-]
 
 // Kurz gehalten, damit der Titel neben dem Logo in einer Zeile bleibt. Dass es
 // um den Pepe Dome geht, sagen Logo und Abschnitt 1.

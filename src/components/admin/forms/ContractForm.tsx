@@ -36,13 +36,16 @@ import {
   type AuftrittFelder,
   type MieteFelder,
 } from '@/lib/vertraege/formular'
+import { KLAUSEL, KLAUSELN, klauselStandard, type Klausel } from '@/lib/vertraege/klauseln'
 import {
   betragAlsEingabe,
   betragAlsText,
   TYP_LABEL,
   VERTRAGSTYPEN,
   type Standardpreise,
+  type Umsatzsteuer,
   type Vertragstyp,
+  type Zahlungsweg,
 } from '@/lib/vertraege/validation'
 
 export type ContractFormVertrag = {
@@ -203,6 +206,66 @@ function Schalter({
   )
 }
 
+/** Eine Wahl aus wenigen Möglichkeiten, als Reihe von Knöpfen. */
+function Auswahl<T extends string>({
+  name,
+  label,
+  wert,
+  optionen,
+  onChange,
+  hint,
+}: {
+  name: string
+  label: string
+  wert: T
+  optionen: ReadonlyArray<readonly [T, string]>
+  onChange: (wert: T) => void
+  hint?: ReactNode
+}) {
+  return (
+    <fieldset className="space-y-2.5">
+      <legend className={`${labelVariants()} mb-2.5`}>{label}</legend>
+      <div className="flex flex-wrap gap-2">
+        {optionen.map(([option, text]) => {
+          const aktiv = wert === option
+          return (
+            <label
+              key={option}
+              className={`relative cursor-pointer rounded-lg border px-3 py-1.5 text-sm transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#016dca] ${
+                aktiv
+                  ? 'border-[#016dca] bg-[#016dca]/15 text-white'
+                  : 'border-white/[0.12] text-white/70 hover:border-white/30'
+              }`}
+            >
+              <input
+                type="radio"
+                name={name}
+                value={option}
+                checked={aktiv}
+                onChange={() => onChange(option)}
+                className="sr-only"
+              />
+              {text}
+            </label>
+          )
+        })}
+      </div>
+      {hint ? <FieldHint>{hint}</FieldHint> : null}
+    </fieldset>
+  )
+}
+
+const UMSATZSTEUER_OPTIONEN = [
+  ['keine', 'Nicht erwähnen'],
+  ['endbetrag', 'Endbetrag (netto = brutto)'],
+  ['zuzueglich', 'Zuzüglich Umsatzsteuer'],
+] as const satisfies ReadonlyArray<readonly [Umsatzsteuer, string]>
+
+const ZAHLUNGSWEG_OPTIONEN = [
+  ['barOderSpende', 'Bar oder als Spende'],
+  ['ueberweisung', 'Per Überweisung'],
+] as const satisfies ReadonlyArray<readonly [Zahlungsweg, string]>
+
 /**
  * Erst wahr, wenn die Seite im Browser wirklich bedienbar ist. Auf dem Server
  * und im ausgelieferten HTML ist der Wert falsch.
@@ -304,6 +367,23 @@ export default function ContractForm({
     setMiete((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
   }
+  /**
+   * Schaltet eine Klausel. Beim ersten Einschalten kommt der Vorschlag ins
+   * Feld, mit dem Namen der Gegenseite, so wie er gerade dasteht.
+   */
+  function schalteKlausel(k: Klausel, an: boolean) {
+    const bisher = miete.klauseln[k]
+    m('klauseln', {
+      ...miete.klauseln,
+      [k]: {
+        an,
+        text: an && !bisher.text.trim() ? klauselStandard(k, gegenseite.partnerName) : bisher.text,
+      },
+    })
+  }
+  const klauselText = (k: Klausel, text: string) =>
+    m('klauseln', { ...miete.klauseln, [k]: { ...miete.klauseln[k], text } })
+
   const a = <K extends keyof AngebotFelder>(feld: K, wert: AngebotFelder[K]) => {
     setAngebot((prev) => ({ ...prev, [feld]: wert }))
     beruehrt(feld)
@@ -849,13 +929,24 @@ export default function ContractForm({
             value={gegenseite.partnerName}
             onChange={(wert) => g('partnerName', wert)}
             error={errors.partnerName}
-            placeholder={type === 'MIETE' ? 'Vor- und Nachname' : 'Person oder Organisation'}
+            placeholder={type === 'MIETE' ? 'Vor- und Nachname oder Verein' : 'Person oder Organisation'}
             hint={
               type === 'ANGEBOT'
                 ? 'Erscheint nur in der Liste, nicht im Angebot.'
                 : 'So steht der Name im Vertrag und unter der Unterschriftslinie. Die eigene Seite ist immer der Verein, einer von euch beiden unterschreibt.'
             }
           />
+          {type === 'MIETE' && (
+            <Feld
+              id="vertretenDurch"
+              label="Vertreten durch"
+              value={miete.vertretenDurch}
+              onChange={(wert) => m('vertretenDurch', wert)}
+              error={errors.vertretenDurch}
+              placeholder="Vorname Nachname"
+              hint="Nur bei Vereinen und Firmen. Im Vertrag: „…, vertreten durch …“."
+            />
+          )}
           <div className="grid gap-5 sm:grid-cols-2">
             <Feld
               id="partnerEmail"
@@ -893,6 +984,15 @@ export default function ContractForm({
           <>
             <Karte titel="Anlass und Termin">
               <Feld
+                id="ueberschrift"
+                label="Überschrift"
+                value={miete.ueberschrift}
+                onChange={(wert) => m('ueberschrift', wert)}
+                error={errors.ueberschrift}
+                placeholder="Vereinbarung zur Nutzung des Pepe Dome"
+                hint="Leer lassen: „Vereinbarung zur Nutzung des Pepe Dome“. Für ein Projekt etwa „Mietvertrag“."
+              />
+              <Feld
                 id="anlass"
                 label="Anlass"
                 required
@@ -900,7 +1000,7 @@ export default function ContractForm({
                 onChange={(wert) => m('anlass', wert)}
                 error={errors.anlass}
                 placeholder="Feier zum 30. Geburtstag"
-                hint="Steht als Untertitel unter „Vereinbarung zur Nutzung des Pepe Dome“."
+                hint="Steht als Untertitel unter der Überschrift."
               />
               <Feld
                 id="termin"
@@ -950,6 +1050,15 @@ export default function ContractForm({
                   einheit="Uhr"
                 />
               </div>
+              <Textfeld
+                id="ablauf"
+                label="Ablauf"
+                value={miete.ablauf}
+                onChange={(wert) => m('ablauf', wert)}
+                error={errors.ablauf}
+                rows={4}
+                hint="Für mehrere Tage: Jede Zeile wird ein Punkt unter Termin und Zeit, etwa „02.04. bis 05.04.: Aufbau und Proben“. Stehen hier Zeilen und sind Beginn und Ende leer, entfällt der Satz „Veranstaltung von … bis …“."
+              />
               <div className="grid gap-5 sm:grid-cols-2">
                 <Feld
                   id="gaesteGeplant"
@@ -1089,8 +1198,25 @@ export default function ContractForm({
                       hint="Etwa ein Freundschaftspreis. Leer lassen: Es gilt der reguläre Preis. Mit Sonderpreis nennt der Vertrag beide und knüpft ihn an die Einhaltung der Regeln."
                     />
                   </div>
+                  <Feld
+                    id="preisEnthalten"
+                    label="Im Preis enthalten"
+                    value={miete.preisEnthalten}
+                    onChange={(wert) => m('preisEnthalten', wert)}
+                    error={errors.preisEnthalten}
+                    hint="Im Vertrag: „Enthalten sind …“. Leer lassen: Der Satz entfällt."
+                  />
                 </>
               )}
+
+              <Auswahl
+                name="umsatzsteuer"
+                label="Umsatzsteuer"
+                wert={miete.umsatzsteuer}
+                optionen={UMSATZSTEUER_OPTIONEN}
+                onChange={(wert) => m('umsatzsteuer', wert)}
+                hint="Endbetrag: Der Vertrag sagt ausdrücklich, dass keine Umsatzsteuer dazukommt."
+              />
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <Feld
@@ -1110,9 +1236,35 @@ export default function ContractForm({
                   onChange={(wert) => m('anzahlungFrist', wert)}
                   error={errors.anzahlungFrist}
                   placeholder="28.02.2027"
-                  hint="Wird aus dem Datum der Veranstaltung berechnet: zwei Wochen vorher. Lässt sich überschreiben."
+                  hint="Wird aus dem Datum der Veranstaltung berechnet: zwei Wochen vorher. Lässt sich überschreiben, auch mit Text wie „bei Vertragsschluss“."
                 />
               </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Feld
+                  id="restFrist"
+                  label="Rest fällig"
+                  value={miete.restFrist}
+                  onChange={(wert) => m('restFrist', wert)}
+                  error={errors.restFrist}
+                  placeholder="innerhalb von 14 Tagen nach der Veranstaltung"
+                  hint="Ein Datum oder ein Zeitpunkt wie „bei Mietbeginn“. Leer lassen: innerhalb von 14 Tagen nach der Veranstaltung."
+                />
+                <Feld
+                  id="verwendungszweck"
+                  label="Verwendungszweck"
+                  value={miete.verwendungszweck}
+                  onChange={(wert) => m('verwendungszweck', wert)}
+                  error={errors.verwendungszweck}
+                  hint="Steht unter der Bankverbindung. Leer lassen: keine Zeile."
+                />
+              </div>
+              <Auswahl
+                name="zahlungsweg"
+                label="Zahlungsweg"
+                wert={miete.zahlungsweg}
+                optionen={ZAHLUNGSWEG_OPTIONEN}
+                onChange={(wert) => m('zahlungsweg', wert)}
+              />
               <FieldHint>
                 Fest im Vertrag, ohne Feld: Absage kostenfrei bis 6 Wochen vorher. Danach werden
                 25 % (6 bis 3 Wochen), 50 % (3 bis 2 Wochen) oder 100 % (ab 2 Wochen) fällig. Bei
@@ -1220,11 +1372,11 @@ export default function ContractForm({
                 <Schalter
                   id="kaution"
                   label="Kaution"
-                  hint="Wird mit der Anzahlung fällig und nach der Abnahme zurückgezahlt oder verrechnet."
+                  hint="Wird nach der Abnahme zurückgezahlt oder verrechnet."
                   checked={miete.kaution}
                   onChange={(wert) => m('kaution', wert)}
                 >
-                  <div className="max-w-xs">
+                  <div className="grid gap-5 sm:grid-cols-2">
                     <Feld
                       id="kautionBetrag"
                       label="Kaution"
@@ -1234,9 +1386,132 @@ export default function ContractForm({
                       onChange={(wert) => m('kautionBetrag', wert)}
                       error={errors.kautionBetrag}
                     />
+                    <Feld
+                      id="kautionFrist"
+                      label="Kaution fällig"
+                      value={miete.kautionFrist}
+                      onChange={(wert) => m('kautionFrist', wert)}
+                      error={errors.kautionFrist}
+                      placeholder="mit der Anzahlung"
+                      hint="Ein Datum oder ein Zeitpunkt. Leer lassen: mit der Anzahlung."
+                    />
                   </div>
                 </Schalter>
               </div>
+            </Karte>
+
+            <Karte titel="Weitere Klauseln">
+              <FieldHint>
+                Für Nutzungen über eine Feier hinaus, etwa ein Projekt mit eigenem Publikum. Beim
+                Einschalten steht ein Vorschlag im Feld, der sich frei ändern lässt. Jede Zeile wird
+                ein Punkt im Vertrag. Linien (________) bleiben zum Ausfüllen von Hand.
+              </FieldHint>
+              {errors.klauseln && <p className="text-sm text-red-400">{errors.klauseln}</p>}
+              <div className="space-y-3">
+                {KLAUSELN.map((k) => (
+                  <Schalter
+                    key={k}
+                    id={`klausel-${k}`}
+                    label={KLAUSEL[k].titel}
+                    hint={KLAUSEL[k].hinweis}
+                    checked={miete.klauseln[k].an}
+                    onChange={(an) => schalteKlausel(k, an)}
+                  >
+                    <Textarea
+                      id={`klausel-${k}-text`}
+                      aria-label={`Text: ${KLAUSEL[k].titel}`}
+                      value={miete.klauseln[k].text}
+                      onChange={(event) => klauselText(k, event.target.value)}
+                      // Die Vorschläge haben lange Zeilen, die umbrechen.
+                      rows={Math.min(14, Math.max(4, miete.klauseln[k].text.split('\n').length * 2))}
+                    />
+                    <button
+                      type="button"
+                      className={zeilenKnopf}
+                      onClick={() => klauselText(k, klauselStandard(k, gegenseite.partnerName))}
+                    >
+                      Vorschlag wieder einsetzen
+                    </button>
+                  </Schalter>
+                ))}
+              </div>
+            </Karte>
+
+            <Karte titel="Eigene Abschnitte">
+              <FieldHint>
+                Für alles, was sonst nirgends passt, etwa Zweck und Projekt, Öffentlichkeitsarbeit
+                oder die Anmeldung beim KVR. Jede Zeile im Text wird ein Punkt, eine einzelne Zeile
+                ein Absatz.
+              </FieldHint>
+              {errors.eigeneAbschnitte && (
+                <p className="text-sm text-red-400">{errors.eigeneAbschnitte}</p>
+              )}
+              {miete.eigeneAbschnitte.length > 0 && (
+                <div className="space-y-4">
+                  {miete.eigeneAbschnitte.map((eintrag, index) => {
+                    const aendere = (neu: Partial<typeof eintrag>) =>
+                      m(
+                        'eigeneAbschnitte',
+                        miete.eigeneAbschnitte.map((e, i) => (i === index ? { ...e, ...neu } : e))
+                      )
+                    return (
+                      <div
+                        key={index}
+                        className="relative space-y-3 rounded-lg border border-white/[0.08] px-4 py-3"
+                      >
+                        <Input
+                          aria-label={`Überschrift von Abschnitt ${index + 1}`}
+                          value={eintrag.titel}
+                          placeholder="Überschrift, etwa „Zweck und Projekt“"
+                          onChange={(event) => aendere({ titel: event.target.value })}
+                        />
+                        <Textarea
+                          aria-label={`Text von Abschnitt ${index + 1}`}
+                          value={eintrag.text}
+                          rows={4}
+                          onChange={(event) => aendere({ text: event.target.value })}
+                        />
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <label className="flex items-center gap-2 text-[12px] text-white/60 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={eintrag.oben}
+                              onChange={(event) => aendere({ oben: event.target.checked })}
+                              className="accent-[#016dca]"
+                            />
+                            Weit oben einordnen, gleich nach Termin und Zeit
+                          </label>
+                          <button
+                            type="button"
+                            className={zeilenKnopf}
+                            aria-label={`Abschnitt ${index + 1} entfernen`}
+                            onClick={() =>
+                              m(
+                                'eigeneAbschnitte',
+                                miete.eigeneAbschnitte.filter((_, i) => i !== index)
+                              )
+                            }
+                          >
+                            Entfernen
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+              <button
+                type="button"
+                className={zeilenKnopf}
+                onClick={() =>
+                  m('eigeneAbschnitte', [
+                    ...miete.eigeneAbschnitte,
+                    { titel: '', text: '', oben: false },
+                  ])
+                }
+              >
+                + Abschnitt
+              </button>
             </Karte>
 
             <Karte titel="Sonderabsprache">
@@ -1254,8 +1529,8 @@ export default function ContractForm({
                   <p className="text-sm text-red-400">{errors.sonderabsprache}</p>
                 ) : (
                   <FieldHint>
-                    Erscheint als eigener, letzter Abschnitt im Vertrag. Eine Leerzeile trennt
-                    Absätze. Leer lassen: kein Abschnitt.
+                    Erscheint als eigener Abschnitt am Ende, nur Schlussbestimmungen und Anlagen
+                    folgen noch. Eine Leerzeile trennt Absätze. Leer lassen: kein Abschnitt.
                   </FieldHint>
                 )}
               </div>

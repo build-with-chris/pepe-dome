@@ -65,6 +65,37 @@ describe('ContractForm beim Anlegen', () => {
     expect(screen.getByLabelText('Preis der Zusatzleistung 1')).toHaveValue('')
   })
 
+  it('füllt eine Klausel beim Einschalten mit dem Vorschlag und schickt den geänderten Text', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ contract: { id: 'c2' } }),
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    render(<ContractForm mode="create" vorbelegung={{}} />)
+
+    tippen(/^Name/, 'Beispiel e.V.')
+    tippen(/^Anlass/, 'Projekt')
+    tippen(/^Termin/, '01.06. bis 04.06.2031')
+    expect(screen.queryByLabelText('Text: Haftung und Versicherung')).toBeNull()
+
+    fireEvent.click(screen.getByRole('switch', { name: 'Haftung und Versicherung' }))
+    const feld = screen.getByLabelText('Text: Haftung und Versicherung')
+    expect((feld as HTMLTextAreaElement).value).toMatch(/^Beispiel e\.V\. haftet/)
+
+    fireEvent.change(feld, { target: { value: 'Eigene Regel.' } })
+    fireEvent.click(screen.getByRole('button', { name: '+ Abschnitt' }))
+    tippen('Überschrift von Abschnitt 1', 'Zweck')
+    fireEvent.click(screen.getByRole('radio', { name: 'Endbetrag (netto = brutto)' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
+
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/admin/contracts/c2'))
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body.data.klauseln.haftung).toEqual({ an: true, text: 'Eigene Regel.' })
+    expect(body.data.klauseln.technik).toEqual({ an: false, text: '' })
+    expect(body.data.eigeneAbschnitte).toEqual([{ titel: 'Zweck', text: '', oben: false }])
+    expect(body.data.umsatzsteuer).toBe('endbetrag')
+  })
+
   it('wechselt beim Showbesuch auf Show, Ticketregel und Heizpauschale', () => {
     render(<ContractForm mode="create" vorbelegung={{}} />)
     expect(screen.queryByLabelText(/^Name der Show/)).toBeNull()

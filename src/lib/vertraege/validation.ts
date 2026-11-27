@@ -16,6 +16,7 @@
  */
 
 import { z } from 'zod'
+import { KLAUSELN, type Klausel } from './klauseln'
 
 export const VERTRAGSTYPEN = ['MIETE', 'ANGEBOT', 'KUENSTLER', 'VERANSTALTER'] as const
 export type Vertragstyp = (typeof VERTRAGSTYPEN)[number]
@@ -129,6 +130,30 @@ const gegenseite = {
 export const PREISMODELLE = ['pauschale', 'showbesuch'] as const
 export type Preismodell = (typeof PREISMODELLE)[number]
 
+/**
+ * Was der Vertrag zur Umsatzsteuer sagt. „keine“ heißt: kein Satz dazu, so wie
+ * bei Feiern bisher. „endbetrag“ ist netto gleich brutto, etwa zwischen
+ * gemeinnützigen Kultureinrichtungen.
+ */
+export const UMSATZSTEUER = ['keine', 'endbetrag', 'zuzueglich'] as const
+export type Umsatzsteuer = (typeof UMSATZSTEUER)[number]
+
+export const ZAHLUNGSWEGE = ['barOderSpende', 'ueberweisung'] as const
+export type Zahlungsweg = (typeof ZAHLUNGSWEGE)[number]
+
+/** Eine Klausel aus klauseln.ts: an oder aus, und der Text, der ins PDF kommt. */
+const klausel = z
+  .object({ an: schalter, text: text(4000) })
+  .nullish()
+  .transform((wert) => wert ?? { an: false, text: '' })
+
+const eigenerAbschnitt = z.object({
+  titel: text(120),
+  text: text(4000),
+  /** Weit oben, gleich nach Termin und Zeit, statt vor den Unterschriften. */
+  oben: schalter,
+})
+
 const zusatzleistung = z.object({
   leistung: text(200),
   /** Freitext, damit auch ein Zusatz wie „für den Abend“ geht. */
@@ -137,13 +162,19 @@ const zusatzleistung = z.object({
 
 export const mieteDatenSchema = z
   .object({
+    /** Überschrift des Vertrags. Leer: „Vereinbarung zur Nutzung des Pepe Dome“. */
+    ueberschrift: text(80),
     /** Untertitel des Vertrags, etwa „Feier zum 18. Geburtstag“. */
     anlass: pflicht('Anlass', 120),
+    /** Wer für die Gegenseite unterschreibt, etwa bei einem Verein. */
+    vertretenDurch: text(160),
     /** Termin als Text, weil er auch „Freitag oder Samstag“ lauten kann. */
     termin: pflicht('Termin', 300),
     aufbauAb: uhrzeit,
     beginn: uhrzeit,
     ende: uhrzeit,
+    /** Ablauf mehrtägiger Nutzungen, eine Zeile je Punkt. */
+    ablauf: text(4000),
     gaesteGeplant: text(60),
     gaesteMax: text(60),
 
@@ -159,8 +190,30 @@ export const mieteDatenSchema = z
     preisRegulaer: betrag,
     /** Mietpauschale oder, beim Showbesuch, die Heizpauschale. */
     preisVereinbart: betrag,
+    /**
+     * „Enthalten sind …“ hinter dem Preis. Fehlt das Feld, gilt der bisherige
+     * Satz (Miete und Heizung). Ein bewusst geleertes Feld lässt den Satz weg.
+     */
+    preisEnthalten: z
+      .string()
+      .trim()
+      .max(300, 'Höchstens 300 Zeichen')
+      .nullish()
+      .transform((wert) => wert ?? null),
+    umsatzsteuer: z
+      .enum(UMSATZSTEUER)
+      .nullish()
+      .transform((wert) => wert ?? 'keine'),
     anzahlungProzent: prozent,
+    /** Ein Datum oder ein Zeitpunkt wie „bei Vertragsschluss“. */
     anzahlungFrist: text(200).transform((wert) => wert.replace(/^bis\s+/i, '')),
+    /** Leer: innerhalb von 14 Tagen nach der Veranstaltung. */
+    restFrist: text(200).transform((wert) => wert.replace(/^bis\s+/i, '')),
+    zahlungsweg: z
+      .enum(ZAHLUNGSWEGE)
+      .nullish()
+      .transform((wert) => wert ?? 'barOderSpende'),
+    verwendungszweck: text(120),
     einweisung: text(200),
 
     minderjaehrig: schalter,
@@ -183,6 +236,27 @@ export const mieteDatenSchema = z
     verbrauchsmaterial: text(120),
     bierPreis: betrag,
     kautionBetrag: betrag,
+    /** Leer: mit der Anzahlung, ohne Anzahlung vor der Veranstaltung. */
+    kautionFrist: text(200).transform((wert) => wert.replace(/^bis\s+/i, '')),
+
+    klauseln: z
+      .object(Object.fromEntries(KLAUSELN.map((schluessel) => [schluessel, klausel])) as {
+        [K in Klausel]: typeof klausel
+      })
+      .nullish()
+      .transform(
+        (wert) =>
+          wert ??
+          (Object.fromEntries(KLAUSELN.map((k) => [k, { an: false, text: '' }])) as Record<
+            Klausel,
+            { an: boolean; text: string }
+          >)
+      ),
+    eigeneAbschnitte: z
+      .array(eigenerAbschnitt)
+      .max(12, 'Höchstens 12 eigene Abschnitte')
+      .nullish()
+      .transform((liste) => (liste ?? []).filter((eintrag) => eintrag.titel || eintrag.text)),
 
     sonderabsprache: text(4000),
   })

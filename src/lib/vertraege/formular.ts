@@ -14,22 +14,34 @@
  * Anteil der Anzahlung, siehe ANZAHLUNG_PROZENT.
  */
 
+import { KLAUSELN, PREIS_ENTHALTEN, type Klausel } from './klauseln'
 import {
   betragAlsEingabe,
   PREISMODELLE,
+  UMSATZSTEUER,
   VERGUETUNGEN,
+  ZAHLUNGSWEGE,
   type Preismodell,
+  type Umsatzsteuer,
   type Verguetung,
+  type Zahlungsweg,
 } from './validation'
 
 export type Zusatzzeile = { leistung: string; preis: string }
+export type KlauselFeld = { an: boolean; text: string }
+export type EigenerAbschnitt = { titel: string; text: string; oben: boolean }
+
+export { PREIS_ENTHALTEN }
 
 export type MieteFelder = {
+  ueberschrift: string
   anlass: string
+  vertretenDurch: string
   termin: string
   aufbauAb: string
   beginn: string
   ende: string
+  ablauf: string
   gaesteGeplant: string
   gaesteMax: string
   preismodell: Preismodell
@@ -38,8 +50,13 @@ export type MieteFelder = {
   preisBezeichnung: string
   preisRegulaer: string
   preisVereinbart: string
+  preisEnthalten: string
+  umsatzsteuer: Umsatzsteuer
   anzahlungProzent: string
   anzahlungFrist: string
+  restFrist: string
+  zahlungsweg: Zahlungsweg
+  verwendungszweck: string
   einweisung: string
   minderjaehrig: boolean
   zusatzleistungen: boolean
@@ -55,6 +72,9 @@ export type MieteFelder = {
   verbrauchsmaterial: string
   bierPreis: string
   kautionBetrag: string
+  kautionFrist: string
+  klauseln: Record<Klausel, KlauselFeld>
+  eigeneAbschnitte: EigenerAbschnitt[]
   sonderabsprache: string
 }
 
@@ -137,6 +157,10 @@ const betrag = (wert: unknown): string =>
 
 const schalter = (wert: unknown): boolean => wert === true
 
+function auswahl<T extends string>(wert: unknown, erlaubt: readonly T[], start: T): T {
+  return (erlaubt as readonly unknown[]).includes(wert) ? (wert as T) : start
+}
+
 export function mieteFelder(daten?: unknown): MieteFelder {
   const d = alsObjekt(daten)
   const zeilen = Array.isArray(d.zusatzleistungenZeilen)
@@ -146,12 +170,30 @@ export function mieteFelder(daten?: unknown): MieteFelder {
       })
     : ZUSATZLEISTUNGEN.map((leistung) => ({ leistung, preis: '' }))
 
+  const gespeicherteKlauseln = alsObjekt(d.klauseln)
+  const klauseln = Object.fromEntries(
+    KLAUSELN.map((schluessel) => {
+      const k = alsObjekt(gespeicherteKlauseln[schluessel])
+      return [schluessel, { an: schalter(k.an), text: text(k.text) }]
+    })
+  ) as Record<Klausel, KlauselFeld>
+
+  const eigeneAbschnitte = Array.isArray(d.eigeneAbschnitte)
+    ? d.eigeneAbschnitte.map((eintrag) => {
+        const e = alsObjekt(eintrag)
+        return { titel: text(e.titel), text: text(e.text), oben: schalter(e.oben) }
+      })
+    : []
+
   return {
+    ueberschrift: text(d.ueberschrift),
     anlass: text(d.anlass),
+    vertretenDurch: text(d.vertretenDurch),
     termin: text(d.termin),
     aufbauAb: text(d.aufbauAb),
     beginn: text(d.beginn),
     ende: text(d.ende),
+    ablauf: text(d.ablauf),
     gaesteGeplant: text(d.gaesteGeplant),
     gaesteMax: text(d.gaesteMax),
     preismodell: (PREISMODELLE as readonly unknown[]).includes(d.preismodell)
@@ -162,11 +204,17 @@ export function mieteFelder(daten?: unknown): MieteFelder {
     preisBezeichnung: text(d.preisBezeichnung),
     preisRegulaer: betrag(d.preisRegulaer),
     preisVereinbart: betrag(d.preisVereinbart),
+    // Wie bei der Anzahlung: Fehlt der Wert, gilt der bisherige Satz.
+    preisEnthalten: text(d.preisEnthalten, PREIS_ENTHALTEN),
+    umsatzsteuer: auswahl(d.umsatzsteuer, UMSATZSTEUER, 'keine'),
     // Fehlt der Wert, gilt die Hausregel. Ein bewusst geleertes Feld ist als
     // null gespeichert und bleibt leer: dann gibt es keine Anzahlung.
     anzahlungProzent:
       d.anzahlungProzent === undefined ? ANZAHLUNG_PROZENT : betrag(d.anzahlungProzent),
     anzahlungFrist: text(d.anzahlungFrist),
+    restFrist: text(d.restFrist),
+    zahlungsweg: auswahl(d.zahlungsweg, ZAHLUNGSWEGE, 'barOderSpende'),
+    verwendungszweck: text(d.verwendungszweck),
     einweisung: text(d.einweisung),
     minderjaehrig: schalter(d.minderjaehrig),
     zusatzleistungen: schalter(d.zusatzleistungen),
@@ -182,6 +230,9 @@ export function mieteFelder(daten?: unknown): MieteFelder {
     verbrauchsmaterial: text(d.verbrauchsmaterial),
     bierPreis: betrag(d.bierPreis),
     kautionBetrag: betrag(d.kautionBetrag),
+    kautionFrist: text(d.kautionFrist),
+    klauseln,
+    eigeneAbschnitte,
     sonderabsprache: text(d.sonderabsprache),
   }
 }
