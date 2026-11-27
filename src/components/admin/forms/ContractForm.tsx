@@ -861,7 +861,7 @@ export default function ContractForm({
             hint={
               type === 'ANGEBOT'
                 ? 'Erscheint nur in der Liste, nicht im Angebot.'
-                : 'So steht der Name im Vertrag und unter der Unterschriftslinie. Die eigene Seite ist immer der Verein mit beiden Vertretern.'
+                : 'So steht der Name im Vertrag und unter der Unterschriftslinie. Die eigene Seite ist immer der Verein, einer von euch beiden unterschreibt.'
             }
           />
           <div className="grid gap-5 sm:grid-cols-2">

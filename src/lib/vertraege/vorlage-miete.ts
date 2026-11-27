@@ -17,7 +17,7 @@
  */
 
 import { fett, linie, type Baustein, type Dokument, type Inhalt } from './dokument'
-import { eigeneSeite, FUSSZEILE, unterschriftenEigeneSeite } from './partei'
+import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
 import { betragAlsText, type MieteDaten } from './validation'
 
 export type Gegenseite = {
@@ -406,13 +406,9 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
         { art: 'ueberschrift', text: 'Unterschriften' },
         {
           art: 'unterschriften',
-          // Erste Zeile die eigene Seite, zweite die Gegenseite.
           felder: [
-            unterschriftenEigeneSeite(),
-            [
-              `Ort, Datum\n${name}`,
-              ...(d.minderjaehrig ? ['Ort, Datum\nErziehungsberechtigte Person'] : []),
-            ],
+            [unterschriftEigeneSeite(), `Ort, Datum\n${name}`],
+            ...(d.minderjaehrig ? [['Ort, Datum\nErziehungsberechtigte Person']] : []),
           ],
         },
       ],

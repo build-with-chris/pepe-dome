@@ -39,7 +39,7 @@
  */
 
 import { fett, linie, type Baustein, type Dokument } from './dokument'
-import { eigeneSeite, FUSSZEILE, unterschriftenEigeneSeite } from './partei'
+import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
 import { betragAlsText, type AuftrittDaten } from './validation'
 import type { Gegenseite } from './vorlage-miete'
 
@@ -221,7 +221,7 @@ export function auftrittDokument(
           { art: 'ueberschrift', text: 'Unterschriften' },
           {
             art: 'unterschriften',
-            felder: [unterschriftenEigeneSeite(), [`Ort, Datum\n${name}`]],
+            felder: [[unterschriftEigeneSeite(), `Ort, Datum\n${name}`]],
           },
         ],
       },

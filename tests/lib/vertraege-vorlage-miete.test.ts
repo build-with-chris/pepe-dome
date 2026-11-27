@@ -110,7 +110,7 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
     expect(text).toContain('Vereinbarung zur Nutzung des Pepe Dome')
     expect(text).toContain('Feier zum Abschluss')
     expect(text).toContain(
-      'Zwischen der Circus Akademie München e.V., Ranhazweg 18, 85521 Ottobrunn, Träger des Pepe Dome, vertreten durch Michael Heiduk und Christoph Hermann, im Folgenden „Pepe Dome“,'
+      'Zwischen der Circus Akademie München e.V., Ranhazweg 18, 85521 Ottobrunn, Träger des Pepe Dome, vertreten durch Michael Heiduk und Christoph Hermann, jeweils einzeln vertretungsberechtigt, im Folgenden „Pepe Dome“,'
     )
     expect(text).toContain('Jana Beispiel, geboren am ____')
     expect(text).toContain('vertreten durch die erziehungsberechtigte Person ____')
@@ -167,28 +167,20 @@ describe('Mietvereinbarung mit allen Schaltern', () => {
     expect(text).toContain('Werkzeug: 3 € Leihgebühr pro Werkzeug.')
   })
 
-  it('hat sechs Unterschriftsfelder: zwei Erklärungen, beide Vertreter des Vereins, Gegenseite, Erziehungsberechtigte', () => {
+  it('hat fünf Unterschriftsfelder: zwei Erklärungen, Verein, Gegenseite, Erziehungsberechtigte', () => {
     expect(unterschriften(dokument.bausteine)).toEqual([
       'Ort, Datum, Unterschrift Aufsichtsperson',
       'Ort, Datum, Unterschrift Aufsichtsperson',
-      'Ort, Datum\nMichael Heiduk, Circus Akademie München e.V.',
-      'Ort, Datum\nChristoph Hermann, Circus Akademie München e.V.',
+      'Ort, Datum\nCircus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann',
       'Ort, Datum\nJana Beispiel',
       'Ort, Datum\nErziehungsberechtigte Person',
     ])
   })
 
-  it('setzt die eigene Seite in die erste Zeile der Unterschriften, die Gegenseite in die zweite', () => {
-    const felder = dokument.bausteine
-      .flatMap((baustein) => (baustein.art === 'gruppe' ? baustein.bausteine : [baustein]))
-      .filter((baustein) => baustein.art === 'unterschriften')
-      .at(-1)
-    expect(felder).toMatchObject({
-      felder: [
-        [expect.stringContaining('Michael Heiduk'), expect.stringContaining('Christoph Hermann')],
-        ['Ort, Datum\nJana Beispiel', 'Ort, Datum\nErziehungsberechtigte Person'],
-      ],
-    })
+  it('braucht für den Verein nur eine Unterschrift und nennt beide Vertreter gleichberechtigt', () => {
+    const felder = unterschriften(dokument.bausteine).filter((feld) => feld.includes('Circus Akademie'))
+    expect(felder).toEqual(['Ort, Datum\nCircus Akademie München e.V.\nMichael Heiduk oder Christoph Hermann'])
+    expect(text).toContain('Michael Heiduk und Christoph Hermann, jeweils einzeln vertretungsberechtigt')
   })
 
   it('bildet den Titel aus Anlass und Name', () => {
@@ -229,8 +221,8 @@ describe('Mietvereinbarung ohne Schalter', () => {
     expect(text).toContain('Anschrift: Musterweg 1')
   })
 
-  it('hat nur die Unterschriften der beiden Seiten: zwei für den Verein, eine für die Gegenseite', () => {
-    expect(unterschriften(dokument.bausteine)).toHaveLength(3)
+  it('hat nur die zwei Unterschriften der beiden Seiten', () => {
+    expect(unterschriften(dokument.bausteine)).toHaveLength(2)
   })
 })
 

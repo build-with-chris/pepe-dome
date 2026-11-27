@@ -11,8 +11,10 @@
  * (src/app/[lang]/impressum/page.tsx) und auf der Spendenseite.
  *
  * Entschieden von Chris am 27.11.2026, nach dem Muster seines Partners:
- * Verein mit zwei Vertretern, für alle Vertragstypen. Vorher stand in den
- * Vorlagen „Pepe Dome, vertreten durch Christoph Hermann“.
+ * Verein mit zwei Vertretern, für alle Vertragstypen. Beide stehen
+ * gleichberechtigt da, und die Unterschrift von einem der beiden genügt.
+ * Deshalb gibt es für die eigene Seite ein einziges Unterschriftsfeld.
+ * Vorher stand in den Vorlagen „Pepe Dome, vertreten durch Christoph Hermann“.
  */
 
 import { fett, type Baustein } from './dokument'
@@ -30,12 +32,12 @@ export function eigeneSeite(): Baustein {
     art: 'absatz',
     text: [
       fett('Zwischen'),
-      ` der ${VEREIN}, ${ANSCHRIFT}, Träger des Pepe Dome, vertreten durch ${VERTRETER.join(' und ')}, im Folgenden „Pepe Dome“,`,
+      ` der ${VEREIN}, ${ANSCHRIFT}, Träger des Pepe Dome, vertreten durch ${VERTRETER.join(' und ')}, jeweils einzeln vertretungsberechtigt, im Folgenden „Pepe Dome“,`,
     ],
   }
 }
 
-/** Unterschriftsfelder der eigenen Seite, eines je Vertreter. */
-export function unterschriftenEigeneSeite(): string[] {
-  return VERTRETER.map((person) => `Ort, Datum\n${person}, ${VEREIN}`)
+/** Das Unterschriftsfeld der eigenen Seite. Einer der beiden Vertreter unterschreibt. */
+export function unterschriftEigeneSeite(): string {
+  return `Ort, Datum\n${VEREIN}\n${VERTRETER.join(' oder ')}`
 }
