@@ -288,11 +288,12 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
     fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
 
     expect(screen.getByText(/noch keinen festen Wortlaut/)).toBeInTheDocument()
-    for (const feld of ['Ausfall und Absage', 'Bedingungen vor Ort', 'Was der Pepe Dome erwartet']) {
+    for (const feld of ['Bedingungen vor Ort', 'Was der Pepe Dome erwartet']) {
       expect(screen.getByLabelText(feld)).toHaveValue('')
     }
-    // Höhere Gewalt ist seit dem 27.11.2026 feste Klausel und kein Feld mehr.
+    // Absage und höhere Gewalt sind seit dem 27.11.2026 feste Klauseln und keine Felder mehr.
     expect(screen.queryByLabelText('Höhere Gewalt')).toBeNull()
+    expect(screen.queryByLabelText('Ausfall und Absage')).toBeNull()
   })
 
   it('verlangt Titel und Termin und schickt die Felder des gewählten Typs', async () => {
@@ -308,7 +309,7 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
 
     tippen(/^Titel der Veranstaltung/, 'Beispielabend')
     tippen(/^Termin/, 'Samstag, 17.05.2031')
-    tippen('Ausfall und Absage', 'Wird einzeln abgesprochen.')
+    tippen('Bedingungen vor Ort', 'Wird einzeln abgesprochen.')
     fireEvent.click(screen.getByRole('button', { name: 'Vertrag anlegen' }))
 
     await waitFor(() => expect(push).toHaveBeenCalledWith('/admin/contracts/c9'))
@@ -320,7 +321,7 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
       verguetung: 'ticketanteil',
       anteilGegenseite: '55',
       mitMwst: false,
-      ausfall: 'Wird einzeln abgesprochen.',
+      bedingungen: 'Wird einzeln abgesprochen.',
     })
   })
 })

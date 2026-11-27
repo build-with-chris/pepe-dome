@@ -238,8 +238,10 @@ export type AngebotDaten = z.infer<typeof angebotDatenSchema>
  * (erst Ersatztermin, dann dürfen beide zurücktreten) und zur Gastronomie
  * (alles über den Pepe Dome, Ausnahmen nur schriftlich vorab).
  *
- * Noch nicht geklärt und deshalb ohne festen Wortlaut: Ausfall und Absage,
- * Bedingungen vor Ort, was der Pepe Dome als Gastgeber erwartet. Dafür gibt es je ein Freitextfeld. Was dort steht, wird ein
+ * Bei einer Absage durch die Gegenseite wird nur ein Ersatztermin gesucht.
+ *
+ * Noch nicht geklärt und deshalb ohne festen Wortlaut: Bedingungen vor Ort
+ * und was der Pepe Dome als Gastgeber erwartet. Dafür gibt es je ein Freitextfeld. Was dort steht, wird ein
  * eigener Abschnitt, ein leeres Feld erzeugt keinen. Sobald die Regeln
  * feststehen, werden aus den Feldern feste Klauseln mit Schaltern, wie in der
  * Mietvereinbarung.
@@ -274,7 +276,6 @@ export const auftrittDatenSchema = z.object({
   foerderung: text(200),
 
   // Noch offene Regelungen, siehe Kommentar oben.
-  ausfall: text(4000),
   bedingungen: text(4000),
   erwartungen: text(4000),
 

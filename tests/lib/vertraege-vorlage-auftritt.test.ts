@@ -57,14 +57,20 @@ describe.each([
     expect(text.match(/\[Unterschrift\]/g)).toHaveLength(2)
   })
 
-  it('besteht ohne Freitext aus Veranstaltung, Einnahmen, Abrechnung, höherer Gewalt und Unterschriften', () => {
+  it('besteht ohne Freitext aus Veranstaltung, Einnahmen, Abrechnung, Absage, höherer Gewalt und Unterschriften', () => {
     expect(titel).toEqual([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
-      '4. Höhere Gewalt',
+      '4. Absage',
+      '5. Höhere Gewalt',
       'Unterschriften',
     ])
+  })
+
+  it('sucht bei einer Absage der Gegenseite nur einen Ersatztermin, ohne Stornokosten', () => {
+    expect(text).toContain('Sagt Duo Beispiel die Veranstaltung ab, suchen beide Seiten einen Ersatztermin. Kosten für die Absage werden nicht berechnet.')
+    expect(text).not.toContain('25 %')
   })
 
   it('sucht bei höherer Gewalt zuerst einen Ersatztermin und lässt dann beide zurücktreten', () => {
@@ -106,15 +112,14 @@ describe.each([
 
   it('behauptet nichts zu den Punkten, die noch nicht geklärt sind', () => {
     // „Ausfalls der Technik“ steht als Beispiel in der Klausel zur höheren Gewalt.
-    for (const wort of ['Ausfall und Absage', 'Absage', 'Storno', 'Hausordnung', 'Haftung', 'Versicherung', 'Gage']) {
+    for (const wort of ['Storno', 'Hausordnung', 'Haftung', 'Versicherung', 'Gage']) {
       expect(text).not.toContain(wort)
     }
   })
 
   it('macht aus jedem ausgefüllten Freitext einen eigenen, nummerierten Abschnitt', () => {
     const voll = bauen(type, {
-      ausfall: 'Erster Absatz.\n\nZweiter Absatz.',
-      bedingungen: 'Text zu den Bedingungen.',
+      bedingungen: 'Erster Absatz.\n\nZweiter Absatz.',
       erwartungen: 'Text zu den Erwartungen.',
       sonderabsprache: 'Sonstiges.',
     })
@@ -122,23 +127,24 @@ describe.each([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
-      '4. Höhere Gewalt',
-      '5. Ausfall und Absage',
+      '4. Absage',
+      '5. Höhere Gewalt',
       '6. Bedingungen vor Ort',
       '7. Was der Pepe Dome erwartet',
       '8. Sonderabsprache',
       'Unterschriften',
     ])
-    expect(voll.text).toContain('5. Ausfall und Absage\nErster Absatz.\nZweiter Absatz.')
+    expect(voll.text).toContain('6. Bedingungen vor Ort\nErster Absatz.\nZweiter Absatz.')
   })
 
   it('nummeriert ohne Lücke, wenn nur ein Freitext ausgefüllt ist', () => {
-    expect(bauen(type, { bedingungen: 'Text.' }).titel).toEqual([
+    expect(bauen(type, { erwartungen: 'Text.' }).titel).toEqual([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
-      '4. Höhere Gewalt',
-      '5. Bedingungen vor Ort',
+      '4. Absage',
+      '5. Höhere Gewalt',
+      '6. Was der Pepe Dome erwartet',
       'Unterschriften',
     ])
   })
@@ -163,7 +169,14 @@ describe('Künstlervertrag mit fester Gage', () => {
   const { text, titel } = bauen('KUENSTLER', { verguetung: 'gage', gage: '777,50', foerderung: 'Beispielförderung' })
 
   it('nennt Gage und Förderung statt einer Aufteilung', () => {
-    expect(titel).toEqual(['1. Veranstaltung', '2. Gage', '3. Abrechnung und Zahlung', '4. Höhere Gewalt', 'Unterschriften'])
+    expect(titel).toEqual([
+      '1. Veranstaltung',
+      '2. Gage',
+      '3. Abrechnung und Zahlung',
+      '4. Absage',
+      '5. Höhere Gewalt',
+      'Unterschriften',
+    ])
     expect(text).toContain('Duo Beispiel erhält für den Auftritt eine feste Gage von 777,50 €.')
     expect(text).toContain('Die Gage wird aus der Förderung „Beispielförderung“ bezahlt.')
     expect(text).toContain('Getränke und Speisen werden vom Pepe Dome angeboten. Die Einnahmen daraus gehen an den Pepe Dome.')

@@ -85,7 +85,6 @@ export type AuftrittFelder = {
   mitMwst: boolean
   gage: string
   foerderung: string
-  ausfall: string
   bedingungen: string
   erwartungen: string
   sonderabsprache: string
@@ -223,7 +222,6 @@ export function auftrittFelder(daten?: unknown): AuftrittFelder {
     mitMwst: schalter(d.mitMwst),
     gage: betrag(d.gage),
     foerderung: text(d.foerderung),
-    ausfall: text(d.ausfall),
     bedingungen: text(d.bedingungen),
     erwartungen: text(d.erwartungen),
     sonderabsprache: text(d.sonderabsprache),

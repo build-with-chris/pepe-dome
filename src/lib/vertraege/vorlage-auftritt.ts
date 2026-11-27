@@ -17,6 +17,7 @@
  *   - Gastronomie: Getränke und Speisen laufen über den Pepe Dome, die
  *     Einnahmen bleiben dort. Ausnahmen nur nach schriftlicher Absprache.
  *   - höhere Gewalt: erst Ersatztermin, sonst dürfen beide zurücktreten
+ *   - Absage durch die Gegenseite: nur Ersatztermin, keine Stornokosten
  *   - Abrechnung in der Woche nach der Veranstaltung, Zahlung spätestens
  *     14 Tage nach der Veranstaltung
  *
@@ -26,8 +27,8 @@
  *
  * Offen, mit Chris zu klären, bevor daraus feste Klauseln werden:
  *
- *   - Ausfall und Absage: Es soll eine feste Hausregel geben (Staffel),
- *     die Werte stehen noch aus
+ *   - was gilt, wenn sich nach einer Absage kein Ersatztermin findet, und
+ *     was bei einer Absage durch den Pepe Dome
  *   - Bedingungen vor Ort für Künstler:innen und Veranstalter:innen
  *     (Technik, Raum, Zeiten, Personal)
  *   - was der Pepe Dome als Gastgeber verlangen kann
@@ -172,12 +173,24 @@ export function auftrittDokument(
     },
   ])
 
+  // ── Absage ──────────────────────────────────────────────────────────
+  // Entschieden am 27.11.2026: Hier gibt es keine Stornostaffel wie in der
+  // Mietvereinbarung, weil keine Miete fließt. Es wird nur ein Ersatztermin
+  // gesucht.
+  abschnitt('Absage', [
+    {
+      art: 'liste',
+      punkte: [
+        `Sagt ${name} die Veranstaltung ab, suchen beide Seiten einen Ersatztermin. Kosten für die Absage werden nicht berechnet.`,
+      ],
+    },
+  ])
+
   // ── Höhere Gewalt ───────────────────────────────────────────────────
   abschnitt('Höhere Gewalt', [{ art: 'liste', punkte: HOEHERE_GEWALT }])
 
   // ── Die noch offenen Regelungen: nur, wenn etwas eingetragen ist ────
   const freitexte: Array<[string, string]> = [
-    ['Ausfall und Absage', d.ausfall],
     ['Bedingungen vor Ort', d.bedingungen],
     ['Was der Pepe Dome erwartet', d.erwartungen],
     ['Sonderabsprache', d.sonderabsprache],

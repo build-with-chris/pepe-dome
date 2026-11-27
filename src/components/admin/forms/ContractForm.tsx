@@ -707,8 +707,8 @@ export default function ContractForm({
           {mitGage
             ? 'Die Ticketeinnahmen und die Einnahmen aus der Gastronomie gehen an den Pepe Dome. Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.'
             : 'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren. Die Gastronomie geht an den Pepe Dome. Abgerechnet wird in der Woche nach der Veranstaltung, gezahlt spätestens 14 Tage danach.'}{' '}
-          Dazu in beiden Fällen: Ausnahmen bei der Gastronomie nur nach schriftlicher Absprache,
-          und bei höherer Gewalt zuerst ein Ersatztermin.
+          Dazu in beiden Fällen: Ausnahmen bei der Gastronomie nur nach schriftlicher Absprache.
+          Bei einer Absage und bei höherer Gewalt wird zuerst ein Ersatztermin gesucht.
         </FieldHint>
       </Karte>
 
@@ -718,14 +718,6 @@ export default function ContractForm({
           als eigener Abschnitt im Vertrag. Ein leeres Feld erzeugt keinen Abschnitt, der Vertrag
           sagt dann nichts dazu.
         </div>
-        <Textfeld
-          id="ausfall"
-          label="Ausfall und Absage"
-          value={auftritt.ausfall}
-          onChange={(wert) => u('ausfall', wert)}
-          error={errors.ausfall}
-          hint="Absage durch die Gegenseite. Die Regel zur höheren Gewalt steht schon fest im Vertrag."
-        />
         <Textfeld
           id="bedingungen"
           label="Bedingungen vor Ort"
