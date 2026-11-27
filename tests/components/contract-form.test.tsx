@@ -288,9 +288,11 @@ describe('ContractForm für Künstler- und Veranstaltervertrag', () => {
     fireEvent.click(screen.getByRole('radio', { name: /^Veranstaltervertrag/ }))
 
     expect(screen.getByText(/noch keinen festen Wortlaut/)).toBeInTheDocument()
-    for (const feld of ['Ausfall und Absage', 'Höhere Gewalt', 'Bedingungen vor Ort', 'Was der Pepe Dome erwartet']) {
+    for (const feld of ['Ausfall und Absage', 'Bedingungen vor Ort', 'Was der Pepe Dome erwartet']) {
       expect(screen.getByLabelText(feld)).toHaveValue('')
     }
+    // Höhere Gewalt ist seit dem 27.11.2026 feste Klausel und kein Feld mehr.
+    expect(screen.queryByLabelText('Höhere Gewalt')).toBeNull()
   })
 
   it('verlangt Titel und Termin und schickt die Felder des gewählten Typs', async () => {

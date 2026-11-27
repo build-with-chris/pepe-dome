@@ -14,7 +14,9 @@
  *     Mehrwertsteuer gilt dasselbe wie beim Anteil: Wer mit Mehrwertsteuer
  *     abrechnet, bekommt sie obendrauf. Wer ohne abrechnet, etwa nach
  *     § 19 UStG, bekommt die Gage als Endbetrag.
- *   - dass die Einnahmen aus der Gastronomie beim Pepe Dome bleiben
+ *   - Gastronomie: Getränke und Speisen laufen über den Pepe Dome, die
+ *     Einnahmen bleiben dort. Ausnahmen nur nach schriftlicher Absprache.
+ *   - höhere Gewalt: erst Ersatztermin, sonst dürfen beide zurücktreten
  *   - Abrechnung in der Woche nach der Veranstaltung, Zahlung spätestens
  *     14 Tage nach der Veranstaltung
  *
@@ -24,8 +26,8 @@
  *
  * Offen, mit Chris zu klären, bevor daraus feste Klauseln werden:
  *
- *   - Ausfall und Absage: wer trägt was, welche Fristen
- *   - höhere Gewalt: was darunter fällt und was dann gilt
+ *   - Ausfall und Absage: Es soll eine feste Hausregel geben (Staffel),
+ *     die Werte stehen noch aus
  *   - Bedingungen vor Ort für Künstler:innen und Veranstalter:innen
  *     (Technik, Raum, Zeiten, Personal)
  *   - was der Pepe Dome als Gastgeber verlangen kann
@@ -37,11 +39,31 @@
  */
 
 import { fett, linie, type Baustein, type Dokument } from './dokument'
+import { eigeneSeite, FUSSZEILE, unterschriftenEigeneSeite } from './partei'
 import { betragAlsText, type AuftrittDaten } from './validation'
-import { FUSSZEILE, type Gegenseite } from './vorlage-miete'
+import type { Gegenseite } from './vorlage-miete'
 
-const VERTRETEN_DURCH = 'Christoph Hermann'
 const LUECKE = '________'
+
+/**
+ * Gastronomie, entschieden am 27.11.2026: Grundsatz ist, dass alles über den
+ * Pepe Dome läuft. Ausnahmen gibt es nur nach schriftlicher Absprache vorab.
+ */
+const GASTRO = [
+  'Getränke und Speisen werden vom Pepe Dome angeboten. Die Einnahmen daraus gehen an den Pepe Dome.',
+  'Ausnahmen sind möglich, wenn sie vorher schriftlich vereinbart werden.',
+]
+
+/**
+ * Höhere Gewalt, entschieden am 27.11.2026: erst Ersatztermin, dann dürfen
+ * beide Seiten zurücktreten. Die drei Beispiele sind die, die Chris so
+ * bestätigt hat. Ob ein Ausfall der Technik rechtlich als höhere Gewalt
+ * trägt, gehört in die juristische Durchsicht.
+ */
+const HOEHERE_GEWALT = [
+  'Kann die Veranstaltung wegen höherer Gewalt nicht stattfinden, etwa wegen Sturm, einer behördlichen Anordnung oder eines Ausfalls der Technik, suchen beide Seiten zuerst einen Ersatztermin.',
+  'Findet sich kein Ersatztermin, können beide Seiten vom Vertrag zurücktreten. Bereits Gezahltes wird erstattet. Weitergehende Ansprüche sind ausgeschlossen, soweit gesetzlich zulässig.',
+]
 
 // Kurz gehalten, damit der Titel neben dem Logo in einer Zeile bleibt. Dass es
 // um den Pepe Dome geht, sagen Logo und Abschnitt 1.
@@ -111,7 +133,7 @@ export function auftrittDokument(
             : `${name} rechnet ohne Mehrwertsteuer ab. Die Gage ist der Endbetrag.`,
           ...(d.foerderung ? [`Die Gage wird aus der Förderung „${d.foerderung}“ bezahlt.`] : []),
           'Die Ticketeinnahmen gehen an den Pepe Dome.',
-          'Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.',
+          ...GASTRO,
         ],
       },
     ])
@@ -131,7 +153,7 @@ export function auftrittDokument(
           d.mitMwst
             ? `${name} rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf den Anteil hinzu.`
             : `${name} rechnet ohne Mehrwertsteuer ab und erhält den Anteil ohne Aufschlag.`,
-          'Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.',
+          ...GASTRO,
         ],
       },
     ])
@@ -150,10 +172,12 @@ export function auftrittDokument(
     },
   ])
 
+  // ── Höhere Gewalt ───────────────────────────────────────────────────
+  abschnitt('Höhere Gewalt', [{ art: 'liste', punkte: HOEHERE_GEWALT }])
+
   // ── Die noch offenen Regelungen: nur, wenn etwas eingetragen ist ────
   const freitexte: Array<[string, string]> = [
     ['Ausfall und Absage', d.ausfall],
-    ['Höhere Gewalt', d.hoehereGewalt],
     ['Bedingungen vor Ort', d.bedingungen],
     ['Was der Pepe Dome erwartet', d.erwartungen],
     ['Sonderabsprache', d.sonderabsprache],
@@ -169,10 +193,7 @@ export function auftrittDokument(
   ].join(', ')
 
   const parteien: Baustein[] = [
-    {
-      art: 'absatz',
-      text: [fett('Zwischen'), ` dem Pepe Dome, vertreten durch ${VERTRETEN_DURCH},`],
-    },
+    eigeneSeite(),
     { art: 'abstand', hoehe: 3 },
     { art: 'absatz', text: fett('und') },
     kontakt
@@ -200,7 +221,7 @@ export function auftrittDokument(
           { art: 'ueberschrift', text: 'Unterschriften' },
           {
             art: 'unterschriften',
-            felder: [[`Ort, Datum\n${VERTRETEN_DURCH}, Pepe Dome`, `Ort, Datum\n${name}`]],
+            felder: [unterschriftenEigeneSeite(), [`Ort, Datum\n${name}`]],
           },
         ],
       },

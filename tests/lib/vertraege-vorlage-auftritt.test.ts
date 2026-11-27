@@ -49,19 +49,33 @@ describe.each([
     expect(dokument.titel).toBe(dateititel)
     expect(dokument.akzent).toBe(true)
     expect(dokument.fuss).toContain('Pepe Dome')
-    expect(text).toContain('Zwischen dem Pepe Dome, vertreten durch Christoph Hermann,')
+    expect(text).toContain('Zwischen der Circus Akademie München e.V., Ranhazweg 18, 85521 Ottobrunn, Träger des Pepe Dome,')
+    expect(text).toContain('vertreten durch Michael Heiduk und Christoph Hermann, im Folgenden „Pepe Dome“,')
     expect(text).toContain('Duo Beispiel, E-Mail: duo@example.org')
-    expect(text).toContain('[Unterschrift] Ort, Datum, Christoph Hermann, Pepe Dome')
+    expect(text).toContain('[Unterschrift] Ort, Datum, Michael Heiduk, Circus Akademie München e.V.')
+    expect(text).toContain('[Unterschrift] Ort, Datum, Christoph Hermann, Circus Akademie München e.V.')
     expect(text).toContain('[Unterschrift] Ort, Datum, Duo Beispiel')
   })
 
-  it('besteht ohne Freitext aus Veranstaltung, Einnahmen, Abrechnung und Unterschriften', () => {
+  it('besteht ohne Freitext aus Veranstaltung, Einnahmen, Abrechnung, höherer Gewalt und Unterschriften', () => {
     expect(titel).toEqual([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
+      '4. Höhere Gewalt',
       'Unterschriften',
     ])
+  })
+
+  it('sucht bei höherer Gewalt zuerst einen Ersatztermin und lässt dann beide zurücktreten', () => {
+    expect(text).toContain('suchen beide Seiten zuerst einen Ersatztermin.')
+    expect(text).toContain('Findet sich kein Ersatztermin, können beide Seiten vom Vertrag zurücktreten. Bereits Gezahltes wird erstattet.')
+    expect(text).toContain('Weitergehende Ansprüche sind ausgeschlossen, soweit gesetzlich zulässig.')
+  })
+
+  it('lässt Getränke und Speisen über den Pepe Dome laufen, mit Ausnahmen nur schriftlich vorab', () => {
+    expect(text).toContain('Getränke und Speisen werden vom Pepe Dome angeboten. Die Einnahmen daraus gehen an den Pepe Dome.')
+    expect(text).toContain('Ausnahmen sind möglich, wenn sie vorher schriftlich vereinbart werden.')
   })
 
   it('teilt netto, ohne Ticketgebühren, und sagt, was mit der Mehrwertsteuer ist', () => {
@@ -86,13 +100,13 @@ describe.each([
     expect(text).not.toContain('Ende')
   })
 
-  it('teilt die Ticketeinnahmen und lässt die Gastronomie beim Pepe Dome', () => {
+  it('teilt die Ticketeinnahmen', () => {
     expect(text).toContain('Die Ticketeinnahmen werden geteilt: 55 % für Duo Beispiel, 45 % für den Pepe Dome.')
-    expect(text).toContain('Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.')
   })
 
   it('behauptet nichts zu den Punkten, die noch nicht geklärt sind', () => {
-    for (const wort of ['Ausfall', 'Absage', 'höhere Gewalt', 'Höhere Gewalt', 'Hausordnung', 'Technik', 'Gage']) {
+    // „Ausfalls der Technik“ steht als Beispiel in der Klausel zur höheren Gewalt.
+    for (const wort of ['Ausfall und Absage', 'Absage', 'Storno', 'Hausordnung', 'Haftung', 'Versicherung', 'Gage']) {
       expect(text).not.toContain(wort)
     }
   })
@@ -100,7 +114,6 @@ describe.each([
   it('macht aus jedem ausgefüllten Freitext einen eigenen, nummerierten Abschnitt', () => {
     const voll = bauen(type, {
       ausfall: 'Erster Absatz.\n\nZweiter Absatz.',
-      hoehereGewalt: 'Text zur höheren Gewalt.',
       bedingungen: 'Text zu den Bedingungen.',
       erwartungen: 'Text zu den Erwartungen.',
       sonderabsprache: 'Sonstiges.',
@@ -109,14 +122,14 @@ describe.each([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
-      '4. Ausfall und Absage',
-      '5. Höhere Gewalt',
+      '4. Höhere Gewalt',
+      '5. Ausfall und Absage',
       '6. Bedingungen vor Ort',
       '7. Was der Pepe Dome erwartet',
       '8. Sonderabsprache',
       'Unterschriften',
     ])
-    expect(voll.text).toContain('4. Ausfall und Absage\nErster Absatz.\nZweiter Absatz.')
+    expect(voll.text).toContain('5. Ausfall und Absage\nErster Absatz.\nZweiter Absatz.')
   })
 
   it('nummeriert ohne Lücke, wenn nur ein Freitext ausgefüllt ist', () => {
@@ -124,7 +137,8 @@ describe.each([
       '1. Veranstaltung',
       '2. Einnahmen',
       '3. Abrechnung und Zahlung',
-      '4. Bedingungen vor Ort',
+      '4. Höhere Gewalt',
+      '5. Bedingungen vor Ort',
       'Unterschriften',
     ])
   })
@@ -149,10 +163,10 @@ describe('Künstlervertrag mit fester Gage', () => {
   const { text, titel } = bauen('KUENSTLER', { verguetung: 'gage', gage: '777,50', foerderung: 'Beispielförderung' })
 
   it('nennt Gage und Förderung statt einer Aufteilung', () => {
-    expect(titel).toEqual(['1. Veranstaltung', '2. Gage', '3. Abrechnung und Zahlung', 'Unterschriften'])
+    expect(titel).toEqual(['1. Veranstaltung', '2. Gage', '3. Abrechnung und Zahlung', '4. Höhere Gewalt', 'Unterschriften'])
     expect(text).toContain('Duo Beispiel erhält für den Auftritt eine feste Gage von 777,50 €.')
     expect(text).toContain('Die Gage wird aus der Förderung „Beispielförderung“ bezahlt.')
-    expect(text).toContain('Die Einnahmen aus der Gastronomie gehen an den Pepe Dome.')
+    expect(text).toContain('Getränke und Speisen werden vom Pepe Dome angeboten. Die Einnahmen daraus gehen an den Pepe Dome.')
     expect(text).not.toContain('werden geteilt')
     expect(text).not.toContain('Grundlage')
   })

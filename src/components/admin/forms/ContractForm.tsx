@@ -706,7 +706,9 @@ export default function ContractForm({
           Fest im Vertrag, ohne Feld:{' '}
           {mitGage
             ? 'Die Ticketeinnahmen und die Einnahmen aus der Gastronomie gehen an den Pepe Dome. Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.'
-            : 'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren. Die Gastronomie geht an den Pepe Dome. Abgerechnet wird in der Woche nach der Veranstaltung, gezahlt spätestens 14 Tage danach.'}
+            : 'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren. Die Gastronomie geht an den Pepe Dome. Abgerechnet wird in der Woche nach der Veranstaltung, gezahlt spätestens 14 Tage danach.'}{' '}
+          Dazu in beiden Fällen: Ausnahmen bei der Gastronomie nur nach schriftlicher Absprache,
+          und bei höherer Gewalt zuerst ein Ersatztermin.
         </FieldHint>
       </Karte>
 
@@ -722,13 +724,7 @@ export default function ContractForm({
           value={auftritt.ausfall}
           onChange={(wert) => u('ausfall', wert)}
           error={errors.ausfall}
-        />
-        <Textfeld
-          id="hoehereGewalt"
-          label="Höhere Gewalt"
-          value={auftritt.hoehereGewalt}
-          onChange={(wert) => u('hoehereGewalt', wert)}
-          error={errors.hoehereGewalt}
+          hint="Absage durch die Gegenseite. Die Regel zur höheren Gewalt steht schon fest im Vertrag."
         />
         <Textfeld
           id="bedingungen"
@@ -865,7 +861,7 @@ export default function ContractForm({
             hint={
               type === 'ANGEBOT'
                 ? 'Erscheint nur in der Liste, nicht im Angebot.'
-                : 'So steht der Name im Vertrag und unter der Unterschriftslinie.'
+                : 'So steht der Name im Vertrag und unter der Unterschriftslinie. Die eigene Seite ist immer der Verein mit beiden Vertretern.'
             }
           />
           <div className="grid gap-5 sm:grid-cols-2">

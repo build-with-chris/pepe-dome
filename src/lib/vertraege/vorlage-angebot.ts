@@ -11,7 +11,7 @@
 
 import { fett, grau, type Baustein, type Dokument, type Inhalt } from './dokument'
 import { betragAlsText, type AngebotDaten } from './validation'
-import { FUSSZEILE } from './vorlage-miete'
+import { FUSSZEILE } from './partei'
 
 const VERTRETEN_DURCH = 'Christoph Hermann'
 

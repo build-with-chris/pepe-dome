@@ -93,7 +93,7 @@ describe('Angebot', () => {
   })
 
   it('trägt die Fußzeile', () => {
-    expect(dokument.fuss).toBe('Pepe Dome · Ostpark München · www.pepe-dome.de')
+    expect(dokument.fuss).toBe('Pepe Dome · Circus Akademie München e.V. · Ostpark München · www.pepe-dome.de')
   })
 
   it('ohne regulären Preis gibt es keine durchgestrichene Zeile und kein Entgegenkommen', () => {

@@ -86,7 +86,6 @@ export type AuftrittFelder = {
   gage: string
   foerderung: string
   ausfall: string
-  hoehereGewalt: string
   bedingungen: string
   erwartungen: string
   sonderabsprache: string
@@ -225,7 +224,6 @@ export function auftrittFelder(daten?: unknown): AuftrittFelder {
     gage: betrag(d.gage),
     foerderung: text(d.foerderung),
     ausfall: text(d.ausfall),
-    hoehereGewalt: text(d.hoehereGewalt),
     bedingungen: text(d.bedingungen),
     erwartungen: text(d.erwartungen),
     sonderabsprache: text(d.sonderabsprache),

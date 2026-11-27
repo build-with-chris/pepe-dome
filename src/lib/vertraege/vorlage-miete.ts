@@ -17,6 +17,7 @@
  */
 
 import { fett, linie, type Baustein, type Dokument, type Inhalt } from './dokument'
+import { eigeneSeite, FUSSZEILE, unterschriftenEigeneSeite } from './partei'
 import { betragAlsText, type MieteDaten } from './validation'
 
 export type Gegenseite = {
@@ -25,12 +26,6 @@ export type Gegenseite = {
   partnerPhone: string | null
   partnerAddress: string | null
 }
-
-/** Die eigene Seite steht in jeder Vorlage fest. */
-const VERTRETEN_DURCH = 'Christoph Hermann'
-
-/** Steht auf jeder Seite unten, auch im Angebot. */
-export const FUSSZEILE = 'Pepe Dome · Ostpark München · www.pepe-dome.de'
 
 /** Dieselbe Bankverbindung wie auf der Spendenseite (src/app/[lang]/spenden/page.tsx). */
 const BANK: Array<[string, string]> = [
@@ -349,10 +344,7 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
   ].join(', ')
 
   const parteien: Baustein[] = [
-    {
-      art: 'absatz',
-      text: [fett('Zwischen'), ` dem Pepe Dome, vertreten durch ${VERTRETEN_DURCH},`],
-    },
+    eigeneSeite(),
     { art: 'abstand', hoehe: 3 },
     { art: 'absatz', text: fett('und') },
     ...(d.minderjaehrig
@@ -414,9 +406,13 @@ export function mieteDokument(gegenseite: Gegenseite, d: MieteDaten, titel: stri
         { art: 'ueberschrift', text: 'Unterschriften' },
         {
           art: 'unterschriften',
+          // Erste Zeile die eigene Seite, zweite die Gegenseite.
           felder: [
-            [`Ort, Datum\n${VERTRETEN_DURCH}, Pepe Dome`, `Ort, Datum\n${name}`],
-            ...(d.minderjaehrig ? [['Ort, Datum\nErziehungsberechtigte Person']] : []),
+            unterschriftenEigeneSeite(),
+            [
+              `Ort, Datum\n${name}`,
+              ...(d.minderjaehrig ? ['Ort, Datum\nErziehungsberechtigte Person'] : []),
+            ],
           ],
         },
       ],
