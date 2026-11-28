@@ -47,14 +47,35 @@ export function isBootstrapSuperAdminEmail(email: string | null | undefined): bo
   return getBootstrapSuperAdmins().includes(email.trim().toLowerCase())
 }
 
-/** Primäre Mailadresse eines Clerk-Users, unabhängig von der Sortierung. */
-function primaryEmail(user: {
+type ClerkEmailUser = {
   primaryEmailAddressId?: string | null
-  emailAddresses?: Array<{ id: string; emailAddress: string }>
-}): string | null {
+  emailAddresses?: Array<{
+    id: string
+    emailAddress: string
+    verification?: { status?: string | null } | null
+  }>
+}
+
+/** Primäre Mailadresse eines Clerk-Users, unabhängig von der Sortierung. */
+function primaryEmail(user: ClerkEmailUser): string | null {
   const addresses = user.emailAddresses ?? []
   const primary = addresses.find((address) => address.id === user.primaryEmailAddressId)
   return primary?.emailAddress ?? addresses[0]?.emailAddress ?? null
+}
+
+/**
+ * Die primäre Adresse, aber nur, wenn Clerk sie als bestätigt führt.
+ *
+ * Die Allowlist vergibt Super Admin allein über die Adresse. Ohne diese
+ * Prüfung hinge die höchste Rolle daran, dass Clerk unbestätigte Adressen nie
+ * als primär zulässt. Das ist eine Einstellung im Clerk-Dashboard und kein
+ * Versprechen dieses Codes. Hier gilt deshalb: nur bestätigte Adressen zählen.
+ */
+function verifiedPrimaryEmail(user: ClerkEmailUser): string | null {
+  const addresses = user.emailAddresses ?? []
+  const primary = addresses.find((address) => address.id === user.primaryEmailAddressId)
+  if (!primary || primary.verification?.status !== 'verified') return null
+  return primary.emailAddress
 }
 
 /**
@@ -65,7 +86,7 @@ export async function getUserRole(): Promise<UserRole> {
   const user = await currentUser()
   if (!user) return ROLES.NONE
 
-  if (isBootstrapSuperAdminEmail(primaryEmail(user))) {
+  if (isBootstrapSuperAdminEmail(verifiedPrimaryEmail(user))) {
     return ROLES.SUPER_ADMIN
   }
 
@@ -92,7 +113,7 @@ export async function getCurrentAdmin(): Promise<{
 
   const email = primaryEmail(user)
   const metadataRole = user.publicMetadata?.role
-  const role: UserRole = isBootstrapSuperAdminEmail(email)
+  const role: UserRole = isBootstrapSuperAdminEmail(verifiedPrimaryEmail(user))
     ? ROLES.SUPER_ADMIN
     : isAssignableRole(metadataRole)
       ? metadataRole
