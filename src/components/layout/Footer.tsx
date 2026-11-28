@@ -6,7 +6,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Instagram } from 'lucide-react'
+import { InstagramIcon } from '@/components/icons/InstagramIcon'
 import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
 import SupporterLogos from '@/components/custom/SupporterLogos'
@@ -50,7 +50,7 @@ export default function Footer() {
                   alignItems: 'baseline'
                 }}
               >
-                <Instagram
+                <InstagramIcon
                   style={{
                     width: '0.875rem',
                     height: '0.875rem',
