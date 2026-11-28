@@ -1,8 +1,7 @@
 # Wöchentliche Sicherheitsprüfung
 #
-# Zwei getrennte Aufgaben:
-#   audit    schaut nach bekannten Schwachstellen in den Abhängigkeiten
-#   codeql   sucht Schwachstellen im eigenen Code (Injection, XSS, offene Pfade)
+# audit schaut nach bekannten Schwachstellen in den Abhängigkeiten.
+# Die Suche im eigenen Code (CodeQL) steht in codeql.yml.
 #
 # Der Zeitplan ist der eigentliche Punkt. Ein Audit, das nur läuft, wenn jemand
 # daran denkt, läuft nicht. Beim ersten Audit dieses Projekts lagen 29 offene
@@ -11,14 +10,33 @@
 
 name: Security
 
+# Wann das Audit läuft: wöchentlich, von Hand und nur dann bei Push oder PR,
+# wenn sich package.json oder package-lock.json ändert. Neue Advisories
+# erscheinen unabhängig von unseren Commits. Lief das Audit bei jedem Push,
+# färbte eine frisch gemeldete Lücke jeden Vertrags- oder Textcommit rot,
+# und nach ein paar Tagen sah niemand mehr hin. CodeQL prüft den eigenen
+# Code und läuft deshalb in codeql.yml bei jeder Änderung.
+
 on:
   push:
     branches: [main]
+    paths:
+      - package.json
+      - package-lock.json
+      - .github/workflows/security.yml
   pull_request:
+    paths:
+      - package.json
+      - package-lock.json
+      - .github/workflows/security.yml
   schedule:
     # Montags 05:30 UTC. Der Bericht liegt vor dem Wochenanfang bereit.
     - cron: "30 5 * * 1"
   workflow_dispatch:
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -48,25 +66,3 @@ jobs:
       - name: Vollständiger Bericht (nur zur Ansicht)
         if: always()
         run: npm audit || true
-
-  codeql:
-    name: CodeQL
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: github/codeql-action/init@v4
-        with:
-          languages: javascript-typescript
-          # security-and-quality findet mehr als der Standard, dafür auch
-          # Stilfragen. Für ein Projekt dieser Grösse gut auszuhalten.
-          queries: security-and-quality
-
-      - uses: github/codeql-action/analyze@v4

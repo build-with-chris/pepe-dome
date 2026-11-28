@@ -27,11 +27,12 @@
   ],
   "author": "",
   "license": "ISC",
-  "//overrides": "Next pinnt intern ältere Versionen dieser beiden Pakete, für die es bereits gefixte Fassungen gibt. sharp 0.34 setzt auf libvips mit bekannten CVEs auf (CVE-2026-33327/33328/35590/35591); postcss 8.4.31 hat XSS und Pfad-Traversal über sourceMappingURL. Beide Overrides entfernen, sobald Next selbst nachzieht. deepmerge-ts 7 (über prisma → @prisma/config) läuft bei rekursiven Objekten in einen Stack-Überlauf (GHSA-ggr8-5vv4-36mx); Prisma 6 nutzt es nur zum Einlesen der prisma.config.ts, die Brüche von Version 8 (Maps, deepmergeInto) treffen das nicht. Entfernen, sobald Prisma selbst auf 8 geht.",
+  "//overrides": "Next pinnt intern ältere Versionen dieser beiden Pakete, für die es bereits gefixte Fassungen gibt. sharp 0.34 setzt auf libvips mit bekannten CVEs auf (CVE-2026-33327/33328/35590/35591); postcss 8.4.31 hat XSS und Pfad-Traversal über sourceMappingURL. Beide Overrides entfernen, sobald Next selbst nachzieht. deepmerge-ts 7 (über prisma → @prisma/config) läuft bei rekursiven Objekten in einen Stack-Überlauf (GHSA-ggr8-5vv4-36mx); Prisma 6 nutzt es nur zum Einlesen der prisma.config.ts, die Brüche von Version 8 (Maps, deepmergeInto) treffen das nicht. Entfernen, sobald Prisma selbst auf 8 geht. effect bis 3.22.0 (über prisma → @prisma/config und @hookform/resolvers) hat eine ReDoS-Lücke in Schema.TemplateLiteral (GHSA-7589-6fvf-x4pw); @prisma/config pinnt 3.20.0, 3.22.5 ist innerhalb von 3.x kompatibel. Entfernen, sobald Prisma selbst nachzieht.",
   "overrides": {
     "sharp": "^0.35.3",
     "postcss": "$postcss",
-    "deepmerge-ts": "^8.0.2"
+    "deepmerge-ts": "^8.0.2",
+    "effect": "^3.22.5"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.35.6",
@@ -60,7 +61,7 @@
     "framer-motion": "^12.23.24",
     "i18next": "^25.5.3",
     "lucide-react": "^0.560.0",
-    "next": "^15.1.6",
+    "next": "^15.5.29",
     "next-i18next": "^15.4.2",
     "next-themes": "^0.4.6",
     "react": "^19.1.1",
