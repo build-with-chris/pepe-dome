@@ -50,7 +50,7 @@ Das ist `prisma migrate deploy` und wendet nur offene Migrationen an. Es löscht
 nichts. Läuft auch automatisch mit, wenn dein Vercel-Build das vorsieht — dann
 kontrollier nur, dass beide Migrationen als angewendet auftauchen.
 
-> **Nicht** `npm run db:reset` oder `vitest` mit der Produktions-`.env` starten.
+> **Nicht** `prisma migrate reset` oder `vitest` mit der Produktions-`.env` starten.
 > Beides leert die Datenbank.
 
 ---

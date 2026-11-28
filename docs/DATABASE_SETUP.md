@@ -83,19 +83,9 @@ Das führt `prisma migrate deploy` aus und legt alle Tabellen an.
 
 ---
 
-## 4. Optional: Startdaten einspielen (Events Jan/Feb 2026)
+## 4. Prüfen
 
-```bash
-npm run db:seed
-```
-
-Das führt das Script `scripts/seed-jan-feb-2026.ts` aus und legt die definierten Events an (inkl. Bild-Download, falls URLs gesetzt sind).
-
----
-
-## 5. Prüfen
-
-- **Lokal:** `npm run dev` → z.B. `/events` aufrufen; Events sollten erscheinen, wenn du geseeded hast.
+- **Lokal:** `npm run dev` → z.B. `/events` aufrufen; Events erscheinen, sobald welche im Admin angelegt sind.
 - **Vercel:** Nach dem Setzen von `DATABASE_URL` in Vercel einen neuen Deploy auslösen.
 
 ---
@@ -105,8 +95,6 @@ Das führt das Script `scripts/seed-jan-feb-2026.ts` aus und legt die definierte
 | Befehl | Beschreibung |
 |--------|--------------|
 | `npm run db:migrate` | Migrations anwenden (Tabellen anlegen/aktualisieren) |
-| `npm run db:seed` | Seed-Script ausführen (Beispiel-Events anlegen) |
-| `npm run db:reset` | **Vorsicht:** DB zurücksetzen (löscht alle Daten), dann Migrations neu anwenden |
 
 ---
 
