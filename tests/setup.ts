@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 import { afterAll, afterEach, beforeEach } from 'vitest'
 import { prisma } from '../src/lib/prisma'
 import { assertSafeTestDatabase } from './db-guard'
