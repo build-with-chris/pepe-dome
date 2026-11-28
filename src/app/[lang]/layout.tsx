@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { isLocale, LOCALES } from '@/i18n/config'
 import LocaleSync from '@/components/layout/LocaleSync'
+import { PublicDocument } from '@/components/layout/SiteDocument'
 
 /**
  * Statically generate one branch per locale.
@@ -32,10 +33,12 @@ export default async function LangLayout({
   const { lang } = await params
   if (!isLocale(lang)) notFound()
 
+  // Hier entsteht <html lang>: die Sprache kommt aus dem Pfad und steht damit
+  // schon im vorgerenderten HTML, ohne dass ein Request gelesen werden muss.
   return (
-    <>
+    <PublicDocument lang={lang}>
       <LocaleSync lang={lang} />
       {children}
-    </>
+    </PublicDocument>
   )
 }

@@ -45,6 +45,9 @@ export interface EventCardProps extends HTMLAttributes<HTMLDivElement> {
     /** Ziel des Datenschutz-Links im Hinweis, lokalisiert */
     privacyHref: string
   }
+  /** Ausverkauft: Schild statt Preis */
+  soldOut?: boolean
+  soldOutLabel?: string
   /** Featured variant spans 2 columns */
   featured?: boolean
   /** Compact variant for horizontal layout */
@@ -65,6 +68,8 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
       price,
       freeEntryLabel = 'Gratis Eintritt',
       trailer: trailerProp,
+      soldOut = false,
+      soldOutLabel = 'Ausverkauft',
       featured = false,
       compact = false,
       ...props
@@ -80,7 +85,9 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
     // "Eintritt frei" daneben sagt dasselbe noch einmal. Ein leeres Preisfeld
     // heisst "steht noch nicht fest" und bekommt bewusst gar nichts: eine
     // erfundene Angabe wäre schlimmer als eine fehlende.
-    const priceLabel = price && !isFree ? price : null
+    // Ist das Event voll, interessiert der Preis nicht mehr. Das Schild sitzt
+    // an derselben Stelle, damit die Karte nicht voller wird.
+    const priceLabel = price && !isFree && !soldOut ? price : null
 
     const trailer = parseTrailer(trailerProp?.url)
     // In der compact-Variante ist das Bild ein 160px-Quadrat neben dem Text.
@@ -196,6 +203,13 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
               6 oder 20 Euro kostet, musste jede Karte einzeln öffnen. Beim
               Überfliegen der Liste ist der Preis aber die zweite Frage nach dem
               Datum. */}
+          {soldOut && !compact && (
+            <div className="absolute bottom-2 right-2 z-10 rounded-md bg-red-700 px-2 py-0.5 @[24rem]:bottom-3 @[24rem]:right-3 @[24rem]:px-2.5 @[24rem]:py-1">
+              <span className="text-[11px] font-bold uppercase tracking-wide text-white @[24rem]:text-xs">
+                {soldOutLabel}
+              </span>
+            </div>
+          )}
           {priceLabel && !compact && (
             <div className="absolute bottom-2 right-2 z-10 rounded-md bg-black/70 px-2 py-0.5 backdrop-blur-sm @[24rem]:bottom-3 @[24rem]:right-3 @[24rem]:px-2.5 @[24rem]:py-1">
               <span className="text-[11px] font-semibold tracking-wide text-white @[24rem]:text-xs">
@@ -240,6 +254,11 @@ const EventCard = forwardRef<HTMLDivElement, EventCardProps>(
                 hier, damit das Foto frei bleibt. */}
             {isFree && !compact && (
               <FreeEntryBadge label={freeEntryLabel} size="sm" className="@[24rem]:hidden" />
+            )}
+            {soldOut && compact && (
+              <span className="text-xs font-bold uppercase tracking-wide text-red-400">
+                {soldOutLabel}
+              </span>
             )}
             {priceLabel && compact && (
               <span className="text-xs font-semibold text-[var(--pepe-accent-text)]">

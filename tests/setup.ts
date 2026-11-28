@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 import { afterAll, afterEach, beforeEach } from 'vitest'
 import { prisma } from '../src/lib/prisma'
 import { assertSafeTestDatabase } from './db-guard'
@@ -42,6 +42,8 @@ async function cleanDatabase() {
     await prisma.artist.deleteMany({})
     await prisma.subscriber.deleteMany({})
     await prisma.testRecipient.deleteMany({})
+    await prisma.contract.deleteMany({})
+    await prisma.contractSetting.deleteMany({})
   } catch (error) {
     // Ignore cleanup errors
     console.warn('Cleanup warning:', error)

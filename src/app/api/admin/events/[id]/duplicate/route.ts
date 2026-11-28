@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 function generateSlug(title: string): string {
   return title
@@ -60,6 +61,7 @@ export async function POST(
         trailerUrl: original.trailerUrl,
         imageUrl: original.imageUrl,
         featured: false,        // Nicht automatisch featured
+        soldOut: false,         // Der naechste Termin hat wieder Plaetze
         highlights: original.highlights ?? [],
         status: 'DRAFT',        // Immer als Entwurf speichern
         recurrence: original.recurrence,
@@ -78,6 +80,7 @@ export async function POST(
       },
     })
 
+    await revalidateInhalte()
     return NextResponse.json(duplicate, { status: 201 })
   } catch (error) {
     console.error('Error duplicating event:', error)

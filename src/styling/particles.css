@@ -215,17 +215,6 @@
   }
 }
 
-/* ===== JavaScript Hook Classes ===== */
-
-/* Classes to be applied via JavaScript for interaction */
-.particles-active {
-  /* Applied to body when particle system is running */
-}
-
-.mouse-moving {
-  /* Applied when mouse is moving for performance optimization */
-}
-
 /* ===== Responsive Particle Density ===== */
 
 /* Fewer particles on smaller screens */
@@ -246,21 +235,3 @@
     box-shadow: none;
   }
 }
-
-/* ===== Usage Notes ===== */
-
-/*
-HTML Structure:
-<div class="stage-background"></div>
-<div class="particle-canvas" id="particleCanvas">
-  <!-- Particles will be dynamically generated here -->
-</div>
-
-JavaScript Integration:
-- Generate 30-50 particles randomly positioned
-- Track mouse position
-- Apply .repelled class to particles within 150px of cursor
-- Apply .dispersed class to particles within 75px of cursor
-- Use requestAnimationFrame for smooth performance
-- Throttle mouse events to ~60fps
-*/

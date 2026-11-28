@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source("..");
 
 /* ========================================
    PEPE DOME DESIGN SYSTEM
@@ -12,7 +12,6 @@
 @import '../styling/card-components.css';
 @import '../styling/animations.css';
 @import '../styling/particles.css';
-@import '../styling/dotcloud.css';
 
 /* ===== shadcn/ui Theme Variables ===== */
 /* Maps shadcn semantic colors to pepe design tokens */
@@ -106,29 +105,6 @@ main {
 
 /* Page section spacing and Bento Grid (legacy classes) */
 @layer components {
-.page-section {
-  padding: var(--space-20) 0;
-}
-
-.page-section-compact {
-  padding: var(--space-12) 0;
-}
-
-.page-section-hero {
-  padding: var(--space-24) 0 var(--space-20);
-}
-
-.content-block {
-  margin-bottom: var(--space-12);
-}
-
-.content-block-sm {
-  margin-bottom: var(--space-8);
-}
-
-.content-block-lg {
-  margin-bottom: var(--space-16);
-}
 
 .section {
   padding: var(--space-16) 0;
@@ -139,31 +115,11 @@ main {
   min-height: 70vh;
 }
 
-.section-compact {
-  padding: var(--space-12) 0;
-}
-
 /* Bento Grid System */
 .bento-grid {
   display: grid;
   gap: var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.bento-grid-2 {
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-}
-
-.bento-grid-3 {
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-}
-
-.bento-item {
-  min-height: 300px;
-}
-
-.bento-item-tall {
-  grid-row: span 2;
 }
 
 .bento-item-wide {
@@ -173,10 +129,6 @@ main {
 @media (max-width: 768px) {
   .bento-item-wide {
     grid-column: span 1;
-  }
-
-  .bento-item-tall {
-    grid-row: span 1;
   }
 }
 }

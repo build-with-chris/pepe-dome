@@ -6,7 +6,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Instagram } from 'lucide-react'
+import { InstagramIcon } from '@/components/icons/InstagramIcon'
 import { useTranslation } from 'react-i18next'
 import SignupForm from '@/components/newsletter/SignupForm'
 import SupporterLogos from '@/components/custom/SupporterLogos'
@@ -19,9 +19,12 @@ function localeFromPathname(pathname: string | null): Locale {
 }
 
 export default function Footer() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const pathname = usePathname()
   const lang = localeFromPathname(pathname)
+  // Sprache aus dem Pfad, nicht aus dem Browser: sonst kommt /en mit
+  // deutscher Fusszeile aus dem Server. Siehe usePageT in Navbar.tsx.
+  const t = i18n.getFixedT(lang)
   const href = (p: string) => localizedHref(lang, p)
   return (
     <footer className="footer">
@@ -47,7 +50,7 @@ export default function Footer() {
                   alignItems: 'baseline'
                 }}
               >
-                <Instagram
+                <InstagramIcon
                   style={{
                     width: '0.875rem',
                     height: '0.875rem',

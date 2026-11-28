@@ -12,6 +12,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { artistSchema, toArtistData } from '@/lib/artist-validation'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 export async function GET(
   _request: NextRequest,
@@ -70,6 +71,7 @@ export async function PUT(
     data: toArtistData(parsed.data, existing.translations),
   })
 
+  await revalidateInhalte()
   return NextResponse.json({ artist })
 }
 
@@ -90,5 +92,6 @@ export async function DELETE(
   // EventArtist-Zeilen gehen per onDelete: Cascade mit.
   await prisma.artist.delete({ where: { id } })
 
+  await revalidateInhalte()
   return NextResponse.json({ success: true })
 }

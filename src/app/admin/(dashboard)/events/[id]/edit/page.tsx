@@ -45,6 +45,7 @@ async function getEvent(id: string) {
     trailerUrl: event.trailerUrl,
     imageUrl: event.imageUrl,
     featured: event.featured,
+    soldOut: event.soldOut,
     highlights: (event.highlights as string[]) || [],
     status: event.status,
     recurrence: event.recurrence,

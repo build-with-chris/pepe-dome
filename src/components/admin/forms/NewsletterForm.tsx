@@ -17,6 +17,7 @@ import {
 import ImageDropzone from '@/components/admin/ui/ImageDropzone'
 import FieldHint from '@/components/admin/ui/FieldHint'
 import MarkdownToolbar from '@/components/admin/ui/MarkdownToolbar'
+import { InboxPreview, HeroPreview } from '@/components/admin/ui/NewsletterPlacement'
 
 // Available pages for CTA link
 const pageOptions = [
@@ -217,9 +218,11 @@ export default function NewsletterForm({
   // Render basics section fields
   const renderBasics = () => (
     <div className="space-y-6">
+      <InboxPreview subject={formData.subject} preheader={formData.preheader} />
+
       <div className="space-y-2.5">
         <Label htmlFor="subject" hasError={!!errors.subject} required>
-          Betreff
+          Betreff (nur im Postfach)
         </Label>
         <Input
           id="subject"
@@ -236,7 +239,8 @@ export default function NewsletterForm({
           ) : (
             <FieldHint>
               Die Zeile, die im Postfach steht und darüber entscheidet, ob die Mail
-              geöffnet wird. Konkret schlägt allgemein: &quot;Drei Premieren im
+              geöffnet wird. Nicht die Überschrift in der Mail, die heißt Hero-Titel.
+              Konkret schlägt allgemein: &quot;Drei Premieren im
               November&quot; wirkt besser als &quot;Newsletter November&quot;.
             </FieldHint>
           )}
@@ -247,7 +251,7 @@ export default function NewsletterForm({
       </div>
 
       <div className="space-y-2.5">
-        <Label htmlFor="preheader">Preheader</Label>
+        <Label htmlFor="preheader">Preheader (nur im Postfach)</Label>
         <Input
           id="preheader"
           value={formData.preheader}
@@ -267,7 +271,7 @@ export default function NewsletterForm({
       </div>
 
       <div className="space-y-2.5">
-        <Label htmlFor="introText">Intro-Text</Label>
+        <Label htmlFor="introText">Intro-Text (in der Mail, unter dem Kopfbereich)</Label>
         <MarkdownToolbar
           textareaRef={introRef}
           value={formData.introText || ''}
@@ -305,6 +309,14 @@ export default function NewsletterForm({
   // Render hero section fields
   const renderHero = () => (
     <div className="space-y-6">
+      <HeroPreview
+        subject={formData.subject}
+        heroTitle={formData.heroTitle}
+        heroSubtitle={formData.heroSubtitle}
+        heroCTALabel={formData.heroCTALabel}
+        hasImage={!!formData.heroImageUrl}
+      />
+
       <ImageDropzone
         label="Hero-Bild"
         value={formData.heroImageUrl}
@@ -316,30 +328,31 @@ export default function NewsletterForm({
 
       <FieldHint>
         Der Kopfbereich ist das Erste, was nach dem Öffnen zu sehen ist: ein großes
-        Bild mit Überschrift und einem Knopf. Alle vier Felder sind optional, leere
-        Felder werden in der Mail einfach weggelassen.
+        Bild mit Überschrift und einem Knopf. Alle Felder sind optional. Leere Felder
+        werden weggelassen, nur für eine leere Überschrift springt der Betreff ein.
       </FieldHint>
 
       <div className="grid grid-cols-1 gap-5">
         <div className="space-y-2.5">
-          <Label htmlFor="heroTitle">Hero-Titel</Label>
+          <Label htmlFor="heroTitle">Hero-Titel (große Überschrift in der Mail)</Label>
           <Input
             id="heroTitle"
             value={formData.heroTitle}
             onChange={(e) => updateField('heroTitle', e.target.value)}
             hasError={!!errors.heroTitle}
-            placeholder="Willkommen zu..."
+            placeholder={formData.subject ? `Leer = Betreff: ${formData.subject}` : 'Willkommen zu...'}
             maxLength={100}
             inputSize="lg"
           />
           <FieldHint>
             Die große Überschrift im Kopfbereich. Nicht dasselbe wie der Betreff: den
-            hat der Empfänger an dieser Stelle schon gelesen.
+            hat der Empfänger an dieser Stelle schon gelesen. Bleibt das Feld leer,
+            steht hier der Betreff.
           </FieldHint>
         </div>
 
         <div className="space-y-2.5">
-          <Label htmlFor="heroSubtitle">Hero-Untertitel</Label>
+          <Label htmlFor="heroSubtitle">Hero-Untertitel (Zeile unter der Überschrift)</Label>
           <Input
             id="heroSubtitle"
             value={formData.heroSubtitle}
@@ -460,7 +473,7 @@ export default function NewsletterForm({
           {/* Basic Information */}
           <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
             <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
-              Basis-Informationen
+              Postfach &amp; Intro
             </h2>
             {renderBasics()}
           </div>
@@ -468,7 +481,7 @@ export default function NewsletterForm({
           {/* Hero Section */}
           <div className="bg-[#111113] border border-white/[0.08] rounded-xl p-6">
             <h2 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-6">
-              Hero-Bereich
+              Kopfbereich (Hero)
             </h2>
             {renderHero()}
           </div>

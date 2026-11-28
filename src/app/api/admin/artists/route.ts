@@ -10,6 +10,7 @@ import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import type { Artist } from '@prisma/client'
 import { artistSchema, generateArtistSlug, toArtistData } from '@/lib/artist-validation'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 /** Siehe src/lib/db-courses.ts: der exportierte prisma-Client ist als `any` typisiert. */
 type ArtistRow = Artist & { _count: { events: number } }
@@ -68,5 +69,6 @@ export async function POST(request: NextRequest) {
     data: { ...toArtistData(parsed.data), slug },
   })
 
+  await revalidateInhalte()
   return NextResponse.json({ artist }, { status: 201 })
 }

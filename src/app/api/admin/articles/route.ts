@@ -3,6 +3,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 const articleSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -116,6 +117,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    await revalidateInhalte()
     return NextResponse.json(article, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {

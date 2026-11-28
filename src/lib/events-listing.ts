@@ -16,6 +16,7 @@ import type { Event } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { transformEvent, type DbLocale, type EventData } from '@/lib/db-data'
 import { imMonatFilter, nichtVorbeiFilter, tagesbeginn } from '@/lib/event-window'
+import { sortByEventStart } from '@/lib/event-time'
 
 export interface ListingMonth {
   year: number
@@ -46,7 +47,7 @@ export async function resolveListingMonth(now: Date = new Date()): Promise<Listi
   return { year: stichtag.getFullYear(), month: stichtag.getMonth() + 1 }
 }
 
-/** Alle veröffentlichten Termine eines Monats, aufsteigend nach Datum. */
+/** Alle veröffentlichten Termine eines Monats, aufsteigend nach Tag und Uhrzeit. */
 export async function getEventsForMonth(
   year: number,
   month: number,
@@ -62,5 +63,5 @@ export async function getEventsForMonth(
 
   // Die Annotation ist nötig, weil `prisma` ohne DATABASE_URL ein Mock ist und
   // der Rückgabetyp dadurch weit wird. Siehe src/lib/prisma.ts.
-  return events.map((event: Event) => transformEvent(event, locale))
+  return sortByEventStart(events.map((event: Event) => transformEvent(event, locale)))
 }

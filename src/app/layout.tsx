@@ -1,27 +1,20 @@
+/**
+ * Root-Layout: reicht nur durch und traegt die Standard-Metadaten.
+ *
+ * <html> und <body> rendern die Layouts darunter, weil erst sie die Sprache
+ * kennen: src/app/[lang]/layout.tsx fuer die oeffentlichen Seiten,
+ * src/app/admin/layout.tsx fuer den Admin. Warum das so ist und was es
+ * bringt, steht in src/components/layout/SiteDocument.tsx.
+ *
+ * Wichtig fuer alles, was hier neu dazukommt: Eine Seite direkt unter
+ * src/app, die etwas anzeigt statt nur weiterzuleiten, braucht ein eigenes
+ * Layout mit PublicDocument (Beispiel: src/app/mithelfen/layout.tsx). Und
+ * hier oben darf nichts stehen, was den Request liest (headers, cookies),
+ * sonst wird wieder jede Seite bei jedem Aufruf neu gerendert.
+ */
+
 import type { Metadata } from 'next'
-import { Outfit, Inter } from 'next/font/google'
-import { headers } from 'next/headers'
-import { ClerkProvider } from '@clerk/nextjs'
-import './globals.css'
-import ConditionalLayout from '@/components/layout/ConditionalLayout'
-import I18nProvider from '@/components/layout/I18nProvider'
-import ConsentBanner from '@/components/consent/ConsentBanner'
-import ConsentScripts from '@/components/consent/ConsentScripts'
 import { getSiteContent } from '@/lib/data'
-import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd'
-import { isLocale, DEFAULT_LOCALE, type Locale } from '@/i18n/config'
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-outfit',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
 
 function getSiteContentSafe() {
   try {
@@ -86,55 +79,10 @@ export const metadata: Metadata = {
   },
 }
 
-// Only skip Clerk in development and when the dev flag is explicitly set.
-const skipClerkInDev =
-  process.env.NODE_ENV === 'development' &&
-  process.env.NEXT_PUBLIC_DISABLE_CLERK_IN_DEV === 'true'
-
-/**
- * Clerk 7 verlangt den ClerkProvider innerhalb von <body>, nicht um <html>
- * herum. Das Abmelde-Ziel steht hier statt an jedem UserButton, weil Clerk 7
- * afterSignOutUrl am UserButton nicht mehr kennt.
- */
-function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  if (skipClerkInDev) return <>{children}</>
-  return <ClerkProvider afterSignOutUrl="/">{children}</ClerkProvider>
-}
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Locale kommt aus dem vom Proxy (src/proxy.ts) gesetzten x-locale-Header, damit
-  // <html lang> serverseitig stimmt (auch für JS-lose Crawler auf /en-Seiten).
-  const headerLocale = (await headers()).get('x-locale')
-  const lang: Locale = isLocale(headerLocale ?? '') ? (headerLocale as Locale) : DEFAULT_LOCALE
-
-  // data-scroll-behavior: globals.css setzt scroll-behavior: smooth auf <html>.
-  // Bis Next 15 schaltete Next das beim Seitenwechsel kurz ab, damit neue
-  // Seiten sofort oben stehen statt hochzuscrollen. Seit Next 16 nur noch mit
-  // diesem Attribut.
-  return (
-    <html
-      lang={lang}
-      className={`${outfit.variable} ${inter.variable}`}
-      data-scroll-behavior="smooth"
-    >
-      <body className="antialiased">
-        <AuthProvider>
-          <OrganizationJsonLd />
-          <WebSiteJsonLd />
-          <I18nProvider>
-            <ConditionalLayout>
-              {children}
-            </ConditionalLayout>
-          </I18nProvider>
-          {/* Analytics und Pixel laden erst nach Einwilligung, siehe src/lib/consent.ts */}
-          <ConsentScripts />
-          <ConsentBanner />
-        </AuthProvider>
-      </body>
-    </html>
-  )
+  return children
 }

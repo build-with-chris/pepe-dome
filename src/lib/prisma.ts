@@ -13,6 +13,9 @@ function createPrismaClient() {
       event: {
         findMany: () => Promise.resolve([]),
         findUnique: () => Promise.resolve(null),
+        // Für resolveListingMonth: ohne das bricht /events im Betrieb ohne
+        // Datenbank ab, seit die Seite Fehler nicht mehr abfängt.
+        findFirst: () => Promise.resolve(null),
       },
       article: {
         findMany: () => Promise.resolve([]),

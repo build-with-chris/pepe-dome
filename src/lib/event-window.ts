@@ -100,6 +100,12 @@ export function imMonatFilter(monatsBeginn: Date, monatsEnde: Date) {
  * um, und wer westlich von Greenwich sitzt, sah den Termin einen Tag zu frueh.
  */
 export const KARTEN_DATUM: Intl.DateTimeFormatOptions = {
+  // Mit Wochentag: "Fr., 27. Nov. 2026". Ob ein Termin auf einen Freitag
+  // oder einen Dienstag fällt, entscheidet oft mehr als das Datum selbst,
+  // und sonst rechnet es jeder im Kopf nach. Roundhouse, Chamäleon Berlin
+  // und Muffatwerk führen ihn deshalb auf jeder Karte. Bei einem Zeitraum
+  // lässt formatEventDateRange ihn weg, siehe unten.
+  weekday: 'short',
   day: 'numeric',
   month: 'short',
   year: 'numeric',

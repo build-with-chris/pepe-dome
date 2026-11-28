@@ -10,7 +10,8 @@
  */
 
 import Image from 'next/image'
-import { Globe, Instagram } from 'lucide-react'
+import { Globe } from 'lucide-react'
+import { InstagramIcon } from '@/components/icons/InstagramIcon'
 import type { ArtistData } from '@/lib/db-data'
 import type { ArtistBildformat } from '@/lib/artist-bildformat'
 
@@ -103,7 +104,7 @@ export default function EventArtists({
                         title={labels.instagram.replace('{name}', artist.name)}
                         className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-[var(--pepe-line)] text-[var(--pepe-accent-text)] hover:bg-[var(--pepe-gold)]/10 transition-colors"
                       >
-                        <Instagram className="w-4 h-4" aria-hidden="true" />
+                        <InstagramIcon className="w-4 h-4" aria-hidden="true" />
                       </a>
                     )}
                     {artist.websiteUrl && (

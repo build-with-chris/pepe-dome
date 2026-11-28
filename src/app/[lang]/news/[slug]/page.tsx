@@ -6,11 +6,12 @@
  * ist lokalisiert.
  */
 
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getArticleBySlug, getRecentArticles, getUpcomingEvents } from '@/lib/db-data'
+import { getArticleBySlug, getRecentArticles, getUpcomingEvents, ohneErsatzdaten } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
 import ArticleContent from '@/components/custom/ArticleContent'
@@ -30,7 +31,29 @@ function getReadingTime(content: string): number {
   return Math.ceil(wordCount / wordsPerMinute)
 }
 
-export const dynamic = 'force-dynamic'
+/**
+ * Zwischengespeichert, erzeugt beim ersten Aufruf.
+ *
+ * `generateStaticParams` gibt bewusst nichts zurück: Beim Build wird keine
+ * einzelne Seite vorgerendert. Die leere Liste ist trotzdem nötig, ohne sie
+ * rendert Next eine Route mit [slug] bei jedem Aufruf neu, egal was bei
+ * `revalidate` steht.
+ *
+ * Eine Minute als Sicherheitsnetz, beim Speichern im Admin wird sofort
+ * verworfen (src/lib/revalidate-content.ts). Das gilt auch für eine
+ * gespeicherte 404: Wer einen Link aufruft, bevor veröffentlicht ist,
+ * blockiert die Adresse höchstens für diese Minute.
+ */
+export const revalidate = 60
+
+export function generateStaticParams() {
+  return []
+}
+
+/** Eine Abfrage für Metadaten und Seite, ohne Ersatzdaten. Siehe events/[slug]. */
+const ladeArtikel = cache((slug: string, lang: Locale) =>
+  ohneErsatzdaten(() => getArticleBySlug(slug, lang))
+)
 
 export async function generateMetadata({
   params,
@@ -39,7 +62,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params
   if (!isLocale(rawLang)) return {}
-  const article = await getArticleBySlug(slug, rawLang)
+  const article = await ladeArtikel(slug, rawLang)
   const dict = await getDictionary(rawLang)
 
   if (!article) {
@@ -74,13 +97,15 @@ export default async function NewsArticlePage({
   const t = dict.news.detail
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const article = await getArticleBySlug(slug, lang)
+  const article = await ladeArtikel(slug, lang)
   if (!article) notFound()
 
-  const [upcomingEvents, recentArticles] = await Promise.all([
-    getUpcomingEvents(lang),
-    getRecentArticles(4, lang),
-  ])
+  const [upcomingEvents, recentArticles] = await ohneErsatzdaten(() =>
+    Promise.all([
+      getUpcomingEvents(lang),
+      getRecentArticles(4, lang),
+    ])
+  )
 
   const relatedArticles = recentArticles.filter((a) => a.id !== article.id).slice(0, 3)
   const relatedEvents = upcomingEvents.slice(0, 3)

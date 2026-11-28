@@ -6,6 +6,7 @@ import { toStoredTime } from '@/lib/event-time'
 import { isValidTrailerInput } from '@/lib/event-trailer'
 import { artistIdsSchema } from '@/lib/artist-validation'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 const eventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -28,6 +29,7 @@ const eventSchema = z.object({
     .refine(isValidTrailerInput, 'Trailer muss ein YouTube-/Vimeo-Link oder ein Pfad wie /videos/trailer.mp4 sein'),
   imageUrl: z.string().optional().or(z.literal('')),
   featured: z.boolean().default(false),
+  soldOut: z.boolean().default(false),
   highlights: z.array(z.string()).default([]),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().or(z.literal('')),
@@ -144,6 +146,7 @@ export async function POST(request: NextRequest) {
         trailerUrl: data.trailerUrl?.trim() || null,
         imageUrl: data.imageUrl || null,
         featured: data.featured,
+        soldOut: data.soldOut,
         highlights: data.highlights,
         status: data.status,
         recurrence: data.recurrence || null,
@@ -155,6 +158,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    await revalidateInhalte()
     return NextResponse.json(event, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {

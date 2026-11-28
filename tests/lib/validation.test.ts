@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
+import { SECTION_TEXT_MAX } from '@/lib/newsletter-limits'
 import {
   subscriberSignupSchema,
   subscriberConfirmSchema,
@@ -308,6 +309,23 @@ describe('Validation Schemas', () => {
         ],
       })
       expect(result.success).toBe(true)
+    })
+
+    // Das Textfeld im Editor laesst SECTION_TEXT_MAX Zeichen zu. Nimmt der
+    // Server weniger an, verschwindet der Text beim Speichern ohne Meldung.
+    it('accepts a text block as long as the editor allows', () => {
+      const block = (text: string) => ({
+        content: [{ contentType: 'CUSTOM_SECTION', sectionDescription: text, orderPosition: 0 }],
+      })
+      expect(reorderContentSchema.safeParse(block('x'.repeat(SECTION_TEXT_MAX))).success).toBe(true)
+      expect(reorderContentSchema.safeParse(block('x'.repeat(SECTION_TEXT_MAX + 1))).success).toBe(false)
+      expect(
+        addContentSchema.safeParse({
+          contentType: 'CUSTOM_SECTION',
+          sectionDescription: 'x'.repeat(SECTION_TEXT_MAX),
+          orderPosition: 0,
+        }).success
+      ).toBe(true)
     })
   })
 

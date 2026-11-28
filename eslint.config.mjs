@@ -18,8 +18,6 @@ export default [
       'out/**',
       'build/**',
       'next-env.d.ts',
-      // Altbestand, der nicht mehr gebaut wird
-      '_old/**',
       // Arbeitskopien von Agenten-Läufen, keine Quelldateien
       '.claude/**',
       // Generiert

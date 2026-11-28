@@ -26,6 +26,7 @@ export type CarouselEvent = {
   category: string
   imageUrl: string | null
   price?: string | null
+  soldOut?: boolean
   /** Roher Feldinhalt, siehe src/lib/event-trailer.ts */
   trailerUrl?: string | null
 }
@@ -35,6 +36,7 @@ export default function EventsCarousel({
   lang = 'de',
   eventsHref = '/de/events',
   freeEntryLabel = 'Gratis Eintritt',
+  soldOutLabel = 'Ausverkauft',
   trailerLabels,
   privacyHref = '/de/datenschutz',
   prevLabel = 'Vorheriges Event',
@@ -46,6 +48,7 @@ export default function EventsCarousel({
   /** Basis-URL der Event-Liste, damit die Karten nicht auf einen Redirect zeigen. */
   eventsHref?: string
   freeEntryLabel?: string
+  soldOutLabel?: string
   /**
    * Beschriftungen für Trailer-Knopf und Einwilligungshinweis. Ohne sie bleibt
    * der Knopf weg: ein Fenster mit englischen Platzhaltern auf einer deutschen
@@ -141,6 +144,8 @@ export default function EventsCarousel({
               image={event.imageUrl || undefined}
               price={event.price}
               freeEntryLabel={freeEntryLabel}
+              soldOut={event.soldOut}
+              soldOutLabel={soldOutLabel}
               trailer={
                 trailerLabels
                   ? { url: event.trailerUrl ?? null, labels: trailerLabels, privacyHref }

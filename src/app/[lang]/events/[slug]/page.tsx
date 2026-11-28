@@ -5,11 +5,12 @@
  * der DB (sind aktuell nur auf Deutsch); UI-Chrome ist lokalisiert.
  */
 
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getEventBySlug, getUpcomingEvents, getRecentArticles } from '@/lib/db-data'
+import { getEventBySlug, getUpcomingEvents, getRecentArticles, ohneErsatzdaten } from '@/lib/db-data'
 import { Button } from '@/components/ui/Button'
 import EventCard from '@/components/custom/EventCard'
 import { MarkdownText } from '@/components/ui/MarkdownText'
@@ -18,12 +19,13 @@ import SignupForm from '@/components/custom/SignupForm'
 import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd'
 import FreeEntryBadge from '@/components/events/FreeEntryBadge'
 import { isFreeEntry } from '@/lib/event-price'
-import { formatEventDateRange } from '@/lib/event-window'
+import { formatEventDateRange, laeuftNoch } from '@/lib/event-window'
 import { parseTrailer } from '@/lib/event-trailer'
 import TrailerPlayer from '@/components/events/TrailerPlayer'
 import EventArtists from '@/components/events/EventArtists'
 import { formatTimeRange } from '@/lib/event-time'
 import TicketLink from '@/components/events/TicketLink'
+import MobileTicketBar from '@/components/events/MobileTicketBar'
 import EventViewTracker from '@/components/events/EventViewTracker'
 import { isMailTicket } from '@/lib/ticket-url'
 import { isLocale, localizedHref, type Locale } from '@/i18n/config'
@@ -33,7 +35,33 @@ import { cn } from '@/lib/utils'
 
 const BASE_URL = 'https://www.pepe-dome.de'
 
-export const dynamic = 'force-dynamic'
+/**
+ * Zwischengespeichert, erzeugt beim ersten Aufruf.
+ *
+ * `generateStaticParams` gibt bewusst nichts zurück: Beim Build wird keine
+ * einzelne Seite vorgerendert. Die leere Liste ist trotzdem nötig, ohne sie
+ * rendert Next eine Route mit [slug] bei jedem Aufruf neu, egal was bei
+ * `revalidate` steht.
+ *
+ * Eine Minute als Sicherheitsnetz, beim Speichern im Admin wird sofort
+ * verworfen (src/lib/revalidate-content.ts). Das gilt auch für eine
+ * gespeicherte 404: Wer einen Link aufruft, bevor veröffentlicht ist,
+ * blockiert die Adresse höchstens für diese Minute.
+ */
+export const revalidate = 60
+
+export function generateStaticParams() {
+  return []
+}
+
+/**
+ * Der Termin wird von generateMetadata und von der Seite gebraucht. `cache`
+ * sorgt dafür, dass daraus eine Abfrage wird statt zwei. Ohne Ersatzdaten,
+ * damit ein Datenbankfehler nicht als 404 im Zwischenspeicher landet.
+ */
+const ladeEvent = cache((slug: string, lang: Locale) =>
+  ohneErsatzdaten(() => getEventBySlug(slug, lang))
+)
 
 export async function generateMetadata({
   params,
@@ -42,7 +70,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params
   if (!isLocale(rawLang)) return {}
-  const event = await getEventBySlug(slug, rawLang)
+  const event = await ladeEvent(slug, rawLang)
   const dict = await getDictionary(rawLang)
 
   if (!event) {
@@ -89,7 +117,7 @@ export default async function EventDetailPage({
   const t = dict.events.detail
   const dateLocale = lang === 'en' ? 'en-US' : 'de-DE'
 
-  const event = await getEventBySlug(slug, lang)
+  const event = await ladeEvent(slug, lang)
   if (!event) notFound()
 
   const isFree = isFreeEntry(event.price)
@@ -97,10 +125,12 @@ export default async function EventDetailPage({
   const timeLabel = formatTimeRange(event.time, event.endTime, lang)
   const trailer = parseTrailer(event.trailerUrl)
 
-  const [upcomingEvents, recentArticles] = await Promise.all([
-    getUpcomingEvents(lang),
-    getRecentArticles(3, lang),
-  ])
+  const [upcomingEvents, recentArticles] = await ohneErsatzdaten(() =>
+    Promise.all([
+      getUpcomingEvents(lang),
+      getRecentArticles(3, lang),
+    ])
+  )
 
   const similarEvents = upcomingEvents
     .filter((e) => e.category === event.category && e.id !== event.id)
@@ -114,6 +144,38 @@ export default async function EventDetailPage({
     year: 'numeric',
   })
 
+  /**
+   * Termin, Uhrzeit und Preis für den Kopf der Seite.
+   *
+   * Vorher standen dort nur Kategorie, Titel und Untertitel. Wann die Show
+   * ist und was sie kostet, erfuhr man erst in der Infokarte, und die liegt
+   * auf dem Handy unter dem gesamten Inhalt. Genau diese drei Angaben
+   * entscheiden aber, ob jemand weiterliest. Die grossen Häuser setzen sie
+   * deshalb direkt an den Titel (Barbican: "Sat 31 Oct 2026" unter der
+   * Überschrift, Chamäleon Berlin: Datum und Ticket-Knopf vor dem Text).
+   *
+   * Mit Wochentag: "Fr., 27. Nov. 2026" beantwortet die erste Rückfrage
+   * gleich mit. Bei mehrtägigen Terminen lässt formatEventDateRange ihn weg.
+   */
+  const heroDate = formatEventDateRange(event, dateLocale, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+  const startTime = formatTimeRange(event.time, null, lang)
+  // Für die Ticket-Leiste auf dem Handy: ohne Jahr, die Zeile ist schmal.
+  const barWhen = [
+    formatEventDateRange(event, dateLocale, { weekday: 'short', day: 'numeric', month: 'short' }),
+    startTime,
+  ]
+    .filter(Boolean)
+    .join(' · ')
+  // Dieselbe Bedingung wie beim Knopf in der Infokarte, dazu: nicht für
+  // Termine, die vorbei sind. Eine Kaufleiste unter einer Show von gestern
+  // führt nur in einen Shop, der nichts mehr verkauft.
+  const showTicketBar = Boolean(event.ticketUrl) && !event.soldOut && laeuftNoch(event)
+
   const homeHref = localizedHref(lang, '/')
   const eventsHref = localizedHref(lang, '/events')
   const newsHref = localizedHref(lang, '/news')
@@ -121,7 +183,18 @@ export default async function EventDetailPage({
   const privacyHref = localizedHref(lang, '/datenschutz')
 
   return (
-    <div className="min-h-screen bg-[var(--pepe-black)]">
+    <div className={cn('min-h-screen bg-[var(--pepe-black)]', showTicketBar && 'pb-20 lg:pb-0')}>
+      {showTicketBar && event.ticketUrl && (
+        <MobileTicketBar
+          ticketUrl={event.ticketUrl}
+          eventTitle={event.title}
+          eventSlug={event.slug}
+          price={isFree ? null : event.price}
+          when={barWhen}
+          label={isMailTicket(event.ticketUrl) ? t.registerMail : t.ticketsBuy}
+          targetId="tickets"
+        />
+      )}
       {/* Baut die Retargeting-Zielgruppe auf, siehe src/lib/tracking.ts */}
       <EventViewTracker title={event.title} slug={event.slug} category={event.category} />
 
@@ -138,6 +211,7 @@ export default async function EventDetailPage({
         url={`/${lang}/events/${event.slug}`}
         price={event.price}
         ticketUrl={event.ticketUrl}
+        soldOut={event.soldOut}
         category={event.category}
       />
       <BreadcrumbJsonLd
@@ -195,6 +269,27 @@ export default async function EventDetailPage({
             {event.subtitle && (
               <p className="text-xl text-[var(--pepe-gold-hover)] font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_2px_12px_rgba(0,0,0,0.7)]">{event.subtitle}</p>
             )}
+            {/* Datum und Uhrzeit bleiben zusammen in einer Zeile. Der Preis
+                steht als eigenes Stück daneben und rutscht auf schmalen
+                Schirmen geschlossen darunter, ohne dass ein Trennpunkt am
+                Zeilenende hängen bleibt. */}
+            <p className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-base md:text-lg font-semibold text-[var(--pepe-white)] [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]">
+              <span className="whitespace-nowrap">
+                {heroDate}
+                {startTime && (
+                  <>
+                    <span aria-hidden="true" className="mx-2 text-white/40">·</span>
+                    {startTime}
+                  </>
+                )}
+              </span>
+              {event.soldOut ? (
+                <span className="text-[var(--pepe-t80)]">{t.ticketsSoldOut}</span>
+              ) : (
+                event.price &&
+                !isFree && <span className="text-[var(--pepe-accent-text)]">{event.price}</span>
+              )}
+            </p>
           </div>
         </div>
       </section>
@@ -251,17 +346,14 @@ export default async function EventDetailPage({
               </div>
             )}
 
-            <div className="mt-12 pt-8 border-t border-[var(--pepe-line)]">
-              <div className="max-w-xl">
-                <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4">{t.stayInformed}</h3>
-                <p className="text-[var(--pepe-t64)] mb-4">{t.stayInformedText}</p>
-                <SignupForm variant="simple" lang={lang} source="event-detail" />
-              </div>
-            </div>
           </div>
 
-          {/* Sidebar */}
-          <aside className="space-y-6">
+          {/* Sidebar.
+              Spannt auf dem Desktop beide Zeilen, damit die Karte so lange
+              mitscrollt wie bisher. Auf dem Handy steht sie jetzt vor der
+              Newsletter-Anmeldung statt dahinter: erst wann, wo und was es
+              kostet, dann die Bitte um die Mailadresse. */}
+          <aside className="space-y-6 lg:row-span-2">
             <div className="bg-[var(--pepe-ink)] border border-[var(--pepe-line)] rounded-xl p-6 sticky top-24">
               <h3 className="text-lg font-bold text-[var(--pepe-white)] mb-6">{t.infoTitle}</h3>
               <div className="space-y-5 mb-6">
@@ -337,7 +429,14 @@ export default async function EventDetailPage({
                 )}
               </div>
 
-              {event.ticketUrl ? (
+              {/* Die ID braucht die Ticket-Leiste auf dem Handy: sie blendet
+                  sich aus, sobald dieser Knopf im Bild ist. */}
+              <div id="tickets" className="scroll-mt-28">
+              {event.soldOut ? (
+                <Button variant="secondary" size="lg" className="w-full" disabled>
+                  {t.ticketsSoldOut}
+                </Button>
+              ) : event.ticketUrl ? (
                 <TicketLink
                   ticketUrl={event.ticketUrl}
                   eventTitle={event.title}
@@ -356,12 +455,21 @@ export default async function EventDetailPage({
                   {isFree ? t.ticketsFree : t.ticketsSoon}
                 </Button>
               )}
+              </div>
 
               <Link href={contactHref} className="block mt-3">
                 <Button variant="ghost" size="md" className="w-full">{t.askQuestion}</Button>
               </Link>
             </div>
           </aside>
+
+          <div className="pt-8 border-t border-[var(--pepe-line)]">
+            <div className="max-w-xl">
+              <h3 className="text-xl font-bold text-[var(--pepe-white)] mb-4">{t.stayInformed}</h3>
+              <p className="text-[var(--pepe-t64)] mb-4">{t.stayInformedText}</p>
+              <SignupForm variant="simple" lang={lang} source="event-detail" />
+            </div>
+          </div>
         </div>
 
         {similarEvents.length > 0 && (
@@ -382,6 +490,8 @@ export default async function EventDetailPage({
                   image={e.imageUrl || undefined}
                   price={e.price}
                   freeEntryLabel={dict.events.freeBadge}
+                  soldOut={e.soldOut}
+                  soldOutLabel={dict.events.soldOutBadge}
                   trailer={{
                     url: e.trailerUrl,
                     labels: dict.events.trailer,

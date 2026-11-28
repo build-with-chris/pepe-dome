@@ -1,0 +1,224 @@
+/**
+ * Vorlage für Künstlervertrag und Veranstaltervertrag: Formularwerte hinein,
+ * Bausteine heraus. Reine Funktion, wie vorlage-miete.ts.
+ *
+ * GRUNDGERÜST, Stand 26.11.2026. Der Vertrag enthält nur, was feststeht:
+ *
+ *   - die Aufteilung der Ticketeinnahmen zwischen Gegenseite und Pepe Dome.
+ *     Geteilt werden immer die Netto-Ticketeinnahmen ohne Ticketgebühren.
+ *     Rechnet die Gegenseite mit Mehrwertsteuer ab, kommt die Mehrwertsteuer
+ *     auf ihren Anteil obendrauf, sonst nicht.
+ *   - bei Künstler:innen wahlweise eine feste Gage, wenn eine Förderung
+ *     dahintersteht. Dann gehen die Ticketeinnahmen an den Pepe Dome. Welche
+ *     der beiden Möglichkeiten gilt, steht vor dem Vertrag fest. Für die
+ *     Mehrwertsteuer gilt dasselbe wie beim Anteil: Wer mit Mehrwertsteuer
+ *     abrechnet, bekommt sie obendrauf. Wer ohne abrechnet, etwa nach
+ *     § 19 UStG, bekommt die Gage als Endbetrag.
+ *   - Gastronomie: Getränke und Speisen laufen über den Pepe Dome, die
+ *     Einnahmen bleiben dort. Ausnahmen nur nach schriftlicher Absprache.
+ *   - höhere Gewalt: erst Ersatztermin, sonst dürfen beide zurücktreten
+ *   - Absage durch die Gegenseite: nur Ersatztermin, keine Stornokosten
+ *   - Abrechnung in der Woche nach der Veranstaltung, Zahlung spätestens
+ *     14 Tage nach der Veranstaltung
+ *
+ * Für alles andere gibt es noch keinen abgestimmten Wortlaut, und hier wird
+ * keiner erfunden. Die offenen Punkte sind Freitextfelder: Was im Formular
+ * steht, erscheint als eigener Abschnitt, ein leeres Feld erzeugt keinen.
+ *
+ * Offen, mit Chris zu klären, bevor daraus feste Klauseln werden:
+ *
+ *   - was gilt, wenn sich nach einer Absage kein Ersatztermin findet, und
+ *     was bei einer Absage durch den Pepe Dome
+ *   - Bedingungen vor Ort für Künstler:innen und Veranstalter:innen
+ *     (Technik, Raum, Zeiten, Personal)
+ *   - was der Pepe Dome als Gastgeber verlangen kann
+ *   - welche Ticketarten zählen (Freikarten, Ermäßigungen)
+ *   - ob Hausordnung und Regeln der Mietvereinbarung hier ebenfalls gelten
+ *
+ * Bei neu formulierten Verträgen ist eine juristische Durchsicht sinnvoll
+ * (docs/specs/vertragstool.md, Offene Punkte).
+ */
+
+import { fett, linie, mitSchluss, type Baustein, type Dokument } from './dokument'
+import { eigeneSeite, FUSSZEILE, unterschriftEigeneSeite } from './partei'
+import { GASTRO, HOEHERE_GEWALT, LUECKE } from './klauseln'
+import { betragAlsText, type AuftrittDaten } from './validation'
+import type { Gegenseite } from './vorlage-miete'
+
+// Kurz gehalten, damit der Titel neben dem Logo in einer Zeile bleibt. Dass es
+// um den Pepe Dome geht, sagen Logo und Abschnitt 1.
+const TITEL = {
+  KUENSTLER: 'Vereinbarung über einen Auftritt',
+  VERANSTALTER: 'Vereinbarung über eine Veranstaltung',
+} as const
+
+const euro = (betrag: number | null) => `${betrag === null ? LUECKE : betragAlsText(betrag)} €`
+const satz = (wert: string) => (/[.!?]$/.test(wert) ? wert : `${wert}.`)
+
+/** Freitext wird an Leerzeilen in Absätze geteilt. */
+const absaetze = (text: string): Baustein[] =>
+  text
+    .split(/\n\s*\n/)
+    .map((absatz) => absatz.trim())
+    .filter(Boolean)
+    .map((absatz) => ({ art: 'absatz', text: absatz }))
+
+export function auftrittDokument(
+  art: 'KUENSTLER' | 'VERANSTALTER',
+  gegenseite: Gegenseite,
+  d: AuftrittDaten,
+  titel: string
+): Dokument {
+  const name = gegenseite.partnerName
+  const gage = art === 'KUENSTLER' && d.verguetung === 'gage'
+
+  // Anteil des Pepe Dome ist der Rest zu 100. Ohne Angabe bleiben beide offen.
+  const anteil = d.anteilGegenseite
+  const anteilText = anteil === null ? LUECKE : betragAlsText(anteil)
+  const restText = anteil === null ? LUECKE : betragAlsText(Math.round((100 - anteil) * 100) / 100)
+
+  const abschnitte: Array<{ titel: string; bausteine: Baustein[] }> = []
+  const abschnitt = (ueberschrift: string, bausteine: Baustein[]) =>
+    abschnitte.push({ titel: `${abschnitte.length + 1}. ${ueberschrift}`, bausteine })
+
+  // ── Veranstaltung ───────────────────────────────────────────────────
+  const zeiten = [
+    ...(d.aufbauAb ? [`Aufbau ab ${d.aufbauAb} Uhr`] : []),
+    ...(d.einlass ? [`Einlass ${d.einlass} Uhr`] : []),
+    ...(d.beginn ? [`Beginn ${d.beginn} Uhr`] : []),
+    ...(d.ende ? [`Ende ${d.ende} Uhr`] : []),
+  ]
+  abschnitt('Veranstaltung', [
+    {
+      art: 'liste',
+      punkte: [
+        [fett(d.titel), ' im Pepe Dome, Ostpark München.'],
+        satz(d.termin),
+        ...(zeiten.length > 0 ? [`${zeiten.join(', ')}.`] : []),
+      ],
+    },
+  ])
+
+  // ── Vergütung oder Einnahmen ────────────────────────────────────────
+  if (gage) {
+    abschnitt('Gage', [
+      {
+        art: 'liste',
+        punkte: [
+          [`${name} erhält für den Auftritt eine `, fett(`feste Gage von ${euro(d.gage)}`), '.'],
+          // Der Vertrag nennt keinen Paragrafen. Warum jemand ohne
+          // Mehrwertsteuer abrechnet, kann verschiedene Gründe haben.
+          d.mitMwst
+            ? `${name} rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf die Gage hinzu.`
+            : `${name} rechnet ohne Mehrwertsteuer ab. Die Gage ist der Endbetrag.`,
+          ...(d.foerderung ? [`Die Gage wird aus der Förderung „${d.foerderung}“ bezahlt.`] : []),
+          'Die Ticketeinnahmen gehen an den Pepe Dome.',
+          ...GASTRO,
+        ],
+      },
+    ])
+  } else {
+    abschnitt('Einnahmen', [
+      {
+        art: 'liste',
+        punkte: [
+          [
+            'Die Ticketeinnahmen werden geteilt: ',
+            fett(`${anteilText} % für ${name}`),
+            ', ',
+            fett(`${restText} % für den Pepe Dome`),
+            '.',
+          ],
+          'Grundlage sind die Netto-Ticketeinnahmen ohne Ticketgebühren.',
+          d.mitMwst
+            ? `${name} rechnet mit Mehrwertsteuer ab. Die Mehrwertsteuer kommt auf den Anteil hinzu.`
+            : `${name} rechnet ohne Mehrwertsteuer ab und erhält den Anteil ohne Aufschlag.`,
+          ...GASTRO,
+        ],
+      },
+    ])
+  }
+
+  // ── Abrechnung und Zahlung ──────────────────────────────────────────
+  abschnitt('Abrechnung und Zahlung', [
+    {
+      art: 'liste',
+      punkte: gage
+        ? ['Die Gage wird spätestens 14 Tage nach der Veranstaltung gezahlt.']
+        : [
+            'Der Pepe Dome rechnet die Ticketeinnahmen in der Woche nach der Veranstaltung ab.',
+            'Die Zahlung erfolgt spätestens 14 Tage nach der Veranstaltung.',
+          ],
+    },
+  ])
+
+  // ── Absage ──────────────────────────────────────────────────────────
+  // Entschieden am 27.11.2026: Hier gibt es keine Stornostaffel wie in der
+  // Mietvereinbarung, weil keine Miete fließt. Es wird nur ein Ersatztermin
+  // gesucht.
+  abschnitt('Absage', [
+    {
+      art: 'liste',
+      punkte: [
+        `Sagt ${name} die Veranstaltung ab, suchen beide Seiten einen Ersatztermin. Kosten für die Absage werden nicht berechnet.`,
+      ],
+    },
+  ])
+
+  // ── Höhere Gewalt ───────────────────────────────────────────────────
+  abschnitt('Höhere Gewalt', [{ art: 'liste', punkte: HOEHERE_GEWALT }])
+
+  // ── Die noch offenen Regelungen: nur, wenn etwas eingetragen ist ────
+  const freitexte: Array<[string, string]> = [
+    ['Bedingungen vor Ort', d.bedingungen],
+    ['Was der Pepe Dome erwartet', d.erwartungen],
+    ['Sonderabsprache', d.sonderabsprache],
+  ]
+  for (const [ueberschrift, text] of freitexte) {
+    if (text) abschnitt(ueberschrift, absaetze(text))
+  }
+
+  // ── Parteien ────────────────────────────────────────────────────────
+  const kontakt = [
+    ...(gegenseite.partnerPhone ? [`Telefon: ${gegenseite.partnerPhone}`] : []),
+    ...(gegenseite.partnerEmail ? [`E-Mail: ${gegenseite.partnerEmail}`] : []),
+  ].join(', ')
+
+  const parteien: Baustein[] = [
+    eigeneSeite(),
+    { art: 'abstand', hoehe: 3 },
+    { art: 'absatz', text: fett('und') },
+    kontakt
+      ? { art: 'absatz', text: `${name}, ${kontakt}` }
+      : { art: 'ausfuellen', teile: [`${name}, Telefon:`, linie()] },
+    gegenseite.partnerAddress
+      ? { art: 'absatz', text: `Anschrift: ${gegenseite.partnerAddress}` }
+      : { art: 'ausfuellen', teile: ['Anschrift:', linie()] },
+  ]
+
+  return {
+    titel,
+    akzent: true,
+    fuss: FUSSZEILE,
+    bausteine: mitSchluss(
+      [
+        { art: 'kopf', titel: TITEL[art], untertitel: d.titel, logo: true },
+        ...parteien,
+        ...abschnitte.flatMap((eintrag): Baustein[] => [
+          { art: 'ueberschrift', text: eintrag.titel },
+          ...eintrag.bausteine,
+        ]),
+      ],
+      {
+        art: 'gruppe',
+        bausteine: [
+          { art: 'ueberschrift', text: 'Unterschriften' },
+          {
+            art: 'unterschriften',
+            felder: [[unterschriftEigeneSeite(), `Ort, Datum\n${name}`]],
+          },
+        ],
+      }
+    ),
+  }
+}

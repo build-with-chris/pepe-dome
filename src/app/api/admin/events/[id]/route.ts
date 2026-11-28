@@ -7,6 +7,7 @@ import { isValidTrailerInput } from '@/lib/event-trailer'
 import { artistIdsSchema } from '@/lib/artist-validation'
 import type { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 /**
  * Siehe src/lib/db-courses.ts: der exportierte prisma-Client ist als `any`
@@ -42,6 +43,7 @@ const eventUpdateSchema = z.object({
     .refine(isValidTrailerInput, 'Trailer muss ein YouTube-/Vimeo-Link oder ein Pfad wie /videos/trailer.mp4 sein'),
   imageUrl: z.string().optional().nullable().or(z.literal('')),
   featured: z.boolean().optional(),
+  soldOut: z.boolean().optional(),
   highlights: z.array(z.string()).optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
   recurrence: z.enum(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY']).optional().nullable().or(z.literal('')),
@@ -124,6 +126,7 @@ export async function PUT(
       })
     })
 
+    await revalidateInhalte()
     return NextResponse.json(event)
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -146,6 +149,7 @@ export async function DELETE(
 
   try {
     await prisma.event.delete({ where: { id } })
+    await revalidateInhalte()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting event:', error)

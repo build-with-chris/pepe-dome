@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod'
+import { SECTION_HEADING_MAX, SECTION_TEXT_MAX } from './newsletter-limits'
 
 /**
  * E-Mail-Adresse vereinheitlichen: Leerraum weg, klein geschrieben.
@@ -148,9 +149,10 @@ export const scheduleNewsletterSchema = z.object({
 export const addContentSchema = z.object({
   contentType: z.enum(['EVENT', 'ARTICLE', 'SHOW', 'CUSTOM_SECTION']),
   contentId: z.string().uuid().optional(),
-  sectionHeading: z.string().max(100).optional(),
-  sectionDescription: z.string().max(500).optional(),
+  sectionHeading: z.string().max(SECTION_HEADING_MAX).optional(),
+  sectionDescription: z.string().max(SECTION_TEXT_MAX).optional(),
   orderPosition: z.number().int().min(0),
+  showImage: z.boolean().optional(),
 })
 
 export const reorderContentSchema = z.object({
@@ -159,9 +161,10 @@ export const reorderContentSchema = z.object({
       id: z.string().uuid().optional(),
       contentType: z.enum(['EVENT', 'ARTICLE', 'SHOW', 'CUSTOM_SECTION']),
       contentId: z.string().nullable().optional(),
-      sectionHeading: z.string().max(100).nullable().optional(),
-      sectionDescription: z.string().max(500).nullable().optional(),
+      sectionHeading: z.string().max(SECTION_HEADING_MAX).nullable().optional(),
+      sectionDescription: z.string().max(SECTION_TEXT_MAX).nullable().optional(),
       orderPosition: z.number().int().min(0),
+      showImage: z.boolean().optional(),
     })
   ),
 })

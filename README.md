@@ -1,56 +1,57 @@
 # Pepe Dome
 
-Ein einzigartiger Veranstaltungsort in München - geodätische Kuppel im Ostpark für Artistik, Events und kulturelle Begegnungen.
+Website, Admin und Newsletter für den Pepe Dome, die geodätische Kuppel im Ostpark München.
 
-## Tech Stack
+## Technik
 
-- **Next.js 15** - React Framework mit App Router
-- **TypeScript** - Type-safe JavaScript
-- **Tailwind CSS** - Utility-first CSS Framework
-- **ESLint** - Code Linting
+- **Next.js 15** mit App Router, React 19, TypeScript
+- **Tailwind CSS 4**
+- **PostgreSQL** über Prisma 6 (gehostet bei Supabase)
+- **Clerk** für den Login im Admin
+- **Resend** für Newsletter und Bestätigungsmails
+- **Vitest** für Tests
 
-## Getting Started
-
-### Development
+## Entwicklung
 
 ```bash
 npm run dev
 ```
 
-Öffnen Sie [http://localhost:3000](http://localhost:3000) in Ihrem Browser.
+Die Seite läuft dann unter [http://localhost:3004](http://localhost:3004).
 
-### Build
+**Wichtig:** Die `.env` enthält die Produktionsdatenbank. Vor Tests und
+Datenbankbefehlen [CLAUDE.md](CLAUDE.md) und [tests/README.md](tests/README.md)
+lesen.
 
-```bash
-npm run build
-npm run start
-```
+## Befehle
 
-### Linting
+| Befehl | Was es tut |
+|---|---|
+| `npm run dev` | Entwicklungsserver auf Port 3004 |
+| `npm run build` | Prisma-Client erzeugen und Produktions-Build bauen |
+| `npm run lint` | ESLint |
+| `npm test` | Tests ohne Datenbank (sicher) |
+| `npm run test:db` | Tests mit Datenbank, nur gegen eine Wegwerf-Test-DB |
+| `npm run db:migrate` | Offene Migrationen anwenden (`prisma migrate deploy`) |
+| `npm run newsletter:preview` | Newsletter-Layout lokal als HTML ansehen |
 
-```bash
-npm run lint
-```
-
-## Project Structure
+## Aufbau
 
 ```
 src/
-  app/                 # Next.js App Router pages
-  components/          # React components
-  contexts/            # React contexts
-  i18n/               # Internationalization
-public/               # Static assets
+  app/          Seiten und API-Routen (App Router)
+  components/   React-Komponenten
+  lib/          Datenzugriff, Mailversand, Verträge, Hilfsfunktionen
+  i18n/         Sprachen (de, en)
+prisma/         Schema und Migrationen
+scripts/        Hilfsskripte für Bilder und Newsletter-Vorschau
+tests/          Vitest
+docs/           Anleitungen und Konzepte
 ```
 
-## Features
+## Weitere Doku
 
-- 🏛️ **Geodätische Architektur** - Einzigartige Kuppelkonstruktion
-- 🎪 **8,50 Meter Höhe** - Perfekt für spektakuläre Luftakrobatik
-- 🌿 **Ostpark Lage** - Mitten im Grünen
-- ♿ **Barrierearm** - Zugang mit Begleitperson empfohlen
-- 📱 **Responsive Design** - Optimiert für alle Geräte
-
-## Contact
-
-Für Event-Anfragen und weitere Informationen kontaktieren Sie uns über die Website.
+- [SECURITY.md](SECURITY.md): wie Login, Rollen und Schutzmaßnahmen funktionieren
+- [docs/DATABASE_SETUP.md](docs/DATABASE_SETUP.md): Datenbank einrichten
+- [docs/newsletter-system.md](docs/newsletter-system.md): Newsletter
+- [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md): Farben, Schriften, Abstände

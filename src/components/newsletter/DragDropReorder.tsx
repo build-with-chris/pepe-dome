@@ -25,6 +25,8 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import { emphasisForEvent, fotosBegrenztFuer, type ItemEmphasis } from '@/lib/newsletter-emphasis'
+import { SECTION_HEADING_MAX, SECTION_TEXT_MAX } from '@/lib/newsletter-limits'
 
 interface ContentItem {
   id?: string
@@ -33,6 +35,8 @@ interface ContentItem {
   sectionHeading?: string | null
   sectionDescription?: string | null
   orderPosition: number
+  /** Termin mit Foto zeigen. Fehlt der Wert, ist das Foto an. */
+  showImage?: boolean
   _metadata?: {
     title: string
     imageUrl?: string
@@ -44,6 +48,8 @@ interface DragDropReorderProps {
   items: ContentItem[]
   onReorder: (items: ContentItem[]) => void
   onAddTextSnippet?: () => void
+  /** Status der Ausgabe. Verschickte zeigen wie damals nur drei Fotos. */
+  status?: string
 }
 
 // Generate a unique sortable key for each item
@@ -53,10 +59,32 @@ function getSortableKey(item: ContentItem, index: number): string {
   return `item-${index}-${item.contentType}`
 }
 
+function isEvent(item: ContentItem): boolean {
+  return item.contentType === 'EVENT' || item.contentType === 'SHOW'
+}
+
+/**
+ * Wie jeder Termin in der Mail erscheint, nach derselben Regel wie
+ * buildViewModel. Termine ohne Datensatz (geloescht) zaehlen dort nicht mit,
+ * hier erkennbar am fehlenden _metadata.
+ */
+function emphasisPerItem(items: ContentItem[], status?: string): Array<ItemEmphasis | undefined> {
+  const fotosBegrenzt = fotosBegrenztFuer(status)
+  let imageIndex = 0
+  return items.map((item) => {
+    if (!isEvent(item) || !item._metadata) return undefined
+    const showImage = item.showImage !== false
+    const emphasis = emphasisForEvent(imageIndex, showImage, fotosBegrenzt)
+    if (showImage) imageIndex += 1
+    return emphasis
+  })
+}
+
 export default function DragDropReorder({
   items,
   onReorder,
   onAddTextSnippet,
+  status,
 }: DragDropReorderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -100,6 +128,17 @@ export default function DragDropReorder({
     )
     onReorder(updatedItems)
   }
+
+  const handleToggleImage = (sortableKey: string) => {
+    const updatedItems = items.map((item, idx) =>
+      getSortableKey(item, idx) === sortableKey
+        ? { ...item, showImage: item.showImage === false }
+        : item
+    )
+    onReorder(updatedItems)
+  }
+
+  const emphases = emphasisPerItem(items, status)
 
   const handleRemove = (sortableKey: string) => {
     const updatedItems = items
@@ -152,6 +191,8 @@ export default function DragDropReorder({
                 item={item}
                 index={index}
                 sortableKey={getSortableKey(item, index)}
+                emphasis={emphases[index]}
+                onToggleImage={handleToggleImage}
                 onUpdateHeading={handleUpdateHeading}
                 onUpdateDescription={handleUpdateDescription}
                 onRemove={handleRemove}
@@ -168,6 +209,8 @@ function SortableItem({
   item,
   index,
   sortableKey,
+  emphasis,
+  onToggleImage,
   onUpdateHeading,
   onUpdateDescription,
   onRemove,
@@ -175,6 +218,8 @@ function SortableItem({
   item: ContentItem
   index: number
   sortableKey: string
+  emphasis?: ItemEmphasis
+  onToggleImage: (id: string) => void
   onUpdateHeading: (id: string, heading: string) => void
   onUpdateDescription: (id: string, description: string) => void
   onRemove: (id: string) => void
@@ -195,6 +240,7 @@ function SortableItem({
   }
 
   const isTextSnippet = item.contentType === 'CUSTOM_SECTION'
+  const showImage = item.showImage !== false
   const [isEditingHeading, setIsEditingHeading] = useState(false)
   const [isEditingDescription, setIsEditingDescription] = useState(false)
   const [headingValue, setHeadingValue] = useState(
@@ -264,11 +310,29 @@ function SortableItem({
         {/* Content */}
         <div className="flex-1 space-y-3">
           {/* Type Badge */}
-          <span className={`inline-block text-xs px-2 py-0.5 rounded ${
-            isTextSnippet ? 'bg-sky-500/20 text-sky-400' : 'bg-pepe-gold/20 text-pepe-gold'
-          }`}>
-            {getTypeLabel(item.contentType)}
-          </span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className={`inline-block text-xs px-2 py-0.5 rounded ${
+              isTextSnippet ? 'bg-sky-500/20 text-sky-400' : 'bg-pepe-gold/20 text-pepe-gold'
+            }`}>
+              {getTypeLabel(item.contentType)}
+            </span>
+
+            {/* Foto an oder aus, z. B. wenn dieselbe Show mehrfach im Newsletter steht */}
+            {emphasis && (
+              <>
+                <label className="inline-flex items-center gap-2 text-sm cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={showImage}
+                    onChange={() => onToggleImage(sortableKey)}
+                    className="h-4 w-4 accent-pepe-gold"
+                  />
+                  Mit Foto
+                </label>
+                <span className="text-xs text-pepe-t64">{emphasisHint(emphasis, showImage)}</span>
+              </>
+            )}
+          </div>
 
           {/* Section Heading */}
           {isEditingHeading ? (
@@ -286,7 +350,7 @@ function SortableItem({
                   }
                 }}
                 autoFocus
-                maxLength={100}
+                maxLength={SECTION_HEADING_MAX}
                 placeholder={isTextSnippet ? 'Überschrift eingeben...' : 'Abschnitt-Überschrift'}
               />
             </div>
@@ -309,7 +373,9 @@ function SortableItem({
                 <img
                   src={item._metadata.imageUrl}
                   alt={item._metadata.title}
-                  className="w-12 h-12 object-cover rounded"
+                  className={`w-12 h-12 object-cover rounded ${
+                    emphasis === 'compact' ? 'opacity-30 grayscale' : ''
+                  }`}
                 />
               )}
               <div>
@@ -325,16 +391,19 @@ function SortableItem({
 
           {/* Section Description / Text Content */}
           {isEditingDescription ? (
-            <div className="flex items-center gap-2">
+            <div className="space-y-1">
               <textarea
                 value={descriptionValue}
                 onChange={(e) => setDescriptionValue(e.target.value)}
                 onBlur={saveDescription}
                 className="input w-full"
-                rows={isTextSnippet ? 4 : 2}
-                maxLength={1000}
+                rows={isTextSnippet ? 6 : 2}
+                maxLength={SECTION_TEXT_MAX}
                 placeholder={isTextSnippet ? 'Text eingeben...' : 'Optionale Beschreibung...'}
               />
+              <p className="text-xs text-pepe-t64 text-right">
+                {descriptionValue.length} von {SECTION_TEXT_MAX} Zeichen
+              </p>
             </div>
           ) : (
             <button
@@ -360,4 +429,12 @@ function SortableItem({
       </div>
     </div>
   )
+}
+
+/** Was der Haken in der Mail bewirkt, in einem Satz neben der Checkbox. */
+function emphasisHint(emphasis: ItemEmphasis, showImage: boolean): string {
+  if (!showImage) return 'Terminzeile ohne Foto'
+  if (emphasis === 'lead') return 'Aufmacher mit großem Foto'
+  if (emphasis === 'feature') return 'Karte mit Foto'
+  return 'Terminzeile: In dieser verschickten Ausgabe gab es nur drei Fotos'
 }

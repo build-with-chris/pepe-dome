@@ -3,6 +3,7 @@ import { requireApiRole } from '@/lib/roles.server'
 import { ROLES } from '@/lib/roles'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
+import { revalidateInhalte } from '@/lib/revalidate-content'
 
 const translationSchema = z.object({
   title: z.string().optional(),
@@ -100,6 +101,7 @@ export async function PUT(
       }
     })
 
+    await revalidateInhalte()
     return NextResponse.json(article)
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -122,6 +124,7 @@ export async function DELETE(
 
   try {
     await prisma.article.delete({ where: { id } })
+    await revalidateInhalte()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting article:', error)

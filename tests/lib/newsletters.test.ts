@@ -399,7 +399,7 @@ describe('Newsletter Management', () => {
       await markNewsletterSent(nl2.id, 10)
 
       const drafts = await getNewsletters({ status: NewsletterStatus.DRAFT })
-      expect(drafts.newsletters.every((n: { status: NewsletterStatus }) => n.status === NewsletterStatus.DRAFT)).toBe(true)
+      expect(drafts.newsletters.every((n: { status: string }) => n.status === NewsletterStatus.DRAFT)).toBe(true)
     })
 
     it('should order by createdAt desc', async () => {

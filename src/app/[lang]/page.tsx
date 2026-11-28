@@ -21,6 +21,7 @@ import {
   getFeaturedArticles,
   getRecentArticles,
   getUpcomingEvents,
+  ohneErsatzdaten,
   type EventData,
   type ArticleData,
 } from '@/lib/db-data'
@@ -33,7 +34,19 @@ import HeroBackgroundVideo from '@/components/custom/HeroBackgroundVideo'
 
 const VideoCarousel = nextDynamic(() => import('@/components/custom/VideoCarousel'), { ssr: true })
 
-export const dynamic = 'force-dynamic'
+/**
+ * Zwischengespeichert statt bei jedem Aufruf neu gerendert.
+ *
+ * Mit `force-dynamic` lief jeder Besuch der Startseite durch eine
+ * Serverfunktion und drei Datenbankabfragen, gemessen 1,6 bis 1,9 Sekunden bis
+ * zum ersten Byte. Jetzt kommt die fertige Seite aus dem Netz von Vercel.
+ *
+ * Eine Minute ist das Sicherheitsnetz. Im Normalfall greift es nicht, weil
+ * der Admin beim Speichern gezielt verwirft (src/lib/revalidate-content.ts).
+ * Es sorgt aber dafür, dass ein Termin von gestern auch ohne Zutun aus
+ * "Kommende Events" verschwindet.
+ */
+export const revalidate = 60
 
 /**
  * Die Startseite hatte keine eigenen Metadaten und erbte deshalb komplett vom
@@ -79,25 +92,24 @@ export default async function HomePage({
   const dict = await getDictionary(lang)
   const t = dict.home
 
-  let displayEvents: EventData[] = []
-  let displayNews: ArticleData[] = []
-
-  try {
-    const [featuredArticles, recentArticles, upcomingEvents] = await Promise.all([
+  // Bewusst kein try/catch und keine Ersatzdaten: Scheitert die Datenbank,
+  // bricht die Neuerzeugung ab und Next liefert weiter die letzte gute
+  // Fassung aus. Mit Ersatzdaten läge stattdessen eine Startseite ohne
+  // Termine im Zwischenspeicher. Siehe ohneErsatzdaten in src/lib/db-data.ts.
+  const [featuredArticles, recentArticles, upcomingEvents] = await ohneErsatzdaten(() =>
+    Promise.all([
       getFeaturedArticles(lang),
       getRecentArticles(4, lang),
       getUpcomingEvents(lang),
     ])
-    displayEvents = upcomingEvents.slice(0, 3)
-    const merged = featuredArticles.length > 0
-      ? [...featuredArticles, ...recentArticles.filter((a) => !featuredArticles.find((f) => f.id === a.id))]
-      : recentArticles
-    displayNews = merged
-      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-      .slice(0, 3)
-  } catch (err) {
-    console.error('HomePage data error:', err)
-  }
+  )
+  const displayEvents: EventData[] = upcomingEvents.slice(0, 3)
+  const merged: ArticleData[] = featuredArticles.length > 0
+    ? [...featuredArticles, ...recentArticles.filter((a) => !featuredArticles.find((f) => f.id === a.id))]
+    : recentArticles
+  const displayNews: ArticleData[] = merged
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, 3)
 
   // Features — Reihenfolge + Icons sind fix, Texte lokalisiert
   const featureKeys: Array<'show' | 'training' | 'dome' | 'community'> = [
@@ -206,10 +218,12 @@ export default async function HomePage({
               also springt nichts nach.
 
               Die Verzoegerung steht bewusst inline und nicht als delay-*:
-              animations.css definiert .delay-* als animation-delay, Tailwind
-              erzeugt dieselben Klassennamen als transition-delay. Beide
-              gaelten gleichzeitig, und der Farbwechsel beim Antippen haette
-              sich mitverzoegert. Bei reduzierter Bewegung setzt animations.css
+              Tailwinds delay-* setzt transition-delay, nicht animation-delay.
+              Die Einblendung kaeme also sofort, und dafuer haette sich der
+              Farbwechsel beim Antippen verzoegert. (animations.css hatte
+              frueher gleichnamige Klassen fuer animation-delay. Sie waren
+              ungenutzt und sind mit dem toten CSS entfallen.)
+              Bei reduzierter Bewegung setzt animations.css
               alle Verzoegerungen auf null, dann steht ohnehin alles sofort.
             */}
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[var(--pepe-white)] leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.85)]">
@@ -364,6 +378,7 @@ export default async function HomePage({
               lang={lang}
               eventsHref={localizedHref(lang, '/events')}
               freeEntryLabel={dict.events.freeBadge}
+              soldOutLabel={dict.events.soldOutBadge}
               trailerLabels={dict.events.trailer}
               privacyHref={localizedHref(lang, '/datenschutz')}
               prevLabel={t.upcomingEvents.prev}
@@ -379,6 +394,7 @@ export default async function HomePage({
                 category: e.category,
                 imageUrl: e.imageUrl,
                 price: e.price,
+                soldOut: e.soldOut,
                 trailerUrl: e.trailerUrl,
               }))}
             />
