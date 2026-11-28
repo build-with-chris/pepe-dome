@@ -169,7 +169,7 @@ const geschuetzt = clerkMiddleware(async (auth, req) => {
  * requiresAuth: Die Anmeldeseiten sind zwar ohne Login erreichbar, brauchen
  * Clerk aber sehr wohl, sonst kommt niemand mehr durch den Login.
  */
-export default function middleware(req: NextRequest, event: NextFetchEvent) {
+export function proxy(req: NextRequest, event: NextFetchEvent) {
   if (skipClerkInDev || !isProtectedRoute(req)) return oeffentlich(req)
   // Das Event muss weitergereicht werden, nicht erfunden: Clerk hängt daran
   // seine Hintergrundarbeit (waitUntil), etwa das Nachladen der Schlüssel.

@@ -182,7 +182,6 @@ const s = StyleSheet.create({
 })
 
 /** Logo für den Dokumentkopf. Liegt unter public/, damit es eine einzige Quelle gibt. */
-const LOGO_PFAD = ['public', 'vertraege', 'logo-pepe-dome.png']
 const LOGO_BREITE = mm(36)
 
 type Logo = { daten: Buffer; breite: number; hoehe: number }
@@ -192,7 +191,10 @@ type Logo = { daten: Buffer; breite: number; hoehe: number }
  * im IHDR-Block direkt hinter der Signatur, als zwei 32-Bit-Zahlen ab Byte 16.
  */
 async function ladeLogo(): Promise<Logo> {
-  const daten = await readFile(path.join(process.cwd(), ...LOGO_PFAD))
+  // Pfad bewusst als feste Teile ausgeschrieben. Mit einem gespreizten Array
+  // kann Turbopack ihn nicht auswerten und packt das ganze Projekt samt public/
+  // in die Serverfunktion.
+  const daten = await readFile(path.join(process.cwd(), 'public', 'vertraege', 'logo-pepe-dome.png'))
   return { daten, breite: daten.readUInt32BE(16), hoehe: daten.readUInt32BE(20) }
 }
 

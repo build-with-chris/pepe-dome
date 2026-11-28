@@ -46,8 +46,12 @@ export function PublicDocument({
   lang: Locale
   children: React.ReactNode
 }>) {
+  // data-scroll-behavior: globals.css setzt scroll-behavior: smooth auf <html>.
+  // Bis Next 15 schaltete Next das beim Seitenwechsel kurz ab, damit eine neue
+  // Seite sofort oben steht statt hochzuscrollen. Seit Next 16 nur noch mit
+  // diesem Attribut.
   return (
-    <html lang={lang} className={fontClasses}>
+    <html lang={lang} className={fontClasses} data-scroll-behavior="smooth">
       <body className="antialiased">
         <OrganizationJsonLd />
         <WebSiteJsonLd />

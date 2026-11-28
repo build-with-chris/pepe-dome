@@ -1,17 +1,17 @@
 /**
  * i18n routing config
  *
- * URLs sind `/de/...` und `/en/...`. `/` redirected via middleware auf die
+ * URLs sind `/de/...` und `/en/...`. `/` redirected via Proxy (src/proxy.ts) auf die
  * Default-Locale (oder die per `Accept-Language` erkannte Sprache).
  *
  * LOCALIZED_PATHS ist die *einzige* Liste der lokalisierten Seiten. Sie
  * steuert drei Dinge gleichzeitig, die vorher auseinanderlaufen konnten:
  *
  *   1. localizedHref()  — welche Links einen /de- bzw. /en-Prefix bekommen
- *   2. middleware.ts    — welche Root-Pfade auf die Locale-URL umgeleitet werden
+ *   2. proxy.ts         — welche Root-Pfade auf die Locale-URL umgeleitet werden
  *   3. sitemap.ts       — welche URLs an Google gemeldet werden
  *
- * Vorher gab es die Liste zweimal (hier und in der Middleware) und die beiden
+ * Vorher gab es die Liste zweimal (hier und in der Middleware, heute src/proxy.ts) und die beiden
  * Fassungen waren nicht deckungsgleich: `/cafe` und `/spenden` standen nur hier.
  * Folge: die Sitemap meldete `/cafe`, es gab aber weder eine Seite unter diesem
  * Pfad noch eine Weiterleitung — ein 404 mitten im Sitemap-Index. Eine neue
@@ -31,7 +31,7 @@ export function isLocale(value: string): value is Locale {
  * Alle Seiten, die unter /[lang]/... liegen.
  *
  * Reihenfolge = Reihenfolge in der Sitemap, deshalb nach Wichtigkeit sortiert.
- * Sub-Routen (z.B. /events/holi-poldini) sind mit abgedeckt, die Middleware
+ * Sub-Routen (z.B. /events/holi-poldini) sind mit abgedeckt, der Proxy
  * matcht auf Prefix.
  */
 export const LOCALIZED_PATHS = [

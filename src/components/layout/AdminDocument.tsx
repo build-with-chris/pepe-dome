@@ -15,14 +15,16 @@ const skipClerkInDev =
  * im Admin sind keine Besuche und gehoeren nicht in die Statistik.
  */
 export function AdminDocument({ children }: Readonly<{ children: React.ReactNode }>) {
-  const document = (
-    <html lang="de" className={fontClasses}>
+  const inhalt = <I18nProvider>{children}</I18nProvider>
+
+  // Clerk 7 verlangt den ClerkProvider innerhalb von <body>, nicht um <html>.
+  // Das Abmelde-Ziel steht hier, weil Clerk 7 afterSignOutUrl am UserButton
+  // nicht mehr kennt.
+  return (
+    <html lang="de" className={fontClasses} data-scroll-behavior="smooth">
       <body className="antialiased">
-        <I18nProvider>{children}</I18nProvider>
+        {skipClerkInDev ? inhalt : <ClerkProvider afterSignOutUrl="/">{inhalt}</ClerkProvider>}
       </body>
     </html>
   )
-
-  if (skipClerkInDev) return document
-  return <ClerkProvider>{document}</ClerkProvider>
 }
